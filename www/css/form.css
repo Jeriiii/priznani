@@ -1,0 +1,176 @@
+@CHARSET "UTF-8";
+
+/*** Flash zprávičky ***/
+
+div.flash, .error, .failure {
+  padding: 8px 35px 8px 14px;
+  margin-bottom: 20px;
+  margin-right: 10px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background-color: #fcf8e3;
+  border: 1px solid #fbeed5;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  color: #c09853;
+}
+.flash h4 {
+  margin: 0;
+}
+.flash .close {
+  position: relative;
+  top: -2px;
+  right: -21px;
+  line-height: 20px;
+}
+.flash.success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+}
+.flash.warning,
+.flash.error, .error, .failure {
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  color: #b94a48;
+}
+.flash.info {
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  color: #3a87ad;
+}
+.flash.block {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.flash-block > p,
+.flash-block > ul {
+  margin-bottom: 0;
+}
+.flash-block p + p {
+  margin-top: 5px;
+}
+
+.failure li, .error li, .success li {
+	list-style: none;
+}
+
+.form{
+    padding: 10px;
+}
+.form tr td{
+    padding: 5px;
+}
+
+.form div {
+    padding: 5px 0px 0px 0px;
+}
+
+.form input, .form select {
+    border: solid #212121 1px;
+    background: #fafafa;
+    margin-left: 20px;
+    margin-right: 10px;
+     -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    behavior: url('border-radius.htc');
+    border-radius: 5px;
+    min-height: 20px;
+    padding: 2px;
+    color: black;
+}
+
+.form textarea {
+    border: solid #212121 1px;
+    background: #fafafa;
+    margin-left: 20px;
+    margin-right: 10px;
+     -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    behavior: url('border-radius.htc');
+    border-radius: 5px;
+    min-height: 20px;
+    padding: 2px;
+    color: black;
+}
+
+.form .button, .form .buttonin input {
+    color: white;
+    padding: 8px;
+    text-align: center;
+    position: relative;
+    font-weight: bold;
+	background: #222222;
+	cursor: pointer;
+    
+
+	background-image: linear-gradient(bottom, rgb(34,34,34) 0%, rgb(153,153,153) 100%);
+	background-image: -o-linear-gradient(bottom, rgb(34,34,34) 0%, rgb(153,153,153) 100%);
+	background-image: -moz-linear-gradient(bottom, rgb(34,34,34) 0%, rgb(153,153,153) 100%);
+	background-image: -webkit-linear-gradient(bottom, rgb(34,34,34) 0%, rgb(153,153,153) 100%);
+	background-image: -ms-linear-gradient(bottom, rgb(34,34,34) 0%, rgb(153,153,153) 100%);
+
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, rgb(34,34,34)),
+		color-stop(1, rgb(153,153,153))
+	);
+
+
+    
+}
+
+.form .button:hover, .form .buttonin input:hover {
+
+
+	background-image: linear-gradient(bottom, rgb(51,51,51) 0%, rgb(136,136,136) 100%);
+	background-image: -o-linear-gradient(bottom, rgb(51,51,51) 0%, rgb(136,136,136) 100%);
+	background-image: -moz-linear-gradient(bottom, rgb(51,51,51) 0%, rgb(136,136,136) 100%);
+	background-image: -webkit-linear-gradient(bottom, rgb(51,51,51) 0%, rgb(136,136,136) 100%);
+	background-image: -ms-linear-gradient(bottom, rgb(51,51,51) 0%, rgb(136,136,136) 100%);
+
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, rgb(51,51,51)),
+		color-stop(1, rgb(136,136,136))
+	);
+
+
+}
+
+.form label, .sign legend {
+    color: #222;
+    /*letter-spacing: 2px;*/
+    /*-webkit-text-stroke: 1px white;*/
+        background: -webkit-linear-gradient(top, #000, #222);
+    background: linear-gradient(top, #000, #222);
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+}
+
+.form legend {
+    font-size: 20px;
+}
+
+.form_name {
+	font-size: 20px;
+    color: #222;
+	font-weight: bold;
+	padding-top: 20px;
+	padding-bottom: 5px;
+}
+
+.form_name_sign {
+	font-size: 20px;
+    color: #222;
+	font-weight: bold;
+	padding-top: 5px;
+	padding-bottom: 15px;
+}

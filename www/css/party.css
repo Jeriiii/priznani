@@ -1,0 +1,30 @@
+.partygradient, .submit-container input, .stylish-container{
+    background: #42475b !important; /* Old browsers */
+    background: -moz-linear-gradient(top,  #42475b 0%, #040613 100%) !important; /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#42475b), color-stop(100%,#040613)) !important; /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #42475b 0%,#040613 100%) !important; /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #42475b 0%,#040613 100%) !important; /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #42475b 0%,#040613 100%) !important; /* IE10+ */
+    background: linear-gradient(to bottom,  #42475b 0%,#040613 100%) !important; /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#42475b', endColorstr='#040613',GradientType=0 ) !important; /* IE6-9 */
+}
+.partygradienthover:hover, .submit-container:hover input{
+    background: #515259 !important; /* Old browsers */
+    background: -moz-linear-gradient(top,  #515259 20%, #040613 100%) !important; /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(20%,#515259), color-stop(100%,#040613)) !important; /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #515259 20%,#040613 100%) !important; /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #515259 20%,#040613 100%) !important; /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #515259 20%,#040613 100%) !important; /* IE10+ */
+    background: linear-gradient(to bottom,  #515259 20%,#040613 100%) !important; /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#515259', endColorstr='#040613',GradientType=0 ) !important; /* IE6-9 */
+
+}
+header h1 {background: url('../images/party/titlebackground.png') no-repeat transparent top center;}
+#left-menu a {background-image: url('../images/party/menu.png') !important;}
+header h1 b{color: #aaa9c3;}
+#news h2,.votes a, .polls,#left_confession h2, #clock{color:#22283e !important;}
+#orderlink{background-image: url('../images/party/arrow_light.png') !important;}
+#kiss{background: url('../images/party/party.png') top left !important;width: 223px !important; height: 204px !important;}
+.paginator-left{background: url(../images/party/paginator-left.png) center center no-repeat transparent !important;}
+.paginator-right{background: url(../images/party/paginator-right.png) center center no-repeat transparent !important;}
+.thirdparty{background-position: 0px -210px !important;}

@@ -1,0 +1,182 @@
+/* sipky do leva a do prava */
+.btn-space{
+	padding: 215px 0 215px 0;
+	display: block;
+	float:left;
+	height: 70px;
+}
+
+.btn-link:hover{
+	background-color: #dddddd;
+}
+
+.btn{
+	height: 70px;
+	width: 70px;
+	display: block;
+	background-repeat: no-repeat;
+	margin:0;
+	padding:0;
+}
+
+#next{
+	background-image: url(http://www.nejlevnejsiwebstranky.cz/images/right.gif);
+}
+
+#back{
+	background-image: url(http://www.nejlevnejsiwebstranky.cz/images/left.gif);
+}
+/* obrazek a jeho okoli */
+#image_content{
+	float: left;
+	width: 700px;
+}
+
+#image{
+	float:left;
+	width: 700px;
+	height: 500px;
+	text-align: center;
+	vertical-align: middle;
+	background-color: #f2f2f2;
+	position: relative;
+/*	background-color: #eff1f2;*/
+/*	background-color: #e6ea7f;*/
+/*	background: #383838;*/
+	/*background: #a53134;*/
+}
+#image img{
+	position: relative;
+	margin: auto auto;
+}
+
+#image_comment{
+	width: 700px;
+	min-height: 74px;
+	background-color: white;
+	padding: 10px;
+	font-size: 15px;
+	line-height: 1.38;
+}
+
+#link-and-fb{
+	width:700px;
+	margin: 0 70px;
+	padding: 35px 50px;
+}
+
+#upload_foto{
+	position: relative;
+	display: inline-block;
+	text-align: center;
+	padding: 0 20px;
+	letter-spacing: 1px;
+	color: #fff;
+	cursor: pointer;
+	font: 600 22px 'Exo','Arial Black',Arial;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	width: 150px;
+	height: 32px;
+	text-shadow: 0 0 1px white;
+	background: #cf0707;
+	background: -moz-linear-gradient(top,#cf0707 0,#890302 100%);
+	background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#cf0707),color-stop(100%,#890302));
+	background: -webkit-linear-gradient(top,#cf0707 0,#890302 100%);
+	background: -o-linear-gradient(top,#cf0707 0,#890302 100%);
+	background: -ms-linear-gradient(top,#cf0707 0,#890302 100%);
+	background: linear-gradient(to bottom,#cf0707 0,#890302 100%);
+	filter: progid:dximagetransform.Microsoft.gradient(startcolorstr='#cf0707',endcolorstr='#890302',gradienttype=0);
+	float: right;
+	margin-top: 8px;
+}
+
+.fb-like-container{
+	position: absolute;
+	float: left;
+	width:99px;
+	height: 100px;
+	z-index: 10;
+	text-align: center;
+	margin-top: 10px;
+	min-height: 41px;
+	left: -100px;
+	top: 0px;
+	padding-top: 5px;
+	background-color: #a53134;
+/*	border-right: 1px solid #a53134;*/
+}
+
+#fblike-and-comment{
+	display: block;
+}
+
+#image_name{
+	float: left;
+	margin-left: 70px;
+}
+
+#link{
+	
+}
+
+h2{
+	font-family: 'Exo','Arial';
+	color: #a70304;
+/*	color: #518b35;*/
+	font-size: 30px;
+	margin-top: 3px;
+}
+
+h2#image_name{
+	font-size: 34px;
+}
+
+#kiss {
+	display: none;
+}
+
+#top_container{
+	margin-bottom: 5px;
+}
+
+/*#voting{
+	position: absolute;
+	background-image: url(../images/pin.png);
+	background-repeat: no-repeat;
+	width: 64px;
+	height: 90px;
+	z-index: 10;
+	top: 445px;
+	left: 20px;
+}*/
+
+.fb-like-container p{
+	font-size: 12px;
+	margin-bottom: 8px;
+	margin-top: 2px;
+	color: white;
+	font-weight: bold;
+}
+#adverb-right{
+	float: left;
+	position: absolute;
+	top: -50px;
+	right: -265px;
+}
+
+#adverb-contact{
+	width: 180px;
+	background: #a70304;
+	padding: 20px 5px;
+	color: white;
+	font-weight: bold;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	margin-top: 15px;
+}
+#adverb-contact a {
+	color: white;
+}

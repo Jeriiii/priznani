@@ -1,0 +1,123 @@
+@CHARSET "UTF-8";
+
+h1 {font-size:20px;font-family: georgia, serif, arial;text-decoration:none;color:#F4C389;font-weight:normal;}
+
+body {
+	background:#2D0202;
+	}
+	
+.cela_stranka {
+	position:relative;
+	width:750px;
+	background:#7C0000;
+	margin:0 auto;
+	}
+	
+.horni_polovina_stranky {
+	width:750px;
+	}
+
+.leva_cast {
+	float:left;
+	width:358px;
+	background:#7C0000;
+	}
+	
+.tabule_na_nazev_firmy {
+	width:238px;
+	height:150px;
+	background:url(img/logo.png) no-repeat;
+	color:#f4c389;
+	padding:60px 60px 60px 60px;
+	font-family:georgia, arial;
+	font-size:39px;
+	text-align:center;
+	}
+	
+.tabule_nazev_stranky {
+	padding:0;
+	width:358px;
+	height:39px;
+	}
+	
+.nazev_stranky {
+	padding:2px 0 0 70px;
+	margin:0 0 0 20px;
+	background:url(img/sipka.png) no-repeat;
+	width:260px;
+	height:32px;
+	color:#f4c389;
+	font-size:25px;
+	font-family:verdana, arial;
+	}
+	
+.prava_cast {
+	float:left;
+	border-bottom:1px solid white;
+	}
+	
+.rozcestnik {
+	width:200px;
+	}
+
+.rozcestnik ul {
+	width:200px;
+	float:left;
+	padding:0;
+	margin:20px 0 20px 0;
+	font-size:18px;
+	font-family: arial;
+	list-style-type:none;
+	}
+	
+.rozcestnik ul li {
+	float:left;
+	list-style:none;
+	height:40px;
+	width:180px;
+	margin:3px 0;
+	padding:20px 0 0 20px;
+	background:url(img/tlacitko.png) no-repeat;
+	}
+
+.rozcestnik ul li a{
+	height:40px;
+	width:180px;
+	padding:0;
+	margin:0;
+	text-decoration:none;
+	color:white;
+    margin:0 6px;
+	}
+.rozcestnik ul li a:hover{
+	height:40px;
+	width:180px;
+	padding:0;
+	text-decoration:underline;
+	color:#FFC559;
+	margin:0 6px;
+	}
+	
+.text {
+	float:left;
+	width:500px;
+	margin:25px 0 0 0;
+	padding:0 0 0 30px;
+	color:#F4C389;
+	font-size:15px;
+	font-family:arial;
+	}
+	
+.paticka {
+	height:40px;
+	}
+	
+.copyright {
+	padding:40px 0 0 0;
+	text-align:center;
+	color:#F4C389;
+	}
+	
+.copyright a {
+	color:#F4C389;
+	}

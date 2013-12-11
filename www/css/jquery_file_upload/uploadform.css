@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+.container{
+	width: 700px !important;
+}
+
+.span7{
+	margin: 0 auto;
+	margin-top: 30px;
+	width: 450px !important;
+}
+
+.content .uploadtable {
+	width: 700px !important; 
+}
+.content .uploadtable td{
+	padding-bottom: 5px;
+}
+.content .uploadtable a {
+	text-align: center;
+	width: auto;
+	display: inline-block;
+	padding: 4px 12px;
+	margin-bottom: 0;
+}
+.progress {
+	margin-top: 3px;
+	margin-bottom: 5px !important;
+}

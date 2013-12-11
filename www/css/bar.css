@@ -1,0 +1,28 @@
+.bar {
+display: block;
+background: white;
+width: 140px;
+margin-top: 40px;
+position: absolute;
+top: 0;
+left: 850px;
+overflow: hidden;
+visibility: hidden;
+}
+
+#rollbar p {
+font-family: Tahoma,Geneva,Verdana,sans,sans-serif,Arial;
+font-size: 12px;
+margin-top: 5px;
+}
+
+#rollbar p.line {
+padding-bottom: 20px;
+margin-bottom: 20px;
+border-bottom: 1px solid #bebebe;
+}
+
+.fixed {
+position: fixed;
+margin-top: 0 !important;
+}
