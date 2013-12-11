@@ -1,0 +1,35 @@
+{block head}
+<link rel="stylesheet" href="{$basePath}/css/component-gallery.css" type="text/css">
+<script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>
+<style>
+	a {
+		color: #a70304;
+	}
+</style>
+{/block}
+
+{block content}
+	
+	{control gallery}
+	{*
+	<div>
+		<a href='{$basePath}/images/galleries/{$gallery->id}/{$image->id}.{$image->suffix}' rel="lightbox[gallery]" title="{$image->name}">
+			<img src="{$basePath}/images/galleries/{$gallery->id}/mini{$image->id}.{$image->suffix}" alt="{$image->name}" height="100">
+		</a>
+	</div>
+
+	{control vp*}
+	<p style="color: #bebebe;font-size:10px;">http://www.graphicsfuel.com/</p>
+{/block}
+	
+{block meta}
+	{var $special_meta_tags = TRUE}
+	<title>Soutěž - přiznání o sexu</title>
+
+	<meta name="keywords" content="přiznání o sexu" />
+	<meta name="description" content="Nahraj fotku a vyhraj jeden ze tří sexy oblečků!" />
+
+	<meta property="og:title" content="Soutěž - Přiznání o sexu" />
+	<meta property="og:image" content="{$imageLink}" />
+	<meta property="og:site_name" content="priznaniosexu.cz" />
+{/block}

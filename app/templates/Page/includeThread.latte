@@ -1,0 +1,64 @@
+{block thread}
+
+	{control vp}
+
+	<div id="thread">
+		{snippet thread}
+			<div id="left_confession">
+				{form form1Form class=>'form-container'}
+					{input note class=>'form-field', placeholder=>'Vaše nové přiznání...'}
+					<div class="submit-container">
+						{input submit class => 'submit-button'}
+					</div>
+					{label nick class => 'hidden' /}
+					{input nick class => 'hidden'}
+                {/form}
+				{foreach $confessions as $confession}
+					{if $iterator->isEven()}
+						<div class="confession">
+							{*<h2>Přiznání</h2>*}
+							<p>
+								{$confession->note}{* as $polly}{$polly-ip}{/foreach*}
+							</p>
+							<div class="fb-like-container">
+								<div class="fb-like" data-href="http://localhost/nette/priznaniosexu/www/page/default/priznani-o-sexu"
+									 data-send="true" data-width="300" data-show-faces="true"></div>
+							</div>
+							<div class="fb-comments-container">
+								<div class="fb-comments" data-href="http://example.com" data-width="430" data-num-posts="2"></div>
+							</div>
+						</div>
+					{/if}
+				{/foreach}
+			</div>
+			<div id="right_confession">
+				{ifset $news}
+					<div class="confession">
+						<h2>Novinky</h2>
+						<p>
+							{$news["confession"]->note}
+						</p>
+					</div>
+				{/ifset}
+				{foreach $confessions as $confession}
+					{if $iterator->isOdd()}
+						<div class="confession">
+							{*<h2>Přiznání</h2>*}
+							<p>
+								{$confession->note}{* as $polly}{$polly-ip}{/foreach*}
+							</p>
+							<div class="fb-like-container">
+								<div class="fb-like" data-href="http://localhost/nette/priznaniosexu/www/page/default/priznani-o-sexu"
+									 data-send="true" data-width="300" data-show-faces="true"></div>
+							</div>
+							<div class="fb-comments-container">
+								<div class="fb-comments" data-href="http://example.com" data-width="430" data-num-posts="2"></div>
+							</div>
+						</div>
+					{/if}
+				{/foreach}
+			</div>
+		{/snippet}
+	</div>
+
+	{control vp}

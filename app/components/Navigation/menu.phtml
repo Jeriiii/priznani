@@ -1,0 +1,9 @@
+	{block #menu}
+	{foreach$children as $item}
+		{if $item->isCurrent}
+		<a class="button active" title="{$item->label}">{$item->label}</a>
+		{else}
+		<a href="{$item->url}" class="button" title="{$item->label}">{$item->label}</a>
+		{/if}
+	{/foreach}
+	{/block}

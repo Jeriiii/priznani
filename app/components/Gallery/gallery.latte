@@ -1,0 +1,100 @@
+{snippet}
+	<div id="top_container">
+		<h2 id="image_name">{$image->name|firstUpper}{if (($user->isInRole("superadmin") || $user->isInRole("admin")) && $image->approved == 0)}(zatím neschváleno){/if}</h2>
+		<a href="{plink Competition:uploadImage}" id="upload_foto">
+			nahrát fotku
+		</a>
+		<div class="clear"></div>
+	</div>
+	
+	<div id="image_container">
+		{if $beforeImageID}
+			<a n:href="back! imageID => $beforeImageID" class="btn-space btn-link">
+				<div class="btn" id="back"></div>
+			</a>
+		{else}
+			<div class="btn-space"><div class="btn"></div></div>
+		{/if}
+
+		<div id="image_content">
+			<div id="image">
+				<div class="fb-like-container" >
+					<p>hlasujte zde</p>
+					<div class="fb-like" data-href="http://www.{if partymode}priznanizparby{else}priznaniosexu{/if}.cz{$imageLink}"
+						 data-layout="box_count" data-width="74" data-show-faces="true">
+					</div>
+				</div>
+				<img style="padding: {$padding}px 0" src="{$basePath}/images/galleries/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}" {if $changeWidth} width="700" {else} height="500" {/if}>
+				<div id="voting"></div>
+				{cache}
+				<div id="adverb-right">
+					<div id="adverb-contact">{*<a href="{plink "Adverb:contact"}">*}Chcete zde mít svoji reklamu? Kontaktujte nás na <a href="mailto:info@priznaniosexu.cz"">info@priznaniosexu.cz</a>{*Klikněte <u>zde</u>.</a>*}</div>
+					<div style="background:#f6ecf8; width:150px; font-size:12px; padding:10px; margin:10px 5px; vertical-align:top; text-align:left; color:#333;"><h2 style="font-size:12px; margin:0 0 3px;" class="freesexshop-heading6pY8K000030"><a href="http://www.freesexshop.cz/?ref=6pY8K00003" style="display:block; color:#7C338B;"><span style="display:block; background:#fff; height:150px; margin:0 0 5px; cursor:pointer; text-align:center;"><img src="http://www.freesexshop.cz/img/illust/noImgS.png" alt="" style="position:relative; top:50%; margin-top:-50px; vertical-align:middle; border:none;" /></span>FreeSexShop.cz - nejnavštěvovanější sexshop v ČR</a></h2><p style="margin:0 0 2px;" class="freesexshop-price6pY8K000030"></p><p style="margin:0;" class="freesexshop-availability6pY8K000030"></p></div><div style="background:#f6ecf8; width:150px; font-size:12px; padding:10px; margin:10px 5px; vertical-align:top; text-align:left; color:#333;"><h2 style="font-size:12px; margin:0 0 3px;" class="freesexshop-heading6pY8K000031"><a href="http://www.freesexshop.cz/?ref=6pY8K00003" style="display:block; color:#7C338B;"><span style="display:block; background:#fff; height:150px; margin:0 0 5px; cursor:pointer; text-align:center;"><img src="http://www.freesexshop.cz/img/illust/noImgS.png" alt="" style="position:relative; top:50%; margin-top:-50px; vertical-align:middle; border:none;" /></span>FreeSexShop.cz - nejnavštěvovanější sexshop v ČR</a></h2><p style="margin:0 0 2px;" class="freesexshop-price6pY8K000031"></p><p style="margin:0;" class="freesexshop-availability6pY8K000031"></p></div><div style="background:#f6ecf8; width:150px; font-size:12px; padding:10px; margin:10px 5px; vertical-align:top; text-align:left; color:#333;"><h2 style="font-size:12px; margin:0 0 3px;" class="freesexshop-heading6pY8K000032"><a href="http://www.freesexshop.cz/?ref=6pY8K00003" style="display:block; color:#7C338B;"><span style="display:block; background:#fff; height:150px; margin:0 0 5px; cursor:pointer; text-align:center;"><img src="http://www.freesexshop.cz/img/illust/noImgS.png" alt="" style="position:relative; top:50%; margin-top:-50px; vertical-align:middle; border:none;" /></span>FreeSexShop.cz - nejnavštěvovanější sexshop v ČR</a></h2><p style="margin:0 0 2px;" class="freesexshop-price6pY8K000032"></p><p style="margin:0;" class="freesexshop-availability6pY8K000032"></p></div><div style="background:#f6ecf8; width:150px; font-size:12px; padding:10px; margin:10px 5px; vertical-align:top; text-align:left; color:#333;"><h2 style="font-size:12px; margin:0 0 3px;" class="freesexshop-heading6pY8K000033"><a href="http://www.freesexshop.cz/?ref=6pY8K00003" style="display:block; color:#7C338B;"><span style="display:block; background:#fff; height:150px; margin:0 0 5px; cursor:pointer; text-align:center;"><img src="http://www.freesexshop.cz/img/illust/noImgS.png" alt="" style="position:relative; top:50%; margin-top:-50px; vertical-align:middle; border:none;" /></span>FreeSexShop.cz - nejnavštěvovanější sexshop v ČR</a></h2><p style="margin:0 0 2px;" class="freesexshop-price6pY8K000033"></p><p style="margin:0;" class="freesexshop-availability6pY8K000033"></p></div><div style="background:#f6ecf8; width:150px; font-size:12px; padding:10px; margin:10px 5px; vertical-align:top; text-align:left; color:#333;"><h2 style="font-size:12px; margin:0 0 3px;" class="freesexshop-heading6pY8K000034"><a href="http://www.freesexshop.cz/?ref=6pY8K00003" style="display:block; color:#7C338B;"><span style="display:block; background:#fff; height:150px; margin:0 0 5px; cursor:pointer; text-align:center;"><img src="http://www.freesexshop.cz/img/illust/noImgS.png" alt="" style="position:relative; top:50%; margin-top:-50px; vertical-align:middle; border:none;" /></span>FreeSexShop.cz - nejnavštěvovanější sexshop v ČR</a></h2><p style="margin:0 0 2px;" class="freesexshop-price6pY8K000034"></p><p style="margin:0;" class="freesexshop-availability6pY8K000034"></p></div><script type="text/javascript" src="http://www.freesexshop.cz/ajax/affiliate?link=6pY8K00003"></script>
+				</div>
+				{/cache}
+			</div>
+			<div id="fblike-and-comment">
+				<p id="image_comment">
+					{$image->comment}
+				</p>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		{if $afterImageID}
+			<a n:href="next! imageID => $afterImageID" class="btn-space btn-link">
+				<div class="btn" id="next"></div>
+			</a>
+		{else}
+			<div class="btn-space"><div class="btn"></div></div>
+		{/if}
+		<div class="clear"></div>
+	</div>	
+	
+	<div id="link-and-fb">
+		{* udaje pro adminy *}
+		{if $user->isInRole("superadmin")}
+		<table>
+			<tr>
+				<td>
+					<b>Jméno:</b>
+				</td>
+				<td>
+					{$image->user_name}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>Telefon:</b>
+				</td>
+				<td>
+					{$image->user_phone}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>Email:</b>
+				</td>
+				<td>
+					{$image->user_email}
+				</td>
+			</tr>
+		</table>
+		{/if}
+		
+		<h2><a href="{plink Competition:uploadImage}">Hrajte o sexy oblečky na Vánoce (více zde)</a></h2>
+		<br />
+		
+		<h2>Sdílejte tento obrázek na odkazu:</h2>
+		<form id="link">
+			<textarea cols="70">http://www.{if $partymode}priznanizparby{else}priznaniosexu{/if}.cz{$imageLink}</textarea>
+		</form>
+
+		<div id="fb" class="fb-components">
+			<div class="fb-comments-container">
+				<div class="fb-comments" data-href="http://www.{if $partymode}priznanizparby{else}priznaniosexu{/if}.cz{$imageLink}" data-width="600" data-num-posts="10"></div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">FB.XFBML.parse(document.getElementById('fb'));//revalidace fb komponent</script>
+{/snippet}

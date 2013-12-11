@@ -1,0 +1,71 @@
+{block head}
+
+{/block}
+
+
+{block content}
+	<table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="centered">Jméno</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+			{foreach $forms as $form}
+				{if $form->id == 4 /* pařba */ && ! $user->isInRole("superadmin")}
+					<td> Třídění přiznání z pařby bylo pozastaveno </td><td></td><td></td>
+				{else}
+				<tr>
+					<td class="centered">
+						<div class="btn-group">
+							<a class="name" n:href="Forms:formsX id_form => $form->id, type => $form->type, show_mark => unmark">
+								<button class="btn">
+									{$form->name}
+								</button>
+							</a>
+						</div>
+					</td>
+					<td>
+						<a  n:href="Forms:formsX id_form => $form->id, type => $form->type, show_mark => unmark" class="btn btn-primary">
+							Zobrazit vložené údaje
+						</a>
+					</td>
+					<td class="centered">
+						<button data-target="#modal{$iterator->getCounter()}" role="button" class="btn btn-danger" data-toggle="modal">
+							smazat
+						</button>
+						<div class="modal hide fade in" id="modal{$iterator->getCounter()}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+									×
+								</button>
+								<h5 id="myModalLabel">
+									Smazat {$form->name}
+								</h5>
+							</div>
+							<div class="modal-body">
+								<p>
+									Opravdu chcete smazat {$form->name}?
+								</p>
+							</div>
+							<div class="modal-footer">
+								<a n:href="deleteForm! id_form => $form->id" class="btn btn-danger">
+									Ano
+								</a>
+								<button class="btn" data-dismiss="modal" aria-hidden="true">
+									Ne
+								</button>
+							</div>
+						</div>
+						<script type="text/javascript">
+							$("#modal{$iterator->getCounter()}").modal({ show: false });
+						</script>
+					</td>
+				</tr>
+				{/if}
+			{/foreach}
+		</tbody>
+	</table>
+	
+{/block}

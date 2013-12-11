@@ -1,0 +1,17 @@
+{snippet}
+<div class="add-to-fb-page-container" id="add-to-fb-page{$confession->id}">
+	{if empty($polls[$confession->id])}
+		<a n:href="changeAdd! id_confession => $confession->id, add => inc" class="add-to-fb-page">
+			+ 1 Na facebook (<span>{$confession->add_to_fb_page}</span>)
+		</a>
+	{else}
+		<a n:href="changeAdd! id_confession => $confession->id, add => dec" class="add-to-fb-page">
+			<i class="check"></i>Hlasováno (<span>{$confession->add_to_fb_page}</span>)
+		</a>								
+	{/if}
+        <span class="question">
+            <img src="{$basePath}/images/layout/qmark.png" width="7px" height="10px"></img>
+            <div class="what-the-hell stylish-container shadow">Příspěvky s nejvyšším počtem hlasů budou zveřejněny na Facebooku</div>
+         </span>
+</div>
+{/snippet}

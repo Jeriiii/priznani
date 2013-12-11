@@ -1,0 +1,20 @@
+{block head}
+	<link rel="stylesheet" href="{$basePath}/css/form.css" type="text/css">
+{/block}
+
+
+{block content}
+        <div class="form fullsize">
+	<h2>Registrace</h2>
+	
+	<table>
+		{form registrationForm}
+			<tr><td>{label name /}{*nick*}</td><td>{input name}</td></tr>
+			<tr><td>{label mail /}</td><td>{input mail}</td></tr>
+			<tr><td>{label password /}</td><td>{input password}</td></tr>
+			<tr><td>{label passwordVerify /}</td><td>{input passwordVerify}</td></tr>
+			<tr><td></td><td class="buttonin">{input send}</td></tr>
+		{/form}
+	</table>
+	</div>
+{/block}

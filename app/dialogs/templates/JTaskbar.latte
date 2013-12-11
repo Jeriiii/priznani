@@ -1,0 +1,11 @@
+{if count($minimized_dialogs)}
+Here are minimized dialog:
+{else}
+There is no minimized dialog
+{/if}
+
+<ul>
+	{foreach $minimized_dialogs as $id=>$dialog}
+    <li><a href="#" class="{$id} dialog_restore" rel="{$id}">{$id}</a></li>
+	{/foreach}
+</ul>

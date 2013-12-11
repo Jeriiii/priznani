@@ -1,0 +1,96 @@
+{block head}
+	<link rel="stylesheet" href="{$basePath}/css/form.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
+	<style>
+		h1{
+			color: #a70304;
+		}
+		h2{
+			font-family: 'Exo','Arial';
+			font-size: 28px;
+			color: #a70304;
+		}
+		#link{
+			color:#a70304;
+			font-weight: bold;
+		}
+		.float_left{
+			float: left;
+		}
+		#fotos{
+			width: 200px;
+			margin-top: 20px;
+			margin-left: 100px;
+		}
+		.foto{
+			margin: 10px 0;
+		}
+		.note{
+			font-size: 12px;
+		}
+		ul.inline {
+			margin: 20px 0;
+		}
+		.inline li {
+			float: left;
+			list-style-image: none; 
+			list-style-type: none;
+			margin-right: 15px;
+		}
+		.sponsors a {
+			font-weight: bold;
+			color: #a70304;
+			text-decoration: underline;
+		}
+	</style>
+	<script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>
+{/block}
+{block content}
+	<div class="float_left">
+		<h1>Buď mezi prvními!</h1>
+		<h2>Nahraj fotku a vyhraj dárek pod stromeček</h2>
+		<p>... jako jsou jeden ze tří sexy oblečků:</p>
+		<ul class="inline">
+			{foreach $images as $image}
+			<li>
+				<a href='{$basePath}/images/competition/{$image}.jpg' rel="lightbox[gallery]" tittle="sexy obleček">
+					<img src="{$basePath}/images/competition/{$image}.jpg" alt="sexy obleček" height="100">
+				</a>
+			</li>
+			{/foreach}
+						<div class="clear"></div>
+		</ul>
+		<div class="form fullsize">
+			{control imageNew}
+		</div>
+		<p class="sponsors">
+			Sponzoři soutěže:<br />
+			<a href="http://jkbusiness.cz">JKBusiness</a><br />
+			<a href="http://efektweb.cz">EfektWeb - tvoříme efektivní stránky</a>
+		</p>
+	</div>
+	{*<div class="float_left" id="fotos">
+		<h2>Další fotky:</h2>
+		<a n:href="Competition: imageID => $photo1->id" class="photo"><img src="{$basePath}/images/galleries/{$galleryID}/{$photo1->id}.{$photo1->suffix|lower}" width="200"></a>
+		<a n:href="Competition: imageID => $photo2->id" class="photo"><img src="{$basePath}/images/galleries/{$galleryID}/{$photo2->id}.{$photo2->suffix|lower}" width="200"></a>
+		<a n:href="Competition:" class="note">(zobrazit všechny)</a>
+		<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+{/block}
+
+{block foot}
+	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>
+{/block}
+
+{block meta}
+	{var $special_meta_tags = TRUE}
+	<title>Soutěž - přiznání o sexu</title>
+
+	<meta name="keywords" content="přiznání o sexu" />
+	<meta name="description" content="Nahraj fotku a vyhraj jeden ze tří sexy oblečků!" />
+
+	<meta property="og:title" content="Soutěž - Přiznání o sexu" />
+	<meta property="og:image" content="http://priznaniosexu.cz/images/competition/1.jpg" />
+	<meta property="og:site_name" content="priznaniosexu.cz" />
+{/block}

@@ -1,0 +1,53 @@
+﻿{**
+ * My Application layout template.
+ *
+ * @copyright  Copyright (c) 2010 John Doe
+ * @package    MyApplication
+ *
+ * @param string   $basePath web base path
+ * @param string   $robots   tell robots how to index the content of a page (optional)
+ * @param array    $flashes  flash messages
+ *}
+
+<!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Strict//EN”   “http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd”>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="author" content="Petr Kukrál" />
+	<meta name="Content-language" content="cs" />
+	<meta name="robots" content="{$robots}" n:ifset="$robots">
+
+        <!--[if lt IE 9]>
+            <script src="{$basePath}/js/html5shiv.js"></script>
+        <![endif]-->
+	<meta charset="utf-8" />
+    
+	{if $domain == "priznanizparby.cz"}
+		<title>Přiznání z párty</title>
+        
+		<meta name="keywords" content="Přiznání z pařby" />
+		<meta name="description" content="Přiznání z pářby" />
+		<link rel="stylesheet" href="{$basePath}/css/layout.css" type="text/css">
+		<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">
+		<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
+	{else}
+		<title>Přiznání o sexu</title>
+
+		<meta name="keywords" content="přiznání o sexu" />
+		<meta name="description" content="Přiznání o sexu" />
+		<link rel="stylesheet" href="{$basePath}/css/layout.css" type="text/css">
+		<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">
+		<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
+        {/if}
+        <link href='http://fonts.googleapis.com/css?family=Exo:600,800' rel='stylesheet' type='text/css'>
+    <?php echo $google_analytics; ?>
+	{block head}{/block}
+</head>
+
+<body>
+	<div n:foreach="$flashes as $flash" class='flash {$flash->type}'>
+		{$flash->message}
+            </div>
+	{block content}{/block}
+</body>
+</html>

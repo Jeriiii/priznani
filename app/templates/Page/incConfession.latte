@@ -1,0 +1,35 @@
+<a name="{$confession->id}">
+<div class="confession">
+	<p>
+		{$confession->note}
+	</p>
+	<div class="create-time">
+		{if $partymode}
+		<a n:href="Page:partyConfession id => $confession->id">
+		{var fb = "party-confession"}
+		{elseif $advicemode}
+		<a n:href="Page:advice id => $confession->id">
+		{var fb = "advice"}
+		{else}
+		<a n:href="Page:confession id => $confession->id">
+		{var fb = "confession"}
+		{/if}
+			vydáno {date_format($confession->release_date, "d.m. Y")} v {date_format($confession->release_date, "H:i")}
+		</a>
+	</div>
+	<div class="votes">
+		{control pollsControl-$confession->id}
+		{*control addToFBPagesControl-$confession->id*}
+	</div>
+        <div class="fb-components">
+			<div class="fb-like-container">
+				<div class="fb-like" data-href="http://www.priznaniosexu.cz/page/{$fb}?id={$confession->id}"
+					 data-width="390" data-show-faces="true"></div>
+			</div>
+			{control fbCommentsControl-$confession->id}
+			{*<div class="fb-forum fb-comments-container">
+				<div class="fb-comments" data-href="http://www.priznaniosexu.cz/page/{$fb}?id={$confession->id}" data-width="400" data-num-posts="2"></div>
+			</div>*}
+        </div>
+</div>
+</a>

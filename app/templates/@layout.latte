@@ -1,0 +1,325 @@
+﻿{**
+ * My Application layout template.
+ *
+ * @copyright  Copyright (c) 2010 John Doe
+ * @package    MyApplication
+ *
+ * @param string   $basePath web base path
+ * @param string   $robots   tell robots how to index the content of a page (optional)
+ * @param array    $flashes  flash messages
+ *}
+
+{*<!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.0 Strict//EN”   “http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd”>*}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="author" content="Petr Kukrál" />
+		<meta name="Content-language" content="cs" />
+		<meta name="robots" content="{$robots}" n:ifset="$robots">
+		<meta name="verification" content="37e898047322c2e4e70968ca2c138f0d" />
+
+        <!--[if lt IE 9]>
+            <script src="{$basePath}/js/html5shiv.js"></script>
+        <![endif]-->
+		<meta charset="utf-8" />
+        {block beforeHead}{/block}
+		{if $partymode}
+		    {var $pagename = 'přiznání<b>z</b>pařby<span>.cz</span>'}
+			{ifset #meta}
+				{* inportujou se specialni meta tagy *}
+				{include #meta}
+			{else}
+			<title>Přiznání z pařby</title>
+
+			<meta name="keywords" content="Přiznání z pařby" />
+			<meta name="description" content="Přiznání z pařby" />
+			
+			<meta property="og:title" content="Přiznání z pařby" />
+			<meta property="og:type" content="article" />
+			<meta property="og:image" content="http://priznanizparby.cz/images/party.jpg" />
+			<meta property="og:site_name" content="priznanizparby.cz" />
+			<meta property="og:description" content="Stala se Vám někdy na pařbě nějaká zajímavá, vtipná či šokující příhoda, ale bojíte se to veřejně říct? Využijte formuláře na http://priznanizparby.cz/ Všechna přiznání jsou 100% anonymní." />
+			{/ifset}
+			<link rel="stylesheet" href="{$basePath}/css/layout.css" type="text/css">
+			<link rel="stylesheet" href="{$basePath}/css/party.css" type="text/css">
+			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">
+			<link rel="shortcut icon" href="{$basePath}/partyicon.ico" type="image/x-icon">
+		{else}
+		    {var $pagename = 'přiznání<b>o</b>sexu<span>.cz</span>'}
+			{ifset #meta}
+				{* inportujou se specialni meta tagy *}
+				{include #meta}
+			{else}
+			<title>Přiznání o sexu</title>
+
+			<meta name="keywords" content="přiznání o sexu" />
+			<meta name="description" content="Přiznání o sexu" />
+			
+			<meta property="og:title" content="Přiznání o sexu" />
+			<meta property="og:type" content="article" />
+			<meta property="og:image" content="http://priznaniosexu.cz/images/fbkiss.jpg" />
+			<meta property="og:site_name" content="priznaniosexu.cz" />
+			<meta property="og:description" content="Stala se Vám v posteli nějaká zajímavá, vtipná či šokující příhoda, ale bojíte se to veřejně říct? Přiznejte se na http://priznaniosexu.cz/. Všechna přiznání jsou 100% ANONYMNÍ. " />
+			{/ifset}
+			<link rel="stylesheet" href="{$basePath}/css/layout.css" type="text/css">
+			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">
+			<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
+
+			{* mobile *}
+			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
+			<link media="handheld, only screen and (max-width: 480px), only screen and (max-device-width: 854px)" href="{$basePath}/css/mobile-layout.css" type="text/css" rel="stylesheet" />
+		{/if}
+		{block head}{/block}
+        <link href='http://fonts.googleapis.com/css?family=Exo:600,800' rel='stylesheet' type='text/css'>
+		<?php echo $google_analytics; ?>
+	</head>
+
+	<body>
+		{cache}
+		<div id="page-shadow"></div>
+        <div id="left-side">
+	    {if $partymode}
+            <div id="left-panel">
+                <div id="left-menu">
+                    <a n:href=":Page:default url => priznanizparby" class="first"></a>
+                    <a href="http://akcnidrinky.cz" class="second"></a>
+                    <a n:href=":Page:default url => priznani-o-sexu" class="thirdparty"></a>
+                    <a n:href=":Page:metro" class="third"></a>
+                </div>
+            </div>
+            <div id="left-panel-label">
+                <nav id="title-container">
+                    <a n:href=":Page:default url => priznanizparby" class="first">Přiznání</a>
+                    <a href="http://akcnidrinky.cz" class="second">Akční drinky</a>
+                    <a n:href=":Page:default url => priznani-o-sexu" class="thirdparty">Přiznání o sexu</a>
+                    <a n:href=":Page:metro" class="third">Bonusy</a>
+                </nav>
+            </div>
+	    {else}
+	    <div id="left-panel">
+                <div id="left-menu">
+                    <a n:href=":Page:default url => priznani-o-sexu" class="first"></a>
+                    <a n:href=":Page:default url => poradna-o-sexu" class="second"></a>
+                    <a n:href="this" class="third"></a>
+                    <a n:href=":Page:metro" class="fourth"></a>
+                </div>
+            </div>
+            <div id="left-panel-label">
+                <nav id="title-container">
+                    <a n:href=":Page:default url => priznani-o-sexu" class="first">Přiznání</a>
+                    <a n:href=":Page:default url => poradna-o-sexu" class="second">Poradna</a>
+                    <a n:href="this" class="third">Seznamka (připravujeme)</a>
+                    <a n:href=":Page:metro" class="fourth">Bonusy</a>
+                </nav>
+            </div>
+	    {/if}
+        </div>
+	    <div id="header" class="partygradient">
+	    </div>
+		{/cache}
+        <header class="inner">
+			{cache}
+			{if $partymode}
+			    <a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
+			    <a n:href=":Page:default url => priznanizparby"><h1>{!$pagename}</h1></a>
+			{else}
+			    <a n:href=":Page:default url => priznani-o-sexu" title="Přiznání o sexu" id="kiss"></a>
+			    <a n:href=":Page:default url => priznani-o-sexu"><h1>{!$pagename}</h1></a>
+			{/if}
+			{if !empty($url) && $url == "poradna-o-sexu"}
+			{else}
+			
+			{/if}
+				{*block nextAdmission}{/block}
+				<a href="#" id="droplink">registrace/přihlášení</a>
+				<div class="stylish-container shadow" id="dropmenu">{widget orders}</div>
+
+				{ifset $identity}
+				<p><strong n:ifset="$identity->name">{$identity->name}</strong></p>
+				<p n:ifset="$identity->fbuid">
+						Facebook:
+						<a href="http://www.facebook.com/{$identity->fbuid}">
+								<img src="http://graph.facebook.com/{$identity->fbuid}/picture" style="vertical-align: middle">
+						</a>
+				</p>
+				<p><a n:href="Sign:out">Odhlásit se</a></p>
+				{else}
+				<p><a n:href="Sign:in">Přihlaste se</a></p>
+				{/ifset*}
+			{/cache}
+			{block orders}{/block}
+			<div class="clear"></div>
+			
+        </header>
+        <div class="clear"></div>
+		{block beforeContent}{/block}
+		<section class="inner">
+            <div n:foreach="$flashes as $flash" class='flash {$flash->type}'>
+		{$flash->message}
+            </div>
+            {block content}{/block}
+            <div class="clear"></div>
+		</section>
+
+        <footer class="inner">
+			<div id="footline"></div>
+			<div class="left">
+				Copyright &copy; 2013 priznaniosexu.cz<br /><br />
+				Designed by <a href="http://www.nejlevnejsiwebstranky.cz/">nejlevnejsiwebstranky.cz</a>
+			</div>
+			<div class="right">
+				<nav id="footernav">
+				{*if $user->isLoggedIn()}
+						{widget loggedInMenu}
+				{else}
+						{widget loggedOutMenu}
+				{/if*}
+				</nav>
+				<br />
+				www.priznaniosexu.cz
+			</div>
+
+			<script type="text/javascript" src="{$basePath}/js/jquery-1.7.1.min.js"></script>
+			{if $existForm}
+			<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
+			{/if}
+			<div id="fb-root"></div>
+			
+			{cache}
+			<script>
+				{if $fbToDatabase}
+					window.fbAsyncInit=function(){ FB.Event.subscribe("edge.create",function(a){ a=a.match(/[0-9]+/);$.get({link incLike!} + "&id_confession="+a)});FB.Event.subscribe("edge.remove",function(a){ a=a.match(/[0-9]+/)[0];$.get({link decLike!} + "&id_confession="+a)});FB.Event.subscribe("comment.create",function(a){ a=a.href.match(/[0-9]+/)[0];$.get({link incComment!} + "&id_confession="+a)});FB.Event.subscribe("comment.remove",function(a){ a=a.href.match(/[0-9]+/)[0];$.get({link decComment!} + "&id_confession="+a)})};
+				{/if}
+				(function(a,b,c){ var d=a.getElementsByTagName(b)[0];a.getElementById(c)||(a=a.createElement(b),a.id=c,a.src="//connect.facebook.net/cs_CZ/all.js#xfbml=1&appId=639745929384551",d.parentNode.insertBefore(a,d))})(document,"script","facebook-jssdk");
+					{*window.fbAsyncInit = function() {
+					}
+					//FB.init({ appId: '639745929384551',channelUrl : '//www.milionovykouc.cz/chanel.html', status: true, cookie: true,xfbml: true});
+					FB.Event.subscribe("edge.create", function(targetUrl) {
+						var id = targetUrl.match(/[0-9]+/);
+						$.get({link incLike!} + "&id_confession=" + id);
+					});
+					FB.Event.subscribe("edge.remove", function(targetUrl) {
+						var id = targetUrl.match(/[0-9]+/)[0];
+						$.get({link decLike!} + "&id_confession=" + id);
+					});
+					FB.Event.subscribe("comment.create", function(target) {
+						var href = target.href;
+						var id = href.match(/[0-9]+/)[0];
+						$.get({link incComment!} + "&id_confession=" + id);
+					});
+					FB.Event.subscribe("comment.remove", function(target) {
+						var href = target.href;
+						var id = target.href.match(/[0-9]+/)[0];
+						$.get({link decComment!} + "&id_confession=" + id);
+					});
+				};
+				(function(d, s, id) {
+					var js, fjs = d.getElementsByTagName(s)[0];
+					if (d.getElementById(id)) return;
+					js = d.createElement(s); js.id = id;
+					js.src = "//connect.facebook.net/cs_CZ/all.js#xfbml=1&appId=639745929384551";
+					fjs.parentNode.insertBefore(js, fjs);
+				}(document, 'script', 'facebook-jssdk'));*}
+				
+				jQuery.ajaxSetup({ cache:!1,dataType:"json",success:function(a){ if(a.snippets)for(var b in a.snippets)$("#"+b).html(a.snippets[b])}});$(".polly, .add-to-fb-page").live("click",function(a){ a.preventDefault();a=$(a.target);void 0==a.attr("data-action")&&($.get(this.href),a.attr("data-action","clicked"))});var ordermenu=$("#ordermenu"),orderlink=$("#orderlink");orderlink.click(function(){ ordermenu.stop().animate({ opacity:"toggle"},500)});
+	$("body").click(function(a){ !$(a.target).parents().is("#orders")&&ordermenu.is(":visible")&&ordermenu.stop().hide()});var container=$("#left-side"),panel=$("#left-panel"),label=$("#left-panel-label"),leftspeed=200,isappearing=!1,isdisappearing=!1;container.mouseenter(function(){ isappearing||(isappearing=!0,isdisappearing=!1,label.stop().animate({ left:panel.width()},leftspeed,"linear"))});
+	container.mouseleave(function(){ isdisappearing||(isappearing=!1,isdisappearing=!0,label.stop().animate({ left:-1*$("#left-panel-label").width()+$("#left-panel").width()},leftspeed,"linear"))});$("#left-side .first, #left-side .second, #left-side .third, #left-side .fourth, #left-side .thirdparty").hover(function(){ $("."+$(this).attr("class")).css("text-decoration","underline")},function(){ $("."+$(this).attr("class")).css("text-decoration","none")});
+	{*//////////////////////////////AJAX///////////////////////////////////
+				jQuery.ajaxSetup({
+					cache: false,
+					dataType: 'json',
+					success: function (payload) {
+						if (payload.snippets) {
+							for (var i in payload.snippets) {
+								$('#' + i).html(payload.snippets[i]);
+							
+							}
+						}
+					}
+				});
+				$(".polly, .add-to-fb-page").live('click', function (e) { //click(function(e) {
+					e.preventDefault();
+					var target = $(e.target);
+					var dataAction = target.attr("data-action");
+					if(dataAction == undefined){
+						$.get(this.href);
+						target.attr("data-action", "clicked");
+					}
+				});
+							//////////////PRIHLASOVACI HORNI MENU/////////////////////////
+	//                        var isvisible = false;
+	//                        var dropmenu = $('#dropmenu');
+	//                        var droplink = $('#droplink');
+	//                        dropmenu.css('display', 'none');
+	//                        dropmenu.css('visibility', 'visible');
+	//                        droplink.click(function(){ 
+	//                            if(isvisible){
+	//                                isvisible = false;
+	//                                dropmenu.stop().fadeTo(500, 0.0);
+	//                            }else{
+	//                                isvisible = true;
+	//                                dropmenu.stop().fadeTo(500, 1.0);
+	//                            }
+	//                        });
+						
+							//////////////RAZENI/////////////////////////
+							var ordermenu = $('#ordermenu');
+							var orderlink = $('#orderlink');
+							orderlink.click(function(){
+								ordermenu.stop().animate({
+									opacity: 'toggle'
+								}, 500);
+							});
+							$("body").click(function(e){
+								var clicked = $(e.target);
+								if (!clicked.parents().is("#orders") && ordermenu.is(":visible")){
+									ordermenu.stop().hide();
+								}
+							})
+					
+                        
+							////////////////LEVE MENU//////////////////////////
+							var container = $('#left-side');
+							var panel = $('#left-panel');
+							var label = $('#left-panel-label');
+							var leftspeed = 200;
+							var isappearing = false; //vysouva se - neni treba rusit stopem a posilat znova
+							var isdisappearing = false;
+                        
+							container.mouseenter(function(){
+								if(!isappearing){
+								isappearing = true;
+								isdisappearing = false;
+								label.stop().animate(
+									{
+									left: panel.width()
+									}
+									, leftspeed, 'linear')
+								}
+							});
+							container.mouseleave(function(){
+								if(!isdisappearing){
+								isappearing = false;
+								isdisappearing = true;
+								label.stop().animate(
+									{
+									left: (((-1) * ($('#left-panel-label').width())) + $('#left-panel').width())
+									}
+									, leftspeed, 'linear')
+								}
+							});
+							/////////////////hover underline////////////
+							$('#left-side .first, #left-side .second, #left-side .third, #left-side .fourth').hover(function(){
+								$('.' + $(this).attr('class')).css('text-decoration', 'underline');
+							}, function(){
+								$('.' + $(this).attr('class')).css('text-decoration', 'none');
+							});*}
+			</script>
+			{/cache}
+		{block foot}{/block}
+			
+			<div class="clear"></div>
+		</footer>
+	</body>
+</html>

@@ -1,0 +1,73 @@
+{block pageHead}
+<link rel="stylesheet" href="{$basePath}/css/page.css" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Fondamento' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{$basePath}/css/confession.css" type="text/css">
+<style>
+	#confession{ position: relative; }{* rodic *}
+</style>
+{/block}
+
+{block pageContent}
+
+	{if empty($advice->release_date)}
+	<div id="notification" class="rounded-more">
+		Čeká na schválení adminem
+	</div>
+	{elseif ($now <= $advice->release_date)}
+	<div id="notification" class="rounded-more">
+		Vyjde dne {date_format($advice->release_date, "d.m. Y")} v {date_format($advice->release_date, "H:i")}
+	</div>
+	{/if}
+	<script type="text/javascript"><!--
+	google_ad_client = "ca-pub-7282386453536295";
+	/* široký sloupec nad detailem přiznáním 1 */
+	google_ad_slot = "6040680360";
+	google_ad_width = 728;
+	google_ad_height = 90;
+	//-->
+	</script>
+	<script type="text/javascript"
+	src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+	</script>
+	<div id="confession" class="rounded-more">
+		<p>
+				{$advice->note}
+		</p>
+		<div class="votes">
+		{control pollyControl}
+		{*control addToFBPageControl*}
+		</div>
+		<div class="fb-components">
+			<div class="fb-like-container">
+				<div class="fb-like" data-href="http://www.priznaniosexu.cz/page/advice?id={$advice->id}"
+					 data-send="true" data-width="300" data-show-faces="true"></div>
+			</div>
+				{if $advice->comment < 3}
+			<div class="fb-comments-container-{$advice->comment}">
+				{else}
+				<div class="fb-comments-container-3-more">
+				{/if}
+					<div class="fb-comments" data-href="http://www.priznaniosexu.cz/page/advice?id={$advice->id}" data-width="600" data-num-posts="2"></div>
+				</div>{*include #adverb*}
+			</div>
+		</div>
+	</div>
+	<a href="{link Page:default url => poradna-o-sexu, order => news}#{$otherAdvice->id}" id="link_to_homepage">
+		<h2>Další otázka</h2>
+		{if $otherAdvice}
+		<div id="other">
+			<p class="rounded-more">
+						{$otherAdvice->note|truncate:100}
+			</p>
+			<div class="cut other_advice">
+			    <img src="{$basePath}/images/layout/menu.png" width="70">
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+		{/if}
+	</a>
+	
+	<div style="clear:both"></div>
+
+{/}

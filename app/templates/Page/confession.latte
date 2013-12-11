@@ -1,0 +1,74 @@
+{block pageHead}
+<link rel="stylesheet" href="{$basePath}/css/page.css" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Fondamento' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{$basePath}/css/confession.css" type="text/css">
+{* reklama *}
+<style>
+	#confession{ position: relative; }{* rodic *}
+</style>
+{/block}
+
+{block pageContent}
+	{if empty($confession->release_date)}
+		<div id="notification" class="rounded-more">
+			Čeká na schválení adminem
+		</div>
+	{elseif ($now <= $confession->release_date)}
+		<div id="notification" class="rounded-more">
+			Vyjde dne {date_format($confession->release_date, "d.m. Y")} v {date_format($confession->release_date, "H:i")}
+		</div>
+	{/if}
+	<script type="text/javascript"><!--
+	google_ad_client = "ca-pub-7282386453536295";
+	/* široký sloupec nad detailem přiznáním 1 */
+	google_ad_slot = "6040680360";
+	google_ad_width = 728;
+	google_ad_height = 90;
+	//-->
+	</script>
+	<script type="text/javascript"
+	src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+	</script>
+	<div id="confession" class="rounded-more">
+		<p>
+				{$confession->note}
+		</p>
+		<div class="votes">
+				{control pollyControl}
+				{*control addToFBPageControl*}
+		</div>
+		{*include #adverb*}
+		<div class="fb-components">
+			<div class="fb-like-container">
+				<div class="fb-like" data-href="http://www.priznaniosexu.cz/page/confession?id={$confession->id}"
+					 data-send="true" data-width="600" data-show-faces="true"></div>
+			</div>
+				{if $confession->comment < 3}
+			<div class="fb-comments-container-{$confession->comment}">
+				{else}
+				<div class="fb-comments-container-3-more">
+				{/if}
+					<div class="fb-comments" data-href="http://www.priznaniosexu.cz/page/confession?id={$confession->id}" data-width="600" data-num-posts="2"></div>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+	<a href="{link Page:default order => news}#{$otherConfession->id}" id="link_to_homepage">
+		<h2>Další přiznání</h2>
+		{if $otherConfession}
+		<div id="other">
+			<p class="rounded-more">
+						{$otherConfession->note|truncate:100}
+			</p>
+			<div class="cut">
+			    <img src="{$basePath}/images/layout/menu.png" width="70">
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+		{/if}
+	</a>
+	
+	<div style="clear:both"></div>
+{/}

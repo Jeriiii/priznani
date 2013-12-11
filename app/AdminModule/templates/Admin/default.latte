@@ -1,0 +1,38 @@
+{block head}
+
+{/block}
+
+{block content}
+	<h3>Přehled</h3>
+	<p class="muted">Nápověda: Tyto zprávy se mažou automaticky po dvou měsících</p>
+	<table class="table table-striped">
+		<thead>
+			<th>Vyplněný formulář: </th>
+			<th>Datum odeslání:</th>
+		</thead>
+		<tbody>
+			{foreach $forms_new_send as $form}
+				<tr>
+					<td>
+						<a n:href="markNewSendForm! id => $form->id, path => $form->path">
+							{if $form->mark == 0}
+							<button class="btn btn-primary">
+							{else}
+							<button class="btn">
+							{/if}
+								{$form->name}
+							</button>
+						</a>
+					</td>
+					<td>
+						<a n:href="markNewSendForm!  id => $form->id, path => $form->path">
+							<button class="btn">
+									{$form->date|date:'%d.%m.%Y'}
+							</button>
+						</a>
+					</td>
+				</tr>
+			{/foreach}
+		</tbody>
+	</table>
+{/block}

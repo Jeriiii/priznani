@@ -1,0 +1,53 @@
+{block pageHead}
+	<link href="{$basePath}/css/justtable.bootstrap.min.css" rel="stylesheet" type="text/css">
+{/block}
+
+{block pageContent}
+
+<h2>Aktivita administrátorů:</h2>
+<table class="table table-striped">
+	<thead>
+		<th>pořadí</th>
+		<th>nick</th>
+		<th>skóre</th>
+	</thead>
+	<tbody>
+		{foreach $admins as $admin}
+			<tr>
+				<td>
+					{$iterator->counter}.
+				</td>
+				<td>
+					{if !empty($admin->name)}
+						{$admin->name}
+					{/if}
+				</td>
+				<td>
+					{if $admin->admin_score < 10}
+						0 - 10
+					{elseif $admin->admin_score < 100}
+						10 - 100
+					{elseif $admin->admin_score < 200}
+						100 - 200
+					{elseif $admin->admin_score < 500}
+						200 - 500
+					{elseif $admin->admin_score < 1000}
+						500 - 1000
+					{elseif $admin->admin_score < 2000}
+						1000 - 2000
+					{elseif $admin->admin_score < 5000}
+						2000 - 5000
+					{elseif $admin->admin_score < 10000}
+						5000 - 10000
+					{elseif $admin->admin_score < 20000}
+						10000 - 20000
+					{elseif $admin->admin_score < 50000}
+						20000 - 50000
+					{else}
+						50000+
+					{/if}
+				</td>
+			</tr>
+		{/foreach}
+	</tbody>
+</table>

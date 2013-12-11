@@ -1,0 +1,77 @@
+{**
+ * My Application layout template.
+ *
+ * @copyright  Copyright (c) 2010 John Doe
+ * @package    MyApplication
+ *
+ * @param string   $basePath web base path
+ * @param string   $robots   tell robots how to index the content of a page (optional)
+ * @param array    $flashes  flash messages
+ *}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<meta name="description" content="Nette Framework web application skeleton">
+	<meta name="robots" content="{$robots}" n:ifset="$robots">
+
+	<title>{ifset $title}{$title} &ndash; {/ifset}</title>
+
+
+	<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
+	
+        <link href="{$basePath}/css/default.css" rel="stylesheet" type="text/css">
+        <link href="{$basePath}/css/admin/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+        <link href="{$basePath}/css/admin/adminlayout.css" rel="stylesheet" type="text/css">
+        <link href="{$basePath}/css/admin/adminform.css" rel="stylesheet" type="text/css">
+
+	<link rel="stylesheet" href="{$basePath}/css/smoothness/jquery-ui-1.8.21.custom.css" type="text/css">
+
+
+	{block head}{/block}
+</head>
+
+<body>
+        <div class="navbar">
+        <div class="navbar-inner">
+            <a class="brand" href="#">Přejít na: </a>
+            <ul class="nav">
+                <li class="active"><a n:href="Admin:"><b>Administrace</b></a></li>
+                <li><a n:href=":Homepage:"><b>Domovská stránka</b></a></li>
+            </ul>
+            <div class="btn-group pull-right">
+                <a class="btn btn-primary" n:href="Admin:myAccounts"><i class="icon-user icon-white"></i> Můj účet</a>
+                <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a n:href="Admin:myAccounts"><i class="icon-pencil"></i>Můj účet</a></li>
+                    <li class="divider"></li>
+                    <li><a n:href="signOut!"><i class="icon-ban-circle"></i>Odhlásit se</a></li>
+
+                </ul>
+            </div>
+            
+        </div>
+        </div>
+        <div class="pull-left" id="mainmenu">
+            {widget adminMenu}
+        </div>
+        
+        <div class="well pull-right" id="mainblock">
+                {if $user->isLoggedIn()}
+                <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">{$flash->message}</div>
+                {include #content}
+                {/if}
+        </div>
+        <div class="clearfix"></div>
+            <div id="footer">
+		<script src="{$basePath}/js/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="{$basePath}/js/jquery-ui-1.8.18.min.js"></script>
+                <script type="text/javascript" src="{$basePath}/js/bootstrap.min.js"></script>
+                <script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
+	{block foot}{/block}
+            </div>
+</body>
+</html>

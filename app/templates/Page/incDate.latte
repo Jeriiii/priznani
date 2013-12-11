@@ -1,0 +1,19 @@
+<a name="{$advert->id}">
+<div class="confession">
+	<p>
+		{$advert->note}
+	</p>
+	<div class="create-time">
+		<a n:href=":Profil:ShowProfil: id => $advert->userID">
+			vydáno {date_format($advert->create, "d.m. Y")} v {date_format($advert->create, "H:i")}
+		</a>
+	</div>
+        {*<div class="fb-components">
+			<div class="fb-like-container">
+				<div class="fb-like" data-href="http://www.priznaniosexu.cz/page/{$fb}?id={$advert->id}"
+					 data-width="390" data-show-faces="true"></div>
+			</div>
+			{control fbCommentsControl-$advert->id}
+        </div>*}
+</div>
+</a>

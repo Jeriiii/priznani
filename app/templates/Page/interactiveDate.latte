@@ -1,0 +1,51 @@
+{block pageHead}
+    <style>
+        #datelike{
+            position: absolute;
+            top: 70px;
+            left: 120px;
+            min-height: 23px;
+            min-width: 107px;
+            background: white;
+            text-align: center;
+            padding: 2px 10px;
+			overflow: hidden;
+        }
+        #kiss{
+            display: none;
+        }
+        header.inner{
+            height: 53px;
+        }
+        body{
+            background: url('http://www.interaktivnifilm.cz//images/bg.jpg') repeat 0 0 #000;
+        }
+    </style>
+{/}
+{block meta}
+	{var $special_meta_tags = TRUE}
+	<title>Rande - přiznání o sexu</title>
+
+	<meta name="keywords" content="přiznání o sexu" />
+	<meta name="description" content="Dokážete sbalit tuto nádhernou slečnu?" />
+
+	<meta property="og:title" content="Rande - Přiznání o sexu" />
+	<meta property="og:type" content="article" />
+	<meta property="og:image" content="http://priznaniosexu.cz/images/metro/interande.jpg" />
+	<meta property="og:site_name" content="priznaniosexu.cz" />
+{/}
+
+{block pageContent}{/block}
+{block beforeContent}
+	<div name="flash">
+		<div style="width:1200px;margin:0 auto;position:relative;">
+                    <div id="datelike">
+                        <div class="fb-like" data-href="http://priznaniosexu.cz/page/interactive-date" data-send="false" data-layout="button_count" data-show-faces="true"></div>
+                    </div>
+			<iframe src="http://www.interaktivnifilm.cz/" width="1200" height="740" id="ab"></iframe>
+		</div>
+	</div>
+{/block}
+{block likeThisPage}
+
+{/block}
