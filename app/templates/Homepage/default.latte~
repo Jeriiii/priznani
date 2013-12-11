@@ -1,0 +1,51 @@
+{block head}
+<link rel="stylesheet" type="text/css" href="{$basePath}/css/smoothness/jquery-ui-1.8.18.css">
+<link rel="stylesheet" type="text/css" href="{$basePath}/css/dependentSelect.css">
+<link rel="stylesheet" type="text/css" href="{$basePath}/css/timepicker.css">
+<link rel="stylesheet" type="text/css" href="{$basePath}/css/layout.css">
+<link rel="stylesheet" type="text/css" href="{$basePath}/css/zakladni.css">
+{/block}
+
+
+{block content}
+<ul id="categories">
+	{foreach $categories as $category}
+	<li class="category" id="{$category->name|lower|toAscii}">
+		<a n:href="Kategorie: id => $category->id">{$category->name|upper}</a>
+		<img src="{$basePath}/images/homepage/{$category->name|lower|toAscii}.png" width="116px" height="157px" />
+		<ul style="background: url('{$basePath}/images/homepage/{$category->name|lower|toAscii}-background.png') 50% 50% no-repeat;">
+			{foreach $category->related('subcategories')->order('order') as $subcategory}
+			<li><a n:href="Subkategorie: id => $subcategory->id">{$subcategory->name}</a></li>
+			{/foreach}
+		</ul>
+	</li>
+	{/foreach}
+</ul>
+	{control searchForm}
+	{control fbToolsScript}
+	{control fbLikeBox}
+{/block}
+
+{block foot}
+	<script type="text/javascript" src="{$basePath}/js/jquery.nette.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/jquery.ajaxform.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/jquery.nette.dependentselectbox.js"></script>
+	<script type='text/javascript' src="{$basePath}/js/jquery-ui-1.8.18.min.js"></script>
+	<script type='text/javascript' src="{$basePath}/js/timepicker.js"></script>
+	<script type='text/javascript' src="{$basePath}/js/jquery-ui-timepicker-cs.js"></script>
+	<script type="text/javascript">
+  <!-- <![CDATA[
+    $(document).ready(function()
+    {
+      $('input.datetimepicker').datetimepicker(
+      {
+        duration: '',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: '2012:2020',
+        stepMinute: 1
+      });
+    });
+  //]]> -->
+	</script>
+{/block}

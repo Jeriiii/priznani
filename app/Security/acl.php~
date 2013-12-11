@@ -1,0 +1,32 @@
+<?php
+
+use Nette\Security\Permission;
+
+
+class Acl extends Permission
+{
+
+    public function __construct()
+    {
+    
+    	//base
+
+        	//roles
+        	$this->addRole('guest');
+        	$this->addRole('user', 'guest');
+        	$this->addRole('inzerent', 'user');
+        	$this->addRole('admin', 'inzerent');
+        	
+        	// resources
+        	$this->addResource('Admin');
+        	$this->addResource('User');
+        	
+        	// privileges
+          	$this->allow('user', 'User');
+          	$this->allow('admin', 'Admin');
+          	$this->allow('inzerent', 'Admin', 'default');
+          	$this->allow('inzerent', 'Admin', 'default');
+          	$this->allow('inzerent', 'Admin', 'default');
+    }
+
+}

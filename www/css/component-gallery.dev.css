@@ -62,7 +62,7 @@
 #link-and-fb{
 	width:700px;
 	margin: 0 70px;
-	padding: 35px 50px;
+	padding: 35px 50px 10px 50px;
 }
 
 #upload_foto{
@@ -164,6 +164,10 @@ h2#image_name{
 	position: absolute;
 	top: -50px;
 	right: -265px;
+}
+
+#adverb-right div {
+	margin: 15px 0px;
 }
 
 #adverb-contact{
