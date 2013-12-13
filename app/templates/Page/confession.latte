@@ -54,9 +54,9 @@
 		</div>
 	
 	</div>
-	<a href="{link Page:default order => news}#{$otherConfession->id}" id="link_to_homepage">
+	{if $otherConfession}
+	<a href="{link Page:confession id => $otherConfession->id}#{$otherConfession->id}" id="link_to_homepage">
 		<h2>Další přiznání</h2>
-		{if $otherConfession}
 		<div id="other">
 			<p class="rounded-more">
 						{$otherConfession->note|truncate:100}
@@ -67,8 +67,8 @@
 			<div class="clear"></div>
 		</div>
 		<div class="clear"></div>
-		{/if}
 	</a>
+	{/if}
 	
 	<div style="clear:both"></div>
 {/}
