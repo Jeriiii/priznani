@@ -1,6 +1,6 @@
 {snippet}
 	<div id="top_container">
-            <h2 id="image_name">{$image->name|firstUpper}{if (($user->isInRole("superadmin") || $user->isInRole("admin")) && $image->approved == 0)}(zatím neschváleno)<a href="#">Schválit fotku</a>{/if}</h2>
+            <h2 id="image_name">{$image->name|firstUpper}{if (($user->isInRole("superadmin") || $user->isInRole("admin")) && $image->approved == 0)}(zatím neschváleno <a href="#">Schválit fotku</a>){/if}</h2>
 		<a href="{plink Competition:uploadImage}" id="upload_foto">
 			nahrát fotku
 		</a>
