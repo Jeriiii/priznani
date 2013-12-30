@@ -255,7 +255,8 @@ class FormsPresenter extends AdminSpacePresenter
 		}elseif($doit == "fbmark"){ //fb check
 			$subform
 				->update(array(
-				    "mark" => 1
+				    "mark" => 1,
+					"was_on_fb" => 1,
 				));
 		}elseif($doit == "duplicate"){
 			$subform

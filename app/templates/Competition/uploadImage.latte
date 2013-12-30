@@ -48,6 +48,20 @@
 {block content}
 	<div class="float_left">
 		<h1>Buď mezi prvními!</h1>
+		{if $partymode}
+		<h2>Nahraj fotku a vyhraj jednu ze super cen</h2>
+		<p>... jako je flaška sedmiletého rumu nebo cool hrneček:</p>
+		<ul class="inline">
+			{foreach $images as $image}
+			<li>
+				<a href='{$basePath}/images/competition/party/{$image}.jpg' rel="lightbox[gallery]" tittle="super dárek">
+					<img src="{$basePath}/images/competition/party/{$image}.jpg" alt="super dárek" height="100">
+				</a>
+			</li>
+			{/foreach}
+			<div class="clear"></div>
+		</ul>
+		{else}
 		<h2>Nahraj fotku a vyhraj dárek pod stromeček</h2>
 		<p>... jako jsou jeden ze tří sexy oblečků:</p>
 		<ul class="inline">
@@ -60,12 +74,16 @@
 			{/foreach}
 						<div class="clear"></div>
 		</ul>
+		{/if}
 		<div class="form fullsize">
 			{control imageNew}
 		</div>
 		<p class="sponsors">
 			Sponzoři soutěže:<br />
+			{if $partymode}
+			{else}
 			<a href="http://jkbusiness.cz">JKBusiness</a><br />
+			{/if}
 			<a href="http://efektweb.cz">EfektWeb - tvoříme efektivní stránky</a>
 		</p>
 	</div>
@@ -77,7 +95,7 @@
 		<div class="clear"></div>
 	</div>
 	<div class="clear"></div>
-{/block}
+{/block}*}
 
 {block foot}
 	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>

@@ -19,17 +19,39 @@ class CompetitionPresenter extends BasePresenter
 	public $domain;
 
 
+	public function startup() {
+		parent::startup();
+		
+		$httpRequest = $this->context->httpRequest;
+		$this->domain = $httpRequest
+							->getUrl()
+							->host;
+
+		if(strpos($this->domain, "priznanizparby") !== false)
+		{
+			$this->setPartyMode();
+		} else {
+			$this->setSexMode();
+		}
+	}
+
 	public function beforeRender() {
 		parent::beforeRender();
-		$this->setSexMode();
 	}
 
 	/* bacha, id je url - tedy nazev stranky */
 	
 	public function actionDefault($imageID)
 	{
-		$this->gallery = $this->context->createGalleries()
-							->order("id DESC")
+		$this->gallery = $this->context->createGalleries();
+		
+		if($this->partymode) {
+			$this->gallery->where("partymode", 1);							
+		} else {
+			$this->gallery->where("sexmode", 1);	
+		}
+			
+		$this->gallery = $this->gallery->order("id DESC")
 							->fetch();
 		
 		if(empty($imageID)) 
@@ -93,8 +115,11 @@ class CompetitionPresenter extends BasePresenter
 										->order("id DESC")
 										->fetch()
 										->id;
-		
-		$this->template->images = array(1,2,3);
+		if($this->partymode) {
+			$this->template->images = array(1,2,3);
+		} else {
+			$this->template->images = array(1,2,3);
+		}
 	}
 
 	protected function createComponentGallery()
@@ -124,7 +149,7 @@ class CompetitionPresenter extends BasePresenter
 					->where("approved", 1);
 		}
 		
-		return new Gallery($images, $this->image, $this->gallery, $this->domain);
+		return new Gallery($images, $this->image, $this->gallery, $this->domain, $this->partymode);
 	}
 
 	protected function createComponentImageNew($name) {

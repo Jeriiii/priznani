@@ -59,6 +59,11 @@
 					<td>
 						<a class="btn ajax-btn" n:href="markForm! id => $form->id, type => $type, show_mark => $show_mark, doit => 'duplicate'">totožné</a>
 					</td>
+					<td>
+						{if $form->was_on_fb == 1}
+							<span class="badge badge-success">bylo na FB</span>
+						{/if}
+					</td>
 					{if $show_mark != "fb"}
 					<td>
 						<a class="btn btn-info ajax-btn" n:href="markForm! id => $form->id, type => $type, show_mark => $show_mark, doit => 'toFB'">na FB</a>

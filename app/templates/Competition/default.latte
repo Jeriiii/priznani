@@ -23,13 +23,25 @@
 {/block}
 	
 {block meta}
-	{var $special_meta_tags = TRUE}
-	<title>Soutěž - přiznání o sexu</title>
+	{if $partymode}
+		{var $special_meta_tags = TRUE}
+		<title>Soutěž - přiznání z pařby</title>
 
-	<meta name="keywords" content="přiznání o sexu" />
-	<meta name="description" content="Nahraj fotku a vyhraj jeden ze tří sexy oblečků!" />
+		<meta name="keywords" content="přiznání z pařby" />
+		<meta name="description" content="Nahraj fotku a vyhraj sedmiletý kubánský rum!" />
 
-	<meta property="og:title" content="Soutěž - Přiznání o sexu" />
-	<meta property="og:image" content="{$imageLink}" />
-	<meta property="og:site_name" content="priznaniosexu.cz" />
+		<meta property="og:title" content="Soutěž - Přiznání z pařby" />
+		<meta property="og:image" content="{$imageLink}" />
+		<meta property="og:site_name" content="priznanizparby.cz" />
+	{else}
+		{var $special_meta_tags = TRUE}
+		<title>Soutěž - přiznání o sexu</title>
+
+		<meta name="keywords" content="přiznání o sexu" />
+		<meta name="description" content="Nahraj fotku a vyhraj jeden ze tří sexy oblečků!" />
+
+		<meta property="og:title" content="Soutěž - Přiznání o sexu" />
+		<meta property="og:image" content="{$imageLink}" />
+		<meta property="og:site_name" content="priznaniosexu.cz" />
+	{/if}
 {/block}

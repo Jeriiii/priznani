@@ -27,9 +27,9 @@ class RegistrationForm extends Form
 	$presenter = $this->getPresenter();
 	
 	$this->addGroup('Povinné údaje');
-		$this->addText('name', 'Nick:', 30, 200 )
+		$this->addText('user_name', 'Nick:', 30, 200 )
     		->addRule(Form::FILLED, "Vzplňte svůj nick");
-    	$this->addText('mail', 'E-mail:', 30, 200 )
+    	$this->addText('email', 'E-mail:', 30, 200 )
     		->addRule(Form::EMAIL, 'Zadali jste neplatný e-mail');
     	$this->addPassword('password', 'Heslo:', 30, 200)
     		->setRequired('Zvolte si heslo')
@@ -47,7 +47,7 @@ class RegistrationForm extends Form
 	{
 		$values = $form->getValues();
 		$mail = $form->getPresenter()->context->createUsers()
-			->where('mail', $values->mail)
+			->where('email', $values->email)
 			->fetch();
 		$values->role = 'user';
 		$values['confirmed'] = Strings::random(100);

@@ -202,7 +202,7 @@ class PagePresenter extends BasePresenter
 		$this->setSexMode();
 		$this->template->admins = $this->context->createUsers()
 									->where("role = ? OR role = ?", "admin", "superadmin")
-									->where("NOT name", "Jerry")
+									->where("NOT user_name", "Jerry")
 									->order("admin_score DESC");
 	}
 
@@ -285,6 +285,13 @@ class PagePresenter extends BasePresenter
 			{
 				$news["competition"] = $presenter->context->createGalleries()
 										->where("sexmode", 1)
+										->order("id DESC")
+										->fetch();
+			}
+			if($this->partymode)
+			{
+				$news["competition"] = $presenter->context->createGalleries()
+										->where("partymode", 1)
 										->order("id DESC")
 										->fetch();
 			}

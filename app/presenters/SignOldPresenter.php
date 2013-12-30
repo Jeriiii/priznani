@@ -79,8 +79,12 @@ class SignOldPresenter extends BasePresenter
 //		);
 //		$user->setAuthorizator($authorizator);
 		
-		$this->flashMessage ("Byl jste úspěšně přihlášen");
-	       $this->redirect('Homepage:'); //$this->redirect('Admin:Admin:');
+			$this->flashMessage ("Byl jste úspěšně přihlášen");
+			if($this->user->isInRole("admin") || $this->user->isInRole("superadmin")) {
+				$this->redirect('Admin:Forms:forms');
+			} else {
+				$this->redirect('Homepage:');
+			}
 	    } catch (NS\AuthenticationException $e) {
 		$form->addError($e->getMessage());
     	}

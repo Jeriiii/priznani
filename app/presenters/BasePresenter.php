@@ -48,6 +48,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 			$this->template->fbToDatabase = FALSE;
 			if($this->action == "default") {
 				$this->template->existForm = FALSE;
+			}else{
+				$this->template->existForm = TRUE;
 			}
 		} else {
 			$this->template->existForm = TRUE;

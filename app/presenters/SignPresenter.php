@@ -62,7 +62,11 @@ class SignPresenter extends BasePresenter
 			$values = $form->getValues();
 			$user = $this->getUser();
 			$user->login($values->mail, $values->password);
-			$this->redirect('Homepage:');
+			if($this->user->isInRole("admin") || $this->user->isInRole("superadmin")) {
+				$this->redirect('Admin:Forms:forms');
+			} else {
+				$this->redirect('Homepage:');
+			}
 
 		} catch (\Nette\Security\AuthenticationException $e) {
 			$form->addError($e->getMessage());

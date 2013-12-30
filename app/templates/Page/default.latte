@@ -73,9 +73,9 @@
 
 {block nextAdmission}
             {if !empty($time_of_release)}
-<hgroup id="next_admission">
-	<div id="clock"></div>
-</hgroup>
+				<hgroup id="next_admission">
+					<div id="clock"></div>
+				</hgroup>
             {/if}
 {/block}
 
@@ -139,6 +139,20 @@
 			{if $iterator->isOdd()}
 				{include 'incConfession.latte' confession => $confession}
 			{/if}
+			{if $iterator->last}
+				<div class="confession adverb">
+					{cache}
+						{* Textová reklama - stream přiznání - dole *}
+						<ins class="adsbygoogle"
+							 style="display:inline-block;width:336px;height:280px"
+							 data-ad-client="ca-pub-7282386453536295"
+							 data-ad-slot="1374000361"></ins>
+						<script>
+						(adsbygoogle = window.adsbygoogle || []).push({});
+						</script>
+					{/cache}
+				</div>
+			{/if}
 		{/foreach}
 	</div>
                         {*<div id="top-paginator">
@@ -150,7 +164,11 @@
 			<h2>Nejnovější soutěže</h2>
 			<a n:href="Competition:">
 				<div class="cut">
-					<img src="{$basePath}/images/{if $partymode}party{else}layout{/if}/plus.png" width="48" {if $partymode}style="top: -144px;"{/if}}/>
+					{if $partymode}
+					<img src="{$basePath}/images/party/menu.png" width="48" {if $partymode}style="top: -97px;"{/if}/>
+					{else}
+					<img src="{$basePath}/images/layout/plus.png" width="48" {if $partymode}style="top: -144px;"{/if}/>	
+					{/if}	
 				</div>
 				<p class="rounded-more">
 					{$news["competition"]->description|truncate:250}
@@ -163,7 +181,7 @@
 			<h2>Novinky z přiznání o sexu</h2>
 			<a n:href="Page: url => priznani-o-sexu" id="new1">
 				<div class="cut">
-					<img src="{$basePath}/images/{if $partymode}party{else}layout{/if}/menu.png" width="48" {if $partymode}style="top: -144px;"{/if}}/>
+					<img src="{$basePath}/images/{if $partymode}party{else}layout{/if}/menu.png" width="48" {if $partymode}style="top: -144px;"{/if}/>
 				</div>
 				<p class="rounded-more">
 					{$news["confession"]->note|truncate:250}
@@ -199,6 +217,21 @@
 			*}
 		</div>
 		{foreach $confessions as $confession}
+			{if $iterator->counter == 5}
+				<div class="confession adverb">
+					{cache}
+						<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+						{* Textová reklama - stream přiznání *}
+						<ins class="adsbygoogle"
+							 style="display:inline-block;width:336px;height:280px"
+							 data-ad-client="ca-pub-7282386453536295"
+							 data-ad-slot="4586648765"></ins>
+						<script>
+						(adsbygoogle = window.adsbygoogle || []).push({});
+						</script>
+					{/cache}
+				</div>
+			{/if}
 			{if $iterator->isEven()}
 				{include 'incConfession.latte' confession => $confession}
 			{/if}

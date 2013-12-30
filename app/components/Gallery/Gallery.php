@@ -36,15 +36,18 @@ class Gallery extends Nette\Application\UI\Control {
 	private $gallery;
 	/* aktualni domena */
 	private $domain;
+	/* jsme na priznani z parby */
+	private $partymode;
 
 	private $beforeImageID;
 	private $afterImageID;
 
-	public function __construct($images, $image, $gallery, $domain) {		
+	public function __construct($images, $image, $gallery, $domain, $partymode) {		
 		$this->images = $images->order("id DESC");
 		$this->image = $image;
 		$this->gallery = $gallery;
 		$this->domain = $domain;
+		$this->partymode = $partymode;
 	}
 
 	public function render() {
@@ -52,7 +55,7 @@ class Gallery extends Nette\Application\UI\Control {
 		$afterImageID = FALSE;
 		$setAfter = FALSE;
 		$imageID = $this->image->id;
-		$this->template->partymode = FALSE;
+		$this->template->partymode = $this->partymode;
 		
 		foreach($this->images as $image)
 		{

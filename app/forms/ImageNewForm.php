@@ -24,7 +24,14 @@ class ImageNewForm extends Form
 		//form
 		
 		$presenter = $this->getPresenter();
-		$this->id_gallery = $presenter->context->createGalleries()
+		$gallery = $presenter->context->createGalleries();
+				
+		if($presenter->partymode) {
+			$gallery = $gallery->where("partymode", 1);
+		} else {
+			$gallery = $gallery->where("sexmode", 1);
+		}
+		$this->id_gallery = $gallery
 								->order("id DESC")
 								->fetch()
 								->id;
