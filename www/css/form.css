@@ -148,11 +148,6 @@ div.flash, .error, .failure {
     color: #222;
     /*letter-spacing: 2px;*/
     /*-webkit-text-stroke: 1px white;*/
-        background: -webkit-linear-gradient(top, #000, #222);
-    background: linear-gradient(top, #000, #222);
-
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
 }
 
 .form legend {
