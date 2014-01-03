@@ -136,7 +136,9 @@ class Gallery extends Nette\Application\UI\Control {
         
         public function handleApproveImage($idImage)
 	{
-		$presenter->context->Images()->where('id', $idImage)->update(array('approved' => '1' ));
+		$this->getPresenter()->context->createImages()                                             
+                        ->where("id", $idImage)
+			->update(array("approved" => "1"));
                 $this->flashMessage('Obrázek byl schválen');
                 $this->redirect('this'); 
 	}
