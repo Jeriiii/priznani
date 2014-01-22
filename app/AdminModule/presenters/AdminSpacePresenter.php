@@ -51,7 +51,7 @@ class AdminSpacePresenter extends  \Nette\Application\UI\Presenter
 		else 
 		{
 			// $navigation["STRÁNKY"] = $this->link("Pages:pagesSort");
-			//if ($user->isAllowed('galleries')) $navigation["GALERIE"] = $this->link("Admin:galleries");
+			if ($user->isAllowed('galleries') && $user->isInRole('superadmin')) $navigation["GALERIE"] = $this->link("Admin:galleries");
 			if ($user->isAllowed('forms')) $navigation["FORMULÁŘ"] = $this->link("Forms:forms");
 			//if ($user->isAllowed('facebook')) $navigation["FACEBOOK"] = $this->link("Admin:facebook");
 			//if ($user->isAllowed('files')) $navigation["SOUBORY"] = $this->link("Admin:files");

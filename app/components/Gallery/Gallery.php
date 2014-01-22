@@ -51,38 +51,19 @@ class Gallery extends Nette\Application\UI\Control {
 	}
 
 	public function render() {
-		$beforeImageID = FALSE;
-		$afterImageID = FALSE;
-		$setAfter = FALSE;
-		$imageID = $this->image->id;
 		$this->template->partymode = $this->partymode;
 		
-		foreach($this->images as $image)
-		{
-			if($setAfter)
-			{
-				$afterImageID = $image->id;
-				break;
-			}
-				
-			if($image->id == $imageID)
-				$setAfter = TRUE; // pri dalsi obratce nastavi nasledujici prvek
-			else
-				$beforeImageID = $image->id; //nevyplni se pri nalezeni hledaneho obrazku
-		}
+		$this->setBeforeAndAfterImage();
 		
-		$this->beforeImageID = $beforeImageID;
-		$this->afterImageID = $afterImageID;
-		
-		$this->template->beforeImageID = $beforeImageID;
+		$this->template->beforeImageID = $this->beforeImageID;
 		$this->template->image = $this->image;
-		$this->template->afterImageID = $afterImageID;
+		$this->template->afterImageID = $this->afterImageID;
 		
 		$this->template->gallery = $this->gallery;
 		
 		$this->template->images = $this->images;
 		
-		$this->template->imageLink = $this->getPresenter()->link("this", array("imageID" => $this->image->id));
+		$this->template->imageLink = $this->getPresenter()->link("this", array("imageID" => $this->image->id, "galleryID" => null));
 		
 		/* pro local */
 		$host = $this->getPresenter()->context->httpRequest->getUrl()->host;
@@ -105,6 +86,30 @@ class Gallery extends Nette\Application\UI\Control {
 		
 		$this->template->setFile(dirname(__FILE__) . '/gallery.latte');
 		$this->template->render();
+	}
+	
+	private function setBeforeAndAfterImage() {
+		$imageID = $this->image->id;
+		$beforeImageID = FALSE;
+		$afterImageID = FALSE;
+		$setAfter = FALSE;
+		
+		foreach($this->images as $image)
+		{
+			if($setAfter)
+			{
+				$afterImageID = $image->id;
+				break;
+			}
+				
+			if($image->id == $imageID)
+				$setAfter = TRUE; // pri dalsi obratce nastavi nasledujici prvek
+			else
+				$beforeImageID = $image->id; //nevyplni se pri nalezeni hledaneho obrazku
+		}
+		
+		$this->beforeImageID = $beforeImageID;
+		$this->afterImageID = $afterImageID;
 	}
 	
 	private function getImages()
@@ -134,13 +139,52 @@ class Gallery extends Nette\Application\UI\Control {
 		return new AddToFBPage($imageID);
 	}
         
-        public function handleApproveImage($idImage)
+	public function handleApproveImage($imageID)
 	{
+<<<<<<< HEAD
 		$this->getPresenter()->context->createImages()                                             
                         ->where("id", $idImage)
 			->update(array("approved" => "1"));
                 $this->flashMessage('Obrázek byl schválen');
                 $this->redirect('this'); 
+=======
+		$this->getImages()
+				->find($imageID)
+				->update(array(
+					'approved' => '1' 
+				));
+		$this->setImage($imageID);
+	}
+	
+	public function handleRemoveImage($imageID)
+	{
+		$image = $this->getImages()
+				->where("id", $imageID)
+				->fetch();
+		
+		$way = WWW_DIR . "/images/galleries/" . $image->galleryID . "/" . $image->id . "." . $image->suffix;
+		$wayMini = WWW_DIR . "/images/galleries/" . $image->galleryID . "/mini" . $image->id . "." . $image->suffix;
+		
+		if( file_exists($way) )
+		{
+			unlink($way);
+		}
+		
+		if( file_exists($wayMini) )
+		{
+			unlink($wayMini);
+		}
+		
+		$this->getImages()
+				->find($imageID)
+				->delete();
+		$this->setBeforeAndAfterImage();
+		if(!empty($this->beforeImageID)) {
+			$this->setImage($this->beforeImageID);
+		}else{
+			$this->setImage($this->afterImageID);
+		}
+>>>>>>> Dašlí úpravy
 	}
 
 }

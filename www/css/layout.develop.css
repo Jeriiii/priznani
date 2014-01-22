@@ -1,5 +1,4 @@
-@charset "utf-8";
-    body {
+body {
     font-family: Tahoma, Geneva, Verdana, sans, sans-serif, Arial;
     background: #fff;
 }
@@ -132,12 +131,12 @@ header h1 span {
     float: left;
     padding: 10px 5px 10px 20px;
     margin-right: 15px;
-    background: url(../images/layout/arrow_light.png) no-repeat transparent;
+    background: url(../../images/layout/arrow_light.png) no-repeat transparent;
     background-position: 0 50%;
     cursor: pointer;
 }
 #orderlink {
-    background: url(../images/layout/arrow_light.png) no-repeat transparent;
+    background: url(../../images/layout/arrow_light.png) no-repeat transparent;
     background-position: 0 50%;
     padding-left: 15px;
     margin-left: 10px;
@@ -171,7 +170,7 @@ header h1 span {
     left: -50px;
     width: 207px;
     height: 178px;
-    background: url(../images/layout/kiss.png) no-repeat transparent;
+    background: url(../../images/layout/kiss.png) no-repeat transparent;
 }
 #next_admission {
     position: absolute;
@@ -179,7 +178,7 @@ header h1 span {
     top: 120px;
     width: 271px;
     height: 113px;
-    background: url(../images/layout/next_admission.png) no-repeat transparent;
+    background: url(../../images/layout/next_admission.png) no-repeat transparent;
     float: right;
 }
 #clock {
@@ -201,7 +200,7 @@ header h1 span {
     margin-left: 5px;
     margin-bottom: 8px;
     height: 70px;
-    background: url(../images/layout/menu.png) no-repeat transparent;
+    background: url(../../images/layout/menu.png) no-repeat transparent;
 }
 #left-side .first:hover, #left-side .second:hover, #left-side .third:hover, #left-side .fourth:hover{
     text-decoration: underline;
@@ -213,7 +212,7 @@ header h1 span {
     background-position: 0 -140px;
 }
 #left-menu .fourth {
-    background: url(../images/layout/plus.png) no-repeat transparent;
+    background: url(../../images/layout/plus.png) no-repeat transparent;
 }
 .form-field {
     resize: none;

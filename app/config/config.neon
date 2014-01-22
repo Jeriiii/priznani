@@ -9,7 +9,7 @@ common:
 		database:
 			driver: mysql
 			host: localhost
-			dbname: priznaniosexu_test_rychlosti
+			dbname: priznaniosexu
 			user: root
 			password: root
 		facebook:

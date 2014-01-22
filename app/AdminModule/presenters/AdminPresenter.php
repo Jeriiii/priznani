@@ -58,7 +58,7 @@ class AdminPresenter extends AdminSpacePresenter
 				->where("id", $id_gallery)
 				->fetch();
 		$this->template->images = $this->context->createImages()
-				->where("id_gallery", $id_gallery)
+				->where("galleryID", $id_gallery)
 				->order("order ASC");
 	}
 	
@@ -92,8 +92,8 @@ class AdminPresenter extends AdminSpacePresenter
 		return new Frm\galleryChangeForm($this, $name);
 	}
 	
-	protected function createComponentImageNewForm($name) {
-		return new Frm\imageNewForm($this, $name);
+	protected function createComponentImageGalleryNewForm($name) {
+		return new Frm\imageGalleryNewForm($this, $name);
 	}
 	
 	protected function createComponentGalleryReleaseForm($name) {
@@ -147,7 +147,7 @@ class AdminPresenter extends AdminSpacePresenter
 	public function handledeleteGallery($id_gallery)
 	{
 		$images = $this->context->createImages()
-				->where("id_gallery", $id_gallery);
+				->where("galleryID", $id_gallery);
 		
 		foreach($images as $image)
 			$this->handledeleteImage($image->id, $id_gallery, FALSE);

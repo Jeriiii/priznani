@@ -51,7 +51,7 @@
 }
 
 #image_comment{
-	width: 700px;
+	width: 470px;
 	min-height: 74px;
 	background-color: white;
 	padding: 10px;
@@ -77,7 +77,7 @@
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
-	width: 150px;
+	width: 160px;
 	height: 32px;
 	text-shadow: 0 0 1px white;
 	background: #cf0707;
@@ -183,4 +183,7 @@ h2#image_name{
 }
 #adverb-contact a {
 	color: white;
+}
+.float-left{
+	float:left;
 }

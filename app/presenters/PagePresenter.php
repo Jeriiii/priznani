@@ -107,6 +107,22 @@ class PagePresenter extends BasePresenter
 		$this->template->url = $url;		
 	}
 	
+	public function renderMetro() {
+		$items[1]["imageUrl"] = "images/metro/interande.jpg";
+		$items[1]["link"] = $this->link("Page:interactive-date");
+		$items[1]["name"] = "Interaktivní rande";
+
+		$items[2]["imageUrl"] = "images/metro/alex.jpg";
+		$items[2]["link"] = $this->link("Page:naturalScience");
+		$items[2]["name"] = "Přírodověda s Alex";
+
+		$items[3]["imageUrl"] = "images/galleries/5/79.JPG";
+		$items[3]["link"] = $this->link("Competition:list");
+		$items[3]["name"] = "Soutěže";
+		
+		$this->template->items = $items;
+	}
+	
 	public function actionConfession($id) 
 	{
 		$this->setMode("priznani-o-sexu");

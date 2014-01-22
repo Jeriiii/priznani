@@ -8,14 +8,13 @@
  * @author     Petr Kukrál
  * @package    jkbusiness
  */
-
 use Nette\Application\UI\Form as Frm,
 	\Navigation\Navigation,
 	Nette\Http\Url,
 	Nette\Http\Request;
 
-abstract class BasePresenter extends Nette\Application\UI\Presenter
-{
+abstract class BasePresenter extends Nette\Application\UI\Presenter {
+
 	public $parameters;
 	public $domain;
 	public $partystyle;
@@ -27,12 +26,11 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 	public $datemode = FALSE;
 
 	public function startup() {
-		if($this->name == "Homepage")
-		{
+		if ($this->name == "Homepage") {
 			$page = $this->context->createPages()
-				->order("order ASC")
-				->fetch();
-			if($page->id_view)
+					->order("order ASC")
+					->fetch();
+			if ($page->id_view)
 				$this->redirect($page->presenter . ":" . $page->view, $page->url);
 			else
 				$this->redirect($page->presenter . ":" . $page->view);
@@ -41,20 +39,18 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 		parent::startup();
 	}
 
-
-	public function beforeRender()
-	{
-		if($this->name == "Competition") {
+	public function beforeRender() {
+		if ($this->name == "Competition") {
 			$this->template->fbToDatabase = FALSE;
-			if($this->action == "default") {
+			if ($this->action == "default") {
 				$this->template->existForm = FALSE;
-			}else{
+			} else {
 				$this->template->existForm = TRUE;
 			}
 		} else {
 			$this->template->existForm = TRUE;
 			$this->template->fbToDatabase = TRUE;
-			if($this->name != "Sign") {
+			if ($this->name != "Sign") {
 				//die("Stránky přiznáníosexu jsou dočasně mimo provoz.");
 			}
 		}
@@ -81,21 +77,21 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 //			$this->partystyle = FALSE;
 //		}
 //		$this->template->partystyle = $this->partystyle;
-		
+
 		$this->template->domain = $this->domain;
 
 		$this->template->facebook_html = "";
 		$this->template->facebook_script = "";
 
 		$google = $this->context->createGoogle_analytics()
-			->fetch();
+				->fetch();
 
 		$name = "";
 
-		if( $google )
+		if ($google)
 			$name = $google->name;
 
-			$this->template->google_analytics = "
+		$this->template->google_analytics = "
 				<script type='text/javascript'>
 					var _gaq = _gaq || [];
 					  _gaq.push(['_setAccount', '" . $name . "']);
@@ -108,33 +104,30 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 					  })();
 				</script>	
 			";
-		
-		if ( $parameters->map == 1 )
-		{
-			$map = $this->context->createMap()
-				->fetch();
 
-			if( !empty($map) )
-			{
+		if ($parameters->map == 1) {
+			$map = $this->context->createMap()
+					->fetch();
+
+			if (!empty($map)) {
 				$this->template->gps = $map->gps;
 				$this->template->name = $map->name;
 				$this->template->text_map = $map->text;
-			
+
 				$this->template->map_head = '
 					<script type="text/javascript" src="http://api4.mapy.cz/loader.js"></script>
 					<script type="text/javascript">Loader.load();</script>
 				';
-			}else{
+			} else {
 				$this->template->map_head = '';
 			}
-		}else{
+		} else {
 			$this->template->map_script = "";
 			$this->template->map_head = '';
 		}
 	}
-	
-	protected function createComponentOrders($name) 
-	{
+
+	protected function createComponentOrders($name) {
 		$nav = new Navigation($this, $name);
 		$filters = array(
 			"nejaktivnější" => "active",
@@ -142,28 +135,23 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 			"nejoblíbenější" => "likes",
 			"nejkomentovanější" => "comments"
 		);
-		
+
 		foreach ($filters as $name => $link) {
 			$param = array("order" => $link);
 			$article = $nav->add($name, $this->link("this", $param));
-			if (array_key_exists("order", $_GET))
-			{
-				if($_GET["order"] == $link) 
-				{
+			if (array_key_exists("order", $_GET)) {
+				if ($_GET["order"] == $link) {
 					$nav->setCurrentNode($article);
 				}
-			}else{
-				if($link == "active")
-				{
+			} else {
+				if ($link == "active") {
 					$nav->setCurrentNode($article);
 				}
 			}
 		}
-		
-   	}
-	
-	protected function createComponentTopMenu($name) 
-	{
+	}
+
+	protected function createComponentTopMenu($name) {
 		$nav = new Navigation($this, $name);
 		$filters = array(
 			"nejaktivnější" => "active",
@@ -171,91 +159,84 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 			"nejoblíbenější" => "likes",
 			"nejkomentovanější" => "comments"
 		);
-		
+
 		foreach ($filters as $name => $link) {
 			$param = array("order" => $link);
 			$article = $nav->add($name, $this->link("this", $param));
-			if (array_key_exists("order", $_GET))
-			{
-				if($_GET["order"] == $link) 
-				{
+			if (array_key_exists("order", $_GET)) {
+				if ($_GET["order"] == $link) {
 					$nav->setCurrentNode($article);
 				}
-			}else{
-				if($link == "active")
-				{
+			} else {
+				if ($link == "active") {
 					$nav->setCurrentNode($article);
 				}
 			}
 		}
-		
-   	}
-	
+	}
+
 	/**
 	 * nastaví mód dle url
 	 */
-	
-	protected function setMode($url = NULL)
-	{
-		if(empty($url))
+	protected function setMode($url = NULL) {
+		if (empty($url))
 			$url = $this->url;
-		
-		if($this->url == "priznanizparby")
-		{
+
+		if ($this->url == "priznanizparby") {
 			$this->partymode = TRUE;
-		}
-		elseif($this->url == "poradna-o-sexu")
-		{
+		} elseif ($this->url == "poradna-o-sexu") {
 			$this->advicemode = TRUE;
-		}
-		elseif($this->url == "seznamka")
-		{
+		} elseif ($this->url == "seznamka") {
 			$this->datemode = TRUE;
-		}
-		else
-		{
+		} else {
 			$this->sexmode = TRUE;
 		}
-		
+
 		$this->setTemplateMode($this->template);
 	}
-	
+
 	/**
 	 * nastaví mód template
 	 */
-	
-	protected function setTemplateMode($template)
-	{
+	protected function setTemplateMode($template) {
 		$template->partymode = $this->partymode;
 		$template->sexmode = $this->sexmode;
 		$template->advicemode = $this->advicemode;
 		$template->datemode = $this->datemode;
 	}
 
-	protected function setPartyMode()
-	{
+	protected function setPartyMode() {
 		$this->partymode = TRUE;
 		$this->setTemplateMode($this->template);
 	}
-	
-	protected function setSexMode()
-	{
+
+	protected function setSexMode() {
 		$this->sexmode = TRUE;
 		$this->setTemplateMode($this->template);
 	}
-	
-	protected function setAdviceMode()
-	{
+
+	protected function setAdviceMode() {
 		$this->advicemode = TRUE;
 		$this->setTemplateMode($this->template);
 	}
-	
-	protected function setDateMode()
-	{
+
+	protected function setDateMode() {
 		$this->datemode = TRUE;
 		$this->setTemplateMode($this->template);
 	}
-	
+
+	public function createComponentCss() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
+		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
+		$compiler->addFileFilter(new \Webloader\Filter\LessFilter());
+		$compiler->addFileFilter(function ($code, $compiler, $path) {
+			return cssmin::minify($code);
+		});
+
+		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
+	}
+
 //	protected function createComponentMenu($name) 
 //	{
 //		$nav = new Navigation($this, $name);
@@ -298,7 +279,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 //		}
 //		
 //   	}
-	
 //	protected function createComponentMenu($name) 
 //	{
 //		$nav = new Navigation($this, $name);
@@ -332,27 +312,24 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 //		}
 //		
 //   	}
-	
-	protected function createComponentLoggedInMenu($name) 
-	{
-		$nav = new Navigation($this, $name);
-		if($this->getUser()->isInRole("admin") || $this->getUser()->isInRole("superadmin"))
-		$nav->add("ADMINISTRACE", $this->link(":Admin:Admin:") );		
-		$nav->add("ODHLÁŠENÍ", $this->link("signOut!") );
-   	}
-	
-	protected function createComponentLoggedOutMenu($name) 
-	{
-		$nav = new Navigation($this, $name);
-		$nav->add("REGISTRACE", $this->link("SignOld:registration") );
-		$nav->add("PŘIHLÁŠENÍ", $this->link("SignOld:in") );
-   	}
 
-	public function handleSignOut()
-	{
+	protected function createComponentLoggedInMenu($name) {
+		$nav = new Navigation($this, $name);
+		if ($this->getUser()->isInRole("admin") || $this->getUser()->isInRole("superadmin"))
+			$nav->add("ADMINISTRACE", $this->link(":Admin:Admin:"));
+		$nav->add("ODHLÁŠENÍ", $this->link("signOut!"));
+	}
+
+	protected function createComponentLoggedOutMenu($name) {
+		$nav = new Navigation($this, $name);
+		$nav->add("REGISTRACE", $this->link("SignOld:registration"));
+		$nav->add("PŘIHLÁŠENÍ", $this->link("SignOld:in"));
+	}
+
+	public function handleSignOut() {
 		$this->getSession('allow')->remove();
 		$this->getUser()->logout();
 		$this->redirect('this');
 	}
-	
+
 }

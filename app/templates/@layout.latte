@@ -62,8 +62,9 @@
 			<meta property="og:site_name" content="priznaniosexu.cz" />
 			<meta property="og:description" content="Stala se Vám v posteli nějaká zajímavá, vtipná či šokující příhoda, ale bojíte se to veřejně říct? Přiznejte se na http://priznaniosexu.cz/. Všechna přiznání jsou 100% ANONYMNÍ. " />
 			{/ifset}
-			<link rel="stylesheet" href="{$basePath}/css/layout.css" type="text/css">
-			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">
+			{control css 'default.css', 'layout.develop.css'}
+<!--			<link rel="stylesheet" href="{$basePath}/css/layout.css" type="text/css">
+			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">-->
 			<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
 
 			{* mobile *}
@@ -171,7 +172,7 @@
         <footer class="inner">
 			<div id="footline"></div>
 			<div class="left">
-				Copyright &copy; 2013 priznaniosexu.cz<br /><br />
+				Copyright &copy; 2014 priznaniosexu.cz<br /><br />
 				Designed by <a href="http://www.nejlevnejsiwebstranky.cz/">nejlevnejsiwebstranky.cz</a>
 			</div>
 			<div class="right">
