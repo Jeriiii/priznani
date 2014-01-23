@@ -141,13 +141,6 @@ class Gallery extends Nette\Application\UI\Control {
         
 	public function handleApproveImage($imageID)
 	{
-<<<<<<< HEAD
-		$this->getPresenter()->context->createImages()                                             
-                        ->where("id", $idImage)
-			->update(array("approved" => "1"));
-                $this->flashMessage('Obrázek byl schválen');
-                $this->redirect('this'); 
-=======
 		$this->getImages()
 				->find($imageID)
 				->update(array(
@@ -184,7 +177,6 @@ class Gallery extends Nette\Application\UI\Control {
 		}else{
 			$this->setImage($this->afterImageID);
 		}
->>>>>>> Dašlí úpravy
 	}
 
 }
