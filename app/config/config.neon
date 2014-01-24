@@ -59,6 +59,7 @@ common:
 		forms1: Forms1
 		forms2: Forms2
 		forms3: Forms3
+		videos: Videos
 		authorizator_table: Authorizator_table
 		polls: Polls
 		#facebook: Facebook

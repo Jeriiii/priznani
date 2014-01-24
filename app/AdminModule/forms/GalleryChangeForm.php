@@ -43,6 +43,6 @@ class GalleryChangeForm extends Form
 			->where("id", $presenter->id_gallery)
 			->update($values);
 		$presenter->flashMessage('Galerie byla změněna');
-		$presenter->redirect('Admin:gallery', $this->id_gallery);
+		$presenter->redirect('Galleries:gallery', $this->id_gallery);
  	}
 }

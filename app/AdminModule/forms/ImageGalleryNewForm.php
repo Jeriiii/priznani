@@ -8,9 +8,8 @@ use	Nette\Application\UI\Form,
 	Nette\Image;
 
 
-class ImageGalleryNewForm extends Form
+class ImageGalleryNewForm extends ItemGalleryNewForm
 {
-	public $id_gallery;
 
 	public function __construct(IContainer $parent = NULL, $name = NULL)
 	{
@@ -23,13 +22,6 @@ class ImageGalleryNewForm extends Form
 		$renderer->wrappers['control']['container'] = NULL;
 		//form
 		
-		$presenter = $this->getPresenter();
-		$this->id_gallery = $presenter->id_gallery;
-		
-		$this->addText("name", "Jméno", 30, 150)
-			->addRule(Form::FILLED, "Musíte zadat jméno obrázku.");
-                $this->addTextArea("comment", "Komentář obrázku", 10, 10)
-			->addRule(Form::MAX_LENGTH, "Maximální délka komentáře je %d znaků", 500);
 		$this->addUpload("image","Obrázek")
 			->addRule(Form::IMAGE, "Obrázek musí být ve formátu gif, jpg nebo png")
 			->addRule(Form::FILLED, "Musíte vybrat soubor");
@@ -58,7 +50,7 @@ class ImageGalleryNewForm extends Form
 		$this->upload($image, $id, $values['suffix'], "galleries" . "/" . $this->id_gallery, "600"/*"768"*/, "1024");
 		
 		$this->getPresenter()->flashMessage('Obrázek byl vytvořen');
-		$this->getPresenter()->redirect('Admin:gallery', $this->id_gallery);
+		$this->getPresenter()->redirect('Galleries:gallery', $this->id_gallery);
  	}
 	
 	public function upload($image, $id, $suffix, $folder, $max_height, $max_width){

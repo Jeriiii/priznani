@@ -33,6 +33,6 @@ class GalleryNewForm extends Form
 		$this->getPresenter()->context->createGalleries()
 			->insert($values);
 		$this->getPresenter()->flashMessage('Galerie byla vytvořena');
-		$this->getPresenter()->redirect('Admin:galleries');
+		$this->getPresenter()->redirect('Galleries:galleries');
  	}
 }

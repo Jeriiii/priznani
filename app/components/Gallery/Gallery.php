@@ -71,17 +71,22 @@ class Gallery extends Nette\Application\UI\Control {
 			$this->domain = WWW_DIR;
 		
 		$imageLink = $this->domain . "/images/galleries/" . $this->gallery->id . "/" . $this->image->id . "." . $this->image->suffix;
-		list($width, $height, $type, $attr) = getimagesize($imageLink);
-		if($width < 1.4 * $height) {
-			$this->template->changeHeight = TRUE;
-			$this->template->changeWidth = FALSE;
-			$this->template->padding = FALSE;
+		
+		if(! file_exists ($imageLink)){
+			/* je to video - nic nepočítej */
 		} else {
-			$this->template->changeHeight = FALSE;
-			$this->template->changeWidth = TRUE;
-			$ratio = $width / 700;///pomer zmenceni
-			$new_height = $height / $ratio;
-			$this->template->padding = (int)((500 - $new_height) / 2);
+			list($width, $height, $type, $attr) = getimagesize($imageLink);
+			if($width < 1.4 * $height) {
+				$this->template->changeHeight = TRUE;
+				$this->template->changeWidth = FALSE;
+				$this->template->padding = FALSE;
+			} else {
+				$this->template->changeHeight = FALSE;
+				$this->template->changeWidth = TRUE;
+				$ratio = $width / 700;///pomer zmenceni
+				$new_height = $height / $ratio;
+				$this->template->padding = (int)((500 - $new_height) / 2);
+			}
 		}
 		
 		$this->template->setFile(dirname(__FILE__) . '/gallery.latte');
