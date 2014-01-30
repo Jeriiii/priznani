@@ -72,7 +72,7 @@ class Gallery extends Nette\Application\UI\Control {
 		
 		$imageLink = $this->domain . "/images/galleries/" . $this->gallery->id . "/" . $this->image->id . "." . $this->image->suffix;
 		
-		if(! file_exists ($imageLink)){
+		if($this->image->videoID != 0){
 			/* je to video - nic nepočítej */
 		} else {
 			list($width, $height, $type, $attr) = getimagesize($imageLink);
