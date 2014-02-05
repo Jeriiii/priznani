@@ -232,8 +232,10 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
 		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');		
 		
-		$varFilter = new WebLoader\Filter\VariablesFilter($this->cssVariables);
-		$compiler->addFileFilter($varFilter);
+		if(!empty($this->cssVariables)) {
+			$varFilter = new WebLoader\Filter\VariablesFilter($this->cssVariables);
+			$compiler->addFileFilter($varFilter);
+		}
 		
 		$compiler->addFileFilter(new \Webloader\Filter\LessFilter());
 		$compiler->addFileFilter(function ($code, $compiler, $path) {

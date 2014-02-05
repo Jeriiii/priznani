@@ -1,0 +1,117 @@
+{block head}
+	{control css 'bootstrap/forms-full.less'}
+{/}
+{block content}
+	<nav>
+		<ul id="top_menu">
+			{foreach $games as $game}
+				<li>
+					<a class="scroll-to-game{$game->id}">
+						{$game->name}
+					</a>
+				</li>
+			{/foreach}
+			<li>
+				<a class="scroll-to-contact">
+					Kontakty
+				</a>
+			</li>
+		</ul>
+	</nav>
+	<section id="articles" class="main-section">
+		<div class="container">
+			{foreach $games as $game}
+				<a name="game{$game->id}"></a>
+				<article>
+					<span class="glyphicon glyphicon-check"></span>
+					<h2>{$game->name}</h2>
+					<p>{!$game->description}</p>
+				</article>
+			{/foreach}
+			<div class="clear"></div>
+		</div>
+	</section>
+	<a name="contact"></a>
+	<section id="contact" class="main-section">
+		<div class="container">
+			<h3 class="title">Objednávka</h3>
+			<div class="left">
+				<div id="contact-info">
+					<div class="glyphicon glyphicon-envelope"></div>
+					<a href="mailto:info@priznaniosexu.cz" class="mail">info@priznaniosexu.cz</a>
+					<div class="glyphicon glyphicon-phone"></div><span class="phone">774 181 584</span><br />
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div class="left">
+				{form eshopGameForm role => "form"}
+					{if $form->hasErrors()}
+					<ul id="formError">
+						{foreach $form->errors as $error}
+							<li class="alert alert-danger">{$error}</li>
+						{/foreach}
+					</ul>
+					{/if}
+					<div class="form-group">
+						{label name /}
+						<div>
+							{input name class => "form-control"}
+						</div>
+					</div>
+					<div class="form-group">
+						{label phone /}
+						<div class="input-group">
+							<span class="input-group-addon">+ 420</span>
+							{input phone class => "form-control"}
+						</div>
+					</div>
+					<div class="form-group">
+						{label note /}
+						<div>
+							{input note class => "form-control"}
+						</div>
+					</div>
+					{*<div id="gift">
+						<span class="glyphicon glyphicon-gift"></span>
+						<p>
+							
+							Domluvte si schůzku a dostanete od nás <strong>dárek v hodnotě 1000 Kč</strong>.
+							<br /><br />
+						</p>
+					</div>
+					<div>*}
+						{input submit class => "submit-button"}
+					</div>
+				{/form}
+			</div>
+			<div class="clear"></div>
+		</div>
+	</section>
+{/}
+{block foot}
+	<script>
+		/* fce na rolovani */
+		function scrollToAnchor(aid){
+			var aTag = $("a[name='"+ aid +"']");
+			$('html,body').animate({ scrollTop: aTag.offset().top}, 1200);
+		}
+		
+		/* form error */
+		$.fn.exists = function () {
+			return this.length !== 0;
+		}
+		if($("#formError").exists()) {
+			scrollToAnchor('contact');
+		}
+
+		/*nastaveni scrollovani*/
+		{foreach $games as $game}
+			$(".scroll-to-game{$game->id}").click(function() {
+				scrollToAnchor('game{$game->id}');
+			});
+		{/foreach}
+		$(".scroll-to-contact").click(function() {
+		   scrollToAnchor('contact');
+		});
+	</script>
+{/}
