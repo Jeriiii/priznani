@@ -1,2 +1,0 @@
-
-.imgs-container{padding:0 10px}.img-container{width:200px;height:200px;margin:2px;display:block;position:relative;float:left;overflow:hidden;background-color:black}.img-container img{position:relative;display:block;z-index:1}.img-container a{display:none;position:absolute;top:0;bottom:0;z-index:10;background:#222;opacity:0.8;height:200px;padding-top:40%;width:auto}.img-container:hover a{display:block;width:100%;color:white;font-size:22px;font-family:'Verdana', Arial;text-align:center}
