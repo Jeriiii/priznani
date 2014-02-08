@@ -65,7 +65,7 @@ class SignPresenter extends BasePresenter
 			if($this->user->isInRole("admin") || $this->user->isInRole("superadmin")) {
 				$this->redirect('Admin:Forms:forms');
 			} else {
-				$this->redirect('Homepage:');
+				$this->redirect('Onepage:');
 			}
 
 		} catch (\Nette\Security\AuthenticationException $e) {
