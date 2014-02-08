@@ -1,8 +1,9 @@
 {block head}
-	{control css 'bootstrap/forms-full.less'}
+	{control css 'bootstrap/forms-full.less', 'eshop/game.less'}
+	{*control css 'eshop/game.less'*}
 {/}
 {block content}
-	<nav>
+	{*<nav>
 		<ul id="top_menu">
 			{foreach $games as $game}
 				<li>
@@ -17,25 +18,36 @@
 				</a>
 			</li>
 		</ul>
-	</nav>
+	</nav>*}
+
 	<section id="articles" class="main-section">
 		<div class="container">
 			{foreach $games as $game}
 				<a name="game{$game->id}"></a>
-				<article>
-					<span class="glyphicon glyphicon-check"></span>
-					<h2>{$game->name}</h2>
-					<p>{!$game->description}</p>
-				</article>
+				<div class="game-container {if $iterator->isOdd()}oddbackground{/if}">
+				    <section class="game">
+					<img class="poster" src="{$basePath}/images/origame/posters/{$game->id}.{$game->suffix}" alt="{$game->name}" />
+				    <article>
+					    {*<span class="glyphicon glyphicon-check"></span>*}
+					    <h2>{$game->name}</h2>
+
+					    <p class="description">{!$game->description}</p>
+					    <p class="price">Jen za {$game->price},-</p>
+					    <a href="#" class="scroll-to-contact btn-main" title="Objednat {$game->name}">Objednat nyní</a>
+				    </article>
+				</div>
 			{/foreach}
+			
 			<div class="clear"></div>
 		</div>
 	</section>
+			
 	<a name="contact"></a>
 	<section id="contact" class="main-section">
 		<div class="container">
+			<div class="contact">
 			<h3 class="title">Objednávka</h3>
-			<div class="left">
+			
 				<div id="contact-info">
 					<div class="glyphicon glyphicon-envelope"></div>
 					<a href="mailto:info@priznaniosexu.cz" class="mail">info@priznaniosexu.cz</a>
@@ -43,8 +55,8 @@
 					<div class="clear"></div>
 				</div>
 			</div>
-			<div class="left">
-				{form eshopGamesOrdersForm role => "form"}
+			<div>
+				{form eshopGamesOrdersForm role => "form", class => "form-games"}
 					{if $form->hasErrors()}
 					<ul id="formError">
 						{foreach $form->errors as $error}
@@ -55,8 +67,14 @@
 					<div class="form-group">
 						{label name /}
 						<div>
-							{input name class => "form-control"}
+							{input name class => "form-control input-sm"}
 						</div>
+					</div>
+					<div class="form-group">
+					    {label surname /}
+					    <div>
+						    {input surname class => "form-control"}
+					    </div>
 					</div>
 					<div class="form-group">
 						{label phone /}
@@ -65,6 +83,38 @@
 							{input phone class => "form-control"}
 						</div>
 					</div>
+					<div class="checkbox">
+						{label print /}
+							{input print}
+					</div>
+					<div class="form-group">
+						{label address /}
+							{input address class => "form-control"}
+					</div>
+					<div class="checkgroup">
+					    <div class="checkbox">
+						    {label vasnivefantazie /}
+							    {input vasnivefantazie}
+
+					    </div>
+					    <div class="checkbox">
+						    {label nespoutanevzruseni /}
+							    {input nespoutanevzruseni}
+					    </div>
+					    <div class="checkbox">
+						    {label zhaveukolypropary /}
+							    {input zhaveukolypropary}
+					    </div>
+					    <div class="checkbox">
+						    {label sexyaktivity /}
+							    {input sexyaktivity}
+					    </div>
+					    <div class="checkbox">
+						    {label sexyhratky /}
+							    {input sexyhratky}
+					    </div>
+					</div>	
+						
 					<div class="form-group">
 						{label note /}
 						<div>
@@ -80,8 +130,7 @@
 						</p>
 					</div>
 					<div>*}
-						{input submit class => "submit-button"}
-					</div>
+						{input submit class => "btn-main medium"}
 				{/form}
 			</div>
 			<div class="clear"></div>

@@ -8,7 +8,7 @@ use	Nette\Application\UI\Form,
 	Nette\Mail\Message;
 
 
-class EshopGameForm extends BaseForm
+class EshopGamesOrdersForm extends BaseForm
 {
 	
 	public function __construct(IContainer $parent = NULL, $name = NULL)
@@ -40,14 +40,14 @@ class EshopGameForm extends BaseForm
 		
 		$this->addCheckbox('vasnivefantazie', 'Vášnivé fantazie');
 		$this->addCheckbox('nespoutanevzruseni', 'Nespoutané vzrušení');
-		$this->addCheckbox('zhave-ukoly-pro-pary', 'Žhavé úkoly pro páry');
-		$this->addCheckbox('ceskahralasky', 'Česká hra lásky');
-		$this->addCheckbox('nekonecnaparty', 'Nekonečná párty');
+		$this->addCheckbox('zhaveukolypropary', 'Žhavé úkoly pro páry');
+		//$this->addCheckbox('ceskahralasky', 'Česká hra lásky');
+		//$this->addCheckbox('nekonecnaparty', 'Nekonečná párty');
 		$this->addCheckbox('sexyaktivity', 'Sexy aktivity');
-		$this->addCheckbox('ceskachlastacka', 'Česká chlastačka');
-		$this->addCheckbox('milackuuklidto', 'Miláčku ukliď to');
+		//$this->addCheckbox('ceskachlastacka', 'Česká chlastačka');
+		//$this->addCheckbox('milackuuklidto', 'Miláčku ukliď to');
 		$this->addCheckbox('sexyhratky', 'Sexy hrátky');
-		$this->addCheckbox('manazeruvsen', 'Manažerův sen');
+		//$this->addCheckbox('manazeruvsen', 'Manažerův sen');
 		$this->addText('discount_coupon', 'Slevový kupón')
 				->addRule(Form::FILLED)
 				->addRule(Form::MAX_LENGTH, null, 50);
@@ -61,7 +61,7 @@ class EshopGameForm extends BaseForm
 		return $this;
 	}
     
-	public function submitted(EshopGameForm $form)
+	public function submitted(EshopGamesOrdersForm $form)
 	{
 		$values = $form->values;
 		$presenter = $this->getPresenter();
