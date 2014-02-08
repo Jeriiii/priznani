@@ -77,6 +77,7 @@ Container::extensionMethod('addDateTimePicker', function (Container $_this, $nam
 {
 	return $_this[$name] = new Nette\Extras\DateTimePicker($label, $cols, $maxLength);
 });
+Kdyby\BootstrapFormRenderer\DI\RendererExtension::register($configurator);
 
 // Configure and run the application!
 //$container->application->errorPresenter = 'Error';

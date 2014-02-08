@@ -3,9 +3,8 @@
 namespace Nette\Application\UI\Form;
 
 use	Nette\Application\UI\Form,
-	Nette\Security as NS,
 	Nette\ComponentModel\IContainer,
-	Nette\Mail\Message;
+	Kdyby\BootstrapFormRenderer\BootstrapRenderer;
 
 
 class EshopGameForm extends BaseForm
@@ -14,6 +13,9 @@ class EshopGameForm extends BaseForm
 	public function __construct(IContainer $parent = NULL, $name = NULL)
 	{
 		parent::__construct($parent, $name);
+		
+		$this->setRenderer(new BootstrapRenderer);
+		
 //		//graphics
 //		$renderer = $this->getRenderer();
 //		$renderer->wrappers['controls']['container'] = 'div';
