@@ -12,7 +12,9 @@ class EditProfilPresenter extends ProfilBasePresenter
 	private $record;
 	private $record_couple_partner;
 	public $fotos;
-	
+	private $id;
+        private $user;
+        
 	public function __construct(IContainer $parent = NULL, $name = NULL)
 	{
 		parent::__construct($parent, $name);		
@@ -60,10 +62,15 @@ class EditProfilPresenter extends ProfilBasePresenter
 		$this->userModel = $this->context->userModel;
     }
 	
-	public function renderDefault()
+	public function renderDefault($id)
 	{
-		$this->record = $this->userModel->findUser(array('id' => $this->getUser()->getId()) );
-		$this->template->userData = $this->userModel->findUser(array("id" => $this->getUser()->getId()));
+                if(empty($id)){ 
+			$this->user = $this->userModel->findUser(array("id" => $this->getUser()->getId())); 
+		} else {
+			$this->user = $this->userModel->findUser(array("id" => $id /* $this->getUser()->getId()*/ ));
+		}
+	//	$this->record = $this->userModel->findUser(array('id' => $this->getUser()->getId()) );
+		$this->template->userData = $this->user;//$this->userModel->findUser(array("id" => $this->getUser()->getId()));
 		
 //		/** single man */
 //			if($this->record->user_property == "man"){
