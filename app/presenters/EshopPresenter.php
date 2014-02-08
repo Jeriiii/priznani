@@ -37,8 +37,8 @@ class EshopPresenter extends BasePresenter {
 		$this->template->games = $this->context->createEshopGames();
 	}
 	
-	protected function createComponentEshopGameForm($name) {
-		return new Frm\EshopGameForm($this, $name);
+	protected function createComponentEshopGamesOrdersForm($name) {
+		return new Frm\EshopGamesOrdersForm($this, $name);
 	}
 
 }
