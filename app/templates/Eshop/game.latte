@@ -48,12 +48,12 @@
 	    <div class="clear"></div>
 	</section>
 	<article class="games-description">
-		<img class="icon mail"  alt="email" src="{$basePath}/images/mailicon.png" /> <span class="capital">DORUČENÍ ELEKTRONICKOU POŠTOU</span>
+		<img class="icon mail"  alt="email" src="{$basePath}/images/mailicon.png" /> <span class="capital iconlabel">DORUČENÍ ELEKTRONICKOU POŠTOU</span>
 	    {*<p>
 	    Origame - to jsou kvalitní a originální hry pro dospělé, které můžete hrát s přáteli na párty či oslavě nebo vyzkoušet erotické hry doma s partnerem. Díky netradičnímu způsobu dodání získáte hry takřka okamžitě za zlomek ceny běžných her, které se nabízejí v kamenných obchodech. Hry totiž obdržíte na Váš email v elektronické podobě připravené k vytisknutí (neplatíte tedy žádné poštovné). Pokud budete mít zájem o zaslání hotových her poštou, označte v objednávce pole "Výroba a zaslání her poštou".
 	    </p>*}
 		<br />
-	    <img class="icon" alt="hodiny" src="{$basePath}/images/clock.png" /><span class="capital">HRY DO 24 HODIN</span>
+	    <img class="icon" alt="hodiny" src="{$basePath}/images/clock.png" /><span class="capital iconlabel">HRY DO 24 HODIN</span>
 	    {*<p>
 		Pokud po zaplacení her zašlete na email origame@email.cz jakékoli potvrzení o odeslání platby, doručíme Vám hry nejpozději do 24 hodin (ve většině případů prakticky okamžitě). Platí i o víkendech a svátcích.
 	    </p>*}
@@ -83,18 +83,35 @@
 			{/foreach}
 			<div class="game-container {if $games->count() % 2 == 0}oddbackground{/if}">
 				<div class="game smaller">
-					<article class="about games-description">
-					    <p>
-					    Origame - to jsou kvalitní a originální hry pro dospělé, které můžete hrát s přáteli na párty či oslavě nebo vyzkoušet erotické hry doma s partnerem. Díky netradičnímu způsobu dodání získáte hry takřka okamžitě za zlomek ceny běžných her, které se nabízejí v kamenných obchodech. Hry totiž obdržíte na Váš email v elektronické podobě připravené k vytisknutí (neplatíte tedy žádné poštovné). Pokud budete mít zájem o zaslání hotových her poštou, označte v objednávce pole "Výroba a zaslání her poštou".
-					    </p>
-						<br />
-					    <p>
-						<strong>Pokud po zaplacení her zašlete na email origame@email.cz jakékoli potvrzení o odeslání platby, doručíme Vám hry nejpozději do 24 hodin (ve většině případů prakticky okamžitě). Platí i o víkendech a svátcích.</strong>
-					    </p>
-						<br />
-					    <p>
-					    <span>Za pár korun získáte vzrušující dárek pro svého partnera! Darujete skutečný zážitek, který rozproudí krev v žilách a naplní vaše nejtajnější erotické sny a touhy. Zábavu na oslavě pak rozproudí naše párty hry.</span>
-					    </p>
+					<article id="bottom-description" class="about games-description">
+					    <div class="left-block">
+						<div class="icon coins"></div>
+						<p>
+						
+						    Origame - to jsou kvalitní a originální hry pro dospělé, které můžete hrát s přáteli na párty či oslavě nebo vyzkoušet erotické hry doma s partnerem. Díky netradičnímu způsobu dodání získáte hry takřka okamžitě za <span>zlomek ceny běžných her</span>, které se nabízejí v kamenných obchodech.
+						</p>
+					    </div>
+					    <div class="right-block">
+						<div class="icon envelope"></div>
+						<p>
+						    Hry obdržíte na Váš email v elektronické podobě připravené k vytisknutí (neplatíte tedy <span>žádné poštovné</span>). Pokud budete mít zájem o zaslání hotových her poštou, označte v objednávce pole "Výroba a zaslání her poštou".
+						</p>
+					    </div>
+					    
+					    <div class="left-block">
+						<div class="icon clock"></div>
+						<p>
+						    Pokud po zaplacení her zašlete na email origame@email.cz jakékoli potvrzení o odeslání platby, doručíme Vám hry <span>nejpozději do 24 hodin</span> (ve většině případů prakticky okamžitě). Platí i o víkendech a svátcích.
+						</p>
+					    </div>
+					    <div class="right-block">
+						<div class="icon gift"></div>
+						<p>
+						    Za pár korun získáte vzrušující dárek pro svého partnera! Darujete skutečný zážitek, který rozproudí krev v žilách a naplní vaše nejtajnější erotické sny a touhy. <span>Zábavu na oslavě pak rozproudí naše párty hry</span>.
+						</p>
+					    </div>
+					    
+					    <span class="clear"></span>
 					</article>
 				</div>
 			</div>
@@ -112,10 +129,10 @@
 				<div id="contact-info">
 					<br />
 					<img class="icon"  alt="email" src="{$basePath}/images/mailicon.png" />
-					<a href="mailto:info@priznaniosexu.cz" title="Napsat email" class="mail link">info@priznaniosexu.cz</a>
+					<a href="mailto:info@priznaniosexu.cz" title="Napsat email" class="mail link iconlabel">info@priznaniosexu.cz</a>
 					<br /><br />
 					<img class="icon"  alt="email" src="{$basePath}/images/phoneicon.png" />
-					<span class="phone">  774 181 584</span><br />
+					<span class="phone iconlabel">  774 181 584</span><br />
 					<div class="clear"></div>
 				</div>
 			</div>
