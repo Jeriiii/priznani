@@ -131,7 +131,7 @@
 					<img class="icon"  alt="email" src="{$basePath}/images/mailicon.png" />
 					<a href="mailto:info@priznaniosexu.cz" title="Napsat email" class="mail link iconlabel">info@priznaniosexu.cz</a>
 					<br /><br />
-					<img class="icon"  alt="email" src="{$basePath}/images/phoneicon.png" />
+					<img class="icon"  alt="telefon" src="{$basePath}/images/phoneicon.png" />
 					<span class="phone iconlabel">  774 181 584</span><br />
 					<div class="clear"></div>
 				</div>
@@ -229,7 +229,7 @@
 		/* fce na rolovani */
 		function scrollToAnchor(aid){
 			var aTag = $("a[name='"+ aid +"']");
-			$('html,body').animate({ scrollTop: aTag.offset().top}, 1200);
+			$('html,body').animate({ scrollTop: aTag.offset().top}, 800);
 		}
 		
 		/* form error */
@@ -246,11 +246,11 @@
 				event.preventDefault();
 				scrollToAnchor('game{$game->id}');
 			});
-			$("#order-game-{$game->id}").click(function(event) {
-				event.preventDefault();
-				$("#check-game-{$game->id}").attr('checked', true);
-				scrollToAnchor('contact');
-			});
+//			$("#order-game-{$game->id}").click(function(event) {
+//				event.preventDefault();
+//				$("#check-game-{$game->id}").attr('checked', true);
+//				scrollToAnchor('contact');
+//			});
 		{/foreach}
 		$(".scroll-to-contact").click(function(event) {
 			event.preventDefault();
