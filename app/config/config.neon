@@ -71,14 +71,13 @@ common:
 		news: News
 		news_galleries: News_galleries
 		pages: Pages
-                stream: ActivityStream
+		stream: ActivityStream		
 		form_new_send: Form_new_send
 		advices: Advices
 		partyConfessions: PartyConfessions
 		embedVideos: embedVideos
 		usersFoto: UsersFoto
-		eshopGames: EshopGames		
-
+		eshopGames: EshopGames
 
 production < common:
 

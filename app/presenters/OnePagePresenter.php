@@ -14,10 +14,12 @@ class OnePagePresenter extends BasePresenter
 {
 	
 	public $dataForStream;
+        private $count= 0;
         
 	public function actionDefault()
 	{
             $this->dataForStream = $this->context->createStream();
+            $this->count = $this->dataForStream->count();
 	}
 
 
@@ -25,11 +27,11 @@ class OnePagePresenter extends BasePresenter
 	{
 		// TO DO            
       //      $this->dataForStream = $this->context->createStream()->limit(3);
-      //      $this->template->stream = $this->dataForStream;
+            $this->template->count = $this->count;
 	}
 
 	protected function createComponentStream() {
-		return new Stream($this->dataForStream);
+                return new Stream($this->dataForStream);
 	}
         
         
