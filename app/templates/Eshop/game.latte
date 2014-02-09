@@ -48,17 +48,19 @@
 	    <div class="clear"></div>
 	</section>
 	<article id="games-description">
-	    <p>
+		<img class="icon mail"  alt="email" src="{$basePath}/images/mailicon.png" /> <span class="capital">DORUČENÍ ELEKTRONICKOU POŠTOU</span>
+	    {*<p>
 	    Origame - to jsou kvalitní a originální hry pro dospělé, které můžete hrát s přáteli na párty či oslavě nebo vyzkoušet erotické hry doma s partnerem. Díky netradičnímu způsobu dodání získáte hry takřka okamžitě za zlomek ceny běžných her, které se nabízejí v kamenných obchodech. Hry totiž obdržíte na Váš email v elektronické podobě připravené k vytisknutí (neplatíte tedy žádné poštovné). Pokud budete mít zájem o zaslání hotových her poštou, označte v objednávce pole "Výroba a zaslání her poštou".
-	    </p>
-	    <span class="capital">DORUČENÍ HER DO 24 HODIN</span>
-	    <p>
+	    </p>*}
+		<br />
+	    <img class="icon" alt="hodiny" src="{$basePath}/images/clock.png" /><span class="capital">HRY DO 24 HODIN</span>
+	    {*<p>
 		Pokud po zaplacení her zašlete na email origame@email.cz jakékoli potvrzení o odeslání platby, doručíme Vám hry nejpozději do 24 hodin (ve většině případů prakticky okamžitě). Platí i o víkendech a svátcích.
-	    </p>
-	    <br />
-	    <p>
+	    </p>*}
+	    
+	    {*<p>
 	    <span>Za pár korun získáte vzrušující dárek pro svého partnera! Darujete skutečný zážitek, který rozproudí krev v žilách a naplní vaše nejtajnější erotické sny a touhy. Zábavu na oslavě pak rozproudí naše párty hry.</span>
-	    </p>
+	    </p>*}
 	</article>
 	
 	<section id="articles" class="main-section">
@@ -66,7 +68,6 @@
 			{foreach $games as $game}
 				<a name="game{$game->id}"></a>
 				<div class="game-container {if $iterator->isOdd()}oddbackground{/if}">
-				    <section class="game">
 					<img class="poster" src="{$basePath}/images/origame/posters/{$game->id}.{$game->suffix}" alt="{$game->name}" />
 				    <article>
 					    {*<span class="glyphicon glyphicon-check"></span>*}
@@ -88,13 +89,12 @@
 		<div class="container">
 			<h3 class="title contacttitle">Objednávka</h3>
 			<div class="contact">
-			    
 				<div id="contact-info">
 					<br />
-					<img alt="email" src="{$basePath}/images/mailicon.png" />
+					<img class="icon"  alt="email" src="{$basePath}/images/mailicon.png" />
 					<a href="mailto:info@priznaniosexu.cz" title="Napsat email" class="mail link">info@priznaniosexu.cz</a>
 					<br /><br />
-					<img alt="email" src="{$basePath}/images/phoneicon.png" />
+					<img class="icon"  alt="email" src="{$basePath}/images/phoneicon.png" />
 					<span class="phone">  774 181 584</span><br />
 					<div class="clear"></div>
 				</div>
