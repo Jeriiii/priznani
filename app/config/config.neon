@@ -71,18 +71,14 @@ common:
 		news: News
 		news_galleries: News_galleries
 		pages: Pages
-                stream: ActivityStream
+		stream: ActivityStream
 		form_new_send: Form_new_send
 		advices: Advices
 		partyConfessions: PartyConfessions
 		embedVideos: embedVideos
 		usersFoto: UsersFoto
-<<<<<<< HEAD
 		eshopGames: EshopGames
 		eshopGamesOrders: EshopGamesOrders
-=======
-		eshopGames: EshopGames		
->>>>>>> a61857cfbaba26fc19ca13b347d8bbb693136033
 
 
 production < common:

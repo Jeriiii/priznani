@@ -7,7 +7,7 @@ use	Nette\Application\UI\Form,
 	Kdyby\BootstrapFormRenderer\BootstrapRenderer;
 
 
-class EshopGameForm extends BaseForm
+class EshopGamesOrdersForm extends BaseForm
 {
 	
 	public function __construct(IContainer $parent = NULL, $name = NULL)
@@ -42,7 +42,7 @@ class EshopGameForm extends BaseForm
 		
 		$this->addCheckbox('vasnivefantazie', 'Vášnivé fantazie');
 		$this->addCheckbox('nespoutanevzruseni', 'Nespoutané vzrušení');
-		$this->addCheckbox('zhave-ukoly-pro-pary', 'Žhavé úkoly pro páry');
+		$this->addCheckbox('zhaveukolypropary', 'Žhavé úkoly pro páry');
 		$this->addCheckbox('ceskahralasky', 'Česká hra lásky');
 		$this->addCheckbox('nekonecnaparty', 'Nekonečná párty');
 		$this->addCheckbox('sexyaktivity', 'Sexy aktivity');
@@ -99,6 +99,8 @@ class EshopGameForm extends BaseForm
 		$translator["phone"] = "telefon";
 		$translator["note"] = "poznamka";
 		$translator["print"] = "tisk";
+		$translator["zhaveukolypropary"] = "zhave-ukoly-pro-pary";
+		
 		
 		//vytvoření řetězce hodnot z formuláře
 		$str = "";
