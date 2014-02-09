@@ -2,6 +2,7 @@
 @evenbackground: #fafcfb;
 @origame-width: 1000px; /*  */
 @heading-color: #ae0303; /* nadpisy */
+@light-red-color: #d42626;
 
 
 
@@ -11,6 +12,23 @@
 .oddbackground {
     background: @oddbackground;
     
+}
+
+.oddlink{
+    color: @light-red-color !important;
+}
+
+#games-description{
+    text-align: left;
+    width: @origame-width;
+    margin: 20px auto;
+}
+#games-description span{
+    color: @light-red-color !important;
+}
+#games-description span.capital{
+    line-height: 50px;
+    text-transform: uppercase;
 }
 
 #kiss{

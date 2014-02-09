@@ -47,6 +47,19 @@
 	    </div>
 	    <div class="clear"></div>
 	</section>
+	<article id="games-description">
+	    <p>
+	    Origame - to jsou kvalitní a originální hry pro dospělé, které můžete hrát s přáteli na párty či oslavě nebo vyzkoušet erotické hry doma s partnerem. Díky netradičnímu způsobu dodání získáte hry takřka okamžitě za zlomek ceny běžných her, které se nabízejí v kamenných obchodech. Hry totiž obdržíte na Váš email v elektronické podobě připravené k vytisknutí (neplatíte tedy žádné poštovné). Pokud budete mít zájem o zaslání hotových her poštou, označte v objednávce pole "Výroba a zaslání her poštou".
+	    </p>
+	    <span class="capital">DORUČENÍ HER DO 24 HODIN</span>
+	    <p>
+		Pokud po zaplacení her zašlete na email origame@email.cz jakékoli potvrzení o odeslání platby, doručíme Vám hry nejpozději do 24 hodin (ve většině případů prakticky okamžitě). Platí i o víkendech a svátcích.
+	    </p>
+	    <br />
+	    <p>
+	    <span>Za pár korun získáte vzrušující dárek pro svého partnera! Darujete skutečný zážitek, který rozproudí krev v žilách a naplní vaše nejtajnější erotické sny a touhy. Zábavu na oslavě pak rozproudí naše párty hry.</span>
+	    </p>
+	</article>
 	
 	<section id="articles" class="main-section">
 		<div class="container">		    
@@ -61,7 +74,7 @@
 					    <h2>{$game->name}</h2>
 					    <p class="description">{!$game->description}</p>
 					    <p class="price">Jen za {$game->price},-</p>
-					    <a href="#" class="scroll-to-contact btn-main" title="Objednat {$game->name}">Objednat nyní</a>
+					    <a data-id="{$game->id}" href="#" class="scroll-to-contact btn-main" title="Objednat {$game->name}">Objednat nyní</a>
 				    </article>
 				</div>
 			{/foreach}
