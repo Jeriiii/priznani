@@ -24,16 +24,16 @@ class EshopGamesOrdersForm extends BaseForm
 //		$renderer->wrappers['control']['container'] = NULL;
 		//form
 		$this->addText('name', 'Jméno')
-				->addRule(Form::FILLED)
+				->addRule(Form::FILLED, "Prosím, vyplňte Vaše jméno")
 				->addRule(Form::MAX_LENGTH, null, 20);
 		$this->addText('surname', 'Příjmení')
-				->addRule(Form::FILLED)
+				->addRule(Form::FILLED, "Prosím, vyplňte Vaše příjimení")
 				->addRule(Form::MAX_LENGTH, null, 30);
 		$this->addText('email', 'Email')
-				->addRule(Form::FILLED)
+				->addRule(Form::FILLED, "Prosím, vyplňte Váš email")
 				->addRule(Form::MAX_LENGTH, null, 255);
 		$this->addText('phone', 'Telefon')
-				->addRule(Form::FILLED)
+				->addRule(Form::FILLED, "Prosím, vyplňte Váš telefon")
 				->addRule(Form::MAX_LENGTH, null, 20);
 		$this->addCheckbox('print', 'Chci hru vytisknout a zaslat poštou');
 		$this->addText('address', 'Adresa (pouze pokud chcete hru vytisknout)')
@@ -50,11 +50,10 @@ class EshopGamesOrdersForm extends BaseForm
 		//$this->addCheckbox('milackuuklidto', 'Miláčku ukliď to');
 		$this->addCheckbox('sexyhratky', 'Sexy hrátky');
 		//$this->addCheckbox('manazeruvsen', 'Manažerův sen');
-		$this->addText('discount_coupon', 'Slevový kupón')
-				->addRule(Form::FILLED)
-				->addRule(Form::MAX_LENGTH, null, 50);
+//		$this->addText('discount_coupon', 'Slevový kupón')
+//				->addRule(Form::FILLED)
+//				->addRule(Form::MAX_LENGTH, null, 50);
 		$this->addText('note', 'Poznámka')
-				->addRule(Form::FILLED)
 				->addRule(Form::MAX_LENGTH, null, 255);
 		
 		$this->addSubmit("submit", "Objednat");
@@ -88,6 +87,7 @@ class EshopGamesOrdersForm extends BaseForm
 		$nick = "";
 		
 		$values["priznaniosexu"] = 1;
+		$values["kod"] = "";
 		
 		// překlad
 		$translator = array();
@@ -95,7 +95,7 @@ class EshopGamesOrdersForm extends BaseForm
 		$translator["surname"] = "prijmeni";
 		$translator["address"] = "adresa";
 		$translator["email"] = "email";
-		$translator["discount_coupon"] = "kod";
+		//$translator["discount_coupon"] = "kod";
 		$translator["phone"] = "telefon";
 		$translator["note"] = "poznamka";
 		$translator["print"] = "tisk";
