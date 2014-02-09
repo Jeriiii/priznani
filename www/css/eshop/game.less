@@ -1,6 +1,7 @@
 @oddbackground: #f6e8e8;
 @evenbackground: #fafcfb;
 @origame-width: 1000px; /*  */
+@heading-color: #ae0303; /* nadpisy */
 
 
 
@@ -10,6 +11,50 @@
 .oddbackground {
     background: @oddbackground;
     
+}
+
+#kiss{
+    display: none;
+}
+
+#right-block{
+    float: right;
+}
+#topnav{
+    text-align: right;
+}
+#botnav{
+    margin-top: 140px;
+    text-align: center;
+}
+#botnav a, #botnav span {
+    color: @heading-color;
+}
+
+a.link{
+    
+}
+a.link:hover {
+    text-decoration: underline;
+}
+
+.tag{
+    display: block;
+    text-align: right;
+}
+
+#gamehead{
+    padding: 20px 20px 20px 30px;
+    width: @origame-width;
+    margin: 0 auto;
+}
+#gamehead h1{
+    font-family: 'Exo';
+    color: @heading-color;
+    font-weight: 300;
+    float: left;
+    font-size: 60pt;
+    width: 500px;
 }
 
 
@@ -29,8 +74,9 @@
     float: left;
     width: 300px;
 }
-.contact .title {
+.contacttitle {
     font-family: 'Exo';
+    color: @heading-color;
     font-weight: 600;
     font-size: 30pt;
 }
@@ -39,7 +85,7 @@
     width: @origame-width;
     margin: 0 auto;
     position: relative;
-    min-height: 300px;
+    min-height: 400px;
 }
 .game article {
     margin-left: 290px;
@@ -54,7 +100,7 @@
     font-family: 'Exo';
     font-weight: 200;
     font-size: 50pt;
-    color: #ae0303;
+    color: @heading-color;
 }
 .game article p.description {
     text-align: justify;

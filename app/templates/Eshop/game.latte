@@ -19,9 +19,37 @@
 			</li>
 		</ul>
 	</nav>*}
-
+	<section id="gamehead">
+	    <h1>Vášnivé hry pro dospělé</h1>
+	    <div id="right-block">
+		<nav id="topnav">
+		    <a href="#" title="FAQ" class="link">
+			    FAQ
+		    </a>|
+		    <a href="#" title="kontakt" class="scroll-to-contact link">
+			    kontakt
+		    </a>|
+		    <a href="#" title="objednat" class="scroll-to-contact link">
+			    objednat
+		    </a>
+		    
+		</nav>
+		<nav id="botnav">
+		    {foreach $games as $game}
+			<a title="{$game->name}" class="scroll-to-game{$game->id} {if $iterator->isOdd()}oddlink {/if}link">
+						{$game->name}
+			</a>
+			{if !$iterator->isLast()}
+			    <span class="divider">|</span>
+			{/if}
+		    {/foreach}
+		</nav>
+	    </div>
+	    <div class="clear"></div>
+	</section>
+	
 	<section id="articles" class="main-section">
-		<div class="container">
+		<div class="container">		    
 			{foreach $games as $game}
 				<a name="game{$game->id}"></a>
 				<div class="game-container {if $iterator->isOdd()}oddbackground{/if}">
@@ -29,8 +57,8 @@
 					<img class="poster" src="{$basePath}/images/origame/posters/{$game->id}.{$game->suffix}" alt="{$game->name}" />
 				    <article>
 					    {*<span class="glyphicon glyphicon-check"></span>*}
+					    {ifset $game->tag}<span class="tag">{!$game->tag}</span>{/ifset}
 					    <h2>{$game->name}</h2>
-
 					    <p class="description">{!$game->description}</p>
 					    <p class="price">Jen za {$game->price},-</p>
 					    <a href="#" class="scroll-to-contact btn-main" title="Objednat {$game->name}">Objednat nyní</a>
@@ -45,13 +73,16 @@
 	<a name="contact"></a>
 	<section id="contact" class="main-section">
 		<div class="container">
+			<h3 class="title contacttitle">Objednávka</h3>
 			<div class="contact">
-			<h3 class="title">Objednávka</h3>
-			
+			    
 				<div id="contact-info">
-					<div class="glyphicon glyphicon-envelope"></div>
-					<a href="mailto:info@priznaniosexu.cz" class="mail">info@priznaniosexu.cz</a>
-					<div class="glyphicon glyphicon-phone"></div><span class="phone">774 181 584</span><br />
+					<br />
+					<img alt="email" src="{$basePath}/images/mailicon.png" />
+					<a href="mailto:info@priznaniosexu.cz" title="Napsat email" class="mail link">info@priznaniosexu.cz</a>
+					<br /><br />
+					<img alt="email" src="{$basePath}/images/phoneicon.png" />
+					<span class="phone">  774 181 584</span><br />
 					<div class="clear"></div>
 				</div>
 			</div>

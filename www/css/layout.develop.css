@@ -6,6 +6,9 @@ a {
     color: #000;
     text-decoration: none;
 }
+nav a{
+    cursor: pointer;
+}
 .hidden {
     display: none;
 }
