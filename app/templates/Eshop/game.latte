@@ -68,15 +68,17 @@
 			{foreach $games as $game}
 				<a name="game{$game->id}"></a>
 				<div class="game-container {if $iterator->isOdd()}oddbackground{/if}">
-					<img class="poster" src="{$basePath}/images/origame/posters/{$game->id}.{$game->suffix}" alt="{$game->name}" />
-				    <article>
-					    {*<span class="glyphicon glyphicon-check"></span>*}
-					    {ifset $game->tag}<span class="tag">{!$game->tag}</span>{/ifset}
-					    <h2>{$game->name}</h2>
-					    <p class="description">{!$game->description}</p>
-					    <p class="price">Jen za {$game->price},-</p>
-					    <a data-id="{$game->id}" href="#" class="scroll-to-contact btn-main" title="Objednat {$game->name}">Objednat nyní</a>
-				    </article>
+					<div class="game">
+						<img class="poster" src="{$basePath}/images/origame/posters/{$game->id}.{$game->suffix}" alt="{$game->name}" />
+						<article>
+							{*<span class="glyphicon glyphicon-check"></span>*}
+							{ifset $game->tag}<span class="tag">{!$game->tag}</span>{/ifset}
+							<h2>{$game->name}</h2>
+							<p class="description">{!$game->description}</p>
+							<p class="price">Jen za {$game->price},-</p>
+							<a data-id="{$game->id}" href="#" class="scroll-to-contact btn-main" title="Objednat {$game->name}">Objednat nyní</a>
+						</article>
+					</div>
 				</div>
 			{/foreach}
 			
