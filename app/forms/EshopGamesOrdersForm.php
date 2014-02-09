@@ -44,10 +44,10 @@ class EshopGamesOrdersForm extends BaseForm
 		$this->addCheckbox('zhaveukolypropary', 'Žhavé úkoly pro páry');
 		//$this->addCheckbox('ceskahralasky', 'Česká hra lásky');
 		//$this->addCheckbox('nekonecnaparty', 'Nekonečná párty');
-		$this->addCheckbox('sexyaktivity', 'Sexy aktivity');
+		//$this->addCheckbox('sexyaktivity', 'Sexy aktivity');
 		//$this->addCheckbox('ceskachlastacka', 'Česká chlastačka');
 		//$this->addCheckbox('milackuuklidto', 'Miláčku ukliď to');
-		$this->addCheckbox('sexyhratky', 'Sexy hrátky');
+		//$this->addCheckbox('sexyhratky', 'Sexy hrátky');
 		//$this->addCheckbox('manazeruvsen', 'Manažerův sen');
 //		$this->addText('discount_coupon', 'Slevový kupón')
 //				->addRule(Form::FILLED)
@@ -84,10 +84,7 @@ class EshopGamesOrdersForm extends BaseForm
  	}
 	
 	public function postOrder($values) {
-		
-//		$toStr["priznaniosexu"] = 1;
-//		$["kod"] = "";
-//		
+				
 		// překlad
 		$translator = array();
 		$translator["name"] = "jmeno";
@@ -102,27 +99,29 @@ class EshopGamesOrdersForm extends BaseForm
 		
 		
 		//vytvoření řetězce hodnot z formuláře
-		$str = "noloop=no&priznaniosexu=1&kod=&";
-		//$str = "note=$note&nick=$nick&form_created=igaiiaecbf";
+		$str = "priznaniosexu=1&kod=&vek=&";
+		//$str .= "noloop=no&";
+		
 		$count = $values->count();
 		$i = 0;
 		foreach($values as $key => $value) {
 			if(array_key_exists($key, $translator)) {
-				$str .= $translator[$key] . "=ttt" . $value;
+				$str .= $translator[$key] . "=" . $value;
 			}else{
 				$str .= $key . "=" . $value;
 			}
 			
 			$i++;
-			if($i < ($count - 2)) {
+			if($i < ($count - 1)) {
 				$str .= "&";
 			}
 			
-			if($i == ($count - 2)) break;
+			if($i == ($count - 1)) break;
 		}
 		
-		die($str);
-		$url = 'http://priznaniosexu.cz/eshop/game?do=eshopGamesOrdersForm-submit';
+		die($count.$str);
+		//$url = 'http://priznaniosexu.cz/eshop/game?do=eshopGamesOrdersForm-submit';
+		$url = 'http://www.origame.cz/objednavka.php';
 
 		//open connection
 		$ch = curl_init();
@@ -131,7 +130,7 @@ class EshopGamesOrdersForm extends BaseForm
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, FALSE);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_URL,$url);
-		curl_setopt($ch, CURLOPT_POST, $count - 2 + 1);
+		curl_setopt($ch, CURLOPT_POST, $count /*+ 1*/);
 		curl_setopt($ch, CURLOPT_POSTFIELDS,
 					$str);
 		//die();
