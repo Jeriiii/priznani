@@ -23,14 +23,14 @@
 	    <h1>Vášnivé hry pro dospělé</h1>
 	    <div id="right-block">
 		<nav id="topnav">
-		    <a href="#" title="FAQ" class="link">
+		    {*<a href="#" title="FAQ" class="link">
 			    FAQ
-		    </a>|
+		    </a>|*}
 		    <a href="#" title="kontakt" class="scroll-to-contact link">
-			    kontakt
+			    KONTAKT
 		    </a>|
 		    <a href="#" title="objednat" class="scroll-to-contact link">
-			    objednat
+			    OBJEDNAT
 		    </a>
 		    
 		</nav>
@@ -225,12 +225,14 @@
 
 		/*nastaveni scrollovani*/
 		{foreach $games as $game}
-			$(".scroll-to-game{$game->id}").click(function() {
+			$(".scroll-to-game{$game->id}").click(function(event) {
+				event.preventDefault();
 				scrollToAnchor('game{$game->id}');
 			});
 		{/foreach}
-		$(".scroll-to-contact").click(function() {
-		   scrollToAnchor('contact');
+		$(".scroll-to-contact").click(function(event) {
+			event.preventDefault();
+			scrollToAnchor('contact');
 		});
 	</script>
 {/}

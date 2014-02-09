@@ -101,6 +101,7 @@ class EshopGamesOrdersForm extends BaseForm
 		//vytvoření řetězce hodnot z formuláře
 		$str = "priznaniosexu=1&kod=&vek=&";
 		//$str .= "noloop=no&";
+		$str .= 'ceskahralasky=&nekonecnaparty=&sexyaktivity=&ceskachlastacka=&milackuuklidto=&sexyhratky=&manazeruvsen=&';
 		
 		$count = $values->count();
 		$i = 0;
@@ -130,7 +131,7 @@ class EshopGamesOrdersForm extends BaseForm
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, FALSE);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_URL,$url);
-		curl_setopt($ch, CURLOPT_POST, $count /*+ 1*/);
+		curl_setopt($ch, CURLOPT_POST, $count + 2 + 7 /*+ 1*/);
 		curl_setopt($ch, CURLOPT_POSTFIELDS,
 					$str);
 		//die();
