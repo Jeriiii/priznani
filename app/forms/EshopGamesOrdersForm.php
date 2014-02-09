@@ -44,10 +44,10 @@ class EshopGamesOrdersForm extends BaseForm
 		$this->addCheckbox('zhaveukolypropary', 'Žhavé úkoly pro páry');
 		//$this->addCheckbox('ceskahralasky', 'Česká hra lásky');
 		//$this->addCheckbox('nekonecnaparty', 'Nekonečná párty');
-		//$this->addCheckbox('sexyaktivity', 'Sexy aktivity');
+		$this->addCheckbox('sexyaktivity', 'Sexy aktivity');
 		//$this->addCheckbox('ceskachlastacka', 'Česká chlastačka');
 		//$this->addCheckbox('milackuuklidto', 'Miláčku ukliď to');
-		//$this->addCheckbox('sexyhratky', 'Sexy hrátky');
+		$this->addCheckbox('sexyhratky', 'Sexy hrátky');
 		//$this->addCheckbox('manazeruvsen', 'Manažerův sen');
 //		$this->addText('discount_coupon', 'Slevový kupón')
 //				->addRule(Form::FILLED)
@@ -101,7 +101,7 @@ class EshopGamesOrdersForm extends BaseForm
 		//vytvoření řetězce hodnot z formuláře
 		$str = "priznaniosexu=1&kod=&vek=&";
 		//$str .= "noloop=no&";
-		$str .= 'ceskahralasky=&nekonecnaparty=&sexyaktivity=&ceskachlastacka=&milackuuklidto=&sexyhratky=&manazeruvsen=&';
+		$str .= 'ceskahralasky=&nekonecnaparty=&ceskachlastacka=&milackuuklidto=&&manazeruvsen=&';
 		
 		$count = $values->count();
 		$i = 0;

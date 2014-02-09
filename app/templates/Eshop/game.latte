@@ -36,7 +36,7 @@
 		</nav>
 		<nav id="botnav">
 		    {foreach $games as $game}
-			<a title="{$game->name}" class="scroll-to-game{$game->id} {if $iterator->isOdd()}oddlink {/if}link">
+			<a href="#" title="{$game->name}" class="scroll-to-game{$game->id} {if $iterator->isOdd()}oddlink {/if}link">
 						{$game->name}
 			</a>
 			{if !$iterator->isLast()}
@@ -76,7 +76,7 @@
 							<h2>{$game->name}</h2>
 							<p class="description">{!$game->description}</p>
 							<p class="price">Jen za {$game->price},-</p>
-							<a data-id="{$game->id}" href="#" class="scroll-to-contact btn-main" title="Objednat {$game->name}">Objednat nyní</a>
+							<a id="order-game-{$game->id}" href="#" class="btn-main" title="Objednat {$game->name}">Objednat nyní</a>
 						</article>
 					</div>
 				</div>
@@ -164,25 +164,25 @@
 					<div class="checkgroup">
 					    <div class="checkbox">
 						    {label vasnivefantazie /}
-							    {input vasnivefantazie}
+							{input vasnivefantazie id => "check-game-1"}
 
 					    </div>
 					    <div class="checkbox">
 						    {label nespoutanevzruseni /}
-							    {input nespoutanevzruseni}
+							{input nespoutanevzruseni id => "check-game-2"}
 					    </div>
 					    <div class="checkbox">
 						    {label zhaveukolypropary /}
-							    {input zhaveukolypropary}
+							{input zhaveukolypropary id => "check-game-3"}
 					    </div>
-					    {*<div class="checkbox">
+					    <div class="checkbox">
 						    {label sexyaktivity /}
-							    {input sexyaktivity}
+							    {input sexyaktivity id => "check-game-4"}
 					    </div>
 					    <div class="checkbox">
 						    {label sexyhratky /}
-							    {input sexyhratky}
-					    </div>*}
+							    {input sexyhratky id => "check-game-5"}
+					    </div>
 					</div>	
 						
 					<div class="form-group">
@@ -228,6 +228,11 @@
 			$(".scroll-to-game{$game->id}").click(function(event) {
 				event.preventDefault();
 				scrollToAnchor('game{$game->id}');
+			});
+			$("#order-game-{$game->id}").click(function(event) {
+				event.preventDefault();
+				$("#check-game-{$game->id}").attr('checked', true);
+				scrollToAnchor('contact');
 			});
 		{/foreach}
 		$(".scroll-to-contact").click(function(event) {
