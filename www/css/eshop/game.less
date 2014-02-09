@@ -14,6 +14,18 @@
     
 }
 
+.icon {
+    vertical-align: text-top;
+    display: inline-block;
+    padding-right: 20px;
+}
+img.icon.mail{
+    vertical-align: baseline;
+}
+.iconlabel{
+    
+}
+
 .oddlink{
     color: @light-red-color !important;
 }
@@ -39,6 +51,45 @@
 .games-description span.capital{
     line-height: 50px;
     text-transform: uppercase;
+}
+
+#bottom-description p {
+    text-align: justify;
+    min-height: 160px;
+}
+
+#bottom-description .icon {
+    background-position: center center;
+    height: 120px;
+    width: 80px;
+    background-repeat: no-repeat;
+}
+
+#bottom-description .icon.coins {
+    background-image: url('../../images/icons/coins.png');
+}
+#bottom-description .icon.clock {
+    background-image: url('../../images/icons/clock.png');
+}
+#bottom-description .icon.envelope {
+    background-image: url('../../images/icons/envelope.png');
+}
+#bottom-description .icon.gift {
+    background-image: url('../../images/icons/gift.png');
+}
+#bottom-description p img {
+    float: left;
+    line-height: 60px;
+}
+
+
+#bottom-description div.left-block{
+    padding-right: 40px;
+}
+
+#bottom-description div{
+    width: (@origame-width / 2) - 20;/* 4 - pocet sloupcu */
+    float: left;
 }
 
 #kiss{
