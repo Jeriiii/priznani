@@ -34,7 +34,7 @@ class EshopGamesOrdersForm extends BaseForm
 		$this->addText('phone', 'Telefon')
 				->addRule(Form::FILLED, "Prosím, vyplňte Váš telefon")
 				->addRule(Form::MAX_LENGTH, null, 20);
-		$this->addCheckbox('print', 'Chci hru vytisknout a zaslat poštou');
+		$this->addCheckbox('print', 'Chci hru vytisknout a zaslat poštou (+ 99 Kč)');
 		$this->addText('address', 'Adresa (pouze pokud chcete hru vytisknout)')
 				->addRule(Form::FILLED)
 				->addRule(Form::MAX_LENGTH, null, 255);
@@ -42,9 +42,9 @@ class EshopGamesOrdersForm extends BaseForm
 		$this->addCheckbox('vasnivefantazie', 'Vášnivé fantazie');
 		$this->addCheckbox('nespoutanevzruseni', 'Nespoutané vzrušení');
 		$this->addCheckbox('zhaveukolypropary', 'Žhavé úkoly pro páry');
+		$this->addCheckbox('sexyaktivity', 'Sexy aktivity');
 		//$this->addCheckbox('ceskahralasky', 'Česká hra lásky');
 		//$this->addCheckbox('nekonecnaparty', 'Nekonečná párty');
-		$this->addCheckbox('sexyaktivity', 'Sexy aktivity');
 		//$this->addCheckbox('ceskachlastacka', 'Česká chlastačka');
 		//$this->addCheckbox('milackuuklidto', 'Miláčku ukliď to');
 		$this->addCheckbox('sexyhratky', 'Sexy hrátky');

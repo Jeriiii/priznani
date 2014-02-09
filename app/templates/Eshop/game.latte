@@ -75,7 +75,7 @@
 							{ifset $game->tag}<span class="tag">{!$game->tag}</span>{/ifset}
 							<h2>{$game->name}</h2>
 							<p class="description">{!$game->description}</p>
-							<p class="price">Jen za {$game->price},-</p>
+							<p id="price-game-{$game->id}" data-price="{$game->price}" class="price">Jen za {$game->price},-</p>
 							<a id="order-game-{$game->id}" href="#" class="btn-main" title="Objednat {$game->name}">Objednat nyní</a>
 						</article>
 					</div>
@@ -164,24 +164,24 @@
 					<div class="checkgroup">
 					    <div class="checkbox">
 						    {label vasnivefantazie /}
-							{input vasnivefantazie id => "check-game-1"}
+							{input vasnivefantazie class => "check-game-1", data-name=> 1}
 
 					    </div>
 					    <div class="checkbox">
 						    {label nespoutanevzruseni /}
-							{input nespoutanevzruseni id => "check-game-2"}
+							{input nespoutanevzruseni class => "check-game-2", data-name=> 2}
 					    </div>
 					    <div class="checkbox">
 						    {label zhaveukolypropary /}
-							{input zhaveukolypropary id => "check-game-3"}
+							{input zhaveukolypropary class => "check-game-3", data-name=> 3}
+					    </div>
+						<div class="checkbox">
+						    {label sexyhratky /}
+							    {input sexyhratky class => "check-game-5", data-name=> 4}
 					    </div>
 					    <div class="checkbox">
 						    {label sexyaktivity /}
-							    {input sexyaktivity id => "check-game-4"}
-					    </div>
-					    <div class="checkbox">
-						    {label sexyhratky /}
-							    {input sexyhratky id => "check-game-5"}
+							    {input sexyaktivity class => "check-game-4", data-name=> 5}
 					    </div>
 					</div>	
 						
@@ -201,6 +201,7 @@
 					</div>
 					<div>*}
 						{input submit class => "btn-main medium"}
+						<div><span id="order-price">0</span>,- Kč</div>
 				{/form}
 			</div>
 			<div class="clear"></div>
@@ -231,10 +232,63 @@
 			});
 			$("#order-game-{$game->id}").click(function(event) {
 				event.preventDefault();
-				$("#check-game-{$game->id}").attr('checked', true);
+				$(".check-game-{$game->id}").attr('checked', true);
 				scrollToAnchor('contact');
 			});
 		{/foreach}
+
+		//kontrola na začátku
+		$(".checkgroup input").each(function() {
+			var $checkbox = $(this);
+			var game_id = $checkbox.data("name");
+			var game_price = $("#price-game-" + game_id).data("price");
+			var $bill_element = $("#order-price");
+			var bill = parseInt($bill_element.text());
+
+			if( $checkbox.is(':checked') ) {
+				$bill_element.text(bill + game_price);
+			}
+		});
+		
+		var $checkbox = $("#frmeshopGamesOrdersForm-print");
+		var $bill_element = $("#order-price");
+		var bill = parseInt($bill_element.text());
+
+		if( $checkbox.is(':checked') ) {
+			$bill_element.text(bill + 99);
+		}
+
+		// průběžná kontrola
+		$(".checkgroup input").each(function() {
+			var $checkbox = $(this);
+			$checkbox.change(function() {
+				var game_id = $checkbox.data("name");
+				var game_price = $("#price-game-" + game_id).data("price");
+				var $bill_element = $("#order-price");
+				var bill = parseInt($bill_element.text());
+				
+				if( $checkbox.is(':checked') ) {
+					$bill_element.text(bill + game_price);
+				}
+				else {
+					$bill_element.text(bill - game_price);
+				}
+			});
+		});
+		
+		$("#frmeshopGamesOrdersForm-print").change(function() {
+			var $checkbox = $(this);
+			var $bill_element = $("#order-price");
+			var bill = parseInt($bill_element.text());
+
+			if( $checkbox.is(':checked') ) {
+				$bill_element.text(bill + 99);
+			}
+			else {
+				$bill_element.text(bill - 99);
+			}
+		});
+		
 		$(".scroll-to-contact").click(function(event) {
 			event.preventDefault();
 			scrollToAnchor('contact');
