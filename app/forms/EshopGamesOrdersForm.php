@@ -14,8 +14,6 @@ class EshopGamesOrdersForm extends BaseForm
 	{
 		parent::__construct($parent, $name);
 		
-		$this->setRenderer(new BootstrapRenderer);
-		
 //		//graphics
 //		$renderer = $this->getRenderer();
 //		$renderer->wrappers['controls']['container'] = 'div';
@@ -31,6 +29,7 @@ class EshopGamesOrdersForm extends BaseForm
 				->addRule(Form::MAX_LENGTH, null, 30);
 		$this->addText('email', 'Email')
 				->addRule(Form::FILLED, "Prosím, vyplňte Váš email")
+				->addRule(Form::EMAIL, "Zadejte email ve správném tvaru např. vasemail@seznam.cz")
 				->addRule(Form::MAX_LENGTH, null, 255);
 		$this->addText('phone', 'Telefon')
 				->addRule(Form::FILLED, "Prosím, vyplňte Váš telefon")
@@ -72,23 +71,23 @@ class EshopGamesOrdersForm extends BaseForm
 		$presenter->context->createEshopGamesOrders()
 			->insert($values);
 		
+		//dump($values["noloop"]);die();
+		
 		//poslání dat do origame
-		unset($values["create"]);
-		$this->postOrder($values);
+		if(empty($values["noloop"])) {
+			unset($values["create"]);
+			$this->postOrder($values);
+		}
 		
 		$presenter->flashMessage('Děkujeme za objednávku. Bude vyřízena co nejdříve.');
 		$presenter->redirect('this');
  	}
 	
 	public function postOrder($values) {
-		// TO DO
 		
-		$note = "blablabladfsghbtrdehtrhtyhtyhty";
-		$nick = "";
-		
-		$values["priznaniosexu"] = 1;
-		$values["kod"] = "";
-		
+//		$toStr["priznaniosexu"] = 1;
+//		$["kod"] = "";
+//		
 		// překlad
 		$translator = array();
 		$translator["name"] = "jmeno";
@@ -103,37 +102,45 @@ class EshopGamesOrdersForm extends BaseForm
 		
 		
 		//vytvoření řetězce hodnot z formuláře
-		$str = "";
+		$str = "noloop=no&priznaniosexu=1&kod=&";
 		//$str = "note=$note&nick=$nick&form_created=igaiiaecbf";
-		$lastKey = end(array_keys($values));
-		
+		$count = $values->count();
+		$i = 0;
 		foreach($values as $key => $value) {
 			if(array_key_exists($key, $translator)) {
-				$str .= $translator[$key] . "=" . $value;
+				$str .= $translator[$key] . "=ttt" . $value;
 			}else{
 				$str .= $key . "=" . $value;
 			}
 			
-			if($key != $lastKey) {
+			$i++;
+			if($i < ($count - 2)) {
 				$str .= "&";
 			}
+			
+			if($i == ($count - 2)) break;
 		}
 		
-		$url = 'http://priznaniosexu.cz/?do=form1Form-submit';
+		die($str);
+		$url = 'http://priznaniosexu.cz/eshop/game?do=eshopGamesOrdersForm-submit';
 
 		//open connection
 		$ch = curl_init();
-
+		
+		curl_setopt($ch, CURLOPT_HEADER, TRUE);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, FALSE);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($ch, CURLOPT_URL,$url);
-		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POST, $count - 2 + 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS,
 					$str);
-
+		//die();
 		//execute post
 		$result = curl_exec($ch);
 
 		//close connection
 		curl_close($ch);
+		
 	}
 }
 
