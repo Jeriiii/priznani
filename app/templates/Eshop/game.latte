@@ -47,7 +47,7 @@
 	    </div>
 	    <div class="clear"></div>
 	</section>
-	<article id="games-description">
+	<article class="games-description">
 		<img class="icon mail"  alt="email" src="{$basePath}/images/mailicon.png" /> <span class="capital">DORUČENÍ ELEKTRONICKOU POŠTOU</span>
 	    {*<p>
 	    Origame - to jsou kvalitní a originální hry pro dospělé, které můžete hrát s přáteli na párty či oslavě nebo vyzkoušet erotické hry doma s partnerem. Díky netradičnímu způsobu dodání získáte hry takřka okamžitě za zlomek ceny běžných her, které se nabízejí v kamenných obchodech. Hry totiž obdržíte na Váš email v elektronické podobě připravené k vytisknutí (neplatíte tedy žádné poštovné). Pokud budete mít zájem o zaslání hotových her poštou, označte v objednávce pole "Výroba a zaslání her poštou".
@@ -64,7 +64,7 @@
 	</article>
 	
 	<section id="articles" class="main-section">
-		<div class="container">		    
+		<div class="container">
 			{foreach $games as $game}
 				<a name="game{$game->id}"></a>
 				<div class="game-container {if $iterator->isOdd()}oddbackground{/if}">
@@ -81,6 +81,24 @@
 					</div>
 				</div>
 			{/foreach}
+			<div class="game-container {if $games->count() % 2 == 0}oddbackground{/if}">
+				<div class="game smaller">
+					<article class="about games-description">
+					    <p>
+					    Origame - to jsou kvalitní a originální hry pro dospělé, které můžete hrát s přáteli na párty či oslavě nebo vyzkoušet erotické hry doma s partnerem. Díky netradičnímu způsobu dodání získáte hry takřka okamžitě za zlomek ceny běžných her, které se nabízejí v kamenných obchodech. Hry totiž obdržíte na Váš email v elektronické podobě připravené k vytisknutí (neplatíte tedy žádné poštovné). Pokud budete mít zájem o zaslání hotových her poštou, označte v objednávce pole "Výroba a zaslání her poštou".
+					    </p>
+						<br />
+					    <p>
+						<strong>Pokud po zaplacení her zašlete na email origame@email.cz jakékoli potvrzení o odeslání platby, doručíme Vám hry nejpozději do 24 hodin (ve většině případů prakticky okamžitě). Platí i o víkendech a svátcích.</strong>
+					    </p>
+						<br />
+					    <p>
+					    <span>Za pár korun získáte vzrušující dárek pro svého partnera! Darujete skutečný zážitek, který rozproudí krev v žilách a naplní vaše nejtajnější erotické sny a touhy. Zábavu na oslavě pak rozproudí naše párty hry.</span>
+					    </p>
+					</article>
+				</div>
+			</div>
+			
 			
 			<div class="clear"></div>
 		</div>
