@@ -5,7 +5,6 @@
 @light-red-color: #d42626;
 
 
-
 .game-container{
     background: @evenbackground;
 }
@@ -37,7 +36,6 @@ img.icon.mail{
 
 .game.smaller{
     min-height: 0;
-    padding-bottom: 20px;
 }
 
 .games-description{
@@ -106,6 +104,7 @@ img.icon.mail{
 #botnav{
     margin-top: 140px;
     text-align: center;
+	width: 460px;
 }
 #botnav a, #botnav span {
     color: @heading-color;
@@ -221,5 +220,158 @@ section.inner{
 	}
 	.mail {
 		padding-top: 17px;
+	}
+}
+
+#order-price {
+	line-height: 40px;
+	padding-left: 40px;
+	font-weight: bold;
+}
+
+.clear{
+	float: none !important;
+}
+
+@media screen and (max-width: 1200px){
+	@origame-width-1200: @origame-width - 200;
+	#gamehead{
+		width: (@origame-width-1200);
+	}
+	.games-description {
+		width: (@origame-width-1200);
+	}
+	.game{
+		width: (@origame-width-1200);
+	}
+	.game article p.description {
+		font-size: 11pt;
+	}
+	#bottom-description div {
+		width: 100%;
+	}
+	.contact {
+		width: 100%;
+		float: none;
+	}
+	.form-games{
+		float:none;
+	}
+	#contact {
+		width: (@origame-width-1200 - 100);
+	}
+	#left-panel-label{
+		display: none;
+	}
+	#right-block {
+		float:none;
+	}
+	#botnav{
+		margin-left: 400px;
+		margin-top: 50px;
+		width: 400px;
+	}
+	
+}
+
+@media screen and (max-width: 1024px){
+	@origame-width-1200: @origame-width - 400;
+	#gamehead{
+		width: (@origame-width-1200);
+	}
+	.games-description {
+		width: (@origame-width-1200);
+	}
+	.game{
+		width: (@origame-width-1200);
+	}
+	.game article p.description {
+		font-size: 11pt;
+	}
+	#bottom-description div {
+		width: 100%;
+	}
+	.contact {
+		width: 100%;
+		float: none;
+	}
+	.form-games{
+		float:none;
+	}
+	#contact {
+		width: (@origame-width-1200 - 100);
+	}
+	#left-panel-label{
+		display: none;
+	}
+	#right-block {
+		float:none;
+	}
+	#topnav{
+		margin-top: 15px;
+		width: 100%;
+		text-align: right;
+	}
+	#botnav{
+		margin-left: 0;
+		margin-top: 50px;
+		width: 400px;
+		float: left;
+	}
+	#gamehead h1 {
+		font-size: 40pt;
+		width: 100%;
+		float: none;
+	}
+	.form-games {
+		width: 100%;
+	}
+	
+}
+
+@media screen and (max-width: 770px){
+	#left-panel {
+		display: none;
+	}
+	#gamehead {
+		width: auto;
+	}
+	.games-description {
+		width: 90%;
+	}
+}
+
+@media screen and (max-width: 630px){
+	img.poster {
+		display: none;
+	}
+	.game article {
+		margin-left: 0;
+	}
+	.game {
+		width: 90%;
+	}
+	.form-games {
+		width: 450px;
+		margin: 0px;
+	}
+}
+
+@media screen and (max-width: 480px){
+	#botnav {
+		width: auto;
+	}
+	.game article h2 {
+		font-size: 30pt;
+	}
+	#bottom-description .icon {
+		height: 60px;
+	}
+	.form-games {
+		width: 345px;
+		margin: 0px;
+	}
+	.container {
+		margin: 30px 5px;
 	}
 }

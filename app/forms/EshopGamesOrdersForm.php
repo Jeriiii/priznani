@@ -4,7 +4,7 @@ namespace Nette\Application\UI\Form;
 
 use	Nette\Application\UI\Form,
 	Nette\ComponentModel\IContainer,
-	Kdyby\BootstrapFormRenderer\BootstrapRenderer;
+	Nette\Utils\Strings;
 
 
 class EshopGamesOrdersForm extends BaseForm
@@ -36,7 +36,8 @@ class EshopGamesOrdersForm extends BaseForm
 				->addRule(Form::MAX_LENGTH, null, 20);
 		$this->addCheckbox('print', 'Chci hru vytisknout a zaslat poštou (+ 99 Kč)');
 		$this->addText('address', 'Adresa (pouze pokud chcete hru vytisknout)')
-				->addRule(Form::FILLED)
+				->addConditionOn($this['print'], Form::EQUAL, TRUE)
+					->addRule(Form::FILLED, "Prosím vyplňte Vaší adresu, kam Vám máme hru zaslat")
 				->addRule(Form::MAX_LENGTH, null, 255);
 		
 		$this->addCheckbox('vasnivefantazie', 'Vášnivé fantazie');
@@ -95,32 +96,65 @@ class EshopGamesOrdersForm extends BaseForm
 		$translator["phone"] = "telefon";
 		$translator["note"] = "poznamka";
 		$translator["print"] = "tisk";
-		$translator["zhaveukolypropary"] = "zhave-ukoly-pro-pary";
+		
+		$translator_game["vasnivefantazie"]["name"] = "h1";
+		$translator_game["vasnivefantazie"]["value"] = "vasnivefantazie";
+		$translator_game["sexyaktivity"]["name"] = "h2";
+		$translator_game["sexyaktivity"]["value"] = "sexyaktivity";
+		$translator_game["ceskahralasky"]["name"] = "h3";
+		$translator_game["ceskahralasky"]["value"] = "ceskahralasky";
+		
+		$translator_game["nekonecnaparty"]["name"] = "h4";
+		$translator_game["nekonecnaparty"]["value"] = "nekonecnaparty";
+		$translator_game["ceskachlastacka"]["name"] = "h5";
+		$translator_game["ceskachlastacka"]["value"] = "ceskachlastacka";
+		$translator_game["manazeruvsen"]["name"] = "h7";
+		$translator_game["manazeruvsen"]["value"] = "manazeruvsen";
+		
+		$translator_game["sexyhratky"]["name"] = "h8";
+		$translator_game["sexyhratky"]["value"] = "sexyhratky";
+		$translator_game["milackuuklidto"]["name"] = "h9";
+		$translator_game["milackuuklidto"]["value"] = "milackuuklidto";
+		$translator_game["nespoutanevzruseni"]["name"] = "h10";
+		$translator_game["nespoutanevzruseni"]["value"] = "nespoutanevzruseni";
+		$translator_game["zhaveukolypropary"]["name"] = "h11";
+		$translator_game["zhaveukolypropary"]["value"] = "zhave-ukoly-pro-pary";
 		
 		
 		//vytvoření řetězce hodnot z formuláře
 		$str = "priznaniosexu=1&kod=&vek=&";
 		//$str .= "noloop=no&";
-		$str .= 'ceskahralasky=&nekonecnaparty=&ceskachlastacka=&milackuuklidto=&&manazeruvsen=&';
+		//$str .= 'h3=&h4=&h5=&h9=&&h7=&';
+		$values["note"] = "(Zasláno ze stránek Přiznání o sexu) " . $values["note"];
 		
 		$count = $values->count();
 		$i = 0;
 		foreach($values as $key => $value) {
+			Strings::webalize($value);
+			//je mozne to prelozit?
 			if(array_key_exists($key, $translator)) {
 				$str .= $translator[$key] . "=" . $value;
 			}else{
-				$str .= $key . "=" . $value;
+				// jde o hru?
+				if(array_key_exists($key, $translator_game)) {
+					if(!empty($value)) {
+						$value = $translator_game[$key]["value"];
+						$str .= $translator_game[$key]["name"] . "=" . $value;
+					}
+				}else{
+					$str .= $key . "=" . $value;
+				}
 			}
 			
 			$i++;
-			if($i < ($count - 1)) {
+			if($i < ($count)) {
 				$str .= "&";
 			}
 			
-			if($i == ($count - 1)) break;
+			if($i == ($count)) break;
 		}
 		
-		die($count.$str);
+		//die($count.$str);
 		//$url = 'http://priznaniosexu.cz/eshop/game?do=eshopGamesOrdersForm-submit';
 		$url = 'http://www.origame.cz/objednavka.php';
 

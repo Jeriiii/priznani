@@ -40,5 +40,21 @@ class EshopPresenter extends BasePresenter {
 	protected function createComponentEshopGamesOrdersForm($name) {
 		return new Frm\EshopGamesOrdersForm($this, $name);
 	}
+	
+	public function createComponentJsGame()
+	{
+			$files = new \WebLoader\FileCollection(WWW_DIR . '/js');                                       
+							 //$files->addRemoteFile('http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js');
+			$files->addFiles(array(
+				'eshop/game.js'));
+
+			$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+			$compiler->addFilter(function ($code) {
+				$packer = new JavaScriptPacker($code, "None");
+				return $packer->pack();
+			});
+	return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+
 
 }

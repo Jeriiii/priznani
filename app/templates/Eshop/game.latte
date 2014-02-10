@@ -88,7 +88,7 @@
 						<div class="icon coins"></div>
 						<p>
 						
-						    Origame - to jsou kvalitní a originální hry pro dospělé, které můžete hrát s přáteli na párty či oslavě nebo vyzkoušet erotické hry doma s partnerem. Díky netradičnímu způsobu dodání získáte hry takřka okamžitě za <span>zlomek ceny běžných her</span>, které se nabízejí v kamenných obchodech.
+						    Připravili jsme pro Vás kvalitní a originální hry pro dospělé, které můžete hrát s přáteli na párty či oslavě nebo vyzkoušet erotické hry doma s partnerem. Díky netradičnímu způsobu dodání získáte hry takřka okamžitě za <span>zlomek ceny běžných her</span>, které se nabízejí v kamenných obchodech.
 						</p>
 					    </div>
 					    <div class="right-block">
@@ -101,7 +101,7 @@
 					    <div class="left-block">
 						<div class="icon clock"></div>
 						<p>
-						    Pokud po zaplacení her zašlete na email origame@email.cz jakékoli potvrzení o odeslání platby, doručíme Vám hry <span>nejpozději do 24 hodin</span> (ve většině případů prakticky okamžitě). Platí i o víkendech a svátcích.
+						    Pokud po zaplacení her zašlete na email hry@priznaniosexu.cz jakékoli potvrzení o odeslání platby, doručíme Vám hry <span>nejpozději do 24 hodin</span> (ve většině případů prakticky okamžitě). Platí i o víkendech a svátcích.
 						</p>
 					    </div>
 					    <div class="right-block">
@@ -111,7 +111,7 @@
 						</p>
 					    </div>
 					    
-					    <span class="clear"></span>
+					    <div class="clear"></div>
 					</article>
 				</div>
 			</div>
@@ -129,10 +129,10 @@
 				<div id="contact-info">
 					<br />
 					<img class="icon"  alt="email" src="{$basePath}/images/mailicon.png" />
-					<a href="mailto:info@priznaniosexu.cz" title="Napsat email" class="mail link iconlabel">info@priznaniosexu.cz</a>
+					<a href="mailto:hry@priznaniosexu.cz" title="Napsat email" class="mail link iconlabel">hry@priznaniosexu.cz</a>
 					<br /><br />
 					<img class="icon"  alt="telefon" src="{$basePath}/images/phoneicon.png" />
-					<span class="phone iconlabel">  774 181 584</span><br />
+					<span class="phone iconlabel">776 811 021 <br/> <small>(každý den od 16:00 do 20:00 hod)</small></span><br />
 					<div class="clear"></div>
 				</div>
 			</div>
@@ -217,8 +217,11 @@
 						</p>
 					</div>
 					<div>*}
-						{input submit class => "btn-main medium"}
-						<div><span id="order-price">0</span>,- Kč</div>
+					<div>	
+						<div class="left">{input submit class => "btn-main medium"}</div>
+						<div class="left"><span id="order-price">0</span>,- Kč</div>
+						<div class="clear"></div>
+					</div>
 				{/form}
 			</div>
 			<div class="clear"></div>
@@ -226,12 +229,10 @@
 	</section>
 {/}
 {block foot}
+	<script type="text/javascript" src="{$basePath}/js/eshop/game.min.js"></script>
 	<script>
-		/* fce na rolovani */
-		function scrollToAnchor(aid){
-			var aTag = $("a[name='"+ aid +"']");
-			$('html,body').animate({ scrollTop: aTag.offset().top}, 800);
-		}
+		{*
+		function scrollToAnchor(e){ var t=$("a[name='"+e+"']");$("html,body").animate({ scrollTop:t.offset().top},800)}
 		
 		/* form error */
 		$.fn.exists = function () {
@@ -241,33 +242,6 @@
 			scrollToAnchor('contact');
 		}
 
-		/*nastaveni scrollovani*/
-		{foreach $games as $game}
-			$(".scroll-to-game{$game->id}").click(function(event) {
-				event.preventDefault();
-				scrollToAnchor('game{$game->id}');
-			});
-
-			$("#order-game-{$game->id}").click(function(event) {
-				event.preventDefault();
-				$(".check-game-{$game->id}").attr('checked', true);
-				scrollToAnchor('contact');
-			});
-		{/foreach}
-
-		//kontrola na začátku
-		$(".checkgroup input").each(function() {
-			var $checkbox = $(this);
-			var game_id = $checkbox.data("name");
-			var game_price = $("#price-game-" + game_id).data("price");
-			var $bill_element = $("#order-price");
-			var bill = parseInt($bill_element.text());
-
-			if( $checkbox.is(':checked') ) {
-				$bill_element.text(bill + game_price);
-			}
-		});
-		
 		var $checkbox = $("#frmeshopGamesOrdersForm-print");
 		var $bill_element = $("#order-price");
 		var bill = parseInt($bill_element.text());
@@ -276,40 +250,62 @@
 			$bill_element.text(bill + 99);
 		}
 
-		// průběžná kontrola
-		$(".checkgroup input").each(function() {
-			var $checkbox = $(this);
-			$checkbox.change(function() {
-				var game_id = $checkbox.data("name");
-				var game_price = $("#price-game-" + game_id).data("price");
-				var $bill_element = $("#order-price");
-				var bill = parseInt($bill_element.text());
-				
-				if( $checkbox.is(':checked') ) {
-					$bill_element.text(bill + game_price);
-				}
-				else {
-					$bill_element.text(bill - game_price);
-				}
-			});
-		});
-		
-		$("#frmeshopGamesOrdersForm-print").change(function() {
-			var $checkbox = $(this);
+		// funce pro počítání lístku
+
+		$.fn.callBill = function(oddPrice, game_price) {
+			if(!game_price) {
+				var game_id = $(this).data("name");
+				game_price = $("#price-game-" + game_id).data("price");
+			}
 			var $bill_element = $("#order-price");
 			var bill = parseInt($bill_element.text());
 
-			if( $checkbox.is(':checked') ) {
-				$bill_element.text(bill + 99);
+			if( $(this).is(':checked') ) {
+				$bill_element.text(bill + game_price);
 			}
 			else {
-				$bill_element.text(bill - 99);
+				if(oddPrice) {
+					$bill_element.text(bill - game_price);
+				}
 			}
+		};
+
+		$(".checkgroup input").each(function() {
+			$(this).callBill(false);
 		});
-		
+
+		// průběžná kontrola - kliknutí na checkbox
+
+		$.fn.changeBill = function () {
+			this.each(function() {
+				$(this).change(function() {
+					$(this).callBill(true);
+				});
+			});
+		};
+
+		$(".checkgroup input").changeBill();
+
+		$("#frmeshopGamesOrdersForm-print").change(function() {
+			$(this).callBill(true, 99);
+		});
+
 		$(".scroll-to-contact").click(function(event) {
 			event.preventDefault();
 			scrollToAnchor('contact');
-		});
+		});*}
+
+		{foreach $games as $game}
+			$(".scroll-to-game{$game->id}").click(function(event) {
+				event.preventDefault();
+				scrollToAnchor('game{$game->id}');
+			});
+
+			$("#order-game-{$game->id}").click(function(event) {
+				event.preventDefault();
+				$(".check-game-{$game->id}").attr('checked', true).callBill(true);
+				scrollToAnchor('contact');
+			});
+		{/foreach}
 	</script>
 {/}
