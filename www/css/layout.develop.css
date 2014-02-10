@@ -215,8 +215,15 @@ header h1 span {
     background-position: 0 -140px;
 }
 #left-menu .fourth {
-    background: url(../../images/layout/plus.png) no-repeat transparent;
+    background-position: 0 -210px;
 }
+#left-menu .fifth {
+    background-position: 0 -280px;
+}
+#left-menu .sixth {
+    background-position: 0 -350px;
+}
+
 .form-field {
     resize: none;
     border: 1px solid #bebebe;
