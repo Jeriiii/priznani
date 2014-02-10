@@ -174,7 +174,7 @@
 						{label print /}
 							{input print}
 					</div>
-					<div class="form-group">
+					<div id="form-address" class="form-group">
 						{label address /}
 							{input address class => "form-control"}
 					</div>
@@ -229,7 +229,8 @@
 	</section>
 {/}
 {block foot}
-	<script type="text/javascript" src="{$basePath}/js/eshop/game.min.js"></script>
+	{control jsGame}
+<!--	<script type="text/javascript" src="{$basePath}/js/eshop/game.min.js"></script>-->
 	<script>
 		{*
 		function scrollToAnchor(e){ var t=$("a[name='"+e+"']");$("html,body").animate({ scrollTop:t.offset().top},800)}
@@ -304,6 +305,10 @@
 			$("#order-game-{$game->id}").click(function(event) {
 				event.preventDefault();
 				$(".check-game-{$game->id}").attr('checked', true).callBill(true);
+				
+//				if($("#frmeshopGamesOrdersForm-print").is(":checked")) {
+//					$(this).callBill(false, 39);
+//				}
 				scrollToAnchor('contact');
 			});
 		{/foreach}

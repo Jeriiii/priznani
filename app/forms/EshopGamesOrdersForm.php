@@ -34,7 +34,7 @@ class EshopGamesOrdersForm extends BaseForm
 		$this->addText('phone', 'Telefon')
 				->addRule(Form::FILLED, "Prosím, vyplňte Váš telefon")
 				->addRule(Form::MAX_LENGTH, null, 20);
-		$this->addCheckbox('print', 'Chci hru vytisknout a zaslat poštou (+ 99 Kč)');
+		$this->addCheckbox('print', 'Chci hru vytisknout (+ 39 Kč / hru) a zaslat poštou (+ 60 Kč / objednávku)');
 		$this->addText('address', 'Adresa (pouze pokud chcete hru vytisknout)')
 				->addConditionOn($this['print'], Form::EQUAL, TRUE)
 					->addRule(Form::FILLED, "Prosím vyplňte Vaší adresu, kam Vám máme hru zaslat")
