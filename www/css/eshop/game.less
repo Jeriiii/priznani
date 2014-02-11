@@ -1,10 +1,380 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 5.2.2014, 18:28:15
-    Author     : Honza
-*/
+@oddbackground: #f6e8e8;
+@evenbackground: #fafcfb;
+@origame-width: 1000px; /*  */
+@heading-color: #ae0303; /* nadpisy */
+@light-red-color: #d42626;
 
+
+.game-container{
+    background: @evenbackground;
+}
+.oddbackground {
+    background: @oddbackground;
+    
+}
+
+.icon {
+    vertical-align: text-top;
+    display: inline-block;
+    padding-right: 20px;
+}
+img.icon.mail{
+    vertical-align: baseline;
+}
+.iconlabel{
+    
+}
+
+.oddlink{
+    color: @light-red-color !important;
+}
+
+.game article.about{
+    margin-left: 0;
+    
+}
+
+.game.smaller{
+    min-height: 0;
+}
+
+.games-description{
+    text-align: left;
+    width: @origame-width;
+    margin: 20px auto;
+}
+.games-description span{
+    color: @light-red-color !important;
+}
+.games-description span.capital{
+    line-height: 50px;
+    text-transform: uppercase;
+}
+
+#bottom-description p {
+    text-align: justify;
+    min-height: 160px;
+    line-height: 1.4;
+}
+
+#bottom-description .icon {
+    background-position: center 3px;
+    height: 120px;
+    width: 80px;
+    background-repeat: no-repeat;
+}
+
+#bottom-description .icon.coins {
+    background-image: url('../../images/icons/coins.png');
+}
+#bottom-description .icon.clock {
+    background-image: url('../../images/icons/clock.png');
+}
+#bottom-description .icon.envelope {
+    background-image: url('../../images/icons/envelope.png');
+}
+#bottom-description .icon.gift {
+    background-image: url('../../images/icons/gift.png');
+}
+#bottom-description p img {
+    float: left;
+    line-height: 60px;
+}
+
+
+#bottom-description div.left-block{
+    padding-right: 40px;
+}
+
+#bottom-description div{
+    width: (@origame-width / 2) - 20;/* 4 - pocet sloupcu */
+    float: left;
+}
+
+#kiss{
+    display: none;
+}
+
+#right-block{
+    float: right;
+}
+#topnav{
+    text-align: right;
+}
+#botnav{
+    margin-top: 140px;
+    text-align: center;
+	width: 460px;
+}
+#botnav a, #botnav span {
+    color: @heading-color;
+}
+
+a.link{
+    
+}
+a.link:hover {
+    text-decoration: underline;
+}
+
+.tag{
+    display: block;
+    text-align: right;
+	font-size: 10pt;
+	font-weight: bold;
+	color: #666;
+}
+
+#gamehead{
+    padding: 20px 20px 20px 30px;
+    width: @origame-width;
+    margin: 0 auto;
+}
+#gamehead h1{
+    font-family: 'Exo';
+    color: @heading-color;
+    font-weight: 300;
+    float: left;
+    font-size: 60pt;
+    width: 500px;
+}
+
+
+#contact{
+    width: @origame-width;
+    margin: 0 auto;
+}
+.btn-main{
+    margin: 0 !important;
+}
+
+.form-games{
+    width: 700px;
+    float: right;
+}
+.contact {
+    float: left;
+    width: 300px;
+}
+.contacttitle {
+    font-family: 'Exo';
+    color: @heading-color;
+    font-weight: 600;
+    font-size: 30pt;
+}
+.game {
+    padding: 20px 0 0 0;
+    width: @origame-width;
+    margin: 0 auto;
+    position: relative;
+    min-height: 400px;
+}
+.game article {
+    margin-left: 290px;
+    padding-bottom: 20px;
+}
+
+.btn-main {
+    margin: 10px auto;
+}
+
+.game article h2{
+    font-family: 'Exo';
+    font-weight: 200;
+    font-size: 50pt;
+    color: @heading-color;
+}
+.game article p.description {
+    text-align: justify;
+    font-size: 13pt;
+    padding: 10px 0;
+}
+
+.game article .price{
+    font-family: 'Exo';
+    font-weight: 800;
+    font-size: 16pt;
+    text-align: center;
+    padding: 20px 0;
+}
+
+img.poster{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+}
+
+.container {
+    margin: 30px 0;
+}
+
+section.inner{
+    width: auto;
+}
+
+.games-description {
+	.icon {
+		padding-top: 13px;
+		padding-right: 8px;
+		padding-left: 20px;
+		display: block;
+		float: left;
+	}
+	.mail {
+		padding-top: 17px;
+	}
+}
+
+#order-price {
+	line-height: 40px;
+	padding-left: 40px;
+	font-weight: bold;
+}
+
+.clear{
+	float: none !important;
+}
+
+@media screen and (max-width: 1200px){
+	@origame-width-1200: @origame-width - 200;
+	#gamehead{
+		width: (@origame-width-1200);
+	}
+	.games-description {
+		width: (@origame-width-1200);
+	}
+	.game{
+		width: (@origame-width-1200);
+	}
+	.game article p.description {
+		font-size: 11pt;
+	}
+	#bottom-description div {
+		width: 100%;
+	}
+	.contact {
+		width: 100%;
+		float: none;
+	}
+	.form-games{
+		float:none;
+	}
+	#contact {
+		width: (@origame-width-1200 - 100);
+	}
+	#left-panel-label{
+		display: none;
+	}
+	#right-block {
+		float:none;
+	}
+	#botnav{
+		margin-left: 400px;
+		margin-top: 50px;
+		width: 400px;
+	}
+	
+}
+
+@media screen and (max-width: 1024px){
+	@origame-width-1200: @origame-width - 400;
+	#gamehead{
+		width: (@origame-width-1200);
+	}
+	.games-description {
+		width: (@origame-width-1200);
+	}
+	.game{
+		width: (@origame-width-1200);
+	}
+	.game article p.description {
+		font-size: 11pt;
+	}
+	#bottom-description div {
+		width: 100%;
+	}
+	.contact {
+		width: 100%;
+		float: none;
+	}
+	.form-games{
+		float:none;
+	}
+	#contact {
+		width: (@origame-width-1200 - 100);
+	}
+	#left-panel-label{
+		display: none;
+	}
+	#right-block {
+		float:none;
+	}
+	#topnav{
+		margin-top: 15px;
+		width: 100%;
+		text-align: right;
+	}
+	#botnav{
+		margin-left: 0;
+		margin-top: 50px;
+		width: 400px;
+		float: left;
+	}
+	#gamehead h1 {
+		font-size: 40pt;
+		width: 100%;
+		float: none;
+	}
+	.form-games {
+		width: 100%;
+	}
+	
+}
+
+@media screen and (max-width: 770px){
+	#left-panel {
+		display: none;
+	}
+	#gamehead {
+		width: auto;
+	}
+	.games-description {
+		width: 90%;
+	}
+}
+
+@media screen and (max-width: 630px){
+	img.poster {
+		display: none;
+	}
+	.game article {
+		margin-left: 0;
+	}
+	.game {
+		width: 90%;
+	}
+	.form-games {
+		width: 450px;
+		margin: 0px;
+	}
+}
+
+@media screen and (max-width: 480px){
+	#botnav {
+		width: auto;
+	}
+	.game article h2 {
+		font-size: 30pt;
+	}
+	#bottom-description .icon {
+		height: 60px;
+	}
+	.form-games {
+		width: 345px;
+		margin: 0px;
+	}
+	.container {
+		margin: 30px 5px;
+	}
+}

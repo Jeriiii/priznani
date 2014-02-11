@@ -1,8 +1,9 @@
 {block head}
-	{control css 'bootstrap/forms-full.less'}
+	{control css 'bootstrap/forms-full.less', 'eshop/game.less'}
+	{*control css 'eshop/game.less'*}
 {/}
 {block content}
-	<nav>
+	{*<nav>
 		<ul id="top_menu">
 			{foreach $games as $game}
 				<li>
@@ -17,34 +18,126 @@
 				</a>
 			</li>
 		</ul>
-	</nav>
+	</nav>*}
+	<section id="gamehead">
+	    <h1>Vášnivé hry pro dospělé</h1>
+	    <div id="right-block">
+		<nav id="topnav">
+		    {*<a href="#" title="FAQ" class="link">
+			    FAQ
+		    </a>|*}
+		    <a href="#" title="kontakt" class="scroll-to-contact link">
+			    KONTAKT
+		    </a>|
+		    <a href="#" title="objednat" class="scroll-to-contact link">
+			    OBJEDNAT
+		    </a>
+		    
+		</nav>
+		<nav id="botnav">
+		    {foreach $games as $game}
+			<a href="#" title="{$game->name}" class="scroll-to-game{$game->id} {if $iterator->isOdd()}oddlink {/if}link">
+						{$game->name}
+			</a>
+			{if !$iterator->isLast()}
+			    <span class="divider">|</span>
+			{/if}
+		    {/foreach}
+		</nav>
+	    </div>
+	    <div class="clear"></div>
+	</section>
+	<article class="games-description">
+		<img class="icon mail"  alt="email" src="{$basePath}/images/mailicon.png" /> <span class="capital iconlabel">DORUČENÍ ELEKTRONICKOU POŠTOU</span>
+	    {*<p>
+	    Origame - to jsou kvalitní a originální hry pro dospělé, které můžete hrát s přáteli na párty či oslavě nebo vyzkoušet erotické hry doma s partnerem. Díky netradičnímu způsobu dodání získáte hry takřka okamžitě za zlomek ceny běžných her, které se nabízejí v kamenných obchodech. Hry totiž obdržíte na Váš email v elektronické podobě připravené k vytisknutí (neplatíte tedy žádné poštovné). Pokud budete mít zájem o zaslání hotových her poštou, označte v objednávce pole "Výroba a zaslání her poštou".
+	    </p>*}
+		<br />
+	    <img class="icon" alt="hodiny" src="{$basePath}/images/clock.png" /><span class="capital iconlabel">HRY DO 24 HODIN</span>
+	    {*<p>
+		Pokud po zaplacení her zašlete na email origame@email.cz jakékoli potvrzení o odeslání platby, doručíme Vám hry nejpozději do 24 hodin (ve většině případů prakticky okamžitě). Platí i o víkendech a svátcích.
+	    </p>*}
+	    
+	    {*<p>
+	    <span>Za pár korun získáte vzrušující dárek pro svého partnera! Darujete skutečný zážitek, který rozproudí krev v žilách a naplní vaše nejtajnější erotické sny a touhy. Zábavu na oslavě pak rozproudí naše párty hry.</span>
+	    </p>*}
+	</article>
+	
 	<section id="articles" class="main-section">
 		<div class="container">
 			{foreach $games as $game}
 				<a name="game{$game->id}"></a>
-				<article>
-					<span class="glyphicon glyphicon-check"></span>
-					<h2>{$game->name}</h2>
-					<p>{!$game->description}</p>
-				</article>
+				<div class="game-container {if $iterator->isOdd()}oddbackground{/if}">
+					<div class="game">
+						<img class="poster" src="{$basePath}/images/origame/posters/{$game->id}.{$game->suffix}" alt="{$game->name}" />
+						<article>
+							{*<span class="glyphicon glyphicon-check"></span>*}
+							{ifset $game->tags}<span class="tag">{!$game->tags}</span>{/ifset}
+							<h2>{$game->name}</h2>
+							<p class="description">{!$game->description}</p>
+							<p id="price-game-{$game->id}" data-price="{$game->price}" class="price">Jen za {$game->price},-</p>
+							<a id="order-game-{$game->id}" href="#" class="btn-main" title="Objednat {$game->name}">Objednat nyní</a>
+						</article>
+					</div>
+				</div>
 			{/foreach}
+			<div class="game-container {if $games->count() % 2 == 0}oddbackground{/if}">
+				<div class="game smaller">
+					<article id="bottom-description" class="about games-description">
+					    <div class="left-block">
+						<div class="icon coins"></div>
+						<p>
+						
+						    Připravili jsme pro Vás kvalitní a originální hry pro dospělé, které můžete hrát s přáteli na párty či oslavě nebo vyzkoušet erotické hry doma s partnerem. Díky netradičnímu způsobu dodání získáte hry takřka okamžitě za <span>zlomek ceny běžných her</span>, které se nabízejí v kamenných obchodech.
+						</p>
+					    </div>
+					    <div class="right-block">
+						<div class="icon envelope"></div>
+						<p>
+						    Hry obdržíte na Váš email v elektronické podobě připravené k vytisknutí (neplatíte tedy <span>žádné poštovné</span>). Pokud budete mít zájem o zaslání hotových her poštou, označte v objednávce pole "Výroba a zaslání her poštou".
+						</p>
+					    </div>
+					    
+					    <div class="left-block">
+						<div class="icon clock"></div>
+						<p>
+						    Pokud po zaplacení her zašlete na email hry@priznaniosexu.cz jakékoli potvrzení o odeslání platby, doručíme Vám hry <span>nejpozději do 24 hodin</span> (ve většině případů prakticky okamžitě). Platí i o víkendech a svátcích.
+						</p>
+					    </div>
+					    <div class="right-block">
+						<div class="icon gift"></div>
+						<p>
+						    Za pár korun získáte vzrušující dárek pro svého partnera! Darujete skutečný zážitek, který rozproudí krev v žilách a naplní vaše nejtajnější erotické sny a touhy. <span>Zábavu na oslavě pak rozproudí naše párty hry</span>.
+						</p>
+					    </div>
+					    
+					    <div class="clear"></div>
+					</article>
+				</div>
+			</div>
+			
+			
 			<div class="clear"></div>
 		</div>
 	</section>
+			
 	<a name="contact"></a>
 	<section id="contact" class="main-section">
 		<div class="container">
-			<h3 class="title">Objednávka</h3>
-			<div class="left">
+			<h3 class="title contacttitle">Objednávka</h3>
+			<div class="contact">
 				<div id="contact-info">
-					<div class="glyphicon glyphicon-envelope"></div>
-					<a href="mailto:info@priznaniosexu.cz" class="mail">info@priznaniosexu.cz</a>
-					<div class="glyphicon glyphicon-phone"></div><span class="phone">774 181 584</span><br />
+					<br />
+					<img class="icon"  alt="email" src="{$basePath}/images/mailicon.png" />
+					<a href="mailto:hry@priznaniosexu.cz" title="Napsat email" class="mail link iconlabel">hry@priznaniosexu.cz</a>
+					<br /><br />
+					<img class="icon"  alt="telefon" src="{$basePath}/images/phoneicon.png" />
+					<span class="phone iconlabel">776 811 021 <br/> <small>(každý den od 16:00 do 20:00 hod)</small></span><br />
 					<div class="clear"></div>
 				</div>
 			</div>
-			<div class="left">
-				{form eshopGameForm role => "form"}
+			<div>
+				{form eshopGamesOrdersForm role => "form", class => "form-games"}
 					{if $form->hasErrors()}
 					<ul id="formError">
 						{foreach $form->errors as $error}
@@ -55,8 +148,20 @@
 					<div class="form-group">
 						{label name /}
 						<div>
-							{input name class => "form-control"}
+							{input name class => "form-control input-sm"}
 						</div>
+					</div>
+					<div class="form-group">
+					    {label surname /}
+					    <div>
+						    {input surname class => "form-control"}
+					    </div>
+					</div>
+					<div class="form-group">
+					    {label email /}
+					    <div>
+						    {input email class => "form-control"}
+					    </div>
 					</div>
 					<div class="form-group">
 						{label phone /}
@@ -65,6 +170,38 @@
 							{input phone class => "form-control"}
 						</div>
 					</div>
+					<div class="checkbox">
+						{label print /}
+							{input print}
+					</div>
+					<div id="form-address" class="form-group">
+						{label address /}
+							{input address class => "form-control"}
+					</div>
+					<div class="checkgroup">
+					    <div class="checkbox">
+						    {label vasnivefantazie /}
+							{input vasnivefantazie class => "check-game-1", data-name=> 1}
+
+					    </div>
+					    <div class="checkbox">
+						    {label nespoutanevzruseni /}
+							{input nespoutanevzruseni class => "check-game-2", data-name=> 2}
+					    </div>
+					    <div class="checkbox">
+						    {label zhaveukolypropary /}
+							{input zhaveukolypropary class => "check-game-3", data-name=> 3}
+					    </div>
+						<div class="checkbox">
+						    {label sexyhratky /}
+							    {input sexyhratky class => "check-game-4", data-name=> 4}
+					    </div>
+					    <div class="checkbox">
+						    {label sexyaktivity /}
+							    {input sexyaktivity class => "check-game-5", data-name=> 5}
+					    </div>
+					</div>	
+						
 					<div class="form-group">
 						{label note /}
 						<div>
@@ -80,7 +217,10 @@
 						</p>
 					</div>
 					<div>*}
-						{input submit class => "submit-button"}
+					<div>	
+						<div class="left">{input submit class => "btn-main medium"}</div>
+						<div class="left"><span id="order-price">0</span>,- Kč</div>
+						<div class="clear"></div>
 					</div>
 				{/form}
 			</div>
@@ -89,12 +229,12 @@
 	</section>
 {/}
 {block foot}
+	{control jsGame}
+<!--	<script type="text/javascript" src="{$basePath}/js/eshop/game.min.js"></script>-->
 	<script>
-		/* fce na rolovani */
-		function scrollToAnchor(aid){
-			var aTag = $("a[name='"+ aid +"']");
-			$('html,body').animate({ scrollTop: aTag.offset().top}, 1200);
-		}
+		{*
+		//tento kod je ve webloaderu
+		function scrollToAnchor(e){ var t=$("a[name='"+e+"']");$("html,body").animate({ scrollTop:t.offset().top},800)}
 		
 		/* form error */
 		$.fn.exists = function () {
@@ -104,14 +244,74 @@
 			scrollToAnchor('contact');
 		}
 
-		/*nastaveni scrollovani*/
+		var $checkbox = $("#frmeshopGamesOrdersForm-print");
+		var $bill_element = $("#order-price");
+		var bill = parseInt($bill_element.text());
+
+		if( $checkbox.is(':checked') ) {
+			$bill_element.text(bill + 99);
+		}
+
+		// funce pro počítání lístku
+
+		$.fn.callBill = function(oddPrice, game_price) {
+			if(!game_price) {
+				var game_id = $(this).data("name");
+				game_price = $("#price-game-" + game_id).data("price");
+			}
+			var $bill_element = $("#order-price");
+			var bill = parseInt($bill_element.text());
+
+			if( $(this).is(':checked') ) {
+				$bill_element.text(bill + game_price);
+			}
+			else {
+				if(oddPrice) {
+					$bill_element.text(bill - game_price);
+				}
+			}
+		};
+
+		$(".checkgroup input").each(function() {
+			$(this).callBill(false);
+		});
+
+		// průběžná kontrola - kliknutí na checkbox
+
+		$.fn.changeBill = function () {
+			this.each(function() {
+				$(this).change(function() {
+					$(this).callBill(true);
+				});
+			});
+		};
+
+		$(".checkgroup input").changeBill();
+
+		$("#frmeshopGamesOrdersForm-print").change(function() {
+			$(this).callBill(true, 99);
+		});
+
+		$(".scroll-to-contact").click(function(event) {
+			event.preventDefault();
+			scrollToAnchor('contact');
+		});*}
+
 		{foreach $games as $game}
-			$(".scroll-to-game{$game->id}").click(function() {
+			$(".scroll-to-game{$game->id}").click(function(event) {
+				event.preventDefault();
 				scrollToAnchor('game{$game->id}');
 			});
+
+			$("#order-game-{$game->id}").click(function(event) {
+				event.preventDefault();
+				$(".check-game-{$game->id}").attr('checked', true).callBill(true);
+				
+//				if($("#frmeshopGamesOrdersForm-print").is(":checked")) {
+//					$(this).callBill(false, 39);
+//				}
+				scrollToAnchor('contact');
+			});
 		{/foreach}
-		$(".scroll-to-contact").click(function() {
-		   scrollToAnchor('contact');
-		});
 	</script>
 {/}

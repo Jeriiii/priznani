@@ -6,6 +6,9 @@ a {
     color: #000;
     text-decoration: none;
 }
+nav a{
+    cursor: pointer;
+}
 .hidden {
     display: none;
 }
@@ -83,7 +86,7 @@ header h1 {
 }
 header h1 b {
     color: #dfbfc2;
-    font-weight: 400;
+    font-weight: 600;
 }
 header h1 span {
     font-size: 24px;
@@ -104,7 +107,7 @@ header h1 span {
     background: #383838;
 }
 #title-container {
-    margin-top: 200px;
+    margin-top: 170px;
 }
 #title-container a {
     color: #eee;
@@ -191,7 +194,7 @@ header h1 span {
     font: 700 24px 'Arial Black', Arial;
 }
 #left-menu {
-    margin-top: 200px;
+    margin-top: 170px;
 }
 #left-menu a {
     display: block;
@@ -212,8 +215,15 @@ header h1 span {
     background-position: 0 -140px;
 }
 #left-menu .fourth {
-    background: url(../../images/layout/plus.png) no-repeat transparent;
+    background-position: 0 -210px;
 }
+#left-menu .fifth {
+    background-position: 0 -280px;
+}
+#left-menu .sixth {
+    background-position: 0 -350px;
+}
+
 .form-field {
     resize: none;
     border: 1px solid #bebebe;
