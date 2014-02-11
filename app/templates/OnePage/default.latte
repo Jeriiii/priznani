@@ -3,6 +3,7 @@
 {/block}
 
 {block content}
+
 <div class="left-sidebar" style="width:120px; float:left; border:1px solid red;">
     <span><a n:href=":Profil:EditProfil:default">Editace profilu</a></span>
     <span><a n:href=":Profil:ShowProfil:default">Náhled profilu</a></span>
@@ -31,6 +32,7 @@
     
 </div>
     
+
 	{control stream}
         
 </div>
@@ -38,22 +40,39 @@
 {/block}
 
 {block foot}
+{control js}
+ 
 <script>
-$(document).ready(function(){
-    var load = 3;
+    $(document).ready(function(){
+    var offset = 0;
+    var rows = {$count};
+    $('.stream-loader').hide();
     $(window).scroll(function(){
         
-        /* pokud uzivatel naskroluje nakonec stranky tak if projde */
-       if($(window).scrollTop() === ($(document).height() - $(window).height()) ) 
-         //  load++;
-         alert('jste nakonci');
-       //    $(document).getElementById('stream-btn-next').href("getMoreData! 'offset'=>"+load);
-           // $('#next-data-item-btn').href({link getMoreData!});
-//        $.get({link getMoreData!} "&offset=" + load);
-        //$.get({link decComment!} + "&id_confession=" + id);
-        });
-    
-});
+        /* naskroluju-li nakonec stránky if větev projde */        
+       if($(window).scrollTop() === ($(document).height() - $(window).height()) ){
+           $('.stream-loader').show();
+           offset = offset +3;
+           
+           /* Nejsou-li žádné další příspěvky, vypíše hlášku, že už nejsou */
+           if(offset+1 > rows){
+               $('.stream-message').text("Žádné starší příspěvky nebyly nalezené");
+               $('.stream-loader').hide();            
+            } else {
+           /* volam handle metodu komponenty stream a nastavuji offset k nacitani dalšich dat do streamu */    
+           $.get({link stream-getMoreData!} + "&stream-offset="+offset, function(data){               
+               
+               /* ve vysledku dostanu html stanku, ze ktere vezmu pouze nove elementy(.images article), obsahujici nove data
+                * a odříznu je od starých dat, pomocí funkce slice (resp. vezmu poslední, nové 3 řádky)
+                * a pomoci append tyto nove data (moreData) nalepim do streamu 
+                */              
+               var moreData = $(data).find('.images article').slice(-3);                      
+                $('.images').append(moreData);
+                $('.stream-loader').hide();                            
+            });
+            }
+        }
+     });
 </script>
 {/block}
 

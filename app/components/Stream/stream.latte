@@ -4,6 +4,8 @@
    <div class="images">
     {foreach $stream as $dataItem}        
 	<article>
+            <b>{$dataItem->ref('users', 'userID')->user_name}</b>
+            {$dataItem->imageID}
             {$dataItem->ref('images', 'imageID')->name}
             <div class="stream-img"><img src="{!$basePath}/images/galleries/{$dataItem->ref('images', 'imageID')->galleryID}/{$dataItem->ref('images', 'imageID')->id}.{$dataItem->ref('images', 'imageID')->suffix}" /></div>
             {$dataItem->ref('images', 'imageID')->comment}
@@ -12,6 +14,7 @@
         </article>
     {/foreach}
     </div>
-    <div class="stream-btn-next"><a id="next-data-item-btn" href="#">načíst další</a></div>
+    <div class="stream-btn-next"><a id="next-data-item-btn" href="getMoreData!">načíst další</a></div>
+    <div class="stream-message"></div>
+    <div class="stream-loader"><img src="{!$basePath}/img/ajax-loader.gif"></div>
 </div>
-
