@@ -30,10 +30,12 @@ class Stream extends Nette\Application\UI\Control
               //  Nette\Diagnostics\Debugger::Dump($this->offset);
                 if(!empty($this->offset)){
                      $this->template->stream = $this->dataForStream->limit($this->offset, 3);
+                     $this->template->render();                
                 } else {
                     $this->template->stream = $this->dataForStream->limit(3);
+                    $this->template->render();                
                 }              
-		$this->template->render();                
+		
                
                 
 	}
