@@ -72,7 +72,7 @@
 						<img class="poster" src="{$basePath}/images/origame/posters/{$game->id}.{$game->suffix}" alt="{$game->name}" />
 						<article>
 							{*<span class="glyphicon glyphicon-check"></span>*}
-							{ifset $game->tag}<span class="tag">{!$game->tag}</span>{/ifset}
+							{ifset $game->tags}<span class="tag">{!$game->tags}</span>{/ifset}
 							<h2>{$game->name}</h2>
 							<p class="description">{!$game->description}</p>
 							<p id="price-game-{$game->id}" data-price="{$game->price}" class="price">Jen za {$game->price},-</p>
@@ -194,11 +194,11 @@
 					    </div>
 						<div class="checkbox">
 						    {label sexyhratky /}
-							    {input sexyhratky class => "check-game-5", data-name=> 4}
+							    {input sexyhratky class => "check-game-4", data-name=> 4}
 					    </div>
 					    <div class="checkbox">
 						    {label sexyaktivity /}
-							    {input sexyaktivity class => "check-game-4", data-name=> 5}
+							    {input sexyaktivity class => "check-game-5", data-name=> 5}
 					    </div>
 					</div>	
 						
@@ -233,6 +233,7 @@
 <!--	<script type="text/javascript" src="{$basePath}/js/eshop/game.min.js"></script>-->
 	<script>
 		{*
+		//tento kod je ve webloaderu
 		function scrollToAnchor(e){ var t=$("a[name='"+e+"']");$("html,body").animate({ scrollTop:t.offset().top},800)}
 		
 		/* form error */

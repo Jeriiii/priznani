@@ -80,7 +80,7 @@ class EshopGamesOrdersForm extends BaseForm
 			$this->postOrder($values);
 		}
 		
-		$presenter->flashMessage('Děkujeme za objednávku. Bude vyřízena co nejdříve.');
+		$presenter->flashMessage('Děkujeme za objednávku. Informace o platbě Vám byly odeslány na email.');
 		$presenter->redirect('this');
  	}
 	
