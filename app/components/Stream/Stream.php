@@ -42,7 +42,8 @@ class Stream extends Nette\Application\UI\Control
 	
 	/* vrací další data do streamu */
 	public function handleGetMoreData($offset) {
-            $this->offset = $offset;    
+            $this->offset = $offset;   
+			$this->getPresenter()->setLayout(FALSE);
             return $this->dataForStream->limit($this->offset,3);  
 	}
 }
