@@ -34,19 +34,20 @@ class OnePagePresenter extends BasePresenter
                 return new Stream($this->dataForStream);
 	}
         
-        
-        public function createComponentJs()
-        {
-                $files = new \WebLoader\FileCollection(WWW_DIR . '/js');                                       
-                $files->addRemoteFile('http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js');
-                $files->addFiles(array(
-                    'stream.js'));
-                $compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/jstemp');
-                $compiler->addFilter(function ($code) {
-                    $packer = new JavaScriptPacker($code, "None");
-                    return $packer->pack();
-                });                
-            return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/jstemp');
-        }
+	public function createComponentJs()
+	{
+			$files = new \WebLoader\FileCollection(WWW_DIR . '/js');                                       
+			$files->addRemoteFile('http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js');
+			$files->addFiles(array(
+				'stream.js',
+                                'scrollpagination.js',
+                                'nette.ajax.js'));
+			$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+			$compiler->addFilter(function ($code) {
+				$packer = new JavaScriptPacker($code, "None");
+				return $packer->pack();
+			});                
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
 
 }
