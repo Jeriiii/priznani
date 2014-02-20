@@ -14,7 +14,7 @@
 class Stream extends Nette\Application\UI\Control
 {     
         protected $dataForStream;
-        private $offset;
+        private $offset = null;
         
 	public function __construct($data)
         {                        
@@ -26,13 +26,12 @@ class Stream extends Nette\Application\UI\Control
 	{
 		$this->template->setFile(dirname(__FILE__) . '/stream.latte');
 		// TO DO - poslání dat šabloně
-                
-              //  Nette\Diagnostics\Debugger::Dump($this->offset);
+                                
                 if(!empty($this->offset)){
-                     $this->template->stream = $this->dataForStream->limit($this->offset, 3);
+                     $this->template->stream = $this->dataForStream->limit(3,$this->offset);
                      $this->template->render();                
                 } else {
-                    $this->template->stream = $this->dataForStream->limit(3);
+                    $this->template->stream = $this->dataForStream->limit(3);                  
                     $this->template->render();                
                 }              
 		
@@ -42,9 +41,14 @@ class Stream extends Nette\Application\UI\Control
 	
 	/* vrací další data do streamu */
 	public function handleGetMoreData($offset) {
-            $this->offset = $offset;   
-			$this->getPresenter()->setLayout(FALSE);
-            return $this->dataForStream->limit($this->offset,3);  
-	}
+            $this->offset = $offset; 
+
+            if ($this->presenter->isAjax()) {
+              
+                $this->invalidateControl('posts');                
+            } else {
+                $this->redirect('this');                
+            }
+	}      
 }
 ?>
