@@ -1,22 +1,20 @@
-{snippet stream}
-    <div class="content">
-
- 
-        <div n:snippet="posts" data-ajax-append="true">
-
-                {foreach $stream as $dataItem}
-                    {$dataItem->imageID}
-                    {$dataItem->ref('images', 'imageID')->name}
-                    <div class="stream-img"><img src="{!$basePath}/images/galleries/{$dataItem->ref('images', 'imageID')->galleryID}/{$dataItem->ref('images', 'imageID')->id}.{$dataItem->ref('images', 'imageID')->suffix}" /></div>
-                    {$dataItem->ref('images', 'imageID')->comment}
-                    {$dataItem->confessionID}
-                    {$dataItem->content}
-                {/foreach}
-         </div>
+<div class="content">
 
 
-        <div class="stream-btn-next"><button><a id="next-data-item-btn" n:href="getMoreData!" class="ajax">zobrazit více</a></button></div>
-        <div class="stream-message"></div>
-        <div id="stream-loader"><img src="{!$basePath}/img/ajax-loader.gif"></div>
-    </div>
-{/snippet}
+	<div n:snippet="posts" data-ajax-append="true">
+
+			{foreach $stream as $dataItem}
+				{$dataItem->imageID}
+				{$dataItem->ref('images', 'imageID')->name}
+				<div class="stream-img"><img src="{!$basePath}/images/galleries/{$dataItem->ref('images', 'imageID')->galleryID}/{$dataItem->ref('images', 'imageID')->id}.{$dataItem->ref('images', 'imageID')->suffix}" /></div>
+				{$dataItem->ref('images', 'imageID')->comment}
+				{$dataItem->confessionID}
+				{$dataItem->content}
+			{/foreach}
+	 </div>
+
+
+	<div class="stream-btn-next"><button><a id="next-data-item-btn" n:href="getMoreData!" class="ajax">zobrazit více</a></button></div>
+	<div class="stream-message"></div>
+	<div id="stream-loader"><img src="{!$basePath}/img/ajax-loader.gif"></div>
+</div>

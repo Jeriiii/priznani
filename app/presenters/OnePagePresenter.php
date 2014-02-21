@@ -36,7 +36,7 @@ class OnePagePresenter extends BasePresenter
 	public function createComponentJs()
 	{
 			$files = new \WebLoader\FileCollection(WWW_DIR . '/js');                                       
-			$files->addRemoteFile('http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js');
+			//$files->addRemoteFile('http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js');
 			$files->addFiles(array(
 				'stream.js',                               
                                 'nette.ajax.js'));

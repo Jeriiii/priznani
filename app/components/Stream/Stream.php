@@ -44,7 +44,6 @@ class Stream extends Nette\Application\UI\Control
             $this->offset = $offset; 
 
             if ($this->presenter->isAjax()) {
-              
                 $this->invalidateControl('posts');                
             } else {
                 $this->redirect('this');                

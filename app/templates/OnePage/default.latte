@@ -45,48 +45,58 @@
 <script>
     $(document).ready(function(){
 		var offset = 0;
-                var rows = {$count};
-                var location = $('#next-data-item-btn').attr('href');
-                $.nette.init();
+		var rows = {$count};
+		var location = $('#next-data-item-btn').attr('href');
+		$.nette.init();
 		$('.stream-loader').hide();
+		$("#snippet-stream-posts").data("in-progress", false);
 		$(window).scroll(function(){
 			var documentScrollTop = jQuery(document).scrollTop();
 			var viewportHeight = jQuery(window).height();
-			//alert("ahoj");
+			
 			var minTop = documentScrollTop;
 			var maxTop = documentScrollTop + viewportHeight;
 			var elementOffset = $('#stream-loader').offset();
-                        
-			/* naskroluju-li nakonec stránky if větev projde */   
-			if( elementOffset.top > minTop &&  elementOffset.top < maxTop) {
-                           $('.stream-btn-next').hide();
-                               
-         		 /* Nejsou-li žádné další příspěvky, vypíše hlášku, že už nejsou */
-                         if(offset+1 > rows){
-                           $('.stream-message').text("Žádné starší příspěvky nebyly nalezené");
-			   $('#stream-loader').hide();
-                           $('.stream-btn-next').hide();                      
-                         } else {
-                            $('#stream-loader').show();                                                                        	    
-			    offset = offset +3;
-                         
-                            $('#next-data-item-btn').attr("href", location + '&stream-offset='+offset);
-                            $.nette.ext('snippets');
-                            
-                           $.nette.ajax({     
-                                url: location+"&stream-offset="+offset,
+            
+			/* probíhá nějaká operace - if neprojde */
+			if($("#snippet-stream-posts").data("in-progress") == false) {
+				$("#snippet-stream-posts").data("in-progress", true);
+					
+				/* naskroluju-li nakonec stránky if větev projde */   
+				if( elementOffset.top > minTop &&  elementOffset.top < maxTop) {
+					$('.stream-btn-next').hide();
 
-                                success: function(response){
-                                  //  console.log(response);
-                                },        
-                                complete: function (payload) {
-                                  //  console.log(payload);
-                                }
-                            });                            
-                      }
-                    }
-		});               
-	});       
+					 /* Nejsou-li žádné další příspěvky, vypíše hlášku, že už nejsou */
+					if(offset+1 > rows) {
+						$('.stream-message').text("Žádné starší příspěvky nebyly nalezené");
+						$('#stream-loader').hide();
+						$('.stream-btn-next').hide();
+						alert("konec");
+					} else {
+						$('#stream-loader').show();
+						offset = offset + 3;
+						alert("offset: " +offset);
+						//alert($('#snippet-stream-posts').text());
+						$('#next-data-item-btn').attr("href", location + '&stream-offset=' + offset);
+						//$.nette.ext('snippet-stream-posts');
+
+						$.nette.ajax({
+							url: location + "&stream-offset=" + offset,
+							success: function(response) {
+	//							console.log(response);
+							},
+							complete: function(payload) {
+	//							console.log(payload);
+							}
+						});
+
+					}
+				}
+				
+				$("#snippet-stream-posts").data("in-progress", false);
+			}
+		});
+	});
 </script>
 {/block}
 
