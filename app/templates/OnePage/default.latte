@@ -41,83 +41,16 @@
 
 {block foot}
 {control js}
- 
+
+<script type="text/javascript" src="{$basePath}/js/stream.js"></script>
 <script>
-    $(document).ready(function(){
-		var offset = 0;
-		var rows = {$count};
-		var location = $('#next-data-item-btn').attr('href');
-		$.nette.init();
-		$('.stream-loader').hide();
-		
-		/* prodlouží stream */
-		function changeStream() {
-			$('.stream-btn-next').hide();
-
-			/* přidá další příspěvky */
-			if(offset+1 <= rows) {
-				$('#stream-loader').show();
-				offset = offset + 3;
-				$('#next-data-item-btn').attr("href", location + '&stream-offset=' + offset);
-				//$.nette.ext('snippet-stream-posts');
-
-				$.nette.ajax({
-					url: location + "&stream-offset=" + offset,
-					success: function(response) {
-	//							console.log(response);
-					},
-					complete: function(payload) {
-	//							console.log(payload);
-					}
-				});
-			}
-			/* Nejsou-li žádné další příspěvky, vypíše hlášku, že už nejsou */
-			if(offset+1 > rows) {
-				$('.stream-message').text("Žádné starší příspěvky nebyly nalezené");
-				$('#stream-loader').hide();
-				$('.stream-btn-next').hide();
-			}
-		}
-		
-		/* naplánuje další kontrolu za daný časový interval */
-		function timeCheckStream() {
-			setTimeout(function() { visibleCheckStream();}, 500);
-		}
-		
-		/* zkontroluje, zda je uživatel na konci seznamu. Když ano, zavolá prodloužení */
-		function visibleCheckStream() {
-			var documentScrollTop = jQuery(document).scrollTop();
-			var viewportHeight = jQuery(window).height();
-
-			var minTop = documentScrollTop;
-			var maxTop = documentScrollTop + viewportHeight;
-			var elementOffset = $('#stream-loader').offset();
-
-			/* naskroluju-li nakonec stránky if větev projde */   
-			if( elementOffset.top > minTop &&  elementOffset.top < maxTop) {
-				changeStream();
-			}
-			timeCheckStream();
-		}
-		
-		timeCheckStream();
-		
-		//var $snippet = $("#snippet-stream-posts");
-		//$snippet.data("in-progress", false);
-		//var inProgess = false;
-		//$(window).scroll(function(){
-			/* probíhá nějaká operace - if neprojde */
-//			if(inProgess === false) {
-//				inProgess = true;
-				
-				
-//				inProgess = false;
-//			}
-//		});
+	$(document).ready(function () {	
+		$("body").stream({
+			rows: {$count}
+		});
 	});
-	
-	
 </script>
+
 {/block}
 
 
