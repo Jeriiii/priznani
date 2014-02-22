@@ -9,30 +9,33 @@
 		setOpts(opts);
 		
 		$.nette.init();
-		$('.stream-loader').hide();
-
 		timeCheckStream();
 	};
 	$.fn.stream.defaults = {
 		offset: 0,
 		addoffset: 3,
 		ajaxLocation: '#next-data-item-btn',
+                btnNext: '.stream-btn-next',
+                streamLoader: '#stream-loader',
+                msgName: '.stream-message',
+                msgText: "Žádné starší příspěvky nebyly nalezené",
+                offsetName: '&stream-offset=',
 		rows: 6
 	};
 	/* prodlouží stream */
 	function changeStream() {	
 		var location = $(this.opts.ajaxLocation).attr('href');
-		$('.stream-btn-next').hide();
+		$(this.opts.btnNext).hide();
 
 		/* přidá další příspěvky */
 		if(this.opts.offset+1 <= this.opts.rows) {
-			$('#stream-loader').show();
+			$(this.opts.streamLoader).show();
 			this.opts.offset = this.opts.offset + this.opts.addoffset;
-			$('#next-data-item-btn').attr("href", location + '&stream-offset=' + this.opts.offset);
+			$(this.opts.ajaxLocation).attr("href", location + this.opts.offsetName + this.opts.offset);
 			//$.nette.ext('snippet-stream-posts');
 
 			$.nette.ajax({
-				url: location + "&stream-offset=" + this.opts.offset,
+				url: location + this.opts.offsetName + this.opts.offset,
 				success: function(response) {
 //							console.log(response);
 				},
@@ -43,13 +46,13 @@
 		}
 		/* Nejsou-li žádné další příspěvky, vypíše hlášku, že už nejsou */
 		if(this.opts.offset+1 > this.opts.rows) {
-			$('.stream-message').text("Žádné starší příspěvky nebyly nalezené");
-			$('#stream-loader').hide();
-			$('.stream-btn-next').hide();
+			$(this.opts.msgName).text(this.opts.msgText);
+			$(this.opts.streamLoader).hide();
+			$(this.opts.btnNext).hide();
 		}
 	}
 
-	/* naplánuje další kontrolu za daný časový interval */
+	/* naplánuje další kontrolu za daný časový interval(půl vteřinu) */
 	function timeCheckStream() {
 		setTimeout(function() { visibleCheckStream();}, 500);
 	}
@@ -61,7 +64,7 @@
 
 		var minTop = documentScrollTop;
 		var maxTop = documentScrollTop + viewportHeight;
-		var elementOffset = $('#stream-loader').offset();
+		var elementOffset = $(this.opts.streamLoader).offset();
 
 		/* naskroluju-li nakonec stránky if větev projde */   
 		if( elementOffset.top > minTop &&  elementOffset.top < maxTop) {
