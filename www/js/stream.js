@@ -2,51 +2,64 @@
 	
 	/* nastavení */
 	var opts;
+	/* odkaz na další data - pro ajax */
+	var ajaxLocation;
 	
 	/* main */
 	$.fn.stream = function(options) {
 		var opts = $.extend({}, $.fn.stream.defaults, options);
 		setOpts(opts);
-		
+		setAjaxLocation(opts);
+		alert("sdf");
 		$.nette.init();
 		timeCheckStream();
 	};
+	
 	$.fn.stream.defaults = {
 		offset: 0,
+		/* kolik dalších příspěvků (dat) má plugin načíst při najetí na konec */
 		addoffset: 3,
-		ajaxLocation: '#next-data-item-btn',
-                btnNext: '.stream-btn-next',
-                streamLoader: '#stream-loader',
-                msgName: '.stream-message',
-                msgText: "Žádné starší příspěvky nebyly nalezené",
-                offsetName: '&stream-offset=',
+		/* html element, ze kterého se má brát odresa */
+		linkElement: '#next-data-item-btn',
+		/* obaluje celé tlačítko Zobrazit další */
+		btnNext: '.stream-btn-next',
+		/* obrázek (točící), který se zobrazí při načítání dalšího obsahu */
+		streamLoader: '#stream-loader',
+		/* html element obsahující zprávu pro uživatele viz. msgText */
+		msgElement: '.stream-message',
+		/* text zprávy, který se zobrazí když už nejsou k dispozici další data */
+		msgText: "Žádné starší příspěvky nebyly nalezené",
+		/* název parametru v URL, který nastavuje vždy aktuální offset hodnotu při každém ajaxovém požadavku */
+		offsetName: 'stream-offset',
+		/* maximální počet příspěvků (dat), který se může pluginem celkově načíst */
 		rows: 6
 	};
 	/* prodlouží stream */
 	function changeStream() {	
-		var location = $(this.opts.ajaxLocation).attr('href');
 		$(this.opts.btnNext).hide();
 
 		/* přidá další příspěvky */
 		if(this.opts.offset+1 <= this.opts.rows) {
 			$(this.opts.streamLoader).show();
 			this.opts.offset = this.opts.offset + this.opts.addoffset;
-			$(this.opts.ajaxLocation).attr("href", location + this.opts.offsetName + this.opts.offset);
-			//$.nette.ext('snippet-stream-posts');
+			
+			var ajaxUrl = this.ajaxLocation + "&" + this.opts.offsetName + "=" + this.opts.offset;
+			
+			$(this.opts.ajaxLocation).attr("href", ajaxUrl);
 
 			$.nette.ajax({
-				url: location + this.opts.offsetName + this.opts.offset,
+				url: ajaxUrl,
 				success: function(response) {
-//							console.log(response);
+							//console.log(response);
 				},
 				complete: function(payload) {
-//							console.log(payload);
+							//console.log(payload);
 				}
 			});
 		}
 		/* Nejsou-li žádné další příspěvky, vypíše hlášku, že už nejsou */
 		if(this.opts.offset+1 > this.opts.rows) {
-			$(this.opts.msgName).text(this.opts.msgText);
+			$(this.opts.msgElement).text(this.opts.msgText);
 			$(this.opts.streamLoader).hide();
 			$(this.opts.btnNext).hide();
 		}
@@ -76,5 +89,10 @@
 	function setOpts(opts) {
 		this.opts = opts;
 	}
+	
+	function setAjaxLocation(opts) {
+		this.ajaxLocation = $(opts.linkElement).attr('href');
+	}
+	
 })(jQuery);
 

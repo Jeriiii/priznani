@@ -5,7 +5,7 @@ namespace Nette\Application\UI\Form;
 use	Nette\Application\UI\Form,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer,
-	Nette\Image;
+	NetteExt\Image;
 
 
 class ImageGalleryNewForm extends ItemGalleryNewForm
@@ -47,45 +47,43 @@ class ImageGalleryNewForm extends ItemGalleryNewForm
 		$id = $this->getPresenter()->context->createImages()
 			->insert($values);
 		
-		$this->upload($image, $id, $values['suffix'], "galleries" . "/" . $this->id_gallery, "600"/*"768"*/, "1024");
+		$this->upload($image, $id, $values['suffix'], "galleries" . "/" . $this->id_gallery, "600"/*"768"*/, "1024", 100, 130);
 		
 		$this->getPresenter()->flashMessage('Obrázek byl vytvořen');
 		$this->getPresenter()->redirect('Galleries:gallery', $this->id_gallery);
  	}
 	
-	public function upload($image, $id, $suffix, $folder, $max_height, $max_width){
+	public function upload($image, $id, $suffix, $folder, $max_height, $max_width, $max_minheight, $max_minwidth){
 		if($image->isOK() & $image->isImage())
 		{		   
 		    /* uložení souboru a renačtení */
-		    $way = WWW_DIR."/images/" . $folder . "/" . $id . '.' . $suffix;
-		    $image->move($way);
-		    $image = Image::fromFile($way);
+			$dir = WWW_DIR."/images/" . $folder . "/";
+			$file = $id . '.' . $suffix;
+			$path = $dir . $file;
+			$pathSqr = $dir . "minSqr" . $file;
+			$pathMin = $dir . "min" . $file;
+			
+		    $image->move($path);
 		    
 		    /* kontrola velikosti obrázku, proporcionální zmenšení*/
-		    if($image->height > $max_height){
-			$image->resize(NULL, $max_height);
-		    }
-		    if($image->width > $max_width){
-			$image->resize($max_width, NULL);
-		    }
-		    $image->sharpen();
-		    $image->save(WWW_DIR."/images/" . $folder . "/" . $id . "." . $suffix);
+			$image = Image::fromFile($path);
+			$image->resize($max_width, $max_height);
+		    $image->save($path);
 			
-		/* vytvoření miniatury*/
-		    $max_height = 100;
-		    $max_width = 130;
-		    if($image->height > $max_height){
-			$image->resize(NULL, $max_height);
-		    }
-		    if($image->width > $max_width){
-			$image->resize($max_width, NULL);
-		    }
-		    $image->sharpen();
-		    $image->save(WWW_DIR."/images/" . $folder . "/mini" . $id . "." . $suffix);
+			/* vytvoření ořezu 200x200px*/
+			$image = Image::fromFile($path);
+			$image->resizeMinSite(200);
+			$image->cropSqr(200);
+		    $image->save($pathSqr);
+			
+			/* vytvoření miniatury*/
+			$image = Image::fromFile($path);
+			$image->resize($max_minwidth, $max_minheight);
+		    $image->save($pathMin);
+			
 		 } else {
 		    $this->addError('Chyba při nahrávání souboru. Zkuste to prosím znovu.');
-		 }
-		    
+		 }	    
 	}
 	
 	public function suffix($file_name)

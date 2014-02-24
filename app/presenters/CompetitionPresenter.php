@@ -9,7 +9,8 @@
  * @package    jkbusiness
  */
 use Nette\Application\UI\Form as Frm,
-	Nette\Http\Request;
+	Nette\Http\Request,
+	NetteExt\Image;
 
 class CompetitionPresenter extends BasePresenter {
 
@@ -64,12 +65,12 @@ class CompetitionPresenter extends BasePresenter {
 			$this->galleryMissing();
 		}
 		
-		$gallery = $this->context->createGalleries()
+		$this->gallery = $this->context->createGalleries()
 						->find($galleryID)
 						->fetch();
-		
+
 		/* galerie nebyla podle ID nalezena */
-		if(empty($gallery)) {
+		if(empty($this->gallery)) {
 			$this->galleryMissing();
 		}
 		
@@ -93,9 +94,37 @@ class CompetitionPresenter extends BasePresenter {
 										->where("galleryID", $galleryID)
 										->order("id DESC");
 		
-		$this->template->galleryID = $galleryID;
+		$this->template->gallery = $this->gallery;
 	}
 
+	public function actionImagesClip() {
+		$galleries = $this->context->createGalleries();
+		
+		foreach($galleries as $gallery) {
+			$images = $this->context->createImages()
+						->where("galleryID", $gallery->id);
+			
+			foreach($images as $image) {
+				$dir = WWW_DIR . "/images/galleries/" . $gallery->id . "/";
+				$file = $image->id . "." . $image->suffix;
+				$path = $dir . $file;
+				$newPath = $dir . "minSqr" . $file;
+				
+				if(file_exists($path) && !file_exists($newPath)) {
+					$image = Image::fromFile($path);
+					
+					$image->resizeMinSite(200);
+					$image->cropSqr(200);
+					
+					$image->save($newPath);
+				}
+			}
+		}
+		
+		
+		die("miniatury byly vztvořeny");
+	}
+	
 	/* bacha, id je url - tedy nazev stranky */
 
 	public function actionDefault($imageID, $galleryID) {

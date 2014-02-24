@@ -24,9 +24,8 @@ class OnePagePresenter extends BasePresenter
 
 
 	public function renderDefault()
-	{
-		// TO DO            
-            $this->template->count = $this->count;
+	{       
+        $this->template->count = $this->count;
 	}
 
 	protected function createComponentStream() {
@@ -35,11 +34,11 @@ class OnePagePresenter extends BasePresenter
         
 	public function createComponentJs()
 	{
-			$files = new \WebLoader\FileCollection(WWW_DIR . '/js');                                       
-			//$files->addRemoteFile('http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js');
+			$files = new \WebLoader\FileCollection(WWW_DIR . '/js');                                    
 			$files->addFiles(array(
 				'stream.js',                               
-                                'nette.ajax.js'));
+                'nette.ajax.js'
+			));
 			$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 			$compiler->addFilter(function ($code) {
 				$packer = new JavaScriptPacker($code, "None");
