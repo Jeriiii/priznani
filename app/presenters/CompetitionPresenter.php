@@ -3,7 +3,7 @@
 /**
  * Homepage presenter.
  *
- * Zobrayení úvodní stránky systému
+ * Zobrayení úvodní stránky systému test
  *
  * @author     Petr Kukrál
  * @package    jkbusiness
