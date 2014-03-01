@@ -12,7 +12,7 @@ use Nette\Application\UI\Form as Frm;
 
 class OnePagePresenter extends BasePresenter
 {
-	
+
 	public $dataForStream;
         private $count= 0;
         
@@ -48,9 +48,7 @@ class OnePagePresenter extends BasePresenter
 	}
         
         public function createComponentSearch(){
-            $model = $this->context->createUsers();
- 
-               $component = new Search($model);
+               $component = new Search();
         return $component;
         }
 

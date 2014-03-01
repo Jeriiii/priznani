@@ -11,4 +11,29 @@
 <a href="{plink Search:last24Hour}">Pokročilé hledání</a>
 
 
+<table style="margin: 0 auto;">
+<tr>
+{foreach $users as $user}  
+    {if $iterator->isOdd()}
+        <td>{$user->id}
+        {$user->user_name}
+        {$user->orientation}
+        <div class="user-img"><img src="{!$basePath}/images/galleries/5/mini79.jpg" /></div></td>
+    {/if}
+ {/foreach}
+</tr>
+<tr>
+{foreach $users as $user}  
+    {if $iterator->isEven()}
+        <td>{$user->id}
+        {$user->user_name}
+        {$user->orientation}
+        <div class="user-img"><img src="{!$basePath}/images/galleries/5/mini84.jpg" /></div></td>
+    {/if}
+ {/foreach}
+</tr>
+    
+</table>
+
+<div class="moreUsers" style="float:right; width:150px; border:1px solid red;"><a n:href="getMoreUsers!">Zobrazit více</a></div>
 {/block}
