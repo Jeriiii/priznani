@@ -46,5 +46,12 @@ class OnePagePresenter extends BasePresenter
 			});                
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
+        
+        public function createComponentSearch(){
+            $model = $this->context->createUsers();
+ 
+               $component = new Search($model);
+        return $component;
+        }
 
 }
