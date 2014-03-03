@@ -5,6 +5,9 @@
 	float:left;
 	height: 70px;
 }
+.btn-group-vertical {
+	width: 200px;
+}
 
 .btn-link:hover{
 	background-color: #dddddd;

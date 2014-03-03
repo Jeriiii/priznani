@@ -2,7 +2,7 @@
 	<div id="top_container">
         <h2 id="image_name">{$image->name|firstUpper}{if (($user->isInRole("superadmin") || $user->isInRole("admin")) && $image->approved == 0)}(zatím neschváleno){/if}</h2>
 		{if $gallery->current == 1}
-		<a href="{plink Competition:uploadImage}" id="upload_foto">
+		<a href="{plink Competition:uploadImage galleryID => $gallery->id}" id="upload_foto">
 			nahrát fotku
 		</a>
 		{/if}
@@ -29,7 +29,7 @@
 				{if $image->videoID != 0}
 					<object width="700" height="500" data="http://www.youtube.com/v/{$image->video->code}" type="application/x-shockwave-flash"><param name="src" value="http://www.youtube.com/v/{$image->video->code}" /></object>
 				{else}	
-					<img style="padding: {$padding}px 0" src="{$basePath}/images/galleries/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}" {if $changeWidth} width="700" {else} height="500" {/if}>
+					<img style="padding: {$padding}px 0" src="{$basePath}/images/galleries/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}" {*if $changeWidth} width="700" {else*} height="500" {*/if*}>
 				{/if}
 				<div id="voting"></div>
 				{cache}
@@ -64,7 +64,10 @@
 				<p id="image_comment" class="float-left">
 					{$image->comment}
 				</p>
-				<div class="float-left">
+				<div class="float-left btn-group-vertical">
+					<a href="{plink Competition:listImages galleryID => $gallery->id}" id="upload_foto">
+						všechny fotky
+					</a>
 					<a href="{plink Competition:list}" id="upload_foto">
 						seznam galerií
 					</a>
@@ -123,16 +126,11 @@
 			<a n:href="removeImage! imageID => $image->id">Smazat</a>
 		</div>
 		{/if}
-		
-		<h2><a href="{plink Competition:uploadImage}">
-			Hrajte o{if $partymode} 7-letý Kubánský rum{else} sexy oblečky na Vánoce{/if} (více zde)
-		</a></h2>
-		<br />
-		
+		{*
 		<h2>Sdílejte tento obrázek na odkazu:</h2>
 		<form id="link">
 			<textarea cols="70">http://www.{if $partymode}priznanizparby{else}priznaniosexu{/if}.cz{$imageLink}</textarea>
-		</form>
+		</form>*}
 
 		<div id="fb" class="fb-components">
 			<div class="fb-comments-container">

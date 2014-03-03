@@ -17,6 +17,7 @@ class CompetitionPresenter extends BasePresenter {
 	public $imageID;
 	public $image;
 	public $gallery;
+	public $galleryID;
 	public $domain;
 
 	public function startup() {
@@ -39,23 +40,21 @@ class CompetitionPresenter extends BasePresenter {
 	}
 
 	public function renderList($justCompetition = FALSE, $withoutCompetition = FALSE) {
+		$competitions = $this->context->createGalleries()
+							->where("competition", 1);
 		$galleries = $this->context->createGalleries()
-				->where("sexmode", 1);
+							->where("competition", 0);
 
 		if ($this->partymode) {
+			$competitions->where("partymode", 1);
 			$galleries->where("partymode", 1);
 		} else {
+			$competitions->where("sexmode", 1);
 			$galleries->where("sexmode", 1);
 		}
 
-		if ($justCompetition) {
-			$galleries->where("competition", 1);
-		}
-		if ($withoutCompetition) {
-			$galleries->where("competition", 0);
-		}
-
-		$this->template->competitions = $galleries->order("id DESC");
+		$this->template->competitions = $competitions->order("id DESC");
+		$this->template->galleries = $galleries->order("id DESC");
 	}
 	
 	public function actionListImages($galleryID) {
@@ -100,6 +99,9 @@ class CompetitionPresenter extends BasePresenter {
 	public function actionImagesClip() {
 		$galleries = $this->context->createGalleries();
 		
+		//$preffix = "minSqr";
+		$preffix = "galScrn";
+		
 		foreach($galleries as $gallery) {
 			$images = $this->context->createImages()
 						->where("galleryID", $gallery->id);
@@ -108,15 +110,27 @@ class CompetitionPresenter extends BasePresenter {
 				$dir = WWW_DIR . "/images/galleries/" . $gallery->id . "/";
 				$file = $image->id . "." . $image->suffix;
 				$path = $dir . $file;
-				$newPath = $dir . "minSqr" . $file;
+				$newPath = $dir . $preffix . $file;
 				
-				if(file_exists($path) && !file_exists($newPath)) {
-					$image = Image::fromFile($path);
+				if(file_exists($path) /*&& ($image->widthGalScrn == 1280) /*!file_exists($newPath)*/) {
+					echo $path . " <br />";
+					$imageFile = Image::fromFile($path);
 					
-					$image->resizeMinSite(200);
-					$image->cropSqr(200);
+//					$this->context->createImages()
+//						->where("id", $image->id)
+//						->update(array(
+//							"widthGalScrn" => $imageFile->getWidth(),
+//							"heightGalScrn" => $imageFile->getHeight()
+//						));
 					
-					$image->save($newPath);
+					// pro (velký) náhled obrázku v galerii
+					$image->resize(700,500);
+					
+					// pro čtvercový výřez
+//					$image->resizeMinSite(200);
+//					$image->cropSqr(200);
+					
+					$imageFile->save($newPath);
 				}
 			}
 		}
@@ -222,7 +236,11 @@ class CompetitionPresenter extends BasePresenter {
 		}
 	}
 
-	public function renderUploadImage() {
+	public function actionUploadImage($galleryID) {
+		$this->galleryID = $galleryID;
+	}
+	
+	public function renderUploadImage($galleryID) {
 		$photos = $this->context->createImages()
 				->order("id DESC");
 		$this->template->photo1 = $photos->fetch();
