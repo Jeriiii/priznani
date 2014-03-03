@@ -49,7 +49,7 @@ class PagePresenter extends BasePresenter
 		$cache = new Cache($this->context->cacheStorage, 'confession_temp');
 		$countOfItems = $cache->load("count_of_confession");
 		if ($countOfItems === NULL) {
-			$countOfItems = $confessions->count();
+			$countOfItems = $confessions->count("id");
 			$cache->save("count_of_confession", $countOfItems, array( Cache::EXPIRE => '+ 1 minutes'));
 		}
 		
@@ -258,7 +258,7 @@ class PagePresenter extends BasePresenter
 		if(empty($this->page_number)) $this->page_number = $vp->page;
 		$page = $this->page_number;
 		$paginator = $vp->getPaginator();
-		$paginator->setItemCount($videos->count()); // celkový počet položek 
+		$paginator->setItemCount($videos->count("id")); // celkový počet položek 
 		$paginator->setItemsPerPage(3); // počet položek na stránce
 		$paginator->setPage($page); // číslo aktuální stránky
 		$this->template->videos = $videos

@@ -47,48 +47,9 @@ class ImageGalleryNewForm extends ItemGalleryNewForm
 		$id = $this->getPresenter()->context->createImages()
 			->insert($values);
 		
-		$this->upload($image, $id, $values['suffix'], "galleries" . "/" . $this->id_gallery, "600"/*"768"*/, "1024", 100, 130);
+		$this->upload($image, $id, $values['suffix'], "galleries" . "/" . $this->id_gallery, "500", "700", 100, 130);
 		
 		$this->getPresenter()->flashMessage('Obrázek byl vytvořen');
 		$this->getPresenter()->redirect('Galleries:gallery', $this->id_gallery);
  	}
-	
-	public function upload($image, $id, $suffix, $folder, $max_height, $max_width, $max_minheight, $max_minwidth){
-		if($image->isOK() & $image->isImage())
-		{		   
-		    /* uložení souboru a renačtení */
-			$dir = WWW_DIR."/images/" . $folder . "/";
-			$file = $id . '.' . $suffix;
-			$path = $dir . $file;
-			$pathSqr = $dir . "minSqr" . $file;
-			$pathMin = $dir . "min" . $file;
-			
-		    $image->move($path);
-		    
-		    /* kontrola velikosti obrázku, proporcionální zmenšení*/
-			$image = Image::fromFile($path);
-			$image->resize($max_width, $max_height);
-		    $image->save($path);
-			
-			/* vytvoření ořezu 200x200px*/
-			$image = Image::fromFile($path);
-			$image->resizeMinSite(200);
-			$image->cropSqr(200);
-		    $image->save($pathSqr);
-			
-			/* vytvoření miniatury*/
-			$image = Image::fromFile($path);
-			$image->resize($max_minwidth, $max_minheight);
-		    $image->save($pathMin);
-			
-		 } else {
-		    $this->addError('Chyba při nahrávání souboru. Zkuste to prosím znovu.');
-		 }	    
-	}
-	
-	public function suffix($file_name)
-	{
-		$temp = strstr($file_name, '.');
-		return substr($temp,1,strlen($temp)-1);
-	}
 }

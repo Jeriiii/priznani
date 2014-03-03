@@ -8,7 +8,7 @@ use	Nette\Application\UI\Form,
 	Nette\Image;
 
 
-class ItemGalleryNewForm extends Form
+class ItemGalleryNewForm extends ImageBaseForm
 {
 	public $id_gallery;
 
