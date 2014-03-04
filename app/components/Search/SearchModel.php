@@ -11,24 +11,24 @@
  *
  * @author Mario
  */
-class SearchModel extends Nette\Object
-{	
-        private $database;
+class SearchModel extends Nette\Object {
 
-        public function __construct(\Nette\Database\Table\Selection $database)
-        {
-            $this->database = $database;
-        }
-            /*
-             * vrati celeho uzivatele z databaze
-             */
-            public function getUsersFromDB()
-            {
-                return $this->database->limit(8);
-            }
-            
-            public function getAllUsersFromDB()
-            {
-                return $this->database;
-            }
+	private $database;
+
+	public function __construct(\Nette\Database\Table\Selection $database) {
+		$this->database = $database;
+	}
+
+	/*
+	 * vrati celeho uzivatele z databaze
+	 */
+
+	public function getUsersFromDB() {
+		return $this->database->limit(8);
+	}
+
+	public function getAllUsersFromDB() {
+		return $this->database;
+	}
+
 }
