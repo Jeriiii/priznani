@@ -7,28 +7,28 @@
  */
 
 /**
- * Description of SearchModel
+ * Description of TestFinder
  *
  * @author Mario
  */
-class SearchModel extends Nette\Object
+class TestFinder extends Nette\Object
 {	
-        private $database;
+        private $table;
 
-        public function __construct(\Nette\Database\Table\Selection $database)
+        public function __construct(\Nette\Database\Table\Selection $table)
         {
-            $this->database = $database;
+            $this->table = $table;
         }
             /*
              * vrati celeho uzivatele z databaze
              */
             public function getUsersFromDB()
             {
-                return $this->database->limit(8);
+                return $this->table->limit(8);
             }
             
             public function getAllUsersFromDB()
             {
-                return $this->database;
+                return $this->table;
             }
 }
