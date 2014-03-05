@@ -72,22 +72,22 @@ class Gallery extends Nette\Application\UI\Control {
 
 		$imageLink = $this->domain . "/images/galleries/" . $this->gallery->id . "/" . $this->image->id . "." . $this->image->suffix;
 
-		if($this->image->videoID != 0){
-			/* je to video - nic nepočítej - nemá obrázek */
-		} else {
-			list($width, $height, $type, $attr) = getimagesize($imageLink);
-			if($width < 1.4 * $height) {
-				$this->template->changeHeight = TRUE;
-				$this->template->changeWidth = FALSE;
-				$this->template->padding = FALSE;
-			} else {
-				$this->template->changeHeight = FALSE;
-				$this->template->changeWidth = TRUE;
-				$ratio = $width / 700;///pomer zmenceni
-				$new_height = $height / $ratio;
-				$this->template->padding = (int)((500 - $new_height) / 2);
-			}
-		}
+//		if($this->image->videoID != 0){
+//			/* je to video - nic nepočítej - nemá obrázek */
+//		} else {
+//			list($width, $height, $type, $attr) = getimagesize($imageLink);
+//			if($width < 1.4 * $height) {
+//				$this->template->changeHeight = TRUE;
+//				$this->template->changeWidth = FALSE;
+//				$this->template->padding = FALSE;
+//			} else {
+//				$this->template->changeHeight = FALSE;
+//				$this->template->changeWidth = TRUE;
+//				$ratio = $width / 700;///pomer zmenceni
+//				$new_height = $height / $ratio;
+//				$this->template->padding = (int)((500 - $new_height) / 2);
+//			}
+//		}
 
 		$this->template->setFile(dirname(__FILE__) . '/gallery.latte');
 		$this->template->render();

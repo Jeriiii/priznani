@@ -78,6 +78,11 @@ header h1 {
     text-shadow: 0 0 1px white;
     color: #fff;
 }
+h2 {
+    font-family: Exo,Arial;
+	color: #a70304;
+	font-size: 30px;
+}
 #left_confession h2 {
     font-family: 'Exo', 'Arial';
     color: #a70304;

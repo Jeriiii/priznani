@@ -3,8 +3,10 @@
 <script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>
 <style>   
     #metrocontainer{
-        padding: 0 30%;
-        margin: 90px 0 20px 0;
+        //padding: 0 30%;
+        padding: 90px 0 20px 0;
+		width: 608px;
+		margin: 0 auto;
         min-height: 600px;
     }
     .icon-container{
@@ -49,14 +51,26 @@
 
 {block beforeContent}
 <div id="metrocontainer">
-	<a n:href="Competition:listImages galleryID => 8">zde</a>
+	{foreach $galleries as $gallery}
+		{if $iterator->isFirst()}
+			<h2>Galerie</h2>
+		{/if}
+		<div class="icon-container date">
+			<img src="{$basePath}/{$gallery->imageUrl}" width="100%" height="100%"/>
+			<a n:href="Competition: galleryID => $gallery->id">{$gallery->name}</a>
+		</div> 
+	{/foreach}
+	<div class="clear"></div>
     {foreach $competitions as $com}
+		{if $iterator->isFirst()}
+			<h2>Soutěže</h2>
+		{/if}
 		<div class="icon-container date">
 			<img src="{$basePath}/{$com->imageUrl}" width="100%" height="100%"/>
 			<a n:href="Competition: galleryID => $com->id">{$com->name}</a>
 		</div> 
 	{/foreach}
-    <div class="clear"></div>
+	<div class="clear"></div>
 </div>
 {/}
 

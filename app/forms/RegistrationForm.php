@@ -60,7 +60,7 @@ class RegistrationForm extends Form
 			$values->password = \Authenticator::calculateHash($values->password);
 			$form->getPresenter()->context->createUsers()
 				->insert($values);
-			$this->getPresenter()->flashMessage('Registrace proběhla úspěšně, pro dokončení potvrďte email který Vám byl zaslán.');
+			$this->getPresenter()->flashMessage('Registrace proběhla úspěšně, vyčkejte na schválení adminem.');
 	        	$form->getPresenter()->redirect('SignOld:in');
 		}
 	

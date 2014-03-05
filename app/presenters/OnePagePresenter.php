@@ -12,7 +12,7 @@ use Nette\Application\UI\Form as Frm;
 
 class OnePagePresenter extends BasePresenter
 {
-	
+
 	public $dataForStream;
         private $count= 0;
         
@@ -46,5 +46,10 @@ class OnePagePresenter extends BasePresenter
 			});                
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
+        
+        public function createComponentSearch(){
+               $component = new Search();
+        return $component;
+        }
 
 }
