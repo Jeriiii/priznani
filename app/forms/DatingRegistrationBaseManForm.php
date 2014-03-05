@@ -15,8 +15,8 @@ class DatingRegistrationBaseManForm extends DatingRegistrationBaseForm
 	{
 		parent::__construct($parent, $name);
 
-		$this->addSelect('penis_length', 'Délka penisu:', Users::getUserPenisLengthOption());
-		$this->addSelect('penis_width', 'Šířka penisu:', Users::getUserPenisWidthOption());
+		$this->addSelect('penis_length', 'Délka penisu:', \Users::getUserPenisLengthOption());
+		$this->addSelect('penis_width', 'Šířka penisu:', \Users::getUserPenisWidthOption());
 	}
 	public function submitted($form)
 	{
