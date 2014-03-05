@@ -126,34 +126,6 @@
 	    {/if}
         </div>
 	    <div id="header" class="partygradient">
-                <style>
-                    .button {
-                        cursor: pointer;
-                        float:right;
-                        color:white;
-                        
-                    }
-                    #dropdown {
-                        position: relative;
-                        float: right;
-                        display: none;
-                        padding: 5px;
-                        margin-top: 5px;          
-                        padding: 10px;
-                        -webkit-border-radius: 12px;
-                        -moz-border-radius: 12px;
-                        border-radius: 12px;
-                        border: 3px solid #fff;
-                        background: lightgrey;  
-                        display:none;
-                    }
-                    a.odkaz {
-                        color:#cf0707;
-                    }
-                    a.odkaz:hover {
-                        text-decoration:underline;
-                    }
-                </style>
                 {if (($user->isInRole("superadmin") || $user->isInRole("admin"))) }
                     <div class='button' onclick="$('#dropdown').fadeToggle()(500);">Jste přihlášen(á):</div>
                     <div id='dropdown'>
