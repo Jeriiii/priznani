@@ -6,7 +6,8 @@ use Nette\Application\UI,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer,
 	Nette\Mail\Message,
-	Nette\Utils\Strings;
+	Nette\Utils\Strings,
+	Nette\Utils\Html;
 
 
 class ForgottenPasswordForm extends UI\Form
@@ -15,14 +16,16 @@ class ForgottenPasswordForm extends UI\Form
     {
         parent::__construct($parent, $name);
         //graphics
-//        $renderer = $this->getRenderer();
-//		$renderer->wrappers['controls']['container'] = 'div';
-//		$renderer->wrappers['pair']['container'] = 'div';
-//		$renderer->wrappers['label']['container'] = NULL;
-//		$renderer->wrappers['control']['container'] = 'div';
+        $renderer = $this->getRenderer();
+		$renderer->wrappers['controls']['container'] = 'div';
+		$renderer->wrappers['pair']['container'] = 'div';
+		$renderer->wrappers['label']['container'] = NULL;
+		$renderer->wrappers['control']['container'] = 'div';
     	//form
-    	$this->addText('mail', 'Email:', 30, 50);
-    	$this->addSubmit('send', 'Vygenerovat nové heslo');
+    	$this->addText('email', 'Email:', 30, 50)
+		->setAttribute('class', 'form-control');
+    	$this->addSubmit('send', 'Vygenerovat nové heslo')
+		->setAttribute('class','btn-main medium');
     	$this->onSuccess[] = callback($this, 'submitted');
     	return $this;
     }
@@ -33,20 +36,20 @@ class ForgottenPasswordForm extends UI\Form
 		$presenter = $this->getPresenter();
 		
 		$user = $presenter->context->createUsers()
-				->where("mail", $values->mail)
+				->where("email", $values->email)
 				->fetch();
 		if( empty($user) )
 		{
-			$form->addError('Mail nebyl nalezen.');
+		    $form->addError(Html::el('div')->setText('Tento email nebyl nalezen.')->setClass('alert alert-danger'));
 		}else{
 			$password = Strings::random(15);
 			$presenter->context->createUsers()
-					->where("mail", $values->mail)
+					->where("email", $values->email)
 					->update(array(
 						"password" => \Authenticator::calculateHash($password),
 					));
-			$this->sendMail($user->mail, $password);
-			$presenter->flashMessage("Heslo bylo odesláno mailem");
+			$this->sendMail($user->email, $password);
+			$presenter->flashMessage("Heslo bylo odesláno emailem");
 		}
 	}
 	

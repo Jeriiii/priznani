@@ -339,8 +339,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 	protected function createComponentLoggedOutMenu($name) {
 		$nav = new Navigation($this, $name);
-		$nav->add("REGISTRACE", $this->link("SignOld:registration"));
-		$nav->add("PŘIHLÁŠENÍ", $this->link("SignOld:in"));
+		$nav->add("REGISTRACE", $this->link("Sign:registration"));
+		$nav->add("PŘIHLÁŠENÍ", $this->link("Sign:in"));
 	}
 
 	public function handleSignOut() {

@@ -7,7 +7,8 @@ use Nette\Application\UI\Form,
 	Nette\ComponentModel\IContainer,
 	Nette\DateTime,
 	Nette\Utils\Strings,
-	Nette\Mail\Message;
+	Nette\Mail\Message,
+	Nette\Utils\Html;
 
 
 class RegistrationForm extends Form
@@ -28,16 +29,21 @@ class RegistrationForm extends Form
 	
 	$this->addGroup('Povinné údaje');
 		$this->addText('user_name', 'Nick:', 30, 200 )
-    		->addRule(Form::FILLED, "Vzplňte svůj nick");
+    		->addRule(Form::FILLED, "Vyplňte svůj nick")
+		->setAttribute('class', 'form-control');
     	$this->addText('email', 'E-mail:', 30, 200 )
-    		->addRule(Form::EMAIL, 'Zadali jste neplatný e-mail');
+    		->addRule(Form::EMAIL, 'Zadali jste neplatný e-mail')
+		->setAttribute('class', 'form-control');
     	$this->addPassword('password', 'Heslo:', 30, 200)
     		->setRequired('Zvolte si heslo')
-    		->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaky', 3);
+    		->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaky', 3)
+		->setAttribute('class', 'form-control');
     	$this->addPassword('passwordVerify', 'Heslo pro kontrolu:', 30, 200)
     		->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu')
-    		->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password']);	
-    	$this->addSubmit('send', 'Vytvořit');
+    		->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password'])
+		->setAttribute('class', 'form-control');	
+    	$this->addSubmit('send', 'Vytvořit')
+		->setAttribute('class','btn-main medium');
     	//$this->addProtection('Vypršel časový limit, odešlete formulář znovu');
     	$this->onSuccess[] = callback($this, 'submitted');
     	return $this;
@@ -51,8 +57,9 @@ class RegistrationForm extends Form
 			->fetch();
 		$values->role = 'user';
 		$values['confirmed'] = Strings::random(100);
+		
 		if($mail){
-			$form->addError('Tento mail již někdo používá.');
+			$form->addError(Html::el('div')->setText('Tento email už někdo používá.')->setClass('alert alert-danger'));
 		} else {
 			unset($values->passwordVerify);
 			/* odeslání mailu o registraci i s údaji */
@@ -61,7 +68,7 @@ class RegistrationForm extends Form
 			$form->getPresenter()->context->createUsers()
 				->insert($values);
 			$this->getPresenter()->flashMessage('Registrace proběhla úspěšně, vyčkejte na schválení adminem.');
-	        	$form->getPresenter()->redirect('SignOld:in');
+	        	$form->getPresenter()->redirect('Sign:in');
 		}
 	
 	}

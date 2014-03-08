@@ -1,83 +1,67 @@
 <?php
 
-use Nette\Application\UI\Form;
-use Nette\Security\IIdentity;
+/**
+ * Sign in/out presenters.
+ *
+ * @author     Patrick Kusebauch
+ * @package    NudaJeFuc
+ */
+
+use Nette\Application\UI,
+	Nette\Security as NS,
+	Nette\Application\UI\Form as Frm;
 
 class SignPresenter extends BasePresenter
 {
-
-	public function actionIn()
+    /** @persistent */
+    public $backlink = '';
+	
+	public function renderIn($confirmed, $code)
 	{
-		// facebook
-		//curl_setopt ( $ch , CURLOPT_SSL_VERIFYPEER ,  false );
-		$fbUrl = $this->context->facebook->getLoginUrl(array(
-			'scope' => 'user_birthday,email',
-			'redirect_uri' => $this->link('//fbLogin'), // absolute
-		));
-		
-//		$response = file_get_contents($fbUrl);
-//		$params = null;
-//		parse_str($response, $params);
-		//die($fbUrl);
-
-		// twitter
-//		$twitter = $this->context->twitter;
-//		$token = $twitter->getRequestToken();
-//		$twitterSession = $this->getSession('twitter');
-//		$twitterSession->oauthToken = $token['oauth_token'];
-//		$twitterSession->oauthTokenSecret = $token['oauth_token_secret'];
-//		$twitterUrl = $twitter->getAuthorizeURL($token);
-
-		$this->template->fbUrl = $fbUrl;
-//		$this->template->twitterUrl = $twitterUrl;
-	}
-
-	public function actionFbLogin()
-	{
-		$me = $this->context->facebook->api('/me');
-		$identity = $this->context->facebookAuthenticator->authenticate($me);
-
-		$this->getUser()->login($identity);
-		$this->redirect('Homepage:');
-	}
-
-	protected function createComponentSignInForm()
-	{
-		$form = new Form;
-		$form->addText('mail', 'Mail')
-			->setRequired('Vyplňte e-mail.');
-
-		$form->addPassword('password', 'Heslo')
-			->setRequired('Vyplňte heslo');
-
-		$form->addSubmit('s', 'Přihlásit se');
-
-		$form->onSuccess[] = callback($this, 'signInFormSubmitted');
-		return $form;
-	}
-
-	public function signInFormSubmitted($form)
-	{
-		try {
-			$values = $form->getValues();
-			$user = $this->getUser();
-			$user->login($values->mail, $values->password);
-			if($this->user->isInRole("admin") || $this->user->isInRole("superadmin")) {
-				$this->redirect('Admin:Forms:forms');
-			} else {
-				$this->redirect('Onepage:');
+		if($confirmed == 1)
+		{
+			$user = $this->context->createUsers()
+					->where("confirmed", $code)
+					->fetch();
+			if( empty($user) )
+			{
+				$this->flashMessage("Potvrzení emailu se nezdařilo, jestli potíže přetrvávají, kontaktujte administrátora stránek.", "error");
+			}else{
+				$this->context->createUsers()
+					->where("confirmed", $code)
+					->update(array(
+						"role" => "user",
+					));
+				$this->flashMessage("Potvrzení bylo úspěšné, nyní se můžete přihlásit.", "info");
 			}
-
-		} catch (\Nette\Security\AuthenticationException $e) {
-			$form->addError($e->getMessage());
 		}
 	}
+
+	/**
+	 * Sign in form component factory.
+	 * @return Nette\Application\UI\Form
+	 */
+	protected function createComponentSignInForm($name)
+	{
+	    return new Frm\signInForm($this, $name);
+	}
+
+
+
 
 	public function actionOut()
 	{
 		$this->getUser()->logout();
-		$this->flashMessage('Uživatel byl odhlášen.');
-		$this->redirect('Homepage:');
+		$this->flashMessage('You have been signed out.');
+		$this->redirect('Sign:in');
+	}
+	
+	protected function createComponentRegistrationForm($name) {
+		return new Frm\registrationForm($this, $name);
+	}
+	
+	protected function createComponentForgottenPasswordForm($name) {
+		return new Frm\forgottenPasswordForm($this, $name);
 	}
 
 }

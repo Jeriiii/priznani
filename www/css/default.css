@@ -2,6 +2,7 @@
 
 *{padding:0;border:0;margin:0;zoom:1}
 *:focus{outline:0}
+ul li{list-style: none;}
 .inner{margin:0 auto}
 img{padding:0;border:0;margin:0}
 .clear{clear:both}

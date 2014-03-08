@@ -1,19 +1,14 @@
-{var $robots = noindex}
-
 {block head}
-<link rel="stylesheet" href="{$basePath}/css/form.css" type="text/css">
+	{control css 'bootstrap/forms-medium.less', 'sign/sign.less'}
 {/block}
 
-{block #content}
 
-<h1>Přihlašte se</h1>
-
-<h2><a href="{$fbUrl}">Facebook</a></h2>
-
-{*<h2><a href="{$twitterUrl}">Twitter</a></h2>*}
-
-<h2>Mail a heslo</h2>
-
-{control signInForm}
-
-
+{block content}
+<div class="form fullsize">
+	<h2>Přihlášení</h2>
+	{control signInForm}
+	<div class="clear"></div>
+	<h2>Zapomenuté heslo</h2>
+	{control forgottenPasswordForm}
+</div>
+{/block}
