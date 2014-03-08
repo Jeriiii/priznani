@@ -19,16 +19,16 @@ class RegistrationForm extends Form
     {
 	parent::__construct($parent, $name);
 	//graphics
-	$renderer = $this->getRenderer();
-	$renderer->wrappers['controls']['container'] = 'div';
-	$renderer->wrappers['pair']['container'] = 'div';
-	$renderer->wrappers['label']['container'] = NULL;
-	$renderer->wrappers['control']['container'] = NULL;
+//	$renderer = $this->getRenderer();
+//	$renderer->wrappers['controls']['container'] = 'div';
+//	$renderer->wrappers['pair']['container'] = 'div';
+//	$renderer->wrappers['label']['container'] = NULL;
+//	$renderer->wrappers['control']['container'] = NULL;
 	//form
 	$presenter = $this->getPresenter();
 	
-	$this->addGroup('Povinné údaje');
-		$this->addText('user_name', 'Nick:', 30, 200 )
+	
+	$this->addText('user_name', 'Nick:', 30, 200 )
     		->addRule(Form::FILLED, "Vyplňte svůj nick")
 		->setAttribute('class', 'form-control');
     	$this->addText('email', 'E-mail:', 30, 200 )

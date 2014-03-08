@@ -8,13 +8,7 @@
 	<h2>Registrace</h2>
 	
 	<table>
-		{form registrationForm}
-			<tr><td>{label user_name /}{*nick*}</td><td>{input user_name}</td></tr>
-			<tr><td>{label email /}</td><td>{input email}</td></tr>
-			<tr><td>{label password /}</td><td>{input password}</td></tr>
-			<tr><td>{label passwordVerify /}</td><td>{input passwordVerify}</td></tr>
-			<tr><td></td><td class="buttonin">{input send}</td></tr>
-		{/form}
+		{control registrationForm}
 	</table>
 	</div>
 {/block}
