@@ -1,0 +1,208 @@
+
+.username{
+    float: right;
+    color: black;
+    text-decoration: underline;
+    font-weight: 600;
+    font-size: 24px;
+    font-family: 'Exo', 'Arial Black', Arial;
+    padding-top: 15px;
+    margin-right: 50px;
+    max-width: 40%;
+}
+
+.btn-list .btn-main {
+    margin: 6px 0;
+}
+.btn-list{
+    padding-left: 10px;
+    width: 180px;
+    
+}
+
+
+/* sipky do leva a do prava */
+.btn-space{
+	width: 50%;
+	height: 80%;
+	margin: 10% 0;
+	display: block;
+	position: absolute;
+	top: 0;
+	display: block;
+	opacity: 0.2;
+	transition: opacity 0.5s;
+	-webkit-transition: opacity 0.8s;
+}
+
+
+
+.btn-space:hover{
+	opacity: 1;
+}
+
+#back{
+    background: url(http://www.nejlevnejsiwebstranky.cz/images/left.gif) no-repeat left center;
+    left: 0;
+}
+
+#next{
+    background: url(http://www.nejlevnejsiwebstranky.cz/images/right.gif) no-repeat right center;
+    right: 0;
+}
+
+
+/* obrazek a jeho okoli */
+#image_content{
+	width: 700px;
+	margin: 0 auto;
+}
+
+#image{
+	width: 700px;
+	height: 500px;
+	text-align: center;
+	vertical-align: middle;
+	background-color: #f2f2f2;
+	position: relative;
+/*	background-color: #eff1f2;*/
+/*	background-color: #e6ea7f;*/
+/*	background: #383838;*/
+	/*background: #a53134;*/
+}
+#image img{
+	position: relative;
+	margin: auto auto;
+}
+
+#image_comment{
+	width: 490px;
+	min-height: 74px;
+	background-color: white;
+	padding: 10px;
+	font-size: 15px;
+	line-height: 1.38;
+}
+
+#link-and-fb{
+	width:700px;
+	margin: 0 70px;
+	padding: 35px 50px 10px 50px;
+}
+
+.fb-like-container{
+	position: absolute;
+	width:99px;
+	height: 100px;
+	z-index: 10;
+	text-align: center;
+	margin-top: 10px;
+	min-height: 41px;
+	left: -100px;
+	top: 0px;
+	padding-top: 5px;
+	background-color: #a53134;
+/*	border-right: 1px solid #a53134;*/
+}
+
+.image-links{
+    padding: 10px 0;
+    text-align: center;
+}
+.image-links .image-link{
+    
+}
+
+#fblike-and-comment{
+	display: block;
+}
+
+#image_name{
+	float: left;
+	margin-left: 70px;
+	max-width: 60%;
+}
+
+#link{
+	
+}
+
+h2{
+	font-family: 'Exo','Arial';
+	color: #a70304;
+/*	color: #518b35;*/
+	font-size: 30px;
+	margin-top: 3px;
+}
+
+h2#image_name{
+	font-size: 34px;
+}
+
+#kiss {
+	display: none;
+}
+
+#top_container{
+	margin-bottom: 5px;
+}
+
+/*#voting{
+	position: absolute;
+	background-image: url(../images/pin.png);
+	background-repeat: no-repeat;
+	width: 64px;
+	height: 90px;
+	z-index: 10;
+	top: 445px;
+	left: 20px;
+}*/
+
+.fb-like-container p{
+	font-size: 12px;
+	margin-bottom: 8px;
+	margin-top: 2px;
+	color: white;
+	font-weight: bold;
+}
+#adverb-right{
+	position: absolute;
+	top: -50px;
+	right: -265px;
+}
+
+#adverb-right div {
+	margin: 15px 0px;
+}
+
+#adverb-contact{
+	width: 180px;
+	background: #a70304;
+	padding: 20px 5px;
+	color: white;
+	font-weight: bold;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	margin-top: 15px;
+}
+#adverb-contact a {
+	color: white;
+}
+.float-left{
+	float:left;
+}
+
+@media screen and (max-width: 990px){
+    #adverb-right{
+	display: none;
+    }
+    #top_container{
+	margin-left: 140px; 
+    }
+    #image_content{
+	margin: 0;
+	margin-left: 140px;
+    }
+    
+}

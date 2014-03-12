@@ -1,22 +1,17 @@
 {snippet}
 	<div id="top_container">
-        <h2 id="image_name">{$image->name|firstUpper}{if (($user->isInRole("superadmin") || $user->isInRole("admin")) && $image->approved == 0)}(zatím neschváleno){/if}</h2>
-		{if $gallery->current == 1}
-		<a href="{plink Competition:uploadImage galleryID => $gallery->id}" id="upload_foto">
-			nahrát fotku
-		</a>
-		{/if}
-		<div class="clear"></div>
+	    <h2 id="image_name">{$image->name|firstUpper}{if (($user->isInRole("superadmin") || $user->isInRole("admin")) && $image->approved == 0)}(zatím neschváleno){/if}</h2>
+	    {if $gallery->current == 1}
+	    <a href="{plink Competition:uploadImage galleryID => $gallery->id}" id="upload_foto">
+		    nahrát fotku
+	    </a>
+	    {/if}
+	    {ifset $username}<span class="username">{$username}</span>{/ifset}
+	    <div class="clear"></div>
 	</div>
 	
 	<div id="image_container">
-		{if $beforeImageID}
-			<a n:href="back! imageID => $beforeImageID" class="btn-space btn-link">
-				<div class="btn" id="back"></div>
-			</a>
-		{else}
-			<div class="btn-space"><div class="btn"></div></div>
-		{/if}
+		
 
 		<div id="image_content">
 			<div id="image">
@@ -28,8 +23,8 @@
 				</div>
 				{if $image->videoID != 0}
 					<object width="700" height="500" data="http://www.youtube.com/v/{$image->video->code}" type="application/x-shockwave-flash"><param name="src" value="http://www.youtube.com/v/{$image->video->code}" /></object>
-				{else}	
-					<img style="padding: {$padding}px 0" src="{$basePath}/images/galleries/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}" {*if $changeWidth} width="700" {else*} height="500" {*/if*}>
+				{else}	{*padding: {$padding}*}
+					<img src="{$basePath}/images/galleries/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}" {*if $changeWidth} width="700" {else*} height="500" {*/if*}>
 				{/if}
 				<div id="voting"></div>
 				{cache}
@@ -59,17 +54,30 @@
 					</div>
 				</div>
 				{/cache}
+			    {if $beforeImageID}
+				    <a n:href="back! imageID => $beforeImageID" id="back" class="btn-space btn-link"></a>
+			    {else}
+
+			    {/if}
+			    {if $afterImageID}
+				    <a n:href="next! imageID => $afterImageID" id="next" class="btn-space btn-link"></a>
+			    {else}
+
+			    {/if}
 			</div>
 			<div id="fblike-and-comment">
 				<p id="image_comment" class="float-left">
 					{$image->comment}
 				</p>
-				<div class="float-left btn-group-vertical">
-					<a href="{plink Competition:listImages galleryID => $gallery->id}" id="upload_foto">
+				<div class="float-left btn-list">
+					<a href="{plink Competition:listImages galleryID => $gallery->id}"  class="btn-main btn-small">
 						všechny fotky
 					</a>
-					<a href="{plink Competition:list}" id="upload_foto">
+					<a href="{plink Competition:list}"  class="btn-main btn-small">
 						seznam galerií
+					</a>
+					<a href="#" class="btn-main btn-small scroll-to-comments">
+						přidat komentář
 					</a>
 				</div>
 				<div class="clear"></div>
@@ -77,14 +85,28 @@
 			<div class="clear"></div>
 		</div>
 
-		{if $afterImageID}
-			<a n:href="next! imageID => $afterImageID" class="btn-space btn-link">
-				<div class="btn" id="next"></div>
-			</a>
-		{else}
-			<div class="btn-space"><div class="btn"></div></div>
-		{/if}
 		<div class="clear"></div>
+		<div class="image-links">
+		    <a href="#" class="image-link" title="">
+			<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt="" height="140px" />
+		    </a>
+		    <a href="#" class="image-link" title="">
+			<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt=""  height="140px" />
+		    </a>
+		    <a href="#" class="image-link" title="">
+			<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt=""  height="140px" />
+		    </a>
+		    <a href="#" class="image-link" title="">
+			<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt="" height="140px" />
+		    </a>
+		    <a href="#" class="image-link" title="">
+			<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt=""  height="140px" />
+		    </a>
+		    <a href="#" class="image-link" title="">
+			<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt=""  height="140px" />
+		    </a>
+		</div>
+		
 	</div>	
 	
 	<div id="link-and-fb">
@@ -131,7 +153,7 @@
 		<form id="link">
 			<textarea cols="70">http://www.{if $partymode}priznanizparby{else}priznaniosexu{/if}.cz{$imageLink}</textarea>
 		</form>*}
-
+		<a href="#" name="scroll-fb-comments"></a>
 		<div id="fb" class="fb-components">
 			<div class="fb-comments-container">
 				<div class="fb-comments" data-href="http://www.{if $partymode}priznanizparby{else}priznaniosexu{/if}.cz{$imageLink}" data-width="600" data-num-posts="10"></div>
@@ -150,5 +172,16 @@
 		<script>
 		(adsbygoogle = window.adsbygoogle || []).push({});
 		</script>
+		<script>
+		;function scrollToAnchor(e){ 
+			var t=$("a[name='"+e+"']");
+			$("html,body").animate({ scrollTop:t.offset().top},800);
+		}
+
+		$(".scroll-to-comments").click(function(event) {
+			event.preventDefault();
+			scrollToAnchor('scroll-fb-comments');
+		});
+	    </script>
 	</div>
 {/snippet}
