@@ -23,7 +23,7 @@ class DatingRegistrationManThirdForm extends DatingRegistrationBaseManForm
 		parent::submitted($form);
 		$values = $form->values;
 		
-		$this->presenter->redirect('Datingregistration:register', $values->state, $values->orientation, 
+		$this->presenter->redirect('Datingregistration:register', $values->marital_state, $values->orientation, 
 				$values->tallness, $values->shape, $values->smoke, $values->drink,$values->graduation,"","", $values->penis_length, $values->penis_width);
 	}
 }

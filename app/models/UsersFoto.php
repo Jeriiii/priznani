@@ -8,7 +8,7 @@ class UsersFoto extends Selection
 
 	public function __construct(\Nette\Database\Connection $connection)
 	{
-		parent::__construct('users_fotos', $connection);
+		parent::__construct('user_images', $connection);
 	}
 
 	public function getAllUserFotos()

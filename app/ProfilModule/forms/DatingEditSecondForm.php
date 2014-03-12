@@ -19,8 +19,9 @@ class DatingEditSecondForm extends EditBaseForm
 		$presenter = $this->getPresenter();
 		$this->userModel = $this->getPresenter()->context->userModel;
 		$this->id_user = $presenter->getUser()->getId();
-		$userInfo = $presenter->context->userModel->findUser(array('id' => $this->id_user));
-		
+                
+		$userInfo = $presenter->getContext()->userModel->findUser(array('id' => $this->id_user));
+
 		$this->addGroup('Identifikační údaje');
 		$this->addText('email', 'Email')
 			->setDefaultValue($userInfo->email)
