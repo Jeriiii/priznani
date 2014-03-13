@@ -13,7 +13,7 @@ use Nette\Image;
 
 class UserGalleryChangeForm extends Form
 {
-	private $id;
+	private $galleryID;
     
     public function __construct(IContainer $parent = NULL, $name = NULL)
     {
@@ -26,17 +26,18 @@ class UserGalleryChangeForm extends Form
 	$renderer->wrappers['control']['container'] = NULL;
 	//form
 	$presenter = $this->getPresenter();
-	$this->id = $presenter->id;
+    //    \Nette\Diagnostics\Debugger::Dump($presenter->galleryID);die();
+	$this->galleryID = $presenter->galleryID;
 	
-	$new = $presenter->context->createUsersFoto()
-				->where('id', $this->id)
+	$filledForm = $presenter->context->createUsersGallery()
+				->where('id', $this->galleryID)
 				->fetch();
         
-	$this->addText("name", "Jméno Galerie", 30, 150)
-		->setDefaultValue($new->name)
+	$this->addText("name", "Jméno galerie", 30, 150)
+		->setDefaultValue($filledForm->name)
 		->addRule(Form::FILLED,"Vyplňte jméno galerie");
 	$this->addTextArea('description', 'Popis galerie:', 100,15)
-		->setDefaultValue($new->description)
+		->setDefaultValue($filledForm->description)
 		->addRule(Form::FILLED,"Vyplňte popis galerie");
     	$this->addSubmit('send', 'Změnit');
     	//$this->addProtection('Vypršel časový limit, odešlete formulář znovu');
@@ -44,18 +45,19 @@ class UserGalleryChangeForm extends Form
     	return $this;
     }
     
-    public function submitted(NewChangeForm $form)
+    public function submitted(UserGalleryChangeForm $form)
 	{
 		$values = $form->values;
 		$presenter = $form->getPresenter();
 		
-		$values->url = Strings::webalize($values->name);
+		$values2['name'] = $values->name;
+                $values2['description'] = $values->description;
 
-		$presenter->context->createNews()
-			->where("id", $this->id)
-			->update($values);
+		$presenter->context->createUsersGallery()
+			->where("id", $this->galleryID)
+			->update($values2);
 		
-		$presenter->flashMessage('Aktualita byla úspěšně změněna');
-		$presenter->redirect("AdminNews:changeNew",  $this->id);
+		$presenter->flashMessage('Galerie byla úspěšně změněna');
+		$presenter->redirect("Galleries:");
 	}
 }

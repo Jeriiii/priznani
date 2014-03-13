@@ -16,7 +16,7 @@ class GalleriesPresenter extends \BasePresenter
         private $userModel;
         private $user;
         private $fotos;
-        private $galleryID;
+        public $galleryID;
 
         public function __construct(IContainer $parent = NULL, $name = NULL)
 	{
@@ -28,6 +28,12 @@ class GalleriesPresenter extends \BasePresenter
 	public function startup() {
 		parent::startup();
              $this->userModel = $this->context->userModel;
+	}
+        
+        public function actionUserGalleryChange($galleryID)
+	{
+            //\Nette\Diagnostics\Debugger::Dump($galleryID);die();
+		$this->galleryID = $galleryID;
 	}
         
         public function actionImageNew($galleryID)
@@ -138,15 +144,15 @@ class GalleriesPresenter extends \BasePresenter
               //               \Nette\Diagnostics\Debugger::Dump($this->template->userData);die();
       	}
         
-        public function createComponentUserGalleries(){  
-      //      \Nette\Diagnostics\Debugger::Dump($this->userModel->findUser(array("id" => $this->getUser()->getId())));die();
-            \Nette\Diagnostics\Debugger::Dump($this->getUser()->getRole());
-            \Nette\Diagnostics\Debugger::Dump($this->getUser()->getUsername());die();
+        public function createComponentUserGalleries(){ 
             return new \UserGalleries($this->userModel);
         }
         
         protected function createComponentUserGalleryNew($name) {
 		return new Frm\UserGalleryNewForm($this, $name);
+	}
+        protected function createComponentUserGalleryChange($name) {
+		return new Frm\UserGalleryChangeForm($this, $name);
 	}
         
         protected function createComponentNewImage($name) {  
