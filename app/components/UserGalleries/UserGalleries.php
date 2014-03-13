@@ -26,16 +26,12 @@ class UserGalleries extends Nette\Application\UI\Control {
         
         /* vrati pouze posledni 4 nahledy galerie daneho uzivatele */
 	public function render($mode) {
-            //\Nette\Diagnostics\Debugger::Dump($this->getUserDataFromDB()->where('userId',$this->getUserInfo()->getId()) );die();
- 
-            
+
                 if($mode == "listAll"){
                     $this->template->galleries = $this->getUserDataFromDB()
                                                ->where('userId',$this->getUserInfo()->getId())
                                                ->group('galleryID')
                                                ->order('galleryID DESC');
-                    
-             //       \Nette\Diagnostics\Debugger::Dump($this->template->galleries);die();
                     
                     $this->template->userData = $this->user->findUser(array("id" => $this->getUserInfo()->getId()));
                                    
@@ -59,8 +55,6 @@ class UserGalleries extends Nette\Application\UI\Control {
                     
                     
                     $this->template->userData = $this->user->findUser(array("id" => $this->getUserInfo()->getId()));
-
-                                    
                 
                     $this->setCssParams();
                     

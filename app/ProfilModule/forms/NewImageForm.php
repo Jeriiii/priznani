@@ -35,11 +35,6 @@ class NewImageForm extends ImageBaseForm
 		$this->addText('description_image', 'Popis:');
                 $this->addHidden('galleryID', $this->galleryID);
                 
-		$this->addCheckbox("agreement", 
-				Html::el('a')
-					->href("http://priznanizparby.cz/soutez/fotografie.pdf")
-					->setHtml('Souhlasím s podmínkami'))
-			->addRule(Form::FILLED, "Musíte souhlasit s podmínkami.");
                 
 		$this->addSubmit("submit", "Přidat fotku");
 		$this->onSuccess[] = callback($this, 'submitted');

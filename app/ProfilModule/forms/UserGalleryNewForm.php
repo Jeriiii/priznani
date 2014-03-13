@@ -43,7 +43,7 @@ class UserGalleryNewForm extends ImageBaseForm
                 $this->addUpload('foto2', 'Přidat fotku:')
                         ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/png,image/jpeg,image/gif')
                         ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024)
-                        ->addRule(Form::FILLED, "Musíte vybrat soubor");
+                       ->addRule(Form::FILLED, "Musíte vybrat soubor");
 		$this->addText('description_image2', 'Popis:');
                 
 		$this->addUpload('foto3', 'Přidat fotku:')
@@ -114,8 +114,9 @@ class UserGalleryNewForm extends ImageBaseForm
                 
                 $this->upload($image, $id, $values2['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
                 
+                //2nd foto
                 if(!empty($image2)){
-                    //2nd foto
+                    
                     $values3['userID'] = $uID;
                     $values3['suffix'] = $this->suffix( $image->getName() );
                     $values3['description'] = $values->description_image2;
@@ -128,8 +129,9 @@ class UserGalleryNewForm extends ImageBaseForm
                     $this->upload($image2, $id2, $values3['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
                 }
                 
+                //3rd foto
                 if(!empty($image3)){
-                    //3rd foto
+                    
                     $values4['userID'] = $uID;
                     $values4['suffix'] = $this->suffix( $image->getName() );
                     $values4['description'] = $values->description_image3;
@@ -140,9 +142,9 @@ class UserGalleryNewForm extends ImageBaseForm
                    
                    $this->upload($image3, $id3, $values4['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
                 }
-                
+                 //4th foto
                 if(!empty($image4)){
-                    //4th foto
+                
                     $values5['userID'] = $uID;
                     $values5['suffix'] = $this->suffix( $image->getName() );
                     $values5['description'] = $values->description_image4;

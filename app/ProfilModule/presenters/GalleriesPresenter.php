@@ -36,6 +36,10 @@ class GalleriesPresenter extends \BasePresenter
         public function actionEditGalleryImage($imageID, $galleryID){
             $this->galleryID = $galleryID;
             $this->imageID = $imageID;
+            
+            $this->template->galleryImage = $this->context->createUsersFoto()
+                                    ->where('id', $imageID)
+                                    ->order('id DESC');
         }
         
         public function actionListGalleryImage($id_image, $galleryID) {
@@ -43,12 +47,15 @@ class GalleriesPresenter extends \BasePresenter
 					->find($id_image)
 					->fetch();
             $this->galleryID = $galleryID;
+
         }
         
         public function actionUserGalleryChange($galleryID)
 	{
-            //\Nette\Diagnostics\Debugger::Dump($galleryID);die();
 		$this->galleryID = $galleryID;
+                $this->template->galleryImages = $this->context->createUsersFoto()
+                                                ->where('galleryID', $galleryID)
+                                                ->order('id DESC');
 	}
         
         public function actionImageNew($galleryID)
@@ -156,7 +163,6 @@ class GalleriesPresenter extends \BasePresenter
 		$this->template->galleryID = $galleryID;
                  
 		$this->template->userData = $this->userModel->findUser(array("id" => $this->getUserInfo()->getId()));
-              //               \Nette\Diagnostics\Debugger::Dump($this->template->userData);die();
       	}
         
         public function createComponentUserGalleries(){ 
