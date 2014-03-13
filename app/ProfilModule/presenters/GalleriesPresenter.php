@@ -8,6 +8,7 @@ namespace ProfilModule;
 
 use \Nette\Security\User,
 	\UserGalleries\UserGalleries,
+        	Nette\Http\Request,
         \Nette\Application\UI\Form as Frm;
 
 class GalleriesPresenter extends \BasePresenter
@@ -17,6 +18,8 @@ class GalleriesPresenter extends \BasePresenter
         private $user;
         private $fotos;
         public $galleryID;
+        public $imageID;
+        public $id_image;
 
         public function __construct(IContainer $parent = NULL, $name = NULL)
 	{
@@ -29,6 +32,18 @@ class GalleriesPresenter extends \BasePresenter
 		parent::startup();
              $this->userModel = $this->context->userModel;
 	}
+        
+        public function actionEditGalleryImage($imageID, $galleryID){
+            $this->galleryID = $galleryID;
+            $this->imageID = $imageID;
+        }
+        
+        public function actionListGalleryImage($id_image, $galleryID) {
+            $this->id_image = $this->context->createUsersFoto()
+					->find($id_image)
+					->fetch();
+            $this->galleryID = $galleryID;
+        }
         
         public function actionUserGalleryChange($galleryID)
 	{
@@ -157,5 +172,19 @@ class GalleriesPresenter extends \BasePresenter
         
         protected function createComponentNewImage($name) {  
 		return new Frm\NewImageForm($this,$name);
+	}
+        protected function createComponentUserGalleryImageChange($name) {
+                return new Frm\UserGalleryImageChangeForm($this,$name);
+        }
+        
+        protected function createComponentGallery() {  
+
+	$images = $this->context->createUsersFoto()
+			->where("galleryID", $this->galleryID);
+        
+        $httpRequest = $this->context->httpRequest;
+	$domain = $httpRequest->getUrl()->host;	
+                
+		return new \Gallery($images, $this->id_image, $this->galleryID,$domain, "priznaniosexu");
 	}
 }

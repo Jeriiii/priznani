@@ -281,7 +281,7 @@ class CompetitionPresenter extends BasePresenter {
 					->where("galleryID", $this->gallery->id)
 					->where("approved", 1);
 		}
-
+                
 		return new Gallery($images, $this->image, $this->gallery, $this->domain, $this->partymode);
 	}
 
