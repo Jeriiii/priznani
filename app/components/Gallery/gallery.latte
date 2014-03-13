@@ -25,6 +25,7 @@
 					<object width="700" height="500" data="http://www.youtube.com/v/{$image->video->code}" type="application/x-shockwave-flash"><param name="src" value="http://www.youtube.com/v/{$image->video->code}" /></object>
 				{else}	{*padding: {$padding}*}
 					<img src="{$basePath}/images/galleries/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}" {*if $changeWidth} width="700" {else*} height="500" {*/if*}>
+					<div class="clear"></div>
 				{/if}
 				<div id="voting"></div>
 				{cache}
@@ -86,7 +87,7 @@
 		</div>
 
 		<div class="clear"></div>
-		<div class="image-links">
+		{*<div class="image-links">
 		    <a href="#" class="image-link" title="">
 			<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt="" height="140px" />
 		    </a>
@@ -105,7 +106,7 @@
 		    <a href="#" class="image-link" title="">
 			<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt=""  height="140px" />
 		    </a>
-		</div>
+		</div>*}
 		
 	</div>	
 	
@@ -161,7 +162,7 @@
 		</div>
 	</div>
 	<script type="text/javascript">FB.XFBML.parse(document.getElementById('fb'));//revalidace fb komponent</script>
-	<div style="text-align: center; margin-bottom: 10px;">
+	<div id="horadd" style="text-align: center; margin-bottom: 10px;">
 		{* reklama *}
 		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 		{* široký sloupec nad detailem přiznáním 1 *}

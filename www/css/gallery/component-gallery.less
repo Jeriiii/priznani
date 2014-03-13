@@ -36,7 +36,6 @@
 }
 
 
-
 .btn-space:hover{
 	opacity: 1;
 }
@@ -60,7 +59,6 @@
 
 #image{
 	width: 700px;
-	height: 500px;
 	text-align: center;
 	vertical-align: middle;
 	background-color: #f2f2f2;
@@ -193,7 +191,7 @@ h2#image_name{
 	float:left;
 }
 
-@media screen and (max-width: 990px){
+@media screen and (max-width: 1024px){
     #adverb-right{
 	display: none;
     }
@@ -204,5 +202,62 @@ h2#image_name{
 	margin: 0;
 	margin-left: 140px;
     }
+    #left-panel-label{
+	display: none !important;
+    }
     
 }
+
+@media screen and (max-width: 950px){
+	.fb-like-container{
+	    top: 0px;
+	    left: 0;
+	    margin: 0;
+	    height: auto;
+	    padding: 5px 0;
+	    min-height: 60px;
+	    z-index: 5;
+	}
+	.fb-like-container p {
+	    display: none;
+	}
+	#top_container, #image_content{
+	    margin-left: 90px; 
+	}
+}
+
+
+
+@media screen and (max-width: 770px){
+	#left-panel {
+		display: none;
+	}
+	#link-and-fb{
+	    padding: 0;
+	    margin: 0;
+	}
+	#image_content, #image, #link-and-fb{
+	    width: 100% !important;
+	}
+	#top_container, #image_content{
+	    margin-left: 0px; 
+	}
+	#image img{
+	    width: 100% !important;
+	    height: auto !important;
+	}
+	.btn-list{
+	    width: 50%;
+	    margin: 10px 25%;
+	    padding: 0;
+	}
+	
+}
+
+@media screen and (max-width: 650px){
+	#horadd{
+	    display: none;
+	}
+	
+}
+
