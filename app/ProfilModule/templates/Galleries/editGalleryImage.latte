@@ -1,0 +1,23 @@
+{block head}
+{*<link rel="stylesheet" href="{$basePath}/css/bonuses.css" type="text/css">*}
+<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
+<script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>  
+{control css "competition/listImages.less"}
+{/} 
+
+{block content}
+
+<h1>Editace fotky</h1>
+{control userGalleryImageChange}
+
+<section class="inner imgs-container">
+     <h2>Fotka: </h2>
+    {foreach $galleryImage as $image} 
+		<div class="img-container">                                                   
+                        <img src="{$basePath}/images/userGalleries/{$image->userId}/{$image->galleryID}/minSqr{$image->id}.{$image->suffix}" width="100%" height="100%"/>
+                        <h2>{$image->description}</h2>                        
+		</div> 
+
+    {/foreach}
+             <div class="clear"></div>
+</section>
