@@ -72,6 +72,15 @@ class Gallery extends Nette\Application\UI\Control {
 
 		$imageLink = $this->domain . "/images/galleries/" . $this->gallery->id . "/" . $this->image->id . "." . $this->image->suffix;
 
+		// rozhoduje, zda je obrázek vyšší nebo širší
+		if($this->image->widthGalScrn == 700) {
+			$setWidth = TRUE;
+			$this->template->imgPaddingTopBottom = (525 - $this->image->heightGalScrn) / 2;
+		}else{
+			$setWidth = FALSE;
+		}
+		$this->template->setWidth = $setWidth;
+		
 //		if($this->image->videoID != 0){
 //			/* je to video - nic nepočítej - nemá obrázek */
 //		} else {
