@@ -35,29 +35,65 @@ class UserGalleryNewForm extends ImageBaseForm
                 $this->addGroup('Fotografie (4 x 4MB)');
                 
 		$this->addUpload('foto', 'Přidat fotku:')
-                        ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/png,image/jpeg,image/gif')
-                        ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024)
-                        ->addRule(Form::FILLED, "Musíte vybrat soubor");
-		$this->addText('description_image', 'Popis:');
+            //            ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif')
+                        ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024);
+		$this->addText('description_image', 'Popis:')
+                        ->AddConditionOn($this['foto'], Form::FILLED)
+                        ->addRule(Form::FILLED, 'Zadejte popis fotky');
 
-                $this->addUpload('foto2', 'Přidat fotku:')
-                        ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/png,image/jpeg,image/gif')
-                        ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024)
-                       ->addRule(Form::FILLED, "Musíte vybrat soubor");
-		$this->addText('description_image2', 'Popis:');
+                
+                $this->addUpload('foto2', 'Přidat fotku:')                        
+            //            ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif')
+                        ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024);
+                
+		$this->addText('description_image2', 'Popis:')
+                        ->AddConditionOn($this['foto2'], Form::FILLED)
+                        ->addRule(Form::FILLED, 'Zadejte popis fotky');
                 
 		$this->addUpload('foto3', 'Přidat fotku:')
-                        ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/png,image/jpeg,image/gif')
-                        ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024)
-                        ->addRule(Form::FILLED, "Musíte vybrat soubor");
-		$this->addText('description_image3', 'Popis:');
+           //             ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif')
+                        ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024);
+		$this->addText('description_image3', 'Popis:')
+                        ->AddConditionOn($this['foto3'], Form::FILLED)
+                        ->addRule(Form::FILLED, 'Zadejte popis fotky');;
                 
                 
 		$this->addUpload('foto4', 'Přidat fotku:')
-                        ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/png,image/jpeg,image/gif')
-                        ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024)
-                        ->addRule(Form::FILLED, "Musíte vybrat soubor");
-		$this->addText('description_image4', 'Popis:');        
+            //            ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif')
+                        ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024);
+                
+                
+		$this->addText('description_image4', 'Popis:')
+                        ->AddConditionOn($this['foto4'], Form::FILLED)
+                        ->addRule(Form::FILLED, 'Zadejte popis fotky');  
+                
+                /* Je-li první pole prázdné, kontroluji zda jsou ostatní naplněné. Jsou-li také prázdné, alert nahlásí, že je potřeba alespoň 1 fotku */
+                $this['foto']->addConditionOn($this['foto2'], ~Form::FILLED)
+                            ->addConditionOn($this['foto3'], ~Form::FILLED)
+                            ->addConditionOn($this['foto4'], ~Form::FILLED)
+                            ->addRule(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif')
+                            ->addRule(Form::FILLED, "Musíte vybrat alespoň %d soubor",1);
+                
+                /* Je-li druhé pole prázdné, kontroluji zda jsou ostatní naplněné. Jsou-li také prázdné, alert nahlásí, že je potřeba alespoň 1 fotku */
+                $this['foto2']->addConditionOn($this['foto'], ~Form::FILLED)
+                            ->addConditionOn($this['foto3'], ~Form::FILLED)
+                            ->addConditionOn($this['foto4'], ~Form::FILLED)
+                            ->addRule(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif')
+                            ->addRule(Form::FILLED, "Musíte vybrat alespoň %d soubor",1);
+                
+                /* Je-li třetí pole prázdné, kontroluji zda jsou ostatní naplněné. Jsou-li také prázdné, alert nahlásí, že je potřeba alespoň 1 fotku */                
+                $this['foto3']->addConditionOn($this['foto'], ~Form::FILLED)
+                            ->addConditionOn($this['foto2'], ~Form::FILLED)
+                            ->addConditionOn($this['foto4'], ~Form::FILLED)
+                            ->addRule(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif')
+                            ->addRule(Form::FILLED, "Musíte vybrat alespoň %d soubor",1);
+                
+                /* Je-li čtvrté pole prázdné, kontroluji zda jsou ostatní naplněné. Jsou-li také prázdné, alert nahlásí, že je potřeba alespoň 1 fotku */
+                $this['foto4']->addConditionOn($this['foto'], ~Form::FILLED)
+                            ->addConditionOn($this['foto2'], ~Form::FILLED)
+                            ->addConditionOn($this['foto3'], ~Form::FILLED)
+                            ->addRule(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif')
+                            ->addRule(Form::FILLED, "Musíte vybrat alespoň %d soubor",1);
                 
                 
 		$this->addCheckbox("agreement", 
@@ -65,6 +101,7 @@ class UserGalleryNewForm extends ImageBaseForm
 					->href("http://priznanizparby.cz/soutez/fotografie.pdf")
 					->setHtml('Souhlasím s podmínkami'))
 			->addRule(Form::FILLED, "Musíte souhlasit s podmínkami.");
+ 
                 
 		$this->addSubmit("submit", "Vytvořit galerie");
 		$this->onSuccess[] = callback($this, 'submitted');
@@ -87,22 +124,22 @@ class UserGalleryNewForm extends ImageBaseForm
                 unset($values->image3);
                 unset($values->image4);
 		unset($values->agreement);
-              //  \Nette\Diagnostics\Debugger::Dump($values->foto->getName()." ".$values['description_image']." ".$values['foto']);die();
-                
+             
                 //galerie
                 $values1['name'] = $values->name;
                 $values1['description'] = $values->description_gallery;
                 
+                $idGallery = $presenter->context->createUsersGallery()
+                        ->insert($values1);
                 
                 
+                if($values->foto->isOK()){
                 //1st foto
                 $values2['userID'] = $uID;
                 $values2['suffix'] = $this->suffix( $image->getName() );
                 $values2['description'] = $values->description_image;
-
-                $idGallery = $presenter->context->createUsersGallery()
-                        ->insert($values1);
                 $values2['galleryID'] = $idGallery;
+
  
 		$id = $presenter->context->createUsersFoto()
 			->insert($values2);
@@ -113,50 +150,68 @@ class UserGalleryNewForm extends ImageBaseForm
                         ->update($bestImageID);
                 
                 $this->upload($image, $id, $values2['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
+                }
+                
                 
                 //2nd foto
-                if(!empty($image2)){
+                if($values->foto2->isOK()){
                     
                     $values3['userID'] = $uID;
-                    $values3['suffix'] = $this->suffix( $image->getName() );
+                    $values3['suffix'] = $this->suffix( $image2->getName() );
                     $values3['description'] = $values->description_image2;
                     $values3['galleryID'] = $idGallery;
                     
                     $id2 = $presenter->context->createUsersFoto()
 			->insert($values3);
                     
+                    $bestImageID['bestImageID'] = $id2;
+                    $presenter->context->createUsersGallery()
+                        ->where('id', $idGallery)
+                        ->update($bestImageID);
                     
                     $this->upload($image2, $id2, $values3['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
                 }
                 
+                
                 //3rd foto
-                if(!empty($image3)){
+                if($values->foto3->isOK()){
                     
                     $values4['userID'] = $uID;
-                    $values4['suffix'] = $this->suffix( $image->getName() );
+                    $values4['suffix'] = $this->suffix( $image3->getName() );
                     $values4['description'] = $values->description_image3;
                     $values4['galleryID'] = $idGallery;
                     
                    $id3 = $presenter->context->createUsersFoto()
 			->insert($values4);
                    
+                   $bestImageID['bestImageID'] = $id3;
+                   $presenter->context->createUsersGallery()
+                        ->where('id', $idGallery)
+                        ->update($bestImageID);
+                   
                    $this->upload($image3, $id3, $values4['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
                 }
+                
                  //4th foto
-                if(!empty($image4)){
+                if($values->foto4->isOK()){
                 
                     $values5['userID'] = $uID;
-                    $values5['suffix'] = $this->suffix( $image->getName() );
+                    $values5['suffix'] = $this->suffix( $image4->getName() );
                     $values5['description'] = $values->description_image4;
                     $values5['galleryID'] = $idGallery;
                     
                    $id4 = $presenter->context->createUsersFoto()
-			->insert($values4);
+			->insert($values5);
+                   
+                   $bestImageID['bestImageID'] = $id4;
+                   $presenter->context->createUsersGallery()
+                        ->where('id', $idGallery)
+                        ->update($bestImageID);
                    
                    $this->upload($image4, $id4, $values5['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
                 }
 
 		$presenter->flashMessage('Galerie byla vytvořena. Počkejte prosím na schválení adminem.');
-		$presenter->redirect('Galleries:', array("galleryID" => $id));
+		$presenter->redirect('Galleries:');
  	}
 }
