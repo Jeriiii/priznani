@@ -47,12 +47,13 @@ class UserGalleries extends Nette\Application\UI\Control {
           /*          $this->template->galleries = $this->getUserDataFromDB()
                                                         ->where("id = ANY (SELECT MAX( id ) FROM `user_images` WHERE userID =87 GROUP BY galleryID)"              
                                                            )->order('galleryID DESC')->limit(3);
-                        */
+             */         
                     $this->template->galleries = $this->getUserDataFromDB()
                                                          ->where('userId',$this->getUserInfo()->getId())
                                                           ->group('galleryID')
                                                            ->order('galleryID DESC');                                                           
-                    
+                      
+
                     
                     $this->template->userData = $this->user->findUser(array("id" => $this->getUserInfo()->getId()));
                 
