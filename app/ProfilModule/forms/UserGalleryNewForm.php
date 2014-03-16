@@ -110,108 +110,60 @@ class UserGalleryNewForm extends ImageBaseForm
     
 	public function submitted(UserGalleryNewForm $form)
 	{
-		$values = $form->values;
+ $values = $form->values;
 		$image = $values->foto;
                 $image2 = $values->foto2;
                 $image3 = $values->foto3;
                 $image4 = $values->foto4;
                 
-		$presenter = $this->getPresenter();
+		$presenter = $this->getPres();
 		$uID = $presenter->getUser()->getId();
                 
-		unset($values->image);
-                unset($values->image2);
-                unset($values->image3);
-                unset($values->image4);
-		unset($values->agreement);
-             
-                //galerie
-                $values1['name'] = $values->name;
-                $values1['description'] = $values->description_gallery;
+                $arr = array($image, $image2, $image3, $image4);
+                
+                //vytvoření galerie
+                $valuesGallery['name'] = $values->name;
+                $valuesGallery['description'] = $values->description_gallery;
+                $valuesGallery['userId'] = $uID;
                 
                 $idGallery = $presenter->context->createUsersGallery()
-                        ->insert($values1);
+                        ->insert($valuesGallery);
                 
-                
-                if($values->foto->isOK()){
-                //1st foto
-                $values2['userID'] = $uID;
-                $values2['suffix'] = $this->suffix( $image->getName() );
-                $values2['description'] = $values->description_image;
-                $values2['galleryID'] = $idGallery;
-
+                $this->addImages($arr, $values, $uID, $idGallery);
+		unset($values->agreement);
  
-		$id = $presenter->context->createUsersFoto()
-			->insert($values2);
-               
-                $bestImageID['bestImageID'] = $id;
-                $presenter->context->createUsersGallery()
-                        ->where('id', $idGallery)
-                        ->update($bestImageID);
-                
-                $this->upload($image, $id, $values2['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
-                }
-                
-                
-                //2nd foto
-                if($values->foto2->isOK()){
-                    
-                    $values3['userID'] = $uID;
-                    $values3['suffix'] = $this->suffix( $image2->getName() );
-                    $values3['description'] = $values->description_image2;
-                    $values3['galleryID'] = $idGallery;
-                    
-                    $id2 = $presenter->context->createUsersFoto()
-			->insert($values3);
-                    
-                    $bestImageID['bestImageID'] = $id2;
-                    $presenter->context->createUsersGallery()
-                        ->where('id', $idGallery)
-                        ->update($bestImageID);
-                    
-                    $this->upload($image2, $id2, $values3['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
-                }
-                
-                
-                //3rd foto
-                if($values->foto3->isOK()){
-                    
-                    $values4['userID'] = $uID;
-                    $values4['suffix'] = $this->suffix( $image3->getName() );
-                    $values4['description'] = $values->description_image3;
-                    $values4['galleryID'] = $idGallery;
-                    
-                   $id3 = $presenter->context->createUsersFoto()
-			->insert($values4);
-                   
-                   $bestImageID['bestImageID'] = $id3;
-                   $presenter->context->createUsersGallery()
-                        ->where('id', $idGallery)
-                        ->update($bestImageID);
-                   
-                   $this->upload($image3, $id3, $values4['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
-                }
-                
-                 //4th foto
-                if($values->foto4->isOK()){
-                
-                    $values5['userID'] = $uID;
-                    $values5['suffix'] = $this->suffix( $image4->getName() );
-                    $values5['description'] = $values->description_image4;
-                    $values5['galleryID'] = $idGallery;
-                    
-                   $id4 = $presenter->context->createUsersFoto()
-			->insert($values5);
-                   
-                   $bestImageID['bestImageID'] = $id4;
-                   $presenter->context->createUsersGallery()
-                        ->where('id', $idGallery)
-                        ->update($bestImageID);
-                   
-                   $this->upload($image4, $id4, $values5['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
-                }
-
 		$presenter->flashMessage('Galerie byla vytvořena. Počkejte prosím na schválení adminem.');
 		$presenter->redirect('Galleries:');
  	}
+        
+        private function getPres(){
+             return $this->getPresenter();
+        }
+        
+        
+        private function addImages($arr, $values, $uID, $idGallery) {       
+            
+             foreach ($arr as $key => $image) {
+                    
+                    if($image->isOK()){                        
+                    
+                    $valuesDB['suffix'] = $this->suffix( $image->getName() );
+                    
+                    if($key != 0){ $valuesDB['description'] = $values->description_image."".$key; } 
+                    else { $valuesDB['description'] = $values->description_image; }
+                    $valuesDB['galleryID'] = $idGallery;
+
+                    $id = $this->getPres()->context->createUsersFoto()
+                            ->insert($valuesDB);
+
+                    $bestImageID['bestImageID'] = $id;
+                    $this->getPres()->context->createUsersGallery()
+                            ->where('id', $idGallery)
+                            ->update($bestImageID);
+                                        
+                    $this->upload($image, $id, $valuesDB['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
+                    unset($image);
+                    }
+                }
+        }
 }
