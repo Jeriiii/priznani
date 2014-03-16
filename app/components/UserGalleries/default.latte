@@ -19,36 +19,35 @@
                 <img src="{$basePath}/images/layout/plus-gallery2.png" width="100%" height="100%"/>			
                 <a href="{plink Galleries:userGalleryNew}">Přidat novou galerii</a>
             </div>
-    {foreach $galleries as $gallery}
+    {foreach $galleriesIDs as $gallery}
             <div class="img-container">    
                     <h2>{$gallery->description}</h2>
                     
-                    <a class="btn btn-danger" href="{plink Galleries:userGalleryChange galleryID => $gallery->galleryID}" style="position: absolute; background: rgb(0, 255, 41);z-index: 11;height: 21px;width: 24px;top: -80px;left: 2px;" title="editovat galerie"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
+                    <a class="btn btn-danger" href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" style="position: absolute; background: rgb(0, 255, 41);z-index: 11;height: 21px;width: 24px;top: -80px;left: 2px;" title="editovat galerie"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
                     <a data-toggle="modal" class="btn btn-danger" href="#MyModal{$gallery->id}" style="position: absolute;background: red; float:right; z-index: 11;height: 26px;width: 26px;top: -80px;right: 2px;" title="smazat galerie"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
                     
                     
-                    <img src="{$basePath}/images/userGalleries/{$userData->id}/{$gallery->galleryID}/minSqr{$gallery->id}.{$gallery->suffix}" width="100%" height="100%"/>
-                    <a class="view" href="{plink Galleries:listUserGalleryImages galleryID => $gallery->galleryID}">prohlednout</a>
+                    <img src="{$basePath}/images/userGalleries/{$userData->id}/{$gallery->id}/minSqr{$gallery->bestImageID}.{$gallery->ref('user_images','bestImageID')->suffix}" width="100%" height="100%"/>
+                    <a class="view" href="{plink Galleries:listUserGalleryImages galleryID => $gallery->id}">prohlednout</a>
                     
             </div>
                                        
             <div id="MyModal{$gallery->id}" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
                     <div class="modal-header">
                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h3 id="myModalLabel">Smazat galerie {$gallery->galleryID}?</h3>
+                            <h3 id="myModalLabel">Smazat galerie {$gallery->id}?</h3>
                     </div>
                     <div class="modal-body">
-                            <!--<p>Opravdu chcete smazat galerie {*$gallery->ref('user_galleries', 'galleryID')->name*}?</p>-->
-                        <p>Opravdu chcete smazat galerie {$gallery->galleryID}?</p>		        
+                        <p>Opravdu chcete smazat galerie {$gallery->name}?</p>		        
                     </div>
                     <div class="modal-footer">
-                            <a href="{plink deleteGallery! galleryID => $gallery->galleryID}" class="btn btn-success">
+                            <a href="{plink deleteGallery! galleryID => $gallery->id}" class="btn btn-success">
                                     Ano
                             </a>
                             <button  class="btn" data-dismiss="modal" aria-hidden="true">Ne</button>
                     </div>
             </div>
-            <script type="text/javascript">$("#MyModal{$gallery->galleryID}").modal({ show: false });</script>                                               
+            <script type="text/javascript">$("#MyModal{$gallery->id}").modal({ show: false });</script>                                               
                      
                     
                         
