@@ -30,36 +30,49 @@ class NewImageForm extends ImageBaseForm
                 
                 $this->addGroup('Fotografie (4 x 4MB)');
                 
-		$this->addUpload('foto', 'Přidat fotku:')
-            //            ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif')
+		$this->addUpload('foto', 'Přidat fotku:')    
                         ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024);
+                $this->addText('image_name', 'Název:')
+                        ->addRule(Form::MAX_LENGTH, "Maximální délka názvu je %d znaků", 40)
+                        ->AddConditionOn($this['foto'], Form::FILLED)
+                        ->addRule(Form::FILLED, 'Zadejte název fotky');
 		$this->addText('description_image', 'Popis:')
+                        ->addRule(Form::MAX_LENGTH, "Maximální délka komentáře je %d znaků", 500)
                         ->AddConditionOn($this['foto'], Form::FILLED)
                         ->addRule(Form::FILLED, 'Zadejte popis fotky');
 
                 
-                $this->addUpload('foto2', 'Přidat fotku:')                        
-            //            ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif')
+                $this->addUpload('foto2', 'Přidat fotku:')                                    
                         ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024);
-                
+                $this->addText('image_name2', 'Název:')
+                        ->addRule(Form::MAX_LENGTH, "Maximální délka názvu je %d znaků", 40)
+                        ->AddConditionOn($this['foto2'], Form::FILLED)
+                        ->addRule(Form::FILLED, 'Zadejte název fotky');
 		$this->addText('description_image2', 'Popis:')
+                        ->addRule(Form::MAX_LENGTH, "Maximální délka komentáře je %d znaků", 500)
                         ->AddConditionOn($this['foto2'], Form::FILLED)
                         ->addRule(Form::FILLED, 'Zadejte popis fotky');
                 
 		$this->addUpload('foto3', 'Přidat fotku:')
-           //             ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif')
                         ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024);
+                $this->addText('image_name3', 'Název:')
+                        ->addRule(Form::MAX_LENGTH, "Maximální délka názvu je %d znaků", 40)
+                        ->AddConditionOn($this['foto3'], Form::FILLED)
+                        ->addRule(Form::FILLED, 'Zadejte název fotky');
 		$this->addText('description_image3', 'Popis:')
+                        ->addRule(Form::MAX_LENGTH, "Maximální délka komentáře je %d znaků", 500)
                         ->AddConditionOn($this['foto3'], Form::FILLED)
                         ->addRule(Form::FILLED, 'Zadejte popis fotky');;
                 
                 
 		$this->addUpload('foto4', 'Přidat fotku:')
-            //            ->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif')
-                        ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024);
-                
-                
+                        ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024);               
+                $this->addText('image_name4', 'Název:')
+                        ->addRule(Form::MAX_LENGTH, "Maximální délka názvu je %d znaků", 40)
+                        ->AddConditionOn($this['foto4'], Form::FILLED)
+                        ->addRule(Form::FILLED, 'Zadejte název fotky');
 		$this->addText('description_image4', 'Popis:')
+                        ->addRule(Form::MAX_LENGTH, "Maximální délka komentáře je %d znaků", 500)
                         ->AddConditionOn($this['foto4'], Form::FILLED)
                         ->addRule(Form::FILLED, 'Zadejte popis fotky');  
                 
@@ -100,103 +113,57 @@ class NewImageForm extends ImageBaseForm
     
 	public function submitted(NewImageForm $form)
 	{
-		$values = $form->values;
+                $values = $form->values;
 		$image = $values->foto;
                 $image2 = $values->foto2;
                 $image3 = $values->foto3;
                 $image4 = $values->foto4;
-		$presenter = $this->getPresenter();
-		
+                
+		$presenter = $this->getPres();
 		$uID = $presenter->getUser()->getId();
-                
-		unset($values->image);
-                unset($values->image2);
-                unset($values->image3);
-                unset($values->image4);
-		unset($values->agreement);
-                
                 $idGallery = $values->galleryID;
-                
-                //1st foto
-                if($values->foto->isOK()){
-
-                    $values2['userID'] = $uID;
-                    $values2['suffix'] = $this->suffix( $image->getName() );
-                    $values2['description'] = $values->description_image;
-                    $values2['galleryID'] = $idGallery;
-
-
-                    $id = $presenter->context->createUsersFoto()
-                            ->insert($values2);
-
-                    $bestImageID['bestImageID'] = $id;
-                    $presenter->context->createUsersGallery()
-                            ->where('id', $idGallery)
-                            ->update($bestImageID);
-                
-                $this->upload($image, $id, $values2['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
-                }
-                
-                
-                //2nd foto
-                if($values->foto2->isOK()){
-                    
-                    $values3['userID'] = $uID;
-                    $values3['suffix'] = $this->suffix( $image2->getName() );
-                    $values3['description'] = $values->description_image2;
-                    $values3['galleryID'] = $idGallery;
-                    
-                    $id2 = $presenter->context->createUsersFoto()
-			->insert($values3);
-                    
-                    $bestImageID['bestImageID'] = $id2;
-                    $presenter->context->createUsersGallery()
-                        ->where('id', $idGallery)
-                        ->update($bestImageID);
-                    
-                    $this->upload($image2, $id2, $values3['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
-                }
-                
-                
-                //3rd foto
-                if($values->foto3->isOK()){
-                    
-                    $values4['userID'] = $uID;
-                    $values4['suffix'] = $this->suffix( $image3->getName() );
-                    $values4['description'] = $values->description_image3;
-                    $values4['galleryID'] = $idGallery;
-                    
-                   $id3 = $presenter->context->createUsersFoto()
-			->insert($values4);
-                   
-                   $bestImageID['bestImageID'] = $id3;
-                   $presenter->context->createUsersGallery()
-                        ->where('id', $idGallery)
-                        ->update($bestImageID);
-                   
-                   $this->upload($image3, $id3, $values4['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
-                }
-                
-                 //4th foto
-                if($values->foto4->isOK()){
-                
-                    $values5['userID'] = $uID;
-                    $values5['suffix'] = $this->suffix( $image4->getName() );
-                    $values5['description'] = $values->description_image4;
-                    $values5['galleryID'] = $idGallery;
-                    
-                   $id4 = $presenter->context->createUsersFoto()
-			->insert($values5);
-                   
-                   $bestImageID['bestImageID'] = $id4;
-                   $presenter->context->createUsersGallery()
-                        ->where('id', $idGallery)
-                        ->update($bestImageID);
-                   
-                   $this->upload($image4, $id4, $values5['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
-                }
+       
+                $arr = array($image, $image2, $image3, $image4);
+ 
+                $this->addImages($arr, $values, $uID, $idGallery);
+  
 
 		$presenter->flashMessage('Fotky byly přidané.');
 		$presenter->redirect('Galleries:listUserGalleryImages', array("galleryID" => $idGallery));
  	}
+        
+        
+        private function getPres(){
+             return $this->getPresenter();
+        }
+        
+        
+        private function addImages($arr, $values, $uID, $idGallery) {       
+            
+             foreach ($arr as $key => $image) {
+                    
+                    if($image->isOK()){                        
+  
+                    $valuesDB['suffix'] = $this->suffix( $image->getName() );
+                                        
+                    if($key != 0){ $valuesDB['name'] = $values->image_name."".$key; } 
+                    else { $valuesDB['name'] = $values->image_name; }
+                    
+                    if($key != 0){ $valuesDB['description'] = $values->description_image."".$key; } 
+                    else { $valuesDB['description'] = $values->description_image; }
+                    $valuesDB['galleryID'] = $idGallery;
+
+                    $id = $this->getPres()->context->createUsersFoto()
+                            ->insert($valuesDB);
+
+                    $bestImageID['bestImageID'] = $id;
+                    $this->getPres()->context->createUsersGallery()
+                            ->where('id', $idGallery)
+                            ->update($bestImageID);
+                                        
+                    $this->upload($image, $id, $valuesDB['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
+                    unset($image);
+                    }
+                }
+        }
 }

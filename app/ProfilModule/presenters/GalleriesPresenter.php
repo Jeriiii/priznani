@@ -144,7 +144,7 @@ class GalleriesPresenter extends \BasePresenter
 			$this->redirect("this");
 		}
 	}
- 
+        
         protected function getUserDataFromDB(){
             return $this->context->createUsersFoto();
         }
@@ -154,9 +154,9 @@ class GalleriesPresenter extends \BasePresenter
         
         
         public function renderListUserGalleryImages($galleryID) {
-    //        \Nette\Diagnostics\Debugger::Dump($galleryID);die();
+
+
                 $this->template->images = $this->getUserDataFromDB()
-                                               ->where('userID',$this->getUserInfo()->getId())
                                                ->where("galleryID", $galleryID)
                                                ->order("id DESC");
                 
