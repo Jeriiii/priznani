@@ -24,15 +24,15 @@ class UserGalleries extends Nette\Application\UI\Control {
 	}
 
         
-        /* vrati pouze posledni 4 nahledy galerie daneho uzivatele */
+
 	public function render($mode) {
 
+            /* vrati pouze posledni vsechny nahledy galerie daneho uzivatele */
                 if($mode == "listAll"){
-                    $this->template->galleries = $this->getUserDataFromDB()
-                                               ->where('userId',$this->getUserInfo()->getId())
-                                               ->group('galleryID')
-                                               ->order('galleryID DESC');
+ 
                     
+                    $this->template->galleriesIDs = $this->getPresenter()->getContext()->createUsersGallery()->order('id DESC');
+ 
                     $this->template->userData = $this->user->findUser(array("id" => $this->getUserInfo()->getId()));
                                    
                 
@@ -41,17 +41,11 @@ class UserGalleries extends Nette\Application\UI\Control {
                     $this->template->setFile(dirname(__FILE__) . '/default.latte');
                     $this->template->render();
                 }
-                
+                        
+                /* vrati pouze posledni 4 nahledy galerie daneho uzivatele */
                 if($mode == "listFew"){
                     
-          /*          $this->template->galleries = $this->getUserDataFromDB()
-                                                        ->where("id = ANY (SELECT MAX( id ) FROM `user_images` WHERE userID =87 GROUP BY galleryID)"              
-                                                           )->order('galleryID DESC')->limit(3);
-             */         
-                    $this->template->galleries = $this->getUserDataFromDB()
-                                                         ->where('userId',$this->getUserInfo()->getId())
-                                                          ->group('galleryID')
-                                                           ->order('galleryID DESC');                                                           
+                     $this->template->galleriesIDs = $this->getPresenter()->getContext()->createUsersGallery()->order('id DESC')->limit(3);                                                           
                       
 
                     
