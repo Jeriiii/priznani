@@ -1,12 +1,13 @@
 {block head}
 {*<link rel="stylesheet" href="{$basePath}/css/bonuses.css" type="text/css">*}
-<link rel="stylesheet" href="{$basePath}/css/bootstrap.css" type="text/css">
 <link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
+<link rel="stylesheet" href="{$basePath}/css/bootstrap.css" type="text/css">
 <script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>  
 {control css "competition/listImages.less"}
-{/block}
+{/}
 
 {block foot}
+        <script type="text/javascript" src="{$basePath}/js/jquery-1.7.1.min.js" ></script>
 	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>
 	<script type="text/javascript" src="{$basePath}/js/bootstrap-modal.min.js" ></script>
 {/block}
@@ -24,7 +25,7 @@
                     <h2>{$gallery->description}</h2>
                     
                     <a class="btn btn-danger" href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" style="position: absolute; background: rgb(0, 255, 41);z-index: 11;height: 21px;width: 24px;top: -80px;left: 2px;" title="editovat galerie"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
-                    <a data-toggle="modal" class="btn btn-danger" href="#MyModal{$gallery->id}" style="position: absolute;background: red; float:right; z-index: 11;height: 26px;width: 26px;top: -80px;right: 2px;" title="smazat galerie"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
+                    <a data-toggle="modal" class="btn btn-danger" href="#MyModal{$iterator->getCounter()}" style="position: absolute;background: red; float:right; z-index: 11;height: 26px;width: 26px;top: -80px;right: 2px;" title="smazat galerie"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
                     
                     
                     <img src="{$basePath}/images/userGalleries/{$userData->id}/{$gallery->id}/minSqr{$gallery->bestImageID}.{$gallery->ref('user_images','bestImageID')->suffix}" width="100%" height="100%"/>
@@ -32,7 +33,7 @@
                     
             </div>
                                        
-            <div id="MyModal{$gallery->id}" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
+            <div id="MyModal{$iterator->getCounter()}" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
                     <div class="modal-header">
                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                             <h3 id="myModalLabel">Smazat galerie {$gallery->id}?</h3>
@@ -47,10 +48,8 @@
                             <button  class="btn" data-dismiss="modal" aria-hidden="true">Ne</button>
                     </div>
             </div>
-            <script type="text/javascript">$("#MyModal{$gallery->id}").modal({ show: false });</script>                                               
-                     
-                    
-                        
+            <script type="text/javascript">$("#MyModal{$iterator->getCounter()}").modal({ show: false });</script>                                               
+              
     {/foreach}
             <div class="clear"></div>
 </section>
