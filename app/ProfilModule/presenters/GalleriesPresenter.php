@@ -108,10 +108,10 @@ class GalleriesPresenter extends \BasePresenter
 				->where("id", $id_image)
 				->fetch();
  
-                $way = WWW_DIR . "/images/userGalleries/" . $image->userId . "/" . $id_gallery . "/" . $image->id . "." . $image->suffix;
-		$wayMini = WWW_DIR . "/images/userGalleries/" . $image->userId . "/" . $id_gallery . "/min" . $image->id . "." . $image->suffix;
-                $wayScrn = WWW_DIR . "/images/userGalleries/" . $image->userId . "/" . $id_gallery . "/galScrn" . $image->id . "." . $image->suffix;
-                $waySqr = WWW_DIR . "/images/userGalleries/" . $image->userId . "/" . $id_gallery . "/minSqr" . $image->id . "." . $image->suffix;
+                $way = WWW_DIR . "/images/userGalleries/" . $this->getUserInfo()->getId() . "/" . $id_gallery . "/" . $image->id . "." . $image->suffix;
+		$wayMini = WWW_DIR . "/images/userGalleries/" . $this->getUserInfo()->getId() . "/" . $id_gallery . "/min" . $image->id . "." . $image->suffix;
+                $wayScrn = WWW_DIR . "/images/userGalleries/" . $this->getUserInfo()->getId() . "/" . $id_gallery . "/galScrn" . $image->id . "." . $image->suffix;
+                $waySqr = WWW_DIR . "/images/userGalleries/" . $this->getUserInfo()->getId() . "/" . $id_gallery . "/minSqr" . $image->id . "." . $image->suffix;
 		
 		if( file_exists($way) )
 		{
