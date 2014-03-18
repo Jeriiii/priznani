@@ -10,20 +10,14 @@ use Nette\Application\UI,
 	Nette\Utils\Html;
 
 
-class ForgottenPasswordForm extends UI\Form
+class ForgottenPasswordForm extends BaseBootstrapForm
 {
     public function __construct(IContainer $parent = NULL, $name = NULL)
     {
         parent::__construct($parent, $name);
-        //graphics
-        $renderer = $this->getRenderer();
-		$renderer->wrappers['controls']['container'] = 'div';
-		$renderer->wrappers['pair']['container'] = 'div';
-		$renderer->wrappers['label']['container'] = NULL;
-		$renderer->wrappers['control']['container'] = 'div';
+        
     	//form
-    	$this->addText('email', 'Email:', 30, 50)
-		->setAttribute('class', 'form-control');
+    	$this->addText('email', 'Email:', 30, 50);
     	$this->addSubmit('send', 'Vygenerovat nové heslo')
 		->setAttribute('class','btn-main medium');
     	$this->onSuccess[] = callback($this, 'submitted');

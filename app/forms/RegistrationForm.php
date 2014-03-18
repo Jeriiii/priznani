@@ -11,37 +11,27 @@ use Nette\Application\UI\Form,
 	Nette\Utils\Html;
 
 
-class RegistrationForm extends Form
+class RegistrationForm extends BaseBootstrapForm
 {
 	private $id;
     
     public function __construct(IContainer $parent = NULL, $name = NULL)
     {
 	parent::__construct($parent, $name);
-	//graphics
-//	$renderer = $this->getRenderer();
-//	$renderer->wrappers['controls']['container'] = 'div';
-//	$renderer->wrappers['pair']['container'] = 'div';
-//	$renderer->wrappers['label']['container'] = NULL;
-//	$renderer->wrappers['control']['container'] = NULL;
-	//form
+	
 	$presenter = $this->getPresenter();
 	
 	
 	$this->addText('user_name', 'Nick:', 30, 200 )
-    		->addRule(Form::FILLED, "Vyplňte svůj nick")
-		->setAttribute('class', 'form-control');
+    		->addRule(Form::FILLED, "Vyplňte svůj nick");
     	$this->addText('email', 'E-mail:', 30, 200 )
-    		->addRule(Form::EMAIL, 'Zadali jste neplatný e-mail')
-		->setAttribute('class', 'form-control');
+    		->addRule(Form::EMAIL, 'Zadali jste neplatný e-mail');
     	$this->addPassword('password', 'Heslo:', 30, 200)
     		->setRequired('Zvolte si heslo')
-    		->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaky', 3)
-		->setAttribute('class', 'form-control');
+    		->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaky', 3);
     	$this->addPassword('passwordVerify', 'Heslo pro kontrolu:', 30, 200)
     		->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu')
-    		->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password'])
-		->setAttribute('class', 'form-control');	
+    		->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password']);
     	$this->addSubmit('send', 'Vytvořit')
 		->setAttribute('class','btn-main medium');
     	//$this->addProtection('Vypršel časový limit, odešlete formulář znovu');
