@@ -112,19 +112,19 @@ class CompetitionPresenter extends BasePresenter {
 				$path = $dir . $file;
 				$newPath = $dir . $preffix . $file;
 				
-				if(file_exists($path) /*&& ($image->widthGalScrn == 1280) /*!file_exists($newPath)*/) {
+				if(file_exists($path) && !file_exists($newPath) /*&& ($image->widthGalScrn == 1280) /*!file_exists($newPath)*/) {
 					echo $path . " <br />";
 					$imageFile = Image::fromFile($path);
 					
-//					$this->context->createImages()
-//						->where("id", $image->id)
-//						->update(array(
-//							"widthGalScrn" => $imageFile->getWidth(),
-//							"heightGalScrn" => $imageFile->getHeight()
-//						));
+					$this->context->createImages()
+						->where("id", $image->id)
+						->update(array(
+							"widthGalScrn" => $imageFile->getWidth(),
+							"heightGalScrn" => $imageFile->getHeight()
+						));
 					
 					// pro (velký) náhled obrázku v galerii
-					$image->resize(700,500);
+//					$image->resize(700,500);
 					
 					// pro čtvercový výřez
 //					$image->resizeMinSite(200);
