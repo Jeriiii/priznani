@@ -2,7 +2,7 @@
 	<div id="top_container">
 	    <h2 id="image_name">{$image->name|firstUpper}{if (($user->isInRole("superadmin") || $user->isInRole("admin")) && $image->approved == 0)}(zatím neschváleno){/if}</h2>
 	    {if $gallery->current == 1}
-	    <a href="{plink Competition:uploadImage galleryID => $gallery->id}" class="btn-main medium right">
+	    <a href="{plink Competition:uploadImage galleryID => $gallery->id}" id="add-photo-button" class="btn-main medium right">
 		    nahrát fotku
 	    </a>
 	    {/if}

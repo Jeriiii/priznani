@@ -221,6 +221,7 @@ h2#image_name{
 	h2#image_name{
 	    margin-left: 110px;
 	    font-size: 24px;
+	    min-height: 60px;
 	}
 	.fb-like-container{
 	    top: -70px;
@@ -240,17 +241,18 @@ h2#image_name{
 	#top_container, #image_content{
 	    margin-left: 90px; 
 	}
+	#link-and-fb{
+	    width: auto !important;
+	    padding: 0;
+	    margin: 0;
+	}
 }
 
 
 
-@media screen and (max-width: 770px){
+@media screen and (max-width: 805px){
 	#left-panel {
 		display: none;
-	}
-	#link-and-fb{
-	    padding: 0;
-	    margin: 0;
 	}
 	#image_content, #image, #link-and-fb{
 	    width: 100% !important;
@@ -270,11 +272,17 @@ h2#image_name{
 	#horadd{
 	    display: none;
 	}
+	#image_comment{
+	    width: 90%;
+	    padding: 10px 5%;
+	}
 	
 }
 
-@media screen and (max-width: 650px){
-	
+@media screen and (max-width: 450px){
+	#add-photo-button{
+	    width: 50%;
+	}
 	
 }
 
