@@ -9,7 +9,8 @@ namespace ProfilModule;
 use \Nette\Security\User,
 	\UserGalleries\UserGalleries,
         	Nette\Http\Request,
-        \Nette\Application\UI\Form as Frm;
+        \Nette\Application\UI\Form as Frm,
+	   \Navigation\Navigation;
 
 class GalleriesPresenter extends \BasePresenter
 {
@@ -193,4 +194,31 @@ class GalleriesPresenter extends \BasePresenter
                 
 		return new \Gallery($images, $this->id_image, $this->galleryID,$domain, "priznaniosexu");
 	}
+	
+		protected function createComponentNavigation($name) {
+			
+			$id = $this->getUser()->id;
+			
+			$userModel = $this->userModel;
+			$user = $userModel->findUser(array("id" => $id));
+			
+			$galleries = $this->context->createUsersGallery()
+							->where("userId", $user->id);
+			
+				
+			
+			$nav = new Navigation($this, $name);
+			$navigation = $nav->setupHomepage($user->user_name, $this->link("Galleries:default"));
+			if ($this->isLinkCurrent("Galleries:default")) {
+				$nav->setCurrentNode($navigation);
+			}
+			
+			
+			foreach($galleries as $gallery) {
+				$sec = $navigation->add($gallery->name, $this->link("Galleries:listUserGalleryImage", array("galleryID" => $gallery->id)));
+			}
+			if ($this->isLinkCurrent("Galleries:listUserGalleryImages")) {
+				$nav->setCurrentNode($sec);
+			}
+		}
 }
