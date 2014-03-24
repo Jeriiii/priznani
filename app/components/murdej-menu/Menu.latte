@@ -1,0 +1,45 @@
+{define #link}
+	{if $node->url}
+		<a href="{$node->url}" n:class="$node->itemClass">
+	{else}
+		<span n:class="$node->itemClass">
+	{/if}
+	{$node->name}
+	{if $node->link}</a>{else}</span>{/if}
+{/define}
+
+{define #node}
+{if $node}
+	{if !isset($hideName) || !$hideName }
+		{include #link node => $node }
+	{else}
+		{var $hideName = false}
+	{/if}
+	{if $node->nodes && ($showAll || in_array($node, $path) || $node->isRootNode)}
+	<ul class="level-{$level}">
+		{var $level++}
+		<li n:foreach="$node->nodes as $subNode">
+			{include #node, node => $subNode}
+		</li>
+		{var $level--}
+	</ul>
+	{/if}
+{/if}
+{/define}
+
+{if $templateType == "nav"}
+	{foreach $path as $node}
+		{include #link node => $node }
+		{sep} {$navSeparator} {/sep}
+	{/foreach}
+{elseif $templateType == "single"}
+	{if $startNode}
+		{foreach $startNode->nodes as $subNode}
+			{include #link node => $subNode }
+			{sep} {$singleSeparator} {/sep}
+		{/foreach}
+	{/if}
+{elseif $templateType == "tree"}
+	{var $level=1}
+	{include #node node => $startNode, hideName => true, showSubnodes => true}
+{/if}
