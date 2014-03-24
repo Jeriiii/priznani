@@ -92,6 +92,7 @@ class UserGalleryImagesBaseForm extends Form
                             ->insert($valuesDB);
 
                     $bestImageID['bestImageID'] = $id;
+					$latesImageID['lastImageID'] = $id;
                     $this->getPres()->context->createUsersGallery()
                             ->where('id', $idGallery)
                             ->update($bestImageID);
