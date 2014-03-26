@@ -196,9 +196,8 @@ class GalleriesPresenter extends \BasePresenter
 	}
 	
 		protected function createComponentNavigation($name) {
-			
+			//Získání potřebných dat(user id, galerie daného usera)
 			$id = $this->getUser()->id;
-			
 			$userModel = $this->userModel;
 			$user = $userModel->findUser(array("id" => $id));
 			
@@ -206,14 +205,14 @@ class GalleriesPresenter extends \BasePresenter
 							->where("userId", $user->id);
 			
 				
-			
+			//vytvoření navigace a naplnění daty
 			$nav = new Navigation($this, $name);
 			$navigation = $nav->setupHomepage($user->user_name, $this->link("Galleries:default"));
+			//označí aktuální stránku jako aktivní v navigaci
 			if ($this->isLinkCurrent("Galleries:default")) {
 				$nav->setCurrentNode($navigation);
 			}
-			
-			
+			//příprava všech galerií pro možnost použití drobečkové navigace
 			foreach($galleries as $gallery) {
 				$sec = $navigation->add($gallery->name, $this->link("Galleries:listUserGalleryImage", array("galleryID" => $gallery->id)));
 			}
