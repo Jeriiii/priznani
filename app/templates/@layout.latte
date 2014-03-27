@@ -61,7 +61,7 @@
 			<meta property="og:site_name" content="priznaniosexu.cz" />
 			<meta property="og:description" content="Stala se Vám v posteli nějaká zajímavá, vtipná či šokující příhoda, ale bojíte se to veřejně říct? Přiznejte se na http://priznaniosexu.cz/. Všechna přiznání jsou 100% ANONYMNÍ. " />
 			{/ifset}
-			{control css 'default.css', 'buttons.less', 'layout.develop.css', 'mobile/responsive-menu.less'}
+			{control css 'default.css', 'buttons.less', 'layout/layout.less', 'mobile/responsive-menu.less'}
 <!--			<link rel="stylesheet" href="{$basePath}/css/layout.css" type="text/css">
 			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">-->
 			<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
@@ -114,96 +114,75 @@
 			{/cache}
 	    {/if}
         </div>
-	    <div id="header" class="partygradient">
-                {if (($user->isInRole("superadmin") || $user->isInRole("admin"))) }
-                    <div class='button' onclick="$('#dropdown').fadeToggle()(500);">Jste přihlášen(á):</div>
-                    <div id='dropdown'>
-                        <a class='odkaz' href='/www/admin.forms/forms'>Administrace</a><br>
-                        <a class='odkaz' href='/www/sign/out'>Odhlásit se</a><br>
-                    </div>
-                {/if}
-	    </div>
-        <header class="inner">
-	    {*mobilni menu*}
-	    <a href="#" id="mobile-menu-button"></a>
-	    <nav id="mobile-menu-container">
-		<span id="mobile-menu-close"></span>
-		{include #posmenu}
-	    </nav>
-	    {* *}
-	    
-	    
-			{if $partymode}
-				{cache}
-			    <a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
-			    <a n:href=":Page:default url => priznanizparby"><h1 id="pagename">{!$pagename}</h1></a>
-				{/cache}
-			{else}
-				{cache}
-			    <a n:href=":Page:default url => priznani-o-sexu" title="Přiznání o sexu" id="kiss"></a>
-			    <a n:href=":Page:default url => priznani-o-sexu"><h1 id="pagename">{!$pagename}</h1></a>
-				{/cache}
-			{/if}
-			{if !empty($url) && $url == "poradna-o-sexu"}
-			{else}
-			
-			{/if}
-				{*block nextAdmission}{/block}
-				<a href="#" id="droplink">registrace/přihlášení</a>
-				<div class="stylish-container shadow" id="dropmenu">{widget orders}</div>
+	    <div id="header" class="partygradient"></div>
+	    <header class="inner">
+		{*mobilni menu*}
+		<a href="#" id="mobile-menu-button"></a>
+		<nav id="mobile-menu-container">
+		    <span id="mobile-menu-close"></span>
+		    {include #posmenu}
+		</nav>
+		{* *}
+		{includeblock 'menu/user-layout-menu.latte'}
 
-				{ifset $identity}
-				<p><strong n:ifset="$identity->name">{$identity->name}</strong></p>
-				<p n:ifset="$identity->fbuid">
-						Facebook:
-						<a href="http://www.facebook.com/{$identity->fbuid}">
-								<img src="http://graph.facebook.com/{$identity->fbuid}/picture" style="vertical-align: middle">
-						</a>
-				</p>
-				<p><a n:href="Sign:out">Odhlásit se</a></p>
-				{else}
-				<p><a n:href="Sign:in">Přihlaste se</a></p>
-				{/ifset*}
-			
-			{block orders}{/block}
-			{block nextAdmission}{/block}
-			<div class="clear"></div>
-			
-        </header>
-        <div class="clear"></div>
-		{block beforeContent}{/block}
-		<section class="inner">
-            <div n:foreach="$flashes as $flash" class='flash {$flash->type}'>
-		{$flash->message}
-            </div>
-            {block content}{/block}
-            <div class="clear"></div>
-		</section>
+		{if $partymode}
+		    {cache}
+			<a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
+			<a n:href=":Page:default url => priznanizparby"><h1 id="pagename">{!$pagename}</h1></a>
+			{/cache}
+		    {else}
+			{cache}
+			<a n:href=":Page:default url => priznani-o-sexu" title="Přiznání o sexu" id="kiss"></a>
+			<a n:href=":Page:default url => priznani-o-sexu"><h1 id="pagename">{!$pagename}</h1></a>
+			{/cache}
+		    {/if}
+		    {if !empty($url) && $url == "poradna-o-sexu"}
+		    {else}
 
-        <footer class="inner">
-			<div id="footline"></div>
-			<div class="left">
-				Copyright &copy; 2014 priznaniosexu.cz<br /><br />
-				Designed by <a href="http://www.nejlevnejsiwebstranky.cz/">nejlevnejsiwebstranky.cz</a>
-			</div>
-			<div class="right">
-				<nav id="footernav">
-				{*if $user->isLoggedIn()}
-						{widget loggedInMenu}
-				{else}
-						{widget loggedOutMenu}
-				{/if*}
-				</nav>
-				<br />
-				www.priznaniosexu.cz
-			</div>
-			<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-			{if $existForm}
+		{/if}
+		{*block nextAdmission}{/block*}
+
+		{block orders}{/block}
+		{block nextAdmission}{/block}
+
+		<div class="clear"></div>
+
+	    </header>
+	    <div class="clear"></div>
+	    {block beforeContent}{/block}
+	    <section class="inner">
+		<div n:foreach="$flashes as $flash" class='flash {$flash->type}'>
+		    {$flash->message}
+		</div>
+		{block content}{/block}
+		<div class="clear"></div>
+	    </section>
+
+		<footer class="inner">
+		    <div id="footline"></div>
+		    <div class="left">
+			Copyright &copy; 2014 priznaniosexu.cz<br /><br />
+			Designed by <a href="http://www.nejlevnejsiwebstranky.cz/">nejlevnejsiwebstranky.cz</a>
+		    </div>
+		    <div class="right">
+			<nav id="footernav">
+			    {*if $user->isLoggedIn()}
+					    {widget loggedInMenu}
+			    {else}
+					    {widget loggedOutMenu}
+			    {/if*}
+			</nav>
+			<br />
+			www.priznaniosexu.cz
+		    </div>
+		    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+		    {if $existForm}
 			<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
-			{/if}
-			<div id="fb-root"></div>
-			
+		    {/if}
+		    <div id="fb-root"></div>
+
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
+			{include #user-menu-scripts}
 			<script>
 				{if $fbToDatabase}
 					window.fbAsyncInit=function(){ FB.Event.subscribe("edge.create",function(a){ a=a.match(/[0-9]+/);$.get({link incLike!} + "&id_confession="+a)});FB.Event.subscribe("edge.remove",function(a){ a=a.match(/[0-9]+/)[0];$.get({link decLike!} + "&id_confession="+a)});FB.Event.subscribe("comment.create",function(a){ a=a.href.match(/[0-9]+/)[0];$.get({link incComment!} + "&id_confession="+a)});FB.Event.subscribe("comment.remove",function(a){ a=a.href.match(/[0-9]+/)[0];$.get({link decComment!} + "&id_confession="+a)})};
@@ -243,6 +222,7 @@
 				jQuery.ajaxSetup({ cache:!1,dataType:"json",success:function(a){ if(a.snippets)for(var b in a.snippets)$("#"+b).html(a.snippets[b])}});$(".polly, .add-to-fb-page").live("click",function(a){ a.preventDefault();a=$(a.target);void 0==a.attr("data-action")&&($.get(this.href),a.attr("data-action","clicked"))});var ordermenu=$("#ordermenu"),orderlink=$("#orderlink");orderlink.click(function(){ ordermenu.stop().animate({ opacity:"toggle"},500)});
 	$("body").click(function(a){ !$(a.target).parents().is("#orders")&&ordermenu.is(":visible")&&ordermenu.stop().hide()});var container=$("#left-side"),panel=$("#left-panel"),label=$("#left-panel-label"),leftspeed=200,isappearing=!1,isdisappearing=!1;container.mouseenter(function(){ isappearing||(isappearing=!0,isdisappearing=!1,label.stop().animate({ left:panel.width()},leftspeed,"linear"))});
 	container.mouseleave(function(){ isdisappearing||(isappearing=!1,isdisappearing=!0,label.stop().animate({ left:-1*$("#left-panel-label").width()+$("#left-panel").width()},leftspeed,"linear"))});$("#left-side .first, #left-side .second, #left-side .third, #left-side .fourth,#left-side .fifth,#left-side .sixth, #left-side .thirdparty").hover(function(){ $("."+$(this).attr("class")).css("text-decoration","underline")},function(){ $("."+$(this).attr("class")).css("text-decoration","none")});
+					
 	{*//////////////////////////////AJAX///////////////////////////////////
 				jQuery.ajaxSetup({
 					cache: false,
@@ -265,21 +245,7 @@
 						target.attr("data-action", "clicked");
 					}
 				});
-							//////////////PRIHLASOVACI HORNI MENU/////////////////////////
-	//                        var isvisible = false;
-	//                        var dropmenu = $('#dropmenu');
-	//                        var droplink = $('#droplink');
-	//                        dropmenu.css('display', 'none');
-	//                        dropmenu.css('visibility', 'visible');
-	//                        droplink.click(function(){ 
-	//                            if(isvisible){
-	//                                isvisible = false;
-	//                                dropmenu.stop().fadeTo(500, 0.0);
-	//                            }else{
-	//                                isvisible = true;
-	//                                dropmenu.stop().fadeTo(500, 1.0);
-	//                            }
-	//                        });
+							
 						
 							//////////////RAZENI/////////////////////////
 							var ordermenu = $('#ordermenu');

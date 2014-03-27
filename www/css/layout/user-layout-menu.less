@@ -1,0 +1,52 @@
+
+#usermenu{
+
+    float: right;
+    display: block;
+    color: white;
+    position: relative;
+    
+    #droplink {
+	display: block;
+	height: 42px;
+	padding: 5px 5px 5px 25px;
+	line-height: 40px;
+	background: url('../../images/layout/arrow_dark.png') no-repeat 3px center transparent;
+	color: white;
+	cursor: pointer;
+    }
+    #droplink.pushed{
+	box-shadow: inset 0 0 20px #222;
+    }
+    #dropmenu {
+	position: absolute;
+	top: 58px;
+	right: 5px;
+	z-index: 10;
+	width: auto;
+    }
+    #dropmenu a{
+	display: block;
+	padding: 4px;
+	color: white;
+    }
+    #dropmenu a:hover{
+	text-decoration: underline;
+    }
+
+}
+
+@media screen and (max-width: 500px){
+    #usermenu{
+	#droplink{
+	    width: 50px;
+	    height: 52px;
+	    overflow: hidden;
+	    padding: 0;
+	    background: url('../../images/layout/arrow_white.png') no-repeat 10px center;
+	    /* padding-left: 50px; */
+	    color: transparent;
+	    border-left: 1px solid #DFBFC2;
+	}
+    }
+}

@@ -1,3 +1,7 @@
+@import "user-layout-menu.less";
+@import "universal-styles.less";
+@import "../mobile/responsive-menu.less";
+
 body {
     font-family: Tahoma, Geneva, Verdana, sans, sans-serif, Arial;
     background: #fff;
@@ -34,23 +38,7 @@ nav a{
     border-color: #d6e9c6;
     color: #468847;
 }
-.stylish-container {
-    color: #fff;
-    width: 150px;
-    padding: 10px;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    border-radius: 12px;
-    border: 3px solid #fff;
-    background: #cf0707;
-    background: -moz-linear-gradient(top, #cf0707 0, #890302 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #cf0707), color-stop(100%, #890302));
-    background: -webkit-linear-gradient(top, #cf0707 0, #890302 100%);
-    background: -o-linear-gradient(top, #cf0707 0, #890302 100%);
-    background: -ms-linear-gradient(top, #cf0707 0, #890302 100%);
-    background: linear-gradient(to bottom, #cf0707 0, #890302 100%);
-    filter: progid:dximagetransform.Microsoft.gradient(startcolorstr='#cf0707', endcolorstr='#890302', gradienttype=0);
-}
+
 #header {
     position: absolute;
     width: 100%;
@@ -341,34 +329,6 @@ footer .right {
     text-align:  center;
     padding:  20px;
 }
-/*uživatelská nabídka*/
-.button {
-    cursor: pointer;
-    float:right;
-    color:white;
-}
-#dropdown {
-    position: relative;
-    float: right;
-    display: none;
-    padding: 5px;
-    margin-top: 5px;          
-    padding: 10px;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    border-radius: 12px;
-    border: 3px solid #fff;
-    background: lightgrey;  
-    display:none;
-}
-a.odkaz {
-    color:#cf0707;
-}
-a.odkaz:hover {
-    text-decoration:underline;
-}
-
-
 
 @media screen and (max-width: 900px){
 	
@@ -379,4 +339,19 @@ a.odkaz:hover {
 	    margin-left: 0;
 	    margin-right: 0;
 	}
+}
+@media screen and (max-width: 350px){
+    h1#pagename{
+	text-align: center;
+	font-size: 26px !important;
+	line-height: 15px !important;
+    }
+    h1#pagename b{
+	display: block;
+	text-align: center;
+    }
+    h1#pagename span{
+	display: none;
+	text-align: center;
+    }
 }
