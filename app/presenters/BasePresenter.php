@@ -10,6 +10,7 @@
  */
 use Nette\Application\UI\Form as Frm,
 	\Navigation\Navigation,
+        \Nette\Utils\Strings,
 	Nette\Http\Url,
 	Nette\Http\Request;
 
@@ -187,27 +188,61 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		$nav = new Navigation($this, $name);
 		$user = $this->getUser();
 		$nav->setMenuTemplate(APP_DIR . '/components/Navigation/usermenu.phtml');
-                if ($this->getUser()->isLoggedIn()) {
-                     
-                    if ($user->isInRole('admin')){
-                                 $navigation["Administrace"] = $this->link("Admin:Admin:default");
-                                 $navigation["Moje galerie"] = $this->link("Profil:Galleries:");
-                                 $navigation["Nastavení"] = $this->link("#");                                 
-                                 $navigation["Odhlásit se"] = $this->link("Sign:out");
+                
+                $currentUrl = $this->getName();
+                $isModul = $this->isProfilModuleCurrent($currentUrl);
+                
+                //prihlaseny uzivatel
+                if ($this->getUser()->isLoggedIn()) {                    
+                    
+                    // Je-li modul, poupravime odkazy
+                    if($isModul){                                        
+                        if ($user->isInRole('admin')){
+                                     $navigation["Administrace"] = $this->link(":Admin:Admin:default");
+                                     $navigation["Moje galerie"] = $this->link("Galleries:");
+                                     $navigation["Přiznání"] = $this->link(":Page:");
+                                     $navigation["Nastavení"] = $this->link("#");                                 
+                                     $navigation["Odhlásit se"] = $this->link(":Sign:out");
+                        } else {
+                                if ($user->isInRole('user')){
+                                     $navigation["Moje galerie"] = $this->link("Galleries:");
+                                     $navigation["Přiznání"] = $this->link(":Page:");
+                                     $navigation["Nastavení"] = $this->link("#");
+                                     $navigation["Odhlásit se"] = $this->link(":Sign:out");
+                                }
+                        }
+                        
+                     //Neni-li modul, pak jsou odkazy klasicky   
+                    } else {                                        
+                        if ($user->isInRole('admin')){
+                                     $navigation["Administrace"] = $this->link("Admin:Admin:default");
+                                     $navigation["Moje galerie"] = $this->link("Profil:Galleries:");
+                                     $navigation["Přiznání"] = $this->link("Page:");
+                                     $navigation["Nastavení"] = $this->link("#");                                 
+                                     $navigation["Odhlásit se"] = $this->link("Sign:out");
+                        } else {
+                                if ($user->isInRole('user')){
+                                     $navigation["Moje galerie"] = $this->link("Profil:Galleries:");
+                                     $navigation["Přiznání"] = $this->link("Page:");
+                                     $navigation["Nastavení"] = $this->link("#");
+                                     $navigation["Odhlásit se"] = $this->link("Sign:out");
+                                }
+                        }
                     }
-                    else 
-                    {
-                            if ($user->isInRole('user')){
-                                 $navigation["Moje galerie"] = $this->link("Profil:Galleries:");
-                                 $navigation["Nastavení"] = $this->link("#");
-                                 $navigation["Odhlásit se"] = $this->link("Sign:out");
-                            }
-                    }
+                    
+                //neprihlaseny uzivatel
                 } else {
+                    if($isModul){                    
+                               $navigation["Přihlášení"] = $this->link(":Sign:in");
+                               $navigation["Registrace"] = $this->link(":Sign:registration");
+                    } else {
                                $navigation["Přihlášení"] = $this->link("Sign:in");
                                $navigation["Registrace"] = $this->link("Sign:registration");
+                    }
                       
                 }
+                
+                
 		$backlink = $this->link($this->backlink());
 		foreach ($navigation as $name => $link) {
 			$article = $nav->add($name, $link);
@@ -215,8 +250,20 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 				$nav->setCurrentNode($article);
 			}
 		}
+
    	}
         
+        /**
+         * Metoda kontroluje, zda jsme v Profil modulu. Pouziva se cheme-li zmenit odkazy v navigaci
+         * @param type $module
+         * @return type
+         */
+        public function isProfilModuleCurrent($module)
+        {
+            $module = trim((string) $module);
+            return Strings::startsWith($module, 'Profil');
+        }
+
 	/**
 	 * nastaví mód dle url
 	 */
