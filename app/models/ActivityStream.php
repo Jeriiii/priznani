@@ -18,7 +18,7 @@ class ActivityStream extends Selection
 		));
 	}
 	
-	public function aliveGallery($userGalleryID) {
+	public function aliveGallery($userGalleryID, $userID) {
 		$this->where("userGalleryID", $userGalleryID)->delete();
 		$this->insert(array(
 			"userGalleryID" => $userGalleryID,
