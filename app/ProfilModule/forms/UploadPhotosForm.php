@@ -44,7 +44,7 @@ class UploadPhotosForm extends EditBaseForm
 			$valuefoto = $values->foto1;
 			$nameOfFoto = $valuefoto->getName();
 			$suffix = pathinfo($nameOfFoto, PATHINFO_EXTENSION);
-			$id = $presenter->context->createUsersFoto()->insertUserFoto(array('userId'=> $id_user, 'suffix' => $suffix, 'description' => $values->description1));
+			$id = $presenter->context->createUsersImages()->insertUserFoto(array('userId'=> $id_user, 'suffix' => $suffix, 'description' => $values->description1));
 
 			if(!file_exists($pathToSaveData)){
 				mkdir($pathToSaveData, 0742);

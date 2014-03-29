@@ -1,9 +1,9 @@
 {block head}
 {*<link rel="stylesheet" href="{$basePath}/css/bonuses.css" type="text/css">*}
 <link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
-<link rel="stylesheet" href="{$basePath}/css/bootstrap.css" type="text/css">
+{*<link rel="stylesheet" href="{$basePath}/css/bootstrap.css" type="text/css">*}
 <script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>  
-{control css "competition/listImages.less"}
+{control css "competition/listImages.less", "bootstrap/modals.less"}
 {/}
 
 {block foot}
@@ -23,12 +23,12 @@
     {foreach $galleriesIDs as $gallery}
             <div class="img-container">    
                     
-                    <a class="btn btn-danger" href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" style="position: absolute; background: rgb(0, 255, 41);z-index: 11;height: 21px;width: 24px;top: -80px;left: 2px;" title="editovat galerie"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
-                    <a data-toggle="modal" class="btn btn-danger" href="#MyModal{$iterator->getCounter()}" style="position: absolute;background: red; float:right; z-index: 11;height: 26px;width: 26px;top: -80px;right: 2px;" title="smazat galerie"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
+                    <a class="btn btn-danger" href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" style="position: absolute;background: white; float: left;left: 2px; z-index: 11;height: 26px;width: 26px;top: 0px;right: 2px;padding-top: 0px;" title="editovat galerie"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
+                    <a data-toggle="modal" class="btn btn-danger" href="#MyModal{$iterator->getCounter()}" style="position: absolute;background: white; float: right; z-index: 11;height: 26px;width: 26px;top: 0px;right: 2px;padding-top: 0px;" title="smazat galerie"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
                     
                     
                     <img src="{$basePath}/images/userGalleries/{$userData->id}/{$gallery->id}/minSqr{$gallery->bestImageID}.{$gallery->ref('user_images','bestImageID')->suffix}" width="100%" height="100%"/>
-                    <a class="view" href="{plink Galleries:listUserGalleryImages galleryID => $gallery->id}">{$gallery->description}</a>
+                    <a class="view" href="{plink Galleries:listUserGalleryImages galleryID => $gallery->id}">{$gallery->name}</a>
                     
             </div>
                                        

@@ -88,14 +88,15 @@ class UserGalleryImagesBaseForm extends Form
                     
                     $valuesDB['galleryID'] = $idGallery;
 
-                    $id = $this->getPres()->context->createUsersFoto()
+                    $id = $this->getPres()->context->createUsersImages()
                             ->insert($valuesDB);
 
-                    $bestImageID['bestImageID'] = $id;
-					$latesImageID['lastImageID'] = $id;
-                    $this->getPres()->context->createUsersGallery()
+                    $this->getPres()->context->createUsersGalleries()
                             ->where('id', $idGallery)
-                            ->update($bestImageID);
+                            ->update(array(
+								"bestImageID" => $id,
+								"lastImageID" => $id
+							));
                                         
                     $this->upload($image, $id, $valuesDB['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
                     unset($image);

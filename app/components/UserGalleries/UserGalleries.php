@@ -31,7 +31,7 @@ class UserGalleries extends Nette\Application\UI\Control {
                 if($mode == "listAll"){
  
                     
-                    $this->template->galleriesIDs = $this->getPresenter()->getContext()->createUsersGallery()->order('id DESC');
+                    $this->template->galleriesIDs = $this->getPresenter()->getContext()->createUsersGalleries()->order('id DESC');
  
                     $this->template->userData = $this->user->findUser(array("id" => $this->getUserInfo()->getId()));
                                    
@@ -45,7 +45,7 @@ class UserGalleries extends Nette\Application\UI\Control {
                 /* vrati pouze posledni 4 nahledy galerie daneho uzivatele */
                 if($mode == "listFew"){
                     
-                     $this->template->galleriesIDs = $this->getPresenter()->getContext()->createUsersGallery()->order('id DESC')->limit(3);                                                           
+                     $this->template->galleriesIDs = $this->getPresenter()->getContext()->createUsersGalleries()->order('id DESC')->limit(3);                                                           
                       
 
                     

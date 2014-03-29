@@ -32,7 +32,7 @@ class UserGalleryImageChangeForm extends Form
 	$this->galleryID = $presenter->galleryID;
         $this->imageID = $presenter->imageID;
 
-	$filledForm = $presenter->context->createUsersFoto()
+	$filledForm = $presenter->context->createUsersImages()
 				->where('galleryID', $this->galleryID)
                                 ->where('id', $this->imageID)
 				->fetch();
@@ -59,7 +59,7 @@ class UserGalleryImageChangeForm extends Form
 		
                 $values2['description'] = $values->description;
 
-		$presenter->context->createUsersFoto()
+		$presenter->context->createUsersImages()
 			->where("id", $this->imageID)
 			->update($values2);
 		

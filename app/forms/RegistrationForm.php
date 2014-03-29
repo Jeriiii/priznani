@@ -55,8 +55,12 @@ class RegistrationForm extends BaseBootstrapForm
 			/* odeslání mailu o registraci i s údaji */
 			//$this->sendMail($values->mail,$values->password, $values['confirmed']);
 			$values->password = \Authenticator::calculateHash($values->password);
-			$form->getPresenter()->context->createUsers()
-				->insert($values);
+			$user = $form->getPresenter()->context->createUsers()
+						->insert($values);
+			
+			//vytvoření nové složky pro vlastní galerii
+			mkdir(WWW_DIR . "/images/userGalleries/" . $user->id);
+			
 			$this->getPresenter()->flashMessage('Registrace proběhla úspěšně, vyčkejte na schválení adminem.');
 	        	$form->getPresenter()->redirect('Sign:in');
 		}

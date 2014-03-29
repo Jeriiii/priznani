@@ -29,7 +29,7 @@ class UserGalleryChangeForm extends Form
     //    \Nette\Diagnostics\Debugger::Dump($presenter->galleryID);die();
 	$this->galleryID = $presenter->galleryID;
 	
-	$filledForm = $presenter->context->createUsersGallery()
+	$filledForm = $presenter->context->createUsersGalleries()
 				->where('id', $this->galleryID)
 				->fetch();
         
@@ -55,7 +55,7 @@ class UserGalleryChangeForm extends Form
 		$values2['name'] = $values->name;
                 $values2['description'] = $values->description;
 
-		$presenter->context->createUsersGallery()
+		$presenter->context->createUsersGalleries()
 			->where("id", $this->galleryID)
 			->update($values2);
 		
