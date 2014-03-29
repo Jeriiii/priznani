@@ -13,6 +13,9 @@ $(document).ready(function(){
     $('#mobile-menu-close').click(function(){
 	menubutton.trigger('click');	
     });
+    $("body").click(function(a){ 
+	!$(a.target).parents().is("#mobile-menu")&&container.hasClass("visible")&&menubutton.trigger('click');
+    });
     
     
     

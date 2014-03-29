@@ -47,5 +47,8 @@ pouziti:
 		dropmenu.stop().fadeTo(500, 1.0);
 	    }
 	});
+	$("body").click(function(a){ 
+	    !$(a.target).parents().is("#usermenu")&&isvisible&&droplink.trigger('click');
+	});
     </script>
 {/}
