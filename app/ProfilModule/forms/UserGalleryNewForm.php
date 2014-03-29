@@ -41,7 +41,7 @@ class UserGalleryNewForm extends UserGalleryImagesBaseForm
 					->href("http://priznanizparby.cz/soutez/fotografie.pdf")
 					->setHtml('Souhlasím s podmínkami'))
 			->addRule(Form::FILLED, "Musíte souhlasit s podmínkami.");
- 
+
                 
 		$this->addSubmit("submit", "Vytvořit galerie");
 		$this->onSuccess[] = callback($this, 'submitted');
@@ -75,7 +75,10 @@ class UserGalleryNewForm extends UserGalleryImagesBaseForm
  
                     $this->addImages($arr, $values, $uID, $idGallery); 
                     unset($values->agreement);
-
+					
+					//Vložení dat do tabulky activity_stream
+					$presenter->context->createStream()->addNewGallery($idGallery, $uID);
+					
                     $presenter->flashMessage('Galerie byla vytvořena. Počkejte prosím na schválení adminem.');
                     $presenter->redirect('Galleries:'); 
 
