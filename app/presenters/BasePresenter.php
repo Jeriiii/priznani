@@ -178,6 +178,45 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		}
 	}
 
+        /**
+         * User menu komponenta
+         * @param type $name
+         */
+        protected function createComponentUserMenu($name) 
+	{
+		$nav = new Navigation($this, $name);
+		$user = $this->getUser();
+		$nav->setMenuTemplate(APP_DIR . '/components/Navigation/usermenu.phtml');
+                if ($this->getUser()->isLoggedIn()) {
+                     
+                    if ($user->isInRole('admin')){
+                                 $navigation["Administrace"] = $this->link("Admin:Admin:default");
+                                 $navigation["Moje galerie"] = $this->link("Profil:Galleries:");
+                                 $navigation["Nastavení"] = $this->link("#");                                 
+                                 $navigation["Odhlásit se"] = $this->link("Sign:out");
+                    }
+                    else 
+                    {
+                            if ($user->isInRole('user')){
+                                 $navigation["Moje galerie"] = $this->link("Profil:Galleries:");
+                                 $navigation["Nastavení"] = $this->link("#");
+                                 $navigation["Odhlásit se"] = $this->link("Sign:out");
+                            }
+                    }
+                } else {
+                               $navigation["Přihlášení"] = $this->link("Sign:in");
+                               $navigation["Registrace"] = $this->link("Sign:registration");
+                      
+                }
+		$backlink = $this->link($this->backlink());
+		foreach ($navigation as $name => $link) {
+			$article = $nav->add($name, $link);
+			if ($backlink == $link) {
+				$nav->setCurrentNode($article);
+			}
+		}
+   	}
+        
 	/**
 	 * nastaví mód dle url
 	 */

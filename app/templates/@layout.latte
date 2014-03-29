@@ -125,8 +125,17 @@
 		    </nav>
 		</div>
 		{* *}
-		{includeblock 'menu/user-layout-menu.latte'}
-
+		{*includeblock 'menu/user-layout-menu.latte'*}
+                <div id="usermenu">
+                    {ifset $identity}
+                        <strong n:ifset="$identity->user_name" id="droplink">{$identity->user_name}</strong>
+                    {else}
+                        <a href="#" id="droplink">registrace/přihlášení</a>
+                    {/ifset}
+                {widget userMenu}
+                        <div class="clear"></div>
+                 </div>
+                        
 		{if $partymode}
 		    {cache}
 			<a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
@@ -183,9 +192,33 @@
 		    {/if}
 		    <div id="fb-root"></div>
 
+                    
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
-			{include #user-menu-scripts}
-			<script>
+                        <script type="text/javascript">
+                            //////////////PRIHLASOVACI HORNI MENU/////////////////////////
+                            var isvisible = false;
+                            var dropmenu = $('#dropmenu');
+                            var droplink = $('#droplink');
+                            dropmenu.css('display', 'none');
+                            dropmenu.css('visibility', 'visible');
+                            droplink.click(function(){ 
+                                if(isvisible){
+                                    isvisible = false;
+                                    droplink.removeClass('pushed');
+                                    dropmenu.stop().fadeTo(500, 0.0);
+                                }else{
+                                    isvisible = true;
+                                    droplink.addClass('pushed');	    
+                                    dropmenu.stop().fadeTo(500, 1.0);
+                                }
+                            });
+                            $("body").click(function(a){ 
+                                !$(a.target).parents().is("#usermenu")&&isvisible&&droplink.trigger('click');
+                            });
+                        </script>
+			{*include #user-menu-scripts*}
+		
+                        <script>
 				{if $fbToDatabase}
 					window.fbAsyncInit=function(){ FB.Event.subscribe("edge.create",function(a){ a=a.match(/[0-9]+/);$.get({link incLike!} + "&id_confession="+a)});FB.Event.subscribe("edge.remove",function(a){ a=a.match(/[0-9]+/)[0];$.get({link decLike!} + "&id_confession="+a)});FB.Event.subscribe("comment.create",function(a){ a=a.href.match(/[0-9]+/)[0];$.get({link incComment!} + "&id_confession="+a)});FB.Event.subscribe("comment.remove",function(a){ a=a.href.match(/[0-9]+/)[0];$.get({link decComment!} + "&id_confession="+a)})};
 				{/if}
