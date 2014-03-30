@@ -188,7 +188,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		$nav = new Navigation($this, $name);
 		$user = $this->getUser();
 		$nav->setMenuTemplate(APP_DIR . '/components/Navigation/usermenu.phtml');
-                
+                $navigation = array();
                 $currentUrl = $this->getName();
                 $isModul = $this->isProfilModuleCurrent($currentUrl);
                 
@@ -197,7 +197,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
                     
                     // Je-li modul, poupravime odkazy
                     if($isModul){                                        
-                        if ($user->isInRole('admin')){
+                        if ($user->isInRole('admin') || $user->isInRole('superadmin')){
                                      $navigation["Administrace"] = $this->link(":Admin:Admin:default");
                                      $navigation["Moje galerie"] = $this->link("Galleries:");
                                      $navigation["Přiznání"] = $this->link(":Page:");
@@ -214,7 +214,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
                         
                      //Neni-li modul, pak jsou odkazy klasicky   
                     } else {                                        
-                        if ($user->isInRole('admin')){
+                        if ($user->isInRole('admin') || $user->isInRole('superadmin')){
                                      $navigation["Administrace"] = $this->link("Admin:Admin:default");
                                      $navigation["Moje galerie"] = $this->link("Profil:Galleries:");
                                      $navigation["Přiznání"] = $this->link("Page:");
