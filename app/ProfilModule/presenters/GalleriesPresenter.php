@@ -156,14 +156,13 @@ class GalleriesPresenter extends \BasePresenter
         
         public function renderListUserGalleryImages($galleryID) {
 
-
-                $this->template->images = $this->getUserDataFromDB()
+			$this->template->images = $this->getUserDataFromDB()
                                                ->where("galleryID", $galleryID)
                                                ->order("id DESC");
-                
-		$this->template->galleryID = $galleryID;
+            $this->galleryID = $galleryID;    
+			$this->template->galleryID = $galleryID;
                  
-		$this->template->userData = $this->userModel->findUser(array("id" => $this->getUserInfo()->getId()));
+			$this->template->userData = $this->userModel->findUser(array("id" => $this->getUserInfo()->getId()));
       	}
         
         public function createComponentUserGalleries(){ 
@@ -201,9 +200,6 @@ class GalleriesPresenter extends \BasePresenter
 			$userModel = $this->userModel;
 			$user = $userModel->findUser(array("id" => $id));
 			
-			$galleries = $this->context->createUsersGallery()
-							->where("userId", $user->id);
-			
 				
 			//vytvoření navigace a naplnění daty
 			$nav = new Navigation($this, $name);
@@ -212,12 +208,19 @@ class GalleriesPresenter extends \BasePresenter
 			if ($this->isLinkCurrent("Galleries:default")) {
 				$nav->setCurrentNode($navigation);
 			}
+			
+			//získání dat pro přípravu galerii do breadcrumbs
+			$galleries = $this->context->createUsersGallery()
+							->where("userId", $id);
+			
 			//příprava všech galerií pro možnost použití drobečkové navigace
-			foreach($galleries as $gallery) {
-				$sec = $navigation->add($gallery->name, $this->link("Galleries:listUserGalleryImage", array("galleryID" => $gallery->id)));
-			}
-			if ($this->isLinkCurrent("Galleries:listUserGalleryImages")) {
-				$nav->setCurrentNode($sec);
+			foreach ($galleries as $gallery) {
+				$link = $this->link("Galleries:listUserGalleryImage", array("galleryID" => $gallery->id));
+				$sec = $navigation->add($gallery->name, $link);
+
+				if ($this->galleryID == $gallery->id) {
+					$nav->setCurrentNode($sec);
+				}
 			}
 		}
 }

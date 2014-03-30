@@ -18,7 +18,7 @@ class OnePagePresenter extends BasePresenter
         
 	public function actionDefault()
 	{
-            $this->dataForStream = $this->context->createStream();
+            $this->dataForStream = $this->context->createStream()->order("id DESC");
             $this->count = $this->dataForStream->count("id");
 	}
 

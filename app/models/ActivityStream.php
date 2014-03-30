@@ -1,6 +1,7 @@
 <?php
 use Nette\Database\Connection,
-    Nette\Database\Table\Selection;
+    Nette\Database\Table\Selection,
+	Nette\DateTime;
 
 class ActivityStream extends Selection
 {
@@ -9,4 +10,20 @@ class ActivityStream extends Selection
         parent::__construct('stream_items', $connection);
     }
 	
+	public function addNewGallery($userGalleryID, $userID) {
+		$this->insert(array(
+			"userGalleryID" => $userGalleryID,
+			"userID" => $userID,
+			"create" => new DateTime(),
+		));
+	}
+	
+	public function aliveGallery($userGalleryID, $userID) {
+		$this->where("userGalleryID", $userGalleryID)->delete();
+		$this->insert(array(
+			"userGalleryID" => $userGalleryID,
+			"userID" => $userID,
+			"create" => new DateTime(),
+		));
+	}
 }
