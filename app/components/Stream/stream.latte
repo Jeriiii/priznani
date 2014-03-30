@@ -12,13 +12,12 @@
 				{ifset $dataItem->userGalleryID}
 					{$dataItem->userGallery->name}
 					<div class="stream-img">
-						<img src="{$basePath}/images/userGalleries/{$dataItem->userID}/{$dataItem->userGallery->id}/{$dataItem->userGallery->lastImageID}.{$dataItem->userGallery->lastImage->suffix}" />
+						<img src="{$basePath}/images/userGalleries/{$dataItem->userID}/{$dataItem->userGallery->id}/{$dataItem->userGallery->lastImageID-:id}.{$dataItem->userGallery->lastImage->suffix}" />
 					</div>
 					{$dataItem->userGallery->lastImage->description}
 				{/ifset}
 				{*$dataItem->confessionID*}
 				{$dataItem->content}
-				<img src="{!$basePath}/images/userGalleries/{$dataItem->userID}/{$dataItem->userGalleryID}/{$dataItem->userGallery->lastImage->id}.{$dataItem->userGallery->lastImage->suffix}">
 			{/foreach}
 	 </div>
 
