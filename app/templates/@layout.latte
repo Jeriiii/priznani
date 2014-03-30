@@ -194,28 +194,7 @@
 
                     
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
-                        <script type="text/javascript">
-                            //////////////PRIHLASOVACI HORNI MENU/////////////////////////
-                            var isvisible = false;
-                            var dropmenu = $('#dropmenu');
-                            var droplink = $('#droplink');
-                            dropmenu.css('display', 'none');
-                            dropmenu.css('visibility', 'visible');
-                            droplink.click(function(){ 
-                                if(isvisible){
-                                    isvisible = false;
-                                    droplink.removeClass('pushed');
-                                    dropmenu.stop().fadeTo(500, 0.0);
-                                }else{
-                                    isvisible = true;
-                                    droplink.addClass('pushed');	    
-                                    dropmenu.stop().fadeTo(500, 1.0);
-                                }
-                            });
-                            $("body").click(function(a){ 
-                                !$(a.target).parents().is("#usermenu")&&isvisible&&droplink.trigger('click');
-                            });
-                        </script>
+                        {control js 'layout/user-layout-menu.js'}
 			{*include #user-menu-scripts*}
 		
                         <script>
