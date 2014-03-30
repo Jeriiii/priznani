@@ -38,13 +38,13 @@ class GalleriesPresenter extends \BasePresenter
             $this->galleryID = $galleryID;
             $this->imageID = $imageID;
             
-            $this->template->galleryImage = $this->context->createUsersFoto()
+            $this->template->galleryImage = $this->context->createUsersImages()
                                     ->where('id', $imageID)
                                     ->order('id DESC');
         }
         
         public function actionListGalleryImage($id_image, $galleryID) {
-            $this->id_image = $this->context->createUsersFoto()
+            $this->id_image = $this->context->createUsersImages()
 					->find($id_image)
 					->fetch();
             $this->galleryID = $galleryID;
@@ -54,7 +54,7 @@ class GalleriesPresenter extends \BasePresenter
         public function actionUserGalleryChange($galleryID)
 	{
 		$this->galleryID = $galleryID;
-                $this->template->galleryImages = $this->context->createUsersFoto()
+                $this->template->galleryImages = $this->context->createUsersImages()
                                                 ->where('galleryID', $galleryID)
                                                 ->order('id DESC');
 	}
@@ -78,9 +78,15 @@ class GalleriesPresenter extends \BasePresenter
         }
 
 	public function handledeleteGallery($galleryID)
-	{
+	{		
+		$this->context->createUsersGalleries()
+			->find($galleryID)
+			->update(array(
+				"bestImageID" => NULL,
+				"lastImageID" => NULL
+			));
             
-		$images = $this->context->createUsersFoto()
+		$images = $this->context->createUsersImages()
 				->where("galleryID", $galleryID);
                         
 		foreach($images as $image){   
@@ -95,7 +101,7 @@ class GalleriesPresenter extends \BasePresenter
 			rmdir($way);
 		}
 		
-		$this->context->createUsersGallery()
+		$this->context->createUsersGalleries()
 				->where("id", $galleryID)
 				->delete();
 		
@@ -105,14 +111,16 @@ class GalleriesPresenter extends \BasePresenter
         
         public function handledeleteImage($id_image, $id_gallery, $redirekt = TRUE)
 	{		
-		$image = $this->context->createUsersFoto()
-				->where("id", $id_image)
+		$image = $this->context->createUsersImages()
+				->find($id_image)
 				->fetch();
  
-                $way = WWW_DIR . "/images/userGalleries/" . $this->getUserInfo()->getId() . "/" . $id_gallery . "/" . $image->id . "." . $image->suffix;
-		$wayMini = WWW_DIR . "/images/userGalleries/" . $this->getUserInfo()->getId() . "/" . $id_gallery . "/min" . $image->id . "." . $image->suffix;
-                $wayScrn = WWW_DIR . "/images/userGalleries/" . $this->getUserInfo()->getId() . "/" . $id_gallery . "/galScrn" . $image->id . "." . $image->suffix;
-                $waySqr = WWW_DIR . "/images/userGalleries/" . $this->getUserInfo()->getId() . "/" . $id_gallery . "/minSqr" . $image->id . "." . $image->suffix;
+		$dirPath = WWW_DIR . "/images/userGalleries/" . $this->getUserInfo()->getId() . "/" . $id_gallery . "/";
+        
+		$way =		$dirPath . $image->id . "." . $image->suffix;
+		$wayMini =	$dirPath . "min" . $image->id . "." . $image->suffix;
+        $wayScrn =	$dirPath . "galScrn" . $image->id . "." . $image->suffix;
+        $waySqr =	$dirPath . "minSqr" . $image->id . "." . $image->suffix;
 		
 		if( file_exists($way) )
 		{
@@ -134,8 +142,8 @@ class GalleriesPresenter extends \BasePresenter
 			unlink($waySqr);
 		}
                 
-		$this->context->createUsersFoto()
-			->where("id", $id_image)
+		$this->context->createUsersImages()
+			->find($id_image)
 			->delete();
  
 		
@@ -147,7 +155,7 @@ class GalleriesPresenter extends \BasePresenter
 	}
         
         protected function getUserDataFromDB(){
-            return $this->context->createUsersFoto();
+            return $this->context->createUsersImages();
         }
         protected function getUserInfo(){
             return $this->getUser();
@@ -185,7 +193,7 @@ class GalleriesPresenter extends \BasePresenter
         
         protected function createComponentGallery() {  
 
-	$images = $this->context->createUsersFoto()
+	$images = $this->context->createUsersImages()
 			->where("galleryID", $this->galleryID);
         
         $httpRequest = $this->context->httpRequest;
@@ -199,7 +207,6 @@ class GalleriesPresenter extends \BasePresenter
 			$id = $this->getUser()->id;
 			$userModel = $this->userModel;
 			$user = $userModel->findUser(array("id" => $id));
-			
 				
 			//vytvoření navigace a naplnění daty
 			$nav = new Navigation($this, $name);

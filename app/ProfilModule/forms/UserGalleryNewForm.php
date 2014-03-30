@@ -70,7 +70,7 @@ class UserGalleryNewForm extends UserGalleryImagesBaseForm
                     $valuesGallery['description'] = $values->description_gallery;
                     $valuesGallery['userId'] = $uID;
 
-                    $idGallery = $presenter->context->createUsersGallery()
+                    $idGallery = $presenter->context->createUsersGalleries()
                             ->insert($valuesGallery);
  
                     $this->addImages($arr, $values, $uID, $idGallery); 

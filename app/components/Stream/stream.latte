@@ -1,14 +1,22 @@
 <div class="content">
-
-
 	<div n:snippet="posts" data-ajax-append="true">
 
 			{foreach $stream as $dataItem}
-				{$dataItem->imageID}
-				{*$dataItem->ref('images', 'imageID')->name*}
-				{*<div class="stream-img"><img src="{!$basePath}/images/galleries/{$dataItem->ref('images', 'imageID')->galleryID}/{$dataItem->ref('images', 'imageID')->id}.{$dataItem->ref('images', 'imageID')->suffix}" /></div>*}
-				{*$dataItem->ref('images', 'imageID')->comment*}
-				{$dataItem->confessionID}
+				{ifset $dataItem->imageID}
+					{$dataItem->image->name}
+					<div class="stream-img">
+						<img src="{$basePath}/images/galleries/{$dataItem->image->galleryID}/{$dataItem->image->id}.{$dataItem->image->suffix}" />
+					</div>
+					{$dataItem->image->comment}
+				{/ifset}
+				{ifset $dataItem->userGalleryID}
+					{$dataItem->userGallery->name}
+					<div class="stream-img">
+						<img src="{$basePath}/images/userGalleries/{$dataItem->userID}/{$dataItem->userGallery->id}/{$dataItem->userGallery->lastImageID}.{$dataItem->userGallery->lastImage->suffix}" />
+					</div>
+					{$dataItem->userGallery->lastImage->description}
+				{/ifset}
+				{*$dataItem->confessionID*}
 				{$dataItem->content}
 				<img src="{!$basePath}/images/userGalleries/{$dataItem->userID}/{$dataItem->userGalleryID}/{$dataItem->userGallery->lastImage->id}.{$dataItem->userGallery->lastImage->suffix}">
 			{/foreach}
@@ -21,5 +29,5 @@
             </button>
         </div>
 	<div class="stream-message"></div>
-	<div id="stream-loader"><img src="{!$basePath}/img/ajax-loader.gif"></div>
+	<div id="stream-loader"><img src="{$basePath}/img/ajax-loader.gif"></div>
 </div>
