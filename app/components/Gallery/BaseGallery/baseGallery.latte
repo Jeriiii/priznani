@@ -1,0 +1,65 @@
+{includeblock 'baseBlocks.latte'}
+{snippet}
+	<div id="top_container">
+	    <h2 id="image_name">{$image->name|firstUpper}{if (($user->isInRole("superadmin") || $user->isInRole("admin")) && $image->approved == 0)}(zatím neschváleno){/if}</h2>
+	    {include #uploadImage}
+	    {ifset $username}<span class="username">{$username}</span>{/ifset}
+	    <div class="clear"></div>
+	</div>
+	
+	<div id="image_container">
+		<div id="image_content">
+			<div id="image">
+				<div class="fb-like-container" >
+					{include #fbLike} {* baseBlocks.latte *}
+				</div>
+				{include #imageMainScreen}
+				<div class="clear"></div>
+				<div id="voting"></div>
+				{cache}
+				{include #adverbRight} {* baseBlocks.latte *}
+				{/cache}
+			    {if $beforeImageID}
+				    <a n:href="back! imageID => $beforeImageID" id="back" class="btn-space btn-link"></a>
+			    {else}
+
+			    {/if}
+			    {if $afterImageID}
+				    <a n:href="next! imageID => $afterImageID" id="next" class="btn-space btn-link"></a>
+			    {else}
+
+			    {/if}
+			</div>
+			<div id="fblike-and-comment">
+				<p id="image_comment" class="float-left">
+					{include #imageComment}
+				</p>
+				<div class="float-left btn-list">
+					{include #menuButtons}
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="clear"></div>
+		{*<div class="image-links">
+			{include #othersImages}{* baseBlocks.latte */}
+		</div>*}
+	</div>	
+	
+	<div id="link-and-fb">
+		{* udaje pro adminy *}
+		{if $user->isInRole("superadmin")}
+			{include #approvedImage}
+			{include #infoAboutOvner}
+			{include #adminRemoveImage} {* baseBlocks.latte *}
+		{/if}
+		{include #fbComment}{* baseBlocks.latte *}
+	</div>
+	<script type="text/javascript">FB.XFBML.parse(document.getElementById('fb'));//revalidace fb komponent</script>
+	<div id="horadd" style="text-align: center; margin-bottom: 10px;">
+		{include #adverbBottom} {* baseBlocks.latte *}
+		{include #scrollScript} {* baseBlocks.latte *}
+	</div>
+{/snippet}

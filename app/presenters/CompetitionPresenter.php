@@ -282,7 +282,7 @@ class CompetitionPresenter extends BasePresenter {
 					->where("approved", 1);
 		}
                 
-		return new Gallery($images, $this->image, $this->gallery, $this->domain, $this->partymode);
+		return new \POSComponent\Galleries\CompetitionGallery($images, $this->image, $this->gallery, $this->domain, $this->partymode);
 	}
 
 	protected function createComponentImageNew($name) {

@@ -33,7 +33,7 @@
 
 			<meta name="keywords" content="Přiznání z pařby" />
 			<meta name="description" content="Přiznání z pařby" />
-			
+
 			<meta property="og:title" content="Přiznání z pařby" />
 			<meta property="og:type" content="article" />
 			<meta property="og:image" content="http://priznanizparby.cz/images/party.jpg" />
@@ -54,7 +54,7 @@
 
 			<meta name="keywords" content="přiznání o sexu" />
 			<meta name="description" content="Přiznání o sexu" />
-			
+
 			<meta property="og:title" content="Přiznání o sexu" />
 			<meta property="og:type" content="article" />
 			<meta property="og:image" content="http://priznaniosexu.cz/images/fbkiss.jpg" />
@@ -69,7 +69,7 @@
 			{* mobile *}
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
 			<link media="handheld, only screen and (max-width: 480px), only screen and (max-device-width: 854px)" href="{$basePath}/css/mobile-layout.css" type="text/css" rel="stylesheet" />
-			
+
 		{/if}
 		{block head}{/block}
         <link href='http://fonts.googleapis.com/css?family=Exo:200,600,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
@@ -78,39 +78,34 @@
 
 	<body>
 	<div id="page-shadow"></div>
-	{includeblock 'menu/menu-pos.latte'}
+		{includeblock 'menu/menu-pos.latte'}
         <div id="left-side">
-	    {if $partymode}
+			{if $partymode}
 			{cache}
-            <div id="left-panel">
-                <div id="left-menu">
-                    <a n:href=":Page:default url => priznanizparby" class="first"></a>
-                    <a href="http://akcnidrinky.cz" class="second"></a>
-                    <a n:href=":Page:default url => priznani-o-sexu" class="thirdparty"></a>
-                    <a n:href=":Page:metro" class="third"></a>
-                </div>
-            </div>
-            <div id="left-panel-label">
-                <nav id="title-container">
-                    <a n:href=":Page:default url => priznanizparby" class="first">Přiznání</a>
-                    <a href="http://akcnidrinky.cz" class="second">Akční drinky</a>
-                    <a n:href=":Page:default url => priznani-o-sexu" class="thirdparty">Přiznání o sexu</a>
-                    <a n:href=":Page:metro" class="third">Bonusy</a>
-                </nav>
-            </div>
+				{includeblock 'menu/menu-pzp.latte'}
+				<div id="left-panel">
+					<div id="left-menu">
+						{include #pzpicons}
+					</div>
+				</div>
+				<div id="left-panel-label">
+					<nav id="title-container">
+						{include #pzpmenu}
+					</nav>
+				</div>
 			{/cache}
 	    {else}
 			{cache}
-			<div id="left-panel">
-                <div id="left-menu">
-                    {include #posicons}
-                </div>
-            </div>
-            <div id="left-panel-label">
-                <nav id="title-container">
-					{include #posmenu}
-                </nav>
-            </div>
+				<div id="left-panel">
+					<div id="left-menu">
+						{include #posicons}
+					</div>
+				</div>
+				<div id="left-panel-label">
+					<nav id="title-container">
+						{include #posmenu}
+					</nav>
+				</div>
 			{/cache}
 	    {/if}
         </div>
@@ -132,24 +127,23 @@
                     {else}
                         <a href="#" id="droplink">registrace/přihlášení</a>
                     {/ifset}
-                {widget userMenu}
+						{widget userMenu}
                         <div class="clear"></div>
                  </div>
-                        
+
 		{if $partymode}
 		    {cache}
-			<a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
-			<a n:href=":Page:default url => priznanizparby"><h1 id="pagename">{!$pagename}</h1></a>
+				<a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
+				<a n:href=":Page:default url => priznanizparby"><h1 id="pagename">{!$pagename}</h1></a>
 			{/cache}
-		    {else}
+		{else}
 			{cache}
-			<a n:href=":Page:default url => priznani-o-sexu" title="Přiznání o sexu" id="kiss"></a>
-			<a n:href=":Page:default url => priznani-o-sexu"><h1 id="pagename">{!$pagename}</h1></a>
+				<a n:href=":Page:default url => priznani-o-sexu" title="Přiznání o sexu" id="kiss"></a>
+				<a n:href=":Page:default url => priznani-o-sexu"><h1 id="pagename">{!$pagename}</h1></a>
 			{/cache}
 		    {/if}
-		    {if !empty($url) && $url == "poradna-o-sexu"}
-		    {else}
-
+		{if !empty($url) && $url == "poradna-o-sexu"}
+		{else}
 		{/if}
 		{*block nextAdmission}{/block*}
 
@@ -192,11 +186,11 @@
 		    {/if}
 		    <div id="fb-root"></div>
 
-                    
+
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
-                        {control js 'layout/user-layout-menu.js'}
+            {control js 'layout/user-layout-menu.js'}
 			{*include #user-menu-scripts*}
-		
+
                         <script>
 				{if $fbToDatabase}
 					window.fbAsyncInit=function(){ FB.Event.subscribe("edge.create",function(a){ a=a.match(/[0-9]+/);$.get({link incLike!} + "&id_confession="+a)});FB.Event.subscribe("edge.remove",function(a){ a=a.match(/[0-9]+/)[0];$.get({link decLike!} + "&id_confession="+a)});FB.Event.subscribe("comment.create",function(a){ a=a.href.match(/[0-9]+/)[0];$.get({link incComment!} + "&id_confession="+a)});FB.Event.subscribe("comment.remove",function(a){ a=a.href.match(/[0-9]+/)[0];$.get({link decComment!} + "&id_confession="+a)})};
@@ -232,11 +226,11 @@
 					js.src = "//connect.facebook.net/cs_CZ/all.js#xfbml=1&appId=639745929384551";
 					fjs.parentNode.insertBefore(js, fjs);
 				}(document, 'script', 'facebook-jssdk'));*}
-				
+
 				jQuery.ajaxSetup({ cache:!1,dataType:"json",success:function(a){ if(a.snippets)for(var b in a.snippets)$("#"+b).html(a.snippets[b])}});$(".polly, .add-to-fb-page").live("click",function(a){ a.preventDefault();a=$(a.target);void 0==a.attr("data-action")&&($.get(this.href),a.attr("data-action","clicked"))});var ordermenu=$("#ordermenu"),orderlink=$("#orderlink");orderlink.click(function(){ ordermenu.stop().animate({ opacity:"toggle"},500)});
 	$("body").click(function(a){ !$(a.target).parents().is("#orders")&&ordermenu.is(":visible")&&orderlink.trigger('click')});var container=$("#left-side"),panel=$("#left-panel"),label=$("#left-panel-label"),leftspeed=200,isappearing=!1,isdisappearing=!1;container.mouseenter(function(){ isappearing||(isappearing=!0,isdisappearing=!1,label.stop().animate({ left:panel.width()},leftspeed,"linear"))});
 	container.mouseleave(function(){ isdisappearing||(isappearing=!1,isdisappearing=!0,label.stop().animate({ left:-1*$("#left-panel-label").width()+$("#left-panel").width()},leftspeed,"linear"))});$("#left-side .first, #left-side .second, #left-side .third, #left-side .fourth,#left-side .fifth,#left-side .sixth, #left-side .thirdparty").hover(function(){ $("."+$(this).attr("class")).css("text-decoration","underline")},function(){ $("."+$(this).attr("class")).css("text-decoration","none")});
-					
+
 	{*//////////////////////////////AJAX///////////////////////////////////
 				jQuery.ajaxSetup({
 					cache: false,
@@ -245,7 +239,7 @@
 						if (payload.snippets) {
 							for (var i in payload.snippets) {
 								$('#' + i).html(payload.snippets[i]);
-							
+
 							}
 						}
 					}
@@ -259,8 +253,8 @@
 						target.attr("data-action", "clicked");
 					}
 				});
-							
-						
+
+
 							//////////////RAZENI/////////////////////////
 							var ordermenu = $('#ordermenu');
 							var orderlink = $('#orderlink');
@@ -275,8 +269,8 @@
 									ordermenu.stop().hide();
 								}
 							})
-					
-                        
+
+
 							////////////////LEVE MENU//////////////////////////
 							var container = $('#left-side');
 							var panel = $('#left-panel');
@@ -284,7 +278,7 @@
 							var leftspeed = 200;
 							var isappearing = false; //vysouva se - neni treba rusit stopem a posilat znova
 							var isdisappearing = false;
-                        
+
 							container.mouseenter(function(){
 								if(!isappearing){
 								isappearing = true;
@@ -315,9 +309,9 @@
 							});*}
 				{/cache}
 			</script>
-			
+
 		{block foot}{/block}
-			
+
 			<div class="clear"></div>
 		</footer>
 	</body>

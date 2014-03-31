@@ -1,0 +1,98 @@
+{define adverbRight}
+<div id="adverb-right">
+	{*<div id="adverb-contact">{*<a href="{plink "Adverb:contact"}">*}{*Chcete zde mít svoji reklamu? Kontaktujte nás na <a href="mailto:info@priznaniosexu.cz"">info@priznaniosexu.cz</a>{*Klikněte <u>zde</u>.</a>*}{*</div>*}
+	<div>
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		{* přiznání o sexu - banner na výšku *}
+		<ins class="adsbygoogle"
+			 style="display:inline-block;width:160px;height:600px"
+			 data-ad-client="ca-pub-7282386453536295"
+			 data-ad-slot="9034832769"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+	</div>
+	<div>
+		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		{* na výšku 2 *}
+		<ins class="adsbygoogle"
+			 style="display:inline-block;width:160px;height:600px"
+			 data-ad-client="ca-pub-7282386453536295"
+			 data-ad-slot="4915039561"></ins>
+		<script>
+			(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+	</div>
+</div>
+{/}
+
+{define adverbBottom}
+{* široký sloupec nad detailem přiznáním 1 *}
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+	 style="display:inline-block;width:728px;height:90px"
+	 data-ad-client="ca-pub-7282386453536295"
+	 data-ad-slot="6040680360"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+{/}
+
+{define fbComment}
+<a href="#" name="scroll-fb-comments"></a>
+<div id="fb" class="fb-components">
+	<div class="fb-comments-container">
+		<div class="fb-comments" data-href="http://www.{if $partymode}priznanizparby{else}priznaniosexu{/if}.cz{$imageLink}" data-width="600" data-num-posts="10"></div>
+	</div>
+</div>
+{/}
+
+{define adminRemoveImage}
+<div>
+	(obrázek bude navždy smazán)
+	<a n:href="removeImage! imageID => $image->id">Smazat</a>
+</div>
+{/}
+
+{define fbLike}
+<p>hlasujte zde</p>
+<div class="fb-like" data-href="http://www.{if $partymode}priznanizparby{else}priznaniosexu{/if}.cz{$imageLink}"
+	 data-layout="box_count" data-width="74" data-show-faces="true">
+</div>
+{/}
+
+{define othersImages}
+{*
+<a href="#" class="image-link" title="">
+<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt="" height="140px" />
+</a>
+<a href="#" class="image-link" title="">
+<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt=""  height="140px" />
+</a>
+<a href="#" class="image-link" title="">
+<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt=""  height="140px" />
+</a>
+<a href="#" class="image-link" title="">
+<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt="" height="140px" />
+</a>
+<a href="#" class="image-link" title="">
+<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt=""  height="140px" />
+</a>
+<a href="#" class="image-link" title="">
+<img src="http://priznaniosexu.cz/images/galleries/5/522.JPG" alt=""  height="140px" />
+</a>
+*}
+{/}
+
+{define scrollScript}
+<script>
+	;function scrollToAnchor(e){ 
+		var t=$("a[name='"+e+"']");
+		$("html,body").animate({ scrollTop:t.offset().top},800);
+	}
+	$(".scroll-to-comments").click(function(event) {
+		event.preventDefault();
+		scrollToAnchor('scroll-fb-comments');
+	});
+</script>
+{/}
