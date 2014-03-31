@@ -14,6 +14,7 @@ class ActivityStream extends Selection
 		$this->insert(array(
 			"userGalleryID" => $userGalleryID,
 			"userID" => $userID,
+			"type" => 1,
 			"create" => new DateTime(),
 		));
 	}
@@ -23,6 +24,7 @@ class ActivityStream extends Selection
 		$this->insert(array(
 			"userGalleryID" => $userGalleryID,
 			"userID" => $userID,
+			"type" => 1,
 			"create" => new DateTime(),
 		));
 	}
