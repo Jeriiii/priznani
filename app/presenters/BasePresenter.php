@@ -332,6 +332,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 	
+
 	public function createComponentCssBoostrapModal() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
 		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');		
@@ -345,6 +346,19 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
+	}
+	
+	public function createComponentJs() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');		
+		
+		$compiler->addFilter(function ($code) {
+		    $packer = new JavaScriptPacker($code, "None");
+		    return $packer->pack();
+		});
+
+		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 	
 	protected function getCssVariables() {
