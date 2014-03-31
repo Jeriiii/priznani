@@ -11,7 +11,7 @@ common:
 			host: localhost
 			dbname: priznaniosexu
 			user: root
-			password: a10b0618p
+			password: root
 		facebook:
 			appId: '639745929384551' # musi byt string
 			secret: '6db6f485163d65b16d4758520e1011b9'

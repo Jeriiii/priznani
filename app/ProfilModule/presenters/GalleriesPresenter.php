@@ -217,7 +217,7 @@ class GalleriesPresenter extends \BasePresenter
 			}
 			
 			//získání dat pro přípravu galerii do breadcrumbs
-			$galleries = $this->context->createUsersGallery()
+			$galleries = $this->context->createUsersGalleries()
 							->where("userId", $id);
 			
 			//příprava všech galerií pro možnost použití drobečkové navigace
