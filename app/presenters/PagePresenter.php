@@ -409,7 +409,7 @@ class PagePresenter extends BasePresenter
 			return new AddToFBPage($confessions[$confessionId], $url);
 		});
 	}
-
+              
 	/* pro jedno priznani */
 	
 	protected function createComponentAddToFBPageControl()

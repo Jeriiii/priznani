@@ -28,7 +28,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	
 	/* proměnné pro css překlad */
 	protected $cssVariables = array();
-
+        /* proměnné pro js překlad */
+	protected $jsVariables = array();
+        
 	public function startup() {
 		if ($this->name == "Homepage") {
 			$page = $this->context->createPages()
@@ -129,6 +131,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 			$this->template->map_script = "";
 			$this->template->map_head = '';
 		}
+                
+                
+               $this->fillJsVariablesWithLinks();
 	}
 
 	protected function createComponentOrders($name) {
@@ -348,7 +353,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 	
-	public function createComponentJs() {
+	public function createComponentJs(){
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');		
 		
@@ -361,6 +366,56 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 	
+        public function createComponentJsLayout(){
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
+                $files->addFiles(array('baseAjax.js', 'order.js', 'fbBase.js' , 'leftMenu.js'));
+
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');            
+		$compiler->addFilter(function ($code) {
+		    $packer = new JavaScriptPacker($code, "None");
+		    return $packer->pack();
+		});
+                
+		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+        
+        public function createComponentFbLikeAndCommentToDatabase(){
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
+                $files->addFiles(array('fbLikeAndCommentToDatabase.js'));
+                $compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+
+                if(!empty($this->jsVariables)){
+			$varFilter = new WebLoader\Filter\VariablesFilter($this->jsVariables);
+			$compiler->addFileFilter($varFilter);
+		}               
+		$compiler->addFilter(function ($code) {
+		    $packer = new JavaScriptPacker($code, "None");
+		    return $packer->pack();
+		});                              
+
+		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+        
+        /**
+         * Funkce naplni potrebne odkazy do jsVariables, kterou nasledne pouziva WebLoader
+         */
+        private function fillJsVariablesWithLinks(){
+                $linkIncLike = $this->link('incLike!');
+                $linkDecLike = $this->link('decLike!');
+                $linkIncComment = $this->link('incComment!');
+                $linkDecComment = $this->link('decComment!');
+                
+                $this->addToJsVariables(array(
+			"inc-like" => $linkIncLike,
+			"dec-like" => $linkDecLike,
+			"inc-comment" => $linkIncComment,
+                        "dec-comment" => $linkDecComment
+		));                
+            //    \Nette\Diagnostics\Debugger::Dump($this->jsVariables);
+        }
+        
 	protected function getCssVariables() {
 		return $this->cssVariables;
 	}
@@ -369,6 +424,13 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		$this->cssVariables = $this->cssVariables + $css;
 	}
 
+        protected function getJsVariables() {
+		return $this->jsVariables;
+	}
+	
+	protected function addToJsVariables(array $js) {
+		$this->jsVariables = $this->jsVariables + $js;
+	}
 //	protected function createComponentMenu($name) 
 //	{
 //		$nav = new Navigation($this, $name);

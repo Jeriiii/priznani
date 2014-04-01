@@ -196,125 +196,18 @@
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
                         {control js 'layout/user-layout-menu.js'}
 			{*include #user-menu-scripts*}
-		
-                        <script>
-				{if $fbToDatabase}
-					window.fbAsyncInit=function(){ FB.Event.subscribe("edge.create",function(a){ a=a.match(/[0-9]+/);$.get({link incLike!} + "&id_confession="+a)});FB.Event.subscribe("edge.remove",function(a){ a=a.match(/[0-9]+/)[0];$.get({link decLike!} + "&id_confession="+a)});FB.Event.subscribe("comment.create",function(a){ a=a.href.match(/[0-9]+/)[0];$.get({link incComment!} + "&id_confession="+a)});FB.Event.subscribe("comment.remove",function(a){ a=a.href.match(/[0-9]+/)[0];$.get({link decComment!} + "&id_confession="+a)})};
-				{/if}
-				{cache}
-				(function(a,b,c){ var d=a.getElementsByTagName(b)[0];a.getElementById(c)||(a=a.createElement(b),a.id=c,a.src="//connect.facebook.net/cs_CZ/all.js#xfbml=1&appId=639745929384551",d.parentNode.insertBefore(a,d))})(document,"script","facebook-jssdk");
-					{*window.fbAsyncInit = function() {
-					}
-					//FB.init({ appId: '639745929384551',channelUrl : '//www.milionovykouc.cz/chanel.html', status: true, cookie: true,xfbml: true});
-					FB.Event.subscribe("edge.create", function(targetUrl) {
-						var id = targetUrl.match(/[0-9]+/);
-						$.get({link incLike!} + "&id_confession=" + id);
-					});
-					FB.Event.subscribe("edge.remove", function(targetUrl) {
-						var id = targetUrl.match(/[0-9]+/)[0];
-						$.get({link decLike!} + "&id_confession=" + id);
-					});
-					FB.Event.subscribe("comment.create", function(target) {
-						var href = target.href;
-						var id = href.match(/[0-9]+/)[0];
-						$.get({link incComment!} + "&id_confession=" + id);
-					});
-					FB.Event.subscribe("comment.remove", function(target) {
-						var href = target.href;
-						var id = target.href.match(/[0-9]+/)[0];
-						$.get({link decComment!} + "&id_confession=" + id);
-					});
-				};
-				(function(d, s, id) {
-					var js, fjs = d.getElementsByTagName(s)[0];
-					if (d.getElementById(id)) return;
-					js = d.createElement(s); js.id = id;
-					js.src = "//connect.facebook.net/cs_CZ/all.js#xfbml=1&appId=639745929384551";
-					fjs.parentNode.insertBefore(js, fjs);
-				}(document, 'script', 'facebook-jssdk'));*}
-				
-				jQuery.ajaxSetup({ cache:!1,dataType:"json",success:function(a){ if(a.snippets)for(var b in a.snippets)$("#"+b).html(a.snippets[b])}});$(".polly, .add-to-fb-page").live("click",function(a){ a.preventDefault();a=$(a.target);void 0==a.attr("data-action")&&($.get(this.href),a.attr("data-action","clicked"))});var ordermenu=$("#ordermenu"),orderlink=$("#orderlink");orderlink.click(function(){ ordermenu.stop().animate({ opacity:"toggle"},500)});
-	$("body").click(function(a){ !$(a.target).parents().is("#orders")&&ordermenu.is(":visible")&&orderlink.trigger('click')});var container=$("#left-side"),panel=$("#left-panel"),label=$("#left-panel-label"),leftspeed=200,isappearing=!1,isdisappearing=!1;container.mouseenter(function(){ isappearing||(isappearing=!0,isdisappearing=!1,label.stop().animate({ left:panel.width()},leftspeed,"linear"))});
-	container.mouseleave(function(){ isdisappearing||(isappearing=!1,isdisappearing=!0,label.stop().animate({ left:-1*$("#left-panel-label").width()+$("#left-panel").width()},leftspeed,"linear"))});$("#left-side .first, #left-side .second, #left-side .third, #left-side .fourth,#left-side .fifth,#left-side .sixth, #left-side .thirdparty").hover(function(){ $("."+$(this).attr("class")).css("text-decoration","underline")},function(){ $("."+$(this).attr("class")).css("text-decoration","none")});
-					
-	{*//////////////////////////////AJAX///////////////////////////////////
-				jQuery.ajaxSetup({
-					cache: false,
-					dataType: 'json',
-					success: function (payload) {
-						if (payload.snippets) {
-							for (var i in payload.snippets) {
-								$('#' + i).html(payload.snippets[i]);
-							
-							}
-						}
-					}
-				});
-				$(".polly, .add-to-fb-page").live('click', function (e) { //click(function(e) {
-					e.preventDefault();
-					var target = $(e.target);
-					var dataAction = target.attr("data-action");
-					if(dataAction == undefined){
-						$.get(this.href);
-						target.attr("data-action", "clicked");
-					}
-				});
-							
-						
-							//////////////RAZENI/////////////////////////
-							var ordermenu = $('#ordermenu');
-							var orderlink = $('#orderlink');
-							orderlink.click(function(){
-								ordermenu.stop().animate({
-									opacity: 'toggle'
-								}, 500);
-							});
-							$("body").click(function(e){
-								var clicked = $(e.target);
-								if (!clicked.parents().is("#orders") && ordermenu.is(":visible")){
-									ordermenu.stop().hide();
-								}
-							})
-					
                         
-							////////////////LEVE MENU//////////////////////////
-							var container = $('#left-side');
-							var panel = $('#left-panel');
-							var label = $('#left-panel-label');
-							var leftspeed = 200;
-							var isappearing = false; //vysouva se - neni treba rusit stopem a posilat znova
-							var isdisappearing = false;
-                        
-							container.mouseenter(function(){
-								if(!isappearing){
-								isappearing = true;
-								isdisappearing = false;
-								label.stop().animate(
-									{
-									left: panel.width()
-									}
-									, leftspeed, 'linear')
-								}
-							});
-							container.mouseleave(function(){
-								if(!isdisappearing){
-								isappearing = false;
-								isdisappearing = true;
-								label.stop().animate(
-									{
-									left: (((-1) * ($('#left-panel-label').width())) + $('#left-panel').width())
-									}
-									, leftspeed, 'linear')
-								}
-							});
-							/////////////////hover underline////////////
-							$('#left-side .first, #left-side .second, #left-side .third, #left-side .fourth').hover(function(){
-								$('.' + $(this).attr('class')).css('text-decoration', 'underline');
-							}, function(){
-								$('.' + $(this).attr('class')).css('text-decoration', 'none');
-							});*}
-				{/cache}
-			</script>
+
+                     
+                        {cache}
+                            {control jsLayout}
+
+                            {if $fbToDatabase}
+                                {control fbLikeAndCommentToDatabase}
+
+                            {/if}
+                        {/cache}                                	
+			 
 			
 		{block foot}{/block}
 			
