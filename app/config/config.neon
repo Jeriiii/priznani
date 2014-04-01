@@ -5,13 +5,12 @@
 # http://nette.org/security-warning
 #
 common:
+
+	includes:
+		- factories.neon
+		- localeconection.neon
+	
 	parameters:
-		database:
-			driver: mysql
-			host: localhost
-			dbname: priznaniosexu
-			user: root
-			password: root
 		facebook:
 			appId: '639745929384551' # musi byt string
 			secret: '6db6f485163d65b16d4758520e1011b9'
@@ -47,40 +46,6 @@ common:
 		authenticator: Authenticator( @users )
 		authorizator:
 			class: Acl
-
-
-	factories:
-		users: Users
-		couple: Couple
-		texts: Texts
-		images: Images
-		galleries: Galleries
-		forms: Forms
-		forms1: Forms1
-		forms2: Forms2
-		forms3: Forms3
-		videos: Videos
-		authorizator_table: Authorizator_table
-		polls: Polls
-		#facebook: Facebook
-		files: Files
-		google_analytics: Google_analytics
-		map: Map
-		pages_galleries: Pages_galleries
-		pages_forms: Pages_forms
-		news: News
-		news_galleries: News_galleries
-		pages: Pages
-		stream: ActivityStream
-		form_new_send: Form_new_send
-		advices: Advices
-		partyConfessions: PartyConfessions
-		embedVideos: embedVideos
-		usersFoto: UsersFoto
-		usersGalleries: UsersGalleries
-		usersImages: UsersImages
-		eshopGames: EshopGames
-		eshopGamesOrders: EshopGamesOrders
 
 		
 production < common:

@@ -5,6 +5,11 @@
 # http://nette.org/security-warning
 #
 common:
+
+	includes:
+		- factories.neon
+		- localescomection.neon
+
 	parameters:
 		database:
 			driver: mysql
