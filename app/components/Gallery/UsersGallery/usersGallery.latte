@@ -1,0 +1,76 @@
+{layout '../UsersGallery/usersGallery.latte'}
+
+{* competition bloky *}
+
+{define infoAboutOvner}
+<table>
+	<tr>
+		<td>
+			<b>Jméno:</b>
+		</td>
+		<td>
+			{$image->user_name}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>Telefon:</b>
+		</td>
+		<td>
+			{$image->user_phone}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>Email:</b>
+		</td>
+		<td>
+			{$image->user_email}
+		</td>
+	</tr>
+</table>
+{/}
+
+{define approvedImage}
+{if $image->approved == 0}
+	<div>
+		<a n:href="approveImage! imageID => $image->id">Schválit</a>
+	</div>
+{/if}
+{/}
+
+{define menuButtons}
+<a href="{plink Competition:listImages galleryID => $gallery->id}"  class="btn-main btn-small">
+	všechny fotky
+</a>
+<a href="{plink Competition:list}"  class="btn-main btn-small">
+	seznam galerií
+</a>
+<a href="#" class="btn-main btn-small scroll-to-comments">
+	přidat komentář
+</a>
+{/}
+
+{define imageComment}
+{$image->comment}
+{/}
+
+{define uploadImage}
+{if $gallery->current == 1}
+	<a href="{plink Competition:uploadImage galleryID => $gallery->id}" id="add-photo-button" class="btn-main medium right">
+		nahrát fotku
+	</a>
+{/if}
+{/}
+
+{define imageMainScreen}
+{if $image->videoID != 0}
+	<object width="700" height="500" data="http://www.youtube.com/v/{$image->video->code}" type="application/x-shockwave-flash"><param name="src" value="http://www.youtube.com/v/{$image->video->code}" /></object>
+	{else}	{*padding: {$padding}*}
+	<img src="{$basePath}/images/galleries/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}" 
+		{ifset $imgPaddingTopBottom}
+			style = "padding: {!$imgPaddingTopBottom}px 0;"
+		{/ifset}
+		{if $setWidth} width="700" {else} height="525" {/if} />
+{/if}
+{/}

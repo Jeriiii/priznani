@@ -38,9 +38,9 @@ class GalleriesPresenter extends \BasePresenter {
 			->order('id DESC');
 	}
 
-	public function actionListGalleryImage($id_image, $galleryID) {
+	public function actionListGalleryImage($imageID, $galleryID) {
 		$this->id_image = $this->context->createUsersImages()
-			->find($id_image)
+			->find($imageID)
 			->fetch();
 		$this->galleryID = $galleryID;
 	}
@@ -67,6 +67,18 @@ class GalleriesPresenter extends \BasePresenter {
 		}
 	}
 
+        public function actionImage($galleryID, $imageID) {
+                $this->galleryID = $galleryID;
+                $this->imageID = $imageID;
+	}
+
+	public function renderImage($galleryID, $imageID) {
+		if (!empty($galleryID) &&  !empty($imageID)) {
+                    $this->galleryID = $galleryID;
+                    $this->imageID = $imageID;                    
+		}
+	}
+        
 	public function handledeleteGallery($galleryID) {
 		$this->context->createUsersGalleries()
 			->find($galleryID)
@@ -186,13 +198,23 @@ class GalleriesPresenter extends \BasePresenter {
 
 	protected function createComponentGallery() {
 
+            //vytahnout vsechny fotky dane galerie podle galleryID - objekt
 		$images = $this->context->createUsersImages()
 			->where("galleryID", $this->galleryID);
 
+                //vytahnout konkretni fotku te galerie podle imageID - objekt
+                $image = $this->context->createUsersImages()
+                        ->where("id", $this->imageID);
+                
+                foreach($images as $img){
+                \Nette\Diagnostics\Debugger::Dump($img->description);die();
+                }
+                
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
-
-		return new \Gallery($images, $this->id_image, $this->galleryID, $domain, "priznaniosexu");
+           
+                
+                return new \POSComponent\Galleries\UsersGallery($images, $image, $gallery, "http://priznaniosexu.cz", "priznaniosexu");
 	}
 
 	protected function createComponentNavigation($name) {
