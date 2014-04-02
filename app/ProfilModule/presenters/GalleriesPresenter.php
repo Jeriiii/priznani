@@ -68,8 +68,8 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
         public function actionImage($galleryID, $imageID) {
+                $this->imageID = $imageID;           
                 $this->galleryID = $galleryID;
-                $this->imageID = $imageID;
 	}
 
 	public function renderImage($galleryID, $imageID) {
@@ -78,7 +78,7 @@ class GalleriesPresenter extends \BasePresenter {
                     $this->imageID = $imageID;                    
 		}
 	}
-        
+      
 	public function handledeleteGallery($galleryID) {
 		$this->context->createUsersGalleries()
 			->find($galleryID)
@@ -197,24 +197,26 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	protected function createComponentGallery() {
-
-            //vytahnout vsechny fotky dane galerie podle galleryID - objekt
+                //vytahnu vsechny fotky dane galerie podle galleryID - objekt
 		$images = $this->context->createUsersImages()
 			->where("galleryID", $this->galleryID);
 
-                //vytahnout konkretni fotku te galerie podle imageID - objekt
+                //vytahnu konkretni vybranou fotku podle imageID - objekt
                 $image = $this->context->createUsersImages()
-                        ->where("id", $this->imageID);
+                                ->find($this->imageID)
+                                ->fetch();
                 
-                foreach($images as $img){
-                \Nette\Diagnostics\Debugger::Dump($img->description);die();
-                }
+                //vytahnu konkretni galerie podle galleryID
+                $gallery = $this->context->createUsersGalleries()
+					->where("id", $this->galleryID)
+					->fetch();
+
                 
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
-           
+                //$domain = "http://priznaniosexu.cz";           
                 
-                return new \POSComponent\Galleries\UsersGallery($images, $image, $gallery, "http://priznaniosexu.cz", "priznaniosexu");
+                return new \POSComponent\Galleries\UsersGallery($images, $image, $gallery, $domain, TRUE);
 	}
 
 	protected function createComponentNavigation($name) {

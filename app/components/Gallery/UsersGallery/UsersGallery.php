@@ -9,11 +9,11 @@
 namespace POSComponent\Galleries;
 
 class UsersGallery extends BaseGallery {
-
+    
 	public function render() {
-		parent::renderBaseGallery("../UsersGallery/usersGallery.latte");
+		parent::renderBaseGallery("../UsersGallery/usersGallery.latte");                
 	}
-
+        
 	/**
 	 * vrátí tabulku s obrázky
 	 */
@@ -53,5 +53,25 @@ class UsersGallery extends BaseGallery {
 		
 		parent::removeImage($image, $folderPath, $imageFileName);
 	}
+        
+	/**
+	 * přepne na další obrázek
+	 * @param type $imageID ID dalšího obrázku
+	 */
+	
+	public function handleNext($imageID)
+	{
+		parent::setImage($imageID, $this->getImages());
+	}
 
+	/**
+	 * přepne na předchozí obrázek
+	 * @param type $imageID ID předchozího obrázku
+	 */
+	
+	public function handleBack($imageID)
+	{
+		parent::setImage($imageID, $this->getImages());
+	}
+     
 }
