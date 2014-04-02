@@ -1,0 +1,44 @@
+{block head}
+{*<link rel="stylesheet" href="{$basePath}/css/bonuses.css" type="text/css">*}
+{*<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">*}
+{*<link rel="stylesheet" href="{$basePath}/css/bootstrap.css" type="text/css">*}
+<script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>  
+{control css "competition/listImages.less", "bootstrap/modals.less"}
+{/}
+
+{block foot}
+{*<script type="text/javascript" src="{$basePath}/js/jquery-1.7.1.min.js" ></script>*}
+{*<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>*}
+{ifset #scripts}
+	{include #scripts}
+{/ifset}
+{/block}
+
+
+{block beforeContent}
+<section class="inner imgs-container">	
+	<h2>Seznam galerií uživatele {$userData->user_name}</h2>
+	{ifset #addNewGallery}
+		{include #addNewGallery}
+	{/ifset}
+	{foreach $galleries as $gallery}
+		<div class="img-container">
+			{ifset #galleryEditButtons}
+				{include #galleryEditButtons "gallery" => $gallery, "iterator" => $iterator}
+			{/ifset}
+
+			<img src="{$basePath}/images/userGalleries/{$userData->id}/{$gallery->id}/minSqr{$gallery->bestImageID}.{$gallery->lastImage->suffix}" width="100%" height="100%"/>
+			<a class="view" href="{plink Galleries:listUserGalleryImages galleryID => $gallery->id}">{$gallery->name}</a>
+
+		</div>
+		
+		{ifset #modalDeleteGallery}
+			{include #modalDeleteGallery "gallery" => $gallery, "iterator" => $iterator}
+		{/ifset}                                         
+
+    {/foreach}
+	<div class="clear"></div>
+</section>
+{/}
+
+{block pageContent}

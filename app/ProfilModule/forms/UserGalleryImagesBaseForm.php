@@ -8,8 +8,14 @@ use	Nette\Application\UI\Form,
 	NetteExt\Image;
 
 
-class UserGalleryImagesBaseForm extends Form
+class UserGalleryImagesBaseForm extends BaseBootstrapForm
 {	
+	
+	public function __construct(IContainer $parent = NULL, $name = NULL)
+	{
+		parent::__construct($parent, $name);
+	}
+	
 	public function upload($image, $id, $suffix, $folder, $max_height, $max_width, $max_minheight, $max_minwidth){
 		if($image->isOK() & $image->isImage())
 		{		   
@@ -56,52 +62,52 @@ class UserGalleryImagesBaseForm extends Form
 		return pathinfo($filename, PATHINFO_EXTENSION);
 	}
         
-        public function addImagesFile($count){                 
-            for($i=0 ; $i < $count; $i++){                    
-                    $this->addUpload('foto'.$i, 'Přidat fotku:')                        
-                        ->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024)
-                        ->AddCondition(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif');
-                    $this->addText('image_name'.$i, 'Jméno:')
-                        ->AddConditionOn($this['foto'.$i], Form::FILLED)
-                        ->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40)
-                        ->addRule(Form::FILLED, 'Zadejte jméno fotky');
-                    $this->addText('description_image'.$i, 'Popis:')
-                        ->AddConditionOn($this['foto'.$i], Form::FILLED)
-                        ->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500)
-                        ->addRule(Form::FILLED, 'Zadejte popis fotky');
-                }
-        }
-         
-        
-        public function addImages($arr, $values, $uID, $idGallery) {       
-            
-        foreach ($arr as $key => $image) {
-            $name = 'image_name'.$key;        
-            $description = 'description_image'.$key;
-            
-                    if($image->isOK()){                        
-                    
-                    $valuesDB['suffix'] = $this->suffix( $image->getName() );
-                                        
-                    $valuesDB['name'] = $values->$name;
-                    $valuesDB['description'] = $values->$description;                         
-                    
-                    $valuesDB['galleryID'] = $idGallery;
+	public function addImagesFile($count){                 
+		for($i=0 ; $i < $count; $i++){                    
+				$this->addUpload('foto'.$i, 'Přidat fotku:')                        
+					->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 *1024)
+					->AddCondition(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif');
+				$this->addText('image_name'.$i, 'Jméno:')
+					->AddConditionOn($this['foto'.$i], Form::FILLED)
+					->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40)
+					->addRule(Form::FILLED, 'Zadejte jméno fotky');
+				$this->addText('description_image'.$i, 'Popis:')
+					->AddConditionOn($this['foto'.$i], Form::FILLED)
+					->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500)
+					->addRule(Form::FILLED, 'Zadejte popis fotky');
+			}
+	}
 
-                    $id = $this->getPres()->context->createUsersImages()
-                            ->insert($valuesDB);
 
-                    $this->getPres()->context->createUsersGalleries()
-                            ->where('id', $idGallery)
-                            ->update(array(
-								"bestImageID" => $id,
-								"lastImageID" => $id
-							));
-                                        
-                    $this->upload($image, $id, $valuesDB['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
-                    unset($image);
-                    }
-                }
-        }
+	public function addImages($arr, $values, $uID, $idGallery) {       
+
+	foreach ($arr as $key => $image) {
+		$name = 'image_name'.$key;        
+		$description = 'description_image'.$key;
+
+				if($image->isOK()){                        
+
+				$valuesDB['suffix'] = $this->suffix( $image->getName() );
+
+				$valuesDB['name'] = $values->$name;
+				$valuesDB['description'] = $values->$description;                         
+
+				$valuesDB['galleryID'] = $idGallery;
+
+				$id = $this->getPres()->context->createUsersImages()
+						->insert($valuesDB);
+
+				$this->getPres()->context->createUsersGalleries()
+						->where('id', $idGallery)
+						->update(array(
+							"bestImageID" => $id,
+							"lastImageID" => $id
+						));
+
+				$this->upload($image, $id, $valuesDB['suffix'], "userGalleries" . "/" . $uID ."/".$idGallery, 500, 700, 100, 130);
+				unset($image);
+				}
+			}
+	}
         
 }

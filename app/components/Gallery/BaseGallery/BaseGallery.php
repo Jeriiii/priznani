@@ -6,7 +6,7 @@
  * Základ komponenty, umožňující zobrazení obrázku, listování a další funkce
  */
 
-namespace POSComponent\Galleries;
+namespace POSComponent\Galleries\Images;
 
 class BaseGallery extends \Nette\Application\UI\Control {
 

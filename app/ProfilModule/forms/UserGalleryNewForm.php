@@ -43,7 +43,8 @@ class UserGalleryNewForm extends UserGalleryImagesBaseForm
 			->addRule(Form::FILLED, "Musíte souhlasit s podmínkami.");
 
                 
-		$this->addSubmit("submit", "Vytvořit galerie");
+		$this->addSubmit("submit", "Vytvořit galerie")
+			->setAttribute('class','btn-main medium');;
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

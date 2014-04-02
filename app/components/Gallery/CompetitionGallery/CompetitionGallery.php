@@ -6,7 +6,7 @@
  * Komponenta pro galerie soutěží a veřejné galerie které spravují administrátoři
  */
 
-namespace POSComponent\Galleries;
+namespace POSComponent\Galleries\Images;
 
 class CompetitionGallery extends BaseGallery {
 

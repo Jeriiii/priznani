@@ -66,6 +66,30 @@ class GalleriesPresenter extends \BasePresenter {
 			$this->template->mode = "listFew";
 		}
 	}
+	
+	public function actionListUserGalleryImages($galleryID) {
+		$this->galleryID = $galleryID;
+		$this->addToCssVariables(array(
+			"img-height" => "200px",
+			"img-width" => "200px",
+			"text-padding-top" => "10px"
+		));
+	}
+	
+	public function renderListUserGalleryImages($galleryID) {
+
+		$this->template->images = $this->getUserDataFromDB()
+			->where("galleryID", $galleryID)
+			->order("id DESC");
+		$this->galleryID = $galleryID;
+		$this->template->galleryID = $galleryID;
+
+		$this->template->userData = $this->userModel->findUser(array("id" => $this->getUser()->getId()));
+	}
+	
+	protected function getUserDataFromDB() {
+		return $this->context->createUsersImages();
+	}
 
 	public function handledeleteGallery($galleryID) {
 		$this->context->createUsersGalleries()
@@ -83,7 +107,7 @@ class GalleriesPresenter extends \BasePresenter {
 			$this->handledeleteImage($image->id, $galleryID, FALSE);
 		}
 
-		$way = WWW_DIR . "/images/userGalleries/" . $this->getUserInfo()->getId() . "/" . $galleryID;
+		$way = WWW_DIR . "/images/userGalleries/" . $this->getUser()->getId() . "/" . $galleryID;
 
 		if (file_exists($way)) {
 			rmdir($way);
@@ -102,7 +126,7 @@ class GalleriesPresenter extends \BasePresenter {
 			->find($id_image)
 			->fetch();
 
-		$dirPath = WWW_DIR . "/images/userGalleries/" . $this->getUserInfo()->getId() . "/" . $id_gallery . "/";
+		$dirPath = WWW_DIR . "/images/userGalleries/" . $this->getUser()->getId() . "/" . $id_gallery . "/";
 
 		$way = $dirPath . $image->id . "." . $image->suffix;
 		$wayMini = $dirPath . "min" . $image->id . "." . $image->suffix;
@@ -136,38 +160,6 @@ class GalleriesPresenter extends \BasePresenter {
 		}
 	}
 
-	protected function getUserDataFromDB() {
-		return $this->context->createUsersImages();
-	}
-
-	protected function getUserInfo() {
-		return $this->getUser();
-	}
-	
-	public function actionListUserGalleryImages($galleryID) {
-		$this->galleryID = $galleryID;
-		$this->addToCssVariables(array(
-			"img-height" => "200px",
-			"img-width" => "200px",
-			"text-padding-top" => "10px"
-		));
-	}
-
-	public function renderListUserGalleryImages($galleryID) {
-
-		$this->template->images = $this->getUserDataFromDB()
-			->where("galleryID", $galleryID)
-			->order("id DESC");
-		$this->galleryID = $galleryID;
-		$this->template->galleryID = $galleryID;
-
-		$this->template->userData = $this->userModel->findUser(array("id" => $this->getUserInfo()->getId()));
-	}
-
-	public function createComponentUserGalleries() {
-		return new \UserGalleries($this->userModel);
-	}
-
 	protected function createComponentUserGalleryNew($name) {
 		return new Frm\UserGalleryNewForm($this, $name);
 	}
@@ -182,6 +174,10 @@ class GalleriesPresenter extends \BasePresenter {
 
 	protected function createComponentUserGalleryImageChange($name) {
 		return new Frm\UserGalleryImageChangeForm($this, $name);
+	}
+	
+	public function createComponentUserGalleries() {
+		return new \POSComponent\Galleries\UserGalleries\MyUserGalleries();
 	}
 
 	protected function createComponentGallery() {
