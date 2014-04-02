@@ -1,0 +1,72 @@
+{layout '../BaseGallery/baseGallery.latte'}
+
+{* competition bloky *}
+
+{define infoAboutOvner}
+<table>
+	<tr>
+		<td>
+			<b>Jméno:</b>
+		</td>
+		<td>
+			{$image->name}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>Popis:</b>
+		</td>
+		<td>
+			{$image->description}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>Email:</b>
+		</td>
+		<td>
+			{$user->user_email}
+		</td>
+	</tr>
+</table>
+{/}
+
+{define approvedImage}
+{if $image->approved == 0}
+	<div>
+		<a n:href="approveImage! imageID => $image->id">Schválit</a>
+	</div>
+{/if}
+{/}
+
+{define menuButtons}
+<a href="{plink Galleries:listUserGalleryImages galleryID => $gallery->id}"  class="btn-main btn-small">
+	všechny fotky
+</a>
+<a href="{plink Galleries:}"  class="btn-main btn-small">
+	seznam galerií
+</a>
+<a href="#" class="btn-main btn-small scroll-to-comments">
+	přidat komentář
+</a>
+{/}
+
+{define imageComment}
+{*$image->comment*}
+{/}
+
+{define uploadImage}
+{if $gallery->current == 1}
+	<a href="{plink Galleries:imageNew galleryID => $gallery->id}" id="add-photo-button" class="btn-main medium right">
+		nahrát fotku
+	</a>
+{/if}
+{/}
+ 
+{define imageMainScreen}
+	<img src="{$basePath}/images/userGalleries/{$user->id}/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}"
+		{ifset $imgPaddingTopBottom}
+			style = "padding: {!$imgPaddingTopBottom}px 0;"
+		{/ifset}
+		{if $setWidth} width="700" {else} height="525" {/if} />
+{/}
