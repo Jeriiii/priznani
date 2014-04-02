@@ -1,31 +1,36 @@
-<div class="content">
-	<div n:snippet="posts" data-ajax-append="true">
+<section class="content">
+	<div n:snippet="posts" id="stream" data-ajax-append="true">
 
 			{foreach $stream as $dataItem}
-				{ifset $dataItem->imageID}
-					{$dataItem->image->name}
+				<div class="stream-item">
+				{*ifset $dataItem->imageID}
 					<div class="stream-img">
 						<img src="{$basePath}/images/galleries/{$dataItem->image->galleryID}/{$dataItem->image->id}.{$dataItem->image->suffix}" />
 					</div>
-					{$dataItem->image->comment}
-				{/ifset}
-				{ifset $dataItem->userGalleryID}
-					{$dataItem->userGallery->name}
-					<div class="stream-img">
-						<img src="{$basePath}/images/userGalleries/{$dataItem->userID}/{$dataItem->userGallery->id}/{$dataItem->userGallery->lastImage->id}.{$dataItem->userGallery->lastImage->suffix}" />
-					</div>
-					{$dataItem->userGallery->lastImage->description}
-				{/ifset}
+					<h3>{$dataItem->image->name}</h3>
+					<p>{$dataItem->image->comment}</p>
+				{/ifset*}
+				
+				
+				{if $dataItem->userGalleryID}
+				    <a href="" title="{$dataItem->user->user_name}"><h3>{$dataItem->user->user_name}</h3></a>
+				    <span class="divider">></span>
+				    <a href="" title="{$dataItem->userGallery->name}"><h3>{$dataItem->userGallery->name}</h3></a>
+					<a href="" class="imagehref">
+						    <img src="{$basePath}/images/userGalleries/{$dataItem->userID}/{$dataItem->userGallery->id}/{$dataItem->userGallery->lastImage->id}.{$dataItem->userGallery->lastImage->suffix}" alt="{$dataItem->userGallery->name}" />
+					    <p>{$dataItem->userGallery->lastImage->description}</p>
+					</a>
+				{/if}
 				{*$dataItem->confessionID*}
+				</div>
 			{/foreach}
+		<div class="stream-btn-next">
+			<a id="next-data-item-btn" n:href="getMoreData!" class="ajax btn-main loadingbutton">zobrazit více</a>
+		</div>
+		<div class="stream-message loading-message"></div>
+		<div id="stream-loader"><img src="{$basePath}/img/ajax-loader.gif"></div>
 	 </div>
+	 <div class="clear"></div>
 
-
-	<div class="stream-btn-next">
-            <button>
-                <a id="next-data-item-btn" n:href="getMoreData!" class="ajax">zobrazit více</a>
-            </button>
-        </div>
-	<div class="stream-message"></div>
-	<div id="stream-loader"><img src="{$basePath}/img/ajax-loader.gif"></div>
-</div>
+	
+</section>

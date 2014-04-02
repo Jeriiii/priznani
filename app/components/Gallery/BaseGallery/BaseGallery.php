@@ -24,7 +24,7 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	private $beforeImageID;
 	private $afterImageID;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode) {		
+	public function __construct($images, $image, $gallery, $domain, $partymode) {	
 		$this->images = $images->order("id DESC");
 		$this->image = $image;
 		$this->gallery = $gallery;
@@ -48,7 +48,7 @@ class BaseGallery extends \Nette\Application\UI\Control {
 		$this->template->imageLink = $this->getPresenter()->link("this", array("imageID" => $this->image->id, "galleryID" => null));
 
 		// rozhoduje, zda je obrázek vyšší nebo širší
-		if($this->image->widthGalScrn == 700) {
+		if($this->image->widthGalScrn == 700) {                    
 			$setWidth = TRUE;
 			$this->template->imgPaddingTopBottom = (525 - $this->image->heightGalScrn) / 2;
 		}else{
@@ -65,11 +65,11 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	 */
 	
 	private function setBeforeAndAfterImage() {
-		$imageID = $this->image->id;
+                $imageID = $this->image->id;                
 		$beforeImageID = FALSE;
 		$afterImageID = FALSE;
 		$setAfter = FALSE;
-
+            
 		foreach($this->images as $image)
 		{
 			if($setAfter)
@@ -103,7 +103,7 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	
 	public function handleNext($imageID)
 	{
-		$this->setImage($imageID);
+		$this->setImage($imageID, $this->getImages());
 	}
 
 	/**
@@ -113,18 +113,19 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	
 	public function handleBack($imageID)
 	{
-		$this->setImage($imageID);
+		$this->setImage($imageID, $this->getImages());
 	}
 
 	/**
 	 * nastaví nový obrázek po přechodu doleva/doprava jako aktuální a invaliduje
 	 * šablonu
 	 * @param type $imageID ID obrázku který má být aktuální
+         * @param type $getFrom nastavuje z jake tabulky se ma prenastavit imageID (pro competitions-> images, pro galleries ->user_images)
 	 */
-	public function setImage($imageID) {
-		$this->image = $this->getImages()
-						->find($imageID)
-						->fetch();
+	public function setImage($imageID, $getFrom) {
+		$this->image = $getFrom
+                            ->find($imageID)
+                            ->fetch();
 		$this->invalidateControl();
 	}
 	

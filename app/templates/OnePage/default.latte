@@ -1,39 +1,23 @@
 {block head}
-
+    {control css 'onepage/default.less', 'stream/list.less'}
 {/block}
 
+
+
 {block content}
-
-<div class="left-sidebar" style="width:120px; float:left; border:1px solid red;">
-    <span><a n:href=":Profil:EditProfil:default">Editace profilu</a></span>
-    <span><a n:href=":Profil:ShowProfil:default">Náhled profilu</a></span>
-    <span><a n:href="">Nastavení</a></span>
-</div>
-<div class="wrap-stream" style="float:left;">
-    <div class="search" style="top:0; border:1px solid blue; float: left; width: 600px;">
-
-        {*control search*}
-
-
-    </div>
-<div class="right-sidebar" style="width:105px; height: 194px; float:right; border:1px solid green; top:0px;">
-    reklama1
-    reklama1
-    reklama1
-    reklama1
-    reklama1reklama1reklama1
-    reklama1
-    reklama1
-    reklama1
-    
-</div>
-<div class="clear"></div>    
-
+<section id="onepage">
+	<nav id="stream-menu">
+	    <a n:href=":Profil:EditProfil:default" class="btn-main medium" title="Editovat profil">Editace profilu</a>
+	    <a n:href=":Profil:ShowProfil:default" class="btn-main medium" title="Profil">Náhled profilu</a>
+	    <a n:href="" class="btn-main medium" title="Nastavení">Nastavení</a>
+	    <div class="clear"></div>
+	</nav>
 	{control stream}
- 
-        
-</div>
-
+	<div id="right-dock">
+	    reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama 
+	</div>
+	<div class="clear"></div>
+</section>
 {/block}
 
 {block foot}
@@ -45,6 +29,7 @@
 			rows: {$count}
 		});
 	});
+	
 </script>
 
 {/block}

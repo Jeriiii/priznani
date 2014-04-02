@@ -38,9 +38,9 @@ class GalleriesPresenter extends \BasePresenter {
 			->order('id DESC');
 	}
 
-	public function actionListGalleryImage($id_image, $galleryID) {
+	public function actionListGalleryImage($imageID, $galleryID) {
 		$this->id_image = $this->context->createUsersImages()
-			->find($id_image)
+			->find($imageID)
 			->fetch();
 		$this->galleryID = $galleryID;
 	}
@@ -91,6 +91,18 @@ class GalleriesPresenter extends \BasePresenter {
 		return $this->context->createUsersImages();
 	}
 
+        public function actionImage($galleryID, $imageID) {
+                $this->imageID = $imageID;           
+                $this->galleryID = $galleryID;
+	}
+
+	public function renderImage($galleryID, $imageID) {
+		if (!empty($galleryID) &&  !empty($imageID)) {
+                    $this->galleryID = $galleryID;
+                    $this->imageID = $imageID;                    
+		}
+	}
+      
 	public function handledeleteGallery($galleryID) {
 		$this->context->createUsersGalleries()
 			->find($galleryID)
@@ -181,14 +193,26 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	protected function createComponentGallery() {
-
+                //vytahnu vsechny fotky dane galerie podle galleryID - objekt
 		$images = $this->context->createUsersImages()
 			->where("galleryID", $this->galleryID);
 
+                //vytahnu konkretni vybranou fotku podle imageID - objekt
+                $image = $this->context->createUsersImages()
+                                ->find($this->imageID)
+                                ->fetch();
+                
+                //vytahnu konkretni galerie podle galleryID
+                $gallery = $this->context->createUsersGalleries()
+					->where("id", $this->galleryID)
+					->fetch();
+
+                
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
-
-		return new \Gallery($images, $this->id_image, $this->galleryID, $domain, "priznaniosexu");
+                //$domain = "http://priznaniosexu.cz";           
+                
+                return new \POSComponent\Galleries\UsersGallery($images, $image, $gallery, $domain, TRUE);
 	}
 
 	protected function createComponentNavigation($name) {
