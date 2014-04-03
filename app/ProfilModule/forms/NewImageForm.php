@@ -13,7 +13,7 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-	
+
 		//form
 		$presenter = $this->getPresenter();
 		$this->galleryID = $presenter->getParam('galleryID');
@@ -25,7 +25,7 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 
 		$this->addHidden('galleryID', $this->galleryID);
 
-		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class','btn-main medium');
+		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'btn-main medium');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
