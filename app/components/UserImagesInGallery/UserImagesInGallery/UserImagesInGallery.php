@@ -1,0 +1,34 @@
+<?php
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Rozšiřuje základní galerii o zobrazení všech galerií konkrétního uživatele
+ *
+ * @author Petr Kukrál <p.kukral@kukral.eu>
+ */
+
+namespace POSComponent\Galleries\UserImagesInGallery;
+
+use \Nette\Security\User,
+	Nette\Utils\Strings;
+
+class UserGalleries extends BaseUserGalleries {
+	
+	public function __construct($galleryID, $images) {
+		parent::__construct($galleryID, $images);
+	}
+	
+	public function render($mode) {
+		$templateName = "../UserImagesInGallery/userImagesInGallery.latte";
+		
+		$this->renderBase($mode, $templateName);
+	}
+
+}
+
+?>
+ 

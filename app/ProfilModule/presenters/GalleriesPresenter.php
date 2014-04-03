@@ -69,22 +69,10 @@ class GalleriesPresenter extends \BasePresenter {
 	
 	public function actionListUserGalleryImages($galleryID) {
 		$this->galleryID = $galleryID;
-		$this->addToCssVariables(array(
-			"img-height" => "200px",
-			"img-width" => "200px",
-			"text-padding-top" => "10px"
-		));
 	}
 	
 	public function renderListUserGalleryImages($galleryID) {
-
-		$this->template->images = $this->getUserDataFromDB()
-			->where("galleryID", $galleryID)
-			->order("id DESC");
-		$this->galleryID = $galleryID;
-		$this->template->galleryID = $galleryID;
-
-		$this->template->userData = $this->userModel->findUser(array("id" => $this->getUser()->getId()));
+		
 	}
 	
 	protected function getUserDataFromDB() {
@@ -190,6 +178,18 @@ class GalleriesPresenter extends \BasePresenter {
 	
 	public function createComponentUserGalleries() {
 		return new \POSComponent\Galleries\UserGalleries\MyUserGalleries();
+	}
+	
+	/**
+	 * vykresluje obrázky v galerii
+	 * @return \POSComponent\Galleries\UsersGallery
+	 */
+	
+	protected function createComponentMyUserImagesInGallery() {
+		$images = $this->context->createUsersImages()
+						->where("galleryID", $this->galleryID);         
+                
+		return new \POSComponent\Galleries\UserImagesInGallery\MyUserImagesInGallery($this->galleryID, $images);
 	}
 
 	protected function createComponentGallery() {

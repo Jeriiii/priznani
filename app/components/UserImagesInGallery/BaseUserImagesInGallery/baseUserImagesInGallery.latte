@@ -1,0 +1,39 @@
+{block head}
+{*<link rel="stylesheet" href="{$basePath}/css/bonuses.css" type="text/css">*}
+<link rel="stylesheet" href="{$basePath}/css/bootstrap.css" type="text/css">
+{*<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">*}
+<script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>  
+{control css "competition/listImages.less"}
+{*control css "bootstrap/bootstrap.less"*}
+{/block}
+
+{block foot}
+{*<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>*}
+{ifset #scripts}
+	{include #scripts}
+{/ifset}
+{/block}
+
+{block beforeContent}
+<section class="inner imgs-container">
+	{ifset #addNewImage}
+		{include #addNewImage}
+	{/ifset}
+    {foreach $images as $image}        
+		<div class="img-container">                           
+			<a id="edit" class="btn btn-danger" href="{plink Galleries:editGalleryImage imageID => $image->id, galleryID => $galleryID, redirekt => FALSE}" style="position: absolute;background: white; float: left; z-index: 11;left: 2px;height: 26px;width: 26px;top: 0px;right: 2px;padding-top: 0px;" title="editovat fotku"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
+			<a data-toggle="modal" href="#MyModal{$image->id}" class="btn btn-danger" href="{plink deleteImage! id_image => $image->id, id_gallery => $galleryID, redirekt => FALSE}" style="position: absolute;background: white; float: right; z-index: 11;height: 26px;width: 26px;top: 0px;right: 2px;padding-top: 0px;" title="smazat fotku"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
+			
+			{ifset #imageEditButtons}
+				{include #imageEditButtons "image" => $image}
+			{/ifset}
+		</div>
+		{ifset #modalDeleteImage}
+			{include #modalDeleteImage "image" => $image}
+		{/ifset}
+    {/foreach}
+    <div class="clear"></div>
+</section>
+{/}
+
+
