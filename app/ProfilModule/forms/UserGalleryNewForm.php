@@ -5,7 +5,8 @@ namespace Nette\Application\UI\Form;
 use Nette\Application\UI\Form,
 	Nette\Utils\Html,
 	Nette\ComponentModel\IContainer,
-	NetteExt\Image;
+	NetteExt\Image,
+        Nette\Utils\Strings;
 
 class UserGalleryNewForm extends UserGalleryImagesBaseForm {
 
@@ -46,21 +47,24 @@ class UserGalleryNewForm extends UserGalleryImagesBaseForm {
 		return $this;
 	}
 
-	public function submitted(UserGalleryNewForm $form) {
+	public function submitted(UserGalleryNewForm $form) {           
 		$values = $form->values;
-		$image = $values->foto0;
-		$image2 = $values->foto1;
-		$image3 = $values->foto2;
-		$image4 = $values->foto3;
+                $num = $this->getNumberOfPhotos($values);
 
-		if ($image->error != 0 && $image2->error != 0 && $image3->error != 0 && $image4->error != 0) {
-			$this->addError("Musíte vybrat alespoň 1 soubor");
+                $arr = $this->getArrayWithPhotos($values, $num);
+
+                $isOK = $this->getOkUploadedPhotos($arr);
+
+//		if ($image->error != 0 && $image2->error != 0 && $image3->error != 0 && $image4->error != 0) {
+//			$this->addError("Musíte vybrat alespoň 1 soubor");
+      		if($isOK == FALSE) {
+		$this->addError("Musíte vybrat alespoň 1 soubor");
 		} else {
 
 			$presenter = $this->getPres();
 			$uID = $presenter->getUser()->getId();
 
-			$arr = array($image, $image2, $image3, $image4);
+			//$arr = array($image, $image2, $image3, $image4);                        
 
 			//vytvoření galerie
 			$valuesGallery['name'] = $values->name;
@@ -84,5 +88,5 @@ class UserGalleryNewForm extends UserGalleryImagesBaseForm {
 	public function getPres() {
 		return $this->getPresenter();
 	}
-
+        
 }
