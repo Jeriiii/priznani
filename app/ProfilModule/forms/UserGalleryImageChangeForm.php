@@ -11,7 +11,7 @@ use Nette\Application\UI\Form,
 use Nette\Image;
 
 
-class UserGalleryImageChangeForm extends Form
+class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm
 {
 	private $galleryID;
         private $imageID;
@@ -19,12 +19,6 @@ class UserGalleryImageChangeForm extends Form
     public function __construct(IContainer $parent = NULL, $name = NULL)
     {
 	parent::__construct($parent, $name);
-	//graphics
-	$renderer = $this->getRenderer();
-	$renderer->wrappers['controls']['container'] = 'div';
-	$renderer->wrappers['pair']['container'] = 'div';
-	$renderer->wrappers['label']['container'] = NULL;
-	$renderer->wrappers['control']['container'] = NULL;
         
 	//form
 	$presenter = $this->getPresenter();
@@ -46,7 +40,8 @@ class UserGalleryImageChangeForm extends Form
 		->setDefaultValue($filledForm->description)
                 ->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500)
 		->addRule(Form::FILLED,"Vyplňte popis fotky");
-    	$this->addSubmit('send', 'Změnit');
+    	$this->addSubmit('send', 'Změnit')
+			->setAttribute('class','btn-main medium');
     	//$this->addProtection('Vypršel časový limit, odešlete formulář znovu');
     	$this->onSuccess[] = callback($this, 'submitted');
     	return $this;
@@ -57,7 +52,7 @@ class UserGalleryImageChangeForm extends Form
 		$values = $form->values;
 		$presenter = $form->getPresenter();
 		
-                $values2['description'] = $values->description;
+        $values2['description'] = $values->description;
 
 		$presenter->context->createUsersImages()
 			->where("id", $this->imageID)

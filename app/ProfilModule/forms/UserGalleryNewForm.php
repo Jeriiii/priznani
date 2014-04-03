@@ -44,7 +44,7 @@ class UserGalleryNewForm extends UserGalleryImagesBaseForm
 
                 
 		$this->addSubmit("submit", "Vytvořit galerie")
-			->setAttribute('class','btn-main medium');;
+			->setAttribute('class','btn-main medium');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

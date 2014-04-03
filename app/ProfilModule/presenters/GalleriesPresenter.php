@@ -26,6 +26,11 @@ class GalleriesPresenter extends \BasePresenter {
 
 	public function startup() {
 		parent::startup();
+		$this->addToCssVariables(array(
+			"img-height" => "200px",
+			"img-width" => "200px",
+			"text-padding-top" => "10px"
+		));
 		$this->userModel = $this->context->userModel;
 	}
 

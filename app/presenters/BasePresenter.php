@@ -10,12 +10,12 @@
  */
 use Nette\Application\UI\Form as Frm,
 	\Navigation\Navigation,
-        \Nette\Utils\Strings,
+	\Nette\Utils\Strings,
 	Nette\Http\Url,
 	Nette\Http\Request;
 
 abstract class BasePresenter extends Nette\Application\UI\Presenter {
-	
+
 	public $parameters;
 	public $domain;
 	public $partystyle;
@@ -25,17 +25,17 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	public $sexmode = FALSE;
 	public $advicemode = FALSE;
 	public $datemode = FALSE;
-	
+
 	/* proměnné pro css překlad */
 	protected $cssVariables = array();
-        /* proměnné pro js překlad */
+	/* proměnné pro js překlad */
 	protected $jsVariables = array();
-        
+
 	public function startup() {
 		if ($this->name == "Homepage") {
 			$page = $this->context->createPages()
-					->order("order ASC")
-					->fetch();
+				->order("order ASC")
+				->fetch();
 			if ($page->id_view)
 				$this->redirect($page->presenter . ":" . $page->view, $page->url);
 			else
@@ -67,7 +67,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 //		$user = $this->getUser();
 //		$authorizator = new MyAuthorizator;
 		$parameters = $this->context->createAuthorizator_table()
-				->fetch();
+			->fetch();
 		$this->parameters = $parameters;
 //		$httpRequest = $this->context->httpRequest;
 //		$this->domain = $httpRequest
@@ -90,7 +90,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		$this->template->facebook_script = "";
 
 		$google = $this->context->createGoogle_analytics()
-				->fetch();
+			->fetch();
 
 		$name = "";
 
@@ -113,7 +113,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 		if ($parameters->map == 1) {
 			$map = $this->context->createMap()
-					->fetch();
+				->fetch();
 
 			if (!empty($map)) {
 				$this->template->gps = $map->gps;
@@ -131,9 +131,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 			$this->template->map_script = "";
 			$this->template->map_head = '';
 		}
-                
-                
-               $this->fillJsVariablesWithLinks();
+
+
+		$this->fillJsVariablesWithLinks();
 	}
 
 	protected function createComponentOrders($name) {
@@ -184,70 +184,34 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		}
 	}
 
-        /**
-         * User menu komponenta
-         * @param type $name
-         */
-        protected function createComponentUserMenu($name) 
-	{
+	/**
+	 * Hlavní navigace v pravé části lišty v layoutu
+	 * @param type $name
+	 */
+	protected function createComponentUserMenu($name) {
 		$nav = new Navigation($this, $name);
 		$user = $this->getUser();
 		$nav->setMenuTemplate(APP_DIR . '/components/Navigation/usermenu.phtml');
-                $navigation = array();
-                $currentUrl = $this->getName();
-                $isModul = $this->isProfilModuleCurrent($currentUrl);
-                
-                //prihlaseny uzivatel
-                if ($this->getUser()->isLoggedIn()) {                    
-                    
-                    // Je-li modul, poupravime odkazy
-                    if($isModul){                                        
-                        if ($user->isInRole('admin') || $user->isInRole('superadmin')){
-                                     $navigation["Administrace"] = $this->link(":Admin:Admin:default");
-                                     $navigation["Moje galerie"] = $this->link("Galleries:");
-                                     $navigation["Přiznání"] = $this->link(":Page:");
-                                     $navigation["Nastavení"] = $this->link("#");                                 
-                                     $navigation["Odhlásit se"] = $this->link(":Sign:out");
-                        } else {
-                                if ($user->isInRole('user')){
-                                     $navigation["Moje galerie"] = $this->link("Galleries:");
-                                     $navigation["Přiznání"] = $this->link(":Page:");
-                                     $navigation["Nastavení"] = $this->link("#");
-                                     $navigation["Odhlásit se"] = $this->link(":Sign:out");
-                                }
-                        }
-                        
-                     //Neni-li modul, pak jsou odkazy klasicky   
-                    } else {                                        
-                        if ($user->isInRole('admin') || $user->isInRole('superadmin')){
-                                     $navigation["Administrace"] = $this->link("Admin:Admin:default");
-                                     $navigation["Moje galerie"] = $this->link("Profil:Galleries:");
-                                     $navigation["Přiznání"] = $this->link("Page:");
-                                     $navigation["Nastavení"] = $this->link("#");                                 
-                                     $navigation["Odhlásit se"] = $this->link("Sign:out");
-                        } else {
-                                if ($user->isInRole('user')){
-                                     $navigation["Moje galerie"] = $this->link("Profil:Galleries:");
-                                     $navigation["Přiznání"] = $this->link("Page:");
-                                     $navigation["Nastavení"] = $this->link("#");
-                                     $navigation["Odhlásit se"] = $this->link("Sign:out");
-                                }
-                        }
-                    }
-                    
-                //neprihlaseny uzivatel
-                } else {
-                    if($isModul){                    
-                               $navigation["Přihlášení"] = $this->link(":Sign:in");
-                               $navigation["Registrace"] = $this->link(":Sign:registration");
-                    } else {
-                               $navigation["Přihlášení"] = $this->link("Sign:in");
-                               $navigation["Registrace"] = $this->link("Sign:registration");
-                    }
-                      
-                }
-                
-                
+		$navigation = array();
+
+		//prihlaseny uzivatel
+		if ($this->getUser()->isLoggedIn()) {
+
+			if ($user->isInRole('admin') || $user->isInRole('superadmin')) {
+				$navigation["Administrace"] = $this->link(":Admin:Admin:default");
+			}
+
+			$navigation["Moje galerie"] = $this->link(":Profil:Galleries:");
+			$navigation["Přiznání"] = $this->link(":Page:");
+			$navigation["Nastavení"] = $this->link("#");
+			$navigation["Odhlásit se"] = $this->link(":Sign:out");
+
+			//neprihlaseny uzivatel
+		} else {
+			$navigation["Přihlášení"] = $this->link(":Sign:in");
+			$navigation["Registrace"] = $this->link(":Sign:registration");
+		}
+
 		$backlink = $this->link($this->backlink());
 		foreach ($navigation as $name => $link) {
 			$article = $nav->add($name, $link);
@@ -255,19 +219,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 				$nav->setCurrentNode($article);
 			}
 		}
-
-   	}
-        
-        /**
-         * Metoda kontroluje, zda jsme v Profil modulu. Pouziva se cheme-li zmenit odkazy v navigaci
-         * @param type $module
-         * @return type
-         */
-        public function isProfilModuleCurrent($module)
-        {
-            $module = trim((string) $module);
-            return Strings::startsWith($module, 'Profil');
-        }
+	}
 
 	/**
 	 * nastaví mód dle url
@@ -321,13 +273,13 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 	public function createComponentCss() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
-		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');		
-		
-		if(!empty($this->cssVariables)) {
+		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
+
+		if (!empty($this->cssVariables)) {
 			$varFilter = new WebLoader\Filter\VariablesFilter($this->cssVariables);
 			$compiler->addFileFilter($varFilter);
 		}
-		
+
 		$compiler->addFileFilter(new \Webloader\Filter\LessFilter());
 		$compiler->addFileFilter(function ($code, $compiler, $path) {
 			return cssmin::minify($code);
@@ -336,176 +288,99 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
-	
 
 	public function createComponentCssBoostrapModal() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
-		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');		
-		
+		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
+
 		$compiler->addFileFilter(new \Webloader\Filter\LessFilter());
 		$compiler->addFileFilter(function ($code, $compiler, $path) {
 			return cssmin::minify($code);
 		});
-		
+
 		$files->addFiles(array('bootstrap/helpNew/bootstrap.less'));
 
 		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
-	
-	public function createComponentJs(){
+
+	public function createComponentJs() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
-		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');		
-		
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+
 		$compiler->addFilter(function ($code) {
-		    $packer = new JavaScriptPacker($code, "None");
-		    return $packer->pack();
+			$packer = new JavaScriptPacker($code, "None");
+			return $packer->pack();
 		});
 
 		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
-	
-        public function createComponentJsLayout(){
-		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
-                $files->addFiles(array('baseAjax.js', 'order.js', 'fbBase.js' , 'leftMenu.js'));
 
-		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');            
+	public function createComponentJsLayout() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
+		$files->addFiles(array('baseAjax.js', 'order.js', 'fbBase.js', 'leftMenu.js'));
+
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {
-		    $packer = new JavaScriptPacker($code, "None");
-		    return $packer->pack();
+			$packer = new JavaScriptPacker($code, "None");
+			return $packer->pack();
 		});
-                
+
 		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
-        
-        public function createComponentFbLikeAndCommentToDatabase(){
-		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
-                $files->addFiles(array('fbLikeAndCommentToDatabase.js'));
-                $compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 
-                if(!empty($this->jsVariables)){
+	public function createComponentFbLikeAndCommentToDatabase() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
+		$files->addFiles(array('fbLikeAndCommentToDatabase.js'));
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+
+		if (!empty($this->jsVariables)) {
 			$varFilter = new WebLoader\Filter\VariablesFilter($this->jsVariables);
 			$compiler->addFileFilter($varFilter);
-		}               
+		}
 		$compiler->addFilter(function ($code) {
-		    $packer = new JavaScriptPacker($code, "None");
-		    return $packer->pack();
-		});                              
+			$packer = new JavaScriptPacker($code, "None");
+			return $packer->pack();
+		});
 
 		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
-        
-        /**
-         * Funkce naplni potrebne odkazy do jsVariables, kterou nasledne pouziva WebLoader
-         */
-        private function fillJsVariablesWithLinks(){
-                $linkIncLike = $this->link('incLike!');
-                $linkDecLike = $this->link('decLike!');
-                $linkIncComment = $this->link('incComment!');
-                $linkDecComment = $this->link('decComment!');
-                
-                $this->addToJsVariables(array(
+
+	/**
+	 * Funkce naplni potrebne odkazy do jsVariables, kterou nasledne pouziva WebLoader
+	 */
+	private function fillJsVariablesWithLinks() {
+		$linkIncLike = $this->link('incLike!');
+		$linkDecLike = $this->link('decLike!');
+		$linkIncComment = $this->link('incComment!');
+		$linkDecComment = $this->link('decComment!');
+
+		$this->addToJsVariables(array(
 			"inc-like" => $linkIncLike,
 			"dec-like" => $linkDecLike,
 			"inc-comment" => $linkIncComment,
-                        "dec-comment" => $linkDecComment
-		));                
-            //    \Nette\Diagnostics\Debugger::Dump($this->jsVariables);
-        }
-        
+			"dec-comment" => $linkDecComment
+		));
+	}
+
 	protected function getCssVariables() {
 		return $this->cssVariables;
 	}
-	
+
 	protected function addToCssVariables(array $css) {
 		$this->cssVariables = $this->cssVariables + $css;
 	}
 
-        protected function getJsVariables() {
+	protected function getJsVariables() {
 		return $this->jsVariables;
 	}
-	
+
 	protected function addToJsVariables(array $js) {
 		$this->jsVariables = $this->jsVariables + $js;
 	}
-//	protected function createComponentMenu($name) 
-//	{
-//		$nav = new Navigation($this, $name);
-//		$pages = $this->context->createPages()
-//				//->where("visibility_menu", 1)
-//				->order("order ASC")
-//				->where("visibility_menu", 1);
-//		
-//		$navigation = array();
-//		
-//		$presenter = $this->getPresenter();
-//
-//		if($presenter->name == "Page")
-//		{
-//			$url = new Url($this->context->httpRequest->getUrl());
-//			$backlink = ($url->path);
-//		}else{
-//			$backlink = $this->link($this->backlink() );
-//		}
-//		
-////		if ($this->parameters->news) $navigation["Aktuality"] = $this->link("Page:aktuality");
-//		
-//		foreach($pages as $page)
-//		{
-//			if($page->id_view)
-//				$navigation[$page->name] = $this->link(
-//					$page->presenter . ":" . $page->view , $page->url//"Page:default",$page->id
-//				);
-//			else
-//				$navigation[$page->name] = $this->link(
-//					$page->presenter . ":" . $page->view
-//				);
-//		}
-//		foreach ($navigation as $name => $link) {
-//			$article = $nav->add($name, $link);
-//			if ($backlink == $link) {
-//				$nav->setCurrentNode($article);
-//			}
-//			//die("back: " . $backlink . " link " . $link);
-//		}
-//		
-//   	}
-//	protected function createComponentMenu($name) 
-//	{
-//		$nav = new Navigation($this, $name);
-//		$pages = $this->context->createTexts()
-//				->where("visibility_menu", 1)
-//				->order("order ASC");
-//		
-//		$navigation = array();
-//		
-//		$presenter = $this->getPresenter();
-//		
-//		if($presenter->name == "Page")
-//		{
-//			$id = $presenter->id_page;
-//			$backlink = $this->link($this->backlink(), $id );
-//		}else{
-//			$backlink = $this->link($this->backlink() );
-//		}
-//		
-//		if ($this->parameters->news) $navigation["Aktuality"] = $this->link("Page:aktuality");
-//		
-//		foreach($pages as $page)
-//		{
-//			$navigation[$page->name] = $this->link("Page:default",$page->id);
-//		}
-//		foreach ($navigation as $name => $link) {
-//			$article = $nav->add($name, $link);
-//			if ($backlink == $link) {
-//				$nav->setCurrentNode($article);
-//			}
-//		}
-//		
-//   	}
 
 	protected function createComponentLoggedInMenu($name) {
 		$nav = new Navigation($this, $name);
