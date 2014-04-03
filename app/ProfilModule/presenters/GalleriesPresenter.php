@@ -71,31 +71,31 @@ class GalleriesPresenter extends \BasePresenter {
 			$this->template->mode = "listFew";
 		}
 	}
-	
+
 	public function actionListUserGalleryImages($galleryID) {
 		$this->galleryID = $galleryID;
 	}
-	
+
 	public function renderListUserGalleryImages($galleryID) {
 		
 	}
-	
+
 	protected function getUserDataFromDB() {
 		return $this->context->createUsersImages();
 	}
 
-        public function actionImage($galleryID, $imageID) {
-                $this->imageID = $imageID;           
-                $this->galleryID = $galleryID;
+	public function actionImage($galleryID, $imageID) {
+		$this->imageID = $imageID;
+		$this->galleryID = $galleryID;
 	}
 
 	public function renderImage($galleryID, $imageID) {
-		if (!empty($galleryID) &&  !empty($imageID)) {
-                    $this->galleryID = $galleryID;
-                    $this->imageID = $imageID;                    
+		if (!empty($galleryID) && !empty($imageID)) {
+			$this->galleryID = $galleryID;
+			$this->imageID = $imageID;
 		}
 	}
-      
+
 	public function handledeleteGallery($galleryID) {
 		$this->context->createUsersGalleries()
 			->find($galleryID)
@@ -180,44 +180,43 @@ class GalleriesPresenter extends \BasePresenter {
 	protected function createComponentUserGalleryImageChange($name) {
 		return new Frm\UserGalleryImageChangeForm($this, $name);
 	}
-	
+
 	public function createComponentUserGalleries() {
 		return new \POSComponent\Galleries\UserGalleries\MyUserGalleries();
 	}
-	
+
 	/**
 	 * vykresluje obrázky v galerii
 	 * @return \POSComponent\Galleries\UsersGallery
 	 */
-	
 	protected function createComponentMyUserImagesInGallery() {
 		$images = $this->context->createUsersImages()
-						->where("galleryID", $this->galleryID);         
-                
+			->where("galleryID", $this->galleryID);
+
 		return new \POSComponent\Galleries\UserImagesInGallery\MyUserImagesInGallery($this->galleryID, $images);
 	}
 
 	protected function createComponentGallery() {
-                //vytahnu vsechny fotky dane galerie podle galleryID - objekt
+		//vytahnu vsechny fotky dane galerie podle galleryID - objekt
 		$images = $this->context->createUsersImages()
 			->where("galleryID", $this->galleryID);
 
-                //vytahnu konkretni vybranou fotku podle imageID - objekt
-                $image = $this->context->createUsersImages()
-                                ->find($this->imageID)
-                                ->fetch();
-                
-                //vytahnu konkretni galerie podle galleryID
-                $gallery = $this->context->createUsersGalleries()
-					->where("id", $this->galleryID)
-					->fetch();
+		//vytahnu konkretni vybranou fotku podle imageID - objekt
+		$image = $this->context->createUsersImages()
+			->find($this->imageID)
+			->fetch();
 
-                
+		//vytahnu konkretni galerie podle galleryID
+		$gallery = $this->context->createUsersGalleries()
+			->where("id", $this->galleryID)
+			->fetch();
+
+
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
-                //$domain = "http://priznaniosexu.cz";           
-                
-                return new \POSComponent\Galleries\UsersGallery($images, $image, $gallery, $domain, TRUE);
+		//$domain = "http://priznaniosexu.cz";           
+
+		return new \POSComponent\Galleries\UsersGallery($images, $image, $gallery, $domain, TRUE);
 	}
 
 	protected function createComponentNavigation($name) {
