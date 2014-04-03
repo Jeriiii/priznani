@@ -102,5 +102,58 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 			}
 		}
 	}
+        
+                
+        /**
+         * Zjistuji zda mam element, zajinajici na foto0.....n => pak z toho ziskavam pocet fotek
+         * @param type $values
+         * @return int - pocet fotek ve formulari
+         */
+        public function getNumberOfPhotos($values){                            
+                $i = 0;
+                foreach($values as $key => $value) {                    
+                    if (strpos($key, 'foto') === 0) {
+                       $i++;
+                    }
+                }
+                return $i;
+        }
+        
+        /**
+         * Vraci vsechny fotky v poli
+         * @param type $values
+         * @param type $num
+         * @return array - pole fotek
+         */
+        public function getArrayWithPhotos($values, $num){
+               $arrayWithPhotos = array();
+                for($i=0; $i< $num; $i++){
+                    $foto = 'foto' . $i;
+                    array_push($arrayWithPhotos,$values->$foto);
+                }  
+                return $arrayWithPhotos;
+        }
+        
+        /**
+         * Metoda kontroluje zda uzivatel neodeslal formular s nevyplnenou fotkou. $item->error == 0 znamena vyplnena fotka 
+         * @param type $arr
+         * @return boolean
+         */
+        public function getOkUploadedPhotos($arr){
+                $ok = false;
+                $checked = array();
+                foreach($arr as $item){                    
+                   if (in_array(($item->error != 0), $arr)) {
+                        array_push($checked, $item);
+                   }
+                }
+                //jsou-li vsechny fotky prazdne => vyhodim chybu
+                if(count($arr) == count($checked)){
+                   $ok = false; 
+                } else {
+                    $ok = true;
+                }
+                return $ok;
+        }
 
 }

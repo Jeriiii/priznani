@@ -40,7 +40,7 @@ class GalleriesPresenter extends \BasePresenter {
 
 		$this->template->galleryImage = $this->context->createUsersImages()
 			->where('id', $imageID)
-			->order('id DESC');
+                        ->fetch();
 	}
 
 	public function actionListGalleryImage($imageID, $galleryID) {

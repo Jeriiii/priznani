@@ -12,12 +12,9 @@
 
 <section class="inner imgs-container">
      <h2>Fotka: </h2>
-    {foreach $galleryImage as $image} 
 		<div class="img-container">                                                   
-                        <img src="{$basePath}/images/userGalleries/{$image->ref('user_galleries','galleryID')->userId}/{$image->galleryID}/minSqr{$image->id}.{$image->suffix}" width="100%" height="100%"/>
-                        <h2>{$image->description}</h2>                        
+                        <img src="{$basePath}/images/userGalleries/{$galleryImage->ref('user_galleries','galleryID')->userId}/{$galleryImage->galleryID}/minSqr{$galleryImage->id}.{$galleryImage->suffix}" width="100%" height="100%"/>
+                        <h2>{$galleryImage->description}</h2>                        
 		</div> 
-
-    {/foreach}
              <div class="clear"></div>
 </section>
