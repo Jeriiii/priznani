@@ -186,7 +186,7 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	/**
-	 * vykresluje obrázky v galerii
+	 * vykresluje obrázky v galerii uživatel (VLASTNÍKA)
 	 * @return \POSComponent\Galleries\UsersGallery
 	 */
 	protected function createComponentMyUserImagesInGallery() {
@@ -194,6 +194,17 @@ class GalleriesPresenter extends \BasePresenter {
 			->where("galleryID", $this->galleryID);
 
 		return new \POSComponent\Galleries\UserImagesInGallery\MyUserImagesInGallery($this->galleryID, $images);
+	}
+	
+	/**
+	 * vykresluje obrázky v galerii
+	 * @return \POSComponent\Galleries\UsersGallery
+	 */
+	protected function createComponentUserImagesInGallery() {
+		$images = $this->context->createUsersImages()
+			->where("galleryID", $this->galleryID);
+
+		return new \POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery($this->galleryID, $images);
 	}
 
 	protected function createComponentGallery() {
@@ -215,8 +226,8 @@ class GalleriesPresenter extends \BasePresenter {
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
 		//$domain = "http://priznaniosexu.cz";           
-
-		return new \POSComponent\Galleries\UsersGallery($images, $image, $gallery, $domain, TRUE);
+		
+		return new \POSComponent\Galleries\Images\UsersGallery($images, $image, $gallery, $domain, TRUE);
 	}
 
 	protected function createComponentNavigation($name) {

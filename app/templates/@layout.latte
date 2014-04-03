@@ -189,15 +189,12 @@
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
             {control js 'layout/user-layout-menu.js'}
 			{*include #user-menu-scripts*}
-                 
-                        {cache}
-                            {control jsLayout}
+			{control jsLayout}
 
-                            {if $fbToDatabase}
-                                {control fbLikeAndCommentToDatabase}
+			{if $fbToDatabase}
+				{control fbLikeAndCommentToDatabase}
 
-                            {/if}
-                        {/cache}                                
+			{/if}                             
 		{block foot}{/block}
 
 			<div class="clear"></div>

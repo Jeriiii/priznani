@@ -89,14 +89,6 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	}
 
 	/**
-	 * vrátí tabulku s obrázky
-	 */
-	private function getImages()
-	{
-		return $this->getPresenter()->context->createImages();
-	}
-
-	/**
 	 * přepne na další obrázek
 	 * @param type $imageID ID dalšího obrázku
 	 */

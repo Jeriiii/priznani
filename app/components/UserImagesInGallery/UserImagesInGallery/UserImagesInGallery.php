@@ -16,7 +16,7 @@ namespace POSComponent\Galleries\UserImagesInGallery;
 use \Nette\Security\User,
 	Nette\Utils\Strings;
 
-class UserGalleries extends BaseUserGalleries {
+class UserImagesInGallery extends BaseUserImagesInGallery {
 	
 	public function __construct($galleryID, $images) {
 		parent::__construct($galleryID, $images);
