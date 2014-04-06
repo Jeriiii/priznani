@@ -32,12 +32,13 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 
 	public function submitted(NewImageForm $form) {
 		$values = $form->values;
-		$image = $values->foto0;
-		$image2 = $values->foto1;
-		$image3 = $values->foto2;
-		$image4 = $values->foto3;
+		$num = $this->getNumberOfPhotos($values);
 
-		if ($image->error != 0 && $image2->error != 0 && $image3->error != 0 && $image4->error != 0) {
+                $arr = $this->getArrayWithPhotos($values, $num);
+
+                $isOK = $this->getOkUploadedPhotos($arr);
+
+		if ($isOK == FALSE) {
 			$this->addError("Musíte vybrat alespoň 1 soubor");
 		} else {
 
@@ -46,7 +47,7 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 			$idGallery = $values->galleryID;
 
 
-			$arr = array($image, $image2, $image3, $image4);
+			//$arr = array($image, $image2, $image3, $image4);
 
 			$this->addImages($arr, $values, $uID, $idGallery);
 

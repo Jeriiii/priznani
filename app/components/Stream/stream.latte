@@ -15,11 +15,11 @@
 				{if $dataItem->userGalleryID}
 				    <a href="{plink :Profil:Galleries: userID => $dataItem->userID}" title="{$dataItem->user->user_name}"><h3>{$dataItem->user->user_name}</h3></a>
 				    <span class="divider">></span>
-				    <a href="{plink :Profil:Galleries:image imageID => $dataItem->userGallery->lastImage->id, galleryID => $dataItem->userGallery->id}" title="{$dataItem->userGallery->name}">
+				    <a href="{plink :Profil:Galleries:listUserGalleryImages galleryID => $dataItem->userGallery->id}" title="{$dataItem->userGallery->name}">
 						<h3>{$dataItem->userGallery->name}</h3>
 					</a>
 					<a href="{plink :Profil:Galleries:image imageID => $dataItem->userGallery->lastImage->id, galleryID => $dataItem->userGallery->id}" class="imagehref">
-						    <img src="{$basePath}/images/userGalleries/{$dataItem->userID}/{$dataItem->userGallery->id}/{$dataItem->userGallery->lastImage->id}.{$dataItem->userGallery->lastImage->suffix}" alt="{$dataItem->userGallery->name}" />
+						<img src="{$basePath}/images/userGalleries/{$dataItem->userID}/{$dataItem->userGallery->id}/{$dataItem->userGallery->lastImage->id}.{$dataItem->userGallery->lastImage->suffix}" alt="{$dataItem->userGallery->name}" />
 					    <p>{$dataItem->userGallery->lastImage->description}</p>
 					</a>
 				{/if}

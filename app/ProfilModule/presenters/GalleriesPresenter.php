@@ -55,7 +55,7 @@ class GalleriesPresenter extends \BasePresenter {
 
 		$this->template->galleryImage = $this->context->createUsersImages()
 			->where('id', $imageID)
-			->order('id DESC');
+                        ->fetch();
 	}
 
 	public function actionListGalleryImage($imageID, $galleryID) {
@@ -236,7 +236,8 @@ class GalleriesPresenter extends \BasePresenter {
 	 */
 	protected function createComponentMyUserImagesInGallery() {
 		$images = $this->context->createUsersImages()
-			->where("galleryID", $this->galleryID);
+					->where("galleryID", $this->galleryID)
+					->order("id DESC");
 
 		return new \POSComponent\Galleries\UserImagesInGallery\MyUserImagesInGallery($this->galleryID, $images);
 	}
