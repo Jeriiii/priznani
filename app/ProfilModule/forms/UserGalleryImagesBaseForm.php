@@ -63,12 +63,10 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 				->AddCondition(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif');
 			$this->addText('image_name' . $i, 'Jméno:')
 				->AddConditionOn($this['foto' . $i], Form::FILLED)
-				->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40)
-				->addRule(Form::FILLED, 'Zadejte jméno fotky');
+				->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40);
 			$this->addText('description_image' . $i, 'Popis:')
 				->AddConditionOn($this['foto' . $i], Form::FILLED)
-				->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500)
-				->addRule(Form::FILLED, 'Zadejte popis fotky');
+				->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500);
 		}
 	}
 

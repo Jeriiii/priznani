@@ -32,6 +32,21 @@ class GalleriesPresenter extends \BasePresenter {
 			"text-padding-top" => "10px"
 		));
 		$this->userModel = $this->context->userModel;
+		
+		$user = $this->getUser();
+		
+		if (!$user->isLoggedIn()) {
+			if ($user->getLogoutReason() === User::INACTIVITY) {
+				$this->flashMessage('Uplynula doba neaktivity! Systém vás z bezpečnostních důvodů odhlásil.', 'warning');
+			}
+			$backlink = $this->getApplication()->storeRequest();
+			$this->redirect(':Sign:in', array('backlink' => $backlink));
+		} else { //kontrola opravnění pro vztup do příslušné sekce
+			if (!$user->isAllowed($this->name, $this->action)) {
+				$this->flashMessage('Nejdříve se musíte přihlásit.', 'warning');
+				$this->redirect(':Sign:in', array('backlink' => $backlink));
+			}
+		}
 	}
 
 	public function actionEditGalleryImage($imageID, $galleryID) {
@@ -63,13 +78,23 @@ class GalleriesPresenter extends \BasePresenter {
 		}
 	}
 
-	public function renderDefault($id) {
-		if (empty($id)) {
-			$this->template->mode = "listAll";
-		} else {
+	public function renderDefault($userID) {
+		$myGallery = FALSE;
+		
+		if(!empty($userID)) {
+			//je vlastník
+			if($userID == $this->getUser()->id) {
+				$myGallery = TRUE;
+			}
 
-			$this->template->mode = "listFew";
+		} else {
+			//nebyla zvolena konkrétní galerie
+			$myGallery = TRUE;
 		}
+		
+		$this->template->myGallery = $myGallery;
+		$this->template->userID = $userID;	
+		$this->template->mode = "listAll";
 	}
 
 	public function actionListUserGalleryImages($galleryID) {
@@ -77,7 +102,19 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function renderListUserGalleryImages($galleryID) {
-		
+			$gallery = $this->context->createUsersGalleries()
+							->find($galleryID)
+							->fetch();
+			
+			//je vlastník
+			if($gallery->userID == $this->getUser()->id) {
+				$myGallery = TRUE;
+			} else {
+				$myGallery = FALSE;
+			}
+			
+			$this->template->galleryOwner = $gallery->userID;
+			$this->template->myGallery = $myGallery;
 	}
 
 	protected function getUserDataFromDB() {
@@ -97,12 +134,17 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function handledeleteGallery($galleryID) {
+		// nastavení vazeb na NULL, jinak to začne padat
 		$this->context->createUsersGalleries()
 			->find($galleryID)
 			->update(array(
 				"bestImageID" => NULL,
 				"lastImageID" => NULL
 		));
+		
+		$this->context->createStream()
+			->where("userGalleryID", $galleryID)
+			->delete();
 
 		$images = $this->context->createUsersImages()
 			->where("galleryID", $galleryID);
@@ -182,12 +224,15 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function createComponentUserGalleries() {
+		return new \POSComponent\Galleries\UserGalleries\UserGalleries();
+	}
+	
+	public function createComponentMyUserGalleries() {
 		return new \POSComponent\Galleries\UserGalleries\MyUserGalleries();
 	}
 
 	/**
 	 * vykresluje obrázky v galerii uživatel (VLASTNÍKA)
-	 * @return \POSComponent\Galleries\UsersGallery
 	 */
 	protected function createComponentMyUserImagesInGallery() {
 		$images = $this->context->createUsersImages()
@@ -198,7 +243,6 @@ class GalleriesPresenter extends \BasePresenter {
 	
 	/**
 	 * vykresluje obrázky v galerii
-	 * @return \POSComponent\Galleries\UsersGallery
 	 */
 	protected function createComponentUserImagesInGallery() {
 		$images = $this->context->createUsersImages()

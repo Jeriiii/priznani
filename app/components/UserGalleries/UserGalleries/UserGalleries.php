@@ -30,7 +30,7 @@ class UserGalleries extends BaseUserGalleries {
 		
 		$templateName = "../UserGalleries/userGalleries.latte";
 		
-		$this->renderBase($mode, $galleries, $templateName);
+		$this->renderBase($mode, $galleries, $userID, $templateName);
 	}
 
 }

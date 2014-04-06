@@ -2,7 +2,16 @@
 
 {control navigation:breadcrumbs}
 
-{control myUserImagesInGallery "listAll"}
+{if $myGallery}
+	{control myUserImagesInGallery "listAll"}
+{else}
+	{control userImagesInGallery "listAll", $galleryOwner}
+{/if}
 
+{/}
+{block foot}
+{if $myGallery}
+<script type="text/javascript" src="{$basePath}/js/bootstrap-modal.min.js" ></script>
+{/if}
 {/}
 {block pageContent}
