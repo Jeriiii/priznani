@@ -23,13 +23,13 @@ class BaseUserImagesInGallery extends \Nette\Application\UI\Control {
 	}
 
 
-	public function renderBase($mode, $templateName = "baseUserImagesInGallery.latte") {		
+	public function renderBase($mode, $owner, $templateName = "baseUserImagesInGallery.latte") {		
 		$this->setCssParams();
 		
 		$this->template->galleryID = $this->galleryID;
 		
 		$this->template->userData = $this->getUserFromDB()
-										->find($this->getUser()->id)
+										->find($owner)
 										->fetch();
 		
 		/* vrati pouze posledni vsechny nahledy galerie daneho uzivatele */

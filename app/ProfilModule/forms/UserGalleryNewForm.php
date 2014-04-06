@@ -8,27 +8,12 @@ use Nette\Application\UI\Form,
 	NetteExt\Image,
         Nette\Utils\Strings;
 
-class UserGalleryNewForm extends UserGalleryImagesBaseForm {
+class UserGalleryNewForm extends UserGalleryBaseForm {
 
 	public $id_gallery;
 
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-		//graphics
-//		$renderer = $this->getRenderer();
-//		$renderer->wrappers['controls']['container'] = 'div';
-//		$renderer->wrappers['pair']['container'] = 'div';
-//		$renderer->wrappers['label']['container'] = NULL;
-//		$renderer->wrappers['control']['container'] = NULL;
-		//form
-
-		$this->addGroup('Infromace o galerii');
-		$this->addText("name", "Jméno galerie:", 30, 35)
-			->addRule(Form::FILLED, "Musíte zadat jméno galerii.")
-			->addRule(Form::MAX_LENGTH, "Maximální délka jména galerie je %d znaků", 150);
-		$this->addTextArea("description_gallery", "Popis galerie", 30, 6)
-			->addRule(Form::MAX_LENGTH, "Maximální délka komentáře je %d znaků", 500);
-
 
 		$this->addGroup('Fotografie (4 x 4MB)');
 
@@ -68,7 +53,7 @@ class UserGalleryNewForm extends UserGalleryImagesBaseForm {
 
 			//vytvoření galerie
 			$valuesGallery['name'] = $values->name;
-			$valuesGallery['description'] = $values->description_gallery;
+			$valuesGallery['description'] = $values->descriptionGallery;
 			$valuesGallery['userId'] = $uID;
 
 			$idGallery = $presenter->context->createUsersGalleries()

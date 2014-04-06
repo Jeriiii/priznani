@@ -2,44 +2,28 @@
 
 namespace Nette\Application\UI\Form;
 
-use Nette\Application\UI\Form,
-	Nette\Security as NS,
-	Nette\ComponentModel\IContainer,
-	Nette\Forms\Controls,
-	Nette\Utils\Strings as Strings;
-use Nette\Image;
+use Nette\ComponentModel\IContainer;
 
-class UserGalleryChangeForm extends Form {
+class UserGalleryChangeForm extends UserGalleryBaseForm {
 
 	private $galleryID;
 
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-		//graphics
-		$renderer = $this->getRenderer();
-		$renderer->wrappers['controls']['container'] = 'div';
-		$renderer->wrappers['pair']['container'] = 'div';
-		$renderer->wrappers['label']['container'] = NULL;
-		$renderer->wrappers['control']['container'] = NULL;
 		//form
 		$presenter = $this->getPresenter();
-		//    \Nette\Diagnostics\Debugger::Dump($presenter->galleryID);die();
 		$this->galleryID = $presenter->galleryID;
 
 		$filledForm = $presenter->context->createUsersGalleries()
 			->where('id', $this->galleryID)
 			->fetch();
 
-		$this->addText("name", "Jméno galerie", 30, 150)
-			->setDefaultValue($filledForm->name)
-			->addRule(Form::FILLED, "Vyplňte jméno galerie")
-			->addRule(Form::MAX_LENGTH, "Maximální délka jména galerie je %d znaků", 150);
-		$this->addTextArea('description', 'Popis galerie:', 100, 15)
-			->setDefaultValue($filledForm->description)
-			->addRule(Form::MAX_LENGTH, "Maximální délka popisu galerie je %d znaků", 500)
-			->addRule(Form::FILLED, "Vyplňte popis galerie");
+		$this->setDefaults(array(
+			"name" => $filledForm->name,
+			"description" => $filledForm->description
+		));
+		
 		$this->addSubmit('send', 'Změnit')->setAttribute('class', 'btn-main medium');
-		//$this->addProtection('Vypršel časový limit, odešlete formulář znovu');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -49,7 +33,7 @@ class UserGalleryChangeForm extends Form {
 		$presenter = $form->getPresenter();
 
 		$values2['name'] = $values->name;
-		$values2['description'] = $values->description;
+		$values2['description'] = $values->descriptionGallery;
 
 		$presenter->context->createUsersGalleries()
 			->where("id", $this->galleryID)

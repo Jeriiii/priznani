@@ -74,3 +74,7 @@
 		{if $setWidth} width="700" {else} height="525" {/if} />
 {/if}
 {/}
+
+{define isApprovedText}
+{if (($user->isInRole("superadmin") || $user->isInRole("admin")) && $image->approved == 0)}(zatím neschváleno){/if}
+{/}

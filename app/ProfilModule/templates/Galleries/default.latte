@@ -2,5 +2,16 @@
 
 {block content}
 {control navigation:breadcrumbs}
-{control userGalleries $mode}
+{if $myGallery}
+	{control myUserGalleries $mode}
+{else}
+	{control userGalleries $mode, $userID}
+{/if}
+
+{/}
+{block foot}
+{if $myGallery}
+<script type="text/javascript" src="{$basePath}/js/bootstrap-modal.min.js" ></script>
+{/if}
+{/}
 

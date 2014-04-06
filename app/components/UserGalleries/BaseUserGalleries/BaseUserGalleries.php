@@ -8,7 +8,7 @@
 /**
  * Description of Polly
  *
- * @author Mario
+ * @author Petr Kukrál <p.kukral@kukral.eu>
  */
 
 namespace POSComponent\Galleries\UserGalleries;
@@ -18,10 +18,10 @@ class BaseUserGalleries extends \Nette\Application\UI\Control {
 	/* proměnné pro css překlad */
 	protected $cssVariables = array();
 
-	public function renderBase($mode, $galleries, $templateName = "baseGallery.latte") {		
+	public function renderBase($mode, $galleries, $ownerID, $templateName = "baseGallery.latte") {		
 		$this->setCssParams();
 		$this->template->userData = $this->getUserFromDB()
-										->find($this->getUser()->id)
+										->find($ownerID)
 										->fetch();
 		
 		/* vrati pouze posledni vsechny nahledy galerie daneho uzivatele */

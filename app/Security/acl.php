@@ -27,6 +27,7 @@ class Acl extends Permission
 			$this->addResource('Admin:Galleries');
 			$this->addResource('Profil:EditProfil');
 			$this->addResource('Profil:ShowProfil');
+			$this->addResource('Profil:Galleries');
         	
         	// privileges
 			$this->allow('baseadmin', 'Admin:Admin');
@@ -36,6 +37,7 @@ class Acl extends Permission
 			$this->allow('baseadmin', 'Admin:Galleries');
 			$this->allow('user', 'Profil:EditProfil');
 			$this->allow('user', 'Profil:ShowProfil');
+			$this->allow('user', 'Profil:Galleries');
     }
 
 }

@@ -22,10 +22,10 @@ class UserImagesInGallery extends BaseUserImagesInGallery {
 		parent::__construct($galleryID, $images);
 	}
 	
-	public function render($mode) {
+	public function render($mode, $owner) {
 		$templateName = "../UserImagesInGallery/userImagesInGallery.latte";
 		
-		$this->renderBase($mode, $templateName);
+		$this->renderBase($mode, $owner, $templateName);
 	}
 
 }

@@ -1,8 +1,10 @@
 {includeblock 'baseBlocks.latte'}
 {snippet}
 	<div id="top_container">
-	    <h2 id="image_name">{$image->name|firstUpper}{if (($user->isInRole("superadmin") || $user->isInRole("admin")) && $image->approved == 0)}(zatím neschváleno){/if}</h2>
-	    {*include #uploadImage*}
+	    <h2 id="image_name">{$image->name|firstUpper}{ifset #isApprovedText}{include #isApprovedText}{/ifset}</h2>
+	    {ifset #uploadImage}
+			{include #uploadImage}
+		{/ifset}
 	    {ifset $username}<span class="username">{$username}</span>{/ifset}
 	    <div class="clear"></div>
 	</div>
@@ -51,8 +53,8 @@
 	<div id="link-and-fb">
 		{* udaje pro adminy *}
 		{if $user->isInRole("superadmin")}
-			{include #approvedImage}
-			{include #infoAboutOvner}
+			{ifset #approvedImage}{include #approvedImage}{/ifset}
+			{ifset #infoAboutOvner}{include #infoAboutOvner}{/ifset}
 			{include #adminRemoveImage} {* baseBlocks.latte *}
 		{/if}
 		{include #fbComment}{* baseBlocks.latte *}

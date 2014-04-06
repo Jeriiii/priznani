@@ -29,7 +29,7 @@ class MyUserImagesInGallery extends BaseUserImagesInGallery {
 	public function render($mode) {		
 		$templateName = "../MyUserImagesInGallery/myUserImagesInGallery.latte";
 		
-		$this->renderBase($mode, $templateName);
+		$this->renderBase($mode, $this->getUser()->id, $templateName);
 	}
 
 }
