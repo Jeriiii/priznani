@@ -96,6 +96,25 @@ class BaseInsertForm extends BaseForm
 		$id = $this->getTable($presenter)
 				->insert($insertData)
 				->id;
+                
+                if($this->table_name == "advice"){
+                       //Vložení nové otázky k poradně tabulky activity_stream 
+                       if($presenter->getUser()->loggedIn){
+                           $presenter->context->createStream()->addNewAdvice($id, $presenter->getUser()->id); 
+                       } else {
+                           $presenter->context->createStream()->addNewAdvice($id, NULL); 
+                       }
+                       
+                } else {
+                    if($presenter->getUser()->loggedIn){
+                        //Vložení nového přiznání do tabulky activity_stream                   
+                        $presenter->context->createStream()->addNewConfession($id, $presenter->getUser()->id);                                          
+                    } else {
+                        $presenter->context->createStream()->addNewConfession($id, NULL);                                          
+                    }
+                }
+
+                
 		$presenter->flashMessage('Přiznání bylo vytvořeno, na této adrese můžete sledovat STAV své přiznání.');
 		if($this->table_name == "date") $presenter->redirect("this");
 		$presenter->redirect('Page:' . $template, $id);
