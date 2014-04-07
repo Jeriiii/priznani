@@ -12,7 +12,9 @@
 				{/ifset*}
 				
 				
-				{if $dataItem->userGalleryID}
+				{ifset $dataItem->userGalleryID}
+                                    ID: {$dataItem->id}
+                                    zuzu {$dataItem->userGalleryID}
 				    <a href="{plink :Profil:Galleries: userID => $dataItem->userID}" title="{$dataItem->user->user_name}"><h3>{$dataItem->user->user_name}</h3></a>
 				    <span class="divider">></span>
 				    <a href="{plink :Profil:Galleries:listUserGalleryImages galleryID => $dataItem->userGallery->id}" title="{$dataItem->userGallery->name}">
@@ -22,8 +24,21 @@
 						<img src="{$basePath}/images/userGalleries/{$dataItem->userID}/{$dataItem->userGallery->id}/{$dataItem->userGallery->lastImage->id}.{$dataItem->userGallery->lastImage->suffix}" alt="{$dataItem->userGallery->name}" />
 					    <p>{$dataItem->userGallery->lastImage->description}</p>
 					</a>
-				{/if}
-				{*$dataItem->confessionID*}
+				{/ifset}
+				{ifset $dataItem->confessionID}
+                                    ID: {$dataItem->id}
+                                    bubu {$dataItem->confessionID}
+                                 <a href="{plink Page:confession id => $dataItem->confessionID}" title="Přiznání o sexu"><h3>Přiznání o sexu</h3></a>
+				    <p>{$dataItem->ref('confessions', 'confessionID')->note}</p>
+                                {/ifset}
+                                
+                                {ifset $dataItem->adviceID}
+                                    ID: {$dataItem->id}
+                                    mumu {$dataItem->adviceID}
+                                 <a href="{plink Page:advice id => $dataItem->adviceID}" title="Poradna o sexu"><h3>Poradna o sexu</h3></a>
+				    <p>{$dataItem->ref('advices', 'adviceID')->note}</p>
+                                {/ifset}
+                                
 				</div>
 			{/foreach}
 		<div class="stream-btn-next">
