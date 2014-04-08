@@ -24,7 +24,7 @@
 		/* obaluje celé tlačítko Zobrazit další */
 		btnNext: '.stream-btn-next',
 		/* obrázek (točící), který se zobrazí při načítání dalšího obsahu */
-		streamLoader: '.stream-loader',
+		streamLoader: '#stream-loader',
 		/* html element obsahující zprávu pro uživatele viz. msgText */
 		msgElement: '.stream-message',
 		/* text zprávy, který se zobrazí když už nejsou k dispozici další data */
@@ -40,14 +40,13 @@
 		
 		/* přidá další příspěvky */
 		if(this.opts.offset+1 <= this.opts.rows) {
-			$(this.opts.streamLoader).show();
+			
 			this.opts.offset = this.opts.offset + this.opts.addoffset;
 			
 			var ajaxUrl = this.ajaxLocation + "&" + this.opts.offsetName + "=" + this.opts.offset;
 			
 			$(this.opts.ajaxLocation).attr("href", ajaxUrl);
-
-			$(this.opts.streamLoader).hide();
+			
 			$.nette.ajax({
 				url: ajaxUrl,
 				success: function(response) {
@@ -82,9 +81,8 @@
 
 		/* naskroluju-li nakonec stránky if větev projde */   
 		if( elementOffset.top >= minTop &&  elementOffset.top <= maxTop) {
-			
 			changeStream();
-		}//alert(elementOffset.top + " min top " + minTop +  " max top " + maxTop);
+		}
 		timeCheckStream();
 	}
 	
