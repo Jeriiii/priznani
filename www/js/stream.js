@@ -28,7 +28,7 @@
 		/* html element obsahující zprávu pro uživatele viz. msgText */
 		msgElement: '.stream-message',
 		/* text zprávy, který se zobrazí když už nejsou k dispozici další data */
-		msgText: "",//Žádné starší příspěvky nebyly nalezeny
+		msgText: "Žádné starší příspěvky nebyly nalezeny",//Žádné starší příspěvky nebyly nalezeny
 		/* název parametru v URL, který nastavuje vždy aktuální offset hodnotu při každém ajaxovém požadavku */
 		offsetName: 'stream-offset',
 		/* maximální počet příspěvků (dat), který se může pluginem celkově načíst */
