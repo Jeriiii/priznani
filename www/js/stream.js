@@ -67,7 +67,7 @@
 
 	/* naplánuje další kontrolu za daný časový interval(půl vteřinu) */
 	function timeCheckStream() {
-		setTimeout(function() { visibleCheckStream();}, 1500);
+		setTimeout(function() { visibleCheckStream();}, 500);
 	}
 
 	/* zkontroluje, zda je uživatel na konci seznamu. Když ano, zavolá prodloužení */
