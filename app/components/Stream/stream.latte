@@ -1,5 +1,5 @@
 <section class="content">
-	<div n:snippet="posts" id="stream" data-ajax-append="true">
+	<div n:snippet="posts" class="stream" data-ajax-append="true">
 
 			{foreach $stream as $dataItem}
 				<div class="stream-item">
@@ -45,7 +45,7 @@
 			<a id="next-data-item-btn" n:href="getMoreData!" class="ajax btn-main loadingbutton">zobrazit více</a>
 		</div>
 		<div class="stream-message loading-message"></div>
-		<div id="stream-loader"><img src="{$basePath}/img/ajax-loader.gif"></div>
+		<div class="stream-loader"><img src="{$basePath}/img/ajax-loader.gif"></div>
 	 </div>
 	 <div class="clear"></div>
 

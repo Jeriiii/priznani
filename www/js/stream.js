@@ -24,7 +24,7 @@
 		/* obaluje celé tlačítko Zobrazit další */
 		btnNext: '.stream-btn-next',
 		/* obrázek (točící), který se zobrazí při načítání dalšího obsahu */
-		streamLoader: '#stream-loader',
+		streamLoader: '.stream-loader',
 		/* html element obsahující zprávu pro uživatele viz. msgText */
 		msgElement: '.stream-message',
 		/* text zprávy, který se zobrazí když už nejsou k dispozici další data */
@@ -37,7 +37,7 @@
 	/* prodlouží stream */
 	function changeStream() {	
 		$(this.opts.btnNext).hide();
-
+		
 		/* přidá další příspěvky */
 		if(this.opts.offset+1 <= this.opts.rows) {
 			$(this.opts.streamLoader).show();
@@ -47,6 +47,7 @@
 			
 			$(this.opts.ajaxLocation).attr("href", ajaxUrl);
 
+			$(this.opts.streamLoader).hide();
 			$.nette.ajax({
 				url: ajaxUrl,
 				success: function(response) {
@@ -67,7 +68,7 @@
 
 	/* naplánuje další kontrolu za daný časový interval(půl vteřinu) */
 	function timeCheckStream() {
-		setTimeout(function() { visibleCheckStream();}, 500);
+		setTimeout(function() { visibleCheckStream();}, 1500);
 	}
 
 	/* zkontroluje, zda je uživatel na konci seznamu. Když ano, zavolá prodloužení */
@@ -80,9 +81,10 @@
 		var elementOffset = $(this.opts.streamLoader).offset();
 
 		/* naskroluju-li nakonec stránky if větev projde */   
-		if( elementOffset.top > minTop &&  elementOffset.top < maxTop) {
+		if( elementOffset.top >= minTop &&  elementOffset.top <= maxTop) {
+			
 			changeStream();
-		}
+		}//alert(elementOffset.top + " min top " + minTop +  " max top " + maxTop);
 		timeCheckStream();
 	}
 	
