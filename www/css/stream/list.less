@@ -1,36 +1,37 @@
 @import "../variables.less";
 @import "../bootstrap/help/mixins.less";
 
-#stream{
-    width: 520px;
-    float: left;
-    margin: 0 15px;
-}
 
 .stream{
     width: 520px;
     float: left;
     margin: 0 15px;
+    .box-shadow(3px 0 2px #aaa);
+}
+
+body{
+    background-color: #e9eaee;
 }
 
 .stream-item{
     
     border-top: @stream-line;
     font-family: 'Exo', Arial, sans-serif;
-    
-    margin: 10px 0;
-    padding: 10px 5px;
+    background: white;
+    margin: 0;
+    padding: 15px 5px;
     
     h3{
 	color: @main-red;
-	font-size: 28px;
+	font-size: 20px;
 	display: inline;
     }
     
     .divider{
 	display: inline;
-	font-size: 26px;
-	font-weight: 600;
+	font-size: 18px;
+	font-weight: 400;
+	color: @stream-weak-color;
 	
     }
     .imagehref{
@@ -54,10 +55,12 @@
 .loadingbutton{
     display: block;
 }
-#stream-loader{
+.stream-loader{
     display: block;
     margin: 20px;
     text-align: center;
 	
 }
+
+
 
