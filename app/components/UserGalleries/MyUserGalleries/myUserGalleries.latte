@@ -7,7 +7,7 @@
 </div>
 {/}
 
-{define modalDeleteGallery}
+{*define modalDeleteGallery}
 <div id="MyModal{$iterator->getCounter()}" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -24,7 +24,7 @@
 	</div>
 </div>
 <script type="text/javascript">$("#MyModal{$iterator->getCounter()}").modal({ show: false});</script>
-{/}
+{/*}
 
 {define scripts}
 {* modal script *}

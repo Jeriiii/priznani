@@ -32,9 +32,25 @@
 
 		</div>
 		
-		{ifset #modalDeleteGallery}
-			{include #modalDeleteGallery "gallery" => $gallery, "iterator" => $iterator}
-		{/ifset}                                         
+		<div id="MyModal{$iterator->getCounter()}" class="modal fade">
+			<div class="modal-dialog">
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				  <h3 id="myModalLabel">Smazat galerie {$gallery->id}?</h3>
+				</div>
+				<div class="modal-body">
+				  <p>Opravdu chcete smazat galerie {$gallery->name}?</p>	
+				</div>
+				<div class="modal-footer">
+					<a href="{plink deleteGallery! galleryID => $gallery->id}" class="btn btn-success">
+						Ano
+					</a>
+					<button  class="btn" data-dismiss="modal" aria-hidden="true">Ne</button>
+				</div>
+			  </div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		  </div><!-- /.modal -->
 
     {/foreach}
 	<div class="clear"></div>
