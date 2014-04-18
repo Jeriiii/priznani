@@ -2,7 +2,7 @@
 {*<link rel="stylesheet" href="{$basePath}/css/bonuses.css" type="text/css">*}
 <link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
 <script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>  
-{control css "competition/listImages.less", "bootstrap/forms-medium.less"}
+{control css "competition/listImages.less"}
 {/}
 {block content}
 
@@ -12,6 +12,6 @@
 
 <section class="inner imgs-container">
     <h2>Obsah galerie: </h2>
-    {control userImagesInGallery "listAll"}
+    {control myUserImagesInGallery "listAll"}
     <div class="clear"></div>
 </section>
