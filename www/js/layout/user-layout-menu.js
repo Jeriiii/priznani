@@ -2,8 +2,6 @@
     var isvisible = false;
     var dropmenu = $('#dropmenu');
     var droplink = $('#droplink');
-    //dropmenu.css('display', 'none');
-    //dropmenu.css('visibility', 'visible');
     droplink.click(function(){ 
         if(isvisible){
             isvisible = false;

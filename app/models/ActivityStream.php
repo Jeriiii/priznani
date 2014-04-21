@@ -10,7 +10,7 @@ class ActivityStream extends Selection
         parent::__construct('stream_items', $connection);
     }
      
-         public function addNewConfession($confessionID, $userID) {
+	public function addNewConfession($confessionID, $userID) {
 		$this->insert(array(
 			"confessionID" => $confessionID,
 			"userID" => $userID,
