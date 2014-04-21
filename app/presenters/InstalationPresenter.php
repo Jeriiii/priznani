@@ -22,6 +22,7 @@ class InstalationPresenter extends BasePresenter
 		$this->addToExistDirs(WWW_DIR . "/images/users/profils/");
 		
 		// přidání složek pro cache css a js
+		$this->addToExistDirs(WWW_DIR . "/cache/");
 		$this->addToExistDirs(WWW_DIR . "/cache/js/");
 		$this->addToExistDirs(WWW_DIR . "/cache/css/");
 		
