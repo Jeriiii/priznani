@@ -202,8 +202,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 			}
 
 			$navigation["Moje galerie"] = $this->link(":Profil:Galleries:");
-			$navigation["Přiznání"] = $this->link(":Page:");
-			$navigation["Nastavení"] = $this->link("#");
+//			$navigation["Přiznání"] = $this->link(":Page:");
+//			$navigation["Nastavení"] = $this->link("#");
 			$navigation["Odhlásit se"] = $this->link(":Sign:out");
 
 			//neprihlaseny uzivatel

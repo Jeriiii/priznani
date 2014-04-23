@@ -8,47 +8,28 @@
 {/}
 
 {define modalDeleteGallery}
-<!--<div id="MyModal{$iterator->getCounter()}" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; ">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel">Smazat galerie {$gallery->id}?</h3>
+<div id="MyModal{$gallery->id}" class="modal fade">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="myModalLabel">Smazat galerie {$gallery->id}?</h3>
+		</div>
+		<div class="modal-body">
+			<p>Opravdu chcete smazat galerie {$gallery->name}?</p>	
+		</div>
+		<div class="modal-footer">
+			<a href="{plink deleteGallery! galleryID => $gallery->id}" class="btn btn-success">
+				Ano
+			</a>
+			<button  class="btn" data-dismiss="modal" aria-hidden="true">Ne</button>
+		</div>
 	</div>
-	<div class="modal-body">
-		<p>Opravdu chcete smazat galerie {$gallery->name}?</p>		        
-	</div>
-	<div class="modal-footer">
-		<a href="{plink deleteGallery! galleryID => $gallery->id}" class="btn btn-success">
-			Ano
-		</a>
-		<button  class="btn" data-dismiss="modal" aria-hidden="true">Ne</button>
-	</div>
-</div>-->
-<div id="MyModal{$iterator->getCounter()}" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        <p>One fine body&hellip;</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<script type="text/javascript">$("#MyModal{$iterator->getCounter()}").modal({ show: false});</script>
-{/}
-
-{define scripts}
-{* modal script *}
-<script type="text/javascript" src="{$basePath}/js/bootstrap-modal.min.js" ></script>
+</div>
+</div>
 {/}
 
 {define galleryEditButtons}
-<a class="btn btn-danger" href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" style="position: absolute;background: white; float: left;left: 2px; z-index: 11;height: 26px;width: 26px;top: 0px;right: 2px;padding-top: 0px;" title="editovat galerie"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
-<a data-toggle="modal" class="btn btn-danger" href="#MyModal{$iterator->getCounter()}" style="position: absolute;background: white; float: right; z-index: 11;height: 26px;width: 26px;top: 0px;right: 2px;padding-top: 0px;" title="smazat galerie"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
+<a href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" class="btn-action btn-edit" title="editovat galerie"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
+<a data-toggle="modal" href="#MyModal{$gallery->id}" class="btn-action btn-delete" title="smazat galerie"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
 {/}

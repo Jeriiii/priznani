@@ -48,11 +48,9 @@ class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm {
 		$values = $form->values;
 		$presenter = $form->getPresenter();
 
-		$values2['description'] = $values->description;
-
 		$presenter->context->createUsersImages()
 			->where("id", $this->imageID)
-			->update($values2);
+			->update($values);
 
 		$presenter->flashMessage('Fotka byla úspěšně opravena');
 		$presenter->redirect("Galleries:listUserGalleryImages", $this->galleryID);

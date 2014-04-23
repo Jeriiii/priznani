@@ -13,7 +13,7 @@
 	</nav>
 	{control stream}
 	<div id="right-dock">
-	    reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama 
+	    {*reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama *}
 	</div>
 	<div class="clear"></div>
 </section>
@@ -28,7 +28,9 @@
 			rows: {$count}
 		});
 	});
-	
+	$("#frmaddItemForm-note").click(function() {
+		$("#frmaddItemForm-note").animate({ height: "200px"}, 500);
+	});
 </script>
 
 {/block}

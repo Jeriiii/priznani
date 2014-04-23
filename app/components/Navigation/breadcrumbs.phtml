@@ -1,9 +1,11 @@
 <div class="control breadcrumbs">
-	{foreach $items as $item}
-		{if $iterator->isLast()}
-			<span class="current">{$item->label}</span>
-		{else}
-			<a href="{$item->url}">{$item->label}</a> /
-		{/if}
-	{/foreach}
+	<h2>
+		{foreach $items as $item}
+			{if $iterator->isLast()}
+				<span class="current">Galerie {$item->label|lower}</span>
+			{else}
+			<a href="{$item->url}">{$item->label|firstUpper}</a> <span class="slash">/</span>
+			{/if}
+		{/foreach}
+	</h2>
 </div>

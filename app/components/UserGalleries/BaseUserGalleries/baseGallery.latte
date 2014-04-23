@@ -16,7 +16,13 @@
 
 {block beforeContent}
 <section class="inner imgs-container">	
-	<h2>Seznam galerií uživatele {$userData->user_name}</h2>
+	<div class="top-container">
+		<h2 class="small">Galerie uživatele {$userData->user_name}</h2>
+		<a href="{plink :OnePage:}" id="add-photo-button" class="btn-main btn-small right">
+			zpět na stream
+		</a>
+	</div>
+	<div class="clear"></div>
 	{ifset #addNewGallery}
 		{include #addNewGallery}
 	{/ifset}
@@ -30,26 +36,9 @@
 			<a class="view" href="{plink Galleries:listUserGalleryImages galleryID => $gallery->id}">{$gallery->name}</a>
 
 		</div>
-		
-		<div id="MyModal{$iterator->getCounter()}" class="modal fade">
-			<div class="modal-dialog">
-			  <div class="modal-content">
-				<div class="modal-header">
-				  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				  <h3 id="myModalLabel">Smazat galerie {$gallery->id}?</h3>
-				</div>
-				<div class="modal-body">
-				  <p>Opravdu chcete smazat galerie {$gallery->name}?</p>	
-				</div>
-				<div class="modal-footer">
-					<a href="{plink deleteGallery! galleryID => $gallery->id}" class="btn btn-success">
-						Ano
-					</a>
-					<button  class="btn" data-dismiss="modal" aria-hidden="true">Ne</button>
-				</div>
-			  </div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		  </div><!-- /.modal -->
+		{ifset #modalDeleteGallery}
+			{include #modalDeleteGallery "gallery" => $gallery, "iterator" => $iterator}
+		{/ifset}
 
     {/foreach}
 	<div class="clear"></div>

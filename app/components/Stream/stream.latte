@@ -1,5 +1,15 @@
 <section class="content">
 	<div id="stream">
+		<div class="stream-form">
+			{form addItemForm class=>'form-container'}
+				{input note class=>'form-field', placeholder=>'Přiznání o sexu...', rows => 3}
+				<div class="submit-container">
+					{input submit class => 'submit-button'}
+				</div>
+				{label nick class => 'hidden' /}
+				{input nick class => 'hidden'}
+			{/form}
+		</div>
 		<div n:snippet="posts" data-ajax-append="true">
 
 			{foreach $stream as $dataItem}
@@ -25,12 +35,12 @@
 					</a>
 				{/ifset}
 				{ifset $dataItem->confessionID}
-                                 <a href="{plink Page:confession id => $dataItem->confessionID}" title="Přiznání o sexu"><h3>Přiznání o sexu</h3></a>
+                                 <a href="{plink Page:confession id => $dataItem->confessionID}" title="Přiznání o sexu"><h3>Přiznání</h3></a>
 				    <p>{$dataItem->ref('confessions', 'confessionID')->note}</p>
                                 {/ifset}
                                 
                                 {ifset $dataItem->adviceID}
-                                 <a href="{plink Page:advice id => $dataItem->adviceID}" title="Poradna o sexu"><h3>Poradna o sexu</h3></a>
+                                 <a href="{plink Page:advice id => $dataItem->adviceID}" title="Poradna o sexu"><h3>Poradna</h3></a>
 				    <p>{$dataItem->ref('advices', 'adviceID')->note}</p>
                                 {/ifset}
                                 

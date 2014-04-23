@@ -11,6 +11,8 @@
  * @author Petr
  */
 
+use Nette\Application\UI\Form as Frm;
+
 class Stream extends Nette\Application\UI\Control
 {     
         protected $dataForStream;
@@ -48,6 +50,10 @@ class Stream extends Nette\Application\UI\Control
             } else {
                 $this->redirect('this');                
             }
-	}      
+	}
+	
+	protected function createComponentAddItemForm($name) {
+		return new Frm\Form1NewForm($this, $name);
+	}
 }
 ?>

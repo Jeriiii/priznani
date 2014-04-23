@@ -14,17 +14,23 @@ body{
     background-color: #e9eaee;
 }
 
-.stream-item{
-    
-/*    border-top: @stream-line;*/
-    border: 1px solid @stream-weak-color;
+.stream-item-layout {
+	border: 1px solid @stream-weak-color;
     border-color: @stream-weak-bordercolor;
     font-family: 'Exo', Arial, sans-serif;
     background: white;
     margin: 0;
     margin-bottom: 4px; 
     padding: 15px 5px;
+}
+.stream-form {
+	.stream-item-layout;
+	padding: 5px;
+}
+.stream-item{
     
+/*    border-top: @stream-line;*/
+    .stream-item-layout;
     h3{
 	color: @main-red;
 	font-size: 20px;
@@ -51,7 +57,8 @@ body{
 	text-decoration: underline;
     }
     p{
-	font-size: 15px;
+	font-size: 12px;
+	font-family: 'Helvetica Neue', Helvetica, Arial,tahoma,verdana,arial,sans-serif;
     }
     
     
@@ -73,7 +80,8 @@ body{
     border-color: @stream-weak-bordercolor;
     .stream-message{
 	padding: 8px;
-	font-family: 'Exo', Arial, sans-serif;
+	font-family: Arial, sans-serif;
+	font-size:13px;
     }
     .stream-btn-next, #stream-loader {
 	padding: 10px;
