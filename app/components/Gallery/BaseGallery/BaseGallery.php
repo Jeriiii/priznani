@@ -15,7 +15,7 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	/* aktualni obrazek */
 	private $image;
 	/* aktualni galerie */
-	private $gallery;
+	protected $gallery;
 	/* aktualni domena */
 	private $domain;
 	/* jsme na priznani z parby */

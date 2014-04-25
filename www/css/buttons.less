@@ -16,7 +16,8 @@
     height: 40px;
     text-shadow: 0 0 1px white;
     text-align: center;
-    background: @main-red;
+    background-color: @main-red !important;
+	border: solid 0 black !important;
     #gradient > .vertical(@main-red; @main-red-dark);
 }
 .btn-main:hover {
@@ -31,12 +32,13 @@
 .btn-main.medium {
     width: 300px;
     margin: 10px;
+	font-size: 22px !important;
 }
 
 .btn-main.btn-small{
     line-height: 25px;
     height: 25px;
-    font-size: 18px;
+    font-size: 18px !important;
 }
 
 

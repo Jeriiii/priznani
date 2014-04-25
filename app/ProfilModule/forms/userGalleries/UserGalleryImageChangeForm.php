@@ -33,10 +33,9 @@ class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm {
 			->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40)
 			->addRule(Form::FILLED, 'Zadejte jméno fotky');
 
-		$this->addTextArea('description', 'Popis fotky:', 100, 15)
+		$this->addTextArea('description', 'Popis fotky:', 100, 2)
 			->setDefaultValue($filledForm->description)
-			->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500)
-			->addRule(Form::FILLED, "Vyplňte popis fotky");
+			->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500);
 		$this->addSubmit('send', 'Změnit')
 			->setAttribute('class', 'btn-main medium');
 		//$this->addProtection('Vypršel časový limit, odešlete formulář znovu');
@@ -52,7 +51,7 @@ class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm {
 			->where("id", $this->imageID)
 			->update($values);
 
-		$presenter->flashMessage('Fotka byla úspěšně opravena');
+		$presenter->flashMessage('Fotka byla úspěšně změněna');
 		$presenter->redirect("Galleries:listUserGalleryImages", $this->galleryID);
 	}
 

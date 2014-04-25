@@ -56,32 +56,33 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 		return pathinfo($filename, PATHINFO_EXTENSION);
 	}
 
-	public function addImagesFile($count) {
+	public function addImagesFile($count, $displayName = TRUE, $dislplayDesc = TRUE) {
 		for ($i = 0; $i < $count; $i++) {
 			$this->addUpload('foto' . $i, 'Přidat fotku:')
 				->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 * 1024)
 				->AddCondition(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif');
-			$this->addText('image_name' . $i, 'Jméno:')
-				->AddConditionOn($this['foto' . $i], Form::FILLED)
-				->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40);
-			$this->addText('description_image' . $i, 'Popis:')
-				->AddConditionOn($this['foto' . $i], Form::FILLED)
-				->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500);
+			if($displayName) {
+				$this->addText('image_name' . $i, 'Jméno:')
+					->AddConditionOn($this['foto' . $i], Form::FILLED)
+					->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40);
+			}
+			if($dislplayDesc) {
+				$this->addText('description_image' . $i, 'Popis:')
+					->AddConditionOn($this['foto' . $i], Form::FILLED)
+					->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500);
+			}
 		}
 	}
 
 	public function addImages($arr, $values, $uID, $idGallery) {
 
 		foreach ($arr as $key => $image) {
-			$name = 'image_name' . $key;
-			$description = 'description_image' . $key;
-
 			if ($image->isOK()) {
 
 				$valuesDB['suffix'] = $this->suffix($image->getName());
 
-				$valuesDB['name'] = $values->$name;
-				$valuesDB['description'] = $values->$description;
+				$valuesDB['name'] = !empty($values->name) ? $values->name : "";
+				$valuesDB['description'] = !empty($values->description) ? $values->description : "";
 
 				$valuesDB['galleryID'] = $idGallery;
 

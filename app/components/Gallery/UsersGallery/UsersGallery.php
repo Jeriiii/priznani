@@ -9,8 +9,8 @@
 namespace POSComponent\Galleries\Images;
 
 class UsersGallery extends BaseGallery {
-    
-	public function render() {
+	
+	public function render() {		
 		parent::renderBaseGallery("../UsersGallery/usersGallery.latte");                
 	}
         

@@ -51,8 +51,9 @@ class SignPresenter extends BasePresenter
 
 	public function actionOut()
 	{
+		$this->getSession('allow')->remove();
 		$this->getUser()->logout();
-		$this->flashMessage('You have been signed out.');
+		$this->flashMessage("Byl jste úspěšně odhlášen");
 		$this->redirect('Sign:in');
 	}
 	

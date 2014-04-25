@@ -18,6 +18,44 @@ class CronPresenter extends BasePresenter
 		
 		$this->setLayout("simpleLayout");
 	}
+	
+	public function actionReleaseConfessions() {
+		$allConCount = $this->context->createForms1()
+						->where("inStream", 0)
+						->where("mark", 1)
+						->count("id");
+		
+		$limit = 400;
+		
+		$confessions = $this->context->createForms1()
+						->where("inStream", 0)
+						->where("mark", 1)
+						->order("release_date ASC")
+						->limit($limit);
+		
+		$now = new \Nette\DateTime();
+		
+		$counter = 1;
+		foreach($confessions as $con) {
+			$this->context->createStream()
+				->insert(array(
+					"confessionID" => $con->id,
+					"create" => $now
+				));
+			$counter ++;
+		}
+		
+		$this->context->createForms1()
+			->where("inStream", 0)
+			->where("mark", 1)
+			->limit($limit)
+			->update(array(
+				"inStream" => 1
+			));
+		
+		echo("Nahrávání proběhlo úspěšně, bylo nahráno " . --$counter . " přiznání z " . $allConCount);
+		$this->redirect("this");
+	}
 
 	public function actionWow()
 	{

@@ -17,14 +17,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 
 		$this->addGroup('Fotografie (4 x 4MB)');
 
-		$this->addImagesFile(4);
-
-
-		$this->addCheckbox("agreement", Html::el('a')
-				->href("http://priznanizparby.cz/soutez/fotografie.pdf")
-				->setHtml('Souhlasím s podmínkami'))
-			->addRule(Form::FILLED, "Musíte souhlasit s podmínkami.");
-
+		$this->addImagesFile(4, FALSE, FALSE);
 
 		$this->addSubmit("submit", "Vytvořit galerie")
 			->setAttribute('class', 'btn-main medium');

@@ -32,7 +32,19 @@ class RegistrationForm extends BaseBootstrapForm
     	$this->addPassword('passwordVerify', 'Heslo pro kontrolu:', 30, 200)
     		->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu')
     		->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password']);
-    	$this->addSubmit('send', 'Vytvořit')
+		
+		$this->addCheckbox("adult", "Už mi bylo 18 let")
+			->addRule(Form::FILLED, "Musí Vám být alespoň 18 let.");
+		$this->addCheckbox("agreement", Html::el("span")
+			->setText("Souhlasím s ")
+			->add(
+				Html::el('a')
+				->href("http://priznanizparby.cz/soutez/fotografie.pdf")
+				->setHtml('<u>podmínkami</u>'))
+			)
+			->addRule(Form::FILLED, "Musíte souhlasit s podmínkami.");
+		
+    	$this->addSubmit('send', 'Registrovat')
 		->setAttribute('class','btn-main medium');
     	//$this->addProtection('Vypršel časový limit, odešlete formulář znovu');
     	$this->onSuccess[] = callback($this, 'submitted');
@@ -42,18 +54,28 @@ class RegistrationForm extends BaseBootstrapForm
     public function submitted(RegistrationForm $form)
 	{
 		$values = $form->getValues();
+		
+		unset($values["adult"]);
+		unset($values["agreement"]);
+		
 		$mail = $form->getPresenter()->context->createUsers()
 			->where('email', $values->email)
+			->fetch();
+		
+		$nick = $form->getPresenter()->context->createUsers()
+			->where('user_name', $values->user_name)
 			->fetch();
 		$values->role = 'user';
 		$values['confirmed'] = Strings::random(100);
 		
 		if($mail){
-			$form->addError(Html::el('div')->setText('Tento email už někdo používá.')->setClass('alert alert-danger'));
+			$form->addError('Tento email už někdo používá.');
+		} elseif ($nick) {
+			$form->addError('Tento nick už někdo používá.');
 		} else {
 			unset($values->passwordVerify);
 			/* odeslání mailu o registraci i s údaji */
-			//$this->sendMail($values->mail,$values->password, $values['confirmed']);
+			$this->sendMail($values->email,$values->password, $values['confirmed']);
 			$values->password = \Authenticator::calculateHash($values->password);
 			$user = $form->getPresenter()->context->createUsers()
 						->insert($values);
@@ -61,8 +83,8 @@ class RegistrationForm extends BaseBootstrapForm
 			//vytvoření nové složky pro vlastní galerii
 			mkdir(WWW_DIR . "/images/userGalleries/" . $user->id);
 			
-			$this->getPresenter()->flashMessage('Registrace proběhla úspěšně, vyčkejte na schválení adminem.');
-	        	$form->getPresenter()->redirect('Sign:in');
+			$this->getPresenter()->flashMessage('Pro dokončení registrace prosím klikněte na odkaz zaslaný na Váš email.');
+	        $form->getPresenter()->redirect('Sign:in');
 		}
 	
 	}
@@ -73,10 +95,11 @@ class RegistrationForm extends BaseBootstrapForm
 		$domain_name = $this->getPresenter()->context->createAuthorizator_table()
 				->fetch()
 				->domain_name;
-		$mail->setFrom('info@nejlevnejsiwebstranky.cz')
+		$link = $this->getPresenter()->link("//:Sign:in", array("code" => $code, "confirmed" => 1));
+		$mail->setFrom('neodepisuj@priznaniosexu.cz')
 			->addTo($email)
 			->setSubject('Dokončení registrace')
-			->setBody("Dobrý den,\nbyl jste úspěšně zaregistrován. Vaše přihlašovací údaje jsou\ne-mail: " . $email . "\nheslo: " . $password . "Pro dokončení registrace prosím klikněte na tento odkaz:\n" . "http://" . $domain_name . "/sign/in?code=" . $code . "&confirmed=1\n\nDěkujeme za Vaší registraci.\nS pozdravem\ntým nudajefuc.cz")
+			->setBody("Dobrý den,\nbyl jste úspěšně zaregistrován. Vaše přihlašovací údaje jsou\ne-mail: " . $email . "\nheslo: " . $password . "\nPro dokončení registrace prosím klikněte na tento odkaz:\n" . $link ."\n\nDěkujeme za Vaší registraci.\nS pozdravem\ntým nudajefuc.cz")
 			->send();
 	}
 

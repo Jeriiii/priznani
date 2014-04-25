@@ -34,8 +34,7 @@ $container = $configurator->createContainer();
 $router = new RouteList;
 
 $container->router = $router;
-$router[] = new Route('index.php', 'Homepage:default', Route::ONE_WAY);
-$router[] = new Route('ruzovyslon', '//http://rozovyslon.cz', Route::ONE_WAY);
+$router[] = new Route('index.php', 'OnePage:default', Route::ONE_WAY);
 //$router[] = new Route('//[www.]priznanizparty.cz/[/<presenter>/<url>]', array(
 //    'presenter' => 'Page',
 //    'action' => 'default',
@@ -71,7 +70,7 @@ $router[] = new Route('ruzovyslon', '//http://rozovyslon.cz', Route::ONE_WAY);
 //    'action' => 'advice',
 //	'id' => '<id>'
 //));
-$router[] = new Route('<presenter>/<action>[/<url>]', 'Homepage:default');
+$router[] = new Route('<presenter>/<action>[/<url>]', 'OnePage:default');
 
 Container::extensionMethod('addDateTimePicker', function (Container $_this, $name, $label, $cols = NULL, $maxLength = NULL)
 {

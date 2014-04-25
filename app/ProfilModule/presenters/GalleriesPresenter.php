@@ -195,6 +195,44 @@ class GalleriesPresenter extends \BasePresenter {
 		if (file_exists($waySqr)) {
 			unlink($waySqr);
 		}
+		
+		
+		$gallery = $this->context->createUsersGalleries()
+						->where("bestImageID = ? OR lastImageID = ?", $id_image, $id_image)
+						->fetch();
+
+		/* kontrola, zda se nemaze obrazek zastupujici galerii */
+		if($gallery) {
+			$image = $this->context->createUsersImages()
+						->where("galleryID", $gallery->id)
+						->where("id != ?", $id_image)
+						->fetch();
+			
+			$galleryID = $gallery->id;
+			
+			/* existuji jine obrazky v galerii? */
+			if($image) {
+				/* ANO - nastav jiný obrázek */
+				$gallery
+					->update(array(
+						"bestImageID" => $image->id,
+						"lastImageID" => $image->id
+					));
+			} else {
+				/* NE */
+				$gallery
+					->update(array(
+						"bestImageID" => NULL,
+						"lastImageID" => NULL
+					));
+				
+				/* smaž galerii ze streamu */
+				$this->context->createStream()
+					->where("userGalleryID", $galleryID)
+					->delete();
+			}
+		}
+			
 
 		$this->context->createUsersImages()
 			->find($id_image)

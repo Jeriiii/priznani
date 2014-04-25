@@ -2,16 +2,24 @@
 {*<link rel="stylesheet" href="{$basePath}/css/bonuses.css" type="text/css">*}
 <link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
 <script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>  
-{control css "competition/listImages.less"}
+{control css "competition/listImages.less", 'bootstrap/forms-medium.less'}
 {/}
 {block content}
 
-<h1>Editace galerie</h1>
-{control userGalleryChange}
+<h2>Editace galerie</h2>
+<div class="container-medium">
+	{control userGalleryChange}
+</div>
 
 
 <section class="inner imgs-container">
-    <h2>Obsah galerie: </h2>
+    <h2>Fotky: </h2>
     {control myUserImagesInGallery "listAll"}
     <div class="clear"></div>
 </section>
+	
+{/}
+
+{block foot}
+<script type="text/javascript" src="{$basePath}/js/bootstrap-modal.min.js" ></script>
+{/}

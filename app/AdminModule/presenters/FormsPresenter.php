@@ -146,7 +146,7 @@ class FormsPresenter extends AdminSpacePresenter
 	{
 		switch ($type) 
 		{
-			case "1":
+			case "1": //poradna
 				$forms = $this->context->createForms1()
 							->find($id)
 							->fetch();
@@ -172,7 +172,7 @@ class FormsPresenter extends AdminSpacePresenter
 					->delete();
 				break;
 			
-			case "2":
+			case "2": //priznani
 				$forms = $this->context->createAdvices()
 							->find($id)
 							->fetch();
@@ -334,43 +334,54 @@ class FormsPresenter extends AdminSpacePresenter
 	}
 
 	private function schedulingAdvice(/* posledni naplanovane */ $confession, /*ma se preplanovat*/ $subform){
-		$this->scheduling($confession, $subform, $time = "+30 minutes");
+		$this->scheduling($confession, $subform, $addMinutes = 30);
 	}
 
-	private function scheduling(/* posledni naplanovane */ $confession, /*ma se preplanovat*/ $subform, $time = "+20 minutes")
+	private function scheduling(/* posledni naplanovane */ $confLast, /*ma se preplanovat*/ $confNew, $addMinutes = 20)
 	{
-		$special_time = array(
-				"01" => "1",
-				"02" => "1",
-				"03" => "2",
-				"05" => "2",
-		);
-
-		$new_release_date = new \Nette\DateTime($confession->release_date);
+		$oldReleaseDate = $confLast->release_date;
 		$now = new \Nette\DateTime();
 		
-		/* kdyz by melo byt vydani do minulosti */
-		if($new_release_date < $now)
-		{
-			$new_release_date = $now;
-			$new_release_date->setTime(date_format($new_release_date, "H") + 1, 0);
-		}
-		
-		$hour = date_format($confession->release_date, "H");
+		$newReleaseDate = $this->getReleaseDate($oldReleaseDate, $now, $addMinutes);
 
-		if(array_key_exists($hour, $special_time)) 
-		{
-			$new_release_date->modify("+" . $special_time[$hour] . " hours");
-		}else{
-			$new_release_date->modify($time);
-		}
-
-		$subform
+		$confNew
 			->update(array(
 				"mark" => 1,
-				"release_date" => $new_release_date,
-				"sort_date" => $new_release_date
+				"release_date" => $newReleaseDate,
+				"sort_date" => $newReleaseDate
 			));
+	}
+	
+	public function getReleaseDate($oldReleaseDate, $now, $addMinutes) {
+		$newReleaseDate = new \Nette\DateTime($oldReleaseDate);
+		
+		$modifyMorningHour = array(
+			/* hour => modify hour */
+			"01" => "1",
+			"02" => "1",
+			"03" => "2",
+			"04" => "2",
+			"05" => "2",
+		);
+		
+		/* kdyz by melo byt vydani do minulosti */
+		if($newReleaseDate < $now)
+		{
+			$newReleaseDate = $now;
+			$newReleaseDate->setTime(date_format($newReleaseDate, "H") + 1, 0);
+		}
+		
+		$hour = date_format($oldReleaseDate->release_date, "H");
+
+		/* modify time */
+		if(array_key_exists($hour, $modifyMorningHour))
+		{
+			$newReleaseDate->modify("+" . $modifyMorningHour[$hour] . " hours");
+		}else{
+			$newReleaseDate->modify("+" . $addMinutes . " minutes");
+		}
+		
+		return $newReleaseDate;
 	}
 
 	public function handledeleteFormX($type, $id)

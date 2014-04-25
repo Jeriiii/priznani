@@ -32,7 +32,7 @@ class AddItemForm extends BaseForm
 	 */
 	public function protection($values, $presenter, $template)
 	{
-		if($this->table_name == "date")
+		if($this->tableName == "date")
 			$exist_confession = FALSE;
 		else
 			$exist_confession = $this->getTable($presenter)
@@ -58,15 +58,16 @@ class AddItemForm extends BaseForm
 	}
 
 
-	public function baseSubmitted($form, $template)
+	public function submitted($form)
 	{
+		$template = "confession";
 		$presenter = $this->getPresenter();
 		$values = $this->protection($form->values, $presenter, $template);
 		
 		$values["create"] = new \Nette\DateTime;
 		
 		/* u inzerátů seznamky se ještě ukládá uživatel, který inzerát vložil */
-		if($this->table_name == "date") {
+		if($this->tableName == "date") {
 			$insertData = array(
 				"create" => $values["create"],
 				"note" => $values->note,
@@ -85,26 +86,26 @@ class AddItemForm extends BaseForm
 				->insert($insertData)
 				->id;
                 
-		if($this->table_name == "advice"){
-			   //Vložení nové otázky k poradně tabulky activity_stream 
-			   if($presenter->getUser()->loggedIn){
-				   $presenter->context->createStream()->addNewAdvice($id, $presenter->getUser()->id); 
-			   } else {
-				   $presenter->context->createStream()->addNewAdvice($id, NULL); 
-			   }
-
-		} else {
-			if($presenter->getUser()->loggedIn){
-				//Vložení nového přiznání do tabulky activity_stream                   
-				$presenter->context->createStream()->addNewConfession($id, $presenter->getUser()->id);                                          
-			} else {
-				$presenter->context->createStream()->addNewConfession($id, NULL);                                          
-			}
-		}
+//		if($this->tableName == "advice"){
+//			   //Vložení nové otázky k poradně tabulky activity_stream 
+//			   if($presenter->getUser()->loggedIn){
+//				   $presenter->context->createStream()->addNewAdvice($id, $presenter->getUser()->id); 
+//			   } else {
+//				   $presenter->context->createStream()->addNewAdvice($id, NULL); 
+//			   }
+//
+//		} else {
+//			if($presenter->getUser()->loggedIn){
+//				//Vložení nového přiznání do tabulky activity_stream                   
+//				$presenter->context->createStream()->addNewConfession($id, $presenter->getUser()->id);                                          
+//			} else {
+//				$presenter->context->createStream()->addNewConfession($id, NULL);                                          
+//			}
+//		}
 
                 
 		$presenter->flashMessage('Přiznání bylo vytvořeno, na této adrese můžete sledovat STAV svého přiznání.');
-		if($this->table_name == "date") $presenter->redirect("this");
+		if($this->tableName == "date") $presenter->redirect("this");
 		$presenter->redirect('Page:' . $template, $id);
  	}
 	

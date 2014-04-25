@@ -5,6 +5,11 @@
 {* reklama *}
 <style>
 	#confession{ position: relative; }{* rodic *}
+	.btn-small {
+		width: 200px;
+		margin: 10px 0;
+		margin-top: 20px;
+	}
 </style>
 {/block}
 
@@ -29,7 +34,9 @@
 	<script type="text/javascript"
 	src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 	</script>
+	<a n:href=":OnePage:" class="btn-main btn-small">Zpět na stream</a>
 	<div id="confession" class="rounded-more">
+		
 		<p>
 				{$confession->note}
 		</p>

@@ -1,0 +1,13 @@
+{* Latte template *}
+
+{block head}
+	{control css 'bootstrap/forms-medium.less', 'user/authentication.less'}
+{/block}
+
+{block content}
+
+<h2>Zapomenuté heslo</h2>
+{control forgottenPasswordForm}
+<p class="registration">
+	Znáte své heslo? <a n:href="Sign:in" title="registrace">Přihlašte se zde</a>.
+</p>

@@ -4,14 +4,14 @@
 
 {define menuButtons}
 <a href="{plink Galleries:listUserGalleryImages galleryID => $gallery->id}"  class="btn-main btn-small">
-	všechny fotky
+	celá galerie
 </a>
-<a href="{plink Galleries:}"  class="btn-main btn-small">
+{*<a href="{plink Galleries:}"  class="btn-main btn-small">
 	seznam galerií
-</a>
-<a href="#" class="btn-main btn-small scroll-to-comments">
+</a>*}
+{*<a href="#" class="btn-main btn-small scroll-to-comments">
 	přidat komentář
-</a>
+</a>*}
 {/}
 
 {define imageComment}
@@ -25,7 +25,7 @@
 {/}
  
 {define imageMainScreen}
-	<img src="{$basePath}/images/userGalleries/{$user->id}/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}"
+	<img src="{$basePath}/images/userGalleries/{$gallery->userID}/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}"
 		{ifset $imgPaddingTopBottom}
 			style = "padding: {!$imgPaddingTopBottom}px 0;"
 		{/ifset}

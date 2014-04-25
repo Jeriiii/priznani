@@ -29,16 +29,13 @@ class Stream extends Nette\Application\UI\Control
 		$this->template->setFile(dirname(__FILE__) . '/stream.latte');
 		// TO DO - poslání dat šabloně
                                 
-                if(!empty($this->offset)){
-                     $this->template->stream = $this->dataForStream->limit(3,$this->offset);
-                     $this->template->render();                
-                } else {
-                    $this->template->stream = $this->dataForStream->limit(3);                  
-                    $this->template->render();                
-                }              
-		
-               
-                
+		if(!empty($this->offset)){
+			 $this->template->stream = $this->dataForStream->limit(3,$this->offset);
+			 $this->template->render();                
+		} else {
+			$this->template->stream = $this->dataForStream->limit(3);                  
+			$this->template->render();                
+		}
 	}
 	
 	/* vrací další data do streamu */
@@ -53,7 +50,20 @@ class Stream extends Nette\Application\UI\Control
 	}
 	
 	protected function createComponentAddItemForm($name) {
-		return new Frm\Form1NewForm($this, $name);
+		return new Frm\AddItemForm($this, $name);
+	}
+	
+	/* pro vypsani vice fb komentaru */
+	
+	protected function createComponentFbControl()
+	{
+		$streamItems = $this->getPresenter()->context->createStream();
+
+		$url = "url";
+		
+		return new Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems, $url) {
+			return new FbLikeAndCom($streamItems[$streamItem], $url);
+		});
 	}
 }
 ?>

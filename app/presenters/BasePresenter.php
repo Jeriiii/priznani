@@ -32,15 +32,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	protected $jsVariables = array();
 
 	public function startup() {
-		if ($this->name == "Homepage") {
-			$page = $this->context->createPages()
-				->order("order ASC")
-				->fetch();
-			if ($page->id_view)
-				$this->redirect($page->presenter . ":" . $page->view, $page->url);
-			else
-				$this->redirect($page->presenter . ":" . $page->view);
-		}
 		AntispamControl::register();
 		parent::startup();
 	}
@@ -398,6 +389,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	public function handleSignOut() {
 		$this->getSession('allow')->remove();
 		$this->getUser()->logout();
+		$this->flashMessage("Byl jste úspěšně odhlášen");
 		$this->redirect('this');
 	}
 

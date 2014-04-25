@@ -12,5 +12,7 @@ use Nette\Application\UI\Form as Frm;
 
 class HomepagePresenter extends BasePresenter
 {
-	
+	public function actionDefault() {
+		$this->redirect(":OnePage:");
+	}
 }
