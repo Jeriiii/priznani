@@ -19,7 +19,6 @@ use Nette\Application\UI\Form as Frm;
 class AcceptImagesPresenter extends AdminSpacePresenter{
 	
 	public function renderDefault() {
-		$this->template->galleries = $this->context->createUsersGalleries();
-		$this->template->images = $this->context->createUsersImages();
+		$this->template->images = $this->context->createUsersImages()->where('allow', 0);
 	}
 }

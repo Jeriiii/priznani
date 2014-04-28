@@ -1,19 +1,23 @@
-
+{block head}
+	<link rel='stylesheet' href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
+{/block}
 {block content}
-{foreach $galleries as $gallery}
-    {*<h2 class="gallery_name">{$gallery->name|firstUpper}</h2>*}
-    <ul class="inline">
-        {foreach $images as $image}
-			{if $image->galleryID == $gallery->id}
-            <li>
-                <a href='{$basePath}/images/userGalleries/{$user->id}/{$gallery->id}/{$image->id}.{$image->suffix}' title="{$image->name}">
-                    <img src="{$basePath}/images/userGalleries/{$user->id}/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}" height="250">
-                </a>
-            </li>
-			{/if}
-        {/foreach}
-        <div class="clear"></div>
-    </ul>
-    <div class="clear"></div>
-{/foreach}
+	{foreach $images as $image}
+		{if isset($lastImage) && $lastImage->galleryID != $image->galleryID}
+			<hr>
+		{/if}
+		<ul class="inline">
+				<li>
+					<a href='{$basePath}/images/userGalleries/{$user->id}/{$image->galleryID}/{$image->id}.{$image->suffix}' rel='lightbox' title="{$image->name}">
+						<img class="accept" src="{$basePath}/images/userGalleries/{$user->id}/{$image->galleryID}/{$image->id}.{$image->suffix}" alt="{$image->name}" height="250">
+					</a>
+				</li>
+			<div class="clear"></div>
+		</ul>
+		<div class="clear"></div>
+		{var $lastImage = $image}
+	{/foreach}
+{/block}
+{block foot}
+	<script type="text/javascript" src="{$basePath}/js/slimbox2.js"></script>
 {/block}
