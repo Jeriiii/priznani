@@ -1,0 +1,19 @@
+
+{block content}
+{foreach $galleries as $gallery}
+    {*<h2 class="gallery_name">{$gallery->name|firstUpper}</h2>*}
+    <ul class="inline">
+        {foreach $images as $image}
+			{if $image->galleryID == $gallery->id}
+            <li>
+                <a href='{$basePath}/images/userGalleries/{$user->id}/{$gallery->id}/{$image->id}.{$image->suffix}' title="{$image->name}">
+                    <img src="{$basePath}/images/userGalleries/{$user->id}/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}" height="250">
+                </a>
+            </li>
+			{/if}
+        {/foreach}
+        <div class="clear"></div>
+    </ul>
+    <div class="clear"></div>
+{/foreach}
+{/block}
