@@ -2,15 +2,15 @@
 
 /**
  * @author Petr Kukrál <p.kukral@kukral.eu>
- * 
+ *
  * Základ komponenty, umožňující zobrazení obrázku, listování a další funkce
  */
 
 namespace POSComponent\Galleries\Images;
 
 class BaseGallery extends \Nette\Application\UI\Control {
-
 	/* vsechny obrazky z galerie */
+
 	private $images;
 	/* aktualni obrazek */
 	private $image;
@@ -20,16 +20,17 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	private $domain;
 	/* jsme na priznani z parby */
 	private $partymode;
-
 	private $beforeImageID;
 	private $afterImageID;
+	private $galleryMode;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode) {	
+	public function __construct($images, $image, $gallery, $domain, $partymode, $galleryMode) {
 		$this->images = $images->order("id DESC");
 		$this->image = $image;
 		$this->gallery = $gallery;
 		$this->domain = $domain;
 		$this->partymode = $partymode;
+		$this->galleryMode = $galleryMode;
 	}
 
 	public function renderBaseGallery($templateName) {
@@ -48,10 +49,10 @@ class BaseGallery extends \Nette\Application\UI\Control {
 		$this->template->imageLink = $this->getPresenter()->link("this", array("imageID" => $this->image->id, "galleryID" => null));
 
 		// rozhoduje, zda je obrázek vyšší nebo širší
-		if($this->image->widthGalScrn == 700) {                    
+		if ($this->image->widthGalScrn == 700) {
 			$setWidth = TRUE;
 			$this->template->imgPaddingTopBottom = (525 - $this->image->heightGalScrn) / 2;
-		}else{
+		} else {
 			$setWidth = FALSE;
 		}
 		$this->template->setWidth = $setWidth;
@@ -63,22 +64,19 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	/**
 	 * nastavuje proměnné třídy beforeImageID a afterImageID
 	 */
-	
 	private function setBeforeAndAfterImage() {
-                $imageID = $this->image->id;                
+		$imageID = $this->image->id;
 		$beforeImageID = FALSE;
 		$afterImageID = FALSE;
 		$setAfter = FALSE;
-            
-		foreach($this->images as $image)
-		{
-			if($setAfter)
-			{
+
+		foreach ($this->images as $image) {
+			if ($setAfter) {
 				$afterImageID = $image->id;
 				break;
 			}
 
-			if($image->id == $imageID)
+			if ($image->id == $imageID)
 				$setAfter = TRUE; // pri dalsi obratce nastavi nasledujici prvek
 			else
 				$beforeImageID = $image->id; //nevyplni se pri nalezeni hledaneho obrazku
@@ -92,9 +90,7 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	 * přepne na další obrázek
 	 * @param type $imageID ID dalšího obrázku
 	 */
-	
-	public function handleNext($imageID)
-	{
+	public function handleNext($imageID) {
 		$this->setImage($imageID, $this->getImages());
 	}
 
@@ -102,9 +98,7 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	 * přepne na předchozí obrázek
 	 * @param type $imageID ID předchozího obrázku
 	 */
-	
-	public function handleBack($imageID)
-	{
+	public function handleBack($imageID) {
 		$this->setImage($imageID, $this->getImages());
 	}
 
@@ -112,53 +106,61 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	 * nastaví nový obrázek po přechodu doleva/doprava jako aktuální a invaliduje
 	 * šablonu
 	 * @param type $imageID ID obrázku který má být aktuální
-         * @param type $getFrom nastavuje z jake tabulky se ma prenastavit imageID (pro competitions-> images, pro galleries ->user_images)
+	 * @param type $getFrom nastavuje z jake tabulky se ma prenastavit imageID (pro competitions-> images, pro galleries ->user_images)
 	 */
 	public function setImage($imageID, $getFrom) {
 		$this->image = $getFrom
-                            ->find($imageID)
-                            ->fetch();
+			->find($imageID)
+			->fetch();
 		$this->invalidateControl();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param type $imageID ID obrázku, který se má odstranit
 	 */
-	
+
 	/**
 	 * odstranění obrázku
 	 * @param type $image záznam obrázku z tabulky, který se má odstranit
 	 * @param type $folderPath cesta do složky s obrázkem
 	 * @param type $imageFileName jméno souboru obrázku (bez předpony mini, sqr a pod)
 	 */
-
-	public function removeImage($image, $folderPath, $imageFileName)
-	{
+	public function removeImage($image, $folderPath, $imageFileName) {
 		$preffixs = array("", "mini", "sqr");
-		
+
 		// mazání souborů
-		foreach($preffixs as $prefix) {
+		foreach ($preffixs as $prefix) {
 			$path = $folderPath . $preffix . $imageFileName;
-			
-			if( file_exists($path) )	{
+
+			if (file_exists($path)) {
 				unlink($path);
 			}
 		}
 
 		$this->getImages()
-				->find($image->id)
-				->delete();
+			->find($image->id)
+			->delete();
 		$this->setBeforeAndAfterImage();
-		if(!empty($this->beforeImageID)) {
+		if (!empty($this->beforeImageID)) {
 			$this->setImage($this->beforeImageID);
-		}else{
+		} else {
 			$this->setImage($this->afterImageID);
 		}
 	}
-	
-	protected function createComponentAddToFBPageControl()
-	{
+
+	/**
+	 * vrátí tabulku s obrázky
+	 */
+	private function getImages() {
+		if ($this->galleryMode == "users-gallery") {
+			return $this->getPresenter()->context->createUsersImages();
+		} else {
+			return $this->getPresenter()->context->createImages();
+		}
+	}
+
+	protected function createComponentAddToFBPageControl() {
 		return new AddToFBPage($imageID);
 	}
 
