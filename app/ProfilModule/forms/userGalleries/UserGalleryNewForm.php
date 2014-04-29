@@ -56,7 +56,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 			unset($values->agreement);
 
 			//Vložení dat do tabulky activity_stream
-			$presenter->context->createStream()->addNewGallery($idGallery, $uID);
+			//$presenter->context->createStream()->addNewGallery($idGallery, $uID);
 
 			$presenter->flashMessage('Galerie byla vytvořena. Počkejte prosím na schválení adminem.');
 			$presenter->redirect('Galleries:');

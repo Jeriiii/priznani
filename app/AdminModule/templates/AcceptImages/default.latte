@@ -8,13 +8,15 @@
 		{/if}
 		<ul class="inline">
 				<li>
-					<a href='{$basePath}/images/userGalleries/{$user->id}/{$image->galleryID}/{$image->id}.{$image->suffix}' rel='lightbox' title="{$image->name}">
-						<img class="accept" src="{$basePath}/images/userGalleries/{$user->id}/{$image->galleryID}/{$image->id}.{$image->suffix}" alt="{$image->name}" height="250">
+					<a href='{$basePath}/images/userGalleries/{$image->gallery->userId}/{$image->galleryID}/{$image->gallery->id}.{$image->suffix}' rel='lightbox' title="{$image->name}">
+						<img class="accept" src="{$basePath}/images/userGalleries/{$image->gallery->userID}/{$image->galleryID}/{$image->id}.{$image->suffix}" alt="{$image->name}" height="250">
 					</a>
 				</li>
 			<div class="clear"></div>
 		</ul>
 		<div class="clear"></div>
+		<a n:href="acceptImage! imgId => $image->id, galleryId => $image->galleryID, userId => $image->gallery->userId" class="btn btn-success">Schválit</a>
+		<br>
 		{var $lastImage = $image}
 	{/foreach}
 {/block}
