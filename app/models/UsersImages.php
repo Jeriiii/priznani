@@ -32,6 +32,6 @@ class UsersImages extends Selection
 		// todo validate values
 		return $this->insert($values)->id;
 	}
- 
+	
 
 }
