@@ -26,26 +26,25 @@ class AcceptImagesPresenter extends AdminSpacePresenter{
 	}
 	
 	public function handleAcceptImage($imgId, $galleryId, $userId) {
-		$gallery = $this->context->createUsersImages()->where('galleryID', $galleryId);
-		$galleryCheck = FALSE;
-		
-		foreach($gallery as $image) {
-			if($image->allow == 1) {
-				$galleryCheck = TRUE;
+		if($this->isAjax("acceptButton")) {
+			$gallery = $this->context->createUsersImages()->where('galleryID', $galleryId);
+			$galleryCheck = FALSE;
+
+			foreach($gallery as $image) {
+				if($image->allow == 1) {
+					$galleryCheck = TRUE;
+				}
+			}
+
+			if($galleryCheck) {
+				$image = $this->context->createUsersImages()->where('id', $imgId)->fetch();
+				$image->update(array('allow' => 1));
+				$this->context->createStream()->aliveGallery($galleryId, $userId);
+			} else {
+				$image = $this->context->createUsersImages()->where('id', $imgId)->fetch();
+				$image->update(array('allow' => 1));
+				$this->context->createStream()->addNewGallery($galleryId, $userId);
 			}
 		}
-		
-		if($galleryCheck) {
-			$image = $this->context->createUsersImages()->where('id', $imgId)->fetch();
-			$image->update(array('allow' => 1));
-			$this->context->createStream()->aliveGallery($galleryId, $userId);
-			$this->flashMessage("Obrázek schválen.",'success');
-		} else {
-			$image = $this->context->createUsersImages()->where('id', $imgId)->fetch();
-			$image->update(array('allow' => 1));
-			$this->context->createStream()->addNewGallery($galleryId, $userId);
-			$this->flashMessage("Obrázek schválen.",'success');
-		}
-		
 	}
 }
