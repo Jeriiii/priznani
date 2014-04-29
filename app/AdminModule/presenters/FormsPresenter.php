@@ -371,7 +371,7 @@ class FormsPresenter extends AdminSpacePresenter
 			$newReleaseDate->setTime(date_format($newReleaseDate, "H") + 1, 0);
 		}
 		
-		$hour = date_format($oldReleaseDate->release_date, "H");
+		$hour = date_format($oldReleaseDate, "H");
 
 		/* modify time */
 		if(array_key_exists($hour, $modifyMorningHour))

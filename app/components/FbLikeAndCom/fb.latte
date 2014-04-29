@@ -1,6 +1,6 @@
 {snippet}
 <div id="like-item{$itemId}" class="fb-like-container">
-	<div class="fb-like" data-href="http://www.priznaniosexu.cz/one-page/item?id={$itemId}"
+	<div class="fb-like" data-href="{$fbLink}"
 		data-width="390" data-show-faces="true"></div>
 	<script type="text/javascript">FB.XFBML.parse(document.getElementById('like-item{$itemId}'));//revalidace fb komponent</script>
 </div>
@@ -8,7 +8,7 @@
 <a n:href="loadComment!" class="show_comments_button">Vložit komentář</a>
 {else}
 <div id="comments-item{$itemId}" class="fb-forum fb-comments-container">
-	<div class="fb-comments" data-href="http://www.priznaniosexu.cz/page/{$fb}?id={$itemId}" data-width="505" data-num-posts="2"></div>
+	<div class="fb-comments" data-href="{$fbLink}" data-width="505" data-num-posts="2"></div>
     <script type="text/javascript">FB.XFBML.parse(document.getElementById('comments-item{$itemId}'));//revalidace fb komponent</script>
 </div>
 {/if}
