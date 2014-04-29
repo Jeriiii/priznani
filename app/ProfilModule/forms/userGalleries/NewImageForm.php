@@ -24,8 +24,18 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 		$this->addImagesFile(4);
 
 		$this->addHidden('galleryID', $this->galleryID);
+		
+		$this->addCheckbox('man', 'jen muži');
+		
+		$this->addCheckbox('women', 'jen ženy');
+		
+		$this->addCheckbox('couple', 'pár');
+		
+		$this->addCheckbox('more', '3 a více');
 
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'btn-main medium');
+		
+		$this->onValidate[] = callback($this, 'checkboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -45,7 +55,15 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 			$presenter = $this->getPres();
 			$uID = $presenter->getUser()->getId();
 			$idGallery = $values->galleryID;
-
+			
+			$galleryValues['man'] = $values->man;
+			$galleryValues['women'] = $values->women;
+			$galleryValues['couple'] = $values->couple;
+			$galleryValues['more'] = $values->more;
+			
+			$gallery = $presenter->context->createUsersGalleries()->where('id', $idGallery)->fetch();
+			$gallery->update($galleryValues);
+			
 
 			//$arr = array($image, $image2, $image3, $image4);
 
@@ -63,4 +81,12 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 		return $this->getPresenter();
 	}
 
+	
+	public function checkboxValidation($form) {
+		$values = $form->getValues();
+		
+		if(empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
+			$form->addError("Musíte vybrat jednu z kategorií");
+		}
+	}
 }
