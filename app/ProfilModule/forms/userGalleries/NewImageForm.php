@@ -52,7 +52,7 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 			$this->addImages($arr, $values, $uID, $idGallery);
 
 			//aktualizování dat v tabulce activity_stream
-			$presenter->context->createStream()->aliveGallery($idGallery, $uID);
+			//$presenter->context->createStream()->aliveGallery($idGallery, $uID);
 
 			$presenter->flashMessage('Fotky byly přidané.');
 			$presenter->redirect('Galleries:listUserGalleryImages', array("galleryID" => $idGallery));
