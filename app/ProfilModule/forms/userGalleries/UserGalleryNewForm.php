@@ -19,8 +19,19 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 
 		$this->addImagesFile(4, FALSE, FALSE);
 
+		$this->addCheckbox('man', 'jen muži');
+		
+		$this->addCheckbox('women', 'jen ženy');
+		
+		$this->addCheckbox('couple', 'pár');
+		
+		$this->addCheckbox('more', '3 a více');
+		
 		$this->addSubmit("submit", "Vytvořit galerie")
 			->setAttribute('class', 'btn-main medium');
+		
+		$this->onValidate[] = callback($this, 'checkboxValidation');
+		
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -48,7 +59,11 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 			$valuesGallery['name'] = $values->name;
 			$valuesGallery['description'] = $values->descriptionGallery;
 			$valuesGallery['userId'] = $uID;
-
+			$valuesGallery['man'] = $values->man;
+			$valuesGallery['women'] = $values->women;
+			$valuesGallery['couple'] = $values->couple;
+			$valuesGallery['more'] = $values->more;
+			
 			$idGallery = $presenter->context->createUsersGalleries()
 				->insert($valuesGallery);
 
