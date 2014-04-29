@@ -19,5 +19,13 @@ class UserGalleryBaseForm extends UserGalleryImagesBaseForm {
 			->addRule(Form::MAX_LENGTH, "Maximální délka popisu galerie je %d znaků", 500);
 		return $this;
 	}
+	
+	public function checkboxValidation($form) {
+		$values = $form->getValues();
+		
+		if(empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
+			$form->addError("Musíte vybrat jednu z kategorií");
+		}
+	}
 
 }
