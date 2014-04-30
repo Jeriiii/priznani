@@ -38,6 +38,17 @@
 							<strong>Obrázky se zobrazují pouze registrovaným uživatelům. <a href="{plink :Sign:registration}">Registrujte se</a>.</strong>
 						{/if}
 					{/ifset}
+					{ifset $dataItem->galleryID}
+						{if $user->isLoggedIn()}
+							<a href="{plink :Competition: imageID => $dataItem->gallery->lastImageID}" title="{$dataItem->gallery->name}"><h3>{$dataItem->gallery->name}</h3></a>
+							<a href="{plink :Competition: imageID => $dataItem->gallery->lastImageID}" class="imagehref">
+								<img src="{$basePath}/images/galleries/{$dataItem->galleryID}/{$dataItem->gallery->lastImageID}.{$dataItem->gallery->lastImage->suffix}" alt="{$dataItem->gallery->name}" />
+								<p>{$dataItem->gallery->lastImage->comment}</p>
+							</a>
+						{else}
+							<strong>Obrázky se zobrazují pouze registrovaným uživatelům. <a href="{plink :Sign:registration}">Registrujte se</a>.</strong>
+						{/if}
+					{/ifset}
 					{ifset $dataItem->confessionID}
 						<a href="{plink Page:confession id => $dataItem->confessionID}" title="Přiznání o sexu"><h3>Přiznání</h3></a>
 						<p>{$dataItem->ref('confessions', 'confessionID')->note}</p>

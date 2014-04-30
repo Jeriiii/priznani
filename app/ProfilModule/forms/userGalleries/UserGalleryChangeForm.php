@@ -13,19 +13,21 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 		//form
 		$presenter = $this->getPresenter();
 		$this->galleryID = $presenter->galleryID;
-		
+
 		$filledForm = $presenter->context->createUsersGalleries()
 			->where('id', $this->galleryID)
 			->fetch();
-		
+
+		$this->addGroup('Kategorie');
+
 		$this->addCheckbox('man', 'jen muži');
-		
+
 		$this->addCheckbox('women', 'jen ženy');
-		
+
 		$this->addCheckbox('couple', 'pár');
-		
+
 		$this->addCheckbox('more', '3 a více');
-		
+
 		$this->setDefaults(array(
 			"name" => $filledForm->name,
 			"description" => $filledForm->description,
@@ -34,7 +36,7 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 			"couple" => $filledForm->couple,
 			"more" => $filledForm->more,
 		));
-		
+
 		$this->addSubmit('send', 'Změnit')->setAttribute('class', 'btn-main medium');
 		$this->onValidate[] = callback($this, 'checkboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');

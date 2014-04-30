@@ -15,7 +15,7 @@
 			<div class="clear"></div>
 		</ul>
 		<div class="clear"></div>
-		<a n:href="acceptImage! imgId => $image->id, galleryId => $image->galleryID, userId => $image->gallery->userId" class="btn btn-success">Schválit</a>
+		<a n:href="acceptImage! imgId => $image->id, galleryId => $image->galleryID, userId => $image->gallery->userID" class="btn btn-success">Schválit</a>
 		<br>
 		{var $lastImage = $image}
 	{/foreach}

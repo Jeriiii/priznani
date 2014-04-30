@@ -6,7 +6,7 @@ use Nette\Application\UI\Form,
 	Nette\Utils\Html,
 	Nette\ComponentModel\IContainer,
 	NetteExt\Image,
-        Nette\Utils\Strings;
+	Nette\Utils\Strings;
 
 class UserGalleryNewForm extends UserGalleryBaseForm {
 
@@ -19,42 +19,42 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 
 		$this->addImagesFile(4, FALSE, FALSE);
 
+		$this->addGroup('Kategorie');
 		$this->addCheckbox('man', 'jen muži');
-		
+
 		$this->addCheckbox('women', 'jen ženy');
-		
+
 		$this->addCheckbox('couple', 'pár');
-		
+
 		$this->addCheckbox('more', '3 a více');
-		
+
 		$this->addSubmit("submit", "Vytvořit galerie")
 			->setAttribute('class', 'btn-main medium');
-		
+
 		$this->onValidate[] = callback($this, 'checkboxValidation');
-		
+
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
 
-	public function submitted(UserGalleryNewForm $form) {           
+	public function submitted(UserGalleryNewForm $form) {
 		$values = $form->values;
-                $num = $this->getNumberOfPhotos($values);
+		$num = $this->getNumberOfPhotos($values);
 
-                $arr = $this->getArrayWithPhotos($values, $num);
+		$arr = $this->getArrayWithPhotos($values, $num);
 
-                $isOK = $this->getOkUploadedPhotos($arr);
+		$isOK = $this->getOkUploadedPhotos($arr);
 
 //		if ($image->error != 0 && $image2->error != 0 && $image3->error != 0 && $image4->error != 0) {
 //			$this->addError("Musíte vybrat alespoň 1 soubor");
-      		if($isOK == FALSE) {
-		$this->addError("Musíte vybrat alespoň 1 soubor");
+		if ($isOK == FALSE) {
+			$this->addError("Musíte vybrat alespoň 1 soubor");
 		} else {
 
 			$presenter = $this->getPres();
 			$uID = $presenter->getUser()->getId();
 
-			//$arr = array($image, $image2, $image3, $image4);                        
-
+			//$arr = array($image, $image2, $image3, $image4);
 			//vytvoření galerie
 			$valuesGallery['name'] = $values->name;
 			$valuesGallery['description'] = $values->descriptionGallery;
@@ -63,7 +63,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 			$valuesGallery['women'] = $values->women;
 			$valuesGallery['couple'] = $values->couple;
 			$valuesGallery['more'] = $values->more;
-			
+
 			$idGallery = $presenter->context->createUsersGalleries()
 				->insert($valuesGallery);
 
@@ -73,7 +73,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 			//Vložení dat do tabulky activity_stream
 			//$presenter->context->createStream()->addNewGallery($idGallery, $uID);
 
-			$presenter->flashMessage('Galerie byla vytvořena. Počkejte prosím na schválení adminem.');
+			$presenter->flashMessage('Galerie byla vytvořena. Fotky budou nejdříve schváleny adminem.');
 			$presenter->redirect('Galleries:');
 		}
 	}
@@ -81,5 +81,5 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 	public function getPres() {
 		return $this->getPresenter();
 	}
-        
+
 }

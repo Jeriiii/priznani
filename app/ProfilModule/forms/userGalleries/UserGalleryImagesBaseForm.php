@@ -18,7 +18,7 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 			/* uložení souboru a renačtení */
 			$dir = WWW_DIR . "/images/" . $folder . "/";
 			if (!file_exists($dir)) {
-				mkdir($dir, 0742);
+				mkdir($dir, 0752);
 			}
 			$file = $id . '.' . $suffix;
 			// originální obrázek
@@ -61,12 +61,12 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 			$this->addUpload('foto' . $i, 'Přidat fotku:')
 				->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 * 1024)
 				->AddCondition(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif');
-			if($displayName) {
+			if ($displayName) {
 				$this->addText('image_name' . $i, 'Jméno:')
 					->AddConditionOn($this['foto' . $i], Form::FILLED)
 					->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40);
 			}
-			if($dislplayDesc) {
+			if ($dislplayDesc) {
 				$this->addText('description_image' . $i, 'Popis:')
 					->AddConditionOn($this['foto' . $i], Form::FILLED)
 					->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500);
@@ -101,58 +101,57 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 			}
 		}
 	}
-        
-                
-        /**
-         * Zjistuji zda mam element, zajinajici na foto0.....n => pak z toho ziskavam pocet fotek
-         * @param type $values
-         * @return int - pocet fotek ve formulari
-         */
-        public function getNumberOfPhotos($values){                            
-                $i = 0;
-                foreach($values as $key => $value) {                    
-                    if (strpos($key, 'foto') === 0) {
-                       $i++;
-                    }
-                }
-                return $i;
-        }
-        
-        /**
-         * Vraci vsechny fotky v poli
-         * @param type $values
-         * @param type $num
-         * @return array - pole fotek
-         */
-        public function getArrayWithPhotos($values, $num){
-               $arrayWithPhotos = array();
-                for($i=0; $i< $num; $i++){
-                    $foto = 'foto' . $i;
-                    array_push($arrayWithPhotos,$values->$foto);
-                }  
-                return $arrayWithPhotos;
-        }
-        
-        /**
-         * Metoda kontroluje zda uzivatel neodeslal formular s nevyplnenou fotkou. $item->error == 0 znamena vyplnena fotka 
-         * @param type $arr
-         * @return boolean
-         */
-        public function getOkUploadedPhotos($arr){
-                $ok = false;
-                $checked = array();
-                foreach($arr as $item){                    
-                   if (in_array(($item->error != 0), $arr)) {
-                        array_push($checked, $item);
-                   }
-                }
-                //jsou-li vsechny fotky prazdne => vyhodim chybu
-                if(count($arr) == count($checked)){
-                   $ok = false; 
-                } else {
-                    $ok = true;
-                }
-                return $ok;
-        }
+
+	/**
+	 * Zjistuji zda mam element, zajinajici na foto0.....n => pak z toho ziskavam pocet fotek
+	 * @param type $values
+	 * @return int - pocet fotek ve formulari
+	 */
+	public function getNumberOfPhotos($values) {
+		$i = 0;
+		foreach ($values as $key => $value) {
+			if (strpos($key, 'foto') === 0) {
+				$i++;
+			}
+		}
+		return $i;
+	}
+
+	/**
+	 * Vraci vsechny fotky v poli
+	 * @param type $values
+	 * @param type $num
+	 * @return array - pole fotek
+	 */
+	public function getArrayWithPhotos($values, $num) {
+		$arrayWithPhotos = array();
+		for ($i = 0; $i < $num; $i++) {
+			$foto = 'foto' . $i;
+			array_push($arrayWithPhotos, $values->$foto);
+		}
+		return $arrayWithPhotos;
+	}
+
+	/**
+	 * Metoda kontroluje zda uzivatel neodeslal formular s nevyplnenou fotkou. $item->error == 0 znamena vyplnena fotka
+	 * @param type $arr
+	 * @return boolean
+	 */
+	public function getOkUploadedPhotos($arr) {
+		$ok = false;
+		$checked = array();
+		foreach ($arr as $item) {
+			if (in_array(($item->error != 0), $arr)) {
+				array_push($checked, $item);
+			}
+		}
+		//jsou-li vsechny fotky prazdne => vyhodim chybu
+		if (count($arr) == count($checked)) {
+			$ok = false;
+		} else {
+			$ok = true;
+		}
+		return $ok;
+	}
 
 }

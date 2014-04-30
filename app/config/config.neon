@@ -62,9 +62,9 @@ production < common:
 			#dbname: d42750_priznan
 			#user: a42750_priznan
 			#password: 845DjQBp
-			host: wm37.wedos.net
-			dbname: d42750_prizn2
-			user: a42750_prizn2
-			password: wVdehcmC
+			host: wm58.wedos.net
+			dbname: d42750_pos3
+			user: a42750_pos3
+			password: QBuTAkjX
 
 development < common:

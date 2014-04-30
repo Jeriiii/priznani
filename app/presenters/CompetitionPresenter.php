@@ -25,8 +25,8 @@ class CompetitionPresenter extends BasePresenter {
 
 		$httpRequest = $this->context->httpRequest;
 		$this->domain = $httpRequest
-						->getUrl()
-				->host;
+				->getUrl()
+			->host;
 
 		if (strpos($this->domain, "priznanizparby") !== false) {
 			$this->setPartyMode();
@@ -41,9 +41,9 @@ class CompetitionPresenter extends BasePresenter {
 
 	public function renderList($justCompetition = FALSE, $withoutCompetition = FALSE) {
 		$competitions = $this->context->createGalleries()
-							->where("competition", 1);
+			->where("competition", 1);
 		$galleries = $this->context->createGalleries()
-							->where("competition", 0);
+			->where("competition", 0);
 
 		if ($this->partymode) {
 			$competitions->where("partymode", 1);
@@ -56,97 +56,95 @@ class CompetitionPresenter extends BasePresenter {
 		$this->template->competitions = $competitions->order("id DESC");
 		$this->template->galleries = $galleries->order("id DESC");
 	}
-	
+
 	public function actionListImages($galleryID) {
-		
+
 		/* pokud není specifikovaná galerie, stránka se přesměruje */
-		if(empty($galleryID)) {
+		if (empty($galleryID)) {
 			$this->galleryMissing();
 		}
-		
+
 		$this->gallery = $this->context->createGalleries()
-						->find($galleryID)
-						->fetch();
+			->find($galleryID)
+			->fetch();
 
 		/* galerie nebyla podle ID nalezena */
-		if(empty($this->gallery)) {
+		if (empty($this->gallery)) {
 			$this->galleryMissing();
 		}
-		
+
 		$this->addToCssVariables(array(
 			"img-height" => "200px",
 			"img-width" => "200px",
 			"text-padding-top" => "40%"
 		));
-		
 	}
-	
+
 	private function galleryMissing() {
-		
+
 		$this->flashMessage("Galerie nebyla nalezena");
 		$this->redirect("Competition:");
 	}
-	
+
 	public function renderListImages($galleryID) {
 		$this->template->images = $this->context->createImages()
-										->where("approved", 1)
-										->where("galleryID", $galleryID)
-										->order("id DESC");
-		
+			->where("approved", 1)
+			->where("galleryID", $galleryID)
+			->order("id DESC");
+
 		$this->template->gallery = $this->gallery;
 	}
 
 	public function actionImagesClip() {
 		$galleries = $this->context->createGalleries();
-		
+
 		//$preffix = "minSqr";
 		$preffix = "galScrn";
-		
-		foreach($galleries as $gallery) {
+
+		foreach ($galleries as $gallery) {
 			$images = $this->context->createImages()
-						->where("galleryID", $gallery->id);
-			
-			foreach($images as $image) {
+				->where("galleryID", $gallery->id);
+
+			foreach ($images as $image) {
 				$dir = WWW_DIR . "/images/galleries/" . $gallery->id . "/";
 				$file = $image->id . "." . $image->suffix;
 				$path = $dir . $file;
 				$newPath = $dir . $preffix . $file;
-				
-				if(file_exists($path) && !file_exists($newPath) /*&& ($image->widthGalScrn == 1280) /*!file_exists($newPath)*/) {
+
+				if (file_exists($path) && !file_exists($newPath) /* && ($image->widthGalScrn == 1280) /*!file_exists($newPath) */) {
 					echo $path . " <br />";
 					$imageFile = Image::fromFile($path);
-					
+
 					$this->context->createImages()
 						->where("id", $image->id)
 						->update(array(
 							"widthGalScrn" => $imageFile->getWidth(),
 							"heightGalScrn" => $imageFile->getHeight()
-						));
-					
+					));
+
 					// pro (velký) náhled obrázku v galerii
 //					$image->resize(700,500);
-					
 					// pro čtvercový výřez
 //					$image->resizeMinSite(200);
 //					$image->cropSqr(200);
-					
+
 					$imageFile->save($newPath);
 				}
 			}
 		}
-		
-		
+
+
 		die("miniatury byly vztvořeny");
 	}
-	
+
 	/* bacha, id je url - tedy nazev stranky */
 
 	public function actionDefault($imageID, $galleryID) {
 		//určitá galerie
 		if (!empty($galleryID)) {
 			$this->gallery = $this->context->createGalleries()
-					->where("id", $galleryID)
-					->fetch();
+				->where("id", $galleryID)
+				->fetch();
 		}
 
 		/* id obrázku je uloženo v odkaze od galerie */
@@ -173,11 +171,11 @@ class CompetitionPresenter extends BasePresenter {
 			$this->imageID = $imageID;
 
 			$this->image = $this->context->createImages()
-					->find($this->imageID)
-					->fetch();
+				->find($this->imageID)
+				->fetch();
 			$this->gallery = $this->context->createGalleries()
-					->where("id", $this->image->galleryID)
-					->fetch();
+				->where("id", $this->image->galleryID)
+				->fetch();
 
 			$this->domain = $this->partymode ? "http://priznanizparby.cz" : "http://priznaniosexu.cz";
 		}
@@ -189,10 +187,10 @@ class CompetitionPresenter extends BasePresenter {
 	 */
 	public function getImageIDFromGallery($gallery) {
 		$image = $this->context->createImages()
-				->where("galleryID", $gallery->id)
-				->where("approved", 1)
-				->order("id DESC")
-				->fetch();
+			->where("galleryID", $gallery->id)
+			->where("approved", 1)
+			->order("id DESC")
+			->fetch();
 
 		if (!empty($image)) {
 			return $image->id;
@@ -214,8 +212,8 @@ class CompetitionPresenter extends BasePresenter {
 		}
 
 		$gallery = $gallery
-				->order("id DESC")
-				->fetch();
+			->order("id DESC")
+			->fetch();
 
 		return $gallery;
 	}
@@ -239,17 +237,17 @@ class CompetitionPresenter extends BasePresenter {
 	public function actionUploadImage($galleryID) {
 		$this->galleryID = $galleryID;
 	}
-	
+
 	public function renderUploadImage($galleryID) {
 		$photos = $this->context->createImages()
-				->order("id DESC");
+			->order("id DESC");
 		$this->template->photo1 = $photos->fetch();
 		$this->template->photo2 = $photos->fetch();
 
 		$this->template->galleryID = $this->context->createGalleries()
-						->order("id DESC")
-						->fetch()
-				->id;
+				->order("id DESC")
+				->fetch()
+			->id;
 		if ($this->partymode) {
 			$this->template->images = array(1, 2, 3);
 		} else {
@@ -264,24 +262,24 @@ class CompetitionPresenter extends BasePresenter {
 //						->where("galleryID", $this->gallery->id)
 //						->order("id DESC")
 //						->fetch();
-//			
+//
 //			}else{
 		$imageID = $this->context->createImages()
-				->where("galleryID", $this->gallery->id)
-				->where("approved", 1)
-				->order("id DESC")
-				->fetch();
+			->where("galleryID", $this->gallery->id)
+			->where("approved", 1)
+			->order("id DESC")
+			->fetch();
 //			}
-//			
+//
 		if ($this->getUser()->isInRole("admin") || $this->getUser()->isInRole("superadmin")) {
 			$images = $this->context->createImages()
-					->where("galleryID", $this->gallery->id);
+				->where("galleryID", $this->gallery->id);
 		} else {
 			$images = $this->context->createImages()
-					->where("galleryID", $this->gallery->id)
-					->where("approved", 1);
+				->where("galleryID", $this->gallery->id)
+				->where("approved", 1);
 		}
-                
+
 		return new \POSComponent\Galleries\Images\CompetitionGallery($images, $this->image, $this->gallery, $this->domain, $this->partymode);
 	}
 
@@ -305,19 +303,19 @@ class CompetitionPresenter extends BasePresenter {
 	}
 
 	public function handleincLike($id_confession) {
-		
+
 	}
 
 	public function handledecLike($id_confession) {
-		
+
 	}
 
 	public function handleincComment($id_confession) {
-		
+
 	}
 
 	public function handledecComment($id_confession) {
-		
+
 	}
 
 }

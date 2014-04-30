@@ -72,8 +72,8 @@ class FbLikeAndCom extends Nette\Application\UI\Control {
 			$link = $presenter->link("//:Profil:Galleries:image", array("imageID" => $imageID, "galleryID" => $galleryID));
 		} elseif ($item->confessionID) {
 			$link = $presenter->link("//:Page:confession", $item->confessionID);
-		} elseif ($item->imageID) {
-			throw new Exception("TO DO link for image");
+		} elseif ($item->galleryID) {
+			$link = $presenter->link("//:Competition:", array("galleryID" => $item->galleryID));
 		}
 
 		return $link;

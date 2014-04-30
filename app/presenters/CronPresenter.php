@@ -8,57 +8,55 @@
  * @author     Petr Kukrál
  * @package    jkbusiness
  */
+class CronPresenter extends BasePresenter {
 
-class CronPresenter extends BasePresenter
-{
 	private $dataToDebug;
-	
+
 	public function startup() {
 		parent::startup();
-		
+
 		$this->setLayout("simpleLayout");
 	}
-	
+
 	public function actionReleaseConfessions() {
 		$allConCount = $this->context->createForms1()
-						->where("inStream", 0)
-						->where("mark", 1)
-						->count("id");
-		
+			->where("inStream", 0)
+			->where("mark", 1)
+			->count("id");
+
 		$limit = 400;
-		
+
 		$confessions = $this->context->createForms1()
-						->where("inStream", 0)
-						->where("mark", 1)
-						->order("release_date ASC")
-						->limit($limit);
-		
+			->where("inStream", 0)
+			->where("mark", 1)
+			->order("release_date ASC")
+			->limit($limit);
+
 		$now = new \Nette\DateTime();
-		
+
 		$counter = 1;
-		foreach($confessions as $con) {
+		foreach ($confessions as $con) {
 			$this->context->createStream()
 				->insert(array(
 					"confessionID" => $con->id,
 					"create" => $now
-				));
+			));
 			$counter ++;
 		}
-		
+
 		$this->context->createForms1()
 			->where("inStream", 0)
 			->where("mark", 1)
 			->limit($limit)
 			->update(array(
 				"inStream" => 1
-			));
-		
+		));
+
 		echo("Nahrávání proběhlo úspěšně, bylo nahráno " . --$counter . " přiznání z " . $allConCount);
 		$this->redirect("this");
 	}
 
-	public function actionWow()
-	{
+	public function actionWow() {
 		$pripojeni_manius['ip'] = '91.219.244.178';
 		$pripojeni_manius['uzivatel'] = 'priznani';
 		$pripojeni_manius['heslo'] = 'SJ28XNypF';
@@ -71,44 +69,41 @@ class CronPresenter extends BasePresenter
 		$morning = $now->setTime(0, 0, 0)->modify('-1 day');
 		$now2 = new DateTime();
 		$night = $now2->setTime(23, 59, 59)->modify('-1 day');
-		
+
 		$partyConfessions = $this->context->createPartyConfessions()
-								->where('release_date >= ?', $morning)
-								->where('release_date <= ?', $night);
+			->where('release_date >= ?', $morning)
+			->where('release_date <= ?', $night);
 
 		$query = "";
-		
-		foreach($partyConfessions as $confession)
-		{
+
+		foreach ($partyConfessions as $confession) {
 			$release_date = new DateTime($confession->release_date);
 			$release_date = $release_date->modify('+1 day')->format('Y-m-d H:i:s');
-			$insert = "INSERT into priznanizparby (text, datum) VALUES ('".addslashes($confession->note)."', '".$release_date."');";
+			$insert = "INSERT into priznanizparby (text, datum) VALUES ('" . addslashes($confession->note) . "', '" . $release_date . "');";
 			mysql_query($insert, $spojeni_manius);
-			$query = $query . $insert ;
+			$query = $query . $insert;
 		}
-		
+
 		$sexConfessions = $this->context->createForms1()
-								->where('release_date >= ?', $morning)
-								->where('release_date <= ?', $night);
-		
+			->where('release_date >= ?', $morning)
+			->where('release_date <= ?', $night);
+
 		$query2 = "";
-		
-		foreach($sexConfessions as $confession)
-		{
+
+		foreach ($sexConfessions as $confession) {
 			$release_date = new DateTime($confession->release_date);
 			$release_date = $release_date->modify('+1 day')->format('Y-m-d H:i:s');
-			$insert = "INSERT into priznaniosexu (text, datum) VALUES ('".addslashes($confession->note)."', '".$release_date."');";
+			$insert = "INSERT into priznaniosexu (text, datum) VALUES ('" . addslashes($confession->note) . "', '" . $release_date . "');";
 			mysql_query($insert, $spojeni_manius);
-			$query2 = $query2 . $insert ;
+			$query2 = $query2 . $insert;
 		}
 		$this->dataToDebug = $query;
 		//mysql_query($query, $spojeni_manius);
 		mysql_close($spojeni_manius);
 	}
-	
-	public function renderWow()
-	{
+
+	public function renderWow() {
 		$this->template->dataToDebug = $this->dataToDebug;
 	}
-	
+
 }

@@ -3,13 +3,12 @@
 /**
  * My Application bootstrap file.
  */
-use		Nette\Application\Routers\RouteList,
-		Nette\Application\Routers\Route,
-		Nette\Forms\Container;
-
+use Nette\Application\Routers\RouteList,
+	Nette\Application\Routers\Route,
+	Nette\Forms\Container;
 
 // Load Nette Framework
-require LIBS_DIR . '/Nette/loader.php';
+require LIBS_DIR . '/Nette/nette.min.php';
 
 
 // Configure application
@@ -72,8 +71,7 @@ $router[] = new Route('index.php', 'OnePage:default', Route::ONE_WAY);
 //));
 $router[] = new Route('<presenter>/<action>[/<url>]', 'OnePage:default');
 
-Container::extensionMethod('addDateTimePicker', function (Container $_this, $name, $label, $cols = NULL, $maxLength = NULL)
-{
+Container::extensionMethod('addDateTimePicker', function (Container $_this, $name, $label, $cols = NULL, $maxLength = NULL) {
 	return $_this[$name] = new Nette\Extras\DateTimePicker($label, $cols, $maxLength);
 });
 Kdyby\BootstrapFormRenderer\DI\RendererExtension::register($configurator);

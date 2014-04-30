@@ -35,7 +35,18 @@ class CompetitionGallery extends BaseGallery {
 			->update(array(
 				'approved' => '1'
 		));
-		$this->setImage($imageID);
+
+		$image = $this->getImages()
+			->find($imageID)
+			->fetch();
+		$this->getPresenter()->context->createGalleries()
+			->find($image->galleryID)
+			->update(array(
+				"lastImageID" => $image->id
+		));
+		$this->getPresenter()->context->createStream()->aliveCompGallery($image->galleryID);
+
+		$this->setImage($imageID, $this->getImages());
 	}
 
 	/**

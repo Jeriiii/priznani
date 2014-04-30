@@ -17,18 +17,18 @@ class SignInForm extends BaseBootstrapForm {
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		//form
-		
+
 		$this->addText('email', 'E-mail:', 30, 200)
-				->addRule(Form::FILLED, "Zadejte svůj email");
-		
+			->addRule(Form::FILLED, "Zadejte svůj email");
+
 		$this->addPassword('password', 'Heslo:', 30, 200)
-				->addRule(Form::FILLED, "Zadejte heslo");
-		
+			->addRule(Form::FILLED, "Zadejte heslo");
+
 		$this->addCheckbox('persistent', 'Pamatovat si mě na tomto počítači', 30, 200);
-		
+
 		$this->addSubmit('login', 'PŘIHLÁSIT SE')
-				->setAttribute('class', 'btn-main medium');
-		
+			->setAttribute('class', 'btn-main medium');
+
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -39,7 +39,9 @@ class SignInForm extends BaseBootstrapForm {
 			$user = $presenter->getUser();
 			$values = $form->getValues();
 			if ($values->persistent) {
-				$user->setExpiration('+30 days', FALSE);
+				$presenter->getUser()->setExpiration('7 days', FALSE);
+			} else {
+				$presenter->getUser()->setExpiration('20 minutes', TRUE);
 			}
 			$user->login($values->email, $values->password);
 			//toto se provede při úspěšném zpracování přihlašovacího formuláře

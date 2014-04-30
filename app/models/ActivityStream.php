@@ -1,15 +1,15 @@
 <?php
+
 use Nette\Database\Connection,
-    Nette\Database\Table\Selection,
+	Nette\Database\Table\Selection,
 	Nette\DateTime;
 
-class ActivityStream extends Selection
-{
-    public function __construct(\Nette\Database\Connection $connection)
-    {
-        parent::__construct('stream_items', $connection);
-    }
-     
+class ActivityStream extends Selection {
+
+	public function __construct(\Nette\Database\Connection $connection) {
+		parent::__construct('stream_items', $connection);
+	}
+
 	public function addNewConfession($confessionID, $userID) {
 		$this->insert(array(
 			"confessionID" => $confessionID,
@@ -18,8 +18,8 @@ class ActivityStream extends Selection
 			"create" => new DateTime(),
 		));
 	}
-        
-        public function addNewAdvice($adviceID, $userID) {
+
+	public function addNewAdvice($adviceID, $userID) {
 		$this->insert(array(
 			"adviceID" => $adviceID,
 			"userID" => $userID,
@@ -27,7 +27,7 @@ class ActivityStream extends Selection
 			"create" => new DateTime(),
 		));
 	}
-    
+
 	public function addNewGallery($userGalleryID, $userID) {
 		$this->insert(array(
 			"userGalleryID" => $userGalleryID,
@@ -36,7 +36,17 @@ class ActivityStream extends Selection
 			"create" => new DateTime(),
 		));
 	}
-	
+
+	public function aliveCompGallery($galleryID) {
+		$this->where("galleryID", $galleryID)->delete();
+		$this->insert(array(
+			"galleryID" => $galleryID,
+//			"userID" => $userID,
+			"type" => 1,
+			"create" => new DateTime(),
+		));
+	}
+
 	public function aliveGallery($userGalleryID, $userID) {
 		$this->where("userGalleryID", $userGalleryID)->delete();
 		$this->insert(array(
@@ -46,4 +56,5 @@ class ActivityStream extends Selection
 			"create" => new DateTime(),
 		));
 	}
+
 }
