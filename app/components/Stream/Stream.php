@@ -17,9 +17,15 @@ class Stream extends Nette\Application\UI\Control {
 	protected $dataForStream;
 	private $offset = null;
 
-	public function __construct($data) {
+	/**
+	 * @var \POS\Model\StreamDao
+	 */
+	public $streamDao;
+
+	public function __construct($data, $streamDao) {
 		parent::__construct();
 		$this->dataForStream = $data;
+		$this->streamDao = $streamDao;
 	}
 
 	public function render() {
@@ -58,7 +64,7 @@ class Stream extends Nette\Application\UI\Control {
 	/* pro vypsani vice fb komentaru */
 
 	protected function createComponentFbControl() {
-		$streamItems = $this->getPresenter()->context->createStream();
+		$streamItems = $this->streamDao->getAllRows();
 
 		$url = "url";
 

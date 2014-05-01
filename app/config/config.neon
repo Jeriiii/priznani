@@ -7,7 +7,7 @@
 common:
 
 	includes:
-		- factories.neon
+		- model.neon
 		- localeconection.neon
 	
 	parameters:
@@ -43,7 +43,7 @@ common:
 		facebookAuthenticator: FacebookAuthenticator
 
 
-		authenticator: Authenticator( @users )
+		authenticator: Authenticator
 		authorizator:
 			class: Acl
 

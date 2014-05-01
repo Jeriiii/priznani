@@ -31,6 +31,18 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	/* proměnné pro js překlad */
 	protected $jsVariables = array();
 
+	/**
+	 * @var \POS\Model\AuthorizatorDao
+	 * @inject
+	 */
+	public $authorizatorDao;
+
+	/**
+	 * @var \POS\Model\GoogleAnalyticsDao
+	 * @inject
+	 */
+	public $googleAnalyticsDao;
+
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
@@ -57,8 +69,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		}
 //		$user = $this->getUser();
 //		$authorizator = new MyAuthorizator;
-		$parameters = $this->context->createAuthorizator_table()
-			->fetch();
+		$parameters = $this->authorizatorDao->getTable()->fetch();
 		$this->parameters = $parameters;
 //		$httpRequest = $this->context->httpRequest;
 //		$this->domain = $httpRequest
@@ -80,8 +91,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		$this->template->facebook_html = "";
 		$this->template->facebook_script = "";
 
-		$google = $this->context->createGoogle_analytics()
-			->fetch();
+		$google = $this->googleAnalyticsDao->getTable()->fetch();
 
 		$name = "";
 
@@ -99,7 +109,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 						ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 						var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 					  })();
-				</script>	
+				</script>
 			";
 
 		if ($parameters->map == 1) {

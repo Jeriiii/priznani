@@ -12,11 +12,16 @@ use Nette\Application\UI\Form as Frm;
 
 class OnePagePresenter extends BasePresenter {
 
+	/**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
 	public $dataForStream;
 	private $count = 0;
 
 	public function actionDefault() {
-		$this->dataForStream = $this->context->createStream()->order("id DESC");
+		$this->dataForStream = $this->streamDao->getTable()->order("id DESC");
 		$this->count = $this->dataForStream->count("id");
 	}
 
@@ -25,7 +30,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentStream() {
-		return new Stream($this->dataForStream);
+		return new Stream($this->dataForStream, $this->streamDao);
 	}
 
 	public function createComponentJs() {

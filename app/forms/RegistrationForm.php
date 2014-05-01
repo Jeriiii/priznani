@@ -39,7 +39,7 @@ class RegistrationForm extends BaseBootstrapForm {
 				->setText("Souhlasím s ")
 				->add(
 					Html::el('a')
-					->href("http://priznanizparby.cz/soutez/fotografie.pdf")
+					->href("http://priznaniosexu.cz/smlouvy/registrace.pdf")
 					->setHtml('<u>podmínkami</u>'))
 			)
 			->addRule(Form::FILLED, "Musíte souhlasit s podmínkami.");
