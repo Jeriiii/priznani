@@ -24,7 +24,7 @@ class CronPresenter extends BasePresenter {
 			->where("mark", 1)
 			->count("id");
 
-		$limit = 400;
+		$limit = 15;
 
 		$confessions = $this->context->createForms1()
 			->where("inStream", 0)
@@ -53,7 +53,8 @@ class CronPresenter extends BasePresenter {
 		));
 
 		echo("Nahrávání proběhlo úspěšně, bylo nahráno " . --$counter . " přiznání z " . $allConCount);
-		$this->redirect("this");
+		die();
+//		$this->redirect("this");
 	}
 
 	public function actionWow() {

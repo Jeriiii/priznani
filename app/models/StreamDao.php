@@ -34,8 +34,14 @@ class StreamDao extends AbstractDao {
 		return $this->getTable();
 	}
 
+	/**
+	 * Přidá odkaz na přiznání do streamu
+	 * @param int $confessionID ID přiznání
+	 * @param int $userID ID uživatele
+	 */
 	public function addNewConfession($confessionID, $userID) {
-		$this->getTable()->insert(array(
+		$sel = $this->getTable();
+		$sel->insert(array(
 			"confessionID" => $confessionID,
 			"userID" => $userID,
 			"type" => 1,
@@ -43,8 +49,14 @@ class StreamDao extends AbstractDao {
 		));
 	}
 
+	/**
+	 * Přidá odkaz na otázku do streamu
+	 * @param type $adviceID ID otázky
+	 * @param type $userID ID uživatele
+	 */
 	public function addNewAdvice($adviceID, $userID) {
-		$this->getTable()->insert(array(
+		$sel = $this->getTable();
+		$sel->insert(array(
 			"adviceID" => $adviceID,
 			"userID" => $userID,
 			"type" => 1,
@@ -52,8 +64,14 @@ class StreamDao extends AbstractDao {
 		));
 	}
 
+	/**
+	 * Přidá odkaz na gallerii do streamu
+	 * @param int $userGalleryID ID galerie
+	 * @param int $userID ID uživatele
+	 */
 	public function addNewGallery($userGalleryID, $userID) {
-		$this->getTable()->insert(array(
+		$sel = $this->getTable();
+		$sel->insert(array(
 			"userGalleryID" => $userGalleryID,
 			"userID" => $userID,
 			"type" => 1,
@@ -61,9 +79,27 @@ class StreamDao extends AbstractDao {
 		));
 	}
 
+	/**
+	 * Snaže starý záznam z galerie a vloží ho znovu. Tím se příspěvek
+	 * dostane opět nahoru ve streamu.
+	 * @param int $galleryID ID galerie
+	 */
 	public function aliveCompGallery($galleryID) {
-		$this->getTable()->where("galleryID", $galleryID)->delete();
-		$this->getTable()->insert(array(
+		// smazání starého řádku
+		$sel = $this->getTable();
+		$sel->where("galleryID", $galleryID);
+		$sel->delete();
+
+		$this->addNewComGallery($galleryID);
+	}
+
+	/**
+	 * Přidá nový odkaz na galerii do streamu
+	 * @param int $galleryID ID galerie
+	 */
+	public function addNewComGallery($galleryID) {
+		$sel = $this->getTable();
+		$sel->insert(array(
 			"galleryID" => $galleryID,
 //			"userID" => $userID,
 			"type" => 1,
@@ -71,14 +107,19 @@ class StreamDao extends AbstractDao {
 		));
 	}
 
+	/**
+	 * Snaže starý záznam z galerie a vloží ho znovu. Tím se příspěvek
+	 * dostane opět nahoru ve streamu.
+	 * @param int $userGalleryID ID galerie
+	 * @param int $userID ID uživatele
+	 */
 	public function aliveGallery($userGalleryID, $userID) {
-		$this->getTable()->where("userGalleryID", $userGalleryID)->delete();
-		$this->getTable()->insert(array(
-			"userGalleryID" => $userGalleryID,
-			"userID" => $userID,
-			"type" => 1,
-			"create" => new DateTime(),
-		));
+		//smazání starého řádku
+		$sel = $this->getTable();
+		$sel->where("userGalleryID", $userGalleryID);
+		$sel->delete();
+
+		$this->addNewGallery($userGalleryID, $userID);
 	}
 
 }
