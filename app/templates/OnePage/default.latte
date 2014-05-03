@@ -25,7 +25,8 @@
 <script>
 	$(document).ready(function () {	
 		$("body").stream({
-			rows: {$count}
+			rows: {$count},
+			addoffset: 4
 		});
 	});
 	$("#frmaddItemForm-note").click(function() {

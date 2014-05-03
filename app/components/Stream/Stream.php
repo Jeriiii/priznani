@@ -25,14 +25,15 @@ class Stream extends Nette\Application\UI\Control {
 	public function render() {
 		$this->template->setFile(dirname(__FILE__) . '/stream.latte');
 		// TO DO - poslání dat šabloně
-
+		$offset = 4;
 		if (!empty($this->offset)) {
-			$this->template->stream = $this->dataForStream->limit(3, $this->offset);
+			$this->template->stream = $this->dataForStream->limit($offset, $this->offset);
 			$this->template->render();
 		} else {
-			$this->template->stream = $this->dataForStream->limit(3);
+			$this->template->stream = $this->dataForStream->limit($offset);
 			$this->template->render();
 		}
+		$this->template->offset = $offset;
 	}
 
 	/* vrací další data do streamu */
@@ -58,7 +59,7 @@ class Stream extends Nette\Application\UI\Control {
 	/* pro vypsani vice fb komentaru */
 
 	protected function createComponentFbControl() {
-		$streamItems = $this->getPresenter()->context->createStream();
+		$streamItems = $this->dataForStream;
 
 		$url = "url";
 

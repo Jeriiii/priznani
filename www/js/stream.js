@@ -18,7 +18,7 @@
 	$.fn.stream.defaults = {
 		offset: 0,
 		/* kolik dalších příspěvků (dat) má plugin načíst při najetí na konec */
-		addoffset: 3,
+		addoffset: 4,
 		/* html element, ze kterého se má brát odresa */
 		linkElement: '#next-data-item-btn',
 		/* obaluje celé tlačítko Zobrazit další */
@@ -49,6 +49,7 @@
 			
 			$.nette.ajax({
 				url: ajaxUrl,
+				async: false,
 				success: function(response) {
 							//console.log(response);
 				},
@@ -67,7 +68,7 @@
 
 	/* naplánuje další kontrolu za daný časový interval(půl vteřinu) */
 	function timeCheckStream() {
-		setTimeout(function() { visibleCheckStream();}, 700);
+		setTimeout(function() { visibleCheckStream();}, 500);
 	}
 
 	/* zkontroluje, zda je uživatel na konci seznamu. Když ano, zavolá prodloužení */
