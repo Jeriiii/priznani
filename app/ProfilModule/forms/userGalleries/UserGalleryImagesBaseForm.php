@@ -9,6 +9,8 @@ use Nette\Application\UI\Form,
 
 class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 
+	const LimitForImages = 3;
+	
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 	}
@@ -86,14 +88,16 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 
 				$valuesDB['galleryID'] = $idGallery;
 				
+				//získání user galerii
 				$userGalleries = $this->getPres()->context->createUsersGalleries()->where('userID',$uID);
+				//counter
 				$allowedImagesCount = 0;
-				
+				//cyklus prochází obrázky z uživatelových galerií a počítá schválené fotky
 				foreach($userGalleries as $userGallery) {
 					$allowedImagesCount += count($this->getPres()->context->createUsersImages()->where(array("galleryID" => $userGallery->id, "allow" => 1)));
 				}
-				
-				if($allowedImagesCount >= 3) {
+				//pokud je 3 a více schválených, schválí i nově přidávanou
+				if($allowedImagesCount >= self::LimitForImages) {
 					$valuesDB["allow"] = 1;
 				}
 				
