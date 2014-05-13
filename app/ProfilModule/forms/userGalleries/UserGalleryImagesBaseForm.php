@@ -85,7 +85,20 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 				$valuesDB['description'] = !empty($values->description) ? $values->description : "";
 
 				$valuesDB['galleryID'] = $idGallery;
-
+				
+				$userGalleries = $this->getPres()->context->createUsersGalleries()->where('userID',$uID);
+				$allowedImagesCount = 0;
+				
+				foreach($userGalleries as $userGallery) {
+					$allowedImagesCount += count($this->getPres()->context->createUsersImages()->where(array("galleryID" => $userGallery->id, "allow" => 1)));
+				}
+				
+				if($allowedImagesCount >= 3) {
+					$valuesDB["allow"] = 1;
+				}
+				
+				
+				
 				$id = $this->getPres()->context->createUsersImages()
 					->insert($valuesDB);
 
