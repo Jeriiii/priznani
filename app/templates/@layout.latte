@@ -62,6 +62,7 @@
 			<meta property="og:description" content="Stala se Vám v posteli nějaká zajímavá, vtipná či šokující příhoda, ale bojíte se to veřejně říct? Přiznejte se na http://priznaniosexu.cz/. Všechna přiznání jsou 100% ANONYMNÍ. " />
 			{/ifset}
 			{control css 'default.css', 'layout/layout.less', 'mobile/responsive-menu.less'}
+			<link rel="stylesheet" href="{$basePath}/css/tabs/tabs.css" type="text/css">
 <!--			<link rel="stylesheet" href="{$basePath}/css/layout.css" type="text/css">
 			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">-->
 			<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
@@ -185,7 +186,7 @@
 		    {/if}
 		    <div id="fb-root"></div>
 
-
+			<script type="text/javascript" src="{$basePath}/js/tabs.js"></script>
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
             {control js 'layout/user-layout-menu.js'}
 			{*include #user-menu-scripts*}
