@@ -47,4 +47,18 @@ class AcceptImagesPresenter extends AdminSpacePresenter{
 			}
 		}
 	}
+	
+	public function handleDeleteImage($imgId, $galleryId) {
+		if($this->isAjax("acceptButton")) {
+			
+			$imageToDelete = $this->context->createUsersImages()->where('id', $imgId)->fetch();
+			
+			unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . $imgId . "." . $imageToDelete->suffix);
+			unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "galScrn" . $imgId . "." . $imageToDelete->suffix);
+			unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "min" . $imgId . "." . $imageToDelete->suffix);
+			unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "minSqr" . $imgId . "." . $imageToDelete->suffix);
+		
+			$this->context->createUsersImages()->where('id', $imgId)->fetch()->delete();
+		}
+	}
 }
