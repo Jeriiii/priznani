@@ -48,6 +48,10 @@ class Stream extends Nette\Application\UI\Control {
 		}
 	}
 
+	protected function createComponentNewStreamImageForm($name) {
+		return new Frm\NewStreamImageForm($this, $name);
+	}
+	
 	protected function createComponentAddItemForm($name) {
 		return new Frm\AddItemForm($this, $name);
 	}
