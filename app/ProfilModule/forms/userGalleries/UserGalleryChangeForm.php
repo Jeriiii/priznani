@@ -30,7 +30,7 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 
 		$this->setDefaults(array(
 			"name" => $filledForm->name,
-			"description" => $filledForm->description,
+			"descriptionGallery" => $filledForm->description,
 			"man" => $filledForm->man,
 			"women" => $filledForm->women,
 			"couple" => $filledForm->couple,

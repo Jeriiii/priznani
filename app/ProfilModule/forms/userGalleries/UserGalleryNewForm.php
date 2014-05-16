@@ -45,8 +45,6 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 
 		$isOK = $this->getOkUploadedPhotos($arr);
 
-//		if ($image->error != 0 && $image2->error != 0 && $image3->error != 0 && $image4->error != 0) {
-//			$this->addError("Musíte vybrat alespoň 1 soubor");
 		if ($isOK == FALSE) {
 			$this->addError("Musíte vybrat alespoň 1 soubor");
 		} else {
@@ -54,24 +52,20 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 			$presenter = $this->getPres();
 			$uID = $presenter->getUser()->getId();
 
-			//$arr = array($image, $image2, $image3, $image4);
 			//vytvoření galerie
-			$valuesGallery['name'] = $values->name;
-			$valuesGallery['description'] = $values->descriptionGallery;
-			$valuesGallery['userId'] = $uID;
-			$valuesGallery['man'] = $values->man;
-			$valuesGallery['women'] = $values->women;
-			$valuesGallery['couple'] = $values->couple;
-			$valuesGallery['more'] = $values->more;
-
 			$idGallery = $presenter->context->createUsersGalleries()
-				->insert($valuesGallery);
+				->insert(array(
+				"name" => $values->name,
+				"description" => $values->descriptionGallery,
+				"userID" => $uID,
+				"man" => $values->man,
+				"women" => $values->women,
+				"couple" => $values->couple,
+				"more" => $values->more
+			));
 
 			$this->addImages($arr, $values, $uID, $idGallery);
 			unset($values->agreement);
-
-			//Vložení dat do tabulky activity_stream
-			//$presenter->context->createStream()->addNewGallery($idGallery, $uID);
 
 			$presenter->flashMessage('Galerie byla vytvořena. Fotky budou nejdříve schváleny adminem.');
 			$presenter->redirect('Galleries:');
