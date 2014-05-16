@@ -16,7 +16,7 @@
 				{/form}
 			</div>
 			<div id="tabs-2">
-				
+				{control newStreamImageForm}
 			</div>
 		</div>
 		<div n:snippet="posts" data-ajax-append="true">
@@ -34,7 +34,7 @@
 
 					{ifset $dataItem->userGalleryID}
 						{if $user->isLoggedIn()}
-							<a href="{plink :Profil:Galleries: userID => $dataItem->userID}" title="{$dataItem->user->user_name}"><h3>{$dataItem->user->user_name}</h3></a>
+							<a href="{plink :Profil:Galleries: userID => $dataItem->userID}" title="{$dataItem->userID}"><h3>{$dataItem->userID}</h3></a>
 							<span class="divider">></span>
 							<a href="{plink :Profil:Galleries:listUserGalleryImages galleryID => $dataItem->userGallery->id}" title="{$dataItem->userGallery->name}">
 								<h3>{$dataItem->userGallery->name}</h3>
