@@ -7,20 +7,21 @@ use Nette\Application\UI\Form,
 	Nette\ComponentModel\IContainer,
 	NetteExt\Image;
 
-class NewStreamImageForm extends NewImageForm {
+class NewStreamImageForm extends UserGalleryImagesBaseForm {
 
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
 		//form
-		$this->addImagesFile(3);
+		$this->addImagesFile(3, TRUE, FALSE);
 		
-		$this->onValidate[] = callback($this, 'checkboxValidation');
+		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'submit-button');
+		
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
 
-	public function submitted(NewImageForm $form) {
+	public function submitted(NewStreamImageForm $form) {
 		$values = $form->values;
 		$num = $this->getNumberOfPhotos($values);
 
@@ -35,15 +36,6 @@ class NewStreamImageForm extends NewImageForm {
 			$presenter = $this->getPres();
 			$uID = $presenter->getUser()->getId();
 			$defaultGallery = $presenter->context->createUsersGalleries()->where(array("userID" => $uID, "default" => 1))->fetch();
-			
-			$galleryValues['man'] = $values->man;
-			$galleryValues['women'] = $values->women;
-			$galleryValues['couple'] = $values->couple;
-			$galleryValues['more'] = $values->more;
-			
-			$gallery = $presenter->context->createUsersGalleries()->where('id', $defaultGallery->id)->fetch();
-			$gallery->update($galleryValues);
-			
 
 			//$arr = array($image, $image2, $image3, $image4);
 
@@ -53,7 +45,7 @@ class NewStreamImageForm extends NewImageForm {
 			//$presenter->context->createStream()->aliveGallery($idGallery, $uID);
 
 			$presenter->flashMessage('Fotky byly přidané.');
-			$presenter->redirect('Galleries:listUserGalleryImages', array("galleryID" => $defaultGallery->id));
+			$presenter->redirect('OnePage:default');
 		}
 	}
 
