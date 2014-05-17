@@ -1,5 +1,5 @@
 {block head}
-    {control css 'onepage/default.less', 'stream/list.less'}
+    {control css 'onepage/default.less', 'stream/list.less', 'jqueryUI-tabs.css'}
 {/block}
 
 
@@ -21,7 +21,7 @@
 
 {block foot}
 {control js}
-
+<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
 <script>
 	$(document).ready(function () {	
 		$( ".stream-form" ).tabs();
@@ -34,7 +34,6 @@
 		$("#frmaddItemForm-note").animate({ height: "200px"}, 500);
 	});
 </script>
-
 {/block}
 
 
