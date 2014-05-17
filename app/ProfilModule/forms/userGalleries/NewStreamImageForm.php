@@ -36,10 +36,22 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 			$presenter = $this->getPres();
 			$uID = $presenter->getUser()->getId();
 			$defaultGallery = $presenter->context->createUsersGalleries()->where(array("userID" => $uID, "default" => 1))->fetch();
-
+			
+			if($defaultGallery == NULL) {
+				$idGallery = $presenter->context->createUsersGalleries()
+						->insert(array(
+							"name" => "Default",
+							"userID" => $uID,
+							"default" => 1,
+						));
+			}
+			else {
+				$idGallery = $defaultGallery->id;
+			}
+			
 			//$arr = array($image, $image2, $image3, $image4);
 
-			$this->addImages($arr, $values, $uID, $defaultGallery->id);
+			$this->addImages($arr, $values, $uID, $idGallery);
 
 			//aktualizování dat v tabulce activity_stream
 			//$presenter->context->createStream()->aliveGallery($idGallery, $uID);
