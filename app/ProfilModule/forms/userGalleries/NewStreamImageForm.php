@@ -52,13 +52,4 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 	public function getPres() {
 		return $this->getPresenter();
 	}
-
-	
-	public function checkboxValidation($form) {
-		$values = $form->getValues();
-		
-		if(empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
-			$form->addError("Musíte vybrat jednu z kategorií");
-		}
-	}
 }
