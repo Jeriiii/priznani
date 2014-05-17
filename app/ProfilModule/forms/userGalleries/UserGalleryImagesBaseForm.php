@@ -170,5 +170,23 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 		}
 		return $ok;
 	}
+	
+	public function genderCheckboxValidation($form) {
+		$values = $form->getValues();
+		
+		if(empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
+			$form->addError("Musíte vybrat jednu z kategorií");
+		}
+	}
+	
+	public function genderCheckboxes() {
+		$this->addCheckbox('man', 'jen muži');
+		
+		$this->addCheckbox('women', 'jen ženy');
+		
+		$this->addCheckbox('couple', 'pár');
+		
+		$this->addCheckbox('more', '3 a více');
+	}
 
 }
