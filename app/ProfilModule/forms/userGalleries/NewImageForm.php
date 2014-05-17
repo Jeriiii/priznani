@@ -25,17 +25,11 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 
 		$this->addHidden('galleryID', $this->galleryID);
 		
-		$this->addCheckbox('man', 'jen muži');
-		
-		$this->addCheckbox('women', 'jen ženy');
-		
-		$this->addCheckbox('couple', 'pár');
-		
-		$this->addCheckbox('more', '3 a více');
+		$this->genderCheckboxes();
 
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'btn-main medium');
 		
-		$this->onValidate[] = callback($this, 'checkboxValidation');
+		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -79,14 +73,5 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 
 	public function getPres() {
 		return $this->getPresenter();
-	}
-
-	
-	public function checkboxValidation($form) {
-		$values = $form->getValues();
-		
-		if(empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
-			$form->addError("Musíte vybrat jednu z kategorií");
-		}
 	}
 }
