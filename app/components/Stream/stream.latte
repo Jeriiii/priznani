@@ -16,7 +16,11 @@
 				{/form}
 			</div>
 			<div id="tabs-2">
-				{control newStreamImageForm}
+				{if $user->isLoggedIn()}
+					{control newStreamImageForm}
+				{else}
+					Pro přidávání fotek se <a href="{plink :Sign:in}">přihlaš</a> nebo <a href="{plink :Sign:registration}">registruj</a>.
+				{/if}
 			</div>
 		</div>
 		<div n:snippet="posts" data-ajax-append="true">
