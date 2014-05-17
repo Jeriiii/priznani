@@ -30,20 +30,21 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		$image->update(array('allow' => 1));
 		$this->context->createStream()->aliveGallery($galleryId, $userId);
 
-		//if($this->isAjax("acceptButton")) {}
+		if($this->isAjax("acceptButton")) {
+			$this->invalidateControl('acceptButton');
+		}
 	}
 
 	public function handleDeleteImage($imgId, $galleryId) {
+		$imageToDelete = $this->context->createUsersImages()->where('id', $imgId)->fetch();
+		unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . $imgId . "." . $imageToDelete->suffix);
+		unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "galScrn" . $imgId . "." . $imageToDelete->suffix);
+		unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "min" . $imgId . "." . $imageToDelete->suffix);
+		unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "minSqr" . $imgId . "." . $imageToDelete->suffix);
+		$this->context->createUsersImages()->where('id', $imgId)->fetch()->delete();
+		
 		if ($this->isAjax("acceptButton")) {
-
-			$imageToDelete = $this->context->createUsersImages()->where('id', $imgId)->fetch();
-
-			unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . $imgId . "." . $imageToDelete->suffix);
-			unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "galScrn" . $imgId . "." . $imageToDelete->suffix);
-			unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "min" . $imgId . "." . $imageToDelete->suffix);
-			unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "minSqr" . $imgId . "." . $imageToDelete->suffix);
-
-			$this->context->createUsersImages()->where('id', $imgId)->fetch()->delete();
+			$this->invalidateControl('acceptButton');
 		}
 	}
 
