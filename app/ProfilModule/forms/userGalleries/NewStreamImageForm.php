@@ -40,7 +40,7 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 			if($defaultGallery == NULL) {
 				$idGallery = $presenter->context->createUsersGalleries()
 						->insert(array(
-							"name" => "Default",
+							"name" => "Moje fotky",
 							"userID" => $uID,
 							"default" => 1,
 						));
