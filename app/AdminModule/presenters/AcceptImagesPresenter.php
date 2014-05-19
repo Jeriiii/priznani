@@ -30,7 +30,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		$image->update(array('allow' => 1));
 		$this->context->createStream()->aliveGallery($galleryId, $userId);
 
-		if($this->isAjax("acceptButton")) {
+		if($this->isAjax("imageAcceptance")) {
 			$this->invalidateControl('acceptButton');
 		}
 	}
@@ -43,7 +43,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "minSqr" . $imgId . "." . $imageToDelete->suffix);
 		$this->context->createUsersImages()->where('id', $imgId)->fetch()->delete();
 		
-		if ($this->isAjax("acceptButton")) {
+		if ($this->isAjax("imageAcceptance")) {
 			$this->invalidateControl('acceptButton');
 		}
 	}
