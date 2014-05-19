@@ -31,7 +31,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		$this->context->createStream()->aliveGallery($galleryId, $userId);
 
 		if($this->isAjax("imageAcceptance")) {
-			$this->invalidateControl('acceptButton');
+			$this->invalidateControl('imageAcceptance');
 		}
 	}
 
@@ -52,7 +52,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		$this->context->createUsersImages()->where('id', $imgId)->fetch()->delete();
 		
 		if ($this->isAjax("imageAcceptance")) {
-			$this->invalidateControl('acceptButton');
+			$this->invalidateControl('imageAcceptance');
 		}
 	}
 
