@@ -2,7 +2,7 @@
 	<link rel='stylesheet' href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
 {/block}
 {block content}
-{snippet acceptButton}
+{snippet imageAcceptance}
 	{foreach $images as $image}
 		{if isset($lastImage) && $lastImage->galleryID != $image->galleryID}
 			<hr>
