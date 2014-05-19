@@ -88,20 +88,13 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 
 				$valuesDB['galleryID'] = $idGallery;
 				
-				//získání user galerii
-				$userGalleries = $this->getPres()->context->createUsersGalleries()->where('userID',$uID);
-				//counter
-				$allowedImagesCount = 0;
-				//cyklus prochází obrázky z uživatelových galerií a počítá schválené fotky
-				foreach($userGalleries as $userGallery) {
-					$allowedImagesCount += count($this->getPres()->context->createUsersImages()->where(array("galleryID" => $userGallery->id, "allow" => 1)));
-				}
+				//získání počtu user obrázků, které mají allow 1
+				$allowedImagesCount = count($this->getPres()->context->createUsersImages()->where(array("user_images.allow" => 1, "galleryID.userID" => $uID)));
+			
 				//pokud je 3 a více schválených, schválí i nově přidávanou
 				if($allowedImagesCount >= self::LimitForImages) {
 					$valuesDB["allow"] = 1;
 				}
-				
-				
 				
 				$id = $this->getPres()->context->createUsersImages()
 					->insert($valuesDB);
