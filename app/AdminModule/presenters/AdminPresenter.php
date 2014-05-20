@@ -15,130 +15,98 @@ use Nette\Application\UI\Form as Frm,
 	Nette\Utils\Finder,
 	Nette\DateTime;
 
-class AdminPresenter extends AdminSpacePresenter
-{
+class AdminPresenter extends AdminSpacePresenter {
 
 	public $id_file;
-	
-	public function renderDefault()
-	{
+
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
+	public function renderDefault() {
 		$this->redirect("Forms:forms");
 //		$this->template->forms_new_send = $this->context->createForm_new_send()
 //												->order("date DESC");
 //		$this->template->forms = $this->context->createForms();
-//		
+//
 //		$date = new DateTime();
 //		$date->modify('-2 month');
-//		
+//
 //		$this->context->createForm_new_send()
 //				->where("mark", 1)
 //				->where("date < ?", $date)
 //				->delete();
 	}
-	
-	public function renderAccounts()
-	{
-		$this->template->unconfirmed_users = $this->context->createUsers()
-							->where("role", "unconfirmed_user");
-		$this->template->users = $this->context->createUsers()
-							->where("role", "user");
-		$this->template->admins = $this->context->createUsers()
-							->where("role", "admin");
-		$this->template->superadmins = $this->context->createUsers()
-							->where("role", "superadmin");
+
+	public function renderAccounts() {
+		$this->template->unconfirmed_users = $this->userDao->getInRoleUnconfirmed();
+		$this->template->users = $this->userDao->getInRoleUsers();
+		$this->template->admins = $this->userDao->getInRoleAdmin();
+		$this->template->superadmins = $this->userDao->getInRoleSuperadmin();
 	}
-	
-	public function renderFiles()
-	{
-		$this->template->files = $this->context->createFiles();
-	}
-	
-	public function actionChangeFile($id_file)
-	{
-		$this->id_file = $id_file;
-	}
-	
-	protected function createComponentAuthorizatorForm($name) {
-		return new Frm\authorizatorForm($this, $name);
-	}
-	
+
 	protected function createComponentFacebookForm($name) {
 		return new Frm\facebookForm($this, $name);
 	}
-	
+
 	protected function createComponentPasswordForm($name) {
 		return new Frm\passwordForm($this, $name);
 	}
-	
-	protected function createComponentFileNewForm($name) {
-		return new Frm\fileNewForm($this, $name);
-	}
-	
-	protected function createComponentFileChangeForm($name) {
-		return new Frm\fileChangeForm($this, $name);
-	}
-	
+
 	protected function createComponentMapForm($name) {
 		return new Frm\mapForm($this, $name);
 	}
-	
-	protected function createComponentGoogleAnalyticsForm($name) {
-		return new Frm\googleAnalyticsForm($this, $name);
-	}
-    
+
 	protected function createComponentDetailInzerat() {
 		$dialog = new \Cherry\JDialogs\BaseDialog;
-		$dialog->template_file = APP_DIR."/dialogs/templates/basedialog.latte";
+		$dialog->template_file = APP_DIR . "/dialogs/templates/basedialog.latte";
 
 		$text = "muj text";
-		
-		$dialog->addData(array("text" => $text));	
+
+		$dialog->addData(array("text" => $text));
 
 		$dialog->addOption(array(
-			"autoOpen" => "false", 
+			"autoOpen" => "false",
 			"title" => "testDialogTwo",
 		));
 
 		return $dialog;
 	}
-	
-	public function handledeleteUser($id)
-	{
+
+	public function handledeleteUser($id) {
 		$this->context->createUsers()
-				->where("id",$id)
-				->delete();
-		
+			->where("id", $id)
+			->delete();
+
 		$this->flashMessage("Uživatel byl smazán.");
 		$this->redirect("this");
 	}
-	
-	public function handlechangeRole($id, $type)
-	{
+
+	public function handlechangeRole($id, $type) {
 		$user = $this->context->createUsers()
-				->where("id",$id);
+			->where("id", $id);
 		$role = $this->context->createUsers()
-				->where("id",$id)
+				->where("id", $id)
 				->fetch()
-				->role;
-		if(! $type)
-		{
-			if($role == "user")
-			{
+			->role;
+		if (!$type) {
+			if ($role == "user") {
 				$user->update(array(
 					"role" => "admin"
 				));
-			}elseif($role == "admin"){
+			} elseif ($role == "admin") {
 				$user->update(array(
 					"role" => "user"
 				));
 			}
-		}else{
-			if($role == "admin")
-			{
+		} else {
+			if ($role == "admin") {
 				$user->update(array(
 					"role" => "superadmin"
 				));
-			}elseif($role == "superadmin"){
+			} elseif ($role == "superadmin") {
 				$user->update(array(
 					"role" => "admin"
 				));
@@ -147,31 +115,31 @@ class AdminPresenter extends AdminSpacePresenter
 		$this->flashMessage("Práva byla změněna.");
 		$this->redirect("this");
 	}
-	
-	public function handledeleteFile($id)
-	{
+
+	public function handledeleteFile($id) {
 		$file = $this->context->createFiles()
-			->where("id",$id);
-		
-		$path = WWW_DIR."/files/page_files/".$id.'.'.$file->fetch()->suffix;
-		
-		if(file_exists($path))
+			->where("id", $id);
+
+		$path = WWW_DIR . "/files/page_files/" . $id . '.' . $file->fetch()->suffix;
+
+		if (file_exists($path))
 			unlink($path);
-		
+
 		$file->delete();
 		$this->flashMessage("Soubor byl smazán.");
 		$this->redirect("this");
 	}
-	
-	public function handleMarkNewSendForm($id, $path)
-	{
+
+	public function handleMarkNewSendForm($id, $path) {
 		$this->context->createForm_new_send()
-				->find($id)
-				->update(array(
-					"mark" => 1
-				));
-		
+			->find($id)
+			->update(array(
+				"mark" => 1
+		));
+
 		$this->redirectUrl($path);
 	}
+
 }
+
 ?>

@@ -23,10 +23,10 @@
 			<span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu">
-			<li><a n:href="this id=> null">všichni</a></li>
+			<li><a n:href="this selectAdminID=> null">všichni</a></li>
 			{foreach $admins as $admin}
 				<li>
-					<a n:href="this idSelectAdmin=>$admin->id">{$admin->user_name}</a>
+					<a n:href="this selectAdminID=>$admin->id">{$admin->user_name}</a>
 				</li>
 			{/foreach}
 		</ul>
@@ -73,10 +73,10 @@
 					<td>
 						<a class="btn" n:href="changeAndschedule! id => $form->id, type => $type">Přehodit</a>
 					</td>
+					{/if}
 					<td>
 						<a class="btn" n:href="Forms:confessionDetail id => $form->id, type => $type">Detail</a>
 					</td>
-					{/if}
 					<td style="width:100px">
 						{$form->create|date:'d.m. -  H:m'}
 					</td>

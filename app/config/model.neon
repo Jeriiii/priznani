@@ -1,29 +1,27 @@
 services:
-	usersDao: \POS\Model\UsersDao
+	userDao: \POS\Model\UserDao
+	formDao: \POS\Model\FormDao
+	formQueryDao: \POS\Model\FormQueryDao
+	confessionDao: \POS\Model\ConfessionDao
+	partyDao: \POS\Model\PartyDao
+	adviceDao: \POS\Model\AdviceDao
+	galleryDao: \POS\Model\GalleryDao
+	videoDao: \POS\Model\VideoDao
 	couple: Couple
 	texts: Texts
 	images: Images
 	galleries: Galleries
-	forms: Forms
-	forms1: Forms1
 	forms2: Forms2
 	forms3: Forms3
-	videos: Videos
-	authorizatorDao: \POS\Model\AuthorizatorDao
 	polls: Polls
 	#facebook: Facebook
 	files: Files
-	googleAnalyticsDao: \POS\Model\GoogleAnalyticsDao
 	map: Map
-	pages_galleries: Pages_galleries
-	pages_forms: Pages_forms
 	news: News
 	news_galleries: News_galleries
 	pages: Pages
 	streamDao: \POS\Model\StreamDao
 	form_new_send: Form_new_send
-	advices: Advices
-	partyConfessions: PartyConfessions
 	embedVideos: embedVideos
 	usersFoto: UsersFoto
 	usersGalleries: UsersGalleries

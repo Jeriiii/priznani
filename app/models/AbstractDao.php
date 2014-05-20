@@ -33,13 +33,24 @@ abstract class AbstractDao extends Object {
 	}
 
 	/**
+	 * Vrátí všechny řádky z databáze
+	 * @param type $order Seřazení podle id
+	 * @return type Nette\Database\Table\Selection
+	 */
+	public function getAll($order = "ASC") {
+		$sel = $this->getTable();
+		$sel->order("id " . $order);
+		return $sel;
+	}
+
+	/**
 	 * Finds the entity by its primary key.
 	 *
 	 * @param mixed|array $primaryKey Primary key of the entity. Array when the primary key is composite.
 	 * @return bool|Database\Table\IRow Single table row or `FALSE` if the row was not found.
 	 */
 	public function find($primaryKey) {
-		$table = $this->createTableSelection();
+		$table = $this->getTable();
 		$table->wherePrimary($primaryKey);
 		return $table->fetch();
 	}
@@ -53,7 +64,7 @@ abstract class AbstractDao extends Object {
 	 *                                      primary key value filled.
 	 */
 	public function insert($data) {
-		$table = $this->createTableSelection();
+		$table = $this->getTable();
 		return $table->insert($data);
 	}
 
@@ -65,7 +76,7 @@ abstract class AbstractDao extends Object {
 	 * @return integer Number of deleted rows.
 	 */
 	public function delete($primaryKey) {
-		$table = $this->createTableSelection();
+		$table = $this->getTable();
 		$table->wherePrimary($primaryKey);
 		return $table->delete();
 	}
