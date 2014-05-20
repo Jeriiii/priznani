@@ -6,11 +6,11 @@ services:
 	partyDao: \POS\Model\PartyDao
 	adviceDao: \POS\Model\AdviceDao
 	galleryDao: \POS\Model\GalleryDao
+	imageDao: \POS\Model\ImageDao
 	videoDao: \POS\Model\VideoDao
 	couple: Couple
 	texts: Texts
 	images: Images
-	galleries: Galleries
 	forms2: Forms2
 	forms3: Forms3
 	polls: Polls

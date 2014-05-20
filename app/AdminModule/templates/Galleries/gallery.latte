@@ -24,8 +24,8 @@
 							<img class="img-polaroid" src="http://img.youtube.com/vi/{$image->video->code}/0.jpg" alt="{$image->name}" width="150" />
 						</a>
 					{else}
-						<a href="{$basePath}/images/galleries/{$gallery->id}/{$image->id}.{$image->suffix}" rel="lightbox[gallery]">
-							<img class="img-polaroid" src="{$basePath}/images/galleries/{$gallery->id}/mini{$image->id}.{$image->suffix}" alt="{$image->name}" />
+						<a href="{$basePath}/images/galleries/{$gallery->id}/galScrn{$image->id}.{$image->suffix}" rel="lightbox[gallery]">
+							<img class="img-polaroid" src="{$basePath}/images/galleries/{$gallery->id}/min{$image->id}.{$image->suffix}" alt="{$image->name}" />
 						</a>
 					{/if}
 				</td>
