@@ -18,6 +18,9 @@ class StreamDao extends AbstractDao {
 
 	const TABLE_NAME = "stream_items";
 
+	/* sloupečky */
+	const COLUMN_USER_GALLERY_ID = "userGalleryID";
+
 	/**
 	 * Vrací tuto tabulku
 	 * @return Nette\Database\Table\Selection
@@ -120,6 +123,16 @@ class StreamDao extends AbstractDao {
 		$sel->delete();
 
 		$this->addNewGallery($userGalleryID, $userID);
+	}
+
+	/**
+	 * Odstraní záznam o uživatelské galerii ze streamu
+	 * @param int $userGalleryID ID uživatelské galerie.
+	 */
+	public function deleteUserGallery($userGalleryID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_GALLERY_ID, $userGalleryID);
+		$sel->delete();
 	}
 
 }

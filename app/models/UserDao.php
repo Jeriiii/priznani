@@ -7,6 +7,7 @@
 namespace POS\Model;
 
 use Nette\Database\SqlLiteral;
+use Authorizator;
 
 /**
  * Uživatelé UsersDao
@@ -47,7 +48,7 @@ class UserDao extends UsersBaseDao {
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function getInRoleUnconfirmed() {
-		return $this->getUsersByRole(\Authorizator::ROLE_UNCONFIRMED_USER);
+		return $this->getUsersByRole(Authorizator::ROLE_UNCONFIRMED_USER);
 	}
 
 	/**
@@ -55,7 +56,7 @@ class UserDao extends UsersBaseDao {
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function getInRoleUsers() {
-		return $this->getUsersByRole(\Authorizator::ROLE_USER);
+		return $this->getUsersByRole(Authorizator::ROLE_USER);
 	}
 
 	/**
@@ -63,7 +64,7 @@ class UserDao extends UsersBaseDao {
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function getInRoleAdmin() {
-		return $this->getUsersByRole(\Authorizator::ROLE_ADMIN);
+		return $this->getUsersByRole(Authorizator::ROLE_ADMIN);
 	}
 
 	/**
@@ -71,7 +72,7 @@ class UserDao extends UsersBaseDao {
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function getInRoleSuperadmin() {
-		return $this->getUsersByRole(\Authorizator::ROLE_SUPERADMIN);
+		return $this->getUsersByRole(Authorizator::ROLE_SUPERADMIN);
 	}
 
 	/**
@@ -121,6 +122,53 @@ class UserDao extends UsersBaseDao {
 		$sel->wherePrimary($adminID);
 		$sel->update(array(
 			self::COLUMN_ADMIN_SCORE => new SqlLiteral(self::COLUMN_ADMIN_SCORE . ' + ' . $value)
+		));
+	}
+
+	/*	 * ************************** UPDATE *************************** */
+
+	/**
+	 * Nastaví roli na super admin.
+	 * @param int $id ID uživatele.
+	 */
+	public function setSuperAdminRole($id) {
+		$this->updateRole($id, \Authorizator::ROLE_SUPERADMIN);
+	}
+
+	/**
+	 * Nastaví roli na admin.
+	 * @param int $id ID uživatele.
+	 */
+	public function setAdminRole($id) {
+		$this->updateRole($id, \Authorizator::ROLE_ADMIN);
+	}
+
+	/**
+	 * Nastaví roli na user.
+	 * @param int $id ID uživatele.
+	 */
+	public function setUserRole($id) {
+		$this->updateRole($id, \Authorizator::ROLE_USER);
+	}
+
+	/**
+	 * Nastaví roli na nepotvrzeného uživatele.
+	 * @param int $id ID uživatele.
+	 */
+	public function setUnconfirmedUserRole($id) {
+		$this->updateRole($id, \Authorizator::ROLE_UNCONFIRMED_USER);
+	}
+
+	/**
+	 * Změní roli uživateli. Používejte setRole metody.
+	 * @param int $id ID uživatele
+	 * @param string $role Nová role uživatele
+	 */
+	private function updateRole($id, $role) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($id);
+		$sel->update(array(
+			self::COLUMN_ROLE => $role
 		));
 	}
 
