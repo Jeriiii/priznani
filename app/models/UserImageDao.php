@@ -18,6 +18,7 @@ class UserImageDao extends AbstractDao {
 
 	/* Column name */
 	const COLUMN_ID = "id";
+	const COLUMN_ALLOW = "allow";
 	const COLUMN_NAME = "name";
 	const COLUMN_SUFFIX = "suffix";
 	const COLUMN_DESCRIPTION = "description";
@@ -100,6 +101,18 @@ class UserImageDao extends AbstractDao {
 		));
 
 		return $image;
+	}
+
+	/**
+	 * Vrátí počet již schválených obrázků danného uživatele.
+	 * @param int $userID ID uživatele.
+	 * @return int Počet již schválených fotek.
+	 */
+	public function countAllowedImages($userID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ALLOW, 1);
+		$sel->where(self::COLUMN_GALLERY_ID . "." . UserGalleryDao::COLUMN_USER_ID, $userID);
+		return $sel->count();
 	}
 
 }

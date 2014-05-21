@@ -14,7 +14,6 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
-		//form
 		$presenter = $this->getPresenter();
 		$this->galleryID = $presenter->getParam('galleryID');
 
@@ -25,17 +24,12 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 
 		$this->addHidden('galleryID', $this->galleryID);
 
-		$this->addCheckbox('man', 'jen muži');
-
-		$this->addCheckbox('women', 'jen ženy');
-
-		$this->addCheckbox('couple', 'pár');
-
-		$this->addCheckbox('more', '3 a více');
+		$this->genderCheckboxes();
 
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'btn-main medium');
 
-		$this->onValidate[] = callback($this, 'checkboxValidation');
+		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
+
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -64,28 +58,10 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 			$gallery = $presenter->context->createUsersGalleries()->where('id', $idGallery)->fetch();
 			$gallery->update($galleryValues);
 
-
-			//$arr = array($image, $image2, $image3, $image4);
-
 			$this->saveImages($arr, $values, $uID, $idGallery);
-
-			//aktualizování dat v tabulce activity_stream
-			//$presenter->context->createStream()->aliveGallery($idGallery, $uID);
 
 			$presenter->flashMessage('Fotky byly přidané.');
 			$presenter->redirect('Galleries:listUserGalleryImages', array("galleryID" => $idGallery));
-		}
-	}
-
-	public function getPres() {
-		return $this->getPresenter();
-	}
-
-	public function checkboxValidation($form) {
-		$values = $form->getValues();
-
-		if (empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
-			$form->addError("Musíte vybrat jednu z kategorií");
 		}
 	}
 

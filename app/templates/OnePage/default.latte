@@ -2,8 +2,6 @@
     {control css 'onepage/default.less', 'stream/list.less'}
 {/block}
 
-
-
 {block content}
 <section id="onepage">
 	<nav id="stream-menu">
@@ -21,18 +19,19 @@
 
 {block foot}
 {control js}
-
+<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
 <script>
 	$(document).ready(function () {	
+		$( ".stream-form" ).tabs();
 		$("body").stream({
-			rows: {$count}
+			rows: {$count},
+			addoffset: 4
 		});
 	});
 	$("#frmaddItemForm-note").click(function() {
 		$("#frmaddItemForm-note").animate({ height: "200px"}, 500);
 	});
 </script>
-
 {/block}
 
 

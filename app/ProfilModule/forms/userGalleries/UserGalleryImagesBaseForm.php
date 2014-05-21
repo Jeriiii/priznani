@@ -29,6 +29,11 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	const IMAGE_FILE = "imageFile";
 	const IMAGE_DESCRIPTION = "imageDescription";
 
+	/**
+	 * @var int Pokud má uživatel alespoň 3 schválené fotky, schvaluj další automaticky
+	 */
+	const AllowLimitForImages = 3;
+
 	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
@@ -104,7 +109,13 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 				$imageSuffix = $this->suffix($image[self::IMAGE_FILE]->getName());
 				$imageDescription = !empty($image[self::IMAGE_DESCRIPTION]) ? $image[self::IMAGE_DESCRIPTION] : "";
 
-				$imageID = $this->userImageDao->insertImage($imageName, $imageSuffix, $imageDescription, $galleryID)->id;
+				//získání počtu user obrázků, které mají allow 1
+				$allowedImagesCount = $this->userImageDao->countAllowedImages($userID);
+
+				//pokud je 3 a více schválených, schválí i nově přidávanou
+				$allow = $allowedImagesCount >= self::AllowLimitForImages ? 1 : 0;
+
+				$imageID = $this->userImageDao->insertImage($imageName, $imageSuffix, $imageDescription, $galleryID, $allow)->id;
 				$this->userGalleryDao->updateBestAndLastImage($imageID, $imageID);
 
 				$this->upload($image, $imageID, $imageSuffix, $galleryID, $userID, 500, 700, 100, 130);
@@ -143,6 +154,24 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 			}
 		}
 		return FALSE;
+	}
+
+	public function genderCheckboxValidation($form) {
+		$values = $form->getValues();
+
+		if (empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
+			$form->addError("Musíte vybrat jednu z kategorií");
+		}
+	}
+
+	public function genderCheckboxes() {
+		$this->addCheckbox('man', 'jen muži');
+
+		$this->addCheckbox('women', 'jen ženy');
+
+		$this->addCheckbox('couple', 'pár');
+
+		$this->addCheckbox('more', '3 a více');
 	}
 
 }

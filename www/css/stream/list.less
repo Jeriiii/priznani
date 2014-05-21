@@ -14,18 +14,51 @@ body{
     background-color: #e9eaee;
 }
 
-.stream-item-layout {
+.stream-input {
 	border: 1px solid @stream-weak-color;
+	margin-bottom: 4px;
+	padding: 3px;
+}
+
+.stream-item-layout {
     border-color: @stream-weak-bordercolor;
     font-family: 'Exo', Arial, sans-serif;
     background: white;
     margin: 0;
-    margin-bottom: 4px; 
     padding: 15px 5px;
+	.stream-input;
 }
+
 .stream-form {
 	.stream-item-layout;
 	padding: 5px;
+	#stream-form-tabs li{
+		float: left;
+		margin: 5px;
+	}
+	#stream-form-tabs li.separator {
+		width: 1px;
+		height: 18px;
+		background-color: #bebebe;
+		margin-top: 7px;
+	}
+	.ui-tabs-active{
+		border-bottom: 1px solid #aeaeae;
+	}
+	#stream-form-tabs:after{
+		content:'';
+		display:block;
+		clear: both;
+	}
+	#tabs-2{
+		margin: 5px;
+		.form-group:nth-child(even) {
+			padding-bottom: 15px;
+		}
+		input[type="text"] {
+			.stream-input;
+		}
+	}
 }
 .stream-item{
     
