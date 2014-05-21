@@ -5,13 +5,16 @@ namespace Nette\Application\UI\Form;
 use Nette\Application\UI\Form,
 	Nette\ComponentModel\IContainer;
 
+/**
+ * Základní formulář pro galerii
+ */
 class UserGalleryBaseForm extends UserGalleryImagesBaseForm {
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $parent, $name);
 
 		$this->addGroup("");
-		
+
 		$this->addText("name", "Jméno galerie", 30, 150)
 			->addRule(Form::FILLED, "Vyplňte prosím jméno galerie")
 			->addRule(Form::MAX_LENGTH, "Maximální délka jména galerie je %d znaků", 150);
@@ -19,11 +22,11 @@ class UserGalleryBaseForm extends UserGalleryImagesBaseForm {
 			->addRule(Form::MAX_LENGTH, "Maximální délka popisu galerie je %d znaků", 500);
 		return $this;
 	}
-	
+
 	public function checkboxValidation($form) {
 		$values = $form->getValues();
-		
-		if(empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
+
+		if (empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
 			$form->addError("Musíte vybrat jednu z kategorií");
 		}
 	}

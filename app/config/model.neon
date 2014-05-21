@@ -6,25 +6,18 @@ services:
 	partyDao: \POS\Model\PartyDao
 	adviceDao: \POS\Model\AdviceDao
 	galleryDao: \POS\Model\GalleryDao
+	userGalleryDao: \POS\Model\UserGalleryDao
+	userImageDao: \POS\Model\UserImageDao
 	imageDao: \POS\Model\ImageDao
 	videoDao: \POS\Model\VideoDao
 	couple: Couple
-	texts: Texts
 	images: Images
-	forms2: Forms2
-	forms3: Forms3
 	polls: Polls
 	#facebook: Facebook
-	files: Files
-	map: Map
 	news: News
 	news_galleries: News_galleries
-	pages: Pages
 	streamDao: \POS\Model\StreamDao
-	form_new_send: Form_new_send
 	embedVideos: embedVideos
 	usersFoto: UsersFoto
-	usersGalleries: UsersGalleries
-	usersImages: UsersImages
 	eshopGames: EshopGames
 	eshopGamesOrders: EshopGamesOrders

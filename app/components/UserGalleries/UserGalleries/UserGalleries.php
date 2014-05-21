@@ -17,23 +17,19 @@ use \Nette\Security\User,
 	Nette\Utils\Strings;
 
 class UserGalleries extends BaseUserGalleries {
-	
+
 	/**
 	 * @param type $mode rozhoduje, zda se mají vygenerovat všechny obrázky v galerii nebo jen pár obrázků
 	 * @param type $userID ID uživatele, kterého se mají galerie zobrazit
 	 */
-	
-	public function render($mode, $userID) {		
-		$galleries = $this->getUserGalleries()
-						->where("userID", $userID)
-						->order('id DESC');
-		
+	public function render($mode, $userID) {
+		$galleries = $this->userGalleryDao->getInUser($userID);
+
 		$templateName = "../UserGalleries/userGalleries.latte";
-		
+
 		$this->renderBase($mode, $galleries, $userID, $templateName);
 	}
 
 }
 
 ?>
- 

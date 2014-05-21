@@ -18,24 +18,19 @@ use \Nette\Security\User,
 
 class MyUserGalleries extends BaseUserGalleries {
 
-	public function __construct() {
-	}
-	
 	/**
 	 * vyrendrování
 	 * @param type $mode
 	 */
-	public function render($mode) {		
-		$galleries = $this->getUserGalleries()
-						->where("userID", $this->getUser()->id)
-						->order('id DESC');
-		
+	public function render($mode) {
+		$userID = $this->getUser()->id;
+		$galleries = $this->userGalleryDao->getInUser($userID);
+
 		$templateName = "../MyUserGalleries/myUserGalleries.latte";
-		
-		$this->renderBase($mode, $galleries, $this->getUser()->id, $templateName);
+
+		$this->renderBase($mode, $galleries, $userID, $templateName);
 	}
 
 }
 
 ?>
- 

@@ -5,33 +5,57 @@ namespace ProfilModule;
 /**
  * Base presenter for all profile application presenters.
  */
-use \Nette\Security\User,
-	\UserGalleries\UserGalleries,
-	Nette\Http\Request,
-	\Nette\Application\UI\Form as Frm,
-	\Navigation\Navigation;
+use Nette\Security\User;
+use Nette\Http\Request;
+use Nette\Application\UI\Form as Frm;
+use Navigation\Navigation;
+use POSComponent\Galleries\UserGalleries\MyUserGalleries;
+use POSComponent\Galleries\UserGalleries\UserGalleries;
+use POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery;
+use POSComponent\Galleries\UserImagesInGallery\MyUserImagesInGallery;
+use POSComponent\Galleries\Images\UsersGallery;
+use NetteExt\File;
+use NetteExt\Path\GalleryPathCreator;
+use NetteExt\Path\ImagePathCreator;
 
 class GalleriesPresenter extends \BasePresenter {
 
-	private $userModel;
-	private $user;
-	private $fotos;
 	public $galleryID;
 	public $imageID;
 	public $id_image;
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
-	}
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
+	/**
+	 * @var \POS\Model\UserGalleryDao
+	 * @inject
+	 */
+	public $userGaleryDao;
+
+	/**
+	 * @var \POS\Model\UserImageDao
+	 * @inject
+	 */
+	public $userImageDao;
+
+	/**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
 
 	public function startup() {
 		parent::startup();
+
 		$this->addToCssVariables(array(
 			"img-height" => "200px",
 			"img-width" => "200px",
 			"text-padding-top" => "10px"
 		));
-		$this->userModel = $this->context->userModel;
 
 		$user = $this->getUser();
 
@@ -52,23 +76,17 @@ class GalleriesPresenter extends \BasePresenter {
 		$this->galleryID = $galleryID;
 		$this->imageID = $imageID;
 
-		$this->template->galleryImage = $this->context->createUsersImages()
-			->where('id', $imageID)
-			->fetch();
+		$this->template->galleryImage = $this->userImageDao->find($imageID);
 	}
 
 	public function actionListGalleryImage($imageID, $galleryID) {
-		$this->id_image = $this->context->createUsersImages()
-			->find($imageID)
-			->fetch();
+		$this->id_image = $this->userImageDao->find($imageID);
 		$this->galleryID = $galleryID;
 	}
 
 	public function actionUserGalleryChange($galleryID) {
 		$this->galleryID = $galleryID;
-		$this->template->galleryImages = $this->context->createUsersImages()
-			->where('galleryID', $galleryID)
-			->order('id DESC');
+		$this->template->galleryImages = $this->userImageDao->getInGallery($galleryID);
 	}
 
 	public function actionImageNew($galleryID) {
@@ -100,9 +118,7 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function renderListUserGalleryImages($galleryID) {
-		$gallery = $this->context->createUsersGalleries()
-			->find($galleryID)
-			->fetch();
+		$gallery = $this->userGaleryDao->find($galleryID);
 
 		//je vlastník
 		if ($gallery->userID == $this->getUser()->id) {
@@ -113,10 +129,6 @@ class GalleriesPresenter extends \BasePresenter {
 
 		$this->template->galleryOwner = $gallery->userID;
 		$this->template->myGallery = $myGallery;
-	}
-
-	protected function getUserDataFromDB() {
-		return $this->context->createUsersImages();
 	}
 
 	public function actionImage($galleryID, $imageID) {
@@ -132,110 +144,35 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function handledeleteGallery($galleryID) {
-		// nastavení vazeb na NULL, jinak to začne padat
-		$this->context->createUsersGalleries()
-			->find($galleryID)
-			->update(array(
-				"bestImageID" => NULL,
-				"lastImageID" => NULL
-		));
+		$this->streamDao->deleteUserGallery($galleryID);
 
-		$this->context->createStream()
-			->where("userGalleryID", $galleryID)
-			->delete();
-
-		$images = $this->context->createUsersImages()
-			->where("galleryID", $galleryID);
+		$images = $this->userImageDao->getInGallery($galleryID);
 
 		foreach ($images as $image) {
 
 			$this->handledeleteImage($image->id, $galleryID, FALSE);
 		}
 
-		$way = WWW_DIR . "/images/userGalleries/" . $this->getUser()->getId() . "/" . $galleryID;
+		$userID = $this->getUser()->getId();
+		$path = GalleryPathCreator::getUserGalleryPath($galleryID, $userID);
 
-		if (file_exists($way)) {
-			rmdir($way);
-		}
+		File::remove($path);
 
-		$this->context->createUsersGalleries()
-			->where("id", $galleryID)
-			->delete();
+		$this->userGaleryDao->delete($galleryID);
 
 		$this->flashMessage("Galerie byla smazána.");
 		$this->redirect("this");
 	}
 
 	public function handledeleteImage($id_image, $id_gallery, $redirekt = TRUE) {
-		$image = $this->context->createUsersImages()
-			->find($id_image)
-			->fetch();
+		$image = $this->userImageDao->find($id_image);
 
-		$dirPath = WWW_DIR . "/images/userGalleries/" . $this->getUser()->getId() . "/" . $id_gallery . "/";
+		$userID = $this->getUser()->getId();
+		$galleryFolder = GalleryPathCreator::getUserGalleryFolder($id_gallery, $userID);
 
-		$way = $dirPath . $image->id . "." . $image->suffix;
-		$wayMini = $dirPath . "min" . $image->id . "." . $image->suffix;
-		$wayScrn = $dirPath . "galScrn" . $image->id . "." . $image->suffix;
-		$waySqr = $dirPath . "minSqr" . $image->id . "." . $image->suffix;
+		File::removeImage($image->id, $image->suffix, $galleryFolder);
 
-		if (file_exists($way)) {
-			unlink($way);
-		}
-
-		if (file_exists($wayMini)) {
-			unlink($wayMini);
-		}
-
-		if (file_exists($wayScrn)) {
-			unlink($wayScrn);
-		}
-
-		if (file_exists($waySqr)) {
-			unlink($waySqr);
-		}
-
-
-		$gallery = $this->context->createUsersGalleries()
-			->where("bestImageID = ? OR lastImageID = ?", $id_image, $id_image)
-			->fetch();
-
-		/* kontrola, zda se nemaze obrazek zastupujici galerii */
-		if ($gallery) {
-			$image = $this->context->createUsersImages()
-				->where("galleryID", $gallery->id)
-				->where("id != ?", $id_image)
-				->fetch();
-
-			$galleryID = $gallery->id;
-
-			/* existuji jine obrazky v galerii? */
-			if ($image) {
-				/* ANO - nastav jiný obrázek */
-				$gallery
-					->update(array(
-						"bestImageID" => $image->id,
-						"lastImageID" => $image->id
-				));
-			} else {
-				/* NE */
-				$gallery
-					->update(array(
-						"bestImageID" => NULL,
-						"lastImageID" => NULL
-				));
-
-				/* smaž galerii ze streamu */
-				$this->context->createStream()
-					->where("userGalleryID", $galleryID)
-					->delete();
-			}
-		}
-
-
-		$this->context->createUsersImages()
-			->find($id_image)
-			->delete();
-
+		$this->userImageDao->delete($id_image);
 
 		if ($redirekt) {
 			$this->flashMessage("Obrázek byl smazán.");
@@ -244,7 +181,7 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	protected function createComponentUserGalleryNew($name) {
-		return new Frm\UserGalleryNewForm($this, $name);
+		return new Frm\UserGalleryNewForm($this->userGaleryDao, $this->userImageDao, $this, $name);
 	}
 
 	protected function createComponentUserGalleryChange($name) {
@@ -260,62 +197,52 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function createComponentUserGalleries() {
-		return new \POSComponent\Galleries\UserGalleries\UserGalleries();
+		return new UserGalleries($this->userDao, $this->userGaleryDao);
 	}
 
 	public function createComponentMyUserGalleries() {
-		return new \POSComponent\Galleries\UserGalleries\MyUserGalleries();
+		return new MyUserGalleries($this->userDao, $this->userGaleryDao);
 	}
 
 	/**
 	 * vykresluje obrázky v galerii uživatel (VLASTNÍKA)
 	 */
 	protected function createComponentMyUserImagesInGallery() {
-		$images = $this->context->createUsersImages()
-			->where("galleryID", $this->galleryID)
-			->order("id DESC");
+		$images = $this->userImageDao->getInGallery($this->galleryID);
 
-		return new \POSComponent\Galleries\UserImagesInGallery\MyUserImagesInGallery($this->galleryID, $images);
+		return new MyUserImagesInGallery($this->galleryID, $images);
 	}
 
 	/**
 	 * vykresluje obrázky v galerii
 	 */
 	protected function createComponentUserImagesInGallery() {
-		$images = $this->context->createUsersImages()
-			->where("galleryID", $this->galleryID);
+		$images = $this->userImageDao->getInGallery($this->galleryID);
 
-		return new \POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery($this->galleryID, $images);
+		return new UserImagesInGallery($this->galleryID, $images);
 	}
 
 	protected function createComponentGallery() {
 		//vytahnu vsechny fotky dane galerie podle galleryID - objekt
-		$images = $this->context->createUsersImages()
-			->where("galleryID", $this->galleryID);
+		$images = $this->userImageDao->getInGallery($this->galleryID);
 
 		//vytahnu konkretni vybranou fotku podle imageID - objekt
-		$image = $this->context->createUsersImages()
-			->find($this->imageID)
-			->fetch();
+		$image = $this->userImageDao->find($this->imageID);
 
 		//vytahnu konkretni galerie podle galleryID
-		$gallery = $this->context->createUsersGalleries()
-			->where("id", $this->galleryID)
-			->fetch();
-
+		$gallery = $this->userGaleryDao->find($this->galleryID);
 
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
 		//$domain = "http://priznaniosexu.cz";
 
-		return new \POSComponent\Galleries\Images\UsersGallery($images, $image, $gallery, $domain, TRUE);
+		return new UsersGallery($images, $image, $gallery, $domain, TRUE);
 	}
 
 	protected function createComponentNavigation($name) {
 		//Získání potřebných dat(user id, galerie daného usera)
-		$id = $this->getUser()->id;
-		$userModel = $this->userModel;
-		$user = $userModel->findUser(array("id" => $id));
+		$userID = $this->getUser()->id;
+		$user = $this->userDao->find($userID);
 
 		//vytvoření navigace a naplnění daty
 		$nav = new Navigation($this, $name);
@@ -326,8 +253,7 @@ class GalleriesPresenter extends \BasePresenter {
 		}
 
 		//získání dat pro přípravu galerii do breadcrumbs
-		$galleries = $this->context->createUsersGalleries()
-			->where("userId", $id);
+		$galleries = $this->userGaleryDao->getInUser($userID);
 
 		//příprava všech galerií pro možnost použití drobečkové navigace
 		foreach ($galleries as $gallery) {

@@ -21,20 +21,20 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 
 		$this->addGroup('Fotografie (4 x 4MB)');
 
-		$this->addImagesFile(4);
+		$this->addImageFields(4);
 
 		$this->addHidden('galleryID', $this->galleryID);
-		
+
 		$this->addCheckbox('man', 'jen muži');
-		
+
 		$this->addCheckbox('women', 'jen ženy');
-		
+
 		$this->addCheckbox('couple', 'pár');
-		
+
 		$this->addCheckbox('more', '3 a více');
 
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'btn-main medium');
-		
+
 		$this->onValidate[] = callback($this, 'checkboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
@@ -44,9 +44,9 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 		$values = $form->values;
 		$num = $this->getNumberOfPhotos($values);
 
-                $arr = $this->getArrayWithPhotos($values, $num);
+		$arr = $this->getArrayWithPhotos($values, $num);
 
-                $isOK = $this->getOkUploadedPhotos($arr);
+		$isOK = $this->getOkUploadedPhotos($arr);
 
 		if ($isOK == FALSE) {
 			$this->addError("Musíte vybrat alespoň 1 soubor");
@@ -55,19 +55,19 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 			$presenter = $this->getPres();
 			$uID = $presenter->getUser()->getId();
 			$idGallery = $values->galleryID;
-			
+
 			$galleryValues['man'] = $values->man;
 			$galleryValues['women'] = $values->women;
 			$galleryValues['couple'] = $values->couple;
 			$galleryValues['more'] = $values->more;
-			
+
 			$gallery = $presenter->context->createUsersGalleries()->where('id', $idGallery)->fetch();
 			$gallery->update($galleryValues);
-			
+
 
 			//$arr = array($image, $image2, $image3, $image4);
 
-			$this->addImages($arr, $values, $uID, $idGallery);
+			$this->saveImages($arr, $values, $uID, $idGallery);
 
 			//aktualizování dat v tabulce activity_stream
 			//$presenter->context->createStream()->aliveGallery($idGallery, $uID);
@@ -81,12 +81,12 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 		return $this->getPresenter();
 	}
 
-	
 	public function checkboxValidation($form) {
 		$values = $form->getValues();
-		
-		if(empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
+
+		if (empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
 			$form->addError("Musíte vybrat jednu z kategorií");
 		}
 	}
+
 }
