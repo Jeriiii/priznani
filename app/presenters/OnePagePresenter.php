@@ -29,6 +29,12 @@ class OnePagePresenter extends BasePresenter {
 	 * @inject
 	 */
 	public $userImageDao;
+
+	/**
+	 * @var \POS\Model\ConfessionDao
+	 * @inject
+	 */
+	public $confessionDao;
 	public $dataForStream;
 	private $count = 0;
 
@@ -42,7 +48,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentStream() {
-		return new Stream($this->dataForStream, $this->streamDao, $this->userGalleryDao, $this->userImageDao);
+		return new Stream($this->dataForStream, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
 	}
 
 	public function createComponentJs() {

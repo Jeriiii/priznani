@@ -1,17 +1,18 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of Stream
  *
  * @author Petr
  */
 use Nette\Application\UI\Form as Frm;
+use POS\Model\UserGalleryDao;
+use POS\Model\UserImageDao;
+use POS\Model\ConfessionDao;
 
+/**
+ * Nekonečný seznam přiznání, fotek a dalších příspěvků od uživatele včetně fomulářů.
+ */
 class Stream extends Nette\Application\UI\Control {
 
 	protected $dataForStream;
@@ -32,12 +33,18 @@ class Stream extends Nette\Application\UI\Control {
 	 */
 	public $streamDao;
 
-	public function __construct($data, $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao) {
+	/**
+	 * @var \POS\Model\ConfessionDao
+	 */
+	public $confessionDao;
+
+	public function __construct($data, $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
 		parent::__construct();
 		$this->dataForStream = $data;
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
 		$this->streamDao = $streamDao;
+		$this->confessionDao = $confDao;
 	}
 
 	public function render() {
@@ -66,12 +73,24 @@ class Stream extends Nette\Application\UI\Control {
 		}
 	}
 
+	/**
+	 * Přidá fotky do defaultní galerie.
+	 * @param type $name
+	 * @return \Nette\Application\UI\Form\NewStreamImageForm
+	 */
 	protected function createComponentNewStreamImageForm($name) {
 		return new Frm\NewStreamImageForm($this->userGalleryDao, $this->userImageDao, $this, $name);
 	}
 
-	protected function createComponentAddItemForm($name) {
-		return new Frm\AddItemForm($this, $name);
+	/**
+	 * Přidání přiznání do streamu
+	 * @param string $name
+	 * @return \Nette\Application\UI\Form\AddItemForm
+	 */
+	protected function createComponentAddConfessionForm($name) {
+		$addItem = new Frm\AddItemForm($this, $name);
+		$addItem->setConfession($this->confessionDao);
+		return $addItem;
 	}
 
 	protected function createComponentFilterForm($name) {

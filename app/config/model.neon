@@ -1,7 +1,6 @@
 services:
 	userDao: \POS\Model\UserDao
 	formDao: \POS\Model\FormDao
-	formQueryDao: \POS\Model\FormQueryDao
 	confessionDao: \POS\Model\ConfessionDao
 	partyDao: \POS\Model\PartyDao
 	adviceDao: \POS\Model\AdviceDao
@@ -14,8 +13,6 @@ services:
 	images: Images
 	polls: Polls
 	#facebook: Facebook
-	news: News
-	news_galleries: News_galleries
 	streamDao: \POS\Model\StreamDao
 	embedVideos: embedVideos
 	usersFoto: UsersFoto
