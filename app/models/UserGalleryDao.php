@@ -21,6 +21,13 @@ class UserGalleryDao extends AbstractDao {
 	const COLUMN_USER_ID = "userID";
 	const COLUMN_BEST_IMAGE_ID = "bestImageID";
 	const COLUMN_LAST_IMAGE_ID = "lastImageID";
+	const COLUMN_MAN = "man";
+	const COLUMN_WOMEN = "woman";
+	const COLUMN_COUPLE = "couple";
+	const COLUMN_MORE = "more";
+	const COLUMN_DEFAULT = "default";
+	const COLUMN_NAME = "name";
+	const COLUMN_DESCRIPTION = "description";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -50,6 +57,33 @@ class UserGalleryDao extends AbstractDao {
 		return $sel->fetch();
 	}
 
+	/**
+	 * Vrátí defaultní galerii uživatel, když existuje
+	 * @param int $userID ID uživatele.
+	 * @return bool|Database\Table\IRow
+	 */
+	public function findDefaultGallery($userID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_ID, $userID);
+		$sel->where(self::COLUMN_DEFAULT, 1);
+		return $sel->fetch();
+	}
+
+	/**
+	 * Vytvoří defaultní galerii uživateli
+	 * @param int $userID ID uživatele.
+	 * @return Database\Table\IRow
+	 */
+	public function insertDefaultGallery($userID) {
+		$sel = $this->getTable();
+		$defaultGallery = $sel->insert(array(
+			self::COLUMN_NAME => "Moje fotky",
+			self::COLUMN_USER_ID => $userID,
+			self::COLUMN_DEFAULT => 1,
+		));
+		return $defaultGallery;
+	}
+
 	/*	 * ****************************** UPDATE **************************** */
 
 	/**
@@ -62,6 +96,48 @@ class UserGalleryDao extends AbstractDao {
 		$sel->update(array(
 			UserGalleryDao::COLUMN_BEST_IMAGE_ID => $bestImageID,
 			UserGalleryDao::COLUMN_LAST_IMAGE_ID => $lastImageID
+		));
+	}
+
+	/**
+	 * Změní hodnoty muž|žena|pár|3 a více u galerie.
+	 * @param int $galleryID ID galerie.
+	 * @param int $man Muž.
+	 * @param int $women Žena.
+	 * @param int $couple Par.
+	 * @param int $more 3 a více.
+	 */
+	public function updateGender($galleryID, $man, $women, $couple, $more) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($galleryID);
+		$sel->update(array(
+			self::COLUMN_MAN => $man,
+			self::COLUMN_WOMEN => $women,
+			self::COLUMN_COUPLE => $couple,
+			self::COLUMN_MORE => $more
+		));
+	}
+
+	/**
+	 * Změní název, popisek a další hodnoty galerie.
+	 * @param int $galleryID ID galerie.
+	 * @param string $name Jméno galerie.
+	 * @param string $description Popisek galerie.
+	 * @param int $man Muž.
+	 * @param int $women Žena.
+	 * @param int $couple Par.
+	 * @param int $more 3 a více.
+	 */
+	public function updateNameDescGender($galleryID, $name, $description, $man, $women, $couple, $more) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($galleryID);
+		$sel->update(array(
+			self::COLUMN_NAME => $name,
+			self::COLUMN_DESCRIPTION => $description,
+			self::COLUMN_MAN => $man,
+			self::COLUMN_WOMEN => $women,
+			self::COLUMN_COUPLE => $couple,
+			self::COLUMN_MORE => $more
 		));
 	}
 
