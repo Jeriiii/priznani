@@ -185,11 +185,11 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	protected function createComponentUserGalleryChange($name) {
-		return new Frm\UserGalleryChangeForm($this, $name);
+		return new Frm\UserGalleryChangeForm($this->userGaleryDao, $this->userImageDao, $this->galleryID, $this, $name);
 	}
 
 	protected function createComponentNewImage($name) {
-		return new Frm\NewImageForm($this, $name);
+		return new Frm\NewImageForm($this->userGaleryDao, $this->userImageDao, $this->galleryID, $this, $name);
 	}
 
 	protected function createComponentUserGalleryImageChange($name) {

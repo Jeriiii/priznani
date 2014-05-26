@@ -6,62 +6,70 @@ use Nette\Application\UI\Form,
 	Nette\Utils\Html,
 	Nette\ComponentModel\IContainer,
 	NetteExt\Image;
+use POS\Model\UserGalleryDao;
+use POS\Model\UserImageDao;
 
+/**
+ * Vkládá fotky do defaultní galerie přímo ze streamu
+ */
 class NewStreamImageForm extends UserGalleryImagesBaseForm {
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
+	/**
+	 * @var \POS\Model\UserGalleryDao
+	 */
+	public $userGalleryDao;
+
+	/**
+	 * @var \POS\Model\ImageGalleryDao
+	 */
+	public $userImageDao;
+
+	/**
+	 * počet možných polí pro obrázky při vytvoření galerie
+	 */
+	const NUMBER_OF_IMAGE = 3;
+
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $parent, $name);
+
+		$this->userGalleryDao = $userGalleryDao;
+		$this->userImageDao = $userImageDao;
 
 		//form
-		$this->addImagesFile(3, TRUE, FALSE);
-		
+		$this->addImageFields(NUMBER_OF_IMAGE, TRUE, FALSE);
+
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'submit-button');
-		
+
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
 
 	public function submitted(NewStreamImageForm $form) {
 		$values = $form->values;
-		$num = $this->getNumberOfPhotos($values);
 
-        $arr = $this->getArrayWithPhotos($values, $num);
+		$images = $this->getArrayWithImages($values, NUMBER_OF_IMAGE);
 
-        $isOK = $this->getOkUploadedPhotos($arr);
+		$isFill = $this->isFillImage($images);
 
-		if ($isOK == FALSE) {
+		if ($isFill == FALSE) {
 			$this->addError("Musíte vybrat alespoň 1 soubor");
 		} else {
 
-			$presenter = $this->getPres();
-			$uID = $presenter->getUser()->getId();
-			$defaultGallery = $presenter->context->createUsersGalleries()->where(array("userID" => $uID, "default" => 1))->fetch();
-			
-			if($defaultGallery == NULL) {
-				$idGallery = $presenter->context->createUsersGalleries()
-						->insert(array(
-							"name" => "Moje fotky",
-							"userID" => $uID,
-							"default" => 1,
-						));
-			}
-			else {
+			$presenter = $this->getPresenter();
+			$userID = $presenter->getUser()->getId();
+			$defaultGallery = $this->userGalleryDao->getDefault($userID);
+
+			if (empty($defaultGallery)) {
+				$idGallery = $this->userGalleryDao->insertDefaultGallery($userID)->id;
+			} else {
 				$idGallery = $defaultGallery->id;
 			}
-			
-			//$arr = array($image, $image2, $image3, $image4);
 
-			$this->addImages($arr, $values, $uID, $idGallery);
-
-			//aktualizování dat v tabulce activity_stream
-			//$presenter->context->createStream()->aliveGallery($idGallery, $uID);
+			$this->saveImages($images, $userID, $idGallery);
 
 			$presenter->flashMessage('Fotky byly přidané.');
 			$presenter->redirect('OnePage:default');
 		}
 	}
 
-	public function getPres() {
-		return $this->getPresenter();
-	}
 }

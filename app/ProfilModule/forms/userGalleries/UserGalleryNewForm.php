@@ -32,18 +32,12 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
 
-		$this->addGroup('Fotografie (4 x 4MB)');
+		$this->addGroup('Fotografie (' . NUMBER_OF_IMAGE . ' x 4MB)');
 
 		$this->addImageFields(NUMBER_OF_IMAGE, FALSE, FALSE);
 
 		$this->addGroup('Kategorie');
-		$this->addCheckbox('man', 'jen muži');
-
-		$this->addCheckbox('women', 'jen ženy');
-
-		$this->addCheckbox('couple', 'pár');
-
-		$this->addCheckbox('more', '3 a více');
+		$this->genderCheckboxes();
 
 		$this->addSubmit("submit", "Vytvořit galerie")
 			->setAttribute('class', 'btn-main medium');
