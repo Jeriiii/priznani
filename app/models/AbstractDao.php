@@ -44,6 +44,19 @@ abstract class AbstractDao extends Object {
 	}
 
 	/**
+	 * Vrátí pravdivostní hodnotu, jestli danný řádek existuje
+	 * @param Nette\Database\Table\ActiveRow|NULL|FALSE $row Řádek z databáze, null nebo pravdivostní hodnota.
+	 * @return boolean Informace, jestli řádek existuje.
+	 */
+	protected function exist($row) {
+		if ($row) {
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
+	/**
 	 * Finds the entity by its primary key.
 	 *
 	 * @param mixed|array $primaryKey Primary key of the entity. Array when the primary key is composite.

@@ -18,13 +18,25 @@ class Stream extends Nette\Application\UI\Control {
 	private $offset = null;
 
 	/**
+	 * @var \POS\Model\UserGalleryDao
+	 */
+	public $userGalleryDao;
+
+	/**
+	 * @var \POS\Model\ImageGalleryDao
+	 */
+	public $userImageDao;
+
+	/**
 	 * @var \POS\Model\StreamDao
 	 */
 	public $streamDao;
 
-	public function __construct($data, $streamDao) {
+	public function __construct($data, $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao) {
 		parent::__construct();
 		$this->dataForStream = $data;
+		$this->userGalleryDao = $userGalleryDao;
+		$this->userImageDao = $userImageDao;
 		$this->streamDao = $streamDao;
 	}
 
@@ -55,7 +67,7 @@ class Stream extends Nette\Application\UI\Control {
 	}
 
 	protected function createComponentNewStreamImageForm($name) {
-		return new Frm\NewStreamImageForm($this, $name);
+		return new Frm\NewStreamImageForm($this->userGalleryDao, $this->userImageDao, $this, $name);
 	}
 
 	protected function createComponentAddItemForm($name) {
