@@ -10,7 +10,7 @@ use Nette\Application\UI\Form,
 class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 
 	const LimitForImages = 3;
-	
+
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 	}
@@ -58,20 +58,23 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 		return pathinfo($filename, PATHINFO_EXTENSION);
 	}
 
-	public function addImagesFile($count, $displayName = TRUE, $dislplayDesc = TRUE) {
+	public function addImagesFile($count, $displayName = TRUE, $dislplayDesc = TRUE, $addGroup = FALSE) {
 		for ($i = 0; $i < $count; $i++) {
+			if ($addGroup) {
+				$this->addGroup();
+			}
 			$this->addUpload('foto' . $i, 'Přidat fotku:')
-				->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 * 1024)
-				->AddCondition(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif');
+					->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 * 1024)
+					->AddCondition(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif');
 			if ($displayName) {
 				$this->addText('image_name' . $i, 'Jméno:')
-					->AddConditionOn($this['foto' . $i], Form::FILLED)
-					->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40);
+						->AddConditionOn($this['foto' . $i], Form::FILLED)
+						->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40);
 			}
 			if ($dislplayDesc) {
 				$this->addText('description_image' . $i, 'Popis:')
-					->AddConditionOn($this['foto' . $i], Form::FILLED)
-					->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500);
+						->AddConditionOn($this['foto' . $i], Form::FILLED)
+						->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500);
 			}
 		}
 	}
@@ -87,23 +90,23 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 				$valuesDB['description'] = !empty($values->description) ? $values->description : "";
 
 				$valuesDB['galleryID'] = $idGallery;
-				
+
 				//získání počtu user obrázků, které mají allow 1
 				$allowedImagesCount = count($this->getPres()->context->createUsersImages()->where(array("user_images.allow" => 1, "galleryID.userID" => $uID)));
-			
+
 				//pokud je 3 a více schválených, schválí i nově přidávanou
-				if($allowedImagesCount >= self::LimitForImages) {
+				if ($allowedImagesCount >= self::LimitForImages) {
 					$valuesDB["allow"] = 1;
 				}
-				
+
 				$id = $this->getPres()->context->createUsersImages()
-					->insert($valuesDB);
+						->insert($valuesDB);
 
 				$this->getPres()->context->createUsersGalleries()
-					->where('id', $idGallery)
-					->update(array(
-						"bestImageID" => $id,
-						"lastImageID" => $id
+						->where('id', $idGallery)
+						->update(array(
+							"bestImageID" => $id,
+							"lastImageID" => $id
 				));
 
 				$this->upload($image, $id, $valuesDB['suffix'], "userGalleries" . "/" . $uID . "/" . $idGallery, 500, 700, 100, 130);
@@ -163,22 +166,22 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 		}
 		return $ok;
 	}
-	
+
 	public function genderCheckboxValidation($form) {
 		$values = $form->getValues();
-		
-		if(empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
+
+		if (empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
 			$form->addError("Musíte vybrat jednu z kategorií");
 		}
 	}
-	
+
 	public function genderCheckboxes() {
 		$this->addCheckbox('man', 'jen muži');
-		
+
 		$this->addCheckbox('women', 'jen ženy');
-		
+
 		$this->addCheckbox('couple', 'pár');
-		
+
 		$this->addCheckbox('more', '3 a více');
 	}
 

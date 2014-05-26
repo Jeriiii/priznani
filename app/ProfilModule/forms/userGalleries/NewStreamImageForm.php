@@ -13,10 +13,10 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 		parent::__construct($parent, $name);
 
 		//form
-		$this->addImagesFile(3, TRUE, FALSE);
-		
+		$this->addImagesFile(3, TRUE, FALSE, TRUE);
+
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'submit-button');
-		
+
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -25,9 +25,9 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 		$values = $form->values;
 		$num = $this->getNumberOfPhotos($values);
 
-        $arr = $this->getArrayWithPhotos($values, $num);
+		$arr = $this->getArrayWithPhotos($values, $num);
 
-        $isOK = $this->getOkUploadedPhotos($arr);
+		$isOK = $this->getOkUploadedPhotos($arr);
 
 		if ($isOK == FALSE) {
 			$this->addError("Musíte vybrat alespoň 1 soubor");
@@ -36,19 +36,18 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 			$presenter = $this->getPres();
 			$uID = $presenter->getUser()->getId();
 			$defaultGallery = $presenter->context->createUsersGalleries()->where(array("userID" => $uID, "default" => 1))->fetch();
-			
-			if($defaultGallery == NULL) {
+
+			if ($defaultGallery == NULL) {
 				$idGallery = $presenter->context->createUsersGalleries()
 						->insert(array(
-							"name" => "Moje fotky",
-							"userID" => $uID,
-							"default" => 1,
-						));
-			}
-			else {
+					"name" => "Moje fotky",
+					"userID" => $uID,
+					"default" => 1,
+				));
+			} else {
 				$idGallery = $defaultGallery->id;
 			}
-			
+
 			//$arr = array($image, $image2, $image3, $image4);
 
 			$this->addImages($arr, $values, $uID, $idGallery);
@@ -64,4 +63,5 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 	public function getPres() {
 		return $this->getPresenter();
 	}
+
 }

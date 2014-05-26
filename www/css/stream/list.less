@@ -6,8 +6,8 @@
     width: 520px;
     float: left;
     margin: 0 15px;
-/*    .box-shadow(4px 0 2px #aaa);*/
-    
+	/*    .box-shadow(4px 0 2px #aaa);*/
+
 }
 
 body{
@@ -51,47 +51,64 @@ body{
 		clear: both;
 	}
 	#tabs-2{
+		font-family: Arial, sans-serif;
 		margin: 5px;
-		.form-group:nth-child(even) {
-			padding-bottom: 15px;
-		}
 		input[type="text"] {
 			.stream-input;
+			border-radius: 6px;
+		}
+		fieldset{
+			padding: 5px 5px 10px 5px;
+			border-bottom: 1px solid #DFE0E4;
+		}
+		fieldset:last-child{
+			border-bottom: none;
+		}
+
+		label {
+			font-weight: 600;
+			min-width: 150px;
+		}
+		label, .controls{
+			display: inline-block;
+		}
+		.form-group{
+			padding: 5px 0;
 		}
 	}
 }
 .stream-item{
-    
-/*    border-top: @stream-line;*/
+
+	/*    border-top: @stream-line;*/
     .stream-item-layout;
     h3{
-	color: @main-red;
-	font-size: 20px;
-	display: inline;
+		color: @main-red;
+		font-size: 20px;
+		display: inline;
     }
-    
+
     .divider{
-	display: inline;
-	font-size: 18px;
-	font-weight: 400;
-	color: #999;
+		display: inline;
+		font-size: 18px;
+		font-weight: 400;
+		color: #999;
     }
     .imagehref{
-	display: block;
-	width: 100%;
+		display: block;
+		width: 100%;
     }
     .imagehref img{
-	display: block;
-	width: 100%;
-	margin: 10px 0;
+		display: block;
+		width: 100%;
+		margin: 10px 0;
     }
-    
+
     a h3:hover, p a, strong a{
-	text-decoration: underline;
+		text-decoration: underline;
     }
     p, strong{
-	font-size: 13px;
-	font-family: 'Helvetica Neue', Helvetica, Arial,tahoma,verdana,arial,sans-serif;
+		font-size: 13px;
+		font-family: 'Helvetica Neue', Helvetica, Arial,tahoma,verdana,arial,sans-serif;
     }
 	p {
 		margin-bottom: 15px;
@@ -103,7 +120,7 @@ body{
 #stream-loader{
     display: block;
     text-align: center;
-	
+
 }
 .loaderbar{
     background: white;
@@ -111,16 +128,17 @@ body{
     border: 1px solid @stream-weak-color;
     border-color: @stream-weak-bordercolor;
     .stream-message{
-	padding: 8px;
-	font-family: Arial, sans-serif;
-	font-size:13px;
+		padding: 8px;
+		font-family: Arial, sans-serif;
+		font-size:13px;
     }
     .stream-btn-next, #stream-loader {
-	padding: 10px;
-	
+		padding: 10px;
+
     }
 }
- 
+
+
 
 
 
