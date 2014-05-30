@@ -8,10 +8,29 @@
 
 namespace POSComponent\Galleries\Images;
 
+use POS\Model\ImageDao;
+use POS\Model\GalleryDao;
+use POS\Model\StreamDao;
+
 class CompetitionGallery extends BaseGallery {
 
-	public function __construct($images, $image, $gallery, $domain, $partymode) {
-		parent::__construct($images, $image, $gallery, $domain, $partymode, "competition");
+	/**
+	 * @var \POS\Model\GalleryDao
+	 */
+	public $galleryDao;
+
+	/**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
+
+	public function __construct($images, $image, $gallery, $domain, $partymode, ImageDao $imageDao, GalleryDao $galleryDao, StreamDao $streamDao) {
+		parent::__construct($images, $image, $gallery, $domain, $partymode);
+
+		$this->streamDao = $streamDao;
+		$this->galleryDao = $galleryDao;
+		parent::setImageDao($imageDao);
 	}
 
 	public function render() {
@@ -19,32 +38,16 @@ class CompetitionGallery extends BaseGallery {
 	}
 
 	/**
-	 * vrátí tabulku s obrázky
-	 */
-	private function getImages() {
-		return $this->getPresenter()->context->createImages();
-	}
-
-	/**
 	 * schválí obrázek
 	 * @param type $imageID ID obrázku, který se má schválit
 	 */
 	public function handleApproveImage($imageID) {
-		$this->getImages()
-			->find($imageID)
-			->update(array(
-				'approved' => '1'
-		));
+		$this->getImages()->approve($imageID);
 
-		$image = $this->getImages()
-			->find($imageID)
-			->fetch();
-		$this->getPresenter()->context->createGalleries()
-			->find($image->galleryID)
-			->update(array(
-				"lastImageID" => $image->id
-		));
-		$this->getPresenter()->context->createStream()->aliveCompGallery($image->galleryID);
+		$image = $this->getImages()->find($imageID);
+		$this->galleryDao->updateLastImage($image->galleryID, $image->id);
+
+		$this->streamDao->aliveCompGallery($image->galleryID);
 
 		$this->setImage($imageID, $this->getImages());
 	}

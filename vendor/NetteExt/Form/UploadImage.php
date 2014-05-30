@@ -6,8 +6,9 @@
 
 namespace NetteExt\Form\Upload;
 
-use Form\Upload\FileUpload;
+use Nette\Http\FileUpload;
 use NetteExt\Path\ImagePathCreator;
+use NetteExt\Image;
 
 /**
  * Slouží pro nahrávání souborů

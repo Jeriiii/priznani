@@ -8,10 +8,14 @@
 
 namespace POSComponent\Galleries\Images;
 
+use POS\Model\UserImageDao;
+
 class UsersGallery extends BaseGallery {
 
-	public function __construct($images, $image, $gallery, $domain, $partymode) {
-		parent::__construct($images, $image, $gallery, $domain, $partymode, "users-gallery");
+	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao) {
+		parent::__construct($images, $image, $gallery, $domain, $partymode);
+
+		parent::setUserImageDao($userImageDao);
 	}
 
 	public function render() {
@@ -19,22 +23,11 @@ class UsersGallery extends BaseGallery {
 	}
 
 	/**
-	 * vrátí tabulku s obrázky
-	 */
-	private function getImages() {
-		return $this->getPresenter()->context->createUsersImages();
-	}
-
-	/**
 	 * schválí obrázek
 	 * @param type $imageID ID obrázku, který se má schválit
 	 */
 	public function handleApproveImage($imageID) {
-		$this->getImages()
-			->find($imageID)
-			->update(array(
-				'approved' => '1'
-		));
+		$this->getImages()->approve($imageID);
 		$this->setImage($imageID);
 	}
 
@@ -43,9 +36,7 @@ class UsersGallery extends BaseGallery {
 	 * @param type $imageID ID obrázku, který se má odstranit
 	 */
 	public function handleRemoveImage($imageID) {
-		$image = $this->getImages()
-			->where("id", $imageID)
-			->fetch();
+		$image = $this->getImages()->find($imageID);
 
 		$folderPath = WWW_DIR . "/images/userGalleries/" . $this->getPresenter()->context->getUser()->getId() . "/" . $image->galleryID . "/";
 		$imageFileName = $image->id . "." . $image->suffix;
@@ -58,7 +49,7 @@ class UsersGallery extends BaseGallery {
 	 * @param type $imageID ID dalšího obrázku
 	 */
 	public function handleNext($imageID) {
-		parent::setImage($imageID, $this->getImages());
+		parent::setImage($imageID);
 	}
 
 	/**
@@ -66,7 +57,7 @@ class UsersGallery extends BaseGallery {
 	 * @param type $imageID ID předchozího obrázku
 	 */
 	public function handleBack($imageID) {
-		parent::setImage($imageID, $this->getImages());
+		parent::setImage($imageID);
 	}
 
 }

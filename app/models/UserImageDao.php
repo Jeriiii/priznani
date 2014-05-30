@@ -6,6 +6,11 @@
 
 namespace POS\Model;
 
+use Nette\Database\Context;
+use POS\Model\UserGalleryDao;
+use POS\Model\StreamDao;
+use NetteExt\Arrays;
+
 /**
  * NAME DAO NAMEDao
  * slouží k
@@ -23,9 +28,26 @@ class UserImageDao extends AbstractDao {
 	const COLUMN_SUFFIX = "suffix";
 	const COLUMN_DESCRIPTION = "description";
 	const COLUMN_GALLERY_ID = "galleryID";
+	const COLUMN_APPROVED = "approved";
+
+	/**
+	 * @var \POS\Model\UserGalleryDao
+	 */
+	public $userGalleryDao;
+
+	/**
+	 * @var \POS\Model\StreamDao
+	 */
+	public $streamDao;
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function __construct(Context $database, UserGalleryDao $userGalleryDao, StreamDao $streamDao) {
+		parent::__construct($database);
+		$this->userGalleryDao = $userGalleryDao;
+		$this->streamDao = $streamDao;
 	}
 
 	/**
@@ -48,8 +70,7 @@ class UserImageDao extends AbstractDao {
 	 */
 	public function delete($imageID) {
 		/* galerie, kterou tento obrázek zastupuje */
-		$userGallery = $this->createSelection(UserGalleryDao::TABLE_NAME);
-		$userGallery->findByBestOrLastImage($imageID, $imageID);
+		$userGallery = $this->userGalleryDao->findByBestOrLastImage($imageID, $imageID);
 
 		/* kontrola, zda se nemaze obrazek zastupujici galerii */
 		if ($userGallery) {
@@ -58,12 +79,10 @@ class UserImageDao extends AbstractDao {
 			/* existuji jine obrazky v galerii? */
 			if ($image) {
 				/* ANO - nastav jiný obrázek */
-				$selUserGallery = $this->createSelection(UserGalleryDao::TABLE_NAME);
-				$selUserGallery->updateBestAndLastImage($image->id, $image->id);
+				$this->userGalleryDao->updateBestAndLastImage($image->id, $image->id, $image->galleryID);
 			} else {
 				/* NE - smaž galerii ze streamu */
-				$selStream = $this->createSelection(StreamDao::TABLE_NAME);
-				$selStream->deleteUserGallery($userGallery->id);
+				$this->streamDao->deleteUserGallery($userGallery->id);
 			}
 		}
 
@@ -113,6 +132,33 @@ class UserImageDao extends AbstractDao {
 		$sel->where(self::COLUMN_ALLOW, 1);
 		$sel->where(self::COLUMN_GALLERY_ID . "." . UserGalleryDao::COLUMN_USER_ID, $userID);
 		return $sel->count();
+	}
+
+	/*	 * **************************** UPDATE ******************************** */
+
+	/**
+	 * Schválí fotku.
+	 * @param int $id Image ID.
+	 */
+	public function approve($id) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($id);
+		$sel->update(array(
+			self::COLUMN_APPROVED => 1
+		));
+	}
+
+	/**
+	 *
+	 * @param int $imageID
+	 * @param string $name
+	 * @param string $descrition
+	 */
+	public function updateImage($imageID, $name, $descrition) {
+		$data = Arrays::addVal(self::COLUMN_NAME, $name);
+		$data = Arrays::addVal(self::COLUMN_DESCRIPTION, $descrition, $data);
+
+		parent::update($imageID, $data);
 	}
 
 }

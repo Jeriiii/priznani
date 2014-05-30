@@ -8,6 +8,9 @@
 
 namespace POSComponent\Galleries\Images;
 
+use POS\Model\ImageDao;
+use POS\Model\UserImageDao;
+
 class BaseGallery extends \Nette\Application\UI\Control {
 	/* vsechny obrazky z galerie */
 
@@ -22,15 +25,23 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	private $partymode;
 	private $beforeImageID;
 	private $afterImageID;
-	private $galleryMode;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, $galleryMode) {
+	/**
+	 * @var \POS\Model\UserImageDao
+	 */
+	public $userImageDao;
+
+	/**
+	 * @var \POS\Model\ImageDao
+	 */
+	public $imageDao;
+
+	public function __construct($images, $image, $gallery, $domain, $partymode) {
 		$this->images = $images->order("id DESC");
 		$this->image = $image;
 		$this->gallery = $gallery;
 		$this->domain = $domain;
 		$this->partymode = $partymode;
-		$this->galleryMode = $galleryMode;
 	}
 
 	public function renderBaseGallery($templateName) {
@@ -91,7 +102,7 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	 * @param type $imageID ID dalšího obrázku
 	 */
 	public function handleNext($imageID) {
-		$this->setImage($imageID, $this->getImages());
+		$this->setImage($imageID);
 	}
 
 	/**
@@ -99,19 +110,16 @@ class BaseGallery extends \Nette\Application\UI\Control {
 	 * @param type $imageID ID předchozího obrázku
 	 */
 	public function handleBack($imageID) {
-		$this->setImage($imageID, $this->getImages());
+		$this->setImage($imageID);
 	}
 
 	/**
 	 * nastaví nový obrázek po přechodu doleva/doprava jako aktuální a invaliduje
 	 * šablonu
 	 * @param type $imageID ID obrázku který má být aktuální
-	 * @param type $getFrom nastavuje z jake tabulky se ma prenastavit imageID (pro competitions-> images, pro galleries ->user_images)
 	 */
-	public function setImage($imageID, $getFrom) {
-		$this->image = $getFrom
-			->find($imageID)
-			->fetch();
+	public function setImage($imageID) {
+		$this->image = $this->getImages()->find($imageID);
 		$this->invalidateControl();
 	}
 
@@ -138,9 +146,8 @@ class BaseGallery extends \Nette\Application\UI\Control {
 			}
 		}
 
-		$this->getImages()
-			->find($image->id)
-			->delete();
+		$this->getImages()->delete($image->id);
+
 		$this->setBeforeAndAfterImage();
 		if (!empty($this->beforeImageID)) {
 			$this->setImage($this->beforeImageID);
@@ -149,15 +156,27 @@ class BaseGallery extends \Nette\Application\UI\Control {
 		}
 	}
 
+	protected function setUserImageDao(UserImageDao $userImageDao) {
+		$this->userImageDao = $userImageDao;
+	}
+
+	protected function setImageDao(ImageDao $imageDao) {
+		$this->imageDao = $imageDao;
+	}
+
 	/**
 	 * vrátí tabulku s obrázky
+	 * @return \POS\Model\BaseGalleryDao
 	 */
 	private function getImages() {
-		if ($this->galleryMode == "users-gallery") {
-			return $this->getPresenter()->context->createUsersImages();
-		} else {
-			return $this->getPresenter()->context->createImages();
+		if (isset($this->userImageDao)) {
+			return $this->userImageDao;
 		}
+		if (isset($this->imageDao)) {
+			return $this->imageDao;
+		}
+
+		throw new Exception("You must set Dao");
 	}
 
 	protected function createComponentAddToFBPageControl() {

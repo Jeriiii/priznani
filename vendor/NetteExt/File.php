@@ -13,8 +13,9 @@
 namespace NetteExt;
 
 use NetteExt\Path\ImagePathCreator;
+use Nette\Object;
 
-class File extends Nette\Object {
+class File extends Object {
 
 	/**
 	 * Vytvoř složku když neexistuje.
@@ -28,13 +29,24 @@ class File extends Nette\Object {
 	}
 
 	/**
+	 * Odstraní adresář.
+	 * @param type $filePath Celá cesta k adresáři.
+	 * @param type $ifExist Odstraní adresář jen když existuje.
+	 */
+	public static function removeDir($filePath, $ifExist = TRUE) {
+		if ($ifExist && file_exists($filePath)) {
+			rmdir($filePath);
+		}
+	}
+
+	/**
 	 * Odstraní soubor.
 	 * @param type $filePath Celá cesta k souboru.
 	 * @param type $ifExist Odstraní soubor jen když existuje.
 	 */
 	public static function remove($filePath, $ifExist = TRUE) {
 		if ($ifExist && file_exists($filePath)) {
-			rmdir($filePath);
+			unlink($filePath);
 		}
 	}
 

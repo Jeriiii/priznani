@@ -1,16 +1,23 @@
 <?php
 
 /**
- * Homepage presenter.
- *
- * Zobrayení úvodní stránky systému
- *
- * @author     Petr Kukrál
- * @package    jkbusiness
+ * Vydává schválená přiznání.
  */
 class CronPresenter extends BasePresenter {
 
 	private $dataToDebug;
+
+	/**
+	 * @var \POS\Model\ConfessionDao
+	 * @inject
+	 */
+	public $confessionDao;
+
+	/**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
 
 	public function startup() {
 		parent::startup();
@@ -19,40 +26,27 @@ class CronPresenter extends BasePresenter {
 	}
 
 	public function actionReleaseConfessions() {
-		$allConCount = $this->context->createForms1()
-			->where("inStream", 0)
-			->where("mark", 1)
-			->count("id");
+//		$allConCount = $this->confessionDao->countReleaseNotStream();
 
 		$limit = 15;
-
-		$confessions = $this->context->createForms1()
-			->where("inStream", 0)
-			->where("mark", 1)
-			->order("release_date ASC")
-			->limit($limit);
+		$confessions = $this->confessionDao->getToRelease($limit);
 
 		$now = new \Nette\DateTime();
 
 		$counter = 1;
+
+		$this->confessionDao->begginTransaction();
+
 		foreach ($confessions as $con) {
-			$this->context->createStream()
-				->insert(array(
-					"confessionID" => $con->id,
-					"create" => $now
-			));
+			$this->streamDao->addNewConfession($con->id, $now);
 			$counter ++;
 		}
 
-		$this->context->createForms1()
-			->where("inStream", 0)
-			->where("mark", 1)
-			->limit($limit)
-			->update(array(
-				"inStream" => 1
-		));
+		$this->confessionDao->setAsRelease($confessions);
 
-		echo("Nahrávání proběhlo úspěšně, bylo nahráno " . --$counter . " přiznání z " . $allConCount);
+		$this->confessionDao->endTransaction();
+
+//		echo("Nahrávání proběhlo úspěšně, bylo nahráno " . --$counter . " přiznání z " . $allConCount);
 		die();
 //		$this->redirect("this");
 	}

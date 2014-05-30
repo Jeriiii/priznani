@@ -7,8 +7,11 @@ use Nette\ComponentModel\IContainer;
 use NetteExt\Image;
 use NetteExt\Form\Upload\UploadImage;
 use NetteExt\Path\GalleryPathCreator;
+use NetteExt\Arrays;
 use NetteExt\File;
 use Nette\ArrayHash;
+use POS\Model\UserGalleryDao;
+use POS\Model\UserImageDao;
 
 /**
  * Základní formulář pro nahrávání a ukládání obrázků
@@ -99,8 +102,8 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	 * Uloží obrázky do databáze a na disk.
 	 * @param array $images Obrázky k uložení.
 	 * @param \Nette\ArrayHash $values Všechny hodnoty z formuláře.
-	 * @param type $userID ID uživatele.
-	 * @param type $galleryID ID galerie.
+	 * @param int $userID ID uživatele.
+	 * @param int $galleryID ID galerie.
 	 */
 	public function saveImages(array $images, $userID, $galleryID) {
 		foreach ($images as $image) {
@@ -116,9 +119,9 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 				$allow = $allowedImagesCount >= self::AllowLimitForImages ? 1 : 0;
 
 				$imageID = $this->userImageDao->insertImage($imageName, $imageSuffix, $imageDescription, $galleryID, $allow)->id;
-				$this->userGalleryDao->updateBestAndLastImage($imageID, $imageID);
+				$this->userGalleryDao->updateBestAndLastImage($galleryID, $imageID, $imageID);
 
-				$this->upload($image, $imageID, $imageSuffix, $galleryID, $userID, 500, 700, 100, 130);
+				$this->upload($image[self::IMAGE_FILE], $imageID, $imageSuffix, $galleryID, $userID, 500, 700, 100, 130);
 				unset($image);
 			}
 		}
@@ -133,9 +136,9 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	public function getArrayWithImages(ArrayHash $values, $num) {
 		$images = array();
 		for ($i = 0; $i < $num; $i++) {
-			$images[$i][self::IMAGE_NAME] = $values[self::IMAGE_NAME . $i];
 			$images[$i][self::IMAGE_FILE] = $values[self::IMAGE_FILE . $i];
-			$images[$i][self::IMAGE_DESCRIPTION] = $values[self::IMAGE_DESCRIPTION . $i];
+			$images[$i][self::IMAGE_NAME] = Arrays::getVal($values, self::IMAGE_NAME . $i);
+			$images[$i][self::IMAGE_DESCRIPTION] = Arrays::getVal($values, self::IMAGE_DESCRIPTION . $i);
 		}
 		return $images;
 	}
@@ -147,8 +150,8 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	 * @return boolean
 	 */
 	public function isFillImage(array $images) {
-		foreach ($images as $item) {
-			if ($item->error == 0) {
+		foreach ($images as $image) {
+			if ($image[self::IMAGE_FILE]->isOk()) {
 				/* alespoň jedna fotka je vyplněná */
 				return TRUE;
 			}

@@ -24,7 +24,7 @@ class GalleryPathCreator {
 	 * @return string Celá cesta ke složce uživatelské galerie.
 	 */
 	public static function getUserGalleryPath($galleryID, $userID) {
-		return self::getBasePath . self::getUserGalleryFolder($galleryID, $userID);
+		return self::getBasePath() . self::getUserGalleryFolder($galleryID, $userID);
 	}
 
 	/**

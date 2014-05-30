@@ -19,6 +19,9 @@ abstract class AbstractDao extends Object {
 	/** @var Database\Context */
 	protected $database;
 
+	/** @var boolean */
+	protected $inTransaction;
+
 	public function __construct(Database\Context $database) {
 		$this->database = $database;
 	}
@@ -92,6 +95,29 @@ abstract class AbstractDao extends Object {
 		$table = $this->getTable();
 		$table->wherePrimary($primaryKey);
 		return $table->delete();
+	}
+
+	/**
+	 * Najde prvek podle primárního klíče a aktualizuje mu data
+	 * @param int $id ID prvku.
+	 * @param array $data Data co se mají změnit.
+	 */
+	public function update($id, $data) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($id);
+		$sel->update($data);
+	}
+
+	public function begginTransaction() {
+		if ($this->inTransaction == FALSE) {
+			$this->database->beginTransaction();
+			$this->inTransaction = TRUE;
+		}
+	}
+
+	public function endTransaction() {
+		$this->database->commit();
+		$this->inTransaction = FALSE;
 	}
 
 }

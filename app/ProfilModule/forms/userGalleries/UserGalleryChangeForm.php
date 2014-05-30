@@ -3,6 +3,8 @@
 namespace Nette\Application\UI\Form;
 
 use Nette\ComponentModel\IContainer;
+use POS\Model\UserGalleryDao;
+use POS\Model\UserImageDao;
 
 /**
  * Upraví galerii
@@ -21,7 +23,7 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 	private $galleryID;
 
 	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, $galleryID, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
+		parent::__construct($userGalleryDao, $userImageDao, $parent, $name);
 		//form
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
@@ -35,7 +37,7 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 
 		$this->setDefaults(array(
 			"name" => $gallery->name,
-			"descriptionGallery" => $gallery->description,
+			"description" => $gallery->description,
 			"man" => $gallery->man,
 			"women" => $gallery->women,
 			"couple" => $gallery->couple,
@@ -43,7 +45,7 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 		));
 
 		$this->addSubmit('send', 'Změnit')->setAttribute('class', 'btn-main medium');
-		$this->onValidate[] = callback($this, 'checkboxValidation');
+		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -52,7 +54,7 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 		$values = $form->values;
 		$presenter = $form->getPresenter();
 
-		$this->userGalleryDao->updateNameDescGender($this->galleryID, $values->name, $values->descriptionGallery, $values->man, $values->women, $values->couple, $values->more);
+		$this->userGalleryDao->update($this->galleryID, $values);
 
 		$presenter->flashMessage('Galerie byla úspěšně změněna');
 		$presenter->redirect("Galleries:");

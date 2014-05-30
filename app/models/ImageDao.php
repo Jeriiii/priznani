@@ -20,6 +20,7 @@ class ImageDao extends AbstractDao {
 	const COLUMN_ID = "id";
 	const COLUMN_GALLERY_ID = "galleryID";
 	const COLUMNT_ORDER = "order";
+	const COLUMN_APPROVED = "approved";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -35,6 +36,20 @@ class ImageDao extends AbstractDao {
 		$sel->where(self::COLUMN_GALLERY_ID, $galleryID);
 		$sel->order(self::COLUMNT_ORDER . " ASC");
 		return $sel;
+	}
+
+	/*	 * **************************** UPDATE ******************************** */
+
+	/**
+	 * Schválí fotku.
+	 * @param int $id Image ID.
+	 */
+	public function approve($id) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($id);
+		$sel->update(array(
+			self::COLUMN_APPROVED => 1
+		));
 	}
 
 }

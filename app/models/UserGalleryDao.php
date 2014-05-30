@@ -12,7 +12,7 @@ namespace POS\Model;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class UserGalleryDao extends AbstractDao {
+class UserGalleryDao extends BaseGalleryDao {
 
 	const TABLE_NAME = "user_galleries";
 
@@ -22,7 +22,7 @@ class UserGalleryDao extends AbstractDao {
 	const COLUMN_BEST_IMAGE_ID = "bestImageID";
 	const COLUMN_LAST_IMAGE_ID = "lastImageID";
 	const COLUMN_MAN = "man";
-	const COLUMN_WOMEN = "woman";
+	const COLUMN_WOMEN = "women";
 	const COLUMN_COUPLE = "couple";
 	const COLUMN_MORE = "more";
 	const COLUMN_DEFAULT = "default";
@@ -88,11 +88,13 @@ class UserGalleryDao extends AbstractDao {
 
 	/**
 	 * Změní nejlepší a poslední vložený obrázek.
+	 * @param int $galleryID ID galerie
 	 * @param type $bestImageID ID nejlepšího obrázku.
 	 * @param type $lastImageID ID posledního vloženého obrázku.
 	 */
-	public function updateBestAndLastImage($bestImageID, $lastImageID) {
+	public function updateBestAndLastImage($galleryID, $bestImageID, $lastImageID) {
 		$sel = $this->getTable();
+		$sel->wherePrimary($galleryID);
 		$sel->update(array(
 			UserGalleryDao::COLUMN_BEST_IMAGE_ID => $bestImageID,
 			UserGalleryDao::COLUMN_LAST_IMAGE_ID => $lastImageID
@@ -111,29 +113,6 @@ class UserGalleryDao extends AbstractDao {
 		$sel = $this->getTable();
 		$sel->wherePrimary($galleryID);
 		$sel->update(array(
-			self::COLUMN_MAN => $man,
-			self::COLUMN_WOMEN => $women,
-			self::COLUMN_COUPLE => $couple,
-			self::COLUMN_MORE => $more
-		));
-	}
-
-	/**
-	 * Změní název, popisek a další hodnoty galerie.
-	 * @param int $galleryID ID galerie.
-	 * @param string $name Jméno galerie.
-	 * @param string $description Popisek galerie.
-	 * @param int $man Muž.
-	 * @param int $women Žena.
-	 * @param int $couple Par.
-	 * @param int $more 3 a více.
-	 */
-	public function updateNameDescGender($galleryID, $name, $description, $man, $women, $couple, $more) {
-		$sel = $this->getTable();
-		$sel->wherePrimary($galleryID);
-		$sel->update(array(
-			self::COLUMN_NAME => $name,
-			self::COLUMN_DESCRIPTION => $description,
 			self::COLUMN_MAN => $man,
 			self::COLUMN_WOMEN => $women,
 			self::COLUMN_COUPLE => $couple,

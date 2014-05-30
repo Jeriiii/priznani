@@ -17,18 +17,13 @@ use \Nette\Security\User,
 	Nette\Utils\Strings;
 
 class UserImagesInGallery extends BaseUserImagesInGallery {
-	
-	public function __construct($galleryID, $images) {
-		parent::__construct($galleryID, $images);
-	}
-	
+
 	public function render($mode, $owner) {
 		$templateName = "../UserImagesInGallery/userImagesInGallery.latte";
-		
+
 		$this->renderBase($mode, $owner, $templateName);
 	}
 
 }
 
 ?>
- 

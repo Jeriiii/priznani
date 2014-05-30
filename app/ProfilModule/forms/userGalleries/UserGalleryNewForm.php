@@ -32,9 +32,9 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
 
-		$this->addGroup('Fotografie (' . NUMBER_OF_IMAGE . ' x 4MB)');
+		$this->addGroup('Fotografie (' . self::NUMBER_OF_IMAGE . ' x 4MB)');
 
-		$this->addImageFields(NUMBER_OF_IMAGE, FALSE, FALSE);
+		$this->addImageFields(self::NUMBER_OF_IMAGE, FALSE, FALSE);
 
 		$this->addGroup('Kategorie');
 		$this->genderCheckboxes();
@@ -42,7 +42,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 		$this->addSubmit("submit", "Vytvořit galerie")
 			->setAttribute('class', 'btn-main medium');
 
-		$this->onValidate[] = callback($this, 'checkboxValidation');
+		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
@@ -51,7 +51,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 	public function submitted(UserGalleryNewForm $form) {
 		$values = $form->values;
 
-		$images = $this->getArrayWithImages($values, NUMBER_OF_IMAGE);
+		$images = $this->getArrayWithImages($values, self::NUMBER_OF_IMAGE);
 
 		$isFill = $this->isFillImage($images);
 
@@ -65,7 +65,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 			unset($values->agreement);
 
 			$galleryID = $this->saveGallery($values, $userID);
-			$this->saveImages($images, $values, $userID, $galleryID);
+			$this->saveImages($images, $userID, $galleryID);
 
 			$presenter->flashMessage('Galerie byla vytvořena. Fotky budou nejdříve schváleny adminem.');
 			$presenter->redirect('Galleries:');
@@ -80,7 +80,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 	 */
 	private function saveGallery($values, $userID) {
 		$valuesGallery['name'] = $values->name;
-		$valuesGallery['description'] = $values->descriptionGallery;
+		$valuesGallery['description'] = $values->description;
 		$valuesGallery['userId'] = $userID;
 		$valuesGallery['man'] = $values->man;
 		$valuesGallery['women'] = $values->women;

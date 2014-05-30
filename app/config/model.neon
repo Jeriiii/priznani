@@ -10,7 +10,6 @@ services:
 	imageDao: \POS\Model\ImageDao
 	videoDao: \POS\Model\VideoDao
 	couple: Couple
-	images: Images
 	polls: Polls
 	#facebook: Facebook
 	streamDao: \POS\Model\StreamDao

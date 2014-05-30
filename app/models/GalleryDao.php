@@ -12,7 +12,7 @@ namespace POS\Model;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class GalleryDao extends AbstractDao {
+class GalleryDao extends BaseGalleryDao {
 
 	const TABLE_NAME = "galleries";
 

@@ -156,7 +156,7 @@ class GalleriesPresenter extends \BasePresenter {
 		$userID = $this->getUser()->getId();
 		$path = GalleryPathCreator::getUserGalleryPath($galleryID, $userID);
 
-		File::remove($path);
+		File::removeDir($path);
 
 		$this->userGaleryDao->delete($galleryID);
 
@@ -193,7 +193,7 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	protected function createComponentUserGalleryImageChange($name) {
-		return new Frm\UserGalleryImageChangeForm($this, $name);
+		return new Frm\UserGalleryImageChangeForm($this->userGaleryDao, $this->userImageDao, $this->imageID, $this->galleryID, $this, $name);
 	}
 
 	public function createComponentUserGalleries() {
@@ -210,7 +210,7 @@ class GalleriesPresenter extends \BasePresenter {
 	protected function createComponentMyUserImagesInGallery() {
 		$images = $this->userImageDao->getInGallery($this->galleryID);
 
-		return new MyUserImagesInGallery($this->galleryID, $images);
+		return new MyUserImagesInGallery($this->galleryID, $images, $this->userDao);
 	}
 
 	/**
@@ -219,7 +219,7 @@ class GalleriesPresenter extends \BasePresenter {
 	protected function createComponentUserImagesInGallery() {
 		$images = $this->userImageDao->getInGallery($this->galleryID);
 
-		return new UserImagesInGallery($this->galleryID, $images);
+		return new UserImagesInGallery($this->galleryID, $images, $this->userDao);
 	}
 
 	protected function createComponentGallery() {
@@ -236,7 +236,7 @@ class GalleriesPresenter extends \BasePresenter {
 		$domain = $httpRequest->getUrl()->host;
 		//$domain = "http://priznaniosexu.cz";
 
-		return new UsersGallery($images, $image, $gallery, $domain, TRUE);
+		return new UsersGallery($images, $image, $gallery, $domain, TRUE, $this->userImageDao);
 	}
 
 	protected function createComponentNavigation($name) {

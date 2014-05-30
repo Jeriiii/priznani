@@ -36,7 +36,7 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 		$this->userImageDao = $userImageDao;
 
 		//form
-		$this->addImageFields(NUMBER_OF_IMAGE, TRUE, FALSE);
+		$this->addImageFields(self::NUMBER_OF_IMAGE, TRUE, FALSE);
 
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'submit-button');
 
@@ -47,7 +47,7 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 	public function submitted(NewStreamImageForm $form) {
 		$values = $form->values;
 
-		$images = $this->getArrayWithImages($values, NUMBER_OF_IMAGE);
+		$images = $this->getArrayWithImages($values, self::NUMBER_OF_IMAGE);
 
 		$isFill = $this->isFillImage($images);
 
@@ -57,7 +57,7 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 
 			$presenter = $this->getPresenter();
 			$userID = $presenter->getUser()->getId();
-			$defaultGallery = $this->userGalleryDao->getDefault($userID);
+			$defaultGallery = $this->userGalleryDao->findDefaultGallery($userID);
 
 			if (empty($defaultGallery)) {
 				$idGallery = $this->userGalleryDao->insertDefaultGallery($userID)->id;

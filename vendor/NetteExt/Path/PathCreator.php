@@ -11,6 +11,6 @@ namespace NetteExt\Path;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class PathCreator extends Nette\Object {
+class PathCreator extends \Nette\Object {
 
 }

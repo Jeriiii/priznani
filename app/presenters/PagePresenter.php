@@ -421,9 +421,10 @@ class PagePresenter extends BasePresenter {
 //		return new Frm\Form1NewForm($this, $name);
 //	}
 //
-//	protected function createComponentPartyConfessionForm($name) {
-//		return new Frm\PartyConfessionForm($this, $name);
-//	}
+	protected function createComponentPartyConfessionForm($name) {
+		return new Frm\PartyConfessionForm($this, $name);
+	}
+
 //
 //	protected function createComponentAdviceForm($name) {
 //		return new Frm\AdviceForm($this, $name);

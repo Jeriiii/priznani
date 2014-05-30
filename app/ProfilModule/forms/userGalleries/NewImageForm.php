@@ -37,17 +37,22 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
 		$this->galleryID = $galleryID;
+		$gallery = $this->userGalleryDao->find($galleryID);
 
 		$this->addGroup('Fotografie (' . self::NUMBER_OF_IMAGE . ' x 4MB)');
-
-		$this->addImageFields(NUMBER_OF_IMAGE);
-
+		$this->addImageFields(self::NUMBER_OF_IMAGE);
 		$this->genderCheckboxes();
+
+		$this->setDefaults(array(
+			"man" => $gallery->man,
+			"women" => $gallery->women,
+			"couple" => $gallery->couple,
+			"more" => $gallery->more
+		));
 
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'btn-main medium');
 
 		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
-
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -55,7 +60,7 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 	public function submitted(NewImageForm $form) {
 		$values = $form->values;
 
-		$images = $this->getArrayWithImages($values, NUMBER_OF_IMAGE);
+		$images = $this->getArrayWithImages($values, self::NUMBER_OF_IMAGE);
 
 		$isFill = $this->isFillImage($images);
 

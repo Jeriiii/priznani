@@ -40,15 +40,18 @@ class StreamDao extends AbstractDao {
 	/**
 	 * Přidá odkaz na přiznání do streamu
 	 * @param int $confessionID ID přiznání
-	 * @param int $userID ID uživatele
 	 */
-	public function addNewConfession($confessionID, $userID) {
+	public function addNewConfession($confessionID, $create = NULL) {
+		if (empty($create)) {
+			$create = new DateTime();
+		}
+
 		$sel = $this->getTable();
 		$sel->insert(array(
 			"confessionID" => $confessionID,
-			"userID" => $userID,
+			"userID" => NULL,
 			"type" => 1,
-			"create" => new DateTime(),
+			"create" => $create,
 		));
 	}
 

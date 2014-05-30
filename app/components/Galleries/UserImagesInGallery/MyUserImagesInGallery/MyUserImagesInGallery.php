@@ -18,21 +18,16 @@ use \Nette\Security\User,
 
 class MyUserImagesInGallery extends BaseUserImagesInGallery {
 
-	public function __construct($galleryID, $images) {
-		parent::__construct($galleryID, $images);
-	}
-	
 	/**
 	 * vyrendrování
 	 * @param type $mode
 	 */
-	public function render($mode) {		
+	public function render($mode) {
 		$templateName = "../MyUserImagesInGallery/myUserImagesInGallery.latte";
-		
+
 		$this->renderBase($mode, $this->getUser()->id, $templateName);
 	}
 
 }
 
 ?>
- 

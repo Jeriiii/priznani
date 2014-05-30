@@ -25,12 +25,6 @@ class FormsPresenter extends AdminSpacePresenter {
 	public $formDao;
 
 	/**
-	 * @var \POS\Model\FormQueryDao
-	 * @inject
-	 */
-	public $formQueryDao;
-
-	/**
 	 * @var \POS\Model\AdviceDao
 	 * @inject
 	 */
@@ -62,11 +56,6 @@ class FormsPresenter extends AdminSpacePresenter {
 
 	public function actionForms() {
 		$this->template->forms = $this->formDao->getAll("DESC");
-	}
-
-	public function actionFormsQuery($id_click) {
-		$this->template->id_click = $id_click;
-		$this->template->forms = $this->formQueryDao->getAll("DESC");
 	}
 
 	/**

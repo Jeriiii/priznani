@@ -8,9 +8,10 @@
  * @author     Petr Kukrál
  * @package    jkbusiness
  */
-use Nette\Application\UI\Form as Frm,
-	Nette\Http\Request,
-	NetteExt\Image;
+use Nette\Application\UI\Form as Frm;
+use Nette\Http\Request;
+use NetteExt\Image;
+use POSComponent\Galleries\Images\CompetitionGallery;
 
 class CompetitionPresenter extends BasePresenter {
 
@@ -19,6 +20,12 @@ class CompetitionPresenter extends BasePresenter {
 	public $gallery;
 	public $galleryID;
 	public $domain;
+
+	/**
+	 * @var \POS\Model\ImageDao
+	 * @inject
+	 */
+	public $imageDao;
 
 	public function startup() {
 		parent::startup();
@@ -280,7 +287,7 @@ class CompetitionPresenter extends BasePresenter {
 				->where("approved", 1);
 		}
 
-		return new \POSComponent\Galleries\Images\CompetitionGallery($images, $this->image, $this->gallery, $this->domain, $this->partymode);
+		return new CompetitionGallery($images, $this->image, $this->gallery, $this->domain, $this->partymode, $this->imageDao);
 	}
 
 	protected function createComponentImageNew($name) {
