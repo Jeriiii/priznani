@@ -14,6 +14,5 @@ services:
 	#facebook: Facebook
 	streamDao: \POS\Model\StreamDao
 	embedVideos: embedVideos
-	usersFoto: UsersFoto
-	eshopGames: EshopGames
-	eshopGamesOrders: EshopGamesOrders
+	eshopGameDao: \POS\Model\EshopGameDao
+	eshopGameOrdersDao: \POS\Model\EshopGameOrderDao

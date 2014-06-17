@@ -15,44 +15,55 @@
 namespace AdminModule;
 
 use Nette\Application\UI\Form as Frm;
+use POS\Model\UserImageDao;
+use POS\Model\StreamDao;
+use NetteExt\File;
+use NetteExt\Path\GalleryPathCreator;
 
 class AcceptImagesPresenter extends AdminSpacePresenter {
 
-	public function renderDefault() {
-		$images = $this->context->createUsersImages()->where('allow', 0);
-		$this->template->images = $images;
+	/**
+	 * @var \POS\Model\UserImageDao
+	 * @inject
+	 */
+	public $userImageDao;
 
-		$this->template->userId = 88;
+	/**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
+
+	public function renderDefault() {
+		$images = $this->userImageDao->getUnapproved();
+		$this->template->images = $images;
 	}
 
 	public function handleAcceptImage($imgId, $galleryId, $userId) {
-		$image = $this->context->createUsersImages()->find($imgId);
+		$image = $this->userImageDao->find($imgId);
 		$image->update(array('allow' => 1));
-		$this->context->createStream()->aliveGallery($galleryId, $userId);
+		$this->streamDao->aliveGallery($galleryId, $userId);
 
-		if($this->isAjax("imageAcceptance")) {
+		if ($this->isAjax("imageAcceptance")) {
 			$this->invalidateControl('imageAcceptance');
+		} else {
+			$this->redirect("this");
 		}
 	}
 
-	public function handleDeleteImage($imgId, $galleryId) {
-		$imageToDelete = $this->context->createUsersImages()->where('id', $imgId)->fetch();
-		if(file_exists(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . $imgId . "." . $imageToDelete->suffix)) {
-			unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . $imgId . "." . $imageToDelete->suffix);
-		}
-		if(file_exists(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "galScrn" . $imgId . "." . $imageToDelete->suffix)) {
-			unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "galScrn" . $imgId . "." . $imageToDelete->suffix);
-		}
-		if(file_exists(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "min" . $imgId . "." . $imageToDelete->suffix)) {
-			unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "min" . $imgId . "." . $imageToDelete->suffix);
-		}
-		if(file_exists(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "minSqr" . $imgId . "." . $imageToDelete->suffix)) {
-			unlink(WWW_DIR . "/images/userGalleries/" . $imageToDelete->gallery->userId . "/" . $galleryId . "/" . "minSqr" . $imgId . "." . $imageToDelete->suffix);
-		}
-		$this->context->createUsersImages()->where('id', $imgId)->fetch()->delete();
-		
+	public function handleDeleteImage($imageId, $galleryId) {
+		$image = $this->userImageDao->find($imageId);
+		$userID = $image->gallery->userId;
+
+		$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryId, $userID);
+		File::removeImage($image->id, $image->suffix, $galleryFolder);
+
+		$image->delete();
+
 		if ($this->isAjax("imageAcceptance")) {
 			$this->invalidateControl('imageAcceptance');
+		} else {
+			$this->redirect("this");
 		}
 	}
 

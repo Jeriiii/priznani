@@ -61,7 +61,7 @@ $checkgroup.each(function() {
 $.fn.changeBill = function () {
 	this.each(function() {
 		$(this).change(function() {
-			var $check_send_post = $("#frmeshopGamesOrdersForm-print");
+			var $check_send_post = $("#frm-eshopGamesOrdersForm-print");
 			
 			$(this).callBill(true);
 			
@@ -75,7 +75,7 @@ $.fn.changeBill = function () {
 $checkgroup.changeBill();
 
 // zaslání poštou - zmáčknutí tohoto tlačítka
-$("#frmeshopGamesOrdersForm-print").change(function() {
+$("#frm-eshopGamesOrdersForm-print").change(function() {
 	$(this).calSendPost();
 	
 	if($(this).is(":checked")) {
@@ -87,7 +87,7 @@ $("#frmeshopGamesOrdersForm-print").change(function() {
 
 // zaslání poštou - první kontrola
 
-var $send_checkbox = $("#frmeshopGamesOrdersForm-print");
+var $send_checkbox = $("#frm-eshopGamesOrdersForm-print");
 if($send_checkbox.is(':checked') ) {
 	$send_checkbox.calSendPost();
 }else{
@@ -98,5 +98,3 @@ $(".scroll-to-contact").click(function(event) {
 	event.preventDefault();
 	scrollToAnchor('contact');
 });
-
-//alert("ahoj");
