@@ -23,6 +23,9 @@ class UserDao extends UsersBaseDao {
 	const COLUMN_EMAIL = "email";
 	const COLUMN_ROLE = "role";
 	const COLUMN_ADMIN_SCORE = "admin_score";
+	const COLUMN_CONFIRMED = "confirmed";
+	const COLUMN_PASSWORD = "password";
+	const COLUMN_USER_NAME = "user_name";
 
 	/**
 	 * Vrací tuto tabulku
@@ -40,6 +43,38 @@ class UserDao extends UsersBaseDao {
 	public function findByEmail($email) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_EMAIL, $email);
+		return $sel->fetch();
+	}
+
+	/**
+	 * Vrátí seznam adminů s jejich score (bez superadmina Jerry)
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getAdminScore() {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ROLE . " = ? OR " . self::COLUMN_ROLE . " = ?", Authorizator::ROLE_ADMIN, Authorizator::ROLE_SUPERADMIN);
+		$sel->where("NOT " . self::COLUMN_USER_NAME, "Jerry");
+		$sel->order(self::COLUMN_ADMIN_SCORE . " DESC");
+	}
+
+	/**
+	 * Najde uživatele podle jeho nicku
+	 * @param string $userName Nick uživatele.
+	 * @return bool|Database\Table\IRow
+	 */
+	public function findByUserName($userName) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_NAME, $userName);
+		return $sel->fetch();
+	}
+
+	/**
+	 * Vrátí uživatele podle potvrzovacího kódu (který mu byl zaslán na jeho email).
+	 * @param string $confirmCode
+	 */
+	public function findByConfirm($confirmCode) {
+		$sel = $this->getTable();
+		$sel->where(COLUMN_CONFIRMED, $confirmCode);
 		return $sel->fetch();
 	}
 
@@ -127,6 +162,13 @@ class UserDao extends UsersBaseDao {
 
 	/*	 * ************************** UPDATE *************************** */
 
+	public function setUserRoleByConfirm($confirmCode) {
+		$user = $this->findByConfirm($confirmCode);
+		$user->update(array(
+			self::COLUMN_ROLE => \Authorizator::ROLE_USER
+		));
+	}
+
 	/**
 	 * Nastaví roli na super admin.
 	 * @param int $id ID uživatele.
@@ -157,6 +199,14 @@ class UserDao extends UsersBaseDao {
 	 */
 	public function setUnconfirmedUserRole($id) {
 		$this->updateRole($id, \Authorizator::ROLE_UNCONFIRMED_USER);
+	}
+
+	public function setPassword($userID, $password) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($userID);
+		$sel->update(array(
+			self::COLUMN_PASSWORD, $password
+		));
 	}
 
 	/**

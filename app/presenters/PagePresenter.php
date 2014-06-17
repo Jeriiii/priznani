@@ -41,6 +41,18 @@ class PagePresenter extends BasePresenter {
 	 */
 	public $adviceDao;
 
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
+	/**
+	 * @var \POS\Model\GalleryDao
+	 * @inject
+	 */
+	public $galleryDao;
+
 	public function startup() {
 		parent::startup();
 
@@ -127,13 +139,9 @@ class PagePresenter extends BasePresenter {
 		$items[1]["link"] = $this->link("Page:interactive-date");
 		$items[1]["name"] = "Interaktivní rande";
 
-		$items[2]["imageUrl"] = "images/metro/alex.jpg";
-		$items[2]["link"] = $this->link("Page:naturalScience");
-		$items[2]["name"] = "Přírodověda s Alex";
-
-		$items[3]["imageUrl"] = "images/galleries/5/79.JPG";
-		$items[3]["link"] = $this->link("Competition:list");
-		$items[3]["name"] = "Soutěže";
+		$items[2]["imageUrl"] = "images/galleries/5/79.JPG";
+		$items[2]["link"] = $this->link("Competition:list");
+		$items[2]["name"] = "Soutěže";
 
 		$this->template->items = $items;
 	}
@@ -174,9 +182,7 @@ class PagePresenter extends BasePresenter {
 		//$this->url = $this->domain;
 		$this->setPartyMode();
 		$this->id_confession = $id;
-		$confession = $this->getDao()
-			->find($id)
-			->fetch();
+		$confession = $this->getDao()->find($id);
 		if (empty($confession)) {
 			$this->flashMessage("Přiznání nebylo nalezeno.");
 			$this->redirect("Page:", array("url" => "priznanizparby"));
@@ -196,9 +202,7 @@ class PagePresenter extends BasePresenter {
 		$this->url = "poradna-o-sexu";
 		$this->setAdviceMode();
 		$this->id_advice = $id;
-		$advice = $this->context->createAdvices()
-			->find($id)
-			->fetch();
+		$advice = $this->adviceDao->find($id);
 		if (empty($advice)) {
 			$this->flashMessage("Otázka nebyla nalezena.");
 			$this->redirect("Page:", array("url" => "poradna-o-sexu"));
@@ -216,48 +220,7 @@ class PagePresenter extends BasePresenter {
 
 	public function renderAdminScore() {
 		$this->setSexMode();
-		$this->template->admins = $this->context->createUsers()
-			->where("role = ? OR role = ?", "admin", "superadmin")
-			->where("NOT user_name", "Jerry")
-			->order("admin_score DESC");
-	}
-
-	public function actionNaturalScience($id) {
-		if (!empty($id)) {
-			$videos = $this->context->createEmbedVideos()
-				->where("id_serie", 1)
-				->order("id DESC");
-			$counter = 0;
-
-			foreach ($videos as $video) {
-				if ($id == $video->id) {
-					$itemsPerPage = 3;
-					$this->page_number = (($counter - $counter % $itemsPerPage) / $itemsPerPage) + 1;
-					// = $
-					//$this->redirectUrl($this->link("Page:naturalScience", array("vp-page" => $page)) . "#" . $id);
-				}
-				$counter++;
-			}
-		}
-	}
-
-	public function renderNaturalScience($id) {
-		$this->setSexMode();
-
-		$videos = $this->context->createEmbedVideos()
-			->where("id_serie", 1)
-			->order("id DESC");
-
-		$vp = new VisualPaginator($this, 'vp');
-		if (empty($this->page_number))
-			$this->page_number = $vp->page;
-		$page = $this->page_number;
-		$paginator = $vp->getPaginator();
-		$paginator->setItemCount($videos->count("id")); // celkový počet položek
-		$paginator->setItemsPerPage(3); // počet položek na stránce
-		$paginator->setPage($page); // číslo aktuální stránky
-		$this->template->videos = $videos
-			->limit($paginator->getLength(), $paginator->getOffset());
+		$this->template->admins = $this->userDao->getAdminScore();
 	}
 
 	/*
@@ -279,25 +242,15 @@ class PagePresenter extends BasePresenter {
 		if (empty($this->page) || $this->page == "1") {
 			$news[] = array();
 			if ($this->advicemode || $this->partymode) {
-				$news["confession"] = $presenter->context->createForms1()
-					->getPublishedConfession()
-					->fetch();
+				$news["confession"] = $this->confessionDao->findLastPublishedConfession();
 			} else {
-				$news["advice"] = $presenter->context->createAdvices()
-					->getPublishedConfession()
-					->fetch();
+				$news["advice"] = $this->adviceDao->findLastPublishedConfession();
 			}
 			if ($this->advicemode || $this->sexmode) {
-				$news["competition"] = $presenter->context->createGalleries()
-					->where("sexmode", 1)
-					->order("id DESC")
-					->fetch();
+				$news["competition"] = $this->galleryDao->findByMode("sexmode");
 			}
 			if ($this->partymode) {
-				$news["competition"] = $presenter->context->createGalleries()
-					->where("partymode", 1)
-					->order("id DESC")
-					->fetch();
+				$news["competition"] = $this->galleryDao->findByMode("partymode");
 			}
 		} else {
 			$news = NULL;
@@ -337,10 +290,10 @@ class PagePresenter extends BasePresenter {
 	protected function createComponentPollsControl() {
 		$confessions = $this->confessions;
 
-		$url = $this->url;
+		$dao = $this->getDao();
 
-		return new Nette\Application\UI\Multiplier(function ($confessionId) use ($confessions, $url ) {
-			return new Polly($confessions[$confessionId], $url);
+		return new Nette\Application\UI\Multiplier(function ($confessionId) use ($confessions, $dao ) {
+			return new Polly($confessions[$confessionId], $dao);
 		});
 	}
 
@@ -354,7 +307,7 @@ class PagePresenter extends BasePresenter {
 
 		$confession = $this->getDao()->find($id);
 
-		return new Polly($confession, $this->url);
+		return new Polly($confession, $this->getDao());
 	}
 
 	/* pro vypsani vice priznani */
@@ -362,23 +315,18 @@ class PagePresenter extends BasePresenter {
 	protected function createComponentFbCommentsControl() {
 		$confessions = $this->confessions;
 
-		$url = $this->url;
-
-		return new Nette\Application\UI\Multiplier(function ($confessionId) use ($confessions, $url) {
-			return new FbComment($confessions[$confessionId], $url);
+		return new Nette\Application\UI\Multiplier(function ($confessionId) use ($confessions) {
+			return new FbComment($confessions[$confessionId]);
 		});
 	}
 
 	/* pro vypsani vice priznani */
 
 	protected function createComponentAddToFBPagesControl() {
-		$confessions = $this->getDao()
-			->getPublishedConfession();
+		$confessions = $this->getDao()->getPublishedConfession();
 
-		$url = $this->url;
-
-		return new Nette\Application\UI\Multiplier(function ($confessionId) use ($confessions, $url) {
-			return new AddToFBPage($confessions[$confessionId], $url);
+		return new Nette\Application\UI\Multiplier(function ($confessionId) use ($confessions) {
+			return new AddToFBPage($confessions[$confessionId]);
 		});
 	}
 
@@ -390,9 +338,7 @@ class PagePresenter extends BasePresenter {
 		else
 			$id = $this->id_advice;
 
-		$confession = $this->getDao()
-			->find($id)
-			->fetch();
+		$confession = $this->getDao()->find($id);
 
 		return new AddToFBPage($confession, $this->url);
 	}
@@ -417,16 +363,8 @@ class PagePresenter extends BasePresenter {
 			->decComment($id_confession);
 	}
 
-//	protected function createComponentForm1Form($name) {
-//		return new Frm\Form1NewForm($this, $name);
-//	}
-//
 	protected function createComponentPartyConfessionForm($name) {
 		return new Frm\PartyConfessionForm($this, $name);
 	}
 
-//
-//	protected function createComponentAdviceForm($name) {
-//		return new Frm\AdviceForm($this, $name);
-//	}
 }

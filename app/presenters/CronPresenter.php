@@ -19,6 +19,18 @@ class CronPresenter extends BasePresenter {
 	 */
 	public $streamDao;
 
+	/**
+	 * @var \POS\Model\AdviceDao
+	 * @inject
+	 */
+	public $adviceDao;
+
+	/**
+	 * @var \POS\Model\PartyDao
+	 * @inject
+	 */
+	public $partyDao;
+
 	public function startup() {
 		parent::startup();
 
@@ -65,9 +77,7 @@ class CronPresenter extends BasePresenter {
 		$now2 = new DateTime();
 		$night = $now2->setTime(23, 59, 59)->modify('-1 day');
 
-		$partyConfessions = $this->context->createPartyConfessions()
-			->where('release_date >= ?', $morning)
-			->where('release_date <= ?', $night);
+		$partyConfessions = $this->partyDao->getBetweenRelease($morning, $night);
 
 		$query = "";
 
@@ -79,9 +89,7 @@ class CronPresenter extends BasePresenter {
 			$query = $query . $insert;
 		}
 
-		$sexConfessions = $this->context->createForms1()
-			->where('release_date >= ?', $morning)
-			->where('release_date <= ?', $night);
+		$sexConfessions = $this->confessionDao->getBetweenRelease($morning, $night);
 
 		$query2 = "";
 

@@ -63,6 +63,16 @@ class UserImageDao extends AbstractDao {
 	}
 
 	/**
+	 * Vrátí všechny neschválené obrázky.
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getUnapproved() {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ALLOW, 0);
+		return $sel;
+	}
+
+	/**
 	 * Smaže obrázek, když jde o polední obrázek nebo nejlepší obrázek,
 	 * zkusí nastavit jiný. Když už žádný jiný obrázek v galerii není
 	 * vymaže ji ze streamu.

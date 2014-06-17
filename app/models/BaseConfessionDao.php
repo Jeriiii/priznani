@@ -90,6 +90,19 @@ class BaseConfessionDao extends AbstractDao {
 	}
 
 	/**
+	 * Vrátí všechna přiznání mezi dolním a horním omezením času vydání.
+	 * @param datetime $lowerLimit Dolní limit času vydání.
+	 * @param datetime $upperLimit Horní limit času vydání.
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getBetweenRelease($lowerLimit, $upperLimit) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_RELEASE_DATE . ' >= ?', $lowerLimit);
+		$sel->where(self::COLUMN_RELEASE_DATE . ' <= ?', $upperLimit);
+		return $sel;
+	}
+
+	/**
 	 * Vrátí počet řádků přiznání v určitém stavu.
 	 * @param int $mark Stav přiznání.
 	 * @return int
@@ -128,6 +141,20 @@ class BaseConfessionDao extends AbstractDao {
 		$sel->order($order . " DESC");
 
 		return $sel;
+	}
+
+	/**
+	 * Vrátí poslední vydané přiznání.
+	 * @return bool|Database\Table\IRow
+	 */
+	public function findLastPublishedConfession() {
+		$sel = $this->getTable();
+
+		$sel->where(self::COLUMN_MARK . ' != ?', 4); // vyhodí duplicitní přiznání
+		$sel->where(self::COLUMN_RELEASE_DATE . ' <= ?', new DateTime());
+		$sel->order(self::COLUMN_SORT_DATE . " DESC");
+
+		return $sel->fetch();
 	}
 
 	/**
