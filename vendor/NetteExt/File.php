@@ -51,7 +51,7 @@ class File extends Object {
 	}
 
 	/**
-	 * Odstraní originální obrázek, když existuje
+	 * Odstraní všechny náhledy obrázku, když existují
 	 * @param type $imageID ID obrázku.
 	 * @param type $imageSuffix Koncovka Obrázku.
 	 * @param type $galleryFolder Adresář danné galerie.

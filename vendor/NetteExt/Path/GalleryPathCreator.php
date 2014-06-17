@@ -37,6 +37,33 @@ class GalleryPathCreator {
 		return self::FOLDER_USER_GALLERY . "/" . $userID . "/" . $galleryID;
 	}
 
+	/**
+	 * Vytvoří celou cestu ke složce galerie
+	 * @param int $galleryID ID galerie.
+	 * @return string Celá cesta ke složce uživatelské galerie.
+	 */
+	public static function getGalleryPath($galleryID) {
+		return self::getBasePath() . self::getGalleryFolder($galleryID);
+	}
+
+	/**
+	 * Vrátí složku kde jsou uloženy VŠECHNY galerie daného uživatele
+	 * @param int $userID ID uživatele.
+	 * @return string Celá cesta ke složce se všemi uživatelskými galeriemi
+	 */
+	public static function getBasePathForAllUserGalleries($userID) {
+		return self::getBasePath() . "/" . $userID;
+	}
+
+	/**
+	 * Vytvoří relativní cestu ke složce galerie.
+	 * @param int $galleryID ID galerie.
+	 * @return string Relativní cesta ke složce.
+	 */
+	public static function getGalleryFolder($galleryID) {
+		return self::FOLDER_USER_GALLERY . "/" . $galleryID;
+	}
+
 	private static function getBasePath() {
 		return WWW_DIR . "/images/";
 	}
