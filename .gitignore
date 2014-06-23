@@ -1,6 +1,6 @@
 /nbproject/private/
 /temp/
-!/temp/reports/placeholder
+!/temp/*/.gitkeep
 /priznaniosexu.7z
 /databaze.sql
 /log/
