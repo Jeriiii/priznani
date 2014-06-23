@@ -1,5 +1,6 @@
 /nbproject/private/
 /temp/
+!/temp/*/.gitkeep
 /priznaniosexu.7z
 /databaze.sql
 /log/
@@ -11,5 +12,5 @@
 /Base2Presenter.php
 README.md
 /www/images/userGalleries/
-www/css/bootstrap/help/reseni 
+www/css/bootstrap/help/reseni
 /www/images/users/profils/
