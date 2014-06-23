@@ -15,6 +15,12 @@ class SignPresenter extends BasePresenter {
 	/** @persistent */
 	public $backlink = '';
 
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
 	public function startup() {
 		parent::startup();
 		if ($this->getUser()->isLoggedIn() && $this->action != "out") {
@@ -24,17 +30,11 @@ class SignPresenter extends BasePresenter {
 
 	public function renderIn($confirmed, $code) {
 		if ($confirmed == 1) {
-			$user = $this->context->createUsers()
-				->where("confirmed", $code)
-				->fetch();
+			$user = $this->userDao->findByConfirm($code);
 			if (empty($user)) {
 				$this->flashMessage("Potvrzení emailu se nezdařilo, jestli potíže přetrvávají, kontaktujte administrátora stránek.", "error");
 			} else {
-				$this->context->createUsers()
-					->where("confirmed", $code)
-					->update(array(
-						"role" => "user",
-				));
+				$this->userDao->setUserRoleByConfirm($code);
 				$this->flashMessage("Potvrzení bylo úspěšné, nyní se můžete přihlásit.", "info");
 			}
 		}
@@ -56,11 +56,11 @@ class SignPresenter extends BasePresenter {
 	}
 
 	protected function createComponentRegistrationForm($name) {
-		return new Frm\registrationForm($this, $name);
+		return new Frm\registrationForm($this->userDao, $this, $name);
 	}
 
 	protected function createComponentForgottenPasswordForm($name) {
-		return new Frm\forgottenPasswordForm($this, $name);
+		return new Frm\forgottenPasswordForm($this->userDao, $this, $name);
 	}
 
 }

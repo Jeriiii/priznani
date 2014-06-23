@@ -2,36 +2,47 @@
 
 namespace Nette\Application\UI\Form;
 
-use Nette\Application\UI\Form,
-	Nette\Utils\Html,
-	Nette\ComponentModel\IContainer,
-	NetteExt\Image,
-	Nette\Utils\Strings;
+use Nette\ComponentModel\IContainer;
+use POS\Model\UserGalleryDao;
+use POS\Model\UserImageDao;
 
+/**
+ * Vytvoří novou uživatelskou galerii.
+ */
 class UserGalleryNewForm extends UserGalleryBaseForm {
 
-	public $id_gallery;
+	/**
+	 * @var \POS\Model\UserGalleryDao
+	 */
+	public $userGalleryDao;
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
+	/**
+	 * @var \POS\Model\ImageGalleryDao
+	 */
+	public $userImageDao;
 
-		$this->addGroup('Fotografie (4 x 4MB)');
+	/**
+	 * počet možných polí pro obrázky při vytvoření galerie
+	 */
+	const NUMBER_OF_IMAGE = 4;
 
-		$this->addImagesFile(4, FALSE, FALSE);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $parent, $name);
+
+		$this->userGalleryDao = $userGalleryDao;
+		$this->userImageDao = $userImageDao;
+
+		$this->addGroup('Fotografie (' . self::NUMBER_OF_IMAGE . ' x 4MB)');
+
+		$this->addImageFields(self::NUMBER_OF_IMAGE, FALSE, FALSE);
 
 		$this->addGroup('Kategorie');
-		$this->addCheckbox('man', 'jen muži');
-
-		$this->addCheckbox('women', 'jen ženy');
-
-		$this->addCheckbox('couple', 'pár');
-
-		$this->addCheckbox('more', '3 a více');
+		$this->genderCheckboxes();
 
 		$this->addSubmit("submit", "Vytvořit galerie")
 			->setAttribute('class', 'btn-main medium');
 
-		$this->onValidate[] = callback($this, 'checkboxValidation');
+		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
@@ -39,41 +50,45 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 
 	public function submitted(UserGalleryNewForm $form) {
 		$values = $form->values;
-		$num = $this->getNumberOfPhotos($values);
 
-		$arr = $this->getArrayWithPhotos($values, $num);
+		$images = $this->getArrayWithImages($values, self::NUMBER_OF_IMAGE);
 
-		$isOK = $this->getOkUploadedPhotos($arr);
+		$isFill = $this->isFillImage($images);
 
-		if ($isOK == FALSE) {
+		if ($isFill == FALSE) {
 			$this->addError("Musíte vybrat alespoň 1 soubor");
 		} else {
 
-			$presenter = $this->getPres();
-			$uID = $presenter->getUser()->getId();
+			$presenter = $this->getPresenter();
+			$userID = $presenter->getUser()->getId();
 
-			//vytvoření galerie
-			$idGallery = $presenter->context->createUsersGalleries()
-				->insert(array(
-				"name" => $values->name,
-				"description" => $values->descriptionGallery,
-				"userID" => $uID,
-				"man" => $values->man,
-				"women" => $values->women,
-				"couple" => $values->couple,
-				"more" => $values->more
-			));
-
-			$this->addImages($arr, $values, $uID, $idGallery);
 			unset($values->agreement);
+
+			$galleryID = $this->saveGallery($values, $userID);
+			$this->saveImages($images, $userID, $galleryID);
 
 			$presenter->flashMessage('Galerie byla vytvořena. Fotky budou nejdříve schváleny adminem.');
 			$presenter->redirect('Galleries:');
 		}
 	}
 
-	public function getPres() {
-		return $this->getPresenter();
+	/**
+	 * Uloží galerii do databáze
+	 * @param Nette\ArrayHash $values
+	 * @param int $userID
+	 * @return int
+	 */
+	private function saveGallery($values, $userID) {
+		$valuesGallery['name'] = $values->name;
+		$valuesGallery['description'] = $values->description;
+		$valuesGallery['userId'] = $userID;
+		$valuesGallery['man'] = $values->man;
+		$valuesGallery['women'] = $values->women;
+		$valuesGallery['couple'] = $values->couple;
+		$valuesGallery['more'] = $values->more;
+
+		$gallery = $this->userGalleryDao->insert($valuesGallery);
+		return $gallery->id;
 	}
 
 }

@@ -6,29 +6,52 @@ use Nette\Application\UI\Form,
 	Nette\Utils\Html,
 	Nette\ComponentModel\IContainer,
 	NetteExt\Image;
+use POS\Model\UserGalleryDao;
+use POS\Model\UserImageDao;
 
+/**
+ * vkládá nové fotky do uživatelské galerie
+ */
 class NewImageForm extends UserGalleryImagesBaseForm {
+
+	/**
+	 * @var \POS\Model\UserGalleryDao
+	 */
+	public $userGalleryDao;
+
+	/**
+	 * @var \POS\Model\ImageGalleryDao
+	 */
+	public $userImageDao;
+
+	/**
+	 * počet možných polí pro obrázky při vytvoření galerie
+	 */
+	const NUMBER_OF_IMAGE = 4;
 
 	public $galleryID;
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, $galleryID, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $parent, $name);
 
-		//form
-		$presenter = $this->getPresenter();
-		$this->galleryID = $presenter->getParam('galleryID');
+		$this->userGalleryDao = $userGalleryDao;
+		$this->userImageDao = $userImageDao;
+		$this->galleryID = $galleryID;
+		$gallery = $this->userGalleryDao->find($galleryID);
 
-
-		$this->addGroup('Fotografie (4 x 4MB)');
-
-		$this->addImagesFile(4);
-
-		$this->addHidden('galleryID', $this->galleryID);
-		
+		$this->addGroup('Fotografie (' . self::NUMBER_OF_IMAGE . ' x 4MB)');
+		$this->addImageFields(self::NUMBER_OF_IMAGE);
 		$this->genderCheckboxes();
 
+		$this->setDefaults(array(
+			"man" => $gallery->man,
+			"women" => $gallery->women,
+			"couple" => $gallery->couple,
+			"more" => $gallery->more
+		));
+
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'btn-main medium');
-		
+
 		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
@@ -36,42 +59,23 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 
 	public function submitted(NewImageForm $form) {
 		$values = $form->values;
-		$num = $this->getNumberOfPhotos($values);
 
-                $arr = $this->getArrayWithPhotos($values, $num);
+		$images = $this->getArrayWithImages($values, self::NUMBER_OF_IMAGE);
 
-                $isOK = $this->getOkUploadedPhotos($arr);
+		$isFill = $this->isFillImage($images);
 
-		if ($isOK == FALSE) {
+		if ($isFill == FALSE) {
 			$this->addError("Musíte vybrat alespoň 1 soubor");
 		} else {
-
-			$presenter = $this->getPres();
+			$presenter = $this->getPresenter();
 			$uID = $presenter->getUser()->getId();
-			$idGallery = $values->galleryID;
-			
-			$galleryValues['man'] = $values->man;
-			$galleryValues['women'] = $values->women;
-			$galleryValues['couple'] = $values->couple;
-			$galleryValues['more'] = $values->more;
-			
-			$gallery = $presenter->context->createUsersGalleries()->where('id', $idGallery)->fetch();
-			$gallery->update($galleryValues);
-			
 
-			//$arr = array($image, $image2, $image3, $image4);
-
-			$this->addImages($arr, $values, $uID, $idGallery);
-
-			//aktualizování dat v tabulce activity_stream
-			//$presenter->context->createStream()->aliveGallery($idGallery, $uID);
+			$this->userGalleryDao->updateGender($this->galleryID, $values->man, $values->women, $values->couple, $values->more);
+			$this->saveImages($images, $uID, $this->galleryID);
 
 			$presenter->flashMessage('Fotky byly přidané.');
-			$presenter->redirect('Galleries:listUserGalleryImages', array("galleryID" => $idGallery));
+			$presenter->redirect('Galleries:listUserGalleryImages', array("galleryID" => $this->galleryID));
 		}
 	}
 
-	public function getPres() {
-		return $this->getPresenter();
-	}
 }

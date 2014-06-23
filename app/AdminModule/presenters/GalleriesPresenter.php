@@ -14,124 +14,117 @@ namespace AdminModule;
 
 use Nette\Application\UI\Form as Frm;
 
-class GalleriesPresenter extends AdminSpacePresenter
-{
+class GalleriesPresenter extends AdminSpacePresenter {
+
 	public $id_gallery;
-	
-	public function renderGalleries() 
-	{
-		$this->template->galleries = $this->context->createGalleries();
+
+	/**
+	 * @var \POS\Model\GalleryDao
+	 * @inject
+	 */
+	public $galleryDao;
+
+	/**
+	 * @var \POS\Model\ImageDao
+	 * @inject
+	 */
+	public $imageDao;
+
+	/**
+	 * @var \POS\Model\VideoDao
+	 * @inject
+	 */
+	public $videoDao;
+
+	public function renderGalleries() {
+		$this->template->galleries = $this->galleryDao->getAll();
 	}
-	
-	public function actionGallery($id_gallery)
-	{
+
+	public function actionGallery($id_gallery) {
 		$this->id_gallery = $id_gallery;
 	}
-	
-	public function renderGallery($id_gallery) 
-	{
-		$this->template->gallery = $this->context->createGalleries()
-				->where("id", $id_gallery)
-				->fetch();
-		$this->template->images = $this->context->createImages()
-				->where("galleryID", $id_gallery)
-				->order("order ASC");
+
+	public function renderGallery($id_gallery) {
+		$this->template->gallery = $this->galleryDao->find($id_gallery);
+		$this->template->images = $this->imageDao->getInGallery($id_gallery);
 	}
-		
+
 	protected function createComponentImageGalleryNewForm($name) {
-		return new Frm\imageGalleryNewForm($this, $name);
+		return new Frm\imageGalleryNewForm($this->imageDao, $this, $name);
 	}
-	
+
 	protected function createComponentVideoGalleryNewForm($name) {
-		return new Frm\videoGalleryNewForm($this, $name);
+		return new Frm\videoGalleryNewForm($this->videoDao, $this->imageDao, $this, $name);
 	}
-	
+
 	protected function createComponentGalleryNewForm($name) {
-		return new Frm\galleryNewForm($this, $name);
+		return new Frm\galleryNewForm($this->galleryDao, $this, $name);
 	}
-	
+
 	protected function createComponentGalleryChangeForm($name) {
-		return new Frm\galleryChangeForm($this, $name);
+		return new Frm\galleryChangeForm($this->galleryDao, $this->id_gallery, $this, $name);
 	}
-	
+
 	protected function createComponentGalleryReleaseForm($name) {
 		return new Frm\galleryReleaseForm($this, $name);
 	}
-	
-	public function handledeleteGallery($id_gallery)
-	{
-		$images = $this->context->createImages()
-				->where("galleryID", $id_gallery);
-		
-		foreach($images as $image)
+
+	public function handledeleteGallery($id_gallery) {
+		$images = $this->imageDao->getInGallery($id_gallery);
+
+		foreach ($images as $image) {
 			$this->handledeleteImage($image->id, $id_gallery, FALSE);
+		}
 
 		$way = WWW_DIR . "/images/galleries/" . $id_gallery;
-		
-		if( file_exists($way) )
-		{
+
+		if (file_exists($way)) {
 			rmdir($way);
 		}
-		
-		$this->context->createGalleries()
-				->where("id", $id_gallery)
-				->delete();
-		
+
+		$this->galleryDao->delete($id_gallery);
+
 		$this->flashMessage("Galerie byla smazána.");
 		$this->redirect("this");
 	}
 
+	public function handledeleteImage($id_image, $id_gallery, $redirekt = TRUE) {
+		$image = $this->imageDao->find($id_image);
 
-	public function handledeleteImage($id_image, $id_gallery, $redirekt = TRUE)
-	{		
-		$image = $this->context->createImages()
-				->where("id", $id_image)
-				->fetch();
-		
-		$videoID = $image->videoID;
-		
 		$way = WWW_DIR . "/images/galleries/" . $id_gallery . "/" . $image->id . "." . $image->suffix;
-		$wayMini = WWW_DIR . "/images/galleries/" . $id_gallery . "/mini" . $image->id . "." . $image->suffix;
-		
-		if( file_exists($way) )
-		{
+		$wayGalScrn = WWW_DIR . "/images/galleries/" . $id_gallery . "/galScrn" . $image->id . "." . $image->suffix;
+		$wayGalScrnMin = WWW_DIR . "/images/galleries/" . $id_gallery . "/minSqr" . $image->id . "." . $image->suffix;
+		$wayMini = WWW_DIR . "/images/galleries/" . $id_gallery . "/min" . $image->id . "." . $image->suffix;
+
+		if (file_exists($way)) {
 			unlink($way);
 		}
-		
-		if( file_exists($wayMini) )
-		{
+
+		if (file_exists($wayGalScrn)) {
+			unlink($wayGalScrn);
+		}
+
+		if (file_exists($wayGalScrnMin)) {
+			unlink($wayGalScrnMin);
+		}
+
+		if (file_exists($wayMini)) {
 			unlink($wayMini);
 		}
-		
-		$this->context->createImages()
-			->where("id", $id_image)
-			->delete();
-		
+
+		$this->imageDao->delete($id_image);
+
 		/* jedna se o video */
-		if($videoID != 0) {
-			$this->context->createVideos()
-				->find($image->videoID)
-				->delete();
+		if ($image->videoID != 0) {
+			$this->videoDao->delete($image->videoID);
 		}
-		
-		if($redirekt)
-		{
+
+		if ($redirekt) {
 			$this->flashMessage("Obrázek byl smazán.");
 			$this->redirect("this");
 		}
 	}
-	
-	public function handleunsetGallery($id_gallery, $id_page)
-	{
-		$this->context->createPages_galleries()
-				->where(array(
-					"id_gallery" => $id_gallery,
-					"id_page" => $id_page,
-				))
-				->delete();
-		$this->flashMessage("Galerie byla odpojena.");
-		$this->redirect("this");
-	}
-	
+
 }
+
 ?>

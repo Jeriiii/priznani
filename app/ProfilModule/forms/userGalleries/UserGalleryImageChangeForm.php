@@ -2,40 +2,53 @@
 
 namespace Nette\Application\UI\Form;
 
-use Nette\Application\UI\Form,
-	Nette\Security as NS,
-	Nette\ComponentModel\IContainer,
-	Nette\Forms\Controls,
-	Nette\Utils\Strings as Strings;
+use Nette\Application\UI\Form;
+use Nette\Security as NS;
+use Nette\ComponentModel\IContainer;
+use Nette\Forms\Controls;
+use Nette\Utils\Strings as Strings;
 use Nette\Image;
+use POS\Model\UserGalleryDao;
+use POS\Model\UserImageDao;
 
 class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm {
 
-	private $galleryID;
-	private $imageID;
+	/**
+	 * @var \POS\Model\UserGalleryDao
+	 */
+	public $userGalleryDao;
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
+	/**
+	 * @var \POS\Model\UserImageDao
+	 */
+	public $userImageDao;
+	private $imageID;
+	private $galleryID;
+
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, $imageID, $galleryID, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $parent, $name);
 
 		//form
-		$presenter = $this->getPresenter();
 
-		$this->galleryID = $presenter->galleryID;
-		$this->imageID = $presenter->imageID;
+		$this->userGalleryDao = $userGalleryDao;
+		$this->userImageDao = $userImageDao;
+		$this->imageID = $imageID;
+		$this->galleryID = $galleryID;
 
-		$filledForm = $presenter->context->createUsersImages()
-			->where('galleryID', $this->galleryID)
-			->where('id', $this->imageID)
-			->fetch();
+		$image = $this->userImageDao->find($imageID);
 
 		$this->addText('name', 'Jméno:')
-			->setDefaultValue($filledForm->name)
 			->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40)
 			->addRule(Form::FILLED, 'Zadejte jméno fotky');
 
 		$this->addTextArea('description', 'Popis fotky:', 100, 2)
-			->setDefaultValue($filledForm->description)
 			->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500);
+
+		$this->setDefaults(array(
+			"name" => $image->name,
+			"description" => $image->description
+		));
+
 		$this->addSubmit('send', 'Změnit')
 			->setAttribute('class', 'btn-main medium');
 		//$this->addProtection('Vypršel časový limit, odešlete formulář znovu');
@@ -47,9 +60,7 @@ class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm {
 		$values = $form->values;
 		$presenter = $form->getPresenter();
 
-		$presenter->context->createUsersImages()
-			->where("id", $this->imageID)
-			->update($values);
+		$this->userImageDao->update($this->imageID, $values);
 
 		$presenter->flashMessage('Fotka byla úspěšně změněna');
 		$presenter->redirect("Galleries:listUserGalleryImages", $this->galleryID);

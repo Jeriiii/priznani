@@ -8,7 +8,7 @@ use Nette\Application\Routers\RouteList,
 	Nette\Forms\Container;
 
 // Load Nette Framework
-require LIBS_DIR . '/Nette/nette.min.php';
+require LIBS_DIR . '/Nette/loader.php';
 
 
 // Configure application

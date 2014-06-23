@@ -57,9 +57,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		}
 //		$user = $this->getUser();
 //		$authorizator = new MyAuthorizator;
-		$parameters = $this->context->createAuthorizator_table()
-			->fetch();
-		$this->parameters = $parameters;
 //		$httpRequest = $this->context->httpRequest;
 //		$this->domain = $httpRequest
 //							->getUrl()
@@ -80,14 +77,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		$this->template->facebook_html = "";
 		$this->template->facebook_script = "";
 
-		$google = $this->context->createGoogle_analytics()
-			->fetch();
-
-		$name = "";
-
-		if ($google)
-			$name = $google->name;
-
+		$name = "UA-34882037-3";
 		$this->template->google_analytics = "
 				<script type='text/javascript'>
 					var _gaq = _gaq || [];
@@ -99,29 +89,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 						ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 						var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 					  })();
-				</script>	
+				</script>
 			";
-
-		if ($parameters->map == 1) {
-			$map = $this->context->createMap()
-				->fetch();
-
-			if (!empty($map)) {
-				$this->template->gps = $map->gps;
-				$this->template->name = $map->name;
-				$this->template->text_map = $map->text;
-
-				$this->template->map_head = '
-					<script type="text/javascript" src="http://api4.mapy.cz/loader.js"></script>
-					<script type="text/javascript">Loader.load();</script>
-				';
-			} else {
-				$this->template->map_head = '';
-			}
-		} else {
-			$this->template->map_script = "";
-			$this->template->map_head = '';
-		}
 
 
 		$this->fillJsVariablesWithLinks();

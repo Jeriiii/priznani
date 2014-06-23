@@ -1,0 +1,18 @@
+services:
+	userDao: \POS\Model\UserDao
+	formDao: \POS\Model\FormDao
+	confessionDao: \POS\Model\ConfessionDao
+	partyDao: \POS\Model\PartyDao
+	adviceDao: \POS\Model\AdviceDao
+	galleryDao: \POS\Model\GalleryDao
+	userGalleryDao: \POS\Model\UserGalleryDao
+	userImageDao: \POS\Model\UserImageDao
+	imageDao: \POS\Model\ImageDao
+	videoDao: \POS\Model\VideoDao
+	couple: Couple
+	polls: Polls
+	#facebook: Facebook
+	streamDao: \POS\Model\StreamDao
+	embedVideos: embedVideos
+	eshopGameDao: \POS\Model\EshopGameDao
+	eshopGameOrdersDao: \POS\Model\EshopGameOrderDao

@@ -3,42 +3,49 @@
 namespace Nette\Application\UI\Form;
 
 use Nette\ComponentModel\IContainer;
+use POS\Model\UserGalleryDao;
+use POS\Model\UserImageDao;
 
+/**
+ * Upraví galerii
+ */
 class UserGalleryChangeForm extends UserGalleryBaseForm {
 
+	/**
+	 * @var \POS\Model\UserGalleryDao
+	 */
+	public $userGalleryDao;
+
+	/**
+	 * @var \POS\Model\ImageGalleryDao
+	 */
+	public $userImageDao;
 	private $galleryID;
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, $galleryID, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $parent, $name);
 		//form
-		$presenter = $this->getPresenter();
-		$this->galleryID = $presenter->galleryID;
+		$this->userGalleryDao = $userGalleryDao;
+		$this->userImageDao = $userImageDao;
+		$this->galleryID = $galleryID;
 
-		$filledForm = $presenter->context->createUsersGalleries()
-			->where('id', $this->galleryID)
-			->fetch();
+		$gallery = $this->userGalleryDao->find($galleryID);
 
 		$this->addGroup('Kategorie');
 
-		$this->addCheckbox('man', 'jen muži');
-
-		$this->addCheckbox('women', 'jen ženy');
-
-		$this->addCheckbox('couple', 'pár');
-
-		$this->addCheckbox('more', '3 a více');
+		$this->genderCheckboxes();
 
 		$this->setDefaults(array(
-			"name" => $filledForm->name,
-			"descriptionGallery" => $filledForm->description,
-			"man" => $filledForm->man,
-			"women" => $filledForm->women,
-			"couple" => $filledForm->couple,
-			"more" => $filledForm->more,
+			"name" => $gallery->name,
+			"description" => $gallery->description,
+			"man" => $gallery->man,
+			"women" => $gallery->women,
+			"couple" => $gallery->couple,
+			"more" => $gallery->more,
 		));
 
 		$this->addSubmit('send', 'Změnit')->setAttribute('class', 'btn-main medium');
-		$this->onValidate[] = callback($this, 'checkboxValidation');
+		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -47,16 +54,7 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 		$values = $form->values;
 		$presenter = $form->getPresenter();
 
-		$values2['name'] = $values->name;
-		$values2['description'] = $values->descriptionGallery;
-		$values2['man'] = $values->man;
-		$values2['women'] = $values->women;
-		$values2['couple'] = $values->couple;
-		$values2['more'] = $values->more;
-
-		$presenter->context->createUsersGalleries()
-			->where("id", $this->galleryID)
-			->update($values2);
+		$this->userGalleryDao->update($this->galleryID, $values);
 
 		$presenter->flashMessage('Galerie byla úspěšně změněna');
 		$presenter->redirect("Galleries:");

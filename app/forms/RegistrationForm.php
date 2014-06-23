@@ -2,22 +2,27 @@
 
 namespace Nette\Application\UI\Form;
 
-use Nette\Application\UI\Form,
-	Nette\Security as NS,
-	Nette\ComponentModel\IContainer,
-	Nette\DateTime,
-	Nette\Utils\Strings,
-	Nette\Mail\Message,
-	Nette\Utils\Html;
+use Nette\Application\UI\Form;
+use Nette\ComponentModel\IContainer;
+use Nette\Utils\Strings;
+use Nette\Mail\Message;
+use Nette\Utils\Html;
+use POS\Model\UserDao;
+use Authorizator;
+use NetteExt\Path\GalleryPathCreator;
+use NetteExt\File;
 
 class RegistrationForm extends BaseBootstrapForm {
 
 	private $id;
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
+	/**
+	 * @var \POS\Model\UserDao
+	 */
+	public $userDao;
 
-		$presenter = $this->getPresenter();
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($parent, $name);
 
 		$emailNameNote = Html::el('small')->setText(" (pro zapomenuté heslo, soutěže a pod.)");
 		$emailName = Html::el()->setText('E-mail:')->add($emailNameNote);
@@ -39,7 +44,7 @@ class RegistrationForm extends BaseBootstrapForm {
 				->setText("Souhlasím s ")
 				->add(
 					Html::el('a')
-					->href("http://priznanizparby.cz/soutez/fotografie.pdf")
+					->href("http://priznaniosexu.cz/smlouvy/registrace.pdf")
 					->setHtml('<u>podmínkami</u>'))
 			)
 			->addRule(Form::FILLED, "Musíte souhlasit s podmínkami.");
@@ -57,15 +62,11 @@ class RegistrationForm extends BaseBootstrapForm {
 		unset($values["adult"]);
 		unset($values["agreement"]);
 
-		$mail = $form->getPresenter()->context->createUsers()
-			->where('email', $values->email)
-			->fetch();
+		$mail = $this->userDao->findByEmail($values->email);
+		$nick = $this->userDao->findByUserName($values->user_name);
 
-		$nick = $form->getPresenter()->context->createUsers()
-			->where('user_name', $values->user_name)
-			->fetch();
-		$values->role = 'user';
-		$values['confirmed'] = Strings::random(100);
+		$values->role = Authorizator::ROLE_USER;
+		$values[UserDao::COLUMN_CONFIRMED] = Strings::random(100);
 
 		if ($mail) {
 			$form->addError('Tento email už někdo používá.');
@@ -74,13 +75,13 @@ class RegistrationForm extends BaseBootstrapForm {
 		} else {
 			unset($values->passwordVerify);
 			/* odeslání mailu o registraci i s údaji */
-			$this->sendMail($values->email, $values->password, $values['confirmed']);
+			$this->sendMail($values->email, $values->password, $values[UserDao::COLUMN_CONFIRMED]);
 			$values->password = \Authenticator::calculateHash($values->password);
-			$user = $form->getPresenter()->context->createUsers()
-				->insert($values);
+			$user = $this->userDao->insert($values);
 
 			//vytvoření nové složky pro vlastní galerii
-			mkdir(WWW_DIR . "/images/userGalleries/" . $user->id, 0752);
+			$galleryPath = GalleryPathCreator::getBasePathForAllUserGalleries($user->id);
+			File::createDir($galleryPath);
 
 			$this->getPresenter()->flashMessage('Pro dokončení registrace prosím klikněte na odkaz zaslaný na Váš email.');
 			$form->getPresenter()->redirect('Sign:in');
@@ -88,16 +89,14 @@ class RegistrationForm extends BaseBootstrapForm {
 	}
 
 	public function sendMail($email, $password, $code) {
-		$mail = new Message;
-		$domain_name = $this->getPresenter()->context->createAuthorizator_table()
-				->fetch()
-			->domain_name;
 		$link = $this->getPresenter()->link("//:Sign:in", array("code" => $code, "confirmed" => 1));
+		$mail = new Message;
 		$mail->setFrom('neodepisuj@priznaniosexu.cz')
 			->addTo($email)
 			->setSubject('Dokončení registrace')
-			->setBody("Dobrý den,\nbyl jste úspěšně zaregistrován. Vaše přihlašovací údaje jsou\ne-mail: " . $email . "\nheslo: " . $password . "\nPro dokončení registrace prosím klikněte na tento odkaz:\n" . $link . "\n\nDěkujeme za Vaší registraci.\nS pozdravem\ntým nudajefuc.cz")
-			->send();
+			->setBody("Dobrý den,\nbyl jste úspěšně zaregistrován. Vaše přihlašovací údaje jsou\ne-mail: " . $email . "\nheslo: " . $password . "\nPro dokončení registrace prosím klikněte na tento odkaz:\n" . $link . "\n\nDěkujeme za Vaší registraci.\nS pozdravem\ntým nudajefuc.cz");
+		$mailer = new SendmailMailer;
+		$mailer->send($mail);
 	}
 
 }

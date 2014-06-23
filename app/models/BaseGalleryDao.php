@@ -1,0 +1,30 @@
+<?php
+
+/*
+ * @copyright Copyright (c) 2014 Kukral COMPANY s.r.o.
+ */
+
+namespace POS\Model;
+
+/**
+ * Slouží pro základní operace s galerií
+ *
+ * @author Petr Kukrál <p.kukral@kukral.eu>
+ */
+class BaseGalleryDao extends AbstractDao {
+	/*	 * ****************************** UPDATE **************************** */
+
+	/**
+	 * Změní poslední vložený obrázek.
+	 * @param int $galleryID ID galerie
+	 * @param type $lastImageID ID posledního vloženého obrázku.
+	 */
+	public function updateLastImage($galleryID, $lastImageID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($galleryID);
+		$sel->update(array(
+			self::COLUMN_LAST_IMAGE_ID => $lastImageID
+		));
+	}
+
+}
