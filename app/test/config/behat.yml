@@ -1,0 +1,18 @@
+#
+# Basic behat configuration.
+#
+#
+
+imports:
+  - behat.local.yml
+
+default:
+  paths:
+    features: ../features
+    bootstrap: ../bootstrap
+  context:
+    class: Test\FeatureContext
+  extensions:
+    Behat\MinkExtension\Extension:
+            goutte: ~
+            selenium2: ~
