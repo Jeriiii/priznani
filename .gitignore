@@ -16,3 +16,4 @@ README.md
 /www/images/userGalleries/
 www/css/bootstrap/help/reseni
 /www/images/users/profils/
+/app/test/config/behat.local.yml
