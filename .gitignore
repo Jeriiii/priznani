@@ -17,3 +17,7 @@ README.md
 www/css/bootstrap/help/reseni
 /www/images/users/profils/
 /app/test/config/behat.local.yml
+www/cache/*
+!www/cache/js
+www/cache/js/*
+!www/cache/js/.gitkeep
