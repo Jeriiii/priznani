@@ -15,31 +15,9 @@
 <h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
  
 <h2>Osobní údaje</h2>
-<table class="table table-striped">
-	<tbody>
-		<tr>
-		{if $hasFoto}
-			{foreach $fotos as $foto}
-				<td class="centered">
-						<a href="{$basePath}/images/users/profils/{$foto->userId}/{$foto->id}.{$foto->suffix}" rel="lightbox[gallery]"><img  src="{$basePath}/images/users/profils/{$foto->userId}/mini{$foto->id}.{$foto->suffix}" alt="{$foto->description}"></a>
-				</td>										
-			{/foreach}
-		</tr>	
-		<tr>
-			{foreach $fotos as $foto}
-				<td class="tdlabel centered">
-					{$foto->description}
-				</td>
-			{/foreach}
-			{else}
-				<td class="centered">
-						<img  src="{$basePath}/images/users/blank_profil.png">
-				</td>		
-		{/if}
- 
-		</tr>
-	</tbody>
-</table>
+{control userGalleries 'listAll', $userID}
+
+{control userImagesAll 'listAll', $userID}
 
 <table class="table table-condensed">
 	<tbody>

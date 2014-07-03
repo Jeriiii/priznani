@@ -23,6 +23,7 @@ class GalleriesPresenter extends \BasePresenter {
 	public $galleryID;
 	public $imageID;
 	public $id_image;
+	private $images;
 
 	/**
 	 * @var \POS\Model\UserDao
@@ -131,15 +132,15 @@ class GalleriesPresenter extends \BasePresenter {
 		$this->template->myGallery = $myGallery;
 	}
 
-	public function actionImage($galleryID, $imageID) {
+	public function actionImage($imageID, $galleryID = NULL, $userID = NULL) {
 		$this->imageID = $imageID;
-		$this->galleryID = $galleryID;
-	}
-
-	public function renderImage($galleryID, $imageID) {
-		if (!empty($galleryID) && !empty($imageID)) {
-			$this->galleryID = $galleryID;
-			$this->imageID = $imageID;
+		/* nastaví obrázky podle uživatele nebo podle galerie */
+		if (!empty($galleryID)) {
+			$this->images = $this->userImageDao->getInGallery($galleryID);
+		} elseif (!empty($userID)) {
+			$this->images = $this->userImageDao->getAllFromUser($userID);
+		} else {
+			throw new Exception("Musíte nastavit buď ID uživatele, nebo ID galerie.");
 		}
 	}
 
@@ -223,20 +224,17 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	protected function createComponentGallery() {
-		//vytahnu vsechny fotky dane galerie podle galleryID - objekt
-		$images = $this->userImageDao->getInGallery($this->galleryID);
-
 		//vytahnu konkretni vybranou fotku podle imageID - objekt
 		$image = $this->userImageDao->find($this->imageID);
 
 		//vytahnu konkretni galerie podle galleryID
-		$gallery = $this->userGaleryDao->find($this->galleryID);
+		$gallery = $this->userGaleryDao->find($image->galleryID);
 
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
 		//$domain = "http://priznaniosexu.cz";
 
-		return new UsersGallery($images, $image, $gallery, $domain, TRUE, $this->userImageDao);
+		return new UsersGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao);
 	}
 
 	protected function createComponentNavigation($name) {

@@ -11,11 +11,11 @@ namespace POSComponent\Galleries\UserImagesInGallery;
 use POS\Model\UserDao;
 
 class BaseUserImagesInGallery extends \Nette\Application\UI\Control {
-	/* proměnné pro css překlad */
+	/* právě procházená galerie */
 
-	protected $cssVariables = array();
-	/* ID galerie, ve které se obrázky nacházejí */
 	protected $galleryID;
+	/* proměnné pro css překlad */
+	protected $cssVariables = array();
 	/* obrázky, co se mají zobrazit */
 	protected $images;
 
@@ -34,7 +34,6 @@ class BaseUserImagesInGallery extends \Nette\Application\UI\Control {
 		$this->setCssParams();
 
 		$this->template->galleryID = $this->galleryID;
-
 		$this->template->userData = $this->userDao->find($owner);
 
 		/* vrati pouze posledni vsechny nahledy galerie daneho uzivatele */

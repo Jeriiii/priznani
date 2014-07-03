@@ -15,9 +15,10 @@ use Authorizator;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class UserDao extends UsersBaseDao {
+class UserDao extends UserBaseDao {
 
 	const TABLE_NAME = "users";
+	const PROPERTIES_TABLE_NAME = "users_properties";
 
 	/* sloupce */
 	const COLUMN_EMAIL = "email";
@@ -33,6 +34,17 @@ class UserDao extends UsersBaseDao {
 	 */
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	/**
+	 * Vrátí další údaje o uživateli
+	 * @param int $userID
+	 * @return bool|Database\Table\IRow
+	 */
+	public function findProperties($userID) {
+		$sel = $this->createSelection(UserPropertyDao::TABLE_NAME);
+		$sel->wherePrimary($userID);
+		return $sel->fetch();
 	}
 
 	/**
@@ -127,22 +139,21 @@ class UserDao extends UsersBaseDao {
 	 * @return bool|Database\Table\IRow
 	 */
 	public function getUserData($userID) {
-		$select = $this->getTable->find($userID);
-		$select->find();
-		$user = $select->fetch();
+		$user = parent::find($userID);
+		$userProperty = $this->findProperties($userID);
 
 		$baseUserData = array(
 			'Jméno' => $user->user_name,
-			'První věta' => $user->first_sentence,
+			'První věta' => $user->property->first_sentence,
 			/* 'Naposledy online' => $user->last_active, */
-			'Druh uživatele' => Users::getTranslateUserProperty($user->user_property),
+			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($user->property->user_property),
 			/* 'Vytvoření profilu' => $user->created, */
 			/* 'Email' => $user->email, */
-			'O mně' => $user->about_me,
+			'O mně' => $user->property->about_me,
 		);
-		$baseData = $this->getBaseData($user);
+		$baseData = $this->getBaseData($userProperty);
 		$other = $this->getOtherData($user);
-		$sex = $this->getSex($user);
+		$sex = $this->getSex($userProperty);
 
 		return $baseUserData + $baseData + $other + $sex;
 	}
