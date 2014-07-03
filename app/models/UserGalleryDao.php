@@ -46,6 +46,15 @@ class UserGalleryDao extends BaseGalleryDao {
 	}
 
 	/**
+	 * Vrátí poslední vytvořenou galerii uživatele
+	 * @param int $userID ID uživatele
+	 */
+	public function findByUser($userID) {
+		$sel = $this->getInUser($userID);
+		return $sel->fetch();
+	}
+
+	/**
 	 * Vrátí galerii která má nejlepší NEBO poslední obrázek tento
 	 * @param int $bestimageID ID nejlepšího obrázku.
 	 * @param int $lastImageID ID posledního obrázku.

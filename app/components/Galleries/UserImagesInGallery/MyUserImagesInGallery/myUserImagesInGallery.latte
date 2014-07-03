@@ -17,7 +17,7 @@
 		<p>Opravdu chcete smazat fotku {$image->name}?</p>		        
 	</div>
 	<div class="modal-footer">
-		<a href="{plink deleteImage! id_image => $image->id, id_gallery => $galleryID, redirekt => FALSE}" class="btn btn-success">
+		<a href="{plink deleteImage! id_image => $image->id, id_gallery => $image->galleryID, redirekt => FALSE}" class="btn btn-success">
 			Ano
 		</a>
 		<button  class="btn" data-dismiss="modal" aria-hidden="true">Ne</button>
@@ -34,7 +34,7 @@
 			<p>Opravdu chcete smazat fotku {$image->name}?</p>	
 		</div>
 		<div class="modal-footer">
-			<a href="{plink deleteImage! id_image => $image->id, id_gallery => $galleryID, redirekt => FALSE}" class="btn btn-success">
+			<a href="{plink deleteImage! id_image => $image->id, id_gallery => $image->galleryID, redirekt => FALSE}" class="btn btn-success">
 				Ano
 			</a>
 			<button  class="btn" data-dismiss="modal" aria-hidden="true">Ne</button>
@@ -45,6 +45,6 @@
 {/}
 
 {define imageEditButtons}
-<a class="btn-action btn-edit" href="{plink Galleries:editGalleryImage imageID => $image->id, galleryID => $galleryID, redirekt => FALSE}"  title="editovat fotku"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
-<a data-toggle="modal" href="#MyModal{$image->id}" class="btn-action btn-delete" href="{plink deleteImage! id_image => $image->id, id_gallery => $galleryID, redirekt => FALSE}" title="smazat fotku"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
+<a class="btn-action btn-edit" href="{plink Galleries:editGalleryImage imageID => $image->id, galleryID => $image->galleryID, redirekt => FALSE}"  title="editovat fotku"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
+<a data-toggle="modal" href="#MyModal{$image->id}" class="btn-action btn-delete" href="{plink deleteImage! id_image => $image->id, id_gallery => $image->galleryID, redirekt => FALSE}" title="smazat fotku"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
 {/}

@@ -7,24 +7,25 @@
 namespace POS\Model;
 
 /**
- * Práce s uživateli UsersBaseDao
+ * Práce s uživateli UserBaseDao
  * slouží k statické práci s vlastnosmi uživatelů, převádění do polí a pod.
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-abstract class UsersBaseDao extends AbstractDao {
+abstract class UserBaseDao extends AbstractDao {
 
 	/**
 	 * vrátí specifické věci pro pohlaví
 	 */
-	protected function getSex($user) {
+	protected function getSex($userProperty) {
+		$property = $userProperty->user_property;
 		/* žena */
-		if ($user->user_property == "woman" || $user->user_property == "couple" || $user->user_property == "coupleWoman") {
-			return $this->getWomanData($user);
+		if ($property == "woman" || $property == "couple" || $property == "coupleWoman") {
+			return $this->getWomanData($userProperty);
 		}
 		/* muž */
-		if ($user->user_property == "man" || $user->user_property == "coupleMan") {
-			return $this->getManData($user);
+		if ($property == "man" || $property == "coupleMan") {
+			return $this->getManData($userProperty);
 		}
 		/* skupina */
 		return array();
@@ -33,20 +34,20 @@ abstract class UsersBaseDao extends AbstractDao {
 	/**
 	 * vrací data specifická pro ženu
 	 */
-	protected function getWomanData($user) {
+	protected function getWomanData($userProperty) {
 		return array(
-			'Velikost košíčku' => Users::getTranslateUserBraSize($user->bra_size),
-			'Barva vlasů' => $user->hair_colour
+			'Velikost košíčku' => UserBaseDao::getTranslateUserBraSize($userProperty->bra_size),
+			'Barva vlasů' => $userProperty->hair_colour
 		);
 	}
 
 	/**
 	 * vrací data specifická pro muže
 	 */
-	protected function getManData($user) {
+	protected function getManData($userProperty) {
 		return array(
-			'Délka penisu' => Users::getTranslateUserPenisLength($user->penis_length),
-			'Šířka penisu' => Users::getTranslateUserPenisWidth($user->penis_width),
+			'Délka penisu' => UserBaseDao::getTranslateUserPenisLength($userProperty->penis_length),
+			'Šířka penisu' => UserBaseDao::getTranslateUserPenisWidth($userProperty->penis_width),
 		);
 	}
 
@@ -55,18 +56,18 @@ abstract class UsersBaseDao extends AbstractDao {
 	 */
 	protected function getOtherData($user) {
 		$other = array(
-			'Trojka' => $user->threesome,
-			'Anální sex' => $user->anal,
-			'Skupinový sex' => $user->group,
-			'BDSM' => $user->bdsm,
-			'Polykání' => $user->swallow,
-			'Sperma' => $user->cum,
-			'Orální sex' => $user->oral,
-			'Piss' => $user->piss,
-			'Sex masáž' => $user->sex_massage,
-			'Petting' => $user->petting,
-			'Fisting' => $user->fisting,
-			'Hluboké kouření' => $user->deepthrought,
+			'Trojka' => $user->property->threesome,
+			'Anální sex' => $user->property->anal,
+			'Skupinový sex' => $user->property->group,
+			'BDSM' => $user->property->bdsm,
+			'Polykání' => $user->property->swallow,
+			'Sperma' => $user->property->cum,
+			'Orální sex' => $user->property->oral,
+			'Piss' => $user->property->piss,
+			'Sex masáž' => $user->property->sex_massage,
+			'Petting' => $user->property->petting,
+			'Fisting' => $user->property->fisting,
+			'Hluboké kouření' => $user->property->deepthrought,
 		);
 
 		/* vyhození nevyplňěných položek */
@@ -85,13 +86,13 @@ abstract class UsersBaseDao extends AbstractDao {
 	protected function getBaseData($user) {
 		return array(
 			'Věk' => $user->age,
-			'Výška' => Users::getTranslateUserTallness($user->tallness),
-			'Typ těla' => Users::getTranslateUserShape($user->shape),
-			'Kouřeni cigaret' => Users::getTranslateUserHabit($user->smoke),
-			'Pití alkoholu' => Users::getTranslateUserHabit($user->drink),
-			'Vzdělání' => Users::getTranslateUserGraduation($user->graduation),
-			'Status' => Users::getTranslateUserState($user->marital_state),
-			'Sexuální orientace' => Users::getTranslateUserOrientacion($user->orientation),
+			'Výška' => UserBaseDao::getTranslateUserTallness($user->tallness),
+			'Typ těla' => UserBaseDao::getTranslateUserShape($user->shape),
+			'Kouřeni cigaret' => UserBaseDao::getTranslateUserHabit($user->smoke),
+			'Pití alkoholu' => UserBaseDao::getTranslateUserHabit($user->drink),
+			'Vzdělání' => UserBaseDao::getTranslateUserGraduation($user->graduation),
+			'Status' => UserBaseDao::getTranslateUserState($user->marital_state),
+			'Sexuální orientace' => UserBaseDao::getTranslateUserOrientacion($user->orientation),
 		);
 	}
 
@@ -101,7 +102,7 @@ abstract class UsersBaseDao extends AbstractDao {
 	 * vrací překlad user property - typ uživatele např. pár
 	 */
 	public static function getTranslateUserProperty($property) {
-		$translate_properties = Users::getUserPropertyOption();
+		$translate_properties = UserBaseDao::getUserPropertyOption();
 		return $translate_properties[$property];
 	}
 
@@ -109,7 +110,7 @@ abstract class UsersBaseDao extends AbstractDao {
 	 * vrací překlad user state - stav uživatele např. zadaný
 	 */
 	public static function getTranslateUserState($state) {
-		$translate_states = Users::getUserStateOption();
+		$translate_states = UserBaseDao::getUserStateOption();
 		return $translate_states[$state];
 	}
 
@@ -117,7 +118,7 @@ abstract class UsersBaseDao extends AbstractDao {
 	 * vrací překlad user orientacion - sexuální orientaci uživatele
 	 */
 	public static function getTranslateUserOrientacion($orientacion) {
-		$translate_orientacions = Users::getUserOrientationOption();
+		$translate_orientacions = UserBaseDao::getUserOrientationOption();
 		return $translate_orientacions[$orientacion];
 	}
 
@@ -125,7 +126,7 @@ abstract class UsersBaseDao extends AbstractDao {
 	 * vrací překlad user tallness - výšku uživatele
 	 */
 	public static function getTranslateUserTallness($tallness) {
-		$translate_tallness = Users::getUserTallnessOption();
+		$translate_tallness = UserBaseDao::getUserTallnessOption();
 		return $translate_tallness[$tallness];
 	}
 
@@ -133,7 +134,7 @@ abstract class UsersBaseDao extends AbstractDao {
 	 * vrací překlad user shape - postavu uživatele
 	 */
 	public static function getTranslateUserShape($shape) {
-		$translate_shapes = Users::getUserShapeOption();
+		$translate_shapes = UserBaseDao::getUserShapeOption();
 		return $translate_shapes[$shape];
 	}
 
@@ -141,7 +142,7 @@ abstract class UsersBaseDao extends AbstractDao {
 	 * vrací překlad user habits - zvyky uživatele
 	 */
 	public static function getTranslateUserHabit($habit) {
-		$translate_habits = Users::getUserHabitOption();
+		$translate_habits = UserBaseDao::getUserHabitOption();
 		return $translate_habits[$habit];
 	}
 
@@ -149,7 +150,7 @@ abstract class UsersBaseDao extends AbstractDao {
 	 * vrací překlad user graduation - nejvyšší dosažené vzdělání uživatele
 	 */
 	public static function getTranslateUserGraduation($graduation) {
-		$translate_graduations = Users::getUserGraduationOption();
+		$translate_graduations = UserBaseDao::getUserGraduationOption();
 		return $translate_graduations[$graduation];
 	}
 
@@ -157,7 +158,7 @@ abstract class UsersBaseDao extends AbstractDao {
 	 * vrací překlad user penis lenght - délka penisu uživatele
 	 */
 	public static function getTranslateUserPenisLength($penisLength) {
-		$translate_penis_length = Users::getUserPenisLengthOption();
+		$translate_penis_length = UserBaseDao::getUserPenisLengthOption();
 		return $translate_penis_length[$penisLength];
 	}
 
@@ -165,7 +166,7 @@ abstract class UsersBaseDao extends AbstractDao {
 	 * vrací překlad user penis width - šířka penisu uživatele
 	 */
 	public static function getTranslateUserPenisWidth($penisWidth) {
-		$translate_penis_width = Users::getUserPenisWidthOption();
+		$translate_penis_width = UserBaseDao::getUserPenisWidthOption();
 		return $translate_penis_width[$penisWidth];
 	}
 
@@ -173,7 +174,7 @@ abstract class UsersBaseDao extends AbstractDao {
 	 * vrací překlad user bra size - velikost prsou uživatele
 	 */
 	public static function getTranslateUserBraSize($braSize) {
-		$translate_bra_size = Users::getUserBraSizeOption();
+		$translate_bra_size = UserBaseDao::getUserBraSizeOption();
 		return $translate_bra_size[$braSize];
 	}
 

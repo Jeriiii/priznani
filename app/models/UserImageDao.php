@@ -63,6 +63,23 @@ class UserImageDao extends AbstractDao {
 	}
 
 	/**
+	 * Vybere úplně všechny fotky daného uživatele ze všech galerií
+	 * @param int $userID ID uživatele.
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getAllFromUser($userID) {
+		/* vybrání všech galeriií uživatele */
+		$galls = $this->createSelection(UserGalleryDao::TABLE_NAME);
+		$galls->where(UserGalleryDao::COLUMN_USER_ID, $userID);
+		$gallsID = $galls->fetchPairs(self::COLUMN_ID, self::COLUMN_ID);
+
+		/* vybrání všech fotek z těchto galerií */
+		$sel = $this->getTable();
+		$sel->where($gallsID);
+		return $sel;
+	}
+
+	/**
 	 * Vrátí všechny neschválené obrázky.
 	 * @return Nette\Database\Table\Selection
 	 */
