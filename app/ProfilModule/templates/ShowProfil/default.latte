@@ -6,6 +6,7 @@
 		margin-top: 0;
 	}
     </style>
+    {control css 'stream/list.less'}
 {/block}
 {block foot}
 	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>
@@ -13,11 +14,14 @@
 {block content}
 
 <h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
- 
-<h2>Osobní údaje</h2>
-{control userGalleries 'listAll', $userID}
 
-{control userImagesAll 'listAll', $userID}
+
+{include 'menu.latte' $userID => 'id'}
+
+<h2>Osobní údaje</h2>
+{control userGalleries 'listFew', $userID}
+
+{*control userImagesAll 'listAll', $userID*}
 
 <table class="table table-condensed">
 	<tbody>
@@ -31,6 +35,22 @@
 	{/foreach}
 	</tbody>
 </table>
+        
+{control stream}
+{block}
+{control js}
+<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
+<script>
+	$(document).ready(function () {	
+		$("body").stream({
+			rows: {$count},
+			addoffset: 4
+		});
+	});
+</script>
+{/block}        
+        
+        
 {ifset $userPartnerProfile}
 Údaje partner 
 <table class="table table-condensed">

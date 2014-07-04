@@ -38,6 +38,29 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 	 */
 	public $userImageDao;
 
+        /**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
+        /**
+	 * @var \POS\Model\ConfessionDao
+	 * @inject
+	 */
+	public $confessionDao;
+        
+        public $dataForStream;
+	private $count = 0;
+
+	public function actionDefault($id) {
+                if (empty($id)) {
+			$id = $this->getUser()->getId();
+		}
+		$this->dataForStream = $this->streamDao->getUserStreamPosts($id);
+		$this->count = $this->dataForStream->count("id");
+	}
+        
+        
 	public function renderDefault($id) {
 		if (empty($id)) {
 			$id = $this->getUser()->getId();
@@ -54,10 +77,16 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 
 		$property = $userProperty->user_property;
 		if ($property == 'couple' || $property == 'coupleMan' || $property == 'coupleWoman') {
-			$this->template->userPartnerProfile = $this->coupleDao->getPartnerData($user->coupleID);
+			$this->template->userPartnerProfile = $this->coupleDao->getPartnerData($userProperty->id_couple);
 		}
+                               
+                $this->template->count = $this->count;
 	}
 
+	protected function createComponentStream() {
+		return new \Stream($this->dataForStream, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+	}
+        
 	public function createComponentUserGalleries() {
 		return new UserGalleries($this->userDao, $this->userGalleryDao);
 	}
@@ -71,5 +100,17 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 
 		return new UserImagesInGallery($gallery->id, $images, $this->userDao);
 	}
-
+	public function createComponentJs() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
+		$files->addFiles(array(
+			'stream.js',
+			'nette.ajax.js'
+		));
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+		$compiler->addFilter(function ($code) {
+			$packer = new JavaScriptPacker($code, "None");
+			return $packer->pack();
+		});
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
 }
