@@ -11,6 +11,7 @@ use POS\Model\UserDao;
 use Authorizator;
 use NetteExt\Path\GalleryPathCreator;
 use NetteExt\File;
+use Nette\Mail\SendmailMailer;
 
 class RegistrationForm extends BaseBootstrapForm {
 
