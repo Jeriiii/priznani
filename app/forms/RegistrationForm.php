@@ -24,6 +24,8 @@ class RegistrationForm extends BaseBootstrapForm {
 	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
+		$this->userDao = $userDao;
+
 		$emailNameNote = Html::el('small')->setText(" (pro zapomenuté heslo, soutěže a pod.)");
 		$emailName = Html::el()->setText('E-mail:')->add($emailNameNote);
 
