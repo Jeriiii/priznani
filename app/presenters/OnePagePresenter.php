@@ -9,6 +9,7 @@
  * @package    jkbusiness
  */
 use Nette\Application\UI\Form as Frm;
+use POSComponent\Stream\UserStream\UserStream;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -37,18 +38,21 @@ class OnePagePresenter extends BasePresenter {
 	public $confessionDao;
 	public $dataForStream;
 	private $count = 0;
+	private $userID;
 
 	public function actionDefault() {
 		$this->dataForStream = $this->streamDao->getTable()->order("id DESC");
 		$this->count = $this->dataForStream->count("id");
+		$this->userID = $this->getUser()->getId();
 	}
 
 	public function renderDefault() {
 		$this->template->count = $this->count;
+		$this->template->userID = $this->userID;
 	}
 
-	protected function createComponentStream() {
-		return new Stream($this->dataForStream, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+	protected function createComponentUserStream() {
+		return new UserStream($this->dataForStream, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
 	}
 
 	public function createComponentJs() {
