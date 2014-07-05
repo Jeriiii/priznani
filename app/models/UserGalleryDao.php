@@ -74,7 +74,7 @@ class UserGalleryDao extends BaseGalleryDao {
 	public function findDefaultGallery($userID) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_USER_ID, $userID);
-		$sel->where(self::COLUMN_DEFAULT, 1);
+		//$sel->where(self::COLUMN_DEFAULT, 1);
 		return $sel->fetch();
 	}
 

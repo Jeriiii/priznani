@@ -10,6 +10,21 @@
 {/block}
 {block foot}
 	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>
+{control js}
+<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
+<script>
+	$(document).ready(function () {	
+		$( ".stream-form" ).tabs();
+		$("body").stream({
+			rows: {$count},
+			addoffset: 4,
+			offsetName: 'profilStream-offset'
+		});
+	});
+	$("#frmaddConfessionForm-note").click(function() {
+		$("#frmaddConfessionForm-note").animate({ height: "200px"}, 500);
+	});
+</script>
 {/block}
 {block content}
 
@@ -21,24 +36,9 @@
 <h2>Zeď</h2>
 {control userGalleries 'listFew', $userID}
 
-{control stream}
-
-{block}
-    {control js}
-    <script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
-    <script>
-            $(document).ready(function () {	
-                    $( ".stream-form" ).tabs();
-                    $("body").stream({
-                            rows: {$count},
-                            addoffset: 4
-                    });
-            });
-            $("#frmaddConfessionForm-note").click(function() {
-                    $("#frmaddConfessionForm-note").animate({ height: "200px"}, 500);
-            });
-    </script>
-{/block}        
+<h2>Příspěvky uživatele</h2>
+{control profilStream}
+       
 
 
 {/block}

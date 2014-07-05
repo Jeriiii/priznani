@@ -1,29 +1,12 @@
+
+{block beforeContent}
 <section class="content">
 	<div id="stream">
-		<div class="stream-form">
-			<ul id="stream-form-tabs">
-				<li><a href="#tabs-1">Přiznání</a></li>
-				<li class="separator"></li>
-				<li class="last"><a href="#tabs-2">Fotky</a></li>
-			</ul>
-			<div id="tabs-1">
-				{form addConfessionForm class=>'form-container'}
-					{input note class=>'form-field', placeholder=>'Přiznej se...', rows => 3}
-					<div class="submit-container">
-						{input submit class => 'submit-button'}
-					</div>
-					{label nick class => 'hidden' /}
-					{input nick class => 'hidden'}
-				{/form}
-			</div>
-			<div id="tabs-2">
-				{if $user->isLoggedIn()}
-					{control newStreamImageForm}
-				{else}
-					Pro přidávání fotek se <a href="{plink :Sign:in}">přihlaš</a> nebo <a href="{plink :Sign:registration}">registruj</a>.
-				{/if}
-			</div>
-		</div>
+            
+                {ifset #addNewPost}
+                        {include #addNewPost}
+                {/ifset}                        
+                        
 		<div n:snippet="posts" data-ajax-append="true">
 
 			{foreach $stream as $dataItem}
@@ -93,3 +76,5 @@
 
 	
 </section>
+{/block}
+{block pageContent}
