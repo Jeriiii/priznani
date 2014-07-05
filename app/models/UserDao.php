@@ -144,15 +144,15 @@ class UserDao extends UserBaseDao {
 
 		$baseUserData = array(
 			'Jméno' => $user->user_name,
-			'První věta' => $user->property->first_sentence,
+			'První věta' => $userProperty->first_sentence,
 			/* 'Naposledy online' => $user->last_active, */
-			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($user->property->user_property),
+			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->user_property),
 			/* 'Vytvoření profilu' => $user->created, */
 			/* 'Email' => $user->email, */
-			'O mně' => $user->property->about_me,
+			'O mně' => $userProperty->about_me,
 		);
 		$baseData = $this->getBaseData($userProperty);
-		$other = $this->getOtherData($user);
+		$other = $this->getOtherData($userProperty);
 		$sex = $this->getSex($userProperty);
 
 		return $baseUserData + $baseData + $other + $sex;

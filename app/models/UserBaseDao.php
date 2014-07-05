@@ -52,22 +52,22 @@ abstract class UserBaseDao extends AbstractDao {
 	}
 
 	/**
-	 * vrací další data jako je třeba jestli poliká
+	 * vrací další data jako je třeba jestli polyká
 	 */
 	protected function getOtherData($user) {
 		$other = array(
-			'Trojka' => $user->property->threesome,
-			'Anální sex' => $user->property->anal,
-			'Skupinový sex' => $user->property->group,
-			'BDSM' => $user->property->bdsm,
-			'Polykání' => $user->property->swallow,
-			'Sperma' => $user->property->cum,
-			'Orální sex' => $user->property->oral,
-			'Piss' => $user->property->piss,
-			'Sex masáž' => $user->property->sex_massage,
-			'Petting' => $user->property->petting,
-			'Fisting' => $user->property->fisting,
-			'Hluboké kouření' => $user->property->deepthrought,
+			'Trojka' => $user->threesome,
+			'Anální sex' => $user->anal,
+			'Skupinový sex' => $user->group,
+			'BDSM' => $user->bdsm,
+			'Polykání' => $user->swallow,
+			'Sperma' => $user->cum,
+			'Orální sex' => $user->oral,
+			'Piss' => $user->piss,
+			'Sex masáž' => $user->sex_massage,
+			'Petting' => $user->petting,
+			'Fisting' => $user->fisting,
+			'Hluboké kouření' => $user->deepthrought,
 		);
 
 		/* vyhození nevyplňěných položek */
@@ -85,7 +85,7 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	protected function getBaseData($user) {
 		return array(
-			'Věk' => $user->age,
+//			'Věk' => $user->age,
 			'Výška' => UserBaseDao::getTranslateUserTallness($user->tallness),
 			'Typ těla' => UserBaseDao::getTranslateUserShape($user->shape),
 			'Kouřeni cigaret' => UserBaseDao::getTranslateUserHabit($user->smoke),
