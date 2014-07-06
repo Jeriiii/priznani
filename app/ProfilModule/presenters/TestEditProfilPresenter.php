@@ -11,11 +11,20 @@ class EditProfilPresenter extends ProfilBasePresenter {
 	private $record;
 	private $record_couple_partner;
 	public $fotos;
-	private $id;
-	private $user;
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
+	public function renderDefault($id) {
+		if (empty($id)) {
+			$id = $this->getUser()->getId();
+		}
+		$user = $this->userDao->find($id);
+		$this->template->userData = $user;
+		$this->template->hasFoto = false;
 	}
 
 	protected function createComponentFirstEditForm($name) {
@@ -56,55 +65,6 @@ class EditProfilPresenter extends ProfilBasePresenter {
 
 	protected function createComponentGalleryProfilEditForm($name) {
 		return new Frm\galleryProfilEditForm($this, $name);
-	}
-
-	public function startup() {
-		parent::startup();
-		$this->userModel = $this->context->userModel;
-	}
-
-	public function renderDefault($id) {
-		if (empty($id)) {
-			$this->user = $this->userModel->findUser(array("id" => $this->getUser()->getId()));
-		} else {
-			$this->user = $this->userModel->findUser(array("id" => $id /* $this->getUser()->getId() */));
-		}
-		//	$this->record = $this->userModel->findUser(array('id' => $this->getUser()->getId()) );
-		$this->template->userData = $this->user; //$this->userModel->findUser(array("id" => $this->getUser()->getId()));
-//		/** single man */
-//			if($this->record->user_property == "man"){
-//				$this->setView("singleEditManForm");
-//				
-//		/** single woman */		
-//			}else if($this->record->user_property == "woman"){
-//					$this->setView("singleEditWomanForm");
-//					
-//			/** couple man + woman */
-//			}else if($this->record->user_property == "couple"){
-//					$this->setView("coupleEditWomanManForm");								
-//
-//			/** couple woman + woman */
-//			}else if($this->record->user_property == "coupleWoman"){
-//					$this->setView("coupleEditWomanWomanForm");
-//					
-//			/** couple man + man */		
-//			}else if($this->record->user_property == "coupleMan"){
-//					$this->setView("coupleEditManManForm");
-//			
-//			/** group */
-//			}else if($this->record->user_property == "group"){
-//					$this->setView("groupEditForm");
-//			}
-
-		/** mini galerie */
-		$this->fotos = $this->context->createUsersFoto()->findUserFoto((array('userId' => $this->getUser()->getId())));
-
-		$this->template->fotos = $this->fotos;
-		if ($this->fotos != null) {
-			$this->template->hasFoto = true;
-		} else {
-			$this->template->hasFoto = false;
-		}
 	}
 
 	public function handledeleteImage($id_image, $id_user, $redirekt = TRUE) {
