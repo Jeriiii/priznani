@@ -5,7 +5,7 @@ namespace ProfilModule;
 use Nette\Application\UI\Form as Frm,
 	Nette\ComponentModel\IContainer;
 
-class EditProfilPresenter extends ProfilBasePresenter {
+class EditPresenter extends ProfilBasePresenter {
 
 	/**
 	 * @var \POS\Model\UserDao
