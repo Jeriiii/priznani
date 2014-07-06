@@ -1,0 +1,25 @@
+{block head}
+	<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/css/bootstrap.min.css" type="text/css">
+	<style>
+	h1 {
+		margin-top: 0;
+	}
+    </style>
+{/block}
+{block foot}
+	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>
+{/block}
+{block content}
+
+<h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
+
+
+{include 'menu.latte' $userID => 'id'}
+
+<h2>Fotky</h2>
+
+{control userImagesAll 'listAll', $userID}
+
+
+{/block}

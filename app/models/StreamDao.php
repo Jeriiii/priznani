@@ -20,6 +20,7 @@ class StreamDao extends AbstractDao {
 
 	/* sloupečky */
 	const COLUMN_USER_GALLERY_ID = "userGalleryID";
+        const COLUMN_USER_ID = "userID";
 
 	/**
 	 * Vrací tuto tabulku
@@ -37,6 +38,12 @@ class StreamDao extends AbstractDao {
 		return $this->getTable();
 	}
 
+        public function getUserStreamPosts($userId){
+            $sel = $this->getTable();
+            $userPosts = $sel->where(self::COLUMN_USER_ID, $userId);
+            return $userPosts->order("id DESC");
+        }
+        
 	/**
 	 * Přidá odkaz na přiznání do streamu
 	 * @param int $confessionID ID přiznání

@@ -30,7 +30,7 @@
 		/* text zprávy, který se zobrazí když už nejsou k dispozici další data */
 		msgText: "Žádné starší příspěvky nebyly nalezeny",//Žádné starší příspěvky nebyly nalezeny
 		/* název parametru v URL, který nastavuje vždy aktuální offset hodnotu při každém ajaxovém požadavku */
-		offsetName: 'stream-offset',
+		offsetName: 'userStream-offset',
 		/* maximální počet příspěvků (dat), který se může pluginem celkově načíst */
 		rows: 6
 	};
@@ -42,7 +42,7 @@
 		if(this.opts.offset+1 <= this.opts.rows) {
 			
 			this.opts.offset = this.opts.offset + this.opts.addoffset;
-			
+
 			var ajaxUrl = this.ajaxLocation + "&" + this.opts.offsetName + "=" + this.opts.offset;
 			
 			$(this.opts.ajaxLocation).attr("href", ajaxUrl);
