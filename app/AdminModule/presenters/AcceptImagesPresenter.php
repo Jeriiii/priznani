@@ -51,9 +51,9 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		}
 	}
 
-	public function handleDeleteImage($imageId, $galleryId) {
-		$image = $this->userImageDao->find($imageId);
-		$userID = $image->gallery->userId;
+	public function handleDeleteImage($imgId, $galleryId) {
+		$image = $this->userImageDao->find($imgId);
+		$userID = $image->gallery->userID;
 
 		$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryId, $userID);
 		File::removeImage($image->id, $image->suffix, $galleryFolder);
