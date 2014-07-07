@@ -15,7 +15,7 @@ class DatingRegistrationSecondForm extends BaseForm {
 	public $userDao;
 
 	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userDao, $parent, $name);
+		parent::__construct($parent, $name);
 		$this->userDao = $userDao;
 		$this->addText('email', 'Email')
 			->addRule(Form::FILLED, 'Email není vyplněn.')
