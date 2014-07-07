@@ -34,6 +34,7 @@ class AdminPresenter extends AdminSpacePresenter {
 		$this->template->users = $this->userDao->getInRoleUsers();
 		$this->template->admins = $this->userDao->getInRoleAdmin();
 		$this->template->superadmins = $this->userDao->getInRoleSuperadmin();
+		$this->template->totalCount = $this->userDao->getTable()->count();
 	}
 
 	protected function createComponentPasswordForm($name) {

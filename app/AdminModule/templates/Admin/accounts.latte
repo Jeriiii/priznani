@@ -3,6 +3,8 @@
 {/block}
 
 {block content}
+	<h3>Celkový počet uživatelů: {$totalCount}</h3>
+	<hr>
 	<h2>Uživatelé s nepotvrzeným mailem</h2>
 	<table class="table table-striped">
 		<thead>
@@ -15,7 +17,7 @@
 			{foreach $unconfirmed_users as $unconfirmed}<tr><td class="centered">{$unconfirmed->email}</td><td class="centered"><button data-target="#modal{$iterator->getCounter()}" role="button" class="btn btn-danger" data-toggle="modal">smazat</button><div class="modal hide fade in" id="modal{$iterator->getCounter()}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h5 id="myModalLabel">Smazat {$unconfirmed->email}</h5></div><div class="modal-body"><p>Opravdu chcete smazat {$unconfirmed->email}?</p></div><div class="modal-footer"><a n:href="deleteUser! id => $unconfirmed->id" class="btn btn-danger">Ano</a><button class="btn" data-dismiss="modal" aria-hidden="true">Ne</button></div></div><script type="text/javascript">$("#modal{$iterator->getCounter()}").modal({ show: false });</script></td></tr>{/foreach}
 		</tbody>
 	</table>
-	<h2>Uživatelé</h2>
+			<h2>Uživatelé</h2>
 	<table class="table table-striped">
 		<thead>
 			<tr>
