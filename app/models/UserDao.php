@@ -99,11 +99,31 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Vrátí část nepotvrzených uživatelů podle požadavků paginatoru
+	 * @param type $limit - počet uživatelů
+	 * @param type $offset - úsek
+	 * @return type
+	 */
+	public function getInRoleUnconfirmedForPaginator($limit, $offset) {
+		return $this->getUsersByRole(Authorizator::ROLE_UNCONFIRMED_USER)->limit($limit, $offset);
+	}
+
+	/**
 	 * Vrátí všechny uživatele v roli user
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function getInRoleUsers() {
 		return $this->getUsersByRole(Authorizator::ROLE_USER);
+	}
+
+	/**
+	 * Vrátí část uživatelů s rolí user podle požadavků paginatoru
+	 * @param type $limit - počet uživatelů
+	 * @param type $offset - úsek
+	 * @return type
+	 */
+	public function getInRoleUsersForPaginator($limit, $offset) {
+		return $this->getUsersByRole(Authorizator::ROLE_USER)->limit($limit, $offset);
 	}
 
 	/**
@@ -115,11 +135,31 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Vrátí část uživatelů s rolí admin podle požadavků paginatoru
+	 * @param type $limit - počet uživatelů
+	 * @param type $offset - úsek
+	 * @return type
+	 */
+	public function getInRoleAdminForPaginator($limit, $offset) {
+		return $this->getUsersByRole(Authorizator::ROLE_ADMIN)->limit($limit, $offset);
+	}
+
+	/**
 	 * Vrátí všechny uživatele v roli superadmin
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function getInRoleSuperadmin() {
 		return $this->getUsersByRole(Authorizator::ROLE_SUPERADMIN);
+	}
+
+	/**
+	 * Vrátí část uživatelů s rolí superadmin podle požadavků paginatoru
+	 * @param type $limit - počet uživatelů
+	 * @param type $offset - úsek
+	 * @return type
+	 */
+	public function getInRoleSuperadminForPaginator($limit, $offset) {
+		return $this->getUsersByRole(Authorizator::ROLE_SUPERADMIN)->limit($limit, $offset);
 	}
 
 	/**
