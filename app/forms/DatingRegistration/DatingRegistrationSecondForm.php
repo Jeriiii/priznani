@@ -1,16 +1,22 @@
 <?php
+
 namespace Nette\Application\UI\Form;
 
-use	Nette\Application\UI\Form,
+use Nette\Application\UI\Form,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer;
+use POS\Model\UserDao;
 
+class DatingRegistrationSecondForm extends BaseForm {
 
-class DatingRegistrationSecondForm extends BaseForm
-{
-	public function __construct(IContainer $parent = NULL, $name = NULL)
-	{
-		parent::__construct($parent, $name);
+	/**
+	 * @var \POS\Model\UserDao
+	 */
+	public $userDao;
+
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userDao, $parent, $name);
+		$this->userDao = $userDao;
 		$this->addText('email', 'Email')
 			->addRule(Form::FILLED, 'Email není vyplněn.')
 			->addRule(Form::EMAIL, 'Vyplněný email není platného formátu.')
@@ -34,22 +40,23 @@ class DatingRegistrationSecondForm extends BaseForm
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->addSubmit('send', 'Do třetí části registrace')
-				->setAttribute("class", "btn btn-success");
-		
-		return $this; 
+			->setAttribute("class", "btn btn-success");
+
+		return $this;
 	}
-	public function submitted($form)
-	{
+
+	public function submitted($form) {
 		$values = $form->values;
 		$presenter = $this->getPresenter();
-		$container = $presenter->context;
-		
-		$user_name = $form->getPresenter()->context->createUsers()->where('user_name', $values->user_name)->fetch();
-		if($user_name){
+
+		$user_name = $this->userDao->findByUserName($values->user_name);
+		//$user_name = $form->getPresenter()->context->createUsers()->where('user_name', $values->user_name)->fetch();
+		if ($user_name) {
 			$form->addError('Toto jméno je již obsazeno.');
-		}else{
-			$email = $form->getPresenter()->context->createUsers()->where('email', $values->email)->fetch();
-			if($email){
+		} else {
+			$email = $this->userDao->findByEmail($values->email);
+			//$email = $form->getPresenter()->context->createUsers()->where('email', $values->email)->fetch();
+			if ($email) {
 				$form->addError('Tento mail již někdo používá.');
 			} else {
 				$authenticator = $presenter->context->authenticator;
@@ -58,4 +65,5 @@ class DatingRegistrationSecondForm extends BaseForm
 			}
 		}
 	}
+
 }

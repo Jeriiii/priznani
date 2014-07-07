@@ -185,11 +185,24 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserPropertyOption() {
 		return array(
-			"man" => "muž",
-			"woman" => "žena",
-			"couple" => "pár",
-			"coupleMan" => "dva muži",
-			"coupleWoman" => "dvě ženy",
+			'woman' => 'Žena',
+			'man' => 'Muž',
+			'couple' => 'Pár',
+			'coupleWoman' => 'Pár dvě ženy',
+			'coupleMan' => 'Pár dva muži',
+			'group' => 'Skupina',
+		);
+	}
+
+	/**
+	 * vrací pole s překlady pro user interest in - např. žena nebo pár
+	 */
+	public static function getUserInterestInOption() {
+		return array(
+			'woman' => 'Žena',
+			'man' => 'Muž',
+			'couple' => 'Pár',
+			'group' => 'Skupina',
 		);
 	}
 
