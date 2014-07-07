@@ -25,20 +25,79 @@ class AdminPresenter extends AdminSpacePresenter {
 	 */
 	public $userDao;
 
+	const PAGINATOR_ITEMS_PER_PAGE = 10;
+
 	public function actionDefault() {
 		$this->redirect("Forms:forms");
 	}
 
 	public function renderAccounts() {
-		$this->template->unconfirmed_users = $this->userDao->getInRoleUnconfirmed();
-		$this->template->users = $this->userDao->getInRoleUsers();
-		$this->template->admins = $this->userDao->getInRoleAdmin();
-		$this->template->superadmins = $this->userDao->getInRoleSuperadmin();
+
+		$adminPaginator = $this["adminPaginator"]->getPaginator();
+		$adminPaginator->itemCount = $this->userDao->getInRoleAdmin()->count();
+
+		$superadminPaginator = $this["superadminPaginator"]->getPaginator();
+		$superadminPaginator->itemCount = $this->userDao->getInRoleSuperadmin()->count();
+
+		$userPaginator = $this["userPaginator"]->getPaginator();
+		$userPaginator->itemCount = $this->userDao->getInRoleUsers()->count();
+
+		$unconfirmedPaginator = $this["unconfirmedPaginator"]->getPaginator();
+		$unconfirmedPaginator->itemCount = $this->userDao->getInRoleUnconfirmed()->count();
+
+		$this->template->unconfirmed_users = $this->userDao->getInRoleUnconfirmedForPaginator($unconfirmedPaginator->itemsPerPage, $unconfirmedPaginator->offset);
+		$this->template->users = $this->userDao->getInRoleUsersForPaginator($userPaginator->itemsPerPage, $userPaginator->offset);
+		$this->template->admins = $this->userDao->getInRoleAdminForPaginator($adminPaginator->itemsPerPage, $adminPaginator->offset);
+		$this->template->superadmins = $this->userDao->getInRoleSuperadminForPaginator($superadminPaginator->itemsPerPage, $superadminPaginator->offset);
 		$this->template->totalCount = $this->userDao->getTable()->count();
 	}
 
 	protected function createComponentPasswordForm($name) {
 		return new Frm\passwordForm($this, $name);
+	}
+
+	/**
+	 * Komponenta pro stránkování superadminů
+	 * @param type $name
+	 * @return \VisualPaginator
+	 */
+	protected function createComponentSuperadminPaginator($name) {
+		$vp = new \VisualPaginator($this, $name);
+		$vp->getPaginator()->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
+		return $vp;
+	}
+
+	/**
+	 * Komponenta pro stránkování adminů
+	 * @param type $name
+	 * @return \VisualPaginator
+	 */
+	protected function createComponentAdminPaginator($name) {
+		$vp = new \VisualPaginator($this, $name);
+		$vp->getPaginator()->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
+		return $vp;
+	}
+
+	/**
+	 * Komponenta pro stránkování uživatelů
+	 * @param type $name
+	 * @return \VisualPaginator
+	 */
+	protected function createComponentUserPaginator($name) {
+		$vp = new \VisualPaginator($this, $name);
+		$vp->getPaginator()->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
+		return $vp;
+	}
+
+	/**
+	 * Komponenta pro stránkování nepotvrzených uživatelů
+	 * @param type $name
+	 * @return \VisualPaginator
+	 */
+	protected function createComponentUnconfirmedPaginator($name) {
+		$vp = new \VisualPaginator($this, $name);
+		$vp->getPaginator()->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
+		return $vp;
 	}
 
 	public function handledeleteUser($id) {

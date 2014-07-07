@@ -1,34 +1,33 @@
 {*
- * @param Paginator $paginator
- * @param array     $steps
- *}
+* @param Paginator $paginator
+* @param array     $steps
+*}
 
 {if $paginator->pageCount > 1}
-<div class="paginator">
-	{if $paginator->isFirst()}
-	<a href="#" class="paginator-left"></a>
-	{else}
-	<a class="paginator-left" href="{link this, 'page' => $paginator->page - 1}">
-        </a>
-	{/if}
+<div class="pagination pagination-centered">
+	<ul>
+		{if $paginator->isFirst()}
+		<li class="disabled"><a href="#">&laquo;</a></li>
+		{else}
+		<li><a class="paginator-left" href="{link this, 'page' => $paginator->page - 1}">&laquo;</a></li>
+		{/if}
 
-	{foreach $steps as $step}
-	{dump $step}
-	{if $step == $paginator->page}
-		<div><span class="current">{$step}</span></div>
-	{else}
-		<div><a href="{link this, 'page' => $step}">{$step}</a></div>
-	{/if}
-	{if $iterator->nextValue > $step + 1}<div><span>…</span></div>{/if}
-	{/foreach}
+		{foreach $steps as $step}
+		<!--		{dump $step}-->
+		{if $step == $paginator->page}
+		<li class="active"><a href="{link this, 'page' => $step}">{$step}</a></li>
+		{else}
+		<li><a href="{link this, 'page' => $step}">{$step}</a></li>
+		{/if}
+				<!--{if $iterator->nextValue > $step + 1}<div><span>…</span></div>{/if}-->
+		{/foreach}
 
-	{if $paginator->isLast()}
-	<div class="paginator-right"></div>
-	{else}
-	<a class="paginator-right" href="{link this, 'page' => $paginator->page + 1}">
-        </a>
-	{/if}
-        <div class="clear"></div>
+		{if $paginator->isLast()}
+		<li class="disabled"><a href="#">&raquo;</a></li>
+		{else}
+		<li><a href="{link this, 'page' => $paginator->page + 1}">&raquo;</a></li>
+		{/if}
+	</ul>
 </div>
 {/if}
 
