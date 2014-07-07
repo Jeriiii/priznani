@@ -16,9 +16,8 @@ class BaseForm extends Form {
 	 */
 	public $userDao;
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
+	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-		$this->userDao = $userDao;
 	}
 
 	/**

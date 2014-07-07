@@ -15,7 +15,7 @@ class DatingRegistrationFirstForm extends BaseForm {
 	public $userDao;
 
 	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userDao, $parent, $name);
+		parent::__construct($parent, $name);
 
 		$this->userDao = $userDao;
 		$users = $this->userDao;
