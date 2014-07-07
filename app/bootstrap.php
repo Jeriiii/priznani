@@ -29,6 +29,8 @@ $configurator->createRobotLoader()
 //pokud se automaticky testuje
 $testing = isset($_SERVER['TESTING']) && $_SERVER['TESTING'];
 
+
+// Load config for automatic testing
 if ($testing) {
 	$configurator->addConfig(__DIR__ . '/config/test.config.neon');
 } else {

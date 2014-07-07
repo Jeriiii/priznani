@@ -22,24 +22,16 @@ class FeatureContext extends MinkContext {
 	/** @var \SystemContainer|Container */
 	protected $context;
 
-	/**
-	 * @var UserManager
-	 * @inject
-	 */
+	/** @var UserManager @inject */
 	private $userManager;
-
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
-	private $userDao;
 
 	/**
 	 * Initialization of context
 	 */
 	public function __construct() {
 		$this->context = $GLOBALS['container'];
-		$this->context->callInjects($this);
+		//$this->context->callInjects($this);//lepsi zpusob s DI - podivat se na to spolecne
+		$this->userManager = $this->context->userManager;
 	}
 
 	/**
@@ -56,7 +48,7 @@ class FeatureContext extends MinkContext {
 	 * @Given /^I am signed in as "([^"]*)"$/
 	 */
 	public function iAmSignedInAs($username) {
-		//$this->userDao->find(1);
+		$this->userManager->loginWithEmail($username);
 	}
 
 }

@@ -8,12 +8,9 @@ common:
 
 	includes:
 		- model.neon
-		- localeconection.neon
+		- testconection.neon
 	
 	parameters:
-		facebook:
-			appId: '639745929384551' # musi byt string
-			secret: '6db6f485163d65b16d4758520e1011b9'
 
 	php:
 		date.timezone: Europe/Prague
@@ -34,37 +31,14 @@ common:
 
 
 	services:
-		database: @POS\Model\UserDao
+		
+		userManager: \Test\UserManager(@POS\Model\UserDao)
 
-		userModel: UserModel
-
-		facebook: Facebook( {appId: %facebook.appId%, secret: %facebook.secret%} )
-
-		facebookAuthenticator: FacebookAuthenticator
-
-
-		authenticator: Authenticator
 		authorizator:
 			class: Acl
 
 		
 production < common:
 
-
-	parameters:
-		database:
-			driver: mysql
-			#host: wm38.wedos.net
-			#dbname: d30935_priznan
-			#user: a30935_priznan
-			#password: EfHKeb7e
-			#host: wm33.wedos.net
-			#dbname: d42750_priznan
-			#user: a42750_priznan
-			#password: 845DjQBp
-			host: localhost
-			dbname: posostra
-			user: root
-			password: root
 
 development < common:

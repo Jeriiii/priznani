@@ -19,5 +19,5 @@ Feature: Homepage.
 #		Then I should see "Byl jste úspěšně přihlášen."
 
 	Scenario: Testing signed as
-		Given I am signed in as "test1234@email.cz"
+		Given I am signed in as "terka1612@seznam.cz"
 		Then I should see "test1234@email.cz"
