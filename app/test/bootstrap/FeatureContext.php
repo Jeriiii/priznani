@@ -7,7 +7,7 @@
  */
 
 /**
- * Description of FeatureContext
+ * Class which is created for every feature
  *
  * @author Jan Kotalík
  */
@@ -15,14 +15,48 @@
 namespace Test;
 
 use Behat\MinkExtension\Context\MinkContext;
+use Nette\DI\Container;
 
 class FeatureContext extends MinkContext {
 
+	/** @var \SystemContainer|Container */
+	protected $context;
+
 	/**
+	 * @var UserManager
+	 * @inject
+	 */
+	private $userManager;
+
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	private $userDao;
+
+	/**
+	 * Initialization of context
+	 */
+	public function __construct() {
+		$this->context = $GLOBALS['container'];
+		$this->context->callInjects($this);
+	}
+
+	/**
+	 * Testing feature
 	 * @Given /^It looks great$/
 	 */
 	public function itLooksGreat() {
-//		throw new PendingException();
+		//uncomment this if you want to make test failed
+		//throw new PendingException();
+	}
+
+	/**
+	 * I am logged user
+	 * @Given /^I am signed in as "([^"]*)"$/
+	 */
+	public function iAmSignedInAs($username) {
+		//$this->userDao->find(1);
 	}
 
 }

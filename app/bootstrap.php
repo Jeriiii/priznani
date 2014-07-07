@@ -8,25 +8,34 @@ use Nette\Application\Routers\RouteList,
 	Nette\Forms\Container;
 
 // Load Nette Framework
-require LIBS_DIR . '/Nette/loader.php';
+require __DIR__ . '/../vendor/Nette/loader.php';
 
 
-// Configure application
-$configurator = new Nette\Config\Configurator;
+$configurator = new Nette\Configurator;
 
+$configurator->setDebugMode(TRUE);  // debug mode MUST NOT be enabled on production server
 // Enable Nette Debugger for error visualisation & logging
 //$configurator->setProductionMode($configurator::AUTO);
 $configurator->enableDebugger(__DIR__ . '/../log');
 
 // Enable RobotLoader - this will load all classes automatically
 $configurator->setTempDirectory(__DIR__ . '/../temp');
+
 $configurator->createRobotLoader()
-	->addDirectory(APP_DIR)
-	->addDirectory(LIBS_DIR)
+	->addDirectory(__DIR__)
+	->addDirectory(__DIR__ . '/../vendor/others')
 	->register();
 
-// Create Dependency Injection container from config.neon file
-$configurator->addConfig(__DIR__ . '/config/config.neon');
+//pokud se automaticky testuje
+$testing = isset($_SERVER['TESTING']) && $_SERVER['TESTING'];
+
+if ($testing) {
+	$configurator->addConfig(__DIR__ . '/config/test.config.neon');
+} else {
+	// Create Dependency Injection container from config.neon file
+	$configurator->addConfig(__DIR__ . '/config/config.neon');
+}
+
 $container = $configurator->createContainer();
 
 // Setup router
@@ -76,6 +85,5 @@ Container::extensionMethod('addDateTimePicker', function (Container $_this, $nam
 });
 Kdyby\BootstrapFormRenderer\DI\RendererExtension::register($configurator);
 
-// Configure and run the application!
-//$container->application->errorPresenter = 'Error';
-$container->application->run();
+return $container;
+

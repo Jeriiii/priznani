@@ -10,10 +10,14 @@ Feature: Homepage.
 		Then I should see "fantazie"
 		And It looks great
 
-	Scenario: Testing sign in
-		Given I am on "/sign/in"
-		And I fill in "p.kukral@kukral.eu" for "email"
-		And I fill in "mojeheslo" for "password"
-		And I check "persistent"
-		And I press "login"
-		Then I should see "Byl jste úspěšně přihlášen."
+#	Scenario: Testing sign in
+#		Given I am on "/sign/in"
+#		And I fill in "p.kukral@kukral.eu" for "email"
+#		And I fill in "mojeheslo" for "password"
+#		And I check "persistent"
+#		And I press "login"
+#		Then I should see "Byl jste úspěšně přihlášen."
+
+	Scenario: Testing signed as
+		Given I am signed in as "test1234@email.cz"
+		Then I should see "test1234@email.cz"
