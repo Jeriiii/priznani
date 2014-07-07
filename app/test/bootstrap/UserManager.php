@@ -8,6 +8,8 @@
 
 namespace Test;
 
+use \Behat\Behat\Exception\PendingException;
+
 /**
  * CLass working with users sessions
  *
@@ -25,19 +27,20 @@ class UserManager {
 
 	/**
 	 * Creates the session manager.
-	 * @param Session $session
-	 * @param UserDao $userDao
+	 * @param \POS\Model\UserDao $userDao
 	 */
 	function __construct(\POS\Model\UserDao $userDao) {
-		$this->session = $session;
 		$this->userDao = $userDao;
 	}
 
-	public function login($username) {
-		//$user = $this->userDao->findByEmail($username);
-		//$roles = array($user->role);
-		//$identity = new \Nette\Security\Identity($user->getPrimary(), $roles);
-		//dump($username);
+	public function loginWithEmail($email) {
+		$user = $this->userDao->findByEmail($email);
+		if ($user) {
+			$roles = array($user->role);
+		} else {
+			throw new PendingException('Uživatel s tímto emailem neexistuje. Opravdu je v testovací databázi?');
+		}
+		$identity = new \Nette\Security\Identity($user->getPrimary(), $roles);
 	}
 
 }
