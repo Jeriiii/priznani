@@ -24,7 +24,7 @@ common:
 	nette:
 		session:
 			autoStart: smart
-			expiration: +5 days
+			expiration: +30 days
 
 		database:
 			default:

@@ -39,9 +39,9 @@ class SignInForm extends BaseBootstrapForm {
 			$user = $presenter->getUser();
 			$values = $form->getValues();
 			if ($values->persistent) {
-				$presenter->getUser()->setExpiration('7 days', FALSE);
+				$presenter->getUser()->setExpiration('30 days', FALSE);
 			} else {
-				$presenter->getUser()->setExpiration('20 minutes', TRUE);
+				$presenter->getUser()->setExpiration('30 minutes', TRUE);
 			}
 			$user->login($values->email, $values->password);
 			//toto se provede při úspěšném zpracování přihlašovacího formuláře
