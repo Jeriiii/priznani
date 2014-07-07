@@ -1,35 +1,35 @@
 <?php
+
 namespace Nette\Application\UI\Form;
 
-use	Nette\Application\UI\Form,
+use Nette\Application\UI\Form,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer;
+use POS\Model\UserDao;
 
 /*
  * rozšiřuje DatingRegistrationBaseForm o konkrétní věci pro ženu
  */
 
-class DatingRegistrationBaseWomanForm extends DatingRegistrationBaseForm
-{
-	public function __construct(IContainer $parent = NULL, $name = NULL)
-	{
-		parent::__construct($parent, $name);
+class DatingRegistrationBaseWomanForm extends DatingRegistrationBaseForm {
 
-		$UserBraOption = array(
-			'a' => 'a',
-			'b' => 'b',
-			'c' => 'c',
-			'd' => 'd',
-			'e' => 'e',
-		);
-		$this->addSelect('bra_size', 'Velikost košíčků:', $UserBraOption);
+	/**
+	 * @var \POS\Model\UserDao
+	 */
+	public $userDao;
+
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userDao, $parent, $name);
+		$this->userDao = $userDao;
+		$users = $this->userDao;
+
+		$this->addSelect('bra_size', 'Velikost košíčků:', $users->getUserBraSizeOption());
 
 		$this->addText('hair_colour', 'Barva vlasů:');
 	}
-	public function submitted($form)
-	{
+
+	public function submitted($form) {
 		parent::submitted($form);
 	}
-	
 
 }

@@ -2,28 +2,32 @@
 
 namespace Nette\Application\UI\Form;
 
-use	Nette\Application\UI\Form,
+use Nette\Application\UI\Form,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer,
 	Nette\DateTime,
 	Nette\Mail\Message;
+use POS\Model\UserDao;
 
+class BaseForm extends Form {
 
-class BaseForm extends Form
-{
-	public function __construct(IContainer $parent = NULL, $name = NULL)
-	{
+	/**
+	 * @var \POS\Model\UserDao
+	 */
+	public $userDao;
+
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
+		$this->userDao = $userDao;
 	}
-	
+
 	/**
 	 * odeslani zpravy o odeslani formulare
 	 */
-	
 	public function sendMailAboutSendForm($form_name, $presenter) {
 		$users = $presenter->context->createUsers()
 			->where("form_mail", 1);
-		
+
 //		foreach($users as $user)
 //		{
 //			$mail = new Message;
@@ -34,27 +38,27 @@ class BaseForm extends Form
 //				->send();
 //		}
 	}
-	
+
 	/**
 	 * zaznamenani odeslani mailu do specialni tabulky
 	 */
-	
 	public function registerNewSendForm($path, $id_form, $presenter, $name, $id_click) {
-		if($path == "standart") {
+		if ($path == "standart") {
 			$form = $presenter->context->createForms()
-						->find($id_form)
-						->fetch();
+				->find($id_form)
+				->fetch();
 			$link = $presenter->link("Admin:Forms:formsX", array("id_form" => $form->id, "type" => $form->type, "id_click" => $id_click->id));
 			$name = $form->name;
-		}else{
+		} else {
 			$link = $presenter->link($path, array("id_click" => $id_click->id));
 //			echo $path . " - "; echo $id_click . " - "; die($link);
 		}
 		$presenter->context->createForm_new_send()
-				->insert(array(
-					"path" => $link,
-					"name" => $name,
-					"date" => new DateTime()
-				));
-	}	
+			->insert(array(
+				"path" => $link,
+				"name" => $name,
+				"date" => new DateTime()
+		));
+	}
+
 }
