@@ -21,3 +21,5 @@ www/cache/*
 !www/cache/js
 www/cache/js/*
 !www/cache/js/.gitkeep
+nbproject/project.properties
+nbproject/project.xml
