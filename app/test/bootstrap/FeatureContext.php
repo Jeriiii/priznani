@@ -59,9 +59,10 @@ class FeatureContext extends MinkContext {
 	 * @Then /^I look on the page$/
 	 */
 	public function iLookOnThePage() {
-
 		$html = $this->getSession()->getDriver()->getContent();
-		throw new PendingException($html);
+		$path = 'screenshots/behat_page' . rand(0, 100000) . '.html';
+		file_put_contents($path, $html);
+		throw new PendingException('Vystup najdete v ' . __DIR__ . '/../' . $path);
 	}
 
 	/**
