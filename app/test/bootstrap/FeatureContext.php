@@ -17,6 +17,7 @@ namespace Test;
 use Behat\MinkExtension\Context\MinkContext;
 use Nette\DI\Container;
 use \Behat\Behat\Exception\PendingException;
+use \Behat\Behat\Event\StepEvent;
 
 class FeatureContext extends MinkContext {
 
@@ -60,7 +61,7 @@ class FeatureContext extends MinkContext {
 	public function iLookOnThePage() {
 
 		$html = $this->getSession()->getDriver()->getContent();
-		file_put_contents('/behat_page.html', $html);
+		throw new PendingException($html);
 	}
 
 	/**
@@ -74,4 +75,4 @@ class FeatureContext extends MinkContext {
 		//$this->getMainContext()
 	}
 
-	}
+}

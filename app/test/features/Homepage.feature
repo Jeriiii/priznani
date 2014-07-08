@@ -21,4 +21,4 @@ Feature: Homepage.
 	Scenario: Testing signed as
 		Given I am on "/"
 		And I am signed in as "terka1612@seznam.cz"
-		Then I should see "Ter"
+		Then I should see "Terka"
