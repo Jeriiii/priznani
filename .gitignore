@@ -23,3 +23,5 @@ www/cache/js/*
 !www/cache/js/.gitkeep
 nbproject/project.properties
 nbproject/project.xml
+app/test/screenshots/*
+!app/test/screenshots/.gitkeep

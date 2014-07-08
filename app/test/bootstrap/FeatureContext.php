@@ -59,9 +59,11 @@ class FeatureContext extends MinkContext {
 	 * @Then /^I look on the page$/
 	 */
 	public function iLookOnThePage() {
-
 		$html = $this->getSession()->getDriver()->getContent();
-		throw new PendingException($html);
+		$path = 'screenshots/behat_page' . rand(0, 100) . '.html';
+
+		file_put_contents($path, $this->modifyHtml($html));
+		throw new PendingException('Vystup najdete v ' . __DIR__ . '/../' . $path);
 	}
 
 	/**
@@ -72,7 +74,16 @@ class FeatureContext extends MinkContext {
 	private function setBrowserCookie($name, $value) {
 		$minkSession = $this->getSession(); //session of Mink browser
 		$minkSession->setCookie($name, $value);
-		//$this->getMainContext()
+	}
+
+	/**
+	 * Modify input html for changes
+	 * @param String $html
+	 * @return String modified input
+	 */
+	public function modifyHtml($html) {
+		$html = str_replace('/priznani/www/cache/', __DIR__ . '/../../../www/cache/', $html);
+		return $html;
 	}
 
 }
