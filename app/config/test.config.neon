@@ -32,7 +32,7 @@ common:
 
 	services:
 		
-		userManager: \Test\UserManager(@POS\Model\UserDao)
+		userManager: \Test\UserManager(@Nette\Http\Session, @POS\Model\UserDao)
 
 		authorizator:
 			class: Acl

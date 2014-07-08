@@ -16,6 +16,7 @@ namespace Test;
 
 use Behat\MinkExtension\Context\MinkContext;
 use Nette\DI\Container;
+use \Behat\Behat\Exception\PendingException;
 
 class FeatureContext extends MinkContext {
 
@@ -49,6 +50,28 @@ class FeatureContext extends MinkContext {
 	 */
 	public function iAmSignedInAs($username) {
 		$this->userManager->loginWithEmail($username);
+		$session = $this->userManager->getSession();
+		$this->setBrowserCookie($session->getName(), $session->getId());
 	}
 
-}
+	/**
+	 * @Then /^I look on the page$/
+	 */
+	public function iLookOnThePage() {
+
+		$html = $this->getSession()->getDriver()->getContent();
+		file_put_contents('/behat_page.html', $html);
+	}
+
+	/**
+	 * Sets cookie of virtual browser
+	 * @param String $name
+	 * @param array $value
+	 */
+	private function setBrowserCookie($name, $value) {
+		$minkSession = $this->getSession(); //session of Mink browser
+		$minkSession->setCookie($name, $value);
+		//$this->getMainContext()
+	}
+
+	}
