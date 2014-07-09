@@ -34,15 +34,24 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	 */
 	public $streamDao;
 
+	/**
+	 * @var \POS\Model\UserGalleryDao
+	 * @inject
+	 */
+	public $userGalleryDao;
+
 	public function renderDefault() {
 		$images = $this->userImageDao->getUnapproved();
 		$this->template->images = $images;
 	}
 
-	public function handleAcceptImage($imgId, $galleryId, $userId) {
+	public function handleAcceptImage($imgId, $galleryId) {
 		$image = $this->userImageDao->find($imgId);
 		$image->update(array('allow' => 1));
-		$this->streamDao->aliveGallery($galleryId, $userId);
+
+		$userID = $this->userGalleryDao->find($image->galleryID)->userID;
+
+		$this->streamDao->aliveGallery($galleryId, $userID);
 
 		if ($this->isAjax("imageAcceptance")) {
 			$this->invalidateControl('imageAcceptance');

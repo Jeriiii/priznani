@@ -20,7 +20,7 @@ class StreamDao extends AbstractDao {
 
 	/* sloupečky */
 	const COLUMN_USER_GALLERY_ID = "userGalleryID";
-        const COLUMN_USER_ID = "userID";
+	const COLUMN_USER_ID = "userID";
 
 	/**
 	 * Vrací tuto tabulku
@@ -38,17 +38,17 @@ class StreamDao extends AbstractDao {
 		return $this->getTable();
 	}
 
-        public function getUserStreamPosts($userId){
-            $sel = $this->getTable();
-            $userPosts = $sel->where(self::COLUMN_USER_ID, $userId);
-            return $userPosts->order("id DESC");
-        }
-        
+	public function getUserStreamPosts($userId) {
+		$sel = $this->getTable();
+		$userPosts = $sel->where(self::COLUMN_USER_ID, $userId);
+		return $userPosts->order("id DESC");
+	}
+
 	/**
 	 * Přidá odkaz na přiznání do streamu
 	 * @param int $confessionID ID přiznání
 	 */
-	public function addNewConfession($confessionID, $create = NULL) {
+	public function addNewConfession($confessionID, $create = NULL, $userID = NULL) {
 		if (empty($create)) {
 			$create = new DateTime();
 		}
@@ -56,7 +56,7 @@ class StreamDao extends AbstractDao {
 		$sel = $this->getTable();
 		$sel->insert(array(
 			"confessionID" => $confessionID,
-			"userID" => NULL,
+			"userID" => $userID,
 			"type" => 1,
 			"create" => $create,
 		));
@@ -67,13 +67,17 @@ class StreamDao extends AbstractDao {
 	 * @param type $adviceID ID otázky
 	 * @param type $userID ID uživatele
 	 */
-	public function addNewAdvice($adviceID, $userID) {
+	public function addNewAdvice($adviceID, $create = NULL, $userID = NULL) {
+		if (empty($create)) {
+			$create = new DateTime();
+		}
+
 		$sel = $this->getTable();
 		$sel->insert(array(
 			"adviceID" => $adviceID,
 			"userID" => $userID,
 			"type" => 1,
-			"create" => new DateTime(),
+			"create" => $create,
 		));
 	}
 

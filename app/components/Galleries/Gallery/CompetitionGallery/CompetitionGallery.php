@@ -25,11 +25,18 @@ class CompetitionGallery extends BaseGallery {
 	 */
 	public $streamDao;
 
+	/**
+	 * @var \POS\Model\ImageDao
+	 * @inject
+	 */
+	public $imageDao;
+
 	public function __construct($images, $image, $gallery, $domain, $partymode, ImageDao $imageDao, GalleryDao $galleryDao, StreamDao $streamDao) {
 		parent::__construct($images, $image, $gallery, $domain, $partymode);
 
 		$this->streamDao = $streamDao;
 		$this->galleryDao = $galleryDao;
+		$this->imageDao = $imageDao;
 		parent::setImageDao($imageDao);
 	}
 
@@ -42,14 +49,14 @@ class CompetitionGallery extends BaseGallery {
 	 * @param type $imageID ID obrázku, který se má schválit
 	 */
 	public function handleApproveImage($imageID) {
-		$this->getImages()->approve($imageID);
+		$this->imageDao->approve($imageID);
 
-		$image = $this->getImages()->find($imageID);
+		$image = $this->imageDao->find($imageID);
 		$this->galleryDao->updateLastImage($image->galleryID, $image->id);
 
 		$this->streamDao->aliveCompGallery($image->galleryID);
 
-		$this->setImage($imageID, $this->getImages());
+		$this->setImage($imageID, $this->imageDao);
 	}
 
 	/**
@@ -57,14 +64,13 @@ class CompetitionGallery extends BaseGallery {
 	 * @param type $imageID ID obrázku, který se má odstranit
 	 */
 	public function handleRemoveImage($imageID) {
-		$image = $this->getImages()
-			->where("id", $imageID)
-			->fetch();
+		$image = $this->imageDao->find($imageID);
 
 		$folderPath = WWW_DIR . "/images/galleries/" . $image->galleryID . "/";
 		$imageFileName = $image->id . "." . $image->suffix;
 
 		parent::removeImage($image, $folderPath, $imageFileName);
+		$image->delete();
 	}
 
 }

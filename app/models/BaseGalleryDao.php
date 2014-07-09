@@ -6,6 +6,8 @@
 
 namespace POS\Model;
 
+use POS\Model\UserGalleryDao;
+
 /**
  * Slouží pro základní operace s galerií
  *
@@ -19,11 +21,11 @@ class BaseGalleryDao extends AbstractDao {
 	 * @param int $galleryID ID galerie
 	 * @param type $lastImageID ID posledního vloženého obrázku.
 	 */
-	public function updateLastImage($galleryID, $lastImageID) {
+	public function updateLastImage($galleryID, $lastImageID, $columnName = UserGalleryDao::COLUMN_LAST_IMAGE_ID) {
 		$sel = $this->getTable();
 		$sel->wherePrimary($galleryID);
 		$sel->update(array(
-			self::COLUMN_LAST_IMAGE_ID => $lastImageID
+			$columnName => $lastImageID
 		));
 	}
 
