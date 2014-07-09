@@ -136,7 +136,6 @@ class DatabaseManager {
 		//run commands
 		foreach ($commands as $command) {
 			if (trim($command)) {
-				dump($command);
 				$this->database->query($command);
 			}
 		}
