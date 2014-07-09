@@ -14,7 +14,7 @@ use Nette\Application\UI\Form as Frm,
 	Nette\Http\Url,
 	Nette\Http\Request;
 
-abstract class BasePresenter extends Nette\Application\UI\Presenter {
+abstract class BasePresenter extends BaseProjectPresenter {
 
 	public $parameters;
 	public $domain;

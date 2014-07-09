@@ -14,7 +14,7 @@ namespace AdminModule;
 use \Nette\Security\User,
 	\Navigation\Navigation;
 
-class AdminSpacePresenter extends \Nette\Application\UI\Presenter {
+class AdminSpacePresenter extends \BaseProjectPresenter {
 
 	public $id_page;
 	public $id_gallery;
