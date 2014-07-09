@@ -25,10 +25,11 @@ class ImagePathCreator extends PathCreator {
 	 * @param int $imageID ID obrázku.
 	 * @param string $imageSuffix Suffix obrázku.
 	 * @param string $folder Složka dané galerie, např. galleries/12|userGalleries/3/50
+	 * @param string $basePath Základní cesta do WWW (dá se naplnit třeba $basePath z šablony)
 	 * @return string Celá cesta k ORIGINÁLNÍMU obrázku.
 	 */
-	public static function getImgPath($imageID, $imageSuffix, $folder) {
-		return self::getBaseImgPath($imageID, $imageSuffix, "", $folder);
+	public static function getImgPath($imageID, $imageSuffix, $folder, $basePath = parent::BASE_PATH) {
+		return self::getBaseImgPath($imageID, $imageSuffix, "", $folder, $basePath);
 	}
 
 	/**
@@ -36,10 +37,11 @@ class ImagePathCreator extends PathCreator {
 	 * @param int $imageID ID obrázku.
 	 * @param string $imageSuffix Suffix obrázku.
 	 * @param string $folder Složka dané galerie, např. galleries/12|userGalleries/2/50
+	 * @param string $basePath Základní cesta do WWW (dá se naplnit třeba $basePath z šablony)
 	 * @return string Celá cesta k obrázku SCREEN.
 	 */
-	public static function getImgScrnPath($imageID, $imageSuffix, $folder) {
-		return self::getBaseImgPath($imageID, $imageSuffix, self::PREFFIX_GALLERY_SCREEN, $folder);
+	public static function getImgScrnPath($imageID, $imageSuffix, $folder, $basePath = parent::BASE_PATH) {
+		return self::getBaseImgPath($imageID, $imageSuffix, self::PREFFIX_GALLERY_SCREEN, $folder, $basePath);
 	}
 
 	/**
@@ -47,10 +49,11 @@ class ImagePathCreator extends PathCreator {
 	 * @param int $imageID ID obrázku.
 	 * @param string $imageSuffix Suffix obrázku.
 	 * @param string $folder Složka dané galerie, např. galleries/12|userGalleries/5/50
+	 * @param string $basePath Základní cesta do WWW (dá se naplnit třeba $basePath z šablony)
 	 * @return string Celá cesta k obrázku miniatury.
 	 */
-	public static function getImgMinPath($imageID, $imageSuffix, $folder) {
-		return self::getBaseImgPath($imageID, $imageSuffix, self::PREFFIX_MIN, $folder);
+	public static function getImgMinPath($imageID, $imageSuffix, $folder, $basePath = parent::BASE_PATH) {
+		return self::getBaseImgPath($imageID, $imageSuffix, self::PREFFIX_MIN, $folder, $basePath);
 	}
 
 	/**
@@ -58,10 +61,11 @@ class ImagePathCreator extends PathCreator {
 	 * @param int $imageID ID obrázku.
 	 * @param string $imageSuffix Suffix obrázku.
 	 * @param string $folder Složka dané galerie, např. galleries/12|userGalleries/3/50
+	 * @param string $basePath Základní cesta do WWW (dá se naplnit třeba $basePath z šablony)
 	 * @return string Celá cesta k obrázku miniatury ořízlou do čtverce.
 	 */
-	public static function getImgMinSqrPath($imageID, $imageSuffix, $folder) {
-		return self::getBaseImgPath($imageID, $imageSuffix, self::PREFFIX_MIN_SQUERE, $folder);
+	public static function getImgMinSqrPath($imageID, $imageSuffix, $folder, $basePath = parent::BASE_PATH) {
+		return self::getBaseImgPath($imageID, $imageSuffix, self::PREFFIX_MIN_SQUERE, $folder, $basePath);
 	}
 
 	/**
@@ -71,19 +75,21 @@ class ImagePathCreator extends PathCreator {
 	 * @param string $imageSuffix Suffix obrázku.
 	 * @param type $preffix Preffix obrázku např. min|galScrn|... .
 	 * @param string $folder Složka dané galerie, např. galleries/12|userGalleries/3/50
+	 * @param string $basePath Základní cesta do WWW (dá se naplnit třeba $basePath z šablony)
 	 * @return string Celá cesta k obrázku.
 	 */
-	private static function getBaseImgPath($imageID, $imageSuffix, $preffix, $folder) {
-		return self::getBasePath($folder) . $preffix . $imageID . '.' . $imageSuffix;
+	private static function getBaseImgPath($imageID, $imageSuffix, $preffix, $folder, $basePath = parent::BASE_PATH) {
+		return self::getBasePath($folder, $basePath) . $preffix . $imageID . '.' . $imageSuffix;
 	}
 
 	/**
 	 * Vrátí cestu ke složce, kde jsou uloženy všechny obrázky
 	 * @param string $folder Složka dané galerie, např. galleries/12|userGalleries/3/50
+	 * @param string $basePath Základní cesta do WWW (dá se naplnit třeba $basePath z šablony)
 	 * @return string Cesta do galerie.
 	 */
-	public static function getBasePath($folder) {
-		return WWW_DIR . "/images/" . $folder . "/";
+	public static function getBasePath($folder, $basePath = parent::BASE_PATH) {
+		return $basePath . "/images/" . $folder . "/";
 	}
 
 }
