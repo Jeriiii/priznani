@@ -3,6 +3,9 @@ temp/*
 !temp/reports
 temp/reports/*
 !temp/reports/.gitkeep
+!temp/sessions
+temp/sessions/*
+!temp/sessions/.gitkeep
 /priznaniosexu.7z
 /databaze.sql
 /log/

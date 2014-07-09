@@ -20,8 +20,7 @@ common:
 
 	nette:
 		session:
-			autoStart: smart
-			expiration: +5 days
+			save_path: "%tempDir%/sessions"
 
 		database:
 			default:
@@ -31,8 +30,8 @@ common:
 
 
 	services:
-		
-		userManager: \Test\UserManager(@Nette\Http\Session, @POS\Model\UserDao)
+		authenticator: Authenticator
+		userManager: \Test\UserManager
 
 		authorizator:
 			class: Acl
