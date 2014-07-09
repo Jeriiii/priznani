@@ -27,6 +27,9 @@ class FeatureContext extends MinkContext {
 	/** @var UserManager @inject */
 	private $userManager;
 
+	/** @var DatabaseManager @inject */
+	private $databaseManager;
+
 	/**
 	 * Initialization of context
 	 */
@@ -34,6 +37,32 @@ class FeatureContext extends MinkContext {
 		$this->context = $GLOBALS['container'];
 		//$this->context->callInjects($this);//lepsi zpusob s DI - podivat se na to spolecne
 		$this->userManager = $this->context->userManager;
+		$this->databaseManager = $this->context->databaseManager;
+	}
+
+	/**
+	 * Called once before testing. Prepares database
+	 * @BeforeSuite
+	 */
+	public static function prepare() {
+		$databaseManager = DatabaseManager::getInstance();
+		$databaseManager->initScripts();
+	}
+
+	/**
+	 * Called before every feature
+	 * @BeforeFeature */
+	public static function setupFeature() {
+		$databaseManager = DatabaseManager::getInstance();
+		$databaseManager->featureStartScripts();
+	}
+
+	/**
+	 * Called after every feature
+	 *  @AfterFeature */
+	public static function teardownFeature() {
+		$databaseManager = DatabaseManager::getInstance();
+		$databaseManager->featureEndScripts();
 	}
 
 	/**

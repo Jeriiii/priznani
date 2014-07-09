@@ -32,6 +32,7 @@ common:
 	services:
 		authenticator: Authenticator
 		userManager: \Test\UserManager
+		databaseManager: \Test\DatabaseManager(%appDir%/test/sql)
 
 		authorizator:
 			class: Acl

@@ -28,3 +28,9 @@ nbproject/project.properties
 nbproject/project.xml
 app/test/screenshots/*
 !app/test/screenshots/.gitkeep
+app/test/sql/init/*
+!app/test/sql/init/.gitkeep
+app/test/sql/featurestart/*
+!app/test/sql/featurestart/.gitkeep
+app/test/sql/featureend/*
+!app/test/sql/featureend/.gitkeep
