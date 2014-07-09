@@ -11,7 +11,7 @@ namespace NetteExt\Path;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class GalleryPathCreator {
+class GalleryPathCreator extends PathCreator {
 	/* složky galerií */
 
 	const FOLDER_GALLERY = "galleries";
@@ -21,10 +21,11 @@ class GalleryPathCreator {
 	 * Vytvoří celou cestu ke složce uživatelské galerie
 	 * @param int $galleryID ID galerie.
 	 * @param int $userID ID uživatele.
+	 * @param string $basePath Základní cesta do WWW (dá se naplnit třeba $basePath z šablony)
 	 * @return string Celá cesta ke složce uživatelské galerie.
 	 */
-	public static function getUserGalleryPath($galleryID, $userID) {
-		return self::getBasePath() . self::getUserGalleryFolder($galleryID, $userID);
+	public static function getUserGalleryPath($galleryID, $userID, $basePath = parent::BASE_PATH) {
+		return self::getBasePath($basePath) . self::getUserGalleryFolder($galleryID, $userID);
 	}
 
 	/**
@@ -40,19 +41,21 @@ class GalleryPathCreator {
 	/**
 	 * Vytvoří celou cestu ke složce galerie
 	 * @param int $galleryID ID galerie.
+	 * @param string $basePath Základní cesta do WWW (dá se naplnit třeba $basePath z šablony)
 	 * @return string Celá cesta ke složce uživatelské galerie.
 	 */
-	public static function getGalleryPath($galleryID) {
-		return self::getBasePath() . self::getGalleryFolder($galleryID);
+	public static function getGalleryPath($galleryID, $basePath = parent::BASE_PATH) {
+		return self::getBasePath($basePath) . self::getGalleryFolder($galleryID);
 	}
 
 	/**
 	 * Vrátí složku kde jsou uloženy VŠECHNY galerie daného uživatele
 	 * @param int $userID ID uživatele.
+	 * @param string $basePath Základní cesta do WWW (dá se naplnit třeba $basePath z šablony)
 	 * @return string Celá cesta ke složce se všemi uživatelskými galeriemi
 	 */
-	public static function getBasePathForAllUserGalleries($userID) {
-		return self::getBasePath() . "/" . $userID;
+	public static function getBasePathForAllUserGalleries($userID, $basePath = parent::BASE_PATH) {
+		return self::getBasePath($basePath) . "/" . $userID;
 	}
 
 	/**
@@ -64,8 +67,13 @@ class GalleryPathCreator {
 		return self::FOLDER_USER_GALLERY . "/" . $galleryID;
 	}
 
-	private static function getBasePath() {
-		return WWW_DIR . "/images/";
+	/**
+	 * Vrací celou základní cestu do obecné složky s obrázky
+	 * @param string $basePath Základní cesta do WWW (dá se naplnit třeba $basePath z šablony)
+	 * @return string obecná složka z obrázky
+	 */
+	private static function getBasePath($basePath = parent::BASE_PATH) {
+		return $basePath . "/images/";
 	}
 
 }

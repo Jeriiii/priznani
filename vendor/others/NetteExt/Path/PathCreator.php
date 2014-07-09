@@ -13,4 +13,6 @@ namespace NetteExt\Path;
  */
 class PathCreator extends \Nette\Object {
 
+	const BASE_PATH = WWW_DIR;
+
 }
