@@ -8,4 +8,5 @@ nette:
 services:
 	userManager: \Test\UserManager
 	databaseManager: \Test\DatabaseManager(%appDir%/test/sql)
-	nette.mailer: \Test\MailManager(%appDir%/test/emails)
+	screenshotManager: \Test\ScreenshotManager(%tempDir%/test/screenshots)
+	nette.mailer: \Test\MailManager(%tempDir%/test/emails)

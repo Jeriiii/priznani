@@ -5,6 +5,12 @@ Feature: Homepage.
 		Given I am on "/"
 		Then I should see "přiznání"
 
+	Scenario: User see confession form
+		Given I am on "/"
+		Then I should see "přiznání"
+		And I follow "Erotické hry"
+		Then I should see "fantazie"
+
 	Scenario: Testing new feature
 		Given I am on "/eshop/game"
 		Then I should see "fantazie"

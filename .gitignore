@@ -6,6 +6,11 @@ temp/reports/*
 !temp/sessions
 temp/sessions/*
 !temp/sessions/.gitkeep
+!temp/test
+temp/test/emails/*
+!temp/test/emails/.gitkeep
+temp/test/screenshots/*
+!temp/test/screenshots/.gitkeep
 /priznaniosexu.7z
 /databaze.sql
 /log/
@@ -26,13 +31,10 @@ www/cache/js/*
 !www/cache/js/.gitkeep
 nbproject/project.properties
 nbproject/project.xml
-app/test/screenshots/*
-!app/test/screenshots/.gitkeep
 app/test/sql/init/*
 !app/test/sql/init/.gitkeep
 app/test/sql/featurestart/*
 !app/test/sql/featurestart/.gitkeep
 app/test/sql/featureend/*
 !app/test/sql/featureend/.gitkeep
-app/test/emails/*
-!app/test/emails/.gitkeep
+
