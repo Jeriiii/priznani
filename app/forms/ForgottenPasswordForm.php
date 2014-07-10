@@ -16,13 +16,20 @@ class ForgottenPasswordForm extends BaseBootstrapForm {
 	 */
 	public $userDao;
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
+	/**
+	 * @var \Nette\Mail\IMailer
+	 */
+	public $mailer;
+
+	public function __construct(UserDao $userDao, \Nette\Mail\IMailer $mailer, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
+		$this->mailer = $mailer;
 		$this->userDao = $userDao;
 		$this->addText('email', 'Email:', 30, 50);
 		$this->addSubmit('send', 'Vygenerovat nové heslo')
 			->setAttribute('class', 'btn-main medium');
+
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -30,7 +37,6 @@ class ForgottenPasswordForm extends BaseBootstrapForm {
 	public function submitted(ForgottenPasswordForm $form) {
 		$values = $form->getValues();
 		$presenter = $this->getPresenter();
-
 		$user = $this->userDao->findByEmail($values->email);
 		if (empty($user)) {
 			$form->addError(Html::el('div')->setText('Tento email nebyl nalezen.')->setClass('alert alert-danger'));
@@ -48,10 +54,8 @@ class ForgottenPasswordForm extends BaseBootstrapForm {
 		$mail->setFrom('info@nejlevnejsiwebstranky.cz')
 			->addTo($email)
 			->setSubject('Zapomenuté heslo')
-			->setBody("Dobrý den,\nVaše přihlašovací údaje jsou:\ne-mail: " . $email . "\nheslo: " . $password . "\n\nS pozdravem\ntým nejlevnejsiwebstranky.cz")
-			->send();
-		$mailer = new SendmailMailer;
-		$mailer->send($mail);
+			->setBody("Dobrý den,\nVaše přihlašovací údaje jsou:\ne-mail: " . $email . "\nheslo: " . $password . "\n\nS pozdravem\ntým nejlevnejsiwebstranky.cz");
+		$this->mailer->send($mail);
 	}
 
 }

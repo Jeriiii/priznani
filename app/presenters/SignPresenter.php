@@ -21,6 +21,12 @@ class SignPresenter extends BasePresenter {
 	 */
 	public $userDao;
 
+	/**
+	 * @var \Nette\Mail\IMailer
+	 * @inject
+	 */
+	public $mailer;
+
 	public function startup() {
 		parent::startup();
 		if ($this->getUser()->isLoggedIn() && $this->action != "out") {
@@ -60,7 +66,7 @@ class SignPresenter extends BasePresenter {
 	}
 
 	protected function createComponentForgottenPasswordForm($name) {
-		return new Frm\forgottenPasswordForm($this->userDao, $this, $name);
+		return new Frm\forgottenPasswordForm($this->userDao, $this->mailer, $this, $name);
 	}
 
 }

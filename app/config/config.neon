@@ -42,7 +42,6 @@ common:
 
 		facebookAuthenticator: FacebookAuthenticator
 
-
 		authenticator: Authenticator
 		authorizator:
 			class: Acl
