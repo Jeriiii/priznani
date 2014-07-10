@@ -1,45 +1,11 @@
-#
-# SECURITY WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
-#
-# If you don't protect this directory from direct web access, anybody will be able to see your passwords.
-# http://nette.org/security-warning
-#
-common:
+includes:
+	- testconection.neon
 
-	includes:
-		- model.neon
-		- testconection.neon
-	
-	parameters:
+nette:
+	session:
+		save_path: "%tempDir%/sessions"
 
-	php:
-		date.timezone: Europe/Prague
-		# session.save_path: "%tempDir%/sessions"
-		# zlib.output_compression: yes
-
-
-	nette:
-		session:
-			save_path: "%tempDir%/sessions"
-
-		database:
-			default:
-				dsn: '%database.driver%:host=%database.host%;dbname=%database.dbname%'
-				user: %database.user%
-				password: %database.password%
-
-
-	services:
-		userManager: \Test\UserManager
-		databaseManager: \Test\DatabaseManager(%appDir%/test/sql)
-
-		nette.mailer: \Test\MailManager(%appDir%/test/emails)
-		authenticator: Authenticator
-		authorizator:
-			class: Acl
-
-		
-production < common:
-
-
-development < common:
+services:
+	userManager: \Test\UserManager
+	databaseManager: \Test\DatabaseManager(%appDir%/test/sql)
+	nette.mailer: \Test\MailManager(%appDir%/test/emails)

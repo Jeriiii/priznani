@@ -38,6 +38,7 @@ class MailManager implements IMailer {
 	 */
 	public function send(Message $mail) {
 		$message = $mail->generateMessage();
+		dump($message);
 		$filepath = $this->mailDir . '/' . time() . '-' . rand(0, 1000) . '.txt';
 		file_put_contents($filepath, $message);
 	}

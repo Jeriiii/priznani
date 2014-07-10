@@ -29,13 +29,11 @@ $configurator->createRobotLoader()
 //pokud se automaticky testuje
 $testing = isset($_SERVER['TESTING']) && $_SERVER['TESTING'];
 
-
+// Create Dependency Injection container from config.neon file
+$configurator->addConfig(__DIR__ . '/config/config.neon');
 // Load config for automatic testing
 if ($testing) {
-	$configurator->addConfig(__DIR__ . '/config/test.config.neon');
-} else {
-	// Create Dependency Injection container from config.neon file
-	$configurator->addConfig(__DIR__ . '/config/config.neon');
+	$configurator->addConfig(__DIR__ . '/config/test.config.neon', FALSE);
 }
 
 $container = $configurator->createContainer();
