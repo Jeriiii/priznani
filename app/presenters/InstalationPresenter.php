@@ -14,7 +14,6 @@ class InstalationPresenter extends BasePresenter {
 	private $dirs = array();
 
 	public function actionDefault() {
-		die(NetteExt\Path\ImagePathCreator::getBasePath("folder", "neco"));
 		// přidání složek pro galerie
 		$this->addToExistDirs(WWW_DIR . "/images/galleries/");
 		$this->addToExistDirs(WWW_DIR . "/images/userGalleries/");
