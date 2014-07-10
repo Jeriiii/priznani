@@ -34,3 +34,5 @@ app/test/sql/featurestart/*
 !app/test/sql/featurestart/.gitkeep
 app/test/sql/featureend/*
 !app/test/sql/featureend/.gitkeep
+app/test/emails/*
+!app/test/emails/.gitkeep

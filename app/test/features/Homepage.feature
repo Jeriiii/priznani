@@ -12,8 +12,8 @@ Feature: Homepage.
 
 	Scenario: Testing sign in
 		Given I am on "/sign/in"
-		And I fill in "p.kukral@seznam.cz" for "email"
-		And I fill in "hesloheslo" for "password"
+		And I fill in "test@seznam.cz" for "email"
+		And I fill in "mojeheslo" for "password"
 		And I check "persistent"
 		And I press "login"
 		Then I should see "Byl jste úspěšně přihlášen"

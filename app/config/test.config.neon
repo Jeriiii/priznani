@@ -30,10 +30,11 @@ common:
 
 
 	services:
-		authenticator: Authenticator
 		userManager: \Test\UserManager
 		databaseManager: \Test\DatabaseManager(%appDir%/test/sql)
 
+		nette.mailer: \Test\MailManager(%appDir%/test/emails)
+		authenticator: Authenticator
 		authorizator:
 			class: Acl
 
