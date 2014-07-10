@@ -106,7 +106,7 @@ class UserImageDao extends AbstractDao {
 			/* existuji jine obrazky v galerii? */
 			if ($image) {
 				/* ANO - nastav jiný obrázek */
-				$this->userGalleryDao->updateBestAndLastImage($image->id, $image->id, $image->galleryID);
+				$this->userGalleryDao->updateBestAndLastImage($image->galleryID, $image->id, $image->id);
 			} else {
 				/* NE - smaž galerii ze streamu */
 				$this->streamDao->deleteUserGallery($userGallery->id);
@@ -155,9 +155,13 @@ class UserImageDao extends AbstractDao {
 	 * @return int Počet již schválených fotek.
 	 */
 	public function countAllowedImages($userID) {
+		/* Vrátí galerie určitého uživatele. */
+		$galls = $this->createSelection(UserGalleryDao::TABLE_NAME);
+		$galls->where(UserGalleryDao::COLUMN_USER_ID, $userID);
+
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_ALLOW, 1);
-		$sel->where(self::COLUMN_GALLERY_ID . "." . UserGalleryDao::COLUMN_USER_ID, $userID);
+		$sel->where(self::COLUMN_GALLERY_ID, $galls);
 		return $sel->count();
 	}
 

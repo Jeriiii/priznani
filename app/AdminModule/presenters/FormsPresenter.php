@@ -48,6 +48,14 @@ class FormsPresenter extends AdminSpacePresenter {
 	 */
 	public $userDao;
 
+	/**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
+
+
+
 
 
 	/* smazat */
@@ -292,6 +300,16 @@ class FormsPresenter extends AdminSpacePresenter {
 		/* naplánování */
 		$markProcessed = BaseConfessionDao::MARK_PROCESSED;
 		$this->getDao($type)->updateMarkDate($confNewID, $markProcessed, $newReleaseDate);
+
+		if ($type == 1) {
+			/* vydání přiznání na streamu */
+			$confession = $this->confessionDao->find($confNewID);
+			$this->streamDao->addNewConfession($confNewID, $confession->create);
+		} elseif ($type == 2) {
+			/* vydání poradny na streamu */
+			$advice = $this->adviceDao->find($confNewID);
+			$this->streamDao->addNewAdvice($confNewID, $advice->create);
+		}
 	}
 
 	/**

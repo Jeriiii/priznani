@@ -138,7 +138,7 @@ class BaseGallery extends \Nette\Application\UI\Control {
 		$preffixs = array("", "mini", "sqr");
 
 		// mazání souborů
-		foreach ($preffixs as $prefix) {
+		foreach ($preffixs as $preffix) {
 			$path = $folderPath . $preffix . $imageFileName;
 
 			if (file_exists($path)) {
