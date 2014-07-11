@@ -55,6 +55,8 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 		if ($user->isAllowed('accept_images'))
 			$navigation["SCHVAL. FOTEK"] = $this->link("AcceptImages:");
 		$navigation["MUJ ÚČET"] = $this->link("Admin:myAccounts");
+		$navigation["PLATBY"] = $this->link("Payments:");
+		$navigation["OBJEDNÁVKY"] = $this->link("GameOrders:");
 		//if ($user->isAllowed('news')) $navigation["AKTUALITY"] = $this->link("AdminNews:");
 
 		$backlink = $this->link($this->backlink());

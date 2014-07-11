@@ -17,3 +17,4 @@ services:
 	embedVideos: embedVideos
 	eshopGameDao: \POS\Model\EshopGameDao
 	eshopGameOrdersDao: \POS\Model\EshopGameOrderDao
+	paymentDao: \POS\Model\PaymentDao
