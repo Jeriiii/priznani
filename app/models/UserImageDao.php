@@ -136,14 +136,16 @@ class UserImageDao extends AbstractDao {
 	 * @param string $suffix Koncovka obrázku.
 	 * @param string $description Popisek obrázku.
 	 * @param int $galleryID ID galerie.
+	 * @param int $allow Fotka je schválená 1, není 0
 	 * @return Database\Table\IRow Nový řádek s obrázekm
 	 */
-	public function insertImage($name, $suffix, $description, $galleryID) {
+	public function insertImage($name, $suffix, $description, $galleryID, $allow) {
 		$image = $this->insert(array(
 			self::COLUMN_NAME => $name,
 			self::COLUMN_SUFFIX => $suffix,
 			self::COLUMN_DESCRIPTION => $description,
-			self::COLUMN_GALLERY_ID => $galleryID
+			self::COLUMN_GALLERY_ID => $galleryID,
+			self::COLUMN_ALLOW => $allow
 		));
 
 		return $image;

@@ -8,6 +8,7 @@ use Nette\Application\UI\Form,
 	NetteExt\Image;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
+use POS\Model\StreamDao;
 
 /**
  * Vkládá fotky do defaultní galerie přímo ze streamu
@@ -29,11 +30,12 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 	 */
 	const NUMBER_OF_IMAGE = 3;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
 
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
+		$this->streamDao = $streamDao;
 
 		//form
 		$this->addImageFields(self::NUMBER_OF_IMAGE, TRUE, FALSE);

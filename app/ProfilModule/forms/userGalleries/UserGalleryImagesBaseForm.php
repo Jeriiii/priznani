@@ -12,6 +12,7 @@ use NetteExt\File;
 use Nette\ArrayHash;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
+use POS\Model\StreamDao;
 
 /**
  * Základní formulář pro nahrávání a ukládání obrázků
@@ -28,6 +29,12 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	 */
 	public $userImageDao;
 
+	/**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
+
 	const IMAGE_NAME = "imageName";
 	const IMAGE_FILE = "imageFile";
 	const IMAGE_DESCRIPTION = "imageDescription";
@@ -37,11 +44,12 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	 */
 	const AllowLimitForImages = 3;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, IContainer $parent = NULL, $name = NULL) {
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
+		$this->streamDao = $streamDao;
 	}
 
 	/**
@@ -104,8 +112,9 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	 * @param \Nette\ArrayHash $values Všechny hodnoty z formuláře.
 	 * @param int $userID ID uživatele.
 	 * @param int $galleryID ID galerie.
+	 * @param \POS\Model\StreamDao $streamDao
 	 */
-	public function saveImages(array $images, $userID, $galleryID) {
+	public function saveImages(array $images, $userID, $galleryID, $streamDao) {
 		foreach ($images as $image) {
 			if ($image[self::IMAGE_FILE]->isOK()) {
 				$imageName = !empty($image[self::IMAGE_NAME]) ? $image[self::IMAGE_NAME] : "";
@@ -118,10 +127,15 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 				//pokud je 3 a více schválených, schválí i nově přidávanou
 				$allow = $allowedImagesCount >= self::AllowLimitForImages ? 1 : 0;
 
-				$imageID = $this->userImageDao->insertImage($imageName, $imageSuffix, $imageDescription, $galleryID, $allow)->id;
-				$this->userGalleryDao->updateBestAndLastImage($galleryID, $imageID, $imageID);
+				$imageDB = $this->userImageDao->insertImage($imageName, $imageSuffix, $imageDescription, $galleryID, $allow)->id;
+				$this->userGalleryDao->updateBestAndLastImage($galleryID, $imageDB->id, $imageDB->id);
 
-				$this->upload($image[self::IMAGE_FILE], $imageID, $imageSuffix, $galleryID, $userID, 500, 700, 100, 130);
+				//aktualizace streamu - vyhodí galerii ve streamu nahoru
+				if ($allow) {
+					$streamDao->aliveGallery($imageDB->galleryID, $imageDB->gallery->userID);
+				}
+
+				$this->upload($image[self::IMAGE_FILE], $imageDB->id, $imageSuffix, $galleryID, $userID, 500, 700, 100, 130);
 				unset($image);
 			}
 		}
