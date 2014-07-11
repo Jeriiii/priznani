@@ -8,14 +8,6 @@ use NetteExt\Path\GalleryPathCreator;
  */
 class BaseProjectPresenter extends Nette\Application\UI\Presenter {
 
-	public function actionDefault() {
-
-	}
-
-	public function renderDefault() {
-
-	}
-
 	/**
 	 * Helper pro relativní cestu k obrázku
 	 * @param type $class
