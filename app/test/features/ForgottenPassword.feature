@@ -7,4 +7,4 @@ Feature: ForgottenPassword.
 		Given I am on "/sign/forgotten-pass"
 		And I fill in "p.kukral2@seznam.cz" for "email"
 		And I press "send"
-		And I look on the page
+		And I should see "Heslo bylo odesláno emailem"

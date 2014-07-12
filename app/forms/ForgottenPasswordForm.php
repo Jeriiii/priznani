@@ -7,7 +7,6 @@ use Nette\Mail\Message;
 use Nette\Utils\Strings;
 use Nette\Utils\Html;
 use POS\Model\UserDao;
-use Nette\Mail\SendmailMailer;
 
 class ForgottenPasswordForm extends BaseBootstrapForm {
 

@@ -70,6 +70,23 @@ class FeatureContext extends MinkContext {
 	}
 
 	/**
+	 * Sends test header to Mink, so Mink`s Nette can indicate testing
+	 * @BeforeScenario
+	 */
+	public function sendTestInfo() {
+		$this->getSession()->setRequestHeader('X-Testing', '1');
+		$this->getSession()->setRequestHeader('X-Requested-With', 'Behat');
+	}
+
+	/**
+	 * Clears sessions after scenario
+	 * @AfterScenario
+	 */
+	public function clearSessions() {
+		$this->userManager->clearSession();
+	}
+
+	/**
 	 * Testing feature
 	 * @Given /^It looks great$/
 	 */
@@ -83,8 +100,9 @@ class FeatureContext extends MinkContext {
 	 * @Given /^I am signed in as "([^"]*)"$/
 	 */
 	public function iAmSignedInAs($username) {
-		$sessionId = $this->userManager->loginWithEmail($username);
+		$this->userManager->loginWithEmail($username);
 		$session = $this->userManager->getSession();
+		$sessionId = $this->userManager->getSessionId();
 		$this->setBrowserCookie($session->getName(), $sessionId);
 	}
 
