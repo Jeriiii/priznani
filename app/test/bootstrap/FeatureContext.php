@@ -18,6 +18,7 @@ use Behat\MinkExtension\Context\MinkContext;
 use Nette\DI\Container;
 use \Behat\Behat\Exception\PendingException;
 use \Behat\Behat\Event\StepEvent;
+use Exception;
 
 class FeatureContext extends MinkContext {
 
@@ -33,6 +34,12 @@ class FeatureContext extends MinkContext {
 	/** @var ScreenshotManager @inject */
 	private $screenshotManager;
 
+	/** @var MailManager @inject  */
+	private $mailer;
+
+	/** @var string  */
+	private $lastEmail;
+
 	/**
 	 * Initialization of context
 	 */
@@ -42,6 +49,7 @@ class FeatureContext extends MinkContext {
 		$this->userManager = $this->context->userManager;
 		$this->databaseManager = $this->context->databaseManager;
 		$this->screenshotManager = $this->context->screenshotManager;
+		$this->mailer = $this->context->getService('nette.mailer');
 	}
 
 	/**
@@ -58,7 +66,9 @@ class FeatureContext extends MinkContext {
 	 * @BeforeFeature */
 	public static function setupFeature() {
 		$databaseManager = DatabaseManager::getInstance();
-		$databaseManager->featureStartScripts();
+		$databaseManager->featureStartScripts(); //usage of end sql scripts
+		$mailManager = MailManager::getInstance();
+		$mailManager->clearEmails(); //clearing email folder
 	}
 
 	/**
@@ -66,7 +76,7 @@ class FeatureContext extends MinkContext {
 	 *  @AfterFeature */
 	public static function teardownFeature() {
 		$databaseManager = DatabaseManager::getInstance();
-		$databaseManager->featureEndScripts();
+		$databaseManager->featureEndScripts(); //usage of end sql scripts
 	}
 
 	/**
@@ -86,6 +96,17 @@ class FeatureContext extends MinkContext {
 		$this->userManager->clearSession();
 	}
 
+	/**
+	 * Sets cookie of virtual browser
+	 * @param String $name
+	 * @param array $value
+	 */
+	private function setBrowserCookie($name, $value) {
+		$minkSession = $this->getSession(); //session of Mink browser
+		$minkSession->setCookie($name, $value);
+	}
+
+	//STEP DEFINITIONS
 	/**
 	 * Testing feature
 	 * @Given /^It looks great$/
@@ -116,13 +137,60 @@ class FeatureContext extends MinkContext {
 	}
 
 	/**
-	 * Sets cookie of virtual browser
-	 * @param String $name
-	 * @param array $value
+	 * When email should arrive
+	 * @Then /^I should receive( an)? email$/
 	 */
-	private function setBrowserCookie($name, $value) {
-		$minkSession = $this->getSession(); //session of Mink browser
-		$minkSession->setCookie($name, $value);
+	public function iShouldReceiveAnEmail() {
+		$this->lastEmail = $this->mailer->getLastEmail();
+		if ($this->lastEmail == NULL) {
+			throw new Exception('No email arrived.');
+		}
+	}
+
+	/**
+	 * 	When email should NOT arrive
+	 * @Then /^I should not receive( another)? email$/
+	 */
+	public function iShouldNotReceiveAnEmail() {
+		$this->lastEmail = $this->mailer->getLastEmail();
+		if ($this->lastEmail != NULL) {
+			throw new Exception('An email arrived, but it should not.');
+		}
+	}
+
+	/**
+	 * When last arrived email should contains something
+	 * @Then /^I should see "([^"]*)" in last email$/
+	 */
+	public function iShouldSeeInLastEmail($content) {
+		if ($this->lastEmail == NULL) {
+			throw new Exception('No email arrived. Perhaps you did not used "I should receive an email" before?');
+		}
+		if (strpos($this->lastEmail, $content) !== FALSE) {
+			//content was found
+		} else {
+			throw new Exception('Received email does not contains ' . $content);
+		}
+	}
+
+	/**
+	 * @When /^I follow( the)? link from last email$/
+	 */
+	public function followEmailLink() {
+		if ($this->lastEmail === NULL) {
+			throw new Exception('No email arrived. Perhaps you did not used "I should receive an email" before?');
+		}
+		$matches = array();
+		$baseUrl = $this->getMinkParameter('base_url');
+		$cleanBaseUrl = rtrim($baseUrl, '/'); //url without whitespaces on the end
+		$quoted = preg_quote($cleanBaseUrl, '#'); //escaping for regular expression
+		if (!preg_match("#" . $quoted . "(/[^\\s\"\\.,]*([\\.,][^\\s\"\\.,]+)*)#", $this->lastEmail, $matches)) {
+			throw new Exception(
+			"There is no link to this website in the email. (Links to other website are ignored.)"
+			);
+		}
+		$link = $matches[1]; //first link
+		$this->getSession()->visit($this->locatePath($link));
 	}
 
 }
