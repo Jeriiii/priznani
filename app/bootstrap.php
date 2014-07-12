@@ -27,7 +27,8 @@ $configurator->createRobotLoader()
 	->register();
 
 //pokud se automaticky testuje
-$testing = isset($_SERVER['TESTING']) && $_SERVER['TESTING'];
+$testing = (isset($_SERVER['TESTING']) && $_SERVER['TESTING']) ||
+	(isset($_SERVER['HTTP_X_TESTING']) && $_SERVER['HTTP_X_TESTING']);
 
 // Create Dependency Injection container from config.neon file
 $configurator->addConfig(__DIR__ . '/config/config.neon');

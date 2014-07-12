@@ -28,6 +28,12 @@ class UserManager {
 	private $userDao;
 
 	/**
+	 *
+	 * @var string id of used session
+	 */
+	private $sessionId;
+
+	/**
 	 * Creates the session manager.
 	 * @param \POS\Model\UserDao $userDao
 	 */
@@ -60,14 +66,16 @@ class UserManager {
 	 * @return string id of created session
 	 */
 	public function saveUserIntoSession($user, $roles) {
-		$identity = new \Nette\Security\Identity($user->id, $roles);
+		$identity = new \Nette\Security\Identity($user->id, $roles, array(
+			'user_name' => 'tester',
+			'email' => 'tester@test.cz'
+		));
 		$this->session->start();
 		$userStorage = new UserStorage($this->session);
 		$userStorage->setIdentity($identity);
 		$userStorage->setAuthenticated(TRUE);
-		$id = $this->session->getId();
+		$this->sessionId = $this->session->getId();
 		$this->session->close();
-		return $id;
 	}
 
 	/**
@@ -76,6 +84,26 @@ class UserManager {
 	 */
 	public function getSession() {
 		return $this->session;
+	}
+
+	/**
+	 * Returns used session id
+	 * @return string id of used session
+	 */
+	public function getSessionId() {
+		return $this->sessionId;
+	}
+
+	/**
+	 * Clears sessions initialized with this manager
+	 */
+	public function clearSession() {
+		if ($this->sessionId !== NULL) {
+			session_id($this->sessionId);
+			session_start();
+			session_destroy();
+			$this->sessionId = NULL;
+		}
 	}
 
 }

@@ -4,6 +4,8 @@ includes:
 nette:
 	session:
 		save_path: "%tempDir%/sessions"
+		autoStart: true
+		expiration: +5 days
 
 services:
 	userManager: \Test\UserManager

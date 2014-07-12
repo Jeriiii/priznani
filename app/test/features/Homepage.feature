@@ -18,14 +18,14 @@ Feature: Homepage.
 
 	Scenario: Testing sign in
 		Given I am on "/sign/in"
-		And I fill in "test@seznam.cz" for "email"
-		And I fill in "mojeheslo" for "password"
+		And I fill in "test@test.cz" for "email"
+		And I fill in "hesloheslo" for "password"
 		And I check "persistent"
 		And I press "login"
-		Then I should see "Byl jste úspěšně přihlášen"
+		Then I look on the page
 
 	Scenario: Testing signed as
 		Given I am on "/"
 		Given I am signed in as "terka1612@seznam.cz"
-		Then I should see "Terka"
+		Then I look on the page
 		
