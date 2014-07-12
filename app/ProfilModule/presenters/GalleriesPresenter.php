@@ -190,7 +190,7 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	protected function createComponentNewImage($name) {
-		return new Frm\NewImageForm($this->userGaleryDao, $this->userImageDao, $this->galleryID, $this, $name);
+		return new Frm\NewImageForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this, $name);
 	}
 
 	protected function createComponentUserGalleryImageChange($name) {

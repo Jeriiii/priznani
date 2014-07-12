@@ -15,9 +15,22 @@
 namespace POSComponent\Stream\UserStream;
 
 use Nette\Application\UI\Form as Frm;
-use \POSComponent\Stream\BaseStream\BaseStream;
+use POSComponent\Stream\BaseStream\BaseStream;
+use POS\Model\UserGalleryDao;
+use POS\Model\UserImageDao;
+use POS\Model\ConfessionDao;
 
 class UserStream extends BaseStream {
+
+	/**
+	 * @var \POS\Model\StreamDao
+	 */
+	public $streamDao;
+
+	public function __construct($data, $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
+		parent::__construct($data, $streamDao, $userGalleryDao, $userImageDao, $confDao);
+		$this->streamDao = $streamDao;
+	}
 
 	//put your code here
 	private $offset = null;
@@ -39,7 +52,7 @@ class UserStream extends BaseStream {
 	 * @return \Nette\Application\UI\Form\NewStreamImageForm
 	 */
 	protected function createComponentNewStreamImageForm($name) {
-		return new Frm\NewStreamImageForm($this->userGalleryDao, $this->userImageDao, $this, $name);
+		return new Frm\NewStreamImageForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
 	}
 
 	/**
