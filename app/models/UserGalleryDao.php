@@ -74,7 +74,7 @@ class UserGalleryDao extends BaseGalleryDao {
 	public function findDefaultGallery($userID) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_USER_ID, $userID);
-		//$sel->where(self::COLUMN_DEFAULT, 1);
+		$sel->where(self::COLUMN_DEFAULT, 1);
 		return $sel->fetch();
 	}
 
@@ -83,7 +83,7 @@ class UserGalleryDao extends BaseGalleryDao {
 	 * @param int $userID ID uživatele.
 	 * @return Database\Table\IRow
 	 */
-	public function insertDefaultGallery($userID) {
+	public function createDefaultGallery($userID) {
 		$sel = $this->getTable();
 		$defaultGallery = $sel->insert(array(
 			self::COLUMN_NAME => "Moje fotky",

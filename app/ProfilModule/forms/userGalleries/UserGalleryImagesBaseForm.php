@@ -12,6 +12,7 @@ use NetteExt\File;
 use Nette\ArrayHash;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
+use POS\Model\StreamDao;
 
 /**
  * Základní formulář pro nahrávání a ukládání obrázků
@@ -28,6 +29,12 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	 */
 	public $userImageDao;
 
+	/**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
+
 	const IMAGE_NAME = "imageName";
 	const IMAGE_FILE = "imageFile";
 	const IMAGE_DESCRIPTION = "imageDescription";
@@ -37,11 +44,12 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	 */
 	const AllowLimitForImages = 3;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, IContainer $parent = NULL, $name = NULL) {
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
+		$this->streamDao = $streamDao;
 	}
 
 	/**
@@ -100,7 +108,7 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 
 	/**
 	 * Uloží obrázky do databáze a na disk.
-	 * @param array $images Obrázky k uložení.
+	 * @param array $images Obrázky k uložení v předzpracovaném poli.
 	 * @param \Nette\ArrayHash $values Všechny hodnoty z formuláře.
 	 * @param int $userID ID uživatele.
 	 * @param int $galleryID ID galerie.
@@ -108,23 +116,48 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	public function saveImages(array $images, $userID, $galleryID) {
 		foreach ($images as $image) {
 			if ($image[self::IMAGE_FILE]->isOK()) {
-				$imageName = !empty($image[self::IMAGE_NAME]) ? $image[self::IMAGE_NAME] : "";
-				$imageSuffix = $this->suffix($image[self::IMAGE_FILE]->getName());
-				$imageDescription = !empty($image[self::IMAGE_DESCRIPTION]) ? $image[self::IMAGE_DESCRIPTION] : "";
+				//název obrázku zadaný uživatelem
+				$name = !empty($image[self::IMAGE_NAME]) ? $image[self::IMAGE_NAME] : "";
+				//koncovka souboru
+				$suffix = $this->suffix($image[self::IMAGE_FILE]->getName());
+				//popis obrázku zadaný uživatelem
+				$description = !empty($image[self::IMAGE_DESCRIPTION]) ? $image[self::IMAGE_DESCRIPTION] : "";
 
-				//získání počtu user obrázků, které mají allow 1
-				$allowedImagesCount = $this->userImageDao->countAllowedImages($userID);
+				//Uloží obrázek do databáze
+				$imageDB = $this->saveImageToDB($userID, $galleryID, $name, $description, $suffix);
 
-				//pokud je 3 a více schválených, schválí i nově přidávanou
-				$allow = $allowedImagesCount >= self::AllowLimitForImages ? 1 : 0;
-
-				$imageID = $this->userImageDao->insertImage($imageName, $imageSuffix, $imageDescription, $galleryID, $allow)->id;
-				$this->userGalleryDao->updateBestAndLastImage($galleryID, $imageID, $imageID);
-
-				$this->upload($image[self::IMAGE_FILE], $imageID, $imageSuffix, $galleryID, $userID, 500, 700, 100, 130);
+				//nahraje soubor
+				$this->upload($image[self::IMAGE_FILE], $imageDB->id, $suffix, $galleryID, $userID, 500, 700, 100, 130);
 				unset($image);
 			}
 		}
+	}
+
+	/**
+	 * Uloží obrázek do databáze.
+	 * @param int $userID ID uživatele.
+	 * @param int $galleryID ID galerie.
+	 * @param string $name Název obrázku zadaný uživatelem.
+	 * @param string $description Popis obrázku zadaný uživatelem.
+	 * @param string $suffix Koncovka obrázku.
+	 * @return Database\Table\IRow
+	 */
+	private function saveImageToDB($userID, $galleryID, $name, $description, $suffix) {
+		//získání počtu user obrázků, které mají allow 1
+		$allowedImagesCount = $this->userImageDao->countAllowedImages($userID);
+
+		//pokud je 3 a více schválených, schválí i nově přidávanou
+		$allow = $allowedImagesCount >= self::AllowLimitForImages ? 1 : 0;
+
+		$image = $this->userImageDao->insertImage($name, $suffix, $description, $galleryID, $allow);
+		$this->userGalleryDao->updateBestAndLastImage($galleryID, $image->id, $image->id);
+
+		//aktualizace streamu - vyhodí galerii ve streamu nahoru
+		if ($allow) {
+			$this->streamDao->aliveGallery($image->galleryID, $image->gallery->userID);
+		}
+
+		return $image;
 	}
 
 	/**

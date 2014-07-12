@@ -182,19 +182,19 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	protected function createComponentUserGalleryNew($name) {
-		return new Frm\UserGalleryNewForm($this->userGaleryDao, $this->userImageDao, $this, $name);
+		return new Frm\UserGalleryNewForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this, $name);
 	}
 
 	protected function createComponentUserGalleryChange($name) {
-		return new Frm\UserGalleryChangeForm($this->userGaleryDao, $this->userImageDao, $this->galleryID, $this, $name);
+		return new Frm\UserGalleryChangeForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this, $name);
 	}
 
 	protected function createComponentNewImage($name) {
-		return new Frm\NewImageForm($this->userGaleryDao, $this->userImageDao, $this->galleryID, $this, $name);
+		return new Frm\NewImageForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this, $name);
 	}
 
 	protected function createComponentUserGalleryImageChange($name) {
-		return new Frm\UserGalleryImageChangeForm($this->userGaleryDao, $this->userImageDao, $this->imageID, $this->galleryID, $this, $name);
+		return new Frm\UserGalleryImageChangeForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->imageID, $this->galleryID, $this, $name);
 	}
 
 	public function createComponentUserGalleries() {

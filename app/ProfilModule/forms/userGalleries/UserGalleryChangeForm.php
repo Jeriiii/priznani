@@ -5,6 +5,7 @@ namespace Nette\Application\UI\Form;
 use Nette\ComponentModel\IContainer;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
+use POS\Model\StreamDao;
 
 /**
  * Upraví galerii
@@ -22,8 +23,8 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 	public $userImageDao;
 	private $galleryID;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, $galleryID, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
 		//form
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;

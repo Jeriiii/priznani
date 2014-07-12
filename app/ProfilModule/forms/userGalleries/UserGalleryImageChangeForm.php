@@ -10,6 +10,7 @@ use Nette\Utils\Strings as Strings;
 use Nette\Image;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
+use POS\Model\StreamDao;
 
 class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm {
 
@@ -25,8 +26,8 @@ class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm {
 	private $imageID;
 	private $galleryID;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, $imageID, $galleryID, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $imageID, $galleryID, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
 
 		//form
 
