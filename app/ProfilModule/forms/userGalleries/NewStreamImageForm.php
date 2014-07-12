@@ -62,7 +62,7 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 			$defaultGallery = $this->userGalleryDao->findDefaultGallery($userID);
 
 			if (empty($defaultGallery)) {
-				$idGallery = $this->userGalleryDao->insertDefaultGallery($userID)->id;
+				$idGallery = $this->userGalleryDao->createDefaultGallery($userID)->id;
 			} else {
 				$idGallery = $defaultGallery->id;
 			}

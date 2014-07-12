@@ -256,7 +256,7 @@ class UserDao extends UserBaseDao {
 		$sel = $this->getTable();
 		$sel->wherePrimary($userID);
 		$sel->update(array(
-			self::COLUMN_PASSWORD, $password
+			self::COLUMN_PASSWORD => $password
 		));
 	}
 

@@ -55,7 +55,7 @@ class GalleryPathCreator extends PathCreator {
 	 * @return string Celá cesta ke složce se všemi uživatelskými galeriemi
 	 */
 	public static function getBasePathForAllUserGalleries($userID, $basePath = parent::BASE_PATH) {
-		return self::getBasePath($basePath) . "/" . $userID;
+		return self::getBasePath($basePath) . self::FOLDER_USER_GALLERY . "/" . $userID;
 	}
 
 	/**
