@@ -5,7 +5,7 @@ nette:
 	session:
 		save_path: "%tempDir%/sessions"
 		autoStart: true
-		expiration: +5 days
+		expiration: 60 days
 
 services:
 	userManager: \Test\UserManager

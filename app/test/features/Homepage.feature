@@ -22,7 +22,7 @@ Feature: Homepage.
 		And I fill in "hesloheslo" for "password"
 		And I check "persistent"
 		And I press "login"
-		Then I look on the page
+		Then I should see "test"
 
 	Scenario: Testing signed as
 		Given I am on "/"

@@ -1,7 +1,6 @@
 <?php
 
-use Behat\Gherkin\Node\PyStringNode,
-    Behat\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\PyStringNode;
 
 // order of autoloading is undefined, so we should
 // require parent class explicitly here
@@ -130,6 +129,9 @@ class FeatureContext extends BaseFeaturesContext
         $this->command = 'behat ' . $argumentsString;
         $this->output  = trim(implode("\n", $output));
         $this->return  = $return;
+
+        // Replace wrong warning message of HHVM
+        $this->output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $this->output);
     }
 
     /**
@@ -223,6 +225,25 @@ class FeatureContext extends BaseFeaturesContext
         }
 
         \PHPUnit_Framework_Assert::assertContains((string) $text, $this->output);
+    }
+
+    /**
+     * @Then /^the junit file "([^"]*)" should contain:$/
+     */
+    public function theJunitFileShouldContain($file, PyStringNode $text)
+    {
+        PHPUnit_Framework_Assert::assertFileExists($file);
+
+        // replace random time ...
+        $contents = preg_replace('@time="[0-9.]*"@', 'time="XXX"', file_get_contents($file));
+
+        // replace random path
+        $contents = preg_replace('@[0-9a-zA-Z]{32}@', 'XXX', $contents);
+
+        // fix random path in exception ...
+        $contents = preg_replace('@<!\[CDATA\[.*\]\]>@s', '<![CDATA[XXX]]>', $contents);
+
+        PHPUnit_Framework_Assert::assertEquals($contents, (string)$text);
     }
 
     /**
