@@ -1,11 +1,14 @@
 <?php
 
+namespace POSComponent;
+
+use Nette\Application\UI\Control;
 use NetteExt\Helper\HelperRegistrator;
 
 /**
- * BaseHelperPresenter Description
+ * Nejzákladnější komponenta pro další komponenty
  */
-class BaseProjectPresenter extends Nette\Application\UI\Presenter {
+class BaseProjectControl extends Control {
 
 	/**
 	 * Zaregistruje helpery
@@ -15,7 +18,7 @@ class BaseProjectPresenter extends Nette\Application\UI\Presenter {
 	protected function createTemplate($class = NULL) {
 		$template = parent::createTemplate($class);
 
-		$url = $this->context->httpRequest->url;
+		$url = $this->presenter->context->httpRequest->url;
 
 		$helperRegistrator = new HelperRegistrator($url);
 		$helperRegistrator->registerHelpers($template);

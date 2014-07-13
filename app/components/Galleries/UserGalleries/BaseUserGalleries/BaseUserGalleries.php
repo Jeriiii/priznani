@@ -16,8 +16,9 @@ namespace POSComponent\Galleries\UserGalleries;
 use Nette\ComponentModel\IContainer;
 use POS\Model\UserDao;
 use POS\Model\UserGalleryDao;
+use POSComponent\BaseProjectControl;
 
-class BaseUserGalleries extends \Nette\Application\UI\Control {
+class BaseUserGalleries extends BaseProjectControl {
 	/* proměnné pro css překlad */
 
 	protected $cssVariables = array();

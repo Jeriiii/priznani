@@ -5,12 +5,14 @@
  * and open the template in the editor.
  */
 
+use POSComponent\BaseProjectControl;
+
 /**
  * Description of Search Component
  *
  * @author Mario
  */
-class Search extends Nette\Application\UI\Control {
+class Search extends BaseProjectControl {
 
 	protected $finder;
 

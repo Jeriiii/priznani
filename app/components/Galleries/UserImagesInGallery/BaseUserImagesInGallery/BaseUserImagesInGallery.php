@@ -9,8 +9,9 @@
 namespace POSComponent\Galleries\UserImagesInGallery;
 
 use POS\Model\UserDao;
+use POSComponent\BaseProjectControl;
 
-class BaseUserImagesInGallery extends \Nette\Application\UI\Control {
+class BaseUserImagesInGallery extends BaseProjectControl {
 	/* právě procházená galerie */
 
 	protected $galleryID;

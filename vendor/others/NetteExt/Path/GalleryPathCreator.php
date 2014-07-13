@@ -64,7 +64,7 @@ class GalleryPathCreator extends PathCreator {
 	 * @return string Relativní cesta ke složce.
 	 */
 	public static function getGalleryFolder($galleryID) {
-		return self::FOLDER_USER_GALLERY . "/" . $galleryID;
+		return self::FOLDER_GALLERY . "/" . $galleryID;
 	}
 
 	/**

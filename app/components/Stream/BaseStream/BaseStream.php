@@ -18,8 +18,9 @@ use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\ConfessionDao;
 use POS\Model\SreamDao;
+use POSComponent\BaseProjectControl;
 
-class BaseStream extends \Nette\Application\UI\Control {
+class BaseStream extends BaseProjectControl {
 
 	protected $dataForStream;
 	private $offset = null;
