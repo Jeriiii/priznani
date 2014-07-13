@@ -4,6 +4,7 @@ namespace ProfilModule;
 
 use Nette\Application\UI\Form as Frm,
 	Nette\ComponentModel\IContainer;
+use Nette\Security\User;
 
 class EditPresenter extends ProfilBasePresenter {
 
@@ -21,7 +22,7 @@ class EditPresenter extends ProfilBasePresenter {
 			if ($user->getLogoutReason() === User::INACTIVITY) {
 				$this->flashMessage('Uplynula doba neaktivity! Systém vás z bezpečnostních důvodů odhlásil.', 'warning');
 			}
-			$backlink = $this->getApplication()->storeRequest();
+			$backlink = $this->backlink();
 			$this->redirect(':Sign:in', array('backlink' => $backlink));
 		} else { //kontrola opravnění pro vztup do příslušné sekce
 			if (!$user->isAllowed($this->name, $this->action)) {
