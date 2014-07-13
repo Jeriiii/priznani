@@ -16,7 +16,8 @@ class BaseProjectPresenter extends Nette\Application\UI\Presenter {
 	protected function createTemplate($class = NULL) {
 		$template = parent::createTemplate($class);
 		$template->registerHelper('getImgPath', function ($image) {
-			$basePath = $this->context->httpRequest->url->basePath;
+			$url = $this->context->httpRequest->url;
+			$basePath = $url->hostUrl . $url->getBasePath();
 			$galleryFolder = GalleryPathCreator::getUserGalleryFolder($image->galleryID, $image->gallery->userID);
 			$imgPath = ImagePathCreator::getImgPath($image->id, $image->suffix, $galleryFolder, $basePath);
 			return $imgPath;
