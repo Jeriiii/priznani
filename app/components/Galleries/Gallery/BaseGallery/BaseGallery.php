@@ -10,8 +10,9 @@ namespace POSComponent\Galleries\Images;
 
 use POS\Model\ImageDao;
 use POS\Model\UserImageDao;
+use POSComponent\BaseProjectControl;
 
-class BaseGallery extends \Nette\Application\UI\Control {
+class BaseGallery extends BaseProjectControl {
 	/* vsechny obrazky z galerie */
 
 	private $images;

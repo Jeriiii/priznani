@@ -25,7 +25,7 @@
 {/}
  
 {define imageMainScreen}
-	<img src="{$basePath}/images/userGalleries/{$gallery->userID}/{$gallery->id}/{$image->id}.{$image->suffix}" alt="{$image->name}"
+	<img src="{$image|getImgPath}" alt="{$image->name}"
 		{ifset $imgPaddingTopBottom}
 			style = "padding: {!$imgPaddingTopBottom}px 0;"
 		{/ifset}

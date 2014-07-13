@@ -5,12 +5,14 @@
  * and open the template in the editor.
  */
 
+use POSComponent\BaseProjectControl;
+
 /**
  * Description of Polly
  *
  * @author Petr
  */
-class Polly extends Nette\Application\UI\Control {
+class Polly extends BaseProjectControl {
 
 	private $confession;
 	/* aktuální DAO, se kterým se pracuje. Buď některé z DAO pro přiznání, nebo poradna */
