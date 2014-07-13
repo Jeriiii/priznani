@@ -48,9 +48,8 @@ class Strings
 	public static function fixEncoding($s, $encoding = 'UTF-8')
 	{
 		// removes xD800-xDFFF, x110000 and higher
-		if (strcasecmp($encoding, 'UTF-8')) {
-			ini_set('mbstring.substitute_character', 'none');
-			return mb_convert_encoding($s, $encoding, $encoding);
+		if (PHP_VERSION_ID < 50400 || strcasecmp($encoding, 'UTF-8')) {
+			return @iconv('UTF-16', $encoding . '//IGNORE', iconv($encoding, 'UTF-16//IGNORE', $s)); // intentionally @
 		} else {
 			return htmlspecialchars_decode(htmlspecialchars($s, ENT_NOQUOTES | ENT_IGNORE, 'UTF-8'), ENT_NOQUOTES);
 		}
@@ -166,6 +165,9 @@ class Strings
 	{
 		$s = preg_replace('#[^\x09\x0A\x0D\x20-\x7E\xA0-\x{2FF}\x{370}-\x{10FFFF}]#u', '', $s);
 		$s = strtr($s, '`\'"^~', "\x01\x02\x03\x04\x05");
+		$s = str_replace(array("\xE2\x80\x9E", "\xE2\x80\x9C", "\xE2\x80\x9D", "\xE2\x80\x9A",
+			"\xE2\x80\x98", "\xE2\x80\x99", "\xC2\xBB", "\xC2\xAB"),
+			array("\x03", "\x03", "\x03", "\x02", "\x02", "\x02", ">>", "<<"), $s);
 		if (ICONV_IMPL === 'glibc') {
 			$s = @iconv('UTF-8', 'WINDOWS-1250//TRANSLIT', $s); // intentionally @
 			$s = strtr($s, "\xa5\xa3\xbc\x8c\xa7\x8a\xaa\x8d\x8f\x8e\xaf\xb9\xb3\xbe\x9c\x9a\xba\x9d\x9f\x9e"

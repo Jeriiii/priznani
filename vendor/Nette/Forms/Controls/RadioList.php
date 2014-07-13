@@ -82,7 +82,7 @@ class RadioList extends ChoiceControl
 	public function getControl($key = NULL)
 	{
 		if ($key !== NULL) {
-			trigger_error('Partial ' . __METHOD__ . '() is deprecated; use getControlPart() instead.', E_USER_DEPRECATED);
+			trigger_error(sprintf('Partial %s() is deprecated; use getControlPart() instead.', __METHOD__), E_USER_DEPRECATED);
 			return $this->getControlPart($key);
 		}
 
@@ -101,7 +101,7 @@ class RadioList extends ChoiceControl
 					'disabled:' => $this->disabled,
 					'data-nette-rules:' => array(key($ids) => $input->attrs['data-nette-rules']),
 				)),
-				array('for:' => $ids) + $this->label->attrs,
+				array('for:' => $ids),
 				$this->separator
 			)
 		);
@@ -116,7 +116,7 @@ class RadioList extends ChoiceControl
 	public function getLabel($caption = NULL, $key = NULL)
 	{
 		if ($key !== NULL) {
-			trigger_error('Partial ' . __METHOD__ . '() is deprecated; use getLabelPart() instead.', E_USER_DEPRECATED);
+			trigger_error(sprintf('Partial %s() is deprecated; use getLabelPart() instead.', __METHOD__), E_USER_DEPRECATED);
 			return $this->getLabelPart($key);
 		}
 		return parent::getLabel($caption)->for(NULL);
