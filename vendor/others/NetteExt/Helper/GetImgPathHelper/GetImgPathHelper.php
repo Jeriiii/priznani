@@ -16,6 +16,7 @@ use Nette\Http\Url;
 use NetteExt\Path\ImagePathCreator;
 use NetteExt\Path\GalleryPathCreator;
 use Nette\Database\Table\ActiveRow;
+use NetteExt\Helper\Image;
 
 /**
  * Vytvoří cestu k obrázku.
@@ -26,12 +27,14 @@ class GetImgPathHelper {
 	const NAME_MIN = "getImgMinPath";
 	const NAME_MIN_SQR = "getImgSqrPath";
 	const NAME_SCRN = "getImgScrnPath";
+	const NAME_STREAM = "getStrmImgPath";
 
 	/* image types */
 	const TYPE_IMG = 1;
 	const TYPE_MIN_IMG = 2;
 	const TYPE_SCRN_IMG = 3;
 	const TYPE_MIN_SQR_IMG = 4;
+	const TYPE_STREAM = 5;
 	/* gallery types */
 	const TYPE_GALLERY = "g";
 	const TYPE_USER_GALLERY = "ug";
@@ -51,6 +54,16 @@ class GetImgPathHelper {
 	 */
 	public function getImgPath($image, $galleryType) {
 		return $this->createImgPath($image, $galleryType, self::TYPE_IMG);
+	}
+
+	/**
+	 * Vrací cestu k uživatelskému obrázku.
+	 * @param Nette\Database\Table\ActiveRow $streamItem Řádek z databáze ze streamu.
+	 * @param string $galleryType Typ galerie (uživatelská nebo normální)
+	 * @return string
+	 */
+	public function getStreamImgPath($streamItem, $galleryType) {
+		return $this->createImgPath($streamItem, $galleryType, self::TYPE_STREAM);
 	}
 
 	/**
@@ -93,10 +106,12 @@ class GetImgPathHelper {
 	 */
 	private function createImgPath($image, $galleryType, $type) {
 		$basePath = $this->getBasePath();
+		$image = new Image($image, $galleryType, $type);
 		$galleryFolder = $this->getGalleryPath($image, $galleryType);
 
 		switch ($type) {
 			case self::TYPE_IMG:
+			case self::TYPE_STREAM:
 				return ImagePathCreator::getImgPath($image->id, $image->suffix, $galleryFolder, $basePath);
 			case self::TYPE_MIN_IMG:
 				return ImagePathCreator::getImgMinPath($image->id, $image->suffix, $galleryFolder, $basePath);
@@ -127,7 +142,7 @@ class GetImgPathHelper {
 	 */
 	private function getGalleryPath($image, $galleryType) {
 		if ($galleryType == self::TYPE_USER_GALLERY) {
-			return GalleryPathCreator::getUserGalleryFolder($image->galleryID, $image->gallery->userID);
+			return GalleryPathCreator::getUserGalleryFolder($image->galleryID, $image->userID);
 		} else {
 			return GalleryPathCreator::getGalleryFolder($image->galleryID);
 		}
