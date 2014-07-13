@@ -41,7 +41,7 @@ class OnePagePresenter extends BasePresenter {
 	private $userID;
 
 	public function actionDefault() {
-		$this->dataForStream = $this->streamDao->getTable()->order("id DESC");
+		$this->dataForStream = $this->streamDao->getAll("DESC");
 		$this->count = $this->dataForStream->count("id");
 		$this->userID = $this->getUser()->getId();
 	}

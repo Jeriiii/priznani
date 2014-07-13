@@ -57,18 +57,18 @@ abstract class MultiChoiceControl extends BaseControl
 		if (is_scalar($values) || $values === NULL) {
 			$values = (array) $values;
 		} elseif (!is_array($values)) {
-			throw new Nette\InvalidArgumentException('Value must be array or NULL, ' . gettype($values) . " given in field '{$this->name}'.");
+			throw new Nette\InvalidArgumentException(sprintf("Value must be array or NULL, %s given in field '%s'.", gettype($values), $this->name));
 		}
 		$flip = array();
 		foreach ($values as $value) {
 			if (!is_scalar($value) && !method_exists($value, '__toString')) {
-				throw new Nette\InvalidArgumentException('Values must be scalar, ' . gettype($value) . " given in field '{$this->name}'.");
+				throw new Nette\InvalidArgumentException(sprintf("Values must be scalar, %s given in field '%s'.", gettype($value), $this->name));
 			}
 			$flip[(string) $value] = TRUE;
 		}
 		$values = array_keys($flip);
 		if ($diff = array_diff($values, array_keys($this->items))) {
-			$range = Nette\Utils\Strings::truncate(implode(', ', array_map(function($s) { return var_export($s, TRUE); }, $this->items)), 70, '...');
+			$range = Nette\Utils\Strings::truncate(implode(', ', array_map(function($s) { return var_export($s, TRUE); }, array_keys($this->items))), 70, '...');
 			$vals = (count($diff) > 1 ? 's' : '') . " '" . implode("', '", $diff) . "'";
 			throw new Nette\InvalidArgumentException("Value$vals are out of allowed range [$range] in field '{$this->name}'.");
 		}

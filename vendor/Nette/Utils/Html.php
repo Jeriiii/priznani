@@ -84,7 +84,7 @@ class Html extends Nette\Object implements \ArrayAccess, \Countable, \IteratorAg
 	public function setName($name, $isEmpty = NULL)
 	{
 		if ($name !== NULL && !is_string($name)) {
-			throw new Nette\InvalidArgumentException("Name must be string or NULL, " . gettype($name) ." given.");
+			throw new Nette\InvalidArgumentException(sprintf('Name must be string or NULL, %s given.', gettype($name)));
 		}
 
 		$this->name = $name;
@@ -237,7 +237,7 @@ class Html extends Nette\Object implements \ArrayAccess, \Countable, \IteratorAg
 	public function setHtml($html)
 	{
 		if (is_array($html)) {
-			throw new Nette\InvalidArgumentException("Textual content must be a scalar, " . gettype($html) ." given.");
+			throw new Nette\InvalidArgumentException(sprintf('Textual content must be a scalar, %s given.', gettype($html)));
 		}
 		$this->removeChildren();
 		$this->children[] = (string) $html;
@@ -331,7 +331,7 @@ class Html extends Nette\Object implements \ArrayAccess, \Countable, \IteratorAg
 			}
 
 		} else {
-			throw new Nette\InvalidArgumentException("Child node must be scalar or Html object, " . (is_object($child) ? get_class($child) : gettype($child)) ." given.");
+			throw new Nette\InvalidArgumentException(sprintf('Child node must be scalar or Html object, %s given.', is_object($child) ? get_class($child) : gettype($child)));
 		}
 
 		return $this;
@@ -525,7 +525,10 @@ class Html extends Nette\Object implements \ArrayAccess, \Countable, \IteratorAg
 					foreach ($value as $k => $v) {
 						if ($v !== NULL && $v !== FALSE) {
 							$q = strpos($v, '"') === FALSE ? '"' : "'";
-							$s .= ' data-' . $k . '=' . $q . str_replace(array('&', $q), array('&amp;', $q === '"' ? '&quot;' : '&#39;'), $v) . $q;
+							$s .= ' data-' . $k . '='
+								. $q . str_replace(array('&', $q), array('&amp;', $q === '"' ? '&quot;' : '&#39;'), $v)
+								. (strpos($v, '`') !== FALSE && strpbrk($v, ' <>"\'') === FALSE ? ' ' : '')
+								. $q;
 						}
 					}
 					continue;
@@ -549,7 +552,10 @@ class Html extends Nette\Object implements \ArrayAccess, \Countable, \IteratorAg
 			}
 
 			$q = strpos($value, '"') === FALSE ? '"' : "'";
-			$s .= ' ' . $key . '=' . $q . str_replace(array('&', $q), array('&amp;', $q === '"' ? '&quot;' : '&#39;'), $value) . $q;
+			$s .= ' ' . $key . '='
+				. $q . str_replace(array('&', $q), array('&amp;', $q === '"' ? '&quot;' : '&#39;'), $value)
+				. (strpos($value, '`') !== FALSE && strpbrk($value, ' <>"\'') === FALSE ? ' ' : '')
+				. $q;
 		}
 
 		$s = str_replace('@', '&#64;', $s);
