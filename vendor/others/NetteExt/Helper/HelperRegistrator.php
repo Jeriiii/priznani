@@ -40,6 +40,9 @@ class HelperRegistrator {
 		$template->registerHelper(GetImgPathHelper::NAME_SCRN, function($image, $gallType = GetImgPathHelper::TYPE_USER_GALLERY) {
 			return $this->getImgPathHelper->getImgScrnPath($image, $gallType);
 		});
+		$template->registerHelper(GetImgPathHelper::NAME_STREAM, function($streamItem, $gallType = GetImgPathHelper::TYPE_USER_GALLERY) {
+			return $this->getImgPathHelper->getStreamImgPath($streamItem, $gallType);
+		});
 	}
 
 }
