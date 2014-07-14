@@ -104,6 +104,7 @@ class FeatureContext extends MinkContext {
 	private function setBrowserCookie($name, $value) {
 		$minkSession = $this->getSession(); //session of Mink browser
 		$minkSession->setCookie($name, $value);
+		$minkSession->reload();
 	}
 
 	//STEP DEFINITIONS
