@@ -37,9 +37,9 @@ Feature: Homepage.
 		Given I am on "/"
 		Given I am signed in as "terka1612@seznam.cz"
 		Given I am on "/admin.forms/forms"
-		Then I should see "Přejít na:" 
-		And I should see "OBJEDNÁVKY"
-		#BUT I SHOULD NOT!!!
+		Then I should not see "Přejít na:" 
+		And I should not see "OBJEDNÁVKY"
+
 	Scenario:
 		Given I am on "/"
 		Given I am signed in as "p.kukral@seznam.cz"
