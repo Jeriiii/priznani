@@ -86,7 +86,7 @@ class UserDao extends UserBaseDao {
 	 */
 	public function findByConfirm($confirmCode) {
 		$sel = $this->getTable();
-		$sel->where(COLUMN_CONFIRMED, $confirmCode);
+		$sel->where(self::COLUMN_CONFIRMED, $confirmCode);
 		return $sel->fetch();
 	}
 
