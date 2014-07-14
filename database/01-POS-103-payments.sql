@@ -1,3 +1,4 @@
+/* Vytvoření tabulky payments pro přehled plateb uživatelů. */
 CREATE TABLE `payments` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`userID` INT(11) UNSIGNED NOT NULL DEFAULT '0',
