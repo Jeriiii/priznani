@@ -24,7 +24,8 @@ class SignInForm extends BaseBootstrapForm {
 		$this->addPassword('password', 'Heslo:', 30, 200)
 			->addRule(Form::FILLED, "Zadejte heslo");
 
-		$this->addCheckbox('persistent', 'Pamatovat si mě na tomto počítači', 30, 200);
+		$this->addCheckbox('persistent', 'Pamatovat si mě na tomto počítači', 30, 200)
+			->setDefaultValue(TRUE);
 
 		$this->addSubmit('login', 'PŘIHLÁSIT SE')
 			->setAttribute('class', 'btn-main medium');

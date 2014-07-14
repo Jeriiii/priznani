@@ -51,7 +51,6 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 	 */
 	public $confessionDao;
 	public $dataForStream;
-	private $count = 0;
 
 	/**
 	 * metoda nastavuje hodnoty predavanych parametru predtim, nez se sablona s uzivatelskym streamem vykresli.
@@ -63,7 +62,6 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 			$id = $this->getUser()->getId();
 		}
 		$this->dataForStream = $this->streamDao->getUserStreamPosts($id);
-		$this->count = $this->dataForStream->count("id");
 	}
 
 	/**
@@ -76,11 +74,11 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 		}
 
 		$this->userID = $id;
-		$user = $this->getUserBaseInfo($id);
+		$user = $this->userDao->find($id);
 
 		$this->template->userData = $user;
 		$this->template->userID = $id;
-		$this->template->count = $this->count;
+		$this->template->count = $this->dataForStream->count("id");
 	}
 
 	/**
@@ -91,7 +89,7 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 		if (empty($id)) {
 			$id = $this->getUser()->getId();
 		}
-		$user = $this->getUserBaseInfo($id);
+		$user = $this->userDao->find($id);
 		$this->userID = $id;
 
 		$this->template->userData = $user;
@@ -110,7 +108,7 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 		$this->userID = $id;
 		$this->template->userID = $id;
 
-		$user = $this->getUserBaseInfo($id);
+		$user = $this->userDao->find($id);
 		$userProperty = $this->userDao->findProperties($id);
 
 		$this->template->userData = $user;
@@ -118,17 +116,8 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 
 		$property = $userProperty->user_property;
 		if ($property == 'couple' || $property == 'coupleMan' || $property == 'coupleWoman') {
-			$this->template->userPartnerProfile = $this->coupleDao->getPartnerData($userProperty->id_couple);
+			$this->template->userPartnerProfile = $this->coupleDao->getPartnerData($user->coupleID);
 		}
-	}
-
-	/**
-	 * vrati zakladni uzivatelske informace z tabulky users jako napr. user_name nebo email apod.
-	 * @param type $id - user id
-	 * @return type
-	 */
-	private function getUserBaseInfo($id) {
-		return $this->userDao->find($id);
 	}
 
 	/**
