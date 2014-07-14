@@ -66,10 +66,7 @@ class UserManager {
 	 * @return string id of created session
 	 */
 	public function saveUserIntoSession($user, $roles) {
-		$identity = new \Nette\Security\Identity($user->id, $roles, array(
-			'user_name' => 'tester',
-			'email' => 'tester@test.cz'
-		));
+		$identity = new \Nette\Security\Identity($user->id, $roles, $user->toArray());
 		$this->session->start();
 		$userStorage = new UserStorage($this->session);
 		$userStorage->setIdentity($identity);

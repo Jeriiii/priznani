@@ -27,5 +27,30 @@ Feature: Homepage.
 	Scenario: Testing signed as
 		Given I am on "/"
 		Given I am signed in as "terka1612@seznam.cz"
-		Then I look on the page
+		Then I should see "Terka"
+
+	Scenario: Testing signed as
+		Given I am on "/"
+		Then I should not see "Terka"
+
+	Scenario:
+		Given I am on "/"
+		Given I am signed in as "terka1612@seznam.cz"
+		Given I am on "/admin.forms/forms"
+		Then I should see "Přejít na:" 
+		And I should see "OBJEDNÁVKY"
+		#BUT I SHOULD NOT!!!
+	Scenario:
+		Given I am on "/"
+		Given I am signed in as "p.kukral@seznam.cz"
+		Given I am on "/admin.forms/forms"
+		Then I should see "Přejít na:"
+		And I should see "OBJEDNÁVKY"
+
+	Scenario:
+		Given I am on "/"
+		And I am signed in as "p.kukral@seznam.cz"
+		And I am on "/profil.galleries/"
+		Then I should see "Galerie uživatele Jerry"
+
 		
