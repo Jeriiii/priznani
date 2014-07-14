@@ -13,7 +13,6 @@ require __DIR__ . '/../vendor/Nette/loader.php';
 
 $configurator = new Nette\Configurator;
 
-//$configurator->setDebugMode(TRUE);  // debug mode MUST NOT be enabled on production server
 // Enable Nette Debugger for error visualisation & logging
 //$configurator->setProductionMode($configurator::AUTO);
 $configurator->enableDebugger(__DIR__ . '/../log');
@@ -52,21 +51,6 @@ $router[] = new Route('//[www.]priznanizparby.cz/[/<presenter>/<url>]', array(
 	'presenter' => 'Page',
 	'action' => 'default',
 	'url' => 'priznanizparby'
-	));
-$router[] = new Route('//priznaniosexu.cz/seznamka[/<presenter>/<url>]', array(
-	'presenter' => 'Page',
-	'action' => 'default',
-	'url' => 'seznamka'
-	));
-$router[] = new Route('//priznaniosexu.cz/[/<presenter>/<url>]', array(
-	'presenter' => 'Page',
-	'action' => 'default',
-	'url' => 'priznani-o-sexu'
-	));
-$router[] = new Route('//priznaniosexu.cz/poradna/[/<presenter>/<url>]', array(
-	'presenter' => 'Page',
-	'action' => 'default',
-	'url' => 'poradna-o-sexu'
 	));
 $router[] = new Route('//priznaniosexu.cz/priznani/<id>', array(
 	'presenter' => 'Page',
