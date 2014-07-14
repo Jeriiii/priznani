@@ -100,12 +100,14 @@ class UserDao extends UserBaseDao {
 
 	/**
 	 * Vrátí část nepotvrzených uživatelů podle požadavků paginatoru
-	 * @param type $limit - počet uživatelů
-	 * @param type $offset - úsek
-	 * @return type
+	 * @param type int $limit Počet uživatelů
+	 * @param type int $offset Velikost množiny pro výběr
+	 * @return Nette\Database\Table\Selection
 	 */
-	public function getInRoleUnconfirmedForPaginator($limit, $offset) {
-		return $this->getUsersByRole(Authorizator::ROLE_UNCONFIRMED_USER)->limit($limit, $offset);
+	public function getInRoleUnconfirmedLimit($limit, $offset = 0) {
+		$sel = $this->getUsersByRole(Authorizator::ROLE_UNCONFIRMED_USER);
+		$sel->limit($limit, $offset);
+		return $sel;
 	}
 
 	/**
@@ -118,12 +120,14 @@ class UserDao extends UserBaseDao {
 
 	/**
 	 * Vrátí část uživatelů s rolí user podle požadavků paginatoru
-	 * @param type $limit - počet uživatelů
-	 * @param type $offset - úsek
-	 * @return type
+	 * @param type int $limit Počet uživatelů
+	 * @param type int $offset Velikost množiny pro výběr
+	 * @return Nette\Database\Table\Selection
 	 */
-	public function getInRoleUsersForPaginator($limit, $offset) {
-		return $this->getUsersByRole(Authorizator::ROLE_USER)->limit($limit, $offset);
+	public function getInRoleUsersLimit($limit, $offset = 0) {
+		$sel = $this->getUsersByRole(Authorizator::ROLE_USER);
+		$sel->limit($limit, $offset);
+		return $sel;
 	}
 
 	/**
@@ -136,12 +140,14 @@ class UserDao extends UserBaseDao {
 
 	/**
 	 * Vrátí část uživatelů s rolí admin podle požadavků paginatoru
-	 * @param type $limit - počet uživatelů
-	 * @param type $offset - úsek
-	 * @return type
+	 * @param type int $limit Počet uživatelů
+	 * @param type int $offset Velikost množiny pro výběr
+	 * @return Nette\Database\Table\Selection
 	 */
-	public function getInRoleAdminForPaginator($limit, $offset) {
-		return $this->getUsersByRole(Authorizator::ROLE_ADMIN)->limit($limit, $offset);
+	public function getInRoleAdminLimit($limit, $offset = 0) {
+		$sel = $this->getUsersByRole(Authorizator::ROLE_ADMIN);
+		$sel->limit($limit, $offset);
+		return $sel;
 	}
 
 	/**
@@ -154,12 +160,14 @@ class UserDao extends UserBaseDao {
 
 	/**
 	 * Vrátí část uživatelů s rolí superadmin podle požadavků paginatoru
-	 * @param type $limit - počet uživatelů
-	 * @param type $offset - úsek
-	 * @return type
+	 * @param type int $limit Počet uživatelů
+	 * @param type int $offset Velikost množiny pro výběr
+	 * @return Nette\Database\Table\Selection
 	 */
-	public function getInRoleSuperadminForPaginator($limit, $offset) {
-		return $this->getUsersByRole(Authorizator::ROLE_SUPERADMIN)->limit($limit, $offset);
+	public function getInRoleSuperadminLimit($limit, $offset = 0) {
+		$sel = $this->getUsersByRole(Authorizator::ROLE_SUPERADMIN);
+		$sel->limit($limit, $offset);
+		return $sel;
 	}
 
 	/**
@@ -209,6 +217,14 @@ class UserDao extends UserBaseDao {
 		$sel->update(array(
 			self::COLUMN_ADMIN_SCORE => new SqlLiteral(self::COLUMN_ADMIN_SCORE . ' + ' . $value)
 		));
+	}
+
+	/**
+	 * Vrátí celkový počet userů
+	 * @return type
+	 */
+	public function getTotalCount() {
+		return $this->getTable()->count();
 	}
 
 	/*	 * ************************** UPDATE *************************** */
