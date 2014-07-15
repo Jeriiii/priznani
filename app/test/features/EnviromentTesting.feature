@@ -1,15 +1,23 @@
-Feature: Homepage.
-  User is able to send confession.
+Feature: Enviroment.
+  User is able to do various things.
 
-	Scenario: User see confession form
+	Scenario: User see homepage
 		Given I am on "/"
 		Then I should see "přiznání"
 
-	Scenario: User see confession form
+	Scenario: User see erotic games
 		Given I am on "/"
 		Then I should see "přiznání"
 		And I follow "Erotické hry"
 		Then I should see "fantazie"
+
+	Scenario: Admin has access to administration
+		Given I am on "/"
+		Given I am signed in as "p.kukral@seznam.cz"
+		Given I am on "/admin.forms/forms"
+		Then I should see "Přejít na:"
+		And I should see "OBJEDNÁVKY"
+
 
 	Scenario: Testing new feature
 		Given I am on "/eshop/game"
@@ -40,12 +48,7 @@ Feature: Homepage.
 		Then I should not see "Přejít na:" 
 		And I should not see "OBJEDNÁVKY"
 
-	Scenario:
-		Given I am on "/"
-		Given I am signed in as "p.kukral@seznam.cz"
-		Given I am on "/admin.forms/forms"
-		Then I should see "Přejít na:"
-		And I should see "OBJEDNÁVKY"
+
 
 	Scenario:
 		Given I am on "/"
