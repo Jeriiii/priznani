@@ -10,6 +10,6 @@
  */
 use Nette\Application\UI\Form as Frm;
 
-class EshopPresenter extends BasePresenter {
+class PaymentPresenter extends BasePresenter {
 
 }
