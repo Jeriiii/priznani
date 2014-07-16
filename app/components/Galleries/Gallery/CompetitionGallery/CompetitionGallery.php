@@ -54,20 +54,22 @@ class CompetitionGallery extends BaseGallery {
 		$image = $this->imageDao->find($imageID);
 		$this->galleryDao->updateLastImage($image->galleryID, $image->id);
 
-		$this->streamDao->aliveCompGallery($image->galleryID);
+		if ($image->gallery->sexmode && $image->gallery->current) {
+		$this->streamDao-> aliveCompGallery($image->galleryID);
+		}
 
 		$this->setImage($imageID, $this->imageDao);
-	}
+		}
 
-	/**
-	 * ostranění obrázku
-	 * @param type $imageID ID obrázku, který se má odstranit
-	 */
-	public function handleRemoveImage($imageID) {
-		$image = $this->imageDao->find($imageID);
+		/**
+		 * ostranění obrázku
+		 * @param type $imageID ID obrázku, který se má odstranit
+		 */
+		public function handleRemoveImage($imageID) {
+			$image = $this->imageDao->find($imageID);
 
-		$folderPath = WWW_DIR . "/images/galleries/" . $image->galleryID . "/";
-		$imageFileName = $image->id . "." . $image->suffix;
+		$folderPath = WWW_DIR. "/images/galleries/" . $image->galleryID . "/";
+			$imageFileName  = $image->id . "." . $image->suffix;
 
 		parent::removeImage($image, $folderPath, $imageFileName);
 		$image->delete();
