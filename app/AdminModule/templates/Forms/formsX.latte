@@ -54,7 +54,7 @@
 					<td>
 						{if $form->mark == 0 || $form->mark == 2}<a class="btn btn-danger ajax-btn" n:href="markForm! id => $form->id, type => $type, show_mark => $show_mark, doit => 'mark'">vyřídit</a>
 						{elseif $form->mark == 1}<a class="btn btn-success ajax-btn" n:href="markForm! id => $form->id, type => $type, show_mark => $show_mark, doit => 'unmark'">označit jako nevyřízeno</a>
-						{else}<a class="btn btn-info ajax-btn" n:href="markForm! id => $form->id, type => $type, show_mark => $show_mark,doit => 'fbmark'">naplánovat</a>{/if}
+						{else}<a class="btn btn-info ajax-btn" n:href="markForm! id => $form->id, type => $type, show_mark => $show_mark,doit => 'mark'">naplánovat</a>{/if}
 					</td>
 					<td>
 						<a class="btn ajax-btn" n:href="markForm! id => $form->id, type => $type, show_mark => $show_mark, doit => 'duplicate'">totožné</a>
