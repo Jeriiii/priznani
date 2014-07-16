@@ -15,12 +15,11 @@
 
 {block content}
 
+	{include 'menu.latte'}
+
 	<h1 n:block="title">Profil uživatele {$userData->user_name}</h1>
 
 	<br />
-	<h2>Fotky</h2>
-	
-        {control myUserGalleries "listAll"}
 	
 	<h2>Editace údajů</h2>
 	<br />
