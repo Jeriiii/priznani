@@ -5,8 +5,8 @@ values	(3, NULL, NULL, 1, 2650, 'user', DATE_ADD(CURRENT_TIMESTAMP(),INTERVAL 12
 			
 /* Vložení testovacích dat pro uživatele z tabulyk výše */			
 insert into users_properties
-values	(3, 'muž', 'sex', 'Oh bože, už budu.', 'Hledám zábavu a vzrušení.', 'free', 'hetero', '180', '5', 'abnormal', 'normal', 'sometimes', 'often', 'vš', 'b', 'black', 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0),
-			(4, 'žena', 'sex', 'To je ale macek.', 'Moc ráda bych nějakýho svalouše co to umí v posteli.', 'free', 'hetero', '165', NULL, NULL, NULL, 'often', 'no', 'sos', 'c', 'blond', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+values	(3, 'man', 'couple', 'Oh bože, už budu.', 'Hledám zábavu a vzrušení.', 'free', 'hetero', '180', '5', 'abnormal', 'normal', 'sometimes', 'often', 'vš', 'b', 'black', 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0),
+		(4, 'woman', 'man', 'To je ale macek.', 'Moc ráda bych nějakýho svalouše co to umí v posteli.', 'free', 'hetero', '160', NULL, NULL, NULL, 'often', 'no', 'sos', 'c', 'blond', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
 /* Provázání uživatelů s jejich user_properties */			
 update users SET propertyID = 3 WHERE id = 3;
