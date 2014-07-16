@@ -54,7 +54,9 @@ class CompetitionGallery extends BaseGallery {
 		$image = $this->imageDao->find($imageID);
 		$this->galleryDao->updateLastImage($image->galleryID, $image->id);
 
-		$this->streamDao->aliveCompGallery($image->galleryID);
+		if ($image->gallery->sexmode && $image->gallery->current) {
+			$this->streamDao->aliveCompGallery($image->galleryID);
+		}
 
 		$this->setImage($imageID, $this->imageDao);
 	}
