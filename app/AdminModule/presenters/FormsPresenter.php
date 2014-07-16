@@ -290,17 +290,34 @@ class FormsPresenter extends AdminSpacePresenter {
 	 * @param int $addMinutes Za kolik minut od posledního naplánovaného přiznání.
 	 */
 	private function scheduling($type, $confNewID, $addMinutes = 20) {
-		/* posledni naplanovane přiznání */
-		$confLast = $this->getDao($type)->getLastScheduledConfession();
+		$confNew = $this->getDao($type)->find($confNewID);
+		if ($confNew->was_on_fb == 0) {
+			/* naplánování přiznání a vložení do streamu */
 
-		$oldReleaseDate = $confLast->release_date;
+			/* posledni naplanovane přiznání */
+			$confLast = $this->getDao($type)->getLastScheduledConfession();
 
-		$newReleaseDate = $this->getReleaseDate($oldReleaseDate, $addMinutes);
+			$oldReleaseDate = $confLast->release_date;
 
-		/* naplánování */
-		$markProcessed = BaseConfessionDao::MARK_PROCESSED;
-		$this->getDao($type)->updateMarkDate($confNewID, $markProcessed, $newReleaseDate);
+			$newReleaseDate = $this->getReleaseDate($oldReleaseDate, $addMinutes);
 
+			/* naplánování */
+			$markProcessed = BaseConfessionDao::MARK_PROCESSED;
+			$this->getDao($type)->updateMarkDate($confNewID, $markProcessed, $newReleaseDate);
+
+			$this->addToStream($type, $confNewID);
+		} else {
+			/* jen přehození, přiznání již bylo naplánováno a hozeno do streamu dříve */
+			$this->getDao($type)->updateMark($confNewID, $type);
+		}
+	}
+
+	/**
+	 * Vloží přiznání do streamu.
+	 * @param int $type Typ přiznání sex|poradna|pařba.
+	 * @param int $confNewID ID přiznání, co se má naplánovat.
+	 */
+	public function addToStream($type, $confNewID) {
 		if ($type == 1) {
 			/* vydání přiznání na streamu */
 			$confession = $this->confessionDao->find($confNewID);
