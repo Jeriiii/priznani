@@ -67,8 +67,6 @@ class FeatureContext extends MinkContext {
 	public static function setupFeature() {
 		$databaseManager = DatabaseManager::getInstance();
 		$databaseManager->featureStartScripts(); //usage of end sql scripts
-		$mailManager = MailManager::getInstance();
-		$mailManager->clearEmails(); //clearing email folder
 	}
 
 	/**
@@ -86,6 +84,15 @@ class FeatureContext extends MinkContext {
 	public function sendTestInfo() {
 		$this->getSession()->setRequestHeader('X-Testing', '1');
 		$this->getSession()->setRequestHeader('X-Requested-With', 'Behat');
+	}
+
+	/**
+	 * Clears emails
+	 * @BeforeScenario
+	 */
+	public function clearEmails() {
+		$mailManager = MailManager::getInstance();
+		$mailManager->clearEmails(); //clearing email folder
 	}
 
 	/**
