@@ -14,24 +14,24 @@ class EditPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $userDao;
-        
-        /**
+
+	/**
 	 * @var \POS\Model\CoupleDao
 	 * @inject
 	 */
 	public $coupleDao;
-        
-        /**
+
+	/**
 	 * @var \POS\Model\UserPropertyDao
 	 * @inject
 	 */
-        public $userPropertyDao;
-        
-        /**
+	public $userPropertyDao;
+
+	/**
 	 * @var \POS\Model\UserGalleryDao
 	 * @inject
 	 */
-        public $userGalleryDao;
+	public $userGalleryDao;
 
 	public function startup() {
 		parent::startup();
@@ -86,9 +86,9 @@ class EditPresenter extends ProfilBasePresenter {
 	protected function createComponentInterestedInForm($name) {
 		return new Frm\InterestedInForm($this->userPropertyDao, $this->userDao, $this, $name);
 	}
-        
-        protected function createComponentMyUserGalleries($name) {
-                return new MyUserGalleries($this->userDao, $this->userGalleryDao, $this, $name);
-        }
+
+	public function createComponentMyUserGalleries() {
+		return new MyUserGalleries($this->userDao, $this->userGalleryDao);
+	}
 
 }
