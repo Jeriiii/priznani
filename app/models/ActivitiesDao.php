@@ -4,7 +4,7 @@
  * @copyright Copyright (c) 2014 Kukral COMPANY s.r.o.
  */
 
-namespace App\Model;
+namespace POS\Model;
 
 /**
  * Aktivity ActivitiesDao
@@ -12,7 +12,7 @@ namespace App\Model;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class TemplateDao extends AbstractDao {
+class ActivitiesDao extends AbstractDao {
 
 	/** @var Nette\Database */
 	protected $database;
