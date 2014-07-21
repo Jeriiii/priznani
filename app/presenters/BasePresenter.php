@@ -31,6 +31,12 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	/* proměnné pro js překlad */
 	protected $jsVariables = array();
 
+	/**
+	 * @var \POS\Model\ActivitiesDao
+	 * @inject
+	 */
+	public $activitiesDao;
+
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
@@ -179,6 +185,11 @@ abstract class BasePresenter extends BaseProjectPresenter {
 				$nav->setCurrentNode($article);
 			}
 		}
+	}
+
+	protected function createComponentActivities() {
+		$activities = new Activities($this->getUser()->id, $this->activitiesDao);
+		return $activities;
 	}
 
 	/**

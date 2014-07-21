@@ -1,0 +1,11 @@
+{block content}
+	{foreach $activities as $item}
+		{if $item->statusID != NULL}
+				{$activityObj->getUserStatusAction($item->event_creator->user_name, $item->event_type, $item->status->text)}
+		{elseif $item->imageID != NULL}		
+				{$activityObj->getUserImageAction($item->event_creator->user_name, $item->event_type, $item->image)}
+		{else}
+				{$activityObj->getUserAction($item->event_creator->user_name, $item->event_type, $item->event_type)}
+		{/if}
+	{/foreach}
+{/block}
