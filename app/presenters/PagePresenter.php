@@ -364,7 +364,7 @@ class PagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentPartyConfessionForm($name) {
-		return new Frm\PartyConfessionForm($this, $name);
+		return new Frm\PartyConfessionForm($this->partyDao, $this, $name);
 	}
 
 }
