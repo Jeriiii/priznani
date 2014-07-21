@@ -16,3 +16,17 @@
     $("body").click(function(a){ 
         !$(a.target).parents().is("#usermenu")&&isvisible&&droplink.trigger('click');
     });
+	
+	//////////////AKTIVITY STREAM/////////////////////////
+	// Při kliknutí zobrází nebo zavře okno aktivit
+	$('#activities').click(function(e) {
+		e.stopPropagation();
+		$('#activities_droplink').fadeToggle();
+		return false;
+	});
+
+	// Pokud se klikne mimo okno aktivit, zavře ho
+	$(document).click(function() {
+		$('#activities_droplink').fadeOut();
+	});
+	
