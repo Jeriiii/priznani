@@ -82,7 +82,7 @@
 {block orders}
 <nav id="orders">
 	<a id="orderlink">řadit podle: <b>{$order}</b></a>
-	<div class="stylish-container shadow" id="ordermenu" style="display:none">{widget orders}</div>
+	<div class="stylish-container shadow" id="ordermenu" style="display:none">{control orders}</div>
 </nav>
 {/block}				
 
@@ -107,23 +107,23 @@
 		<div id="left_confession">
 		{if $advicemode}
 		<h2>Poradna</h2>
-			{form adviceForm class=>'form-container'}
+			{*form adviceForm class=>'form-container'}
 				{input note class=>'form-field', placeholder=>'Otázka k sexu...'}
 				<div class="submit-container">
 					{input submit class => 'submit-button'}
 				</div>
 				{label nick class => 'hidden' /}
 				{input nick class => 'hidden'}
-			{/form}
+			{/form*}
 		{elseif $sexmode}
-			{form form1Form class=>'form-container'}
+			{*form form1Form class=>'form-container'}
 				{input note class=>'form-field', placeholder=>'Přiznání o sexu...'}
 				<div class="submit-container">
 					{input submit class => 'submit-button'}
 				</div>
 				{label nick class => 'hidden' /}
 				{input nick class => 'hidden'}
-			{/form}
+			{/form*}
 		{else}
 			{form partyConfessionForm class=>'form-container'}
 				{input note class=>'form-field', placeholder=>'Přiznání z pařby...'}
