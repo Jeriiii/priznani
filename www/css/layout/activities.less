@@ -1,0 +1,30 @@
+@left: 52px;
+@top: 46px;
+
+#activities {
+	display:block;
+	position:relative;
+	float:right;
+	height: 52px;
+	width:52px;
+	margin-right: 46px;
+	background:url('../../images/layout/arrow_dark.png') @left / 2 @top / 2;
+	background-repeat: no-repeat;
+}
+
+#activities_droplink {
+	display:none;
+	position: absolute;
+	top: 58px;
+	right:5px;
+	width:200px;
+	height:150px;
+	overflow-y: scroll;
+	background-color: #c0c0c0;
+	z-index:1000;
+	.activity_item {
+		border-bottom: 1px solid black;
+		padding:5px;
+		font-size: 12px;
+	}
+}
