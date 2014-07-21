@@ -130,7 +130,6 @@
 						{control userMenu}
                         <div class="clear"></div>
                  </div>
-
 		{if $partymode}
 		    {cache}
 				<a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
@@ -148,7 +147,9 @@
 		{*block nextAdmission}{/block*}
 		{block orders}{/block}
 		{block nextAdmission}{/block}
-
+<div id="user_activities">
+			{control activities}
+		</div>
 		<div class="clear"></div>
 
 	    </header>

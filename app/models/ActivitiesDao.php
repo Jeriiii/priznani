@@ -86,4 +86,15 @@ class ActivitiesDao extends AbstractDao {
 		return $activity;
 	}
 
+	/**
+	 * Vrátí aktivity pro jednoho usera.
+	 * @param type int $userID
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getActivitiesByUserId($userID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_EVENT_OWNER_ID, $userID);
+		return $sel->order('id DESC');
+	}
+
 }
