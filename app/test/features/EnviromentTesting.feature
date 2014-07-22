@@ -12,7 +12,6 @@ Feature: Enviroment.
 		Then I should see "fantazie"
 
 	Scenario: Admin has access to administration
-		Given I am on "/"
 		Given I am signed in as "p.kukral@seznam.cz"
 		Given I am on "/admin.forms/forms"
 		Then I should see "Přejít na:"
