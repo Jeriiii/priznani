@@ -45,7 +45,6 @@ class FeatureContext extends MinkContext {
 	 */
 	public function __construct() {
 		$this->context = $GLOBALS['container'];
-		//$this->context->callInjects($this);//lepsi zpusob s DI - podivat se na to spolecne
 		$this->userManager = $this->context->userManager;
 		$this->databaseManager = $this->context->databaseManager;
 		$this->screenshotManager = $this->context->screenshotManager;
@@ -105,8 +104,8 @@ class FeatureContext extends MinkContext {
 
 	/**
 	 * Sets cookie of virtual browser
-	 * @param String $name
-	 * @param array $value
+	 * @param String $name name of cookie
+	 * @param array $value value of cookie
 	 */
 	private function setBrowserCookie($name, $value) {
 		$minkSession = $this->getSession(); //session of Mink browser
@@ -128,8 +127,9 @@ class FeatureContext extends MinkContext {
 	 * I am logged user
 	 * @Given /^I am signed in as "([^"]*)"$/
 	 */
-	public function iAmSignedInAs($username) {
-		$this->userManager->loginWithEmail($username);
+	public function iAmSignedInAs($email) {
+		$this->iAmOnHomepage();
+		$this->userManager->loginWithEmail($email);
 		$session = $this->userManager->getSession();
 		$sessionId = $this->userManager->getSessionId();
 		$this->setBrowserCookie($session->getName(), $sessionId);

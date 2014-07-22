@@ -61,8 +61,8 @@ class UserManager {
 
 	/**
 	 * Saves user into session (he is "logged in")
-	 * @param \Nette\Database\Table\IRow $user
-	 * @param array $roles
+	 * @param \Nette\Database\Table\IRow $user user's row in database
+	 * @param array $roles roles of the user
 	 * @return string id of created session
 	 */
 	public function saveUserIntoSession($user, $roles) {

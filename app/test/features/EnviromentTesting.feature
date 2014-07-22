@@ -12,7 +12,6 @@ Feature: Enviroment.
 		Then I should see "fantazie"
 
 	Scenario: Admin has access to administration
-		Given I am on "/"
 		Given I am signed in as "p.kukral@seznam.cz"
 		Given I am on "/admin.forms/forms"
 		Then I should see "Přejít na:"
@@ -24,17 +23,8 @@ Feature: Enviroment.
 		Then I should see "fantazie"
 		And It looks great
 
-	Scenario: Testing sign in
-		Given I am on "/sign/in"
-		And I fill in "test@test.cz" for "email"
-		And I fill in "hesloheslo" for "password"
-		And I check "persistent"
-		And I press "login"
-		Then I should see "test"
-
 	Scenario: Testing signed as
-		Given I am on "/"
-		Given I am signed in as "terka1612@seznam.cz"
+		Given I am signed in as "terka1611@seznam.cz"
 		Then I should see "Terka"
 
 	Scenario: Testing signed as
@@ -42,8 +32,7 @@ Feature: Enviroment.
 		Then I should not see "Terka"
 
 	Scenario:
-		Given I am on "/"
-		Given I am signed in as "terka1612@seznam.cz"
+		Given I am signed in as "terka1611@seznam.cz"
 		Given I am on "/admin.forms/forms"
 		Then I should not see "Přejít na:" 
 		And I should not see "OBJEDNÁVKY"
@@ -51,7 +40,6 @@ Feature: Enviroment.
 
 
 	Scenario:
-		Given I am on "/"
 		And I am signed in as "p.kukral@seznam.cz"
 		And I am on "/profil.galleries/"
 		Then I should see "Galerie uživatele Jerry"
