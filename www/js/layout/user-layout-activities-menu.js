@@ -18,15 +18,33 @@
     });
 	
 	//////////////AKTIVITY STREAM/////////////////////////
-	// Při kliknutí zobrází nebo zavře okno aktivit
-	$('#activities').click(function(e) {
-		e.stopPropagation();
-		$('#activities_droplink').fadeToggle();
-		return false;
+	// div, který překreje tlačítko při ukázání aktivit, a který pak aktivity zavře
+	var close='<div class="closer"></div>';
+	
+	// Při kliknutí zobrází okno aktivit a překreje se divem pro zavření
+	$('.activities_btn').click(function() {
+			$('#activities_droplink').fadeIn();
+			$("a.activities_btn").before(close);
 	});
 
-	// Pokud se klikne mimo okno aktivit, zavře ho
+	//Pokud se klikne mimo okno aktivit, zavře ho a odstraní zavíraci div
 	$(document).click(function() {
 		$('#activities_droplink').fadeOut();
+		$('#activities .closer').remove();
 	});
 	
+	//Pokud se klikne na tlačítko překryté zavíracím divem, zavře aktivity a smaže zavírací div
+	$('.closer').click(function() {
+		$('#activities_droplink').fadeOut();
+		$('#activities .closer').remove();
+	});
+	
+	//Při ajaxovém načítání ukáže spinner
+	var $loading = $('#loadingDiv');
+	$(document)
+	  .ajaxStart(function () {
+		$loading.show();
+	  })
+	  .ajaxStop(function () {
+		$loading.hide();
+	  });
