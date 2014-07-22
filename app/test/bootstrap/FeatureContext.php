@@ -128,9 +128,9 @@ class FeatureContext extends MinkContext {
 	 * I am logged user
 	 * @Given /^I am signed in as "([^"]*)"$/
 	 */
-	public function iAmSignedInAs($username) {
+	public function iAmSignedInAs($email) {
 		$this->iAmOnHomepage();
-		$this->userManager->loginWithEmail($username);
+		$this->userManager->loginWithEmail($email);
 		$session = $this->userManager->getSession();
 		$sessionId = $this->userManager->getSessionId();
 		$this->setBrowserCookie($session->getName(), $sessionId);
