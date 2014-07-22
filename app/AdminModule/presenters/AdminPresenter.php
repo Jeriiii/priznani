@@ -32,11 +32,15 @@ class AdminPresenter extends AdminSpacePresenter {
 	}
 
 	public function renderAccounts() {
+		$unconfirmedPag = $this["unconfirmedPaginator"]->getPaginator();
+		$userPag = $this["userPaginator"]->getPaginator();
+		$adminPag = $this["adminPaginator"]->getPaginator();
+		$superadminPag = $this["superadminPaginator"]->getPaginator();
 
-		$this->template->unconfirmed_users = $this->userDao->getInRoleUnconfirmedLimit($this["unconfirmedPaginator"]->getPaginator()->itemsPerPage, $this["unconfirmedPaginator"]->getPaginator()->offset);
-		$this->template->users = $this->userDao->getInRoleUsersLimit($this["userPaginator"]->getPaginator()->itemsPerPage, $this["userPaginator"]->getPaginator()->offset);
-		$this->template->admins = $this->userDao->getInRoleAdminLimit($this["adminPaginator"]->getPaginator()->itemsPerPage, $this["adminPaginator"]->getPaginator()->offset);
-		$this->template->superadmins = $this->userDao->getInRoleSuperadminLimit($this["superadminPaginator"]->getPaginator()->itemsPerPage, $this["superadminPaginator"]->getPaginator()->offset);
+		$this->template->unconfirmed_users = $this->userDao->getInRoleUnconfirmedLimit($unconfirmedPag->itemsPerPage, $unconfirmedPag->offset);
+		$this->template->users = $this->userDao->getInRoleUsersLimit($userPag->itemsPerPage, $userPag->offset);
+		$this->template->admins = $this->userDao->getInRoleAdminLimit($adminPag->itemsPerPage, $adminPag->offset);
+		$this->template->superadmins = $this->userDao->getInRoleSuperadminLimit($superadminPag->itemsPerPage, $superadminPag->offset);
 		$this->template->totalCount = $this->userDao->getTotalCount();
 	}
 
