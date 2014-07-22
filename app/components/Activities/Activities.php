@@ -27,6 +27,11 @@ class Activities extends BaseProjectControl {
 	protected $userID;
 
 	/**
+	 * Indikuje otevřené/zavřené okno
+	 */
+	protected $load = FALSE;
+
+	/**
 	 *
 	 * @param int $userID Id uživatele, který vlastní aktivitu
 	 * @param \POS\Model\ActivitiesDao $activitiesDao
@@ -42,6 +47,7 @@ class Activities extends BaseProjectControl {
 	 */
 	public function render() {
 		$template = $this->template;
+		$template->load = $this->load;
 		$template->setFile(dirname(__FILE__) . '/activities.latte');
 		$template->activities = $this->getUserActivities($this->userID);
 
@@ -58,6 +64,14 @@ class Activities extends BaseProjectControl {
 	protected function getUserActivities($userID) {
 		$userActivities = $this->activitiesDao->getActivitiesByUserId($userID);
 		return $userActivities;
+	}
+
+	/**
+	 * Obsluha pro načtení aktivit
+	 */
+	public function handleLoadActivities() {
+		$this->load = TRUE;
+		$this->redrawControl();
 	}
 
 }

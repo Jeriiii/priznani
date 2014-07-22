@@ -130,11 +130,9 @@
 						{control userMenu}
                         <div class="clear"></div>
                  </div>
-						<div id="activities">
-							<div id="activities_droplink">
-								{control activities}
-							</div>
-						</div>
+				{if $user->isLoggedIn()}
+					{control activities}
+				{/if}
 		{if $partymode}
 		    {cache}
 				<a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
