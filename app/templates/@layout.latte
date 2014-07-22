@@ -61,7 +61,7 @@
 			<meta property="og:site_name" content="priznaniosexu.cz" />
 			<meta property="og:description" content="Stala se Vám v posteli nějaká zajímavá, vtipná či šokující příhoda, ale bojíte se to veřejně říct? Přiznejte se na http://priznaniosexu.cz/. Všechna přiznání jsou 100% ANONYMNÍ. " />
 			{/ifset}
-			{control css 'default.css', 'layout/layout.less', 'mobile/responsive-menu.less'}
+			{control cssLayout 'default.css', 'layout/layout.less', 'mobile/responsive-menu.less'}
 <!--			<link rel="stylesheet" href="{$basePath}/css/layout.css" type="text/css">
 			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">-->
 			<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
@@ -196,7 +196,7 @@
 			{if $fbToDatabase}
 				{control fbLikeAndCommentToDatabase}
 
-			{/if}                             
+			{/if}
 		{block foot}{/block}
 
 			<div class="clear"></div>

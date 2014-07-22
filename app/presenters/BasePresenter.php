@@ -260,7 +260,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
-	public function createComponentCssdual() {
+	public function createComponentCssLayout() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
 		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
 
