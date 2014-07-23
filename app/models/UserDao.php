@@ -42,8 +42,9 @@ class UserDao extends UserBaseDao {
 	 * @return bool|Database\Table\IRow
 	 */
 	public function findProperties($userID) {
+		$user = $this->find($userID);
 		$sel = $this->createSelection(UserPropertyDao::TABLE_NAME);
-		$sel->wherePrimary($userID);
+		$sel->wherePrimary($user->propertyID);
 		return $sel->fetch();
 	}
 
@@ -202,8 +203,25 @@ class UserDao extends UserBaseDao {
 		$baseData = $this->getBaseData($userProperty);
 		$other = $this->getOtherData($userProperty);
 		$sex = $this->getSex($userProperty);
+		$seek = $this->getWantToMeet($userProperty);
+		return $baseUserData + $baseData + $other + $sex + $seek;
+	}
 
-		return $baseUserData + $baseData + $other + $sex;
+	/**
+	 * Vrací zkrácené info o uživateli
+	 * @param int $userID ID uživatele
+	 * @return bool|Database\Table\IRow
+	 */
+	public function getUserShortInfo($userId) {
+		$userProperty = $this->findProperties($userId);
+		$userShortInfo = array(
+			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->user_property),
+			'Status' => UserBaseDao::getTranslateUserState($userProperty->marital_state),
+			'Věk' => $userProperty->age,
+			'Chtěl bych potkat' => UserBaseDao::getTranslateUserInterestedIn($userProperty->interested_in),
+			'První věta' => $userProperty->first_sentence,
+		);
+		return $userShortInfo;
 	}
 
 	/**

@@ -85,7 +85,7 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	protected function getBaseData($user) {
 		return array(
-//			'Věk' => $user->age,
+			'Věk' => $user->age,
 			'Výška' => UserBaseDao::getTranslateUserTallness($user->tallness),
 			'Typ těla' => UserBaseDao::getTranslateUserShape($user->shape),
 			'Kouřeni cigaret' => UserBaseDao::getTranslateUserHabit($user->smoke),
@@ -93,6 +93,35 @@ abstract class UserBaseDao extends AbstractDao {
 			'Vzdělání' => UserBaseDao::getTranslateUserGraduation($user->graduation),
 			'Status' => UserBaseDao::getTranslateUserState($user->marital_state),
 			'Sexuální orientace' => UserBaseDao::getTranslateUserOrientacion($user->orientation),
+		);
+	}
+
+	/*
+	 * vrací data o cilove skupine uzivatele
+	 */
+
+	protected function getWantToMeet($user) {
+		$seek = "";
+		if ($user->want_to_meet_men == 1) {
+			$seek += "muže ";
+		}
+		if ($user->want_to_meet_women == 1) {
+			$seek += "ženu ";
+		}
+		if ($user->want_to_meet_couple == 1) {
+			$seek += "pár ";
+		}
+		if ($user->want_to_meet_couple_men == 1) {
+			$seek += "mužský pár ";
+		}
+		if ($user->want_to_meet_couple_women == 1) {
+			$seek += "ženský pár ";
+		}
+		if ($user->want_to_meet_group == 1) {
+			$seek += "skupinu ";
+		}
+		return array(
+			'Hledám' => $seek,
 		);
 	}
 
@@ -176,6 +205,14 @@ abstract class UserBaseDao extends AbstractDao {
 	public static function getTranslateUserBraSize($braSize) {
 		$translate_bra_size = UserBaseDao::getUserBraSizeOption();
 		return $translate_bra_size[$braSize];
+	}
+
+	/**
+	 * vrací překlad user interested in - zájem uživatele
+	 */
+	public static function getTranslateUserInterestedIn($interestedIn) {
+		$translate_interested_in = UserBaseDao::getUserInterestInOption();
+		return $translate_interested_in[$interestedIn];
 	}
 
 	/*	 * ************* VRACÍ STATICKÁ POLE S PŘEKLADAMA ****************** */

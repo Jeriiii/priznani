@@ -15,26 +15,13 @@
 <h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
 
 
-{include 'menu.latte' $userID => 'id'}
-
-<h2>Informace</h2>
-
-
-    <table class="table table-condensed">
-            <tbody>
-            {foreach $userProfile as $label => $data}
-                    {if !empty($data)}	
-                    <tr>	
-                            <th>{$label}</th>
-                            <td>{$data}</td>
-                    </tr>	
-                    {/if}
-            {/foreach}
-            </tbody>
-    </table>       
-        
-    {ifset $userPartnerProfile}
-    Informace o partnerovi
+{include 'menu.latte' $userID => 'id'}     
+	
+	<h2>Informace o uživateli</h2>
+	{control userInfo $mode, $userID}
+	
+	{ifset $userPartnerProfile}
+    <h2>Informace o partnerovi</h2>
     <table class="table table-condensed">
             <tbody>
             {foreach $userPartnerProfile as $labelPartner => $dataPartner}

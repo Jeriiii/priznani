@@ -28,6 +28,7 @@ class UserGalleryDao extends BaseGalleryDao {
 	const COLUMN_DEFAULT = "default";
 	const COLUMN_NAME = "name";
 	const COLUMN_DESCRIPTION = "description";
+	const COLUMN_PROFILE = "profil_gallery";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -67,7 +68,7 @@ class UserGalleryDao extends BaseGalleryDao {
 	}
 
 	/**
-	 * Vrátí defaultní galerii uživatel, když existuje
+	 * Vrátí defaultní galerii uživatele, když existuje
 	 * @param int $userID ID uživatele.
 	 * @return bool|Database\Table\IRow
 	 */
@@ -75,6 +76,18 @@ class UserGalleryDao extends BaseGalleryDao {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_USER_ID, $userID);
 		$sel->where(self::COLUMN_DEFAULT, 1);
+		return $sel->fetch();
+	}
+
+	/**
+	 * Vrátí profilovou galerii uživatele, když existuje
+	 * @param int $userID ID uživatele.
+	 * @return bool|Database\Table\IRow
+	 */
+	public function findProfileGallery($userID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_ID, $userID);
+		$sel->where(self::COLUMN_PROFILE, 1);
 		return $sel->fetch();
 	}
 
@@ -91,6 +104,21 @@ class UserGalleryDao extends BaseGalleryDao {
 			self::COLUMN_DEFAULT => 1,
 		));
 		return $defaultGallery;
+	}
+
+	/**
+	 * Vytvoří profilovou galerii uživateli
+	 * @param int $userID ID uživatele.
+	 * @return Database\Table\IRow
+	 */
+	public function createProfileGallery($userID) {
+		$sel = $this->getTable();
+		$profileGallery = $sel->insert(array(
+			self::COLUMN_NAME => "Profilové fotky",
+			self::COLUMN_USER_ID => $userID,
+			self::COLUMN_PROFILE => 1,
+		));
+		return $profileGallery;
 	}
 
 	/*	 * ****************************** UPDATE **************************** */
