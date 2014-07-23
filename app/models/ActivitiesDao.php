@@ -110,4 +110,29 @@ class ActivitiesDao extends AbstractDao {
 		return $sel->count();
 	}
 
+	/**
+	 * Označí danou aktivitu za přečtenou
+	 * @param int $activityID ID aktivity
+	 */
+	public function markViewed($activityID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($activityID);
+		$sel->update(array(
+			self::COLUMN_VIEWED => 1
+		));
+	}
+
+	/**
+	 * Označí všechny aktivity daného usera za přečtené
+	 * @param int $userID ID vlastníka aktivit
+	 */
+	public function markAllViewed($userID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_VIEWED, 0);
+		$sel->where(self::COLUMN_EVENT_OWNER_ID, $userID);
+		$sel->update(array(
+			self::COLUMN_VIEWED => 1
+		));
+	}
+
 }

@@ -24,12 +24,13 @@ class Activity {
 	 * @param string $creator Jméno vlastníka aktivity
 	 * @param string $type Typ aktivity (comment, like, ...)
 	 * @param string $status Text statusu
+	 * @param int $activityID ID aktivity
 	 * @return string Text aktivity
 	 */
-	public function getUserStatusAction($creator, $type, $status) {
+	public function getUserStatusAction($creator, $type, $status, $activityID) {
 
 		$element = Html::el('div', array("class" => "activity-item"));
-		$link = Html::el('a')->href('#');
+		$link = Html::el('a')->href('#')->addAttributes(array("data-activity" => $activityID));
 
 		if ($type == "comment") {
 			$element->setText('Uživatel ' . $creator . ' okomentoval váš status "' . $status . '"');
@@ -44,14 +45,15 @@ class Activity {
 	 * Vrátí text k aktivitě statusu podle typu.
 	 * @param string $creator Jméno vlastníka aktivity
 	 * @param string $type Typ aktivity (comment, like, ...)
-	 * @param \Nette\Database\Table\ActiveRow $image Text statusu
+	 * @param \Nette\Database\Table\ActiveRow $image objekt obrázku
+	 * @param int $activityID ID aktivity
 	 * @return string Text aktivity
 	 */
-	public function getUserImageAction($creator, $type, $image) {
+	public function getUserImageAction($creator, $type, $image, $activityID) {
 
 		$element = Html::el('div', array("class" => "activity-item"));
 		$attributes = array("imageID" => $image->id, "galleryID" => $image->galleryID);
-		$link = Html::el('a')->href('profil.galleries/image', $attributes);
+		$link = Html::el('a')->href('profil.galleries/image', $attributes)->addAttributes(array("data-activity" => $activityID));
 
 		if ($type == "comment") {
 			$element->setText('Uživatel ' . $creator . ' okomentoval váš obrázek ' . $image->name);
@@ -66,12 +68,13 @@ class Activity {
 	 * Vrátí text k aktivitě statusu podle typu.
 	 * @param string $creator Jméno vlastníka aktivity
 	 * @param string $type Typ aktivity
+	 * @param int $activityID ID aktivity
 	 * @return string Text aktivity
 	 */
-	public function getUserAction($creator, $type) {
+	public function getUserAction($creator, $type, $activityID) {
 
 		$element = Html::el('div', array("class" => "activity-item"));
-		$link = Html::el('a')->href('#');
+		$link = Html::el('a')->href('#')->addAttributes(array("data-activity" => $activityID));
 
 		if ($type == 'poke') {
 			$element->setText("Uživatel " . $creator . " vás štouchl!");

@@ -92,4 +92,22 @@ class Activities extends BaseProjectControl {
 		$this->presenter->sendResponse(new JsonResponse(array("count" => $count)));
 	}
 
+	/**
+	 * Označí aktivitu jako přečtenou bez invalidace komponenty
+	 * @param int $activityID ID aktivity
+	 */
+	public function handleViewed($activityID) {
+		$this->activitiesDao->markViewed($activityID);
+	}
+
+	/**
+	 * označí všechny aktivity daného usera za přečtené
+	 */
+	public function handleAllViewed() {
+		$this->activitiesDao->markAllViewed($this->userID);
+
+		$this->load = TRUE;
+		$this->redrawControl();
+	}
+
 }
