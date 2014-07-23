@@ -46,7 +46,7 @@ Feature: Enviroment.
 	Scenario: Testing sign out
 		Given I am signed in as "user@test.cz"
 		When I follow "Odhlásit se"
-		And I should be on "/sign/in"
+		Then I should be on "/sign/in"
 		And I should see "Přihlášení"
 
 
