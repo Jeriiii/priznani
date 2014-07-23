@@ -274,6 +274,11 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			return cssmin::minify($code);
 		});
 
+		$files->addFiles(array(
+			'default.css',
+			'layout/layout.less',
+			'mobile/responsive-menu.less'));
+
 		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
