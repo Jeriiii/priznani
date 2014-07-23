@@ -6,15 +6,18 @@
 	position:relative;
 	float:right;
 	height: 52px;
-	width:52px;
-	margin-right: 46px;
-	a.activities_btn {
+	width:82px;
+	margin-right: 16px;
+	a.activities-btn {
 		display: block;
 		height: 100%;
 		img {
 			margin-left: 18px;
 			margin-top: 23px;
 		}
+	}
+	.activities-btn img {
+		float:left;
 	}
 	.closer {
 		width:100%;
@@ -23,9 +26,17 @@
 		z-index:1000;
 		cursor: pointer;
 	}
+	.new-counter {
+		float: left;
+		font-weight: bold;
+		padding: 2px;
+		margin-top: 14px;
+		margin-left: 5px;
+		background-color: #fff;
+	}
 }
 
-#activities_droplink {
+#activities-droplink {
 	display:none;
 	position: absolute;
 	background-color: #fff;
@@ -35,7 +46,7 @@
 	height:150px;
 	overflow-y: scroll;
 	z-index:1000;
-	.activity_item {
+	.activity-item {
 		border-bottom: 1px solid black;
 		padding:5px;
 		font-size: 12px;

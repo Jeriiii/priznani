@@ -22,21 +22,21 @@
 	var close='<div class="closer"></div>';
 	
 	// Při kliknutí zobrází okno aktivit a překreje se divem pro zavření
-	$('.activities_btn').click(function() {
-			$('#activities_droplink').fadeIn();
-			$("a.activities_btn").before(close);
+	$('.activities-btn').click(function() {
+			$('#activities-droplink').fadeIn();
+			$("a.activities-btn").before(close);
 	});
 
 	//Pokud se klikne mimo okno aktivit, zavře ho a odstraní zavíraci div
-	$(document).click(function() {
-		$('#activities_droplink').fadeOut();
-		$('#activities .closer').remove();
-	});
-	
-	//Pokud se klikne na tlačítko překryté zavíracím divem, zavře aktivity a smaže zavírací div
-	$('.closer').click(function() {
-		$('#activities_droplink').fadeOut();
-		$('#activities .closer').remove();
+	$(document).ready(function(){
+		$(this).click(function() {
+			$('#activities-droplink').fadeOut();
+			$('#activities .closer').remove();
+		});
+		$('.closer').click(function() {
+			$('#activities-droplink').fadeOut();
+			$('#activities .closer').remove();
+		});
 	});
 	
 	//Při ajaxovém načítání ukáže spinner

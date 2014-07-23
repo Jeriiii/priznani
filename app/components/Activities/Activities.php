@@ -8,6 +8,7 @@
 
 use POSComponent\BaseProjectControl;
 use POS\Model\ActivitiesDao;
+use Nette\Application\Responses\JsonResponse;
 
 /**
  * Komponenta pro vykreslení aktivit uživatele.
@@ -50,7 +51,6 @@ class Activities extends BaseProjectControl {
 		$template->load = $this->load;
 		$template->setFile(dirname(__FILE__) . '/activities.latte');
 		$template->activities = $this->getUserActivities($this->userID);
-
 		// Objekt pro vybrání a složení správného textu
 		$template->activityObj = new Activity();
 		$template->render();
@@ -67,11 +67,29 @@ class Activities extends BaseProjectControl {
 	}
 
 	/**
+	 * 	Získání počtu nepřečtených aktivit
+	 * @param int $userID ID vlastníka aktivity
+	 * @return int
+	 */
+	protected function getUnviewedActivitiesCount($userID) {
+		$count = $this->activitiesDao->getCountOfUnviewed($userID);
+		return $count;
+	}
+
+	/**
 	 * Obsluha pro načtení aktivit
 	 */
 	public function handleLoadActivities() {
 		$this->load = TRUE;
 		$this->redrawControl();
+	}
+
+	/**
+	 * Signál na počet nových aktivit, pošle JSON odpověď
+	 */
+	public function handleAsk() {
+		$count = $this->getUnviewedActivitiesCount($this->userID);
+		$this->presenter->sendResponse(new JsonResponse(array("count" => $count)));
 	}
 
 }
