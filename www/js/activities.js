@@ -119,10 +119,10 @@ $(document).on("click", ".activities-btn", function(e){
 	//Otevře okno s aktivitama
 	activitiesDrop.fadeIn();
 	$("a.activities-btn").before(close);
-	$('#activities .new-counter').remove();
 	
 	//Obstarává poslání ajax dotazu na vykreslení aktivit, v případě kliku v intervalu 3s nenačte nové
 	if(targetAttr !== '1') {
+		$('#activities .new-counter').remove();
 		$.nette.ajax({
 			url: ajaxUrl,
 			async: true,
@@ -131,6 +131,7 @@ $(document).on("click", ".activities-btn", function(e){
 			},
 			complete: function(payload) {
 				var data = JSON.parse(payload.responseText);
+				$('#activities-droplink .activity-item').remove();
 				$.each(data, function(key, value) {
 					$.each(value, function(key, value) {
 						var div = "<div class=" + value.divClass + ">" + value.divText + "</div>";
