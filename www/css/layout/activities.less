@@ -11,13 +11,8 @@
 	a.activities-btn {
 		display: block;
 		height: 100%;
-		img {
-			margin-left: 18px;
-			margin-top: 23px;
-		}
-	}
-	.activities-btn img {
-		float:left;
+		background: url('../../images/layout/arrow_dark.png') 5px;
+		background-repeat: no-repeat;
 	}
 	.closer {
 		width:100%;
@@ -27,7 +22,8 @@
 		cursor: pointer;
 	}
 	.new-counter {
-		float: left;
+		position: absolute;
+		left: 20px;
 		font-weight: bold;
 		padding: 2px;
 		margin-top: 14px;
@@ -47,7 +43,6 @@
 	overflow-y: scroll;
 	z-index:1000;
 	.activity-item {
-		border-bottom: 1px solid black;
 		padding:5px;
 		font-size: 12px;
 	}
