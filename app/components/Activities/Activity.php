@@ -28,7 +28,7 @@ class Activity {
 	 */
 	public function getUserStatusAction($creator, $type, $status) {
 
-		$element = Html::el('div', array("class" => "activity_item"));
+		$element = Html::el('div', array("class" => "activity-item"));
 		$link = Html::el('a')->href('#');
 
 		if ($type == "comment") {
@@ -49,7 +49,7 @@ class Activity {
 	 */
 	public function getUserImageAction($creator, $type, $image) {
 
-		$element = Html::el('div', array("class" => "activity_item"));
+		$element = Html::el('div', array("class" => "activity-item"));
 		$attributes = array("imageID" => $image->id, "galleryID" => $image->galleryID);
 		$link = Html::el('a')->href('profil.galleries/image', $attributes);
 
@@ -70,7 +70,7 @@ class Activity {
 	 */
 	public function getUserAction($creator, $type) {
 
-		$element = Html::el('div', array("class" => "activity_item"));
+		$element = Html::el('div', array("class" => "activity-item"));
 		$link = Html::el('a')->href('#');
 
 		if ($type == 'poke') {
