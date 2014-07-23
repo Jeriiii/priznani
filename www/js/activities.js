@@ -35,7 +35,7 @@ function getNewActivitiesCount() {
 			
 			//Pokud jsou nové příspěvky, tak ukážeme kolik
 			if(obj.count > 0) {
-				$(".activities-btn img").after('<div class="new-counter">' + obj.count + '</div>');
+				$(".activities-btn").append('<div class="new-counter">' + obj.count + '</div>');
 			}
 		}
 	});
@@ -47,25 +47,19 @@ var loading = $('#loadingDiv');
 var activitiesBtn = $('.activities-btn');
 var activitiesDrop = $('#activities-droplink');
 
-// Při kliknutí zobrází okno aktivit a překreje se divem pro zavření
-activitiesBtn.click(function() {
-	activitiesDrop.fadeIn();
-	$('#activities .new-counter').remove();
-	$("a.activities-btn").before(close);
-});
-
 //Pokud se klikne mimo okno aktivit, zavře ho a odstraní zavíraci div
+//Je immuni, když se kliká na zavírací element, protože ten si obstará zavření sám
 $(document).mouseup(function (e)
 {
-	if (!activitiesDrop.is(e.target) && activitiesDrop.has(e.target).length === 0)
+	if (!activitiesDrop.is(e.target) && activitiesDrop.has(e.target).length === 0 && !$('.closer').is(e.target))
 	{
 		activitiesDrop.fadeOut();
 		$('#activities .closer').remove();
 	}
 });
 
-//Pokud se klikne na překrytý div zavře se okno a div se smaže(simuluje opětovný klik na šipku)
-$(document).on("click",'.closer', function() {
+//Zavře okno s aktivitama a smaže zavírací div
+$(document).on("click", '.closer', function(){
 	activitiesDrop.fadeOut();
 	$('#activities .closer').remove();
 });
@@ -97,4 +91,57 @@ $(document).on("click", '#activities-droplink a', function(){
 			
 		}
 	});
+});
+
+//Vyvolá revalidaci komponenty po označení všech odpovědí jako přečtených
+$(document).on("click", '.marker', function(){
+	var requestUrl = "?do=activities-loadActivities";
+	var wholeUrl = baseUrl + requestUrl;
+	$.nette.ajax({
+		url: wholeUrl,
+		async: true,
+		success: function(response) {
+			
+		},
+		complete: function(payload) {
+			
+		}
+	});
+});
+
+//funkce volá ajax, a povolí načtení každé 3s při kliku
+$(document).on("click", ".activities-btn", function(e){
+	var requestUrl = "?do=activities-loadActivities";
+	var ajaxUrl = baseUrl + requestUrl;
+	var target = $(e.target);
+	var targetAttr = target.attr('data-ajax-off');
+	
+	//Otevře okno s aktivitama
+	activitiesDrop.fadeIn();
+	$("a.activities-btn").before(close);
+	$('#activities .new-counter').remove();
+	
+	//Obstarává poslání ajax dotazu na vykreslení aktivit, v případě kliku v intervalu 3s nenačte nové
+	if(targetAttr !== '1') {
+		$.nette.ajax({
+			url: ajaxUrl,
+			async: true,
+			success: function(response) {
+				activitiesBtn.attr('data-ajax-off', '1');
+			},
+			complete: function(payload) {
+				var data = JSON.parse(payload.responseText);
+				$.each(data, function(key, value) {
+					$.each(value, function(key, value) {
+						var div = "<div class=" + value.divClass + ">" + value.divText + "</div>";
+						$(".marker").after("<a data-activity=" + value.activityID + "href=" + value.href + ">" + div + "</a>");
+					});
+				});
+			}
+		});
+		setTimeout(function(){
+			target.removeAttr('data-ajax-off');
+		 }, 3000);
+
+	}
 });

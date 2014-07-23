@@ -28,11 +28,6 @@ class Activities extends BaseProjectControl {
 	protected $userID;
 
 	/**
-	 * Indikuje otevřené/zavřené okno
-	 */
-	protected $load = FALSE;
-
-	/**
 	 *
 	 * @param int $userID Id uživatele, který vlastní aktivitu
 	 * @param \POS\Model\ActivitiesDao $activitiesDao
@@ -48,11 +43,7 @@ class Activities extends BaseProjectControl {
 	 */
 	public function render() {
 		$template = $this->template;
-		$template->load = $this->load;
 		$template->setFile(dirname(__FILE__) . '/activities.latte');
-		$template->activities = $this->getUserActivities($this->userID);
-		// Objekt pro vybrání a složení správného textu
-		$template->activityObj = new Activity();
 		$template->render();
 	}
 
@@ -77,11 +68,22 @@ class Activities extends BaseProjectControl {
 	}
 
 	/**
-	 * Obsluha pro načtení aktivit
+	 * Obsluha pro načtení aktivit, posílá JSON s polem textů
 	 */
 	public function handleLoadActivities() {
-		$this->load = TRUE;
-		$this->redrawControl();
+		$activities = $this->getUserActivities($this->userID);
+		$activityObj = new Activity();
+
+		foreach ($activities as $item) {
+			if ($item->statusID != NULL) {
+				$data[] = $activityObj->getUserStatusAction($item->event_creator->user_name, $item->event_type, $item->status->text, $item->id);
+			} elseif ($item->imageID != NULL) {
+				$data[] = $activityObj->getUserImageAction($item->event_creator->user_name, $item->event_type, $item->image, $item->id);
+			} else {
+				$data[] = $activityObj->getUserAction($item->event_creator->user_name, $item->event_type, $item->event_type, $item->id);
+			}
+		}
+		$this->presenter->sendResponse(new JsonResponse(array("activities" => $data)));
 	}
 
 	/**
@@ -105,9 +107,6 @@ class Activities extends BaseProjectControl {
 	 */
 	public function handleAllViewed() {
 		$this->activitiesDao->markAllViewed($this->userID);
-
-		$this->load = TRUE;
-		$this->redrawControl();
 	}
 
 }

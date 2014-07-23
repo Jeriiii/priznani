@@ -25,20 +25,21 @@ class Activity {
 	 * @param string $type Typ aktivity (comment, like, ...)
 	 * @param string $status Text statusu
 	 * @param int $activityID ID aktivity
-	 * @return string Text aktivity
+	 * @return array elementy pro složení aktivity
 	 */
 	public function getUserStatusAction($creator, $type, $status, $activityID) {
 
-		$element = Html::el('div', array("class" => "activity-item"));
-		$link = Html::el('a')->href('#')->addAttributes(array("data-activity" => $activityID));
-
+		$result = array();
 		if ($type == "comment") {
-			$element->setText('Uživatel ' . $creator . ' okomentoval váš status "' . $status . '"');
+			$result["divText"] = 'Uživatel ' . $creator . ' okomentoval váš status "' . $status . '"';
 		} else {
-			$element->setText('Uživatel ' . $creator . ' lajknul váš status "' . $status . '"');
+			$result["divText"] = 'Uživatel ' . $creator . ' lajknul váš status "' . $status . '"';
 		}
-		$link->add($element);
-		return $link;
+		$result["divClass"] = "activity-item";
+		$result["href"] = "#";
+		$result["activityID"] = $activityID;
+
+		return $result;
 	}
 
 	/**
@@ -47,21 +48,20 @@ class Activity {
 	 * @param string $type Typ aktivity (comment, like, ...)
 	 * @param \Nette\Database\Table\ActiveRow $image objekt obrázku
 	 * @param int $activityID ID aktivity
-	 * @return string Text aktivity
+	 * @return array elementy pro složení aktivity
 	 */
 	public function getUserImageAction($creator, $type, $image, $activityID) {
-
-		$element = Html::el('div', array("class" => "activity-item"));
-		$attributes = array("imageID" => $image->id, "galleryID" => $image->galleryID);
-		$link = Html::el('a')->href('profil.galleries/image', $attributes)->addAttributes(array("data-activity" => $activityID));
-
+		$result = array();
 		if ($type == "comment") {
-			$element->setText('Uživatel ' . $creator . ' okomentoval váš obrázek ' . $image->name);
+			$result["divText"] = 'Uživatel ' . $creator . ' okomentoval váš obrázek ' . $image->name;
 		} else {
-			$element->setText('Uživatel ' . $creator . ' lajknul váš obrázek ' . $image->name);
+			$result["divText"] = 'Uživatel ' . $creator . ' lajknul váš obrázek ' . $image->name;
 		}
-		$link->add($element);
-		return $link;
+		$result["divClass"] = "activity-item";
+		$result["href"] = 'profil.galleries/image?imageID=' . $image->id . "&galleryID=" . $image->galleryID;
+		$result["activityID"] = $activityID;
+
+		return $result;
 	}
 
 	/**
@@ -69,18 +69,19 @@ class Activity {
 	 * @param string $creator Jméno vlastníka aktivity
 	 * @param string $type Typ aktivity
 	 * @param int $activityID ID aktivity
-	 * @return string Text aktivity
+	 * @return array elementy pro složení aktivity
 	 */
 	public function getUserAction($creator, $type, $activityID) {
 
-		$element = Html::el('div', array("class" => "activity-item"));
-		$link = Html::el('a')->href('#')->addAttributes(array("data-activity" => $activityID));
-
-		if ($type == 'poke') {
-			$element->setText("Uživatel " . $creator . " vás štouchl!");
+		$result = array();
+		if ($type == "poke") {
+			$result["divText"] = "Uživatel " . $creator . " vás štouchl!";
 		}
-		$link->add($element);
-		return $link;
+		$result["divClass"] = "activity-item";
+		$result["href"] = '#';
+		$result["activityID"] = $activityID;
+
+		return $result;
 	}
 
 }
