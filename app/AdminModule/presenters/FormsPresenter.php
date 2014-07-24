@@ -308,7 +308,8 @@ class FormsPresenter extends AdminSpacePresenter {
 			$this->addToStream($type, $confNewID);
 		} else {
 			/* jen přehození, přiznání již bylo naplánováno a hozeno do streamu dříve */
-			$this->getDao($type)->updateMark($confNewID, $type);
+			$markProcessed = BaseConfessionDao::MARK_PROCESSED;
+			$this->getDao($type)->updateMark($confNewID, $markProcessed);
 		}
 	}
 
