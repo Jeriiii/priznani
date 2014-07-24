@@ -80,7 +80,15 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 		$this->template->userData = $user;
 		$this->template->userID = $id;
 		$this->template->count = $this->dataForStream->count("id");
-		$this->template->mode = "listFew";
+
+		$profileGalleryID = $this->userGalleryDao->findProfileGallery($this->userID);
+		$profilePhoto = $this->userImageDao->getInGallery($profileGalleryID)->fetch();
+		if ($profilePhoto) {
+			$this->template->hasProfilePhoto = true;
+			$this->template->profilePhoto = $profilePhoto;
+		} else {
+			$this->template->hasProfilePhoto = false;
+		}
 	}
 
 	/**

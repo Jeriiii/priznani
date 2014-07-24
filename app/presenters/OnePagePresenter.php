@@ -49,6 +49,7 @@ class OnePagePresenter extends BasePresenter {
 	public function renderDefault() {
 		$this->template->count = $this->count;
 		$this->template->userID = $this->userID;
+		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
 	}
 
 	protected function createComponentUserStream() {

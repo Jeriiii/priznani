@@ -44,7 +44,7 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 	public function submitted($form) {
 		$values = $form->getValues();
 
-		$image = $this->getArrayWithImages($values, self::NUMBER_OF_IMAGE);
+		$image = $this->getArrayWithImages($values, 1);
 		$isFilled = $this->isFillImage($image);
 
 

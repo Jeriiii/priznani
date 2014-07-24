@@ -103,23 +103,24 @@ abstract class UserBaseDao extends AbstractDao {
 	protected function getWantToMeet($user) {
 		$seek = "";
 		if ($user->want_to_meet_men == 1) {
-			$seek += "muže ";
+			$seek .= "muže, ";
 		}
 		if ($user->want_to_meet_women == 1) {
-			$seek += "ženu ";
+			$seek .= "ženu, ";
 		}
 		if ($user->want_to_meet_couple == 1) {
-			$seek += "pár ";
+			$seek .= "pár, ";
 		}
 		if ($user->want_to_meet_couple_men == 1) {
-			$seek += "mužský pár ";
+			$seek .= "mužský pár, ";
 		}
 		if ($user->want_to_meet_couple_women == 1) {
-			$seek += "ženský pár ";
+			$seek .= "ženský pár, ";
 		}
 		if ($user->want_to_meet_group == 1) {
-			$seek += "skupinu ";
+			$seek .= "skupinu, ";
 		}
+		$seek = substr($seek, 0, -2);
 		return array(
 			'Hledám' => $seek,
 		);

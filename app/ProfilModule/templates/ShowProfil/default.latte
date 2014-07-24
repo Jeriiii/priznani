@@ -30,6 +30,9 @@
 
 <h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
 
+{if $hasProfilePhoto}
+	<img src="{$profilePhoto|getImgPath}" alt="{$profilePhoto->name}"/>
+{/if}
 
 {include 'menu.latte' $userID => 'id'}
 
@@ -40,7 +43,7 @@
 {control profilStream}
 
 <h2>Informace o uživateli</h2>
-{control userInfo $mode, $userID}
+{control userInfo "listFew", $userID}
 
 <h2>Nahrání profilovky</h2>
 
