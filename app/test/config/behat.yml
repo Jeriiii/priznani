@@ -6,6 +6,9 @@
 imports:
   - behat.local.yml
 
+framework:
+    session:
+        handler_id: ~
 default:
   paths:
     features: ../features

@@ -128,6 +128,7 @@ class FeatureContext extends MinkContext {
 	 * @Given /^I am signed in as "([^"]*)"$/
 	 */
 	public function iAmSignedInAs($email) {
+
 		$this->iAmOnHomepage();
 		$this->userManager->loginWithEmail($email);
 		$session = $this->userManager->getSession();
@@ -142,6 +143,13 @@ class FeatureContext extends MinkContext {
 		$html = $this->getSession()->getDriver()->getContent();
 
 		throw new PendingException($this->screenshotManager->saveHtml($html));
+	}
+
+	/**
+	 * @Then /^I look on the url$/
+	 */
+	public function iLookOnTheUrl() {
+		throw new PendingException($this->getSession()->getCurrentUrl());
 	}
 
 	/**
