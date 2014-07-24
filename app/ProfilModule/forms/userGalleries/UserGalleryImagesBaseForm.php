@@ -31,7 +31,6 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 
 	/**
 	 * @var \POS\Model\StreamDao
-	 * @inject
 	 */
 	public $streamDao;
 
@@ -83,7 +82,7 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	}
 
 	/**
-	 * Přidá určitý počet polý pro vložení obrázku do formuláře
+	 * Přidá určitý počet polí pro vložení obrázku do formuláře
 	 * @param type $count Počet polý obrázků.
 	 * @param type $displayName Má se zobrazit pole pro název obrázku.
 	 * @param type $dislplayDesc Má se zobrazit pole pro popis obrázku.

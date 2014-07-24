@@ -1,0 +1,27 @@
+{block head}
+
+{/block}
+
+{block content}
+
+
+    <table class="table table-condensed">
+            <tbody>
+            {foreach $userProperties as $label => $data}
+                    {if !empty($data)}	
+                    <tr>	
+                            <th>{$label}</th>
+                            <td>{$data}</td>
+                    </tr>	
+                    {/if}
+            {/foreach}
+            </tbody>
+    </table>       
+
+{/block}
+
+{block scripts}
+
+{/block}
+
+{block foot}

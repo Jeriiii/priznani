@@ -7,6 +7,7 @@ use Nette\Application\UI\Form as Frm,
 use POSComponent\Galleries\UserGalleries\UserGalleries;
 use POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery;
 use POSComponent\Stream\ProfilStream\ProfilStream;
+use POSComponent\UserInfo\UserInfo;
 
 class ShowProfilPresenter extends ProfilBasePresenter {
 
@@ -79,6 +80,15 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 		$this->template->userData = $user;
 		$this->template->userID = $id;
 		$this->template->count = $this->dataForStream->count("id");
+
+		$profileGalleryID = $this->userGalleryDao->findProfileGallery($this->userID);
+		$profilePhoto = $this->userImageDao->getInGallery($profileGalleryID)->fetch();
+		if ($profilePhoto) {
+			$this->template->hasProfilePhoto = true;
+			$this->template->profilePhoto = $profilePhoto;
+		} else {
+			$this->template->hasProfilePhoto = false;
+		}
 	}
 
 	/**
@@ -112,12 +122,16 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 		$userProperty = $this->userDao->findProperties($id);
 
 		$this->template->userData = $user;
-		$this->template->userProfile = $this->userDao->getUserData($user->id);
 
 		$property = $userProperty->user_property;
 		if ($property == 'couple' || $property == 'coupleMan' || $property == 'coupleWoman') {
 			$this->template->userPartnerProfile = $this->coupleDao->getPartnerData($user->coupleID);
 		}
+		$this->template->mode = "listAll";
+	}
+
+	protected function createComponentUserInfo($name) {
+		return new UserInfo($this->userDao, $this, $name);
 	}
 
 	/**
@@ -144,6 +158,15 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 		$gallery = $this->userGalleryDao->findByUser($this->userID);
 
 		return new UserImagesInGallery($gallery->id, $images, $this->userDao);
+	}
+
+	/**
+	 * formulář pro nahrávání profilových fotografií
+	 * @param type $name
+	 * @return \Nette\Application\UI\Form\ProfilePhotoUploadForm
+	 */
+	protected function createComponentUploadPhotoForm($name) {
+		return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
 	}
 
 	/**
