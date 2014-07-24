@@ -8,6 +8,7 @@
 
 use POSComponent\BaseProjectControl;
 use POS\Model\ActivitiesDao;
+use Nette\Application\Responses\JsonResponse;
 
 /**
  * Komponenta pro vykreslení aktivit uživatele.
@@ -18,6 +19,7 @@ class Activities extends BaseProjectControl {
 
 	/**
 	 * @var \POS\Model\ActivitiesDao
+	 * @inject
 	 */
 	public $activitiesDao;
 
@@ -25,11 +27,6 @@ class Activities extends BaseProjectControl {
 	 * ID vlastníka aktivit
 	 */
 	protected $userID;
-
-	/**
-	 * Indikuje otevřené/zavřené okno
-	 */
-	protected $load = FALSE;
 
 	/**
 	 *
@@ -47,12 +44,7 @@ class Activities extends BaseProjectControl {
 	 */
 	public function render() {
 		$template = $this->template;
-		$template->load = $this->load;
 		$template->setFile(dirname(__FILE__) . '/activities.latte');
-		$template->activities = $this->getUserActivities($this->userID);
-
-		// Objekt pro vybrání a složení správného textu
-		$template->activityObj = new Activity();
 		$template->render();
 	}
 
@@ -67,11 +59,55 @@ class Activities extends BaseProjectControl {
 	}
 
 	/**
-	 * Obsluha pro načtení aktivit
+	 * 	Získání počtu nepřečtených aktivit
+	 * @param int $userID ID vlastníka aktivity
+	 * @return int
+	 */
+	protected function getUnviewedActivitiesCount($userID) {
+		$count = $this->activitiesDao->getCountOfUnviewed($userID);
+		return $count;
+	}
+
+	/**
+	 * Obsluha pro načtení aktivit, posílá JSON s polem textů
 	 */
 	public function handleLoadActivities() {
-		$this->load = TRUE;
-		$this->redrawControl();
+		$activities = $this->getUserActivities($this->userID);
+		$activityObj = new Activity();
+
+		foreach ($activities as $item) {
+			if ($item->statusID != NULL) {
+				$data[] = $activityObj->getUserStatusAction($item->event_creator->user_name, $item->event_type, $item->status->text, $item->id);
+			} elseif ($item->imageID != NULL) {
+				$data[] = $activityObj->getUserImageAction($item->event_creator->user_name, $item->event_type, $item->image, $item->id);
+			} else {
+				$data[] = $activityObj->getUserAction($item->event_creator->user_name, $item->event_type, $item->event_type, $item->id);
+			}
+		}
+		$this->presenter->sendResponse(new JsonResponse(array("activities" => $data)));
+	}
+
+	/**
+	 * Signál na počet nových aktivit, pošle JSON odpověď
+	 */
+	public function handleAsk() {
+		$count = $this->getUnviewedActivitiesCount($this->userID);
+		$this->presenter->sendResponse(new JsonResponse(array("count" => $count)));
+	}
+
+	/**
+	 * Označí aktivitu jako přečtenou bez invalidace komponenty
+	 * @param int $activityID ID aktivity
+	 */
+	public function handleViewed($activityID) {
+		$this->activitiesDao->markViewed($activityID);
+	}
+
+	/**
+	 * označí všechny aktivity daného usera za přečtené
+	 */
+	public function handleAllViewed() {
+		$this->activitiesDao->markAllViewed($this->userID);
 	}
 
 }

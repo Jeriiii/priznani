@@ -26,6 +26,7 @@ class ActivitiesDao extends AbstractDao {
 	const COLUMN_STATUS_ID = "statusID";
 	const COLUMN_EVENT_OWNER_ID = "event_ownerID";
 	const COLUMN_EVENT_CREATOR_ID = "event_creatorID";
+	const COLUMN_VIEWED = "viewed";
 
 	private function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -94,7 +95,44 @@ class ActivitiesDao extends AbstractDao {
 	public function getActivitiesByUserId($userID) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_EVENT_OWNER_ID, $userID);
-		return $sel->order('id DESC');
+		return $sel->order('id ASC');
+	}
+
+	/**
+	 * 	Vrátí počet nepřčtených aktivit dného usera
+	 * @param type $userID ID vlastníka aktivit
+	 * @return int
+	 */
+	public function getCountOfUnviewed($userID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_EVENT_OWNER_ID, $userID);
+		$sel->where(self::COLUMN_VIEWED, 0);
+		return $sel->count();
+	}
+
+	/**
+	 * Označí danou aktivitu za přečtenou
+	 * @param int $activityID ID aktivity
+	 */
+	public function markViewed($activityID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($activityID);
+		$sel->update(array(
+			self::COLUMN_VIEWED => 1
+		));
+	}
+
+	/**
+	 * Označí všechny aktivity daného usera za přečtené
+	 * @param int $userID ID vlastníka aktivit
+	 */
+	public function markAllViewed($userID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_VIEWED, 0);
+		$sel->where(self::COLUMN_EVENT_OWNER_ID, $userID);
+		$sel->update(array(
+			self::COLUMN_VIEWED => 1
+		));
 	}
 
 }

@@ -1,6 +1,7 @@
 Feature: Enviroment.
   User is able to do various things.
 
+
 	Scenario: User see homepage
 		Given I am on "/"
 		Then I should see "přiznání"
@@ -37,11 +38,18 @@ Feature: Enviroment.
 		Then I should not see "Přejít na:" 
 		And I should not see "OBJEDNÁVKY"
 
-
-
 	Scenario:
 		And I am signed in as "p.kukral@seznam.cz"
 		And I am on "/profil.galleries/"
 		Then I should see "Galerie uživatele Jerry"
+		
+	Scenario: Testing sign out
+		Given I am signed in as "user@test.cz"
+		When I follow "Odhlásit se"
+		Then I should be on "/sign/in"
+		And I should see "Přihlášení"
+
+
+		
 
 		
