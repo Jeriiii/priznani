@@ -31,7 +31,7 @@
 <h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
 
 {if $hasProfilePhoto}
-	<img src="{$profilePhoto|getImgPath}" alt="{$profilePhoto->name}"/>
+	<img src="{$profilePhoto|getImgSqrPath}" alt="{$profilePhoto->name}"/>
 {/if}
 
 {include 'menu.latte' $userID => 'id'}
