@@ -19,6 +19,7 @@ class Activities extends BaseProjectControl {
 
 	/**
 	 * @var \POS\Model\ActivitiesDao
+	 * @inject
 	 */
 	public $activitiesDao;
 

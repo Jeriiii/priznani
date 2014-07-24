@@ -95,7 +95,7 @@ class ActivitiesDao extends AbstractDao {
 	public function getActivitiesByUserId($userID) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_EVENT_OWNER_ID, $userID);
-		return $sel->order('id DESC');
+		return $sel->order('id ASC');
 	}
 
 	/**
