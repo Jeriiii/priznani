@@ -12,3 +12,6 @@ ALTER TABLE `users`
 ALTER TABLE `user_galleries`
 	CHANGE COLUMN `default` `default` TINYINT(1) NULL DEFAULT '0' AFTER `more`;
 
+/* přidání sloupce pro profilovou galerii */
+ALTER TABLE `user_galleries`
+	ADD COLUMN `profil_gallery` TINYINT UNSIGNED NOT NULL DEFAULT '0' AFTER `default`;
