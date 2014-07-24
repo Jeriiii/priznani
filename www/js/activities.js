@@ -131,11 +131,14 @@ $(document).on("click", ".activities-btn", function(e){
 			},
 			complete: function(payload) {
 				var data = JSON.parse(payload.responseText);
-				$('#activities-droplink .activity-item').remove();
+				//Promazání příspěvků, aby se stále neopakovaly
+				$('#activities-droplink .item').each(function(){
+					$(this).remove();
+				});
 				$.each(data, function(key, value) {
 					$.each(value, function(key, value) {
 						var div = "<div class=" + value.divClass + ">" + value.divText + "</div>";
-						$(".marker").after("<a data-activity=" + value.activityID + "href=" + value.href + ">" + div + "</a>");
+						$(".marker").after("<a class=item data-activity=" + value.activityID + " href=" + value.href + ">" + div + "</a>");
 					});
 				});
 			}
