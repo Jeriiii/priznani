@@ -19,3 +19,4 @@ services:
 	eshopGameOrdersDao: \POS\Model\EshopGameOrderDao
 	paymentDao: \POS\Model\PaymentDao
 	activitiesDao: \POS\Model\ActivitiesDao
+	databaseDao: \POS\Model\DatabaseDao
