@@ -131,18 +131,31 @@ $(document).on("click", ".activities-btn", function(e){
 			},
 			complete: function(payload) {
 				var data = JSON.parse(payload.responseText);
-				//Promazání příspěvků, aby se stále neopakovaly
-				$('#activities-droplink .item').each(function(){
-					$(this).remove();
-				});
-				$.each(data, function(key, value) {
-					$.each(value, function(key, value) {
-						var div = "<div class=" + value.divClass + ">" + value.divText + "</div>";
-						$(".marker").after("<a class=item data-activity=" + value.activityID + " href=" + value.href + ">" + div + "</a>");
+				
+				//Pokud uživatel nemá žádnou událost, vypíše se mu to.
+				if(data.activities === 0) {
+					$('#activities .marker').remove();
+					
+					//Kontrola, zda div s oznámením již nebyl jednou vykreslen
+					if($('.no-activities').length === 0) {
+						$('#loadingDiv').after('<div class="no-activities">Zatím nemáte žádné události.</div>');
+					}
+				} else {
+					//Promazání příspěvků, aby se stále neopakovaly
+					$('#activities-droplink .item').each(function(){
+						$(this).remove();
 					});
-				});
+					//Vypsání každé události
+					$.each(data, function(key, value) {
+						$.each(value, function(key, value) {
+							var div = "<div class=" + value.divClass + ">" + value.divText + "</div>";
+							$(".marker").after("<a class=item data-activity=" + value.activityID + " href=" + value.href + ">" + div + "</a>");
+						});
+					});
+				}
 			}
 		});
+		//Nastaví time na 3s, kvůli zamezení posílání ajaxu kadým klikem v rychlém sledu
 		setTimeout(function(){
 			target.removeAttr('data-ajax-off');
 		 }, 3000);

@@ -187,6 +187,10 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		}
 	}
 
+	/**
+	 * Vytovří komponentu pro aktivity
+	 * @return \Activities Komponenta aktivit
+	 */
 	protected function createComponentActivities() {
 		$activities = new Activities($this->getUser()->id, $this->activitiesDao);
 		return $activities;
