@@ -22,6 +22,9 @@ common:
 
 
 	nette:
+		application:
+			errorPresenter: Error
+			
 		session:
 			autoStart: smart
 			expiration: +30 days
