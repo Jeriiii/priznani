@@ -1,8 +1,1 @@
-Postup instalace databáze u programátora:
-
-1) Nainstaluji si stable verzi (obvykle poslední podle data)
-2) Nainstaluji si všechny patche, které vyšly PO vydání stable verze - tedy
-všechny, které mají pozdìjší datum ne stable (vlezu si do sloky patche a nad dotyènou databází spustím patch.sql)
-
-Poznámka: Adresáø s patchem obsahuje soubor patch.sql, kterı obsahuje celı patch (staèí tedy spustit pouze tento soubor)
-Adresáø parts obsahuje jednotlivé èásti patche (které jsou všechny obsaeny v patch.sql)
+PouÅ¾ijte automatickÃ½ instalÃ¡tor na adrese /install

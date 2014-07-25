@@ -7,13 +7,28 @@
  * @package    jkbusiness
  */
 use Nette\Utils\Finder;
+use NetteExt\Install\InstallDB;
+use SQLParser\PHPSQLParser;
+use Nette\Database;
+use Nette\Diagnostics\Debugger;
+use Nette\Environment;
 
-class InstalationPresenter extends BasePresenter {
+class InstallPresenter extends BasePresenter {
+
+	/**
+	 * @var \POS\Model\DatabaseDao
+	 * @inject
+	 */
+	public $dbDao;
+
+
+
 	/* adresáře, které by měli existovat */
-
 	private $dirs = array();
 
 	public function actionDefault() {
+		ini_set('max_execution_time', 300);
+
 		// přidání složek pro galerie
 		$this->addToExistDirs(WWW_DIR . "/images/galleries/");
 		$this->addToExistDirs(WWW_DIR . "/images/userGalleries/");
@@ -25,6 +40,8 @@ class InstalationPresenter extends BasePresenter {
 		$this->addToExistDirs(WWW_DIR . "/cache/css/");
 
 		$this->controlDirs();
+
+		InstallDB::sqlInstall($this->dbDao->getDatabase());
 		die();
 	}
 

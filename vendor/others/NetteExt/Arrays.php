@@ -46,4 +46,20 @@ class Arrays extends \Nette\Object {
 		return $data;
 	}
 
+	/**
+	 * Odstraní všechny prvky pole co neobsahují řetězec.
+	 * @param array $arr Pole prvků, které se má vytřídit.
+	 * @param string $contains Co musí hodnota v poli obsahovat, aby v něm zůstala.
+	 * @return array Vytřízené pole.
+	 */
+	public static function sortOut($arr, $contains) {
+		foreach ($arr as $key => $val) {
+			if (strpos($val, $contains) === FALSE) {
+				unset($arr[$key]);
+			}
+		}
+
+		return $arr;
+	}
+
 }
