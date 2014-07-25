@@ -28,7 +28,7 @@ class GameOrdersPresenter extends AdminSpacePresenter {
 		$grid->addFilterText('name', 'Jméno');
 		$grid->addFilterText('surname', 'Příjmení');
 		$grid->addFilterText('email', 'Email');
-		$grid->addFilterDate('create', 'Datum objednávky')->setDateFormatInput('m/d/Y');
+		$grid->addFilterDateRange('create', 'Datum objednávky')->setDateFormatInput('d.m.Y');
 		/* konec filtrů */
 
 		/* seznam her */
