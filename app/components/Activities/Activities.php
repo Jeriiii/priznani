@@ -81,10 +81,16 @@ class Activities extends BaseProjectControl {
 			} elseif ($item->imageID != NULL) {
 				$data[] = $activityObj->getUserImageAction($item->event_creator->user_name, $item->event_type, $item->image, $item->id);
 			} else {
-				$data[] = $activityObj->getUserAction($item->event_creator->user_name, $item->event_type, $item->event_type, $item->id);
+				$data[] = $activityObj->getUserAction($item->event_creator->user_name, $item->event_type, $item->id);
 			}
 		}
-		$this->presenter->sendResponse(new JsonResponse(array("activities" => $data)));
+
+		//pokud nejsou žádné aktivity pošleme 0
+		if (!isset($data)) {
+			$this->presenter->sendResponse(new JsonResponse(array("activities" => 0)));
+		} else {
+			$this->presenter->sendResponse(new JsonResponse(array("activities" => $data)));
+		}
 	}
 
 	/**
@@ -108,6 +114,7 @@ class Activities extends BaseProjectControl {
 	 */
 	public function handleAllViewed() {
 		$this->activitiesDao->markAllViewed($this->userID);
+		$this->redrawControl();
 	}
 
 }
