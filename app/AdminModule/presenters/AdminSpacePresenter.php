@@ -57,6 +57,7 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 		$navigation["MUJ ÚČET"] = $this->link("Admin:myAccounts");
 		$navigation["PLATBY"] = $this->link("Payments:");
 		$navigation["OBJEDNÁVKY"] = $this->link("GameOrders:");
+		$navigation["UŽIV. ZPRÁVY"] = $this->link("Contacts:");
 		//if ($user->isAllowed('news')) $navigation["AKTUALITY"] = $this->link("AdminNews:");
 
 		$backlink = $this->link($this->backlink());
