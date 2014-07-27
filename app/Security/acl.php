@@ -27,6 +27,7 @@ class Acl extends Permission {
 		$this->addResource('Profil:Galleries');
 		$this->addResource('Admin:Payments');
 		$this->addResource('Admin:GameOrders');
+		$this->addResource('Admin:Contacts');
 
 		// privileges
 		$this->allow('baseadmin', 'Admin:Admin');
@@ -37,6 +38,7 @@ class Acl extends Permission {
 		$this->allow('baseadmin', 'Admin:AcceptImages');
 		$this->allow('baseadmin', 'Admin:Payments');
 		$this->allow('baseadmin', 'Admin:GameOrders');
+		$this->allow('baseadmin', 'Admin:Contacts');
 		$this->allow('user', 'Profil:Edit');
 		$this->allow('user', 'Profil:ShowProfil');
 		$this->allow('user', 'Profil:Galleries');

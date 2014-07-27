@@ -20,3 +20,4 @@ services:
 	paymentDao: \POS\Model\PaymentDao
 	activitiesDao: \POS\Model\ActivitiesDao
 	databaseDao: \POS\Model\DatabaseDao
+	contactDao: POS\Model\ContactDao
