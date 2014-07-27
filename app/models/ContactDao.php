@@ -25,6 +25,7 @@ class ContactDao extends AbstractDao {
 	const COLUMN_PHONE = "phone";
 	const COLUMN_EMAIL = "email";
 	const COLUMN_TEXT = "text";
+	const COLUMN_VIEWED = "viewed";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -77,6 +78,17 @@ class ContactDao extends AbstractDao {
 		$sel = $this->getTable();
 		$sel->limit($limit, $offset);
 		return $sel;
+	}
+
+	/**
+	 * Vrátí počet nepřečtených zpráv od uživatelů
+	 * @return int
+	 */
+	public function getUnviewedCount() {
+		$sel = $this->getTable();
+		$sel->select('id');
+		$sel->where(self::COLUMN_VIEWED, 0);
+		return $sel->count();
 	}
 
 }

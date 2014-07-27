@@ -90,6 +90,17 @@ class UserImageDao extends AbstractDao {
 	}
 
 	/**
+	 * Vrátí počet nevyřízených fotek
+	 * @return int
+	 */
+	public function getUnapprovedCount() {
+		$sel = $this->getTable();
+		$sel->select('id');
+		$sel->where(self::COLUMN_ALLOW, 0);
+		return $sel->count();
+	}
+
+	/**
 	 * Smaže obrázek, když jde o polední obrázek nebo nejlepší obrázek,
 	 * zkusí nastavit jiný. Když už žádný jiný obrázek v galerii není
 	 * vymaže ji ze streamu.
