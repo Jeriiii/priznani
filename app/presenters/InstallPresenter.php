@@ -7,11 +7,12 @@
  * @package    jkbusiness
  */
 use Nette\Utils\Finder;
-use NetteExt\Install\InstallDB;
+use NetteExt\Install\DB\InstallDB;
 use SQLParser\PHPSQLParser;
 use Nette\Database;
 use Nette\Diagnostics\Debugger;
 use Nette\Environment;
+use NetteExt\Install\DirChecker;
 
 class InstallPresenter extends BasePresenter {
 
@@ -21,57 +22,25 @@ class InstallPresenter extends BasePresenter {
 	 */
 	public $dbDao;
 
-
-
-	/* adresáře, které by měli existovat */
-	private $dirs = array();
-
 	public function actionDefault() {
 		ini_set('max_execution_time', 300);
 
-		// přidání složek pro galerie
-		$this->addToExistDirs(WWW_DIR . "/images/galleries/");
-		$this->addToExistDirs(WWW_DIR . "/images/userGalleries/");
-		$this->addToExistDirs(WWW_DIR . "/images/users/profils/");
+		/* zkontroluje zda existují složky */
+		$dirCheker = new DirChecker();
+		$dirCheker->check();
 
-		// přidání složek pro cache css a js
-		$this->addToExistDirs(WWW_DIR . "/cache/");
-		$this->addToExistDirs(WWW_DIR . "/cache/js/");
-		$this->addToExistDirs(WWW_DIR . "/cache/css/");
+		/* obnoví kompletně celou DB pos i postest */
+		$instalDB = new InstallDB($this->dbDao);
+		$instalDB->installAll();
 
-		$this->controlDirs();
-
-		InstallDB::sqlInstall($this->dbDao->getDatabase());
 		die();
 	}
 
-	/**
-	 * zkontroluje, zda existují všechny složky
-	 */
-	private function controlDirs() {
-		foreach ($this->dirs as $dir) {
-			if (!file_exists($dir["path"])) {
-				mkdir($dir["path"]);
-				echo "složka " . $dir["path"] . " BYLA VYTVOŘENA <br />";
-			} else {
-				echo "složka " . $dir["path"] . " již existuje <br />";
-			}
-		}
-	}
+	public function actionTestData() {
+		$instalDB = new InstallDB($this->dbDao);
+		$instalDB->dataPostestDb();
 
-	/**
-	 * Metoda soužící pro přidání dalšího adresáře do adresářů, které by měli
-	 * existovat. Prosím používejte k přidání vždy tuto metodu.
-	 * @param type $path cesta k adresáři který by měl existovat
-	 */
-	private function addToExistDirs($path) {
-		$this->dirs[] = array(
-			"path" => $path
-		);
-	}
-
-	public function renderDefault() {
-
+		die();
 	}
 
 }

@@ -1,6 +1,8 @@
 Feature: Enviroment.
   User is able to do various things.
 
+	Scenario:
+		Given I am on "/install/test-data"
 
 	Scenario: User see homepage
 		Given I am on "/"
