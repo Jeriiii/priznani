@@ -57,7 +57,7 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 				$gallery = $this->userGalleryDao->createProfileGallery($uID);
 			}
 			$this->saveImages($image, $uID, $gallery->id);
-			$presenter->flashMessage('Profilové foto bylo uloženo.');
+			$presenter->flashMessage('Profilové foto bylo uloženo. Nyní je ve frontě na schválení.');
 			$presenter->redirect('this');
 		} else {
 			$this->addError("Vyberte platný soubor");

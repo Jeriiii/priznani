@@ -63,7 +63,7 @@ class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm {
 
 		$this->userImageDao->update($this->imageID, $values);
 
-		$presenter->flashMessage('Fotka byla úspěšně změněna');
+		$presenter->flashMessage('Fotka byla úspěšně změněna. Nyní je ve frontě na schválení.');
 		$presenter->redirect("Galleries:listUserGalleryImages", $this->galleryID);
 	}
 

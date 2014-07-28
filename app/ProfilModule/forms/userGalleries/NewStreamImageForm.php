@@ -69,7 +69,7 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 
 			$this->saveImages($images, $userID, $idGallery);
 
-			$presenter->flashMessage('Fotky byly přidané.');
+			$presenter->flashMessage('Fotky byly přidané. Nyní jsou ve frontě na schválení.');
 			$presenter->redirect('OnePage:default');
 		}
 	}
