@@ -37,6 +37,18 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public $activitiesDao;
 
+	/**
+	 * @var \POS\Model\ChatMessagesDao
+	 * @inject
+	 */
+	public $chatMessagesDao;
+
+	/**
+	 * @var \POS\Model\ChatContactsDao
+	 * @inject
+	 */
+	public $chatContactsDao;
+
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
