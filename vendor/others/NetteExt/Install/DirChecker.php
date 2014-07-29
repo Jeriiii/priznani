@@ -12,10 +12,23 @@ namespace NetteExt\Install;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
+use NetteExt\Install\Messages;
+
 class DirChecker {
 	/* adresáře, které by měli existovat */
 
 	private $dirs = array();
+
+	/** @var Messages */
+	private $messages;
+
+	public function __construct($messages = NULL) {
+		if (isset($messages)) {
+			$this->messages = $messages;
+		} else {
+			$this->messages = new Messages;
+		}
+	}
 
 	/**
 	 * Zkontroluje zda složky existují. Pokud ne, vytvoří je.
@@ -50,9 +63,9 @@ class DirChecker {
 		foreach ($this->dirs as $dir) {
 			if (!file_exists($dir["path"])) {
 				mkdir($dir["path"]);
-				echo "složka " . $dir["path"] . " BYLA VYTVOŘENA <br />";
+				$this->messages->addMessage("složka " . $dir["path"] . " BYLA VYTVOŘENA");
 			} else {
-				echo "složka " . $dir["path"] . " již existuje <br />";
+				$this->messages->addMessage("složka " . $dir["path"] . " již existuje");
 			}
 		}
 	}
