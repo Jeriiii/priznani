@@ -6,6 +6,8 @@ namespace NetteExt\Install\DB;
  * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
+use NetteExt\Install\Messages;
+
 /**
  * Description of SQL
  *
@@ -23,12 +25,20 @@ class InstallDB {
 	/** @var Database\Context */
 	private $dbConection;
 
+	/** @var Messages */
+	private $messages;
+
 	/**
 	 * @param \POS\Model\DatabaseDao $dbDao
 	 */
-	public function __construct($dbDao) {
+	public function __construct($dbDao, $messages = NULL) {
 		$this->dbDao = $dbDao;
 		$this->dbConection = $dbDao->getDatabase();
+		if (isset($messages)) {
+			$this->messages = $messages;
+		} else {
+			$this->messages = new Messages;
+		}
 	}
 
 	/**
@@ -47,7 +57,7 @@ class InstallDB {
 		$sql->setSqlAllDB();
 		$this->executeSql($sql);
 
-		echo "Databáze " . self::TABLE_POS . " byla úspěšně nainstalována <br />";
+		$this->messages->addMessage("Databáze " . self::TABLE_POS . " byla úspěšně nainstalována");
 	}
 
 	/**
@@ -58,18 +68,26 @@ class InstallDB {
 		$sql->setSqlAllDB();
 		$this->executeSql($sql);
 
-		echo "Databáze " . self::TABLE_POS_TEST . " byla úspěšně nainstalovány <br />";
+		$this->messages->addMessage("Databáze " . self::TABLE_POS_TEST . " byla úspěšně nainstalovány");
 	}
 
 	/**
 	 * Obnový data z testovací DB na standartní.
 	 */
-	public function dataPostestDb() {
-		$sql = new Sql(self::TABLE_POS_TEST);
+	public function dataTestDb() {
+		$this->recoveryData(self::TABLE_POS_TEST);
+	}
+
+	public function dataDb() {
+		$this->recoveryData(self::TABLE_POS);
+	}
+
+	private function recoveryData($dbName) {
+		$sql = new Sql($dbName);
 		$sql->setData($this->dbDao);
 		$this->executeSql($sql);
 
-		echo "Data z databáze " . self::TABLE_POS_TEST . " byla obnovena.";
+		$this->messages->addMessage("Data z databáze " . $dbName . " byla obnovena.");
 	}
 
 	/**

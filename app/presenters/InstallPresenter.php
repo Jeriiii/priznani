@@ -13,6 +13,7 @@ use Nette\Database;
 use Nette\Diagnostics\Debugger;
 use Nette\Environment;
 use NetteExt\Install\DirChecker;
+use NetteExt\Install\Messages;
 
 class InstallPresenter extends BasePresenter {
 
@@ -22,25 +23,57 @@ class InstallPresenter extends BasePresenter {
 	 */
 	public $dbDao;
 
-	public function actionDefault() {
+	public function startup() {
+		parent::startup();
+		$this->setLayout("layoutInstall");
+	}
+
+	public function actionAll() {
 		ini_set('max_execution_time', 300);
+		$messages = new Messages;
 
 		/* zkontroluje zda existují složky */
-		$dirCheker = new DirChecker();
+		$dirCheker = new DirChecker($messages);
 		$dirCheker->check();
 
 		/* obnoví kompletně celou DB pos i postest */
-		$instalDB = new InstallDB($this->dbDao);
+		$instalDB = new InstallDB($this->dbDao, $messages);
 		$instalDB->installAll();
 
-		die();
+		$messages->flash($this);
+		$this->redirect("Install:");
 	}
 
 	public function actionTestData() {
-		$instalDB = new InstallDB($this->dbDao);
-		$instalDB->dataPostestDb();
+		$messages = new Messages;
 
-		die();
+		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB->dataTestDb();
+
+		$messages->flash($this);
+		$this->redirect("Install:");
+	}
+
+	public function actionData() {
+		$messages = new Messages;
+
+		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB->dataDb();
+		$instalDB->dataTestDb();
+
+		$messages->flash($this);
+		$this->redirect("Install:");
+	}
+
+	public function actionAllData() {
+		$messages = new Messages;
+
+		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB->dataDb();
+		$instalDB->dataTestDb();
+
+		$messages->flash($this);
+		$this->redirect("Install:");
 	}
 
 }
