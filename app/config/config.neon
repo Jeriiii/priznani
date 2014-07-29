@@ -46,6 +46,8 @@ common:
 		facebookAuthenticator: FacebookAuthenticator
 
 		authenticator: Authenticator
+
+		chatManager: POS\Chat\ChatManager
 		authorizator:
 			class: Acl
 

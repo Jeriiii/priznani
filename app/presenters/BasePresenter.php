@@ -38,16 +38,10 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	public $activitiesDao;
 
 	/**
-	 * @var \POS\Model\ChatMessagesDao
+	 * @var \POS\Chat\ChatManager
 	 * @inject
 	 */
-	public $chatMessagesDao;
-
-	/**
-	 * @var \POS\Model\ChatContactsDao
-	 * @inject
-	 */
-	public $chatContactsDao;
+	public $chatManager;
 
 	public function startup() {
 		AntispamControl::register();
@@ -160,6 +154,15 @@ abstract class BasePresenter extends BaseProjectPresenter {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Vytvoření komponenty pro chat
+	 * @param String $name
+	 * @return \POSComponent\Chat\PosChat
+	 */
+	protected function createComponentChat($name) {
+		return new POSComponent\Chat\PosChat($this->chatManager, NULL, $name);
 	}
 
 	/**
