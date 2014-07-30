@@ -48,3 +48,7 @@
 <a class="btn-action btn-edit" href="{plink Galleries:editGalleryImage imageID => $image->id, galleryID => $image->galleryID, redirekt => FALSE}"  title="editovat fotku"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
 <a data-toggle="modal" href="#MyModal{$image->id}" class="btn-action btn-delete" href="{plink deleteImage! id_image => $image->id, id_gallery => $image->galleryID, redirekt => FALSE}" title="smazat fotku"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
 {/}
+
+{define imageLink}
+	<a class="view" href="{plink Galleries:image imageID => $image->id, galleryID => $image->galleryID}">{$image->name}</a>
+{/}

@@ -7,11 +7,13 @@
  * @package    jkbusiness
  */
 use Nette\Utils\Finder;
-use NetteExt\Install\InstallDB;
+use NetteExt\Install\DB\InstallDB;
 use SQLParser\PHPSQLParser;
 use Nette\Database;
 use Nette\Diagnostics\Debugger;
 use Nette\Environment;
+use NetteExt\Install\DirChecker;
+use NetteExt\Install\Messages;
 
 class InstallPresenter extends BasePresenter {
 
@@ -21,57 +23,57 @@ class InstallPresenter extends BasePresenter {
 	 */
 	public $dbDao;
 
+	public function startup() {
+		parent::startup();
+		$this->setLayout("layoutInstall");
+	}
 
-
-	/* adresáře, které by měli existovat */
-	private $dirs = array();
-
-	public function actionDefault() {
+	public function actionAll() {
 		ini_set('max_execution_time', 300);
+		$messages = new Messages;
 
-		// přidání složek pro galerie
-		$this->addToExistDirs(WWW_DIR . "/images/galleries/");
-		$this->addToExistDirs(WWW_DIR . "/images/userGalleries/");
-		$this->addToExistDirs(WWW_DIR . "/images/users/profils/");
+		/* zkontroluje zda existují složky */
+		$dirCheker = new DirChecker($messages);
+		$dirCheker->check();
 
-		// přidání složek pro cache css a js
-		$this->addToExistDirs(WWW_DIR . "/cache/");
-		$this->addToExistDirs(WWW_DIR . "/cache/js/");
-		$this->addToExistDirs(WWW_DIR . "/cache/css/");
+		/* obnoví kompletně celou DB pos i postest */
+		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB->installAll();
 
-		$this->controlDirs();
-
-		InstallDB::sqlInstall($this->dbDao->getDatabase());
-		die();
+		$messages->flash($this);
+		$this->redirect("Install:");
 	}
 
-	/**
-	 * zkontroluje, zda existují všechny složky
-	 */
-	private function controlDirs() {
-		foreach ($this->dirs as $dir) {
-			if (!file_exists($dir["path"])) {
-				mkdir($dir["path"]);
-				echo "složka " . $dir["path"] . " BYLA VYTVOŘENA <br />";
-			} else {
-				echo "složka " . $dir["path"] . " již existuje <br />";
-			}
-		}
+	public function actionTestData() {
+		$messages = new Messages;
+
+		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB->dataTestDb();
+
+		$messages->flash($this);
+		$this->redirect("Install:");
 	}
 
-	/**
-	 * Metoda soužící pro přidání dalšího adresáře do adresářů, které by měli
-	 * existovat. Prosím používejte k přidání vždy tuto metodu.
-	 * @param type $path cesta k adresáři který by měl existovat
-	 */
-	private function addToExistDirs($path) {
-		$this->dirs[] = array(
-			"path" => $path
-		);
+	public function actionData() {
+		$messages = new Messages;
+
+		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB->dataDb();
+		$instalDB->dataTestDb();
+
+		$messages->flash($this);
+		$this->redirect("Install:");
 	}
 
-	public function renderDefault() {
+	public function actionAllData() {
+		$messages = new Messages;
 
+		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB->dataDb();
+		$instalDB->dataTestDb();
+
+		$messages->flash($this);
+		$this->redirect("Install:");
 	}
 
 }

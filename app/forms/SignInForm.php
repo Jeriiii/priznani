@@ -46,9 +46,9 @@ class SignInForm extends BaseBootstrapForm {
 			}
 			$user->login($values->email, $values->password);
 			//toto se provede při úspěšném zpracování přihlašovacího formuláře
-			if (!empty($presenter->backlink)) {
-				$presenter->flashMessage("Byl jste úspěšně přihlášen");
-			}
+			//if (!empty($presenter->backlink)) {
+			$presenter->flashMessage("Byl jste úspěšně přihlášen");
+			//}
 			if ($presenter->user->isInRole("admin") || $presenter->user->isInRole("superadmin")) {
 				$presenter->redirect('Admin:Forms:forms');
 			} else {
