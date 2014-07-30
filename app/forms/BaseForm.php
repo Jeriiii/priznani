@@ -11,13 +11,16 @@ use POS\Model\UserDao;
 
 class BaseForm extends Form {
 
-	/**
-	 * @var \POS\Model\UserDao
-	 */
-	public $userDao;
+	/** @var boolean Je spuštěno testování Behatem? */
+	protected $testMode;
+
+	/** @var boolean Je spuštěna aplikace na produkci? */
+	protected $productionMode;
 
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
+		$this->testMode = $this->getPresenter()->testMode;
+		$this->productionMode = $this->getPresenter()->productionMode;
 	}
 
 }

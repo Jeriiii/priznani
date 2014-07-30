@@ -14,6 +14,8 @@ common:
 		facebook:
 			appId: '639745929384551' # musi byt string
 			secret: '6db6f485163d65b16d4758520e1011b9'
+		#testovací režim
+		testMode: FALSE
 
 	php:
 		date.timezone: Europe/Prague
@@ -34,7 +36,8 @@ common:
 				dsn: '%database.driver%:host=%database.host%;dbname=%database.dbname%'
 				user: %database.user%
 				password: %database.password%
-
+	
+#	testMode: %testMode%
 
 	services:
 		database: @POS\Model\UserDao
@@ -70,5 +73,8 @@ production < common:
 			dbname: d42750_pos4
 			user: a42750_pos4
 			password: aB9aStTN
+		productionMode: TRUE
 
 development < common:
+	parameters:
+		productionMode: FALSE

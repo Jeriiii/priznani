@@ -1,6 +1,8 @@
 includes:
 	- testconection.neon
 
+testing: TRUE
+
 nette:
 	session:
 		save_path: "%tempDir%/sessions"
@@ -12,3 +14,7 @@ services:
 	databaseManager: \Test\DatabaseManager(%appDir%/test/sql)
 	screenshotManager: \Test\ScreenshotManager(%tempDir%/test/screenshots)
 	nette.mailer: \Test\MailManager(%tempDir%/test/emails)
+
+parameters:
+		#testovací režim
+		testMode: TRUE

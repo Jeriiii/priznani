@@ -48,14 +48,15 @@ class EshopGamesOrdersForm extends BaseForm {
 		//$this->addCheckbox('milackuuklidto', 'Miláčku ukliď to');
 		$this->addCheckbox('sexyhratky', 'Sexy hrátky');
 		//$this->addCheckbox('manazeruvsen', 'Manažerův sen');
-//		$this->addText('discount_coupon', 'Slevový kupón')
-//				->addRule(Form::FILLED)
-//				->addRule(Form::MAX_LENGTH, null, 50);
+		//		$this->addText('discount_coupon', 'Slevový kupón')
+		//				->addRule(Form::FILLED)
+		//				->addRule(Form::MAX_LENGTH, null, 50);
 		$this->addText('note', 'Poznámka')
 			->addRule(Form::MAX_LENGTH, null, 255);
 
 		$this->addSubmit("submit", "Objednat");
 		$this->getElementPrototype()->onsubmit('tinyMCE.triggerSave()');
+		$this->onValidate[] = callback($this, 'gameCheckboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -68,15 +69,24 @@ class EshopGamesOrdersForm extends BaseForm {
 		$values["create"] = new \Nette\DateTime;
 		$this->eshopGameOrderDao->insert($values);
 
-		//dump($values["noloop"]);die();
 		//poslání dat do origame
-		if (empty($values["noloop"])) {
+		if (empty($values["noloop"]) && $this->productionMode) {
 			unset($values["create"]);
+			$presenter->flashMessage('Děkujeme za objednávku. Informace o platbě Vám byly odeslány na email.');
 			$this->postOrder($values);
+		} else {
+			$presenter->flashMessage("Aplikace objednávku NEODESLALA! Pokud potíže přetrvávají, prosím kontaktujte nás.", "error");
 		}
 
-		$presenter->flashMessage('Děkujeme za objednávku. Informace o platbě Vám byly odeslány na email.');
 		$presenter->redirect('this');
+	}
+
+	public function gameCheckboxValidation($form) {
+		$values = $form->getValues();
+
+		if (empty($values['vasnivefantazie']) && empty($values['nespoutanevzruseni']) && empty($values['zhaveukolypropary']) && empty($values['sexyaktivity']) && empty($values['sexyhratky'])) {
+			$form->addError("Musíte vybrat alespoň jednu hru");
+		}
 	}
 
 	public function postOrder($values) {

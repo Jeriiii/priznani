@@ -192,13 +192,17 @@
             {control js 'layout/user-layout-menu.js', 'activities.js', 'chat/core.js', 'chat/init.js', 'chat/jquery.ui.chatbox/jquery.ui.chatbox.js'}
 			{*include #user-menu-scripts*}
 			{control jsLayout}
+			
+			
 
 			{if $fbToDatabase}
 				{control fbLikeAndCommentToDatabase}
 
 			{/if}
 		{block foot}{/block}
-
+<script>
+				alert("neco");
+			</script>
 			<div class="clear"></div>
 		</footer>
 	</body>
