@@ -163,6 +163,7 @@
 		<div class="clear"></div>
 	    </section>
 
+		{control chat}
 		<footer class="inner">
 		    <div id="footline"></div>
 		    <div class="left">
@@ -181,13 +182,14 @@
 			www.priznaniosexu.cz
 		    </div>
 		    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+			<script type="text/javascript" src="{$basePath}/js/jquery-ui-1.8.18.min.js"></script>
 		    {if $existForm}
 			<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
 		    {/if}
 		    <div id="fb-root"></div>
 
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
-            {control js 'layout/user-layout-menu.js', 'activities.js'}
+            {control js 'layout/user-layout-menu.js', 'activities.js', 'chat/core.js', 'chat/init.js', 'chat/jquery.ui.chatbox/jquery.ui.chatbox.js'}
 			{*include #user-menu-scripts*}
 			{control jsLayout}
 

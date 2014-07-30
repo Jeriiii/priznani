@@ -37,6 +37,12 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public $activitiesDao;
 
+	/**
+	 * @var \POS\Chat\ChatManager
+	 * @inject
+	 */
+	public $chatManager;
+
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
@@ -148,6 +154,15 @@ abstract class BasePresenter extends BaseProjectPresenter {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Vytvoření komponenty pro chat
+	 * @param String $name
+	 * @return \POSComponent\Chat\PosChat
+	 */
+	protected function createComponentChat($name) {
+		return new POSComponent\Chat\PosChat($this->chatManager, NULL, $name);
 	}
 
 	/**
@@ -281,7 +296,8 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$files->addFiles(array(
 			'default.css',
 			'layout/layout.less',
-			'mobile/responsive-menu.less'));
+			'mobile/responsive-menu.less',
+			'chat/jquery.ui.chatbox.css'));
 
 		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
