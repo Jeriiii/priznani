@@ -37,7 +37,12 @@ class StandardContactList extends BaseProjectControl implements IContactList {
 	public function render() {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/standard.latte');
-		$template->render();
+
+		$userId = $this->getPresenter()->getUser()->getId();
+		if ($userId) {
+			$template->contacts = $this->chatManager->getContacts($userId);
+			$template->render(); //neprihlasenemu uzivateli se to ani nerenderuje
+		}
 	}
 
 }

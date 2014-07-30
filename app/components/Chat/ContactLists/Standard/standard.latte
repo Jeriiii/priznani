@@ -1,2 +1,11 @@
 
-<div id="contacts"></div>
+<ul id="contacts">
+	{foreach $contacts as $contact}
+		<li id="contact-{$contact->id}" data-id="{$contact->id}" class="contact-link">{$contact->user_name}</li>
+	{/foreach}
+</ul>
+<div id="contact-boxes">
+	{foreach $contacts as $contact}
+		<div id="contact-box-{$contact->id}"></div>
+	{/foreach}
+</div>

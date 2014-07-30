@@ -6,6 +6,8 @@
 
 namespace POS\Model;
 
+use POS\Model\UserDao;
+
 /**
  * NAME DAO NAMEDao
  * slouží k
@@ -28,10 +30,11 @@ class ChatContactsDao extends AbstractDao {
 	/**
 	 * Vrátí seznam kontaktů daného uživatele
 	 * @param int $idUser id uživatele
-	 * @return Nette\Database\Table\Selection seznam kontaktů
+	 * @return Nette\Database\Table\Selection seznam kontaktů (spojený s tabulkou uživatelů)
 	 */
 	public function getUsersContactList($idUser) {
 		$sel = $this->getTable();
+		$sel->select(self::TABLE_NAME . ".*, " . self::COLUMN_ID_CONTACT . ".*"); //spojeni tabulek
 		$sel->where(self::COLUMN_ID_USER, $idUser);
 		return $sel;
 	}

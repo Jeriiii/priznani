@@ -10,6 +10,7 @@ namespace POS\Chat;
 
 use POS\Model\ChatContactsDao;
 use POS\Model\ChatMessagesDao;
+use \POS\Model\UserDao;
 
 /**
  *
@@ -31,11 +32,22 @@ class ChatManager {
 	private $messagesDao;
 
 	/**
+	 * DAO pro uzivatele
+	 * @var UserDao
+	 */
+	private $userDao;
+
+	/**
 	 * Standardni konstruktor, predani potrebnych DAO z presenteru
 	 */
-	function __construct(ChatContactsDao $contactsDao, ChatMessagesDao $messagesDao) {
+	function __construct(ChatContactsDao $contactsDao, ChatMessagesDao $messagesDao, UserDao $userDao) {
 		$this->contactsDao = $contactsDao;
 		$this->messagesDao = $messagesDao;
+		$this->userDao = $userDao;
+	}
+
+	public function getContacts($userId) {
+		return $this->contactsDao->getUsersContactList($userId);
 	}
 
 }

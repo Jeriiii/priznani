@@ -297,7 +297,9 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'default.css',
 			'layout/layout.less',
 			'mobile/responsive-menu.less',
-			'chat/jquery.ui.chatbox.css'));
+			'chat/jquery.ui.chatbox.css',
+			'chat/default.less'
+		));
 
 		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
