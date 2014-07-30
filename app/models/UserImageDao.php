@@ -178,6 +178,16 @@ class UserImageDao extends AbstractDao {
 		return $sel->count();
 	}
 
+	/**
+	 * Vrátí obrázky podle pole ID
+	 * @param array Pole indexů obrázků
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getAllById($imagesID) {
+		$sel = $this->getTable();
+		return $sel->where('id', $imagesID);
+	}
+
 	/*	 * **************************** UPDATE ******************************** */
 
 	/**
