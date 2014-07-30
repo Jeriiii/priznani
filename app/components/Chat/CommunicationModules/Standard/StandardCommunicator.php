@@ -10,6 +10,8 @@ namespace POSComponent\Chat;
 
 use POS\Chat\ChatManager;
 use POSComponent\BaseProjectControl;
+use \Nette\Utils\Json;
+use Nette\Application\Responses\JsonResponse;
 
 /**
  * Slouží přímo ke komunikaci mezi uživateli
@@ -31,12 +33,21 @@ class StandardCommunicator extends BaseProjectControl implements ICommunicator {
 		$this->chatManager = $manager;
 	}
 
+	function handleSendMessage() {
+
+		$json = file_get_contents("php://input");
+//		$json = $this->getPresenter()->getRequest()->getPost();
+		$data = Json::decode($json);
+		$this->getPresenter()->sendJson($data);
+	}
+
 	/**
 	 * Vykreslení komponenty
 	 */
 	public function render() {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/standard.latte');
+		$template->sendMessageLink = $this->link("sendMessage!");
 		$template->render();
 	}
 

@@ -18,13 +18,11 @@ var chatboxManager = function() {
 	var boxList = new Array();
 	// list of boxes shown on the page
 	var showList = new Array();
-	// list of first names, for in-page demo
-	var nameList = new Array();
 
 	var config = {
 		width: 200, //px
 		gap: 20,
-		maxBoxes: 5,
+		maxBoxes: 8,
 		messageSent: function(dest, msg) {
 			// override this
 			$("#" + dest).chatbox("option", "boxManager").addMsg(dest, msg);
@@ -56,12 +54,14 @@ var chatboxManager = function() {
 			}
 		}
 		else {
-			alert("should not happen: " + id);
+			//alert("should not happen: " + id);
 		}
 	};
 
+
+
 	// caller should guarantee the uniqueness of id
-	var addBox = function(id, user, name) {
+	var addBox = function(id, data, name) {
 		var idx1 = showList.indexOf(id);
 		var idx2 = boxList.indexOf(id);
 		if (idx1 != -1) {
@@ -79,29 +79,24 @@ var chatboxManager = function() {
 			var el = document.createElement('div');
 			el.setAttribute('id', id);
 			$(el).chatbox({id: id,
-				user: user,
-				title: user.first_name + " " + user.last_name,
+				user: data,
+				title: data.title,
 				hidden: false,
 				width: config.width,
 				offset: getNextOffset(),
-				messageSent: messageSentCallback,
+				messageSent: config.messageSent,
 				boxClosed: boxClosedCallback
 			});
 			boxList.push(id);
 			showList.push(id);
-			nameList.push(user.first_name);
 		}
 	};
 
-	var messageSentCallback = function(id, user, msg) {
-		var idx = boxList.indexOf(id);
-		config.messageSent(nameList[idx], msg);
-	};
 
 	// not used in demo
 	var dispatch = function(id, user, msg) {
 		$("#" + id).chatbox("option", "boxManager").addMsg(user.first_name, msg);
-	}
+	};
 
 	return {
 		init: init,

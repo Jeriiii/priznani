@@ -9,9 +9,6 @@
 	var opts;
 
 
-	var openBoxes = {};
-
-
 	/* main */
 	$.fn.chat = function(options) {
 		var opts = $.extend({}, $.fn.chat.defaults, options);
@@ -23,21 +20,77 @@
 		minRequestTimeout: 1000,
 		/* minimální čekání mezi zasíláním požadavků. Této hodnoty dosáhne chat při aktivním používání */
 		maxRequestTimeout: 8000,
-		/* maximální čekání mezi zasíláním požadavků na nové zprávy. Této hodnoty postupně dosáhne neaktivní uživatel */
+		/* maximální čekání mezi zasíláním požadavků na nové zprávy. Této hodnoty postupně dosáhne neaktivní chat. */
 		timeoutStep: 100,
 		/* o kolik se zvýší čekání při přijetí prázdné odpovědi */
 		contactListItems: '.contact-link',
 		/* selektor pro položku (jméno) na seznamu kontaktů */
 		idAttribute: 'data-id',
 		/* atribut položky seznamu kontaktů, kde je její ID */
-		boxSelectorPrefix: '#contact-box-'
-				/* prefix selektoru pro jednotliva okenka - na konec bude pridano id kontaktu */
+		boxContainerSelector: '#contact-boxes',
+		/* selector pro objekt, kde se budou vyvtaret okenka */
+		titleAttribute: 'data-title',
+		/* pod kterym atributem u polozky seznamu je text, ktery se ma zobrazit v titulku okenka*/
+		boxWidth: 300,
+		/* sirka okenka s chatem [px] */
+		boxMargin: 30,
+		/* mezera mezi okenky [px] */
+		maxBoxes: 8
+				/* maximalni pocet okenek na obrazovce */
 
 	};
 
-
+	/**
+	 * Nastaveni options
+	 * @param opts nastaveni k nastaveni
+	 */
 	function setOpts(opts) {
 		this.opts = opts;
+	}
+
+	/**
+	 * Posila zpravu na server. Vola se automaticky pro odeslani zpravy v okenku
+	 * @param {type} id
+	 * @param {type} data data souvisejici s okenkem
+	 * @param {type} msg
+	 * @returns {undefined}
+	 */
+	function sendMessage(id, data, msg) {
+		var requestData = {
+			id: id,
+			type: 'textMessage',
+			text: msg
+		};
+		sendDataByAjax(sendMessageLink, requestData);
+		this.boxManager.addMsg(mydata.name, msg);//pridani zpravy do okna
+	}
+	;
+	/**
+	 * Pomoci AJAXU konvertuje data do formatu JSON a posle je na danou adresu
+	 * @param Object data
+	 */
+	function sendDataByAjax(url, data) {
+		var json = JSON.stringify(data);
+
+		$.ajax({
+			dataType: "json",
+			type: 'POST',
+			url: url,
+			data: json,
+			contentType: 'application/json; charset=utf-8',
+			success: handleResponse
+		});
+
+	}
+
+	/**
+	 * Zpracuje odpoved serveru
+	 * @param Object data data ze serveru
+	 * @param Object status status odpovedi ze serveru
+	 * @param Object jqxhr jqXHR (in jQuery 1.4.x, XMLHttpRequest) object viz dokumentace jQuery.ajax()
+	 */
+	function handleResponse(data, status, jqxhr) {
+		alert(JSON.parse(data));
 	}
 
 	/**
@@ -46,39 +99,31 @@
 	function initializeContactList() {
 		console.log('CHAT - initializing contact list');
 
-		var opts = this.opts;
-		$(this.opts.contactListItems).click(function(e) {
-			e.preventDefault();
-			var id = $(this).attr(opts.idAttribute);
-			toggleChatbox(id, opts);
+
+		var idList = new Array();
+
+		chatboxManager.init({//chatbox manager pro spravu okenenek
+			messageSent: sendMessage,
+			width: this.opts.boxWidth,
+			gap: this.opts.boxMargin,
+			maxBoxes: this.opts.maxBoxes
 		});
 
-	}
-
-	/*
-	 * Otevre, zavre nebo vytvori a otevre okno chatu
-	 * Na jeden kontakt muze byt max jedno okno
-	 * @param int id id kontaktu
-	 * @param Object opts to same jako this.opts, globalne to ale neni videt kvuli .click
-	 *
-	 */
-	function toggleChatbox(id, opts) {
-		if (typeof openBoxes[id] == 'undefined') {//neexistuje index = okenko
-			var boxSelector = opts.boxSelectorPrefix + "" + id;
-			openBoxes[id] = $(boxSelector).chatbox({id: id,
-				user: {key: "value"},
-				title: "test chat",
-				messageSent: function(id, user, msg) {
-					$("#log").append(id + " said: " + msg + "<br/>");
-					$(boxSelector).chatbox("option", "boxManager").addMsg(id, msg);
-				}});
-			console.log('CHAT - created new box #' + id + openBoxes[id].toString());
-		} else {//pokud uz existuje
-			openBoxes[id].chatbox("option", "boxManager").toggleBox();
-			console.log('CHAT - toggled box #' + id);
-		}
+		var opts = this.opts;
+		$(this.opts.contactListItems).click(function(event) {//click event na polozkach seznamu
+			event.preventDefault();
+			var id = $(this).attr(opts.idAttribute);
+			idList.push(id);
+			chatboxManager.addBox(id,
+					{
+						title: $(this).attr(opts.titleAttribute)
+					});
+		});
+		console.log('CHAT - created new box #' + id);
 
 	}
+
+
 
 })(jQuery);
 

@@ -10,6 +10,7 @@ namespace POSComponent\Chat;
 
 use POS\Chat\ChatManager;
 use POSComponent\BaseProjectControl;
+use POS\Model\UserDao;
 
 /**
  * Reprezentuje seznam kontaktů
@@ -38,9 +39,10 @@ class StandardContactList extends BaseProjectControl implements IContactList {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/standard.latte');
 
-		$userId = $this->getPresenter()->getUser()->getId();
-		if ($userId) {
-			$template->contacts = $this->chatManager->getContacts($userId);
+		$userIdentity = $this->getPresenter()->getUser()->getIdentity();
+		if ($userIdentity) {
+			$template->contacts = $this->chatManager->getContacts($userIdentity->getId());
+			$template->username = $userIdentity->user_name;
 			$template->render(); //neprihlasenemu uzivateli se to ani nerenderuje
 		}
 	}
