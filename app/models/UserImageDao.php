@@ -178,6 +178,11 @@ class UserImageDao extends AbstractDao {
 		return $sel->count();
 	}
 
+	public function getAllById($imagesID) {
+		$sel = $this->getTable();
+		return $sel->where('id', $imagesID);
+	}
+
 	/*	 * **************************** UPDATE ******************************** */
 
 	/**
