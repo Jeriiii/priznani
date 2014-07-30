@@ -21,3 +21,5 @@ services:
 	activitiesDao: \POS\Model\ActivitiesDao
 	databaseDao: \POS\Model\DatabaseDao
 	contactDao: POS\Model\ContactDao
+	usersCompetitionsDao: POS\Model\UsersCompetitionsDao
+	competitionsImagesDao: POS\Model\CompetitionsImagesDao
