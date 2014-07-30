@@ -33,6 +33,11 @@ class CompetitionsImagesDao extends AbstractDao {
 		return $this->createSelection(self::TABLE_NAME);
 	}
 
+	/**
+	 * Vrátí indexy obrázků podle soutěže v poli
+	 * @param int $competitionID ID soutěže, z které jsou obrázky vybrány
+	 * @return array Pole indexů obrázků z soutěže
+	 */
 	public function getByCompetitions($competitionID) {
 		$sel = $this->getTable();
 		$sel->select(self::COLUMN_IMAGE_ID);
@@ -40,6 +45,11 @@ class CompetitionsImagesDao extends AbstractDao {
 		return $sel->fetchPairs(self::COLUMN_IMAGE_ID, self::COLUMN_IMAGE_ID);
 	}
 
+	/**
+	 * Vrátí jedne obrázek ze schválených dané soutěže, který se nalézá v user_images
+	 * @param int $competitionID ID soutěže
+	 * @return Nette\Database\Table\ActiveRow
+	 */
 	public function findByApproved($competitionID) {
 		$sel = $this->getTable();
 		$sel->select(self::COLUMN_ALLOWED . ", " . self::COLUMN_COMPETITION_ID . ", imageID.*");
@@ -49,6 +59,11 @@ class CompetitionsImagesDao extends AbstractDao {
 		return $sel->fetch();
 	}
 
+	/**
+	 * Vrátí obrázek z competition_images podle imageID
+	 * @param int $imageID ID obrázku z tabulky user_images
+	 * @return Nette\Database\Table\ActiveRow
+	 */
 	public function findByImgId($imageID) {
 		$sel = $this->getTable();
 		$sel->where('imageID', $imageID);

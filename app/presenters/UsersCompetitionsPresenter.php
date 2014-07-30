@@ -5,12 +5,12 @@ use POSComponent\Galleries\UserImagesInGallery\CompetitionsImagesInGallery;
 use POS\Model\GalleryDao;
 
 /**
- * TempPresenter Description
+ * Obstarává komponenty vykreslující soutěžní fotky.
  */
 class UsersCompetitionsPresenter extends BasePresenter {
 
 	public $imageID;
-	public $image;
+	public $compImage;
 	public $gallery;
 	public $galleryID;
 	public $domain;
@@ -73,16 +73,16 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		} else {
 			// obrázek nalezen, nastavení obrázku do presenteru
 			$this->imageID = $imageID;
-			$this->image = $this->competitionsImagesDao->findByImgId($this->imageID);
+			$this->compImage = $this->competitionsImagesDao->findByImgId($this->imageID);
 
-			$this->gallery = $this->usersCompetitionsDao->find($this->image->competitionID);
+			$this->gallery = $this->usersCompetitionsDao->find($this->compImage->competitionID);
 			$this->domain = $this->partymode ? "http://priznanizparby.cz" : "http://priznaniosexu.cz";
 		}
 	}
 
 	public function renderDefault($imageID, $galleryID) {
 		if (!empty($this->imageID)) {
-			$this->template->imageLink = $this->domain . "/images/galleries/" . $this->gallery->id . "/" . $this->image->image->id . "." . $this->image->image->suffix;
+			$this->template->imageLink = $this->domain . "/images/galleries/" . $this->gallery->id . "/" . $this->compImage->image->id . "." . $this->compImage->image->suffix;
 		} else {
 			$this->template->imageLink = null;
 		}
@@ -94,7 +94,7 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		} else {
 			$mode = GalleryDao::COLUMN_SEX_MODE;
 		}
-
+		// Staré soutěže
 		$this->template->oldCompetitions = $this->galleryDao->getGallery($mode);
 		$this->template->galleries = $this->galleryDao->getCompetition($mode);
 		$this->template->competitions = $this->usersCompetitionsDao->getAll();
@@ -127,20 +127,23 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		$this->redirect("UsersCompetitions:");
 	}
 
-	public function renderListImages($galleryID) {
-//		$this->template->images = $this->imageDao->getApproved($galleryID);
-//		$this->template->gallery = $this->gallery;
-	}
-
+	/**
+	 * Vytvoří komponentu pro procházení fotek galerie
+	 * @return \POSComponent\Galleries\Images\UsersCompetitionsGallery
+	 */
 	public function createComponentGallery() {
 		$imagesID = $this->competitionsImagesDao->getByCompetitions($this->gallery->id);
 		$iID = array_keys($imagesID);
 		$images = $this->userImageDao->getAllById($iID);
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
-		return new UsersCompetitionsGallery($images, $this->image->image, $this->gallery, $domain, $this->partymode, $this->userImageDao);
+		return new UsersCompetitionsGallery($images, $this->compImage->image, $this->gallery, $domain, $this->partymode, $this->userImageDao);
 	}
 
+	/**
+	 * Komponenta pro seznam fotek jako kostičky
+	 * @return \POSComponent\Galleries\UserImagesInGallery\CompetitionsImagesInGallery
+	 */
 	protected function createComponentUsersImagesInGallery() {
 		$imagesID = $this->competitionsImagesDao->getByCompetitions($this->gallery->id);
 		$iID = array_keys($imagesID);
@@ -155,6 +158,9 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		return $this->usersCompetitionsDao->findLast();
 	}
 
+	/**
+	 * Vrátí obrázek z galerie, pokud takový je
+	 */
 	public function getImageIDFromCompetition($competition) {
 		$image = $this->competitionsImagesDao->findByApproved($competition->id);
 		if (!empty($image)) {
