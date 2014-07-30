@@ -62,7 +62,7 @@ class SignPresenter extends BasePresenter {
 	}
 
 	protected function createComponentRegistrationForm($name) {
-		return new Frm\registrationForm($this->userDao, $this, $name);
+		return new Frm\registrationForm($this->userDao, $this->mailer, $this, $name);
 	}
 
 	protected function createComponentForgottenPasswordForm($name) {

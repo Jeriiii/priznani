@@ -11,7 +11,7 @@ use POS\Model\UserDao;
 use Authorizator;
 use NetteExt\Path\GalleryPathCreator;
 use NetteExt\File;
-use Nette\Mail\SendmailMailer;
+use Nette\Mail\IMailer;
 
 class RegistrationForm extends BaseBootstrapForm {
 
@@ -22,10 +22,14 @@ class RegistrationForm extends BaseBootstrapForm {
 	 */
 	public $userDao;
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
+	/** @var \Nette\Mail\IMailer */
+	private $mailer;
+
+	public function __construct(UserDao $userDao, IMailer $mailer, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
 		$this->userDao = $userDao;
+		$this->mailer = $mailer;
 
 		$emailNameNote = Html::el('small')->setText(" (pro zapomenuté heslo, soutěže a pod.)");
 		$emailName = Html::el()->setText('E-mail:')->add($emailNameNote);
@@ -97,9 +101,9 @@ class RegistrationForm extends BaseBootstrapForm {
 		$mail->setFrom('neodepisuj@priznaniosexu.cz')
 			->addTo($email)
 			->setSubject('Dokončení registrace')
-			->setBody("Dobrý den,\nbyl jste úspěšně zaregistrován. Vaše přihlašovací údaje jsou\ne-mail: " . $email . "\nheslo: " . $password . "\nPro dokončení registrace prosím klikněte na tento odkaz:\n" . $link . "\n\nDěkujeme za Vaší registraci.\nS pozdravem\ntým nudajefuc.cz");
-		$mailer = new SendmailMailer;
-		$mailer->send($mail);
+			->setBody("Dobrý den,\nbyl jste úspěšně zaregistrován. Vaše přihlašovací údaje jsou\ne-mail: " . $email . "\nheslo: " . $password . "\nPro dokončení registrace prosím klikněte na tento odkaz:\n" . $link . "\n\nDěkujeme za Vaší registraci.\nS pozdravem\ntým priznaniosexu.cz");
+
+		$this->mailer->send($mail);
 	}
 
 }
