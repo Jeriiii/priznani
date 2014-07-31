@@ -2,7 +2,11 @@
 
 use POSComponent\Galleries\Images\UsersCompetitionsGallery;
 use POSComponent\Galleries\UserImagesInGallery\CompetitionsImagesInGallery;
-use POS\Model\GalleryDao;
+use Nette\Application\UI\Form as Frm;
+
+/*
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
+ */
 
 /**
  * Obstarává komponenty vykreslující soutěžní fotky.
@@ -12,8 +16,8 @@ class UsersCompetitionsPresenter extends BasePresenter {
 	public $imageID;
 	public $compImage;
 	public $gallery;
-	public $galleryID;
 	public $domain;
+	public $galleryID;
 
 	/**
 	 * @var POS\Model\UsersCompetitionsDao
@@ -45,10 +49,22 @@ class UsersCompetitionsPresenter extends BasePresenter {
 	 */
 	public $galleryDao;
 
-	public function actionDefault($imageID, $competitionID) {
+	/**
+	 * @var POS\Model\UserGalleryDao
+	 * @inject
+	 */
+	public $userGalleryDao;
+
+	/**
+	 * @var POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
+
+	public function actionDefault($imageID, $galleryID) {
 		//určitá galerie
-		if (!empty($competitionID)) {
-			$this->gallery = $this->usersCompetitionsDao->find($competitionID);
+		if (!empty($galleryID)) {
+			$this->gallery = $this->usersCompetitionsDao->find($galleryID);
 		}
 
 		/* id obrázku je uloženo v odkaze od galerie */
@@ -59,7 +75,7 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		}
 		if (empty($imageID)) {
 			// je na hlavní stránce soutěží ?
-			if (empty($competitionID)) {
+			if (empty($galleryID)) {
 				$this->gallery = $this->getLastCompetition();
 			}
 
@@ -88,18 +104,6 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		}
 	}
 
-	public function renderList($justCompetition = FALSE, $withoutCompetition = FALSE) {
-		if ($this->partymode) {
-			$mode = GalleryDao::COLUMN_PARTY_MODE;
-		} else {
-			$mode = GalleryDao::COLUMN_SEX_MODE;
-		}
-		// Staré soutěže
-		$this->template->oldCompetitions = $this->galleryDao->getGallery($mode);
-		$this->template->galleries = $this->galleryDao->getCompetition($mode);
-		$this->template->competitions = $this->usersCompetitionsDao->getAll();
-	}
-
 	public function actionListImages($galleryID) {
 
 		/* pokud není specifikovaná galerie, stránka se přesměruje */
@@ -119,6 +123,10 @@ class UsersCompetitionsPresenter extends BasePresenter {
 			"img-width" => "200px",
 			"text-padding-top" => "40%"
 		));
+	}
+
+	public function actionUploadImage($galleryID) {
+		$this->galleryID = $galleryID;
 	}
 
 	private function galleryMissing() {
@@ -149,6 +157,10 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		$iID = array_keys($imagesID);
 		$images = $this->userImageDao->getAllById($iID);
 		return new CompetitionsImagesInGallery($this->gallery->id, $images, $this->userDao);
+	}
+
+	public function createComponentNewImageForm($name) {
+		return new Frm\NewCompetitionImageForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this->usersCompetitionsDao, $this->competitionsImagesDao, $this, $name);
 	}
 
 	/**

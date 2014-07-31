@@ -1,7 +1,7 @@
 <?php
 
 /*
- * @copyright Copyright (c) 2014 Kukral COMPANY s.r.o.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 namespace POS\Model;
@@ -39,6 +39,19 @@ class UsersCompetitionsDao extends AbstractDao {
 		$sel = $this->getTable();
 		$sel->order(self::COLUMN_ID . " DESC");
 		return $sel->fetch();
+	}
+
+	/**
+	 * Updatne lastImageID
+	 * @param int $competitionID ID soutěže, kterou chceme updatnout
+	 * @param int $imageID ID obrázku pro lastImageID
+	 */
+	public function updateLastImage($competitionID, $imageID) {
+		$sel = $this->getTable();
+		$sel->get($competitionID);
+		$sel->update(array(
+			"lastImageID" => $imageID
+		));
 	}
 
 }
