@@ -133,18 +133,8 @@ class DatingRegistrationPresenter extends BasePresenter {
 			$tableUsers = $this->userDao;
 			$tableUsers_properties = $this->userPropertyDao;
 
-			$row = $tableUsers->insert(array(
-				'role' => $registrationDataUser->role,
-				'last_active' => new DateTime,
+			$userProperty = $tableUsers_properties->insert(array(
 				'age' => $registrationDataUser->age,
-				'created' => new DateTime,
-				'email' => $registrationDataUser->email,
-				'user_name' => $registrationDataUser->user_name,
-				'password' => $registrationDataUser->password,
-			));
-
-			$row_properties = $tableUsers_properties->insert(array(
-				'id' => $row->id,
 				'user_property' => $registrationDataUser->user_property,
 				'interested_in' => $registrationDataUser->interested_in,
 				'first_sentence' => $registrationDataUser->first_sentence,
@@ -161,7 +151,18 @@ class DatingRegistrationPresenter extends BasePresenter {
 				'bra_size' => $registrationDataUser->bra_size,
 				'hair_colour' => $registrationDataUser->hair_colour
 			));
-			$registrationDataUser->firstMemberId = $row->id;
+
+			$user = $tableUsers->insert(array(
+				'propertyID' => $userProperty->id,
+				'role' => $registrationDataUser->role,
+				'last_active' => new DateTime,
+				'created' => new DateTime,
+				'email' => $registrationDataUser->email,
+				'user_name' => $registrationDataUser->user_name,
+				'password' => $registrationDataUser->password,
+			));
+
+			$registrationDataUser->firstMemberId = $user->id;
 		}
 		if ($registrationDataUser->user_property == "coupleWoman") {
 			$this->setView("fourthRegWomanForm");

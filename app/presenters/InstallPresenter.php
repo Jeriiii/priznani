@@ -25,6 +25,11 @@ class InstallPresenter extends BasePresenter {
 
 	public function startup() {
 		parent::startup();
+		// ochrana proti spuštění instalace na ostrém serveru
+		if ($this->productionMode) {
+			$this->redirect("OnePage:");
+		}
+
 		$this->setLayout("layoutInstall");
 	}
 
