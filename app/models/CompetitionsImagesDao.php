@@ -70,4 +70,35 @@ class CompetitionsImagesDao extends AbstractDao {
 		return $sel->fetch();
 	}
 
+	/**
+	 * Vyhledá, zda je obrázek již umístěn v soutěži
+	 * @param int $imageID ID hledaného obrázku
+	 * @param int $competitionID ID soutěže
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function findByImgAndCmpId($imageID, $competitionID) {
+		$sel = $this->getTable();
+		$sel->where(array(
+			"imageID" => $imageID,
+			"competitionID" => $competitionID,
+		));
+		return $sel->fetch();
+	}
+
+	/**
+	 * Vloží obrázek do soutěže
+	 * @param int $imageID ID obrázku, který bude vložen
+	 * @param int $userID ID uživatele, jemuž patří obrázek
+	 * @param int $competitionID ID soutěže, do které bude obrázek vložen
+	 */
+	public function insertImageToCompetition($imageID, $userID, $competitionID) {
+		$sel = $this->getTable();
+		$sel->get($competitionID);
+		$sel->insert(array(
+			"imageID" => $imageID,
+			"competitionID" => $competitionID,
+			"userID" => $userID
+		));
+	}
+
 }
