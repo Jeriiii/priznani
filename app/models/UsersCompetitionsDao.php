@@ -41,4 +41,17 @@ class UsersCompetitionsDao extends AbstractDao {
 		return $sel->fetch();
 	}
 
+	/**
+	 * Updatne lastImageID
+	 * @param int $competitionID ID soutěže, kterou chceme updatnout
+	 * @param int $imageID ID obrázku pro lastImageID
+	 */
+	public function updateLastImage($competitionID, $imageID) {
+		$sel = $this->getTable();
+		$sel->get($competitionID);
+		$sel->update(array(
+			"lastImageID" => $imageID
+		));
+	}
+
 }

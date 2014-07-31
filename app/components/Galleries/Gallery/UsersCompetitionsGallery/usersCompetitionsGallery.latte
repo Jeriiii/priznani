@@ -6,7 +6,7 @@
 <a href="{plink UsersCompetitions:listImages galleryID => $gallery->id}"  class="btn-main btn-small">
 	celá galerie
 </a>
-<a href="{plink UsersCompetitions:list}"  class="btn-main btn-small">
+<a href="{plink Competition:list}"  class="btn-main btn-small">
 	seznam soutěží
 </a>
 {*<a href="#" class="btn-main btn-small scroll-to-comments">
@@ -16,6 +16,15 @@
 
 {define imageComment}
 {$image->description}
+{/}
+
+	
+{define uploadImage}
+	{if $user->isLoggedIn()}
+		<a href="{plink Competition:uploadCompetitionImage galleryID => $gallery->id}" id="add-photo-button" class="btn-main medium right">
+			nahrát fotku
+		</a>
+	{/if}
 {/}
 
 {*define uploadImage}

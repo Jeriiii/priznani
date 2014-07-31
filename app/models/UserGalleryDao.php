@@ -121,6 +121,18 @@ class UserGalleryDao extends BaseGalleryDao {
 		return $profileGallery;
 	}
 
+	/**
+	 * Vrátí poslední obrázek z galerie usera
+	 * @param int $userID ID usera, jemuž patří galerie
+	 * @return @return Database\Table\ActiveRow
+	 */
+	public function getLastImageByUser($userID) {
+		$sel = $this->getTable();
+		$sel->select("lastImageID");
+		$sel->where(self::COLUMN_USER_ID, $userID);
+		return $sel->fetch();
+	}
+
 	/*	 * ****************************** UPDATE **************************** */
 
 	/**
