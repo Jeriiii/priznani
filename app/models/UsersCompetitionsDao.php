@@ -1,7 +1,7 @@
 <?php
 
 /*
- * @copyright Copyright (c) 2014 Kukral COMPANY s.r.o.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 namespace POS\Model;

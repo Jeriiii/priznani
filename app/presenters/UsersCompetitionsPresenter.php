@@ -4,6 +4,10 @@ use POSComponent\Galleries\Images\UsersCompetitionsGallery;
 use POSComponent\Galleries\UserImagesInGallery\CompetitionsImagesInGallery;
 use Nette\Application\UI\Form as Frm;
 
+/*
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
+ */
+
 /**
  * Obstarává komponenty vykreslující soutěžní fotky.
  */
