@@ -1,18 +1,16 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 /**
- * Description of ProfilStream
+ * Stream na profilové stránce uživatele.
  *
  * @author Mario
  */
 
-namespace POSComponent\Stream\ProfilStream;
+namespace POSComponent\Stream;
 
 use \POSComponent\Stream\BaseStream\BaseStream;
 
@@ -23,10 +21,6 @@ class ProfilStream extends BaseStream {
 		$templateName = "../ProfilStream/profilStream.latte";
 
 		$this->renderBase($mode, $templateName);
-	}
-
-	public function handleGetMoreData($offset) {
-		parent::handleGetMoreData($offset);
 	}
 
 }

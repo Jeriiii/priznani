@@ -1,25 +1,12 @@
-
 {block beforeContent}
 <section class="content">
 	<div id="stream">
-            
-                {ifset #addNewPost}
-                        {include #addNewPost}
-                {/ifset}                        
-                        
+		{ifset #addNewPost}
+				{include #addNewPost}
+		{/ifset}                                
 		<div n:snippet="posts" data-ajax-append="true">
-
 			{foreach $stream as $dataItem}
 				<div class="stream-item">
-					{*ifset $dataItem->imageID}
-						<div class="stream-img">
-							<img src="{$basePath}/images/galleries/{$dataItem->image->galleryID}/{$dataItem->image->id}.{$dataItem->image->suffix}" />
-						</div>
-						<h3>{$dataItem->image->name}</h3>
-						<p>{$dataItem->image->comment}</p>
-					{/ifset*}
-
-
 					{ifset $dataItem->userGalleryID}
 						{if $user->isLoggedIn()}
 							<a href="{plink :Profil:Galleries: userID => $dataItem->userID}" title="{$dataItem->user->user_name}"><h3>{$dataItem->user->user_name}</h3></a>

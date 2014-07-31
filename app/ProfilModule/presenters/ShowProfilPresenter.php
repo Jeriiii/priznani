@@ -1,12 +1,15 @@
 <?php
 
+/*
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
+ */
+
 namespace ProfilModule;
 
-use Nette\Application\UI\Form as Frm,
-	Nette\ComponentModel\IContainer;
+use Nette\Application\UI\Form as Frm;
 use POSComponent\Galleries\UserGalleries\UserGalleries;
 use POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery;
-use POSComponent\Stream\ProfilStream\ProfilStream;
+use POSComponent\Stream\ProfilStream;
 use POSComponent\UserInfo\UserInfo;
 
 class ShowProfilPresenter extends ProfilBasePresenter {
@@ -139,7 +142,7 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 	 * @return \ProfilStream
 	 */
 	protected function createComponentProfilStream() {
-		return new ProfilStream($this->dataForStream, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+		return new ProfilStream($this->dataForStream, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
 	}
 
 	/**
