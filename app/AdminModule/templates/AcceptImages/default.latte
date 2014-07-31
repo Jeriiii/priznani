@@ -3,6 +3,11 @@
 {/block}
 {block content}
 {snippet imageAcceptance}
+		<h2>Uživatelské obrázky</h2>
+	<div class="btn-group btn-group-justified">
+		<a class="btn" n:href="AcceptImages:">Uživatelské fotky {count($images)}</a>
+		<a class="btn" n:href="AcceptImages:acceptCompetitionImages">Soutěžní fotky {$compCount}</a>
+	</div>
 	{foreach $images as $image}
 		{if isset($lastImage) && $lastImage->galleryID != $image->galleryID}
 			<hr>
@@ -16,8 +21,8 @@
 			<div class="clear"></div>
 		</ul>
 		<div class="clear"></div>
-		<a n:href="acceptImage! imgId => $image->id, galleryId => $image->galleryID, userId => $image->gallery->userId" class="btn btn-success ajax-btn">Schválit</a>
-		<a n:href="deleteImage! imgId => $image->id, galleryId => $image->galleryID" class="btn btn-danger ajax-btn">Smazat</a>
+		<a n:href="acceptImage! imgId => $image->id, galleryId => $image->galleryID, userId => $image->gallery->userId" class="btn btn-success ajax">Schválit</a>
+		<a n:href="deleteImage! imgId => $image->id, galleryId => $image->galleryID" class="btn btn-danger ajax">Smazat</a>
 		<br>
 		{var $lastImage = $image}
 	{/foreach}
@@ -25,21 +30,4 @@
 {/block}
 {block foot}
 	<script type="text/javascript" src="{$basePath}/js/slimbox2.js"></script>
-    <script type="text/javascript">
-		jQuery.ajaxSetup({
-            cache: false,
-            dataType: 'json',
-            success: function (payload) {
-                if (payload.snippets) {
-                    for (var i in payload.snippets) {
-                        $('#' + i).html(payload.snippets[i]);
-                    }
-                }
-            }
-        });
-        $('.ajax-btn').live('click', function (event) {
-            event.preventDefault();
-            $.get(this.href);
-        });
-	</script>
 {/block}

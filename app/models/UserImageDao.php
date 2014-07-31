@@ -83,8 +83,9 @@ class UserImageDao extends AbstractDao {
 	 * Vrátí všechny neschválené obrázky.
 	 * @return Nette\Database\Table\Selection
 	 */
-	public function getUnapproved() {
+	public function getUnapproved($indexes) {
 		$sel = $this->getTable();
+		$sel->where('id NOT', $indexes);
 		$sel->where(self::COLUMN_ALLOW, 0);
 		return $sel;
 	}
