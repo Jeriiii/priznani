@@ -19,4 +19,10 @@
 			<h2>{$galleryImage->description}</h2>                        
 		</div> 
              <div class="clear"></div>
+			 {if $competition}
+				<a n:href="addToCompetition! $galleryImage->id, $competition->id">Přidat do soutěže {$competition->name}</a>
+			 {else}
+				Tento obrázek je v poslední soutěži.
+			{/if}
+			<div class="clear"></div>
 </section>

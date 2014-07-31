@@ -54,4 +54,15 @@ class UsersCompetitionsDao extends AbstractDao {
 		));
 	}
 
+	/**
+	 * Vrátí jméno a ID poslední soutěže
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function getLastCompetitionNameAndId() {
+		$sel = $this->getTable();
+		$sel->select('id, name');
+		$sel->order('id DESC');
+		return $sel->fetch();
+	}
+
 }
