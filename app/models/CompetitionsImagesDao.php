@@ -101,4 +101,25 @@ class CompetitionsImagesDao extends AbstractDao {
 		));
 	}
 
+	/**
+	 * Vrátí neschválené fotky
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getUnapproved() {
+		$sel = $this->getTable();
+		return $sel->where(self::COLUMN_ALLOWED, 0);
+	}
+
+	/**
+	 * Schválí soutěžní obrázek
+	 * @param int $imageID ID obrázku ke schválení
+	 */
+	public function acceptImage($imageID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($imageID);
+		$sel->update(array(
+			"allowed" => 1
+		));
+	}
+
 }
