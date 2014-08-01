@@ -1,9 +1,7 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 /**
@@ -40,9 +38,27 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	 */
 	public $userGalleryDao;
 
+	/**
+	 * @var \POS\Model\CompetitionsImagesDao
+	 * @inject
+	 */
+	public $competitionsImagesDao;
+
 	public function renderDefault() {
-		$images = $this->userImageDao->getUnapproved();
+		$compImages = $this->competitionsImagesDao->getUnapproved();
+		$compIndexes = $this->getImagesIndexes($compImages);
+
+		$images = $this->userImageDao->getUnapproved($compIndexes);
 		$this->template->images = $images;
+		$this->template->compCount = count($compImages);
+	}
+
+	public function renderAcceptCompetitionImages() {
+		$images = $this->competitionsImagesDao->getUnapproved();
+		$compIndexes = $this->getImagesIndexes($images);
+		$usrImages = $this->userImageDao->getUnapproved($compIndexes);
+		$this->template->images = $images;
+		$this->template->usrCount = count($usrImages);
 	}
 
 	public function handleAcceptImage($imgId, $galleryId) {
@@ -74,6 +90,38 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		} else {
 			$this->redirect("this");
 		}
+	}
+
+	public function handleAcceptCompetitionImage($imageID, $usrImgID) {
+		$this->competitionsImagesDao->acceptImage($imageID);
+		$usrImage = $this->userImageDao->find($usrImgID);
+		$usrImage->update(array('allow' => 1));
+
+		if ($this->isAjax()) {
+			$this->redrawControl('imageAcceptance');
+		} else {
+			$this->redirect('this');
+		}
+	}
+
+	public function handleDeleteCompetitionImage($imageID) {
+		$this->competitionsImagesDao->delete($imageID);
+
+		if ($this->isAjax("imageAcceptance")) {
+			$this->redrawControl('imageAcceptance');
+		} else {
+			$this->redirect("this");
+		}
+	}
+
+	public function getImagesIndexes($images) {
+		$indexes = array();
+
+		foreach ($images as $item) {
+			$indexes[] = $item->image->id;
+		}
+
+		return $indexes;
 	}
 
 }

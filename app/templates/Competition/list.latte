@@ -71,6 +71,17 @@
 		</div> 
 	{/foreach}
 	<div class="clear"></div>
+	{foreach $userCompetitions as $com}
+		{if $iterator->isFirst()}
+			{* Přejmenovat vhodným nadpisem*}
+			<h2>Moje Soutěže</h2>
+		{/if}
+		<div class="icon-container date">
+			<img src="{$basePath}/{$com->imageUrl}" width="100%" height="100%"/>
+			<a n:href="UsersCompetitions: galleryID => $com->id">{$com->name}</a>
+		</div> 
+	{/foreach}
+	<div class="clear"></div>
 </div>
 {/}
 
