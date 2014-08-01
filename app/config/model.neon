@@ -23,3 +23,5 @@ services:
 	contactDao: POS\Model\ContactDao
 	chatContactsDao: POS\Model\ChatContactsDao
 	chatMessagesDao: POS\Model\ChatMessagesDao
+	usersCompetitionsDao: POS\Model\UsersCompetitionsDao
+	competitionsImagesDao: POS\Model\CompetitionsImagesDao

@@ -209,4 +209,12 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 		$this->addCheckbox('more', '3 a více');
 	}
 
+	/**
+	 * Vytvoří userovi defaultní galerii
+	 * @param $userID ID usera, kterému se galerie vytvoří
+	 */
+	public function createDefaultGalleryIfNotExist($userID) {
+		$gallery = $this->userGalleryDao->createDefaultGallery($userID);
+	}
+
 }
