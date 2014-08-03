@@ -12,12 +12,11 @@ use POS\Model\UserDao;
 use POSComponent\BaseProjectControl;
 
 class BaseUserImagesInGallery extends BaseProjectControl {
-	/* právě procházená galerie */
 
-	protected $galleryID;
-	/* proměnné pro css překlad */
+	/** @var array proměnné pro css překlad */
 	protected $cssVariables = array();
-	/* obrázky, co se mají zobrazit */
+
+	/** obrázky, co se mají zobrazit */
 	protected $images;
 
 	/**
@@ -25,8 +24,7 @@ class BaseUserImagesInGallery extends BaseProjectControl {
 	 */
 	public $userDao;
 
-	public function __construct($galleryID, $images, UserDao $userDao) {
-		$this->galleryID = $galleryID;
+	public function __construct($images, UserDao $userDao) {
 		$this->images = $images;
 		$this->userDao = $userDao;
 	}
@@ -34,7 +32,6 @@ class BaseUserImagesInGallery extends BaseProjectControl {
 	public function renderBase($mode, $owner, $templateName = "baseUserImagesInGallery.latte") {
 		$this->setCssParams();
 
-		$this->template->galleryID = $this->galleryID;
 		$this->template->userData = $this->userDao->find($owner);
 
 		/* vrati pouze posledni vsechny nahledy galerie daneho uzivatele */

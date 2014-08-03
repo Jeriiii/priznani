@@ -97,6 +97,7 @@ class RegistrationForm extends BaseBootstrapForm {
 
 	public function sendMail($email, $password, $code) {
 		$link = $this->getPresenter()->link("//:Sign:in", array("code" => $code, "confirmed" => 1));
+
 		$mail = new Message;
 		$mail->setFrom('neodepisuj@priznaniosexu.cz')
 			->addTo($email)

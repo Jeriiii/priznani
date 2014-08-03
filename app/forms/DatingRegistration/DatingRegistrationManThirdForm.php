@@ -6,6 +6,7 @@ use Nette\Application\UI\Form,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer;
 use POS\Model\UserDao;
+use Nette\Http\SessionSection;
 
 class DatingRegistrationManThirdForm extends DatingRegistrationBaseManForm {
 
@@ -14,9 +15,13 @@ class DatingRegistrationManThirdForm extends DatingRegistrationBaseManForm {
 	 */
 	public $userDao;
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
+	/** @var \Nette\Http\SessionSection */
+	private $regSession;
+
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, SessionSection $regSession = NULL) {
 		parent::__construct($userDao, $parent, $name);
 
+		$this->regSession = $regSession;
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->addSubmit('send', 'Do třetí části registrace')
 			->setAttribute("class", "btn btn-success");
@@ -28,7 +33,19 @@ class DatingRegistrationManThirdForm extends DatingRegistrationBaseManForm {
 		parent::submitted($form);
 		$values = $form->values;
 
-		$this->presenter->redirect('Datingregistration:register', $values->marital_state, $values->orientation, $values->tallness, $values->shape, $values->smoke, $values->drink, $values->graduation, "", "", $values->penis_length, $values->penis_width);
+		$this->regSession->marital_state = $values->marital_state;
+		$this->regSession->orientation = $values->orientation;
+		$this->regSession->tallness = $values->tallness;
+		$this->regSession->shape = $values->shape;
+		$this->regSession->smoke = $values->smoke;
+		$this->regSession->drink = $values->drink;
+		$this->regSession->graduation = $values->graduation;
+		$this->regSession->bra_size = "";
+		$this->regSession->hair_colour = "";
+		$this->regSession->penis_length = $values->penis_length;
+		$this->regSession->penis_width = $values->penis_width;
+
+		$this->presenter->redirect('Datingregistration:register');
 	}
 
 }

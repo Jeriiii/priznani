@@ -71,11 +71,10 @@ class UserImageDao extends AbstractDao {
 		/* vybrání všech galeriií uživatele */
 		$galls = $this->createSelection(UserGalleryDao::TABLE_NAME);
 		$galls->where(UserGalleryDao::COLUMN_USER_ID, $userID);
-		$gallsID = $galls->fetchPairs(self::COLUMN_ID, self::COLUMN_ID);
 
 		/* vybrání všech fotek z těchto galerií */
 		$sel = $this->getTable();
-		$sel->where($gallsID);
+		$sel->where(self::COLUMN_GALLERY_ID, $galls);
 		return $sel;
 	}
 

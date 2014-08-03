@@ -13,6 +13,22 @@ namespace POS\Model;
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
 abstract class UserBaseDao extends AbstractDao {
+	/* Column name */
+
+	const COLUMN_ID = "id";
+	const COLUMN_AGE = "age";
+	const COLUMN_USER_PROPERTY = "user_property";
+	const COLUMN_MARITAL_STATE = "marital_state";
+	const COLUMN_ORIENTATION = "orientation";
+	const COLUMN_TALLNESS = "tallness";
+	const COLUMN_SHAPE = "shape";
+	const COLUMN_PENIS_LENGTH = "penis_length";
+	const COLUMN_PENIS_WIDTH = "penis_width";
+	const COLUMN_SMOKE = "smoke";
+	const COLUMN_DRINK = "drink";
+	const COLUMN_GRADUATION = "graduation";
+	const COLUMN_BRA_SIZE = "bra_size";
+	const COLUMN_HAIR_COLOUR = "hair_colour";
 
 	/**
 	 * vrátí specifické věci pro pohlaví
@@ -126,6 +142,29 @@ abstract class UserBaseDao extends AbstractDao {
 		);
 	}
 
+	/**
+	 * Vrátí správná data k zapsání do DB
+	 * @param array $data Data obsahující nejen informace o páru, musí se
+	 * proto probrat.
+	 */
+	protected function getBaseUserProperty($data) {
+		$property[UserPropertyDao::COLUMN_AGE] = $data->age;
+		$property[UserPropertyDao::COLUMN_MARITAL_STATE] = $data->marital_state;
+		$property[UserPropertyDao::COLUMN_USER_PROPERTY] = $data->user_property;
+		$property[UserPropertyDao::COLUMN_ORIENTATION] = $data->orientation;
+		$property[UserPropertyDao::COLUMN_TALLNESS] = $data->tallness;
+		$property[UserPropertyDao::COLUMN_SHAPE] = $data->shape;
+		$property[UserPropertyDao::COLUMN_PENIS_LENGTH] = $data->penis_length;
+		$property[UserPropertyDao::COLUMN_PENIS_WIDTH] = $data->penis_width;
+		$property[UserPropertyDao::COLUMN_SMOKE] = $data->smoke;
+		$property[UserPropertyDao::COLUMN_DRINK] = $data->drink;
+		$property[UserPropertyDao::COLUMN_GRADUATION] = $data->graduation;
+		$property[UserPropertyDao::COLUMN_BRA_SIZE] = $data->bra_size;
+		$property[UserPropertyDao::COLUMN_HAIR_COLOUR] = $data->hair_colour;
+
+		return $property;
+	}
+
 	/*	 * ***************** PŘEKLADAČE PRO VLASTNOSTI UŽIVATELE ************ */
 
 	/**
@@ -208,14 +247,6 @@ abstract class UserBaseDao extends AbstractDao {
 		return $translate_bra_size[$braSize];
 	}
 
-	/**
-	 * vrací překlad user interested in - zájem uživatele
-	 */
-	public static function getTranslateUserInterestedIn($interestedIn) {
-		$translate_interested_in = UserBaseDao::getUserInterestInOption();
-		return $translate_interested_in[$interestedIn];
-	}
-
 	/*	 * ************* VRACÍ STATICKÁ POLE S PŘEKLADAMA ****************** */
 
 	/**
@@ -237,8 +268,8 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserInterestInOption() {
 		return array(
-			'woman' => 'Žena',
-			'man' => 'Muž',
+			'women' => 'Žena',
+			'men' => 'Muž',
 			'couple' => 'Pár',
 			'group' => 'Skupina',
 		);
