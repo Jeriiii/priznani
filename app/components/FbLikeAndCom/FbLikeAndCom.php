@@ -27,12 +27,10 @@
 class FbLikeAndCom extends Nette\Application\UI\Control {
 
 	private $item;
-	private $url;
 	private $visible = TRUE; //viditelnost komentaru
 
-	public function __construct($item, $url) {
+	public function __construct($item) {
 		$this->item = $item;
-		$this->url = $url;
 //			if($confession->comment == 0){//pamatuje si zobrazeni pri reloadu - pokud by se pamatovat nemelo, porovnavat jinde, napr v render()
 //				$this->visible = FALSE;
 //			}
@@ -45,13 +43,6 @@ class FbLikeAndCom extends Nette\Application\UI\Control {
 		$this->template->fbLink = $this->getFbLink($this->item);
 
 		$this->template->render();
-	}
-
-	public function getConfessionTable() {
-		if ($this->url == "priznani-o-sexu")
-			return $this->presenter->context->createForms1();
-		else
-			return $this->presenter->context->createAdvices();
 	}
 
 	public function setVisibility($visibility) {

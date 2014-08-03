@@ -1,13 +1,11 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 /**
- * Description of BaseStream
+ * Základ pro stream komponenty - nefunguje samostatně.
  *
  * @author Mario
  */
@@ -17,13 +15,16 @@ namespace POSComponent\Stream\BaseStream;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\ConfessionDao;
-use POS\Model\SreamDao;
 use POSComponent\BaseProjectControl;
+use Nette\Database\Table\Selection;
 
 class BaseStream extends BaseProjectControl {
 
+	/** @var Nette\Database\Table\Selection */
 	protected $dataForStream;
-	private $offset = null;
+
+	/** @var int Jaké příspěvky se mají načítat z DB - posun od posledního vydaného příspěvku */
+	protected $offset = null;
 
 	/**
 	 * @var \POS\Model\UserGalleryDao
@@ -36,21 +37,15 @@ class BaseStream extends BaseProjectControl {
 	public $userImageDao;
 
 	/**
-	 * @var \POS\Model\StreamDao
-	 */
-	public $streamDao;
-
-	/**
 	 * @var \POS\Model\ConfessionDao
 	 */
 	public $confessionDao;
 
-	public function __construct($data, $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
+	public function __construct($data, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
 		parent::__construct();
 		$this->dataForStream = $data;
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
-		$this->streamDao = $streamDao;
 		$this->confessionDao = $confDao;
 	}
 
@@ -73,8 +68,8 @@ class BaseStream extends BaseProjectControl {
 	}
 
 	/**
-	 * vykresli globalni stream - activity stream
-	 * @param type $templateName
+	 * Vykresli globalni stream - activity stream.
+	 * @param string $templateName Jméno šablony.
 	 */
 	private function renderMainStream($templateName) {
 		$this->setNewOffset();
@@ -83,8 +78,8 @@ class BaseStream extends BaseProjectControl {
 	}
 
 	/**
-	 * vykresli uzivatelsky stream - profil
-	 * @param type $templateName
+	 * Vykresli stream na profilu.
+	 * @param string $templateName Jméno šablony.
 	 */
 	private function renderProfileStream($templateName) {
 		$this->setNewOffset();
@@ -96,18 +91,18 @@ class BaseStream extends BaseProjectControl {
 	 * Metoda nastavuje novy offset pro nacitani dalsich prispevku uzivatele
 	 */
 	public function setNewOffset() {
-		$offset = 4;
+		// musí se nastavit i v jQuery pluginu
+		$limit = 4;
 		if (!empty($this->offset)) {
-			$this->template->stream = $this->dataForStream->limit($offset, $this->offset);
+			$this->template->stream = $this->dataForStream->limit($limit, $this->offset);
 		} else {
-			$this->template->stream = $this->dataForStream->limit($offset);
+			$this->template->stream = $this->dataForStream->limit($limit);
 		}
-		$this->template->offset = $offset;
 	}
 
 	/**
 	 * vraci dalsi data do streamu, ktere snippet appenduje
-	 * @param type $offset
+	 * @param int $offset
 	 */
 	public function handleGetMoreData($offset) {
 		$this->offset = $offset;
@@ -126,10 +121,8 @@ class BaseStream extends BaseProjectControl {
 	protected function createComponentFbControl() {
 		$streamItems = $this->dataForStream;
 
-		$url = "url";
-
-		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems, $url) {
-			return new \FbLikeAndCom($streamItems[$streamItem], $url);
+		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
+			return new \FbLikeAndCom($streamItems[$streamItem]);
 		});
 	}
 

@@ -1,8 +1,6 @@
 includes:
 	- testconection.neon
 
-testing: TRUE
-
 nette:
 	session:
 		save_path: "%tempDir%/sessions"
