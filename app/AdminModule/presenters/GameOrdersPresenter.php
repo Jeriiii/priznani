@@ -28,7 +28,18 @@ class GameOrdersPresenter extends AdminSpacePresenter {
 		$grid->addFilterText('name', 'Jméno');
 		$grid->addFilterText('surname', 'Příjmení');
 		$grid->addFilterText('email', 'Email');
-		$grid->addFilterDateRange('create', 'Datum objednávky')->setDateFormatInput('d.m.Y');
+
+		//Filtr vyfiltruje objednávky s datem rovným nebo větším vloženému
+		$grid->addFilterDate('create_from', 'Objednávky od:')->setWhere(function($value, $selection) {
+			$date = date('Y-m-d H:i:s', strtotime($value));
+			$selection->where('create >= ?', $date);
+		});
+		//Filtr vyfiltruje objednávky s datem rovným nebo menším vloženému
+		//K datu se přičte 23:59:59
+		$grid->addFilterDate('create_to', 'Objednávky do:')->setWhere(function($value, $selection) {
+			$date = date('Y-m-d H:i:s', strtotime($value . ' + 86399 seconds'));
+			$selection->where('create <= ?', $date);
+		});
 		/* konec filtrů */
 
 		/* seznam her */
