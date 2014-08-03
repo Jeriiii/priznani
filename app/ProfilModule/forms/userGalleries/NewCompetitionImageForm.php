@@ -85,7 +85,7 @@ class NewCompetitionImageForm extends UserGalleryImagesBaseForm {
 			$uID = $presenter->getUser()->getId();
 
 			$gallery = $this->userGalleryDao->findByUser($uID);
-			if (!$gallery) {
+			if (empty($gallery)) {
 				$gallery = $this->createDefaultGalleryIfNotExist($uID);
 			}
 
