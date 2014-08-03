@@ -209,4 +209,13 @@ class FeatureContext extends MinkContext {
 		$this->getSession()->visit($this->locatePath($link));
 	}
 
+	/**
+	 * @When /^I attach to "([^"]*)" the file "([^"]*)"$/
+	 */
+	public function iAttachToTheFile($field, $path) {
+		$absoluteBasePath = APP_DIR . "/test/features/files/";
+
+		$this->attachFileToField($field, $absoluteBasePath . $path);
+	}
+
 }
