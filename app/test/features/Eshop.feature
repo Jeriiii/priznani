@@ -13,7 +13,7 @@ Feature: Filling eshop form
 		Examples:
 			| name			| surname		| email				| phone		| checkbox			| message	|
 			# projde
-			| Test			| User			| user@test.cz		| 123456789 | vasnivefantazie	| Děkujeme za objednávku. Informace o platbě Vám byly odeslány na email. |
+			| Test			| User			| user@test.cz		| 123456789 | vasnivefantazie	| Aplikace objednávku NEODESLALA! Pokud potíže přetrvávají, prosím kontaktujte nás. |
 			# chybí name
 			|				| User			| user@test.cz		| 123456789 | vasnivefantazie	| Prosím, vyplňte Vaše jméno |
 			# chybí surname
