@@ -243,7 +243,7 @@ class GalleriesPresenter extends \BasePresenter {
 	protected function createComponentMyUserImagesInGallery() {
 		$images = $this->userImageDao->getInGallery($this->galleryID);
 
-		return new MyUserImagesInGallery($this->galleryID, $images, $this->userDao);
+		return new MyUserImagesInGallery($images, $this->userDao);
 	}
 
 	/**
@@ -252,7 +252,7 @@ class GalleriesPresenter extends \BasePresenter {
 	protected function createComponentUserImagesInGallery() {
 		$images = $this->userImageDao->getInGallery($this->galleryID);
 
-		return new UserImagesInGallery($this->galleryID, $images, $this->userDao);
+		return new UserImagesInGallery($images, $this->userDao);
 	}
 
 	protected function createComponentGallery() {

@@ -26,13 +26,27 @@ class DatingRegistrationBaseForm extends BaseForm {
 		$this->userDao = $userDao;
 		$users = $this->userDao;
 
-		$this->addSelect('marital_state', 'Stav:', $users->getUserStateOption());
-		$this->addSelect('orientation', 'Orientace:', $users->getUserOrientationOption());
-		$this->addSelect('tallness', 'Výška:', $users->getUserTallnessOption());
-		$this->addSelect('shape', 'Postava:', $users->getUserShapeOption());
-		$this->addSelect('smoke', 'Kouřím:', $users->getUserHabitOption());
-		$this->addSelect('drink', 'Piju:', $users->getUserHabitOption());
-		$this->addSelect('graduation', 'Vzdělání:', $users->getUserGraduationOption());
+		$this->addSelect('marital_state', 'Stav:', $users->getUserStateOption())
+			->setPrompt("- vyberte -")
+			->addRule(Form::FILLED, "Vyberte Váš stav");
+		$this->addSelect('orientation', 'Orientace:', $users->getUserOrientationOption())
+			->setPrompt("- vyberte -")
+			->addRule(Form::FILLED, "Vyberte váší orientaci");
+		$this->addSelect('tallness', 'Výška:', $users->getUserTallnessOption())
+			->setPrompt("- vyberte -")
+			->addRule(Form::FILLED, "Vyberte váši výšku");
+		$this->addSelect('shape', 'Postava:', $users->getUserShapeOption())
+			->setPrompt("- vyberte -")
+			->addRule(Form::FILLED, "Vyberte váší postavu");
+		$this->addSelect('smoke', 'Kouřím:', $users->getUserHabitOption())
+			->setPrompt("- vyberte -")
+			->addRule(Form::FILLED, "Vyberte zda kouříte");
+		$this->addSelect('drink', 'Piju:', $users->getUserHabitOption())
+			->setPrompt("- vyberte -")
+			->addRule(Form::FILLED, "Vyberte zda pijete");
+		$this->addSelect('graduation', 'Vzdělání:', $users->getUserGraduationOption())
+			->setPrompt("- vyberte -")
+			->addRule(Form::FILLED, "Vyberte Vaše vzdělání");
 	}
 
 	public function submitted($form) {

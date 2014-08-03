@@ -21,6 +21,10 @@ class UserDao extends UserBaseDao {
 	const PROPERTIES_TABLE_NAME = "users_properties";
 
 	/* sloupce */
+	const COLUMN_COUPLE_ID = "coupleID";
+	const COLUMN_PROPERTY_ID = "propertyID";
+	const COLUMN_LAST_ACTIVE = "last_active";
+	const COLUMN_CREATED = "created";
 	const COLUMN_EMAIL = "email";
 	const COLUMN_ROLE = "role";
 	const COLUMN_ADMIN_SCORE = "admin_score";
@@ -89,6 +93,32 @@ class UserDao extends UserBaseDao {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_CONFIRMED, $confirmCode);
 		return $sel->fetch();
+	}
+
+	/**
+	 * Zaregistruje uživatele
+	 * @param array $data Data obsahující nejen informace o páru, musí se
+	 * proto probrat.
+	 */
+	public function register($data, $propertyID) {
+		$sel = $this->getTable();
+
+		$user[self::COLUMN_PROPERTY_ID] = $propertyID;
+		$user[self::COLUMN_ROLE] = $data->role;
+		$user[self::COLUMN_LAST_ACTIVE] = new \Nette\DateTime;
+		$user[self::COLUMN_CREATED] = new \Nette\DateTime;
+		$user[self::COLUMN_EMAIL] = $data->email;
+		$user[self::COLUMN_USER_NAME] = $data->user_name;
+		$user[self::COLUMN_PASSWORD] = $data->passwordHash;
+		$user{self::COLUMN_CONFIRMED} = $data[self::COLUMN_CONFIRMED];
+
+		$newUser = $sel->insert($user);
+
+		$newUser->update(array(
+			self::COLUMN_CONFIRMED => $data[self::COLUMN_CONFIRMED] . $newUser->id
+		));
+
+		return $newUser;
 	}
 
 	/**
@@ -212,16 +242,17 @@ class UserDao extends UserBaseDao {
 	 * @param int $userID ID uživatele
 	 * @return bool|Database\Table\IRow
 	 */
-	public function getUserShortInfo($userId) {
-		$userProperty = $this->findProperties($userId);
+	public function getUserShortInfo($userID) {
+		$userProperty = $this->findProperties($userID);
 		$userShortInfo = array(
 			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->user_property),
-			'Status' => UserBaseDao::getTranslateUserState($userProperty->marital_state),
+			'Stav' => UserBaseDao::getTranslateUserState($userProperty->marital_state),
 			'Věk' => $userProperty->age,
-			'Chtěl bych potkat' => UserBaseDao::getTranslateUserInterestedIn($userProperty->interested_in),
+//			'Chtěl bych potkat' => UserBaseDao::getTranslateUserInterestedIn($userProperty->interested_in),
 			'První věta' => $userProperty->first_sentence,
 		);
-		return $userShortInfo;
+		$seek = $this->getWantToMeet($userProperty);
+		return $userShortInfo + $seek;
 	}
 
 	/**
@@ -276,6 +307,15 @@ class UserDao extends UserBaseDao {
 	 */
 	public function setUserRole($id) {
 		$this->updateRole($id, \Authorizator::ROLE_USER);
+	}
+
+	public function setCouple($userID, $coupleID) {
+		$sel = $this->getTable();
+
+		$sel->wherePrimary($userID);
+		$sel->update(array(
+			self::COLUMN_COUPLE_ID => $coupleID
+		));
 	}
 
 	/**

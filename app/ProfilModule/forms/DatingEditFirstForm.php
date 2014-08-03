@@ -7,6 +7,7 @@ use Nette\Application\UI\Form,
 	Nette\ComponentModel\IContainer,
 	POS\Model\UserDao,
 	POS\Model\UserPropertyDao;
+use Nette\Database\Table\ActiveRow;
 
 class DatingEditFirstForm extends DatingRegistrationFirstForm {
 
@@ -21,18 +22,12 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 	public $userPropertyDao;
 	private $id_user;
 
-	public function __construct(UserPropertyDao $userPropertyDao, UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userDao, $parent, $name);
+	public function __construct(UserPropertyDao $userPropertyDao, UserDao $userDao, ActiveRow $user, IContainer $parent = NULL, $name = NULL) {
 
 		$this->userPropertyDao = $userPropertyDao;
-		$presenter = $this->getPresenter();
-		$this->id_user = $presenter->getUser()->getId();
-		$userInfo = $this->userDao->find($this->id_user);
+		$userProperty = $this->userPropertyDao->find($user->propertyID);
 
-		/* $this["age"]->setDefaultValue($userInfo->property->age); */
-
-		$this["user_property"]->setDefaultValue($userInfo->property->user_property);
-		$this["interested_in"]->setDefaultValue($userInfo->property->interested_in);
+		parent::__construct($userDao, $parent, $name, $userProperty);
 
 		$this["send"]->caption = "Uložit";
 		$this["send"]->setAttribute("class", "btn btn-info");
