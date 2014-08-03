@@ -1,5 +1,5 @@
-/* Vloží testovací soutìž */
-INSERT INTO `postest`.`users_competitions` (`id`, `name`, `description`) VALUES ('1', 'Test competition', 'Test competition');
-/* Vloží testovací obrázky pro testovací soutìž */
-INSERT INTO `postest`.`competitions_images` (`imageID`, `userID`, `competitionID`, `allowed`) VALUES (3, 3, 1, 1);
-INSERT INTO `postest`.`competitions_images` (`imageID`, `userID`, `competitionID`, `allowed`) VALUES (2, 3, 1, 1);
+/* VloÅ¾Ã­ testovacÃ­ soutÄ›Å¾ */
+/*INSERT INTO `postest`.`users_competitions` (`id`, `name`, `description`) VALUES ('1', 'Test competition', 'Test competition');
+/* VloÅ¾Ã­ testovacÃ­ obrÃ¡zky pro testovacÃ­ soutÄ›Å¾ */
+/*INSERT INTO `postest`.`competitions_images` (`imageID`, `userID`, `competitionID`, `allowed`) VALUES (3, 3, 1, 1);
+INSERT INTO `postest`.`competitions_images` (`imageID`, `userID`, `competitionID`, `allowed`) VALUES (2, 3, 1, 1);*/
