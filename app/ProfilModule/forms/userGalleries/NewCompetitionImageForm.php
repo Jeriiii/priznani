@@ -90,12 +90,16 @@ class NewCompetitionImageForm extends UserGalleryImagesBaseForm {
 			}
 
 			$this->userGalleryDao->updateGender($gallery->id, $values->man, $values->women, $values->couple, $values->more);
-			$this->saveImages($images, $uID, $gallery->id);
+			$allow = $this->saveImages($images, $uID, $gallery->id);
 			$galleryData = $this->userGalleryDao->getLastImageByUser($uID);
 			$this->competitionsImagesDao->insert(array("imageID" => $galleryData->lastImageID, "competitionID" => $this->galleryID, "userID" => $uID, "name" => $values->name, "surname" => $values->surname, "phone" => $values->phone));
 			$this->usersCompetitionsDao->updateLastImage($this->galleryID, $galleryData->lastImageID);
 
-			$presenter->flashMessage('Fotka byla přidaná. Nyní je ve frontě na schválení.');
+			if ($allow) {
+				$presenter->flashMessage('Fotka byla přidaná.');
+			} else {
+				$presenter->flashMessage('Fotka byla přidaná. Nyní je ve frontě na schválení.');
+			}
 			$presenter->redirect('UsersCompetitions:', $galleryData->lastImageID, $this->galleryID);
 		}
 	}
