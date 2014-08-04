@@ -1,4 +1,5 @@
 /*
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  * @author Jan Kotalík
  */
 
@@ -8,12 +9,16 @@
 	/* nastavení */
 	var opts;
 
+	/* detekce, zda byla poslana zprava*/
+	var messageSent = false;
 
 	/* main */
 	$.fn.chat = function(options) {
 		var opts = $.extend({}, $.fn.chat.defaults, options);
 		setOpts(opts);
 		initializeContactList();
+		setWaitTime(opts.minRequestTimeout);
+		refreshMessages(0);
 	};
 
 	$.fn.chat.defaults = {
@@ -21,7 +26,7 @@
 		/* minimální čekání mezi zasíláním požadavků. Této hodnoty dosáhne chat při aktivním používání */
 		maxRequestTimeout: 8000,
 		/* maximální čekání mezi zasíláním požadavků na nové zprávy. Této hodnoty postupně dosáhne neaktivní chat. */
-		timeoutStep: 100,
+		timeoutStep: 500,
 		/* o kolik se zvýší čekání při přijetí prázdné odpovědi */
 		contactListItems: '.contact-link',
 		/* selektor pro položku (jméno) na seznamu kontaktů */
@@ -40,6 +45,42 @@
 
 	};
 
+	/** pravidelne obnovuje stav prichozich zprav
+	 * @param waitTime cas, ktery bude cekat pred refreshem
+	 * */
+	function refreshMessages(waitTime) {
+		if (messageSent) {//pokud byla ted nekdy odeslana zprava
+			waitTime = this.opts.minRequestTimeout;
+			messageSent = false;
+		}
+		setTimeout(function() {
+			console.log("CHAT - refreshing");
+			sendRefreshRequest(waitTime);
+		}, waitTime);
+
+	}
+	/* Posle na server ajaxovy pozadavek (dotaz) na nove zpravy
+	 * @param waitTime aktualni hodnota casu, po ktery se cekalo na zavolani
+	 * */
+	function sendRefreshRequest(waitTime) {
+		var opts = this.opts;
+		$.getJSON(refreshMessagesLink, function(jsondata) {
+			if ($.isEmptyObject(jsondata)) {
+				waitTime = Math.min(waitTime + opts.timeoutStep, opts.maxRequestTimeout);
+				console.log("CHAT - no new data - request timeout is now: " + waitTime);
+			} else {
+				handleResponse(jsondata);
+				waitTime = opts.minRequestTimeout;
+				console.log("CHAT - data arrived - request timeout is now: " + waitTime);
+			}
+			refreshMessages(waitTime);
+		}).fail(function() {
+			refreshMessages(waitTime);
+		});
+
+	}
+
+
 	/**
 	 * Nastaveni options
 	 * @param opts nastaveni k nastaveni
@@ -49,25 +90,34 @@
 	}
 
 	/**
+	 * Nastaveni cas cekani na pocatecni hodnotu
+	 * @param {int} time cas k nastaveni
+	 */
+	function setWaitTime(time) {
+		waitTime = time;
+	}
+
+	/**
 	 * Posila zpravu na server. Vola se automaticky pro odeslani zpravy v okenku
-	 * @param {type} id
-	 * @param {type} data data souvisejici s okenkem
-	 * @param {type} msg
-	 * @returns {undefined}
+	 * @param {int|String} id
+	 * @param {Object} data data souvisejici s okenkem
+	 * @param {String} msg
 	 */
 	function sendMessage(id, data, msg) {
 		var requestData = {
-			id: id,
+			to: id,
 			type: 'textMessage',
 			text: msg
 		};
 		sendDataByAjax(sendMessageLink, requestData);
 		this.boxManager.addMsg(mydata.name, msg);//pridani zpravy do okna
+		messageSent = true;
 	}
 	;
 	/**
 	 * Pomoci AJAXU konvertuje data do formatu JSON a posle je na danou adresu
-	 * @param Object data
+	 * @param {String} url data, ktera se maji poslat
+	 * @param {Object} data poslana data
 	 */
 	function sendDataByAjax(url, data) {
 		var json = JSON.stringify(data);
@@ -78,19 +128,25 @@
 			url: url,
 			data: json,
 			contentType: 'application/json; charset=utf-8',
-			success: handleResponse
+			success: handleResponse,
+			error: function() {
+
+			}
 		});
 
 	}
 
 	/**
-	 * Zpracuje odpoved serveru
-	 * @param Object data data ze serveru
-	 * @param Object status status odpovedi ze serveru
-	 * @param Object jqxhr jqXHR (in jQuery 1.4.x, XMLHttpRequest) object viz dokumentace jQuery.ajax()
+	 * Zpracuje odpoved serveru. Priklad toho, jak maji vypadat data v jsonu, najdete v dokumentaci
+	 * @param {Object} json data ze serveru, DEKODOVANY JSON
+	 *
 	 */
-	function handleResponse(data, status, jqxhr) {
-		alert(JSON.parse(data));
+	function handleResponse(json) {
+		$.each(json, function(key, values) {//projde vsechny uzivatele, od kterych neco prislo
+			$.each(values, function(messageKey, message) {//vsechny zpravy od kazdeho uzivatele
+				addMessage(key, key, message.text);
+			});
+		});
 	}
 
 	/**
@@ -98,7 +154,6 @@
 	 */
 	function initializeContactList() {
 		console.log('CHAT - initializing contact list');
-
 
 		var idList = new Array();
 
@@ -114,13 +169,35 @@
 			event.preventDefault();
 			var id = $(this).attr(opts.idAttribute);
 			idList.push(id);
-			chatboxManager.addBox(id,
-					{
-						title: $(this).attr(opts.titleAttribute)
-					});
+			addBox(id, $(this).attr(opts.titleAttribute));
 		});
-		console.log('CHAT - created new box #' + id);
 
+
+	}
+
+	/*
+	 * Vytvori nove okno, nebo otevre stavajici. Pokud je pouze zavrene, otevre ho.
+	 * @param {int|String} id id okna
+	 * @param {String} title titulek okna
+	 */
+	function addBox(id, title) {
+		chatboxManager.addBox(id,
+				{
+					title: title
+				});
+		console.log('CHAT - created new box #' + id);
+	}
+
+
+	/**
+	 * Prida zpravu do okna s danym id a okno otevre
+	 * @param {int|String} id id okna
+	 * @param {String} name od koho zprava je
+	 * @param {String} text text zpravy
+	 */
+	function addMessage(id, name, text) {
+		addBox(id, name);//vytvori/zobrazi dotycne okno
+		chatboxManager.addMessage(id, name, text);
 	}
 
 

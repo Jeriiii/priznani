@@ -40,12 +40,16 @@ class ChatMessagesDao extends AbstractDao {
 
 	/**
 	 * Přidá novou textovou zprávu ("odešle" novou zprávu)
+	 * @param int $idSender odesilatel zprávy
+	 * @param int $idRecipient příjemce zprávy
 	 * @param String $text text zprávy
 	 * @return Nette\Database\Table\Selection vytvořená zpráva
 	 */
-	public function addTextMessage($text) {
+	public function addTextMessage($idSender, $idRecipient, $text) {
 		$sel = $this->getTable();
 		$sel->insert(array(
+			self::COLUMN_ID_SENDER => $idSender,
+			self::COLUMN_ID_RECIPIENT => $idRecipient,
 			self::COLUMN_TEXT => $text,
 			self::COLUMN_TYPE => self::TYPE_TEXT_MESSAGE,
 			self::COLUMN_READED => self::MESSAGE_UNREADED

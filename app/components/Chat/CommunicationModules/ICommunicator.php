@@ -1,9 +1,7 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 namespace POSComponent\Chat;
@@ -13,5 +11,11 @@ namespace POSComponent\Chat;
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
 interface ICommunicator {
+	/* zpracovani prichozi zpravy */
 
+	public function handleSendMessage();
+
+	/* zpracovani pozadavku na nove zpravy */
+
+	public function handleRefreshMessages();
 }

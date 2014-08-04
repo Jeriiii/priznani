@@ -1,7 +1,8 @@
 
 <ul id="contacts">
 	{foreach $contacts as $contact}
-		<li id="contact-{$contact->id}" data-id="{$contact->id}" data-title="{$contact->user_name}" class="contact-link">{$contact->user_name}</li>
+		{var $id = $coder->encodeData($contact->id)}
+		<li id="contact-{$id}" data-id="{$id}" data-title="{$contact->user_name}" class="contact-link">{$contact->user_name}</li>
 	{/foreach}
 </ul>
 

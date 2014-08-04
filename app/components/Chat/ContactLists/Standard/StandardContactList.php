@@ -1,9 +1,7 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 namespace POSComponent\Chat;
@@ -41,6 +39,7 @@ class StandardContactList extends BaseProjectControl implements IContactList {
 
 		$userIdentity = $this->getPresenter()->getUser()->getIdentity();
 		if ($userIdentity) {
+			$template->coder = $this->chatManager->getCoder();
 			$template->contacts = $this->chatManager->getContacts($userIdentity->getId());
 			$template->username = $userIdentity->user_name;
 			$template->render(); //neprihlasenemu uzivateli se to ani nerenderuje

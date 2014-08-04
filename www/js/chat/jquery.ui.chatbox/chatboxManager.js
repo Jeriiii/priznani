@@ -93,15 +93,22 @@ var chatboxManager = function() {
 	};
 
 
-	// not used in demo
-	var dispatch = function(id, user, msg) {
-		$("#" + id).chatbox("option", "boxManager").addMsg(user.first_name, msg);
+
+
+	/**
+	 * Prida zpravu do okna
+	 * @param int|String id id okna
+	 * @param String name popisek zpravy (typicky odesilatel)
+	 * @param String msg text zpravy
+	 */
+	var addMessage = function(id, name, msg) {
+		$("#" + id).chatbox("option", "boxManager").addMsg(name, msg);
 	};
 
 	return {
 		init: init,
 		addBox: addBox,
 		delBox: delBox,
-		dispatch: dispatch
+		addMessage: addMessage
 	};
 }();
