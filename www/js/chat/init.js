@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 $(function() {
-	$(document).ready(function() {
-		$('body').chat();
-	});
+	if (isLoggedIn) {//promenna pridana do renderu komponenty seznamu uzivatelu chatu
+		$(document).ready(function() {
+			$('body').chat();
+		});
+	}
 });
 

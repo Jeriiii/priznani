@@ -96,4 +96,21 @@ class ChatManager {
 		$this->messagesDao->setMessagesReaded($messages, TRUE);
 	}
 
+	/**
+	 * Vrátí uživatelské jméno uživatele s daným id
+	 * Šetří databázi.
+	 * @param int $id id uživatele
+	 * @param \Nette\Http\SessionSection $session session k ukladani jmen
+	 * @return String uzivatelske jmeno
+	 */
+	public function getUsername($id, $session) {
+		if ($session->offsetExists($id)) {
+			return $session->offsetGet($id);
+		} else {
+			$user = $this->userDao->find($id);
+			$session->offsetSet($id, $user[UserDao::COLUMN_USER_NAME]);
+			return $user[UserDao::COLUMN_USER_NAME];
+		}
+	}
+
 }

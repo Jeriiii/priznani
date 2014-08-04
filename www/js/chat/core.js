@@ -26,6 +26,8 @@
 		/* minimální čekání mezi zasíláním požadavků. Této hodnoty dosáhne chat při aktivním používání */
 		maxRequestTimeout: 8000,
 		/* maximální čekání mezi zasíláním požadavků na nové zprávy. Této hodnoty postupně dosáhne neaktivní chat. */
+		failResponseTimeout: 10000,
+		/* pokud selže požadavek, toto je doba čekání, po které se to zkusí znovu */
 		timeoutStep: 500,
 		/* o kolik se zvýší čekání při přijetí prázdné odpovědi */
 		contactListItems: '.contact-link',
@@ -75,7 +77,7 @@
 			}
 			refreshMessages(waitTime);
 		}).fail(function() {
-			refreshMessages(waitTime);
+			refreshMessages(opts.failResponseTimeout);
 		});
 
 	}
@@ -144,7 +146,7 @@
 	function handleResponse(json) {
 		$.each(json, function(key, values) {//projde vsechny uzivatele, od kterych neco prislo
 			$.each(values, function(messageKey, message) {//vsechny zpravy od kazdeho uzivatele
-				addMessage(key, key, message.text);
+				addMessage(key, message.name, message.text);
 			});
 		});
 	}

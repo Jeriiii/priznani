@@ -80,11 +80,24 @@ class StandardCommunicator extends BaseProjectControl implements ICommunicator {
 				$array[$senderCoded] = array(); //pak vytvori pole na zpravy od tohoto uzivatele
 			}
 			$rowArray = $row->toArray();
+			$rowArray['name'] = $this->getUsername($sender); //pribaleni uzivatelskeho jmena
 			$rowArray[ChatMessagesDao::COLUMN_ID_SENDER] = (int) $senderCoded; //kodovani id ve zprave
 			unset($rowArray[ChatMessagesDao::COLUMN_ID_RECIPIENT]);  //neposila uzivateli jeho vlastni id
 			array_push($array[$senderCoded], $rowArray); //do pole pod klicem odesilatele v poli $array vlozi pole se zpravou
 		}
 		return $array;
+	}
+
+	/**
+	 * Vrátí uživatelské jméno uživatele s daným id
+	 * Šetří databázi.
+	 * @param int $id id uživatele
+	 * @return String Uzivatelske jmeno
+	 */
+	public function getUsername($id) {
+		$session = $this->getPresenter()->getSession('chat_usernames');
+		$session->setExpiration(0);
+		return $this->chatManager->getUsername($id, $session);
 	}
 
 	/**

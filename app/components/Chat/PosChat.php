@@ -14,7 +14,7 @@ use POSComponent\BaseProjectControl;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class PosChat extends BaseProjectControl implements IChat {
+class PosChat extends BaseProjectControl {
 
 	/**
 	 * chat manager
@@ -28,16 +28,6 @@ class PosChat extends BaseProjectControl implements IChat {
 	function __construct(ChatManager $manager, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->chatManager = $manager;
-	}
-
-	/**
-	 * Pošle zprávu daného uživatele jinému uživateli
-	 * @param int $idSender odesilatel
-	 * @param int $idRecipient prijemce
-	 * @param Strin $text text zpravy
-	 */
-	public function sendTextMessage($idSender, $idRecipient, $text) {
-
 	}
 
 	/**
