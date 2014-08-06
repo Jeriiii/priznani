@@ -10,7 +10,7 @@ use Nette\Application\UI\Form,
 	Nette\Mail\Message,
 	Nette\Utils\Html;
 
-class SignInForm extends BaseBootstrapForm {
+class SignInForm extends BaseForm {
 
 	private $id;
 
@@ -30,6 +30,7 @@ class SignInForm extends BaseBootstrapForm {
 		$this->addSubmit('login', 'PŘIHLÁSIT SE')
 			->setAttribute('class', 'btn-main medium');
 
+		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

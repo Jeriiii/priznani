@@ -3,11 +3,8 @@
 {/block}
 {block content}
 {snippet imageAcceptance}
-		<h2>Uživatelské obrázky</h2>
-	<div class="btn-group btn-group-justified">
-		<a class="btn" n:href="AcceptImages:">Uživatelské fotky {count($images)}</a>
-		<a class="btn" n:href="AcceptImages:acceptCompetitionImages">Soutěžní fotky {$compCount}</a>
-	</div>
+	<h2>Uživatelské obrázky</h2>
+	{includeblock 'acceptMenu.latte'}
 	{foreach $images as $image}
 		{if isset($lastImage) && $lastImage->galleryID != $image->galleryID}
 			<hr>

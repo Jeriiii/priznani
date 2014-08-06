@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use Nette\Utils\Html;
 use POS\Model\UserDao;
 
-class ForgottenPasswordForm extends BaseBootstrapForm {
+class ForgottenPasswordForm extends BaseForm {
 
 	/**
 	 * @var \POS\Model\UserDao
@@ -26,9 +26,9 @@ class ForgottenPasswordForm extends BaseBootstrapForm {
 		$this->mailer = $mailer;
 		$this->userDao = $userDao;
 		$this->addText('email', 'Email:', 30, 50);
-		$this->addSubmit('send', 'Vygenerovat nové heslo')
-			->setAttribute('class', 'btn-main medium');
+		$this->addSubmit('send', 'Vygenerovat nové heslo');
 
+		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

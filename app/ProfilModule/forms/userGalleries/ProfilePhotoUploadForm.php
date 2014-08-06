@@ -35,8 +35,9 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 
 		$this->addGroup('Nahrát profilové foto');
 		$this->addImageFields(1, false, false); //foto bez popisu a nazvu
-		$this->addSubmit('send', 'Odeslat')
-			->setAttribute("class", "btn btn-info");
+		$this->addSubmit('send', 'Odeslat');
+
+		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

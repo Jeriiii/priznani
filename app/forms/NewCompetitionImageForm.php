@@ -55,6 +55,11 @@ class NewCompetitionImageForm extends UserGalleryImagesBaseForm {
 
 		$this->galleryID = $galleryID;
 
+		$this->addGroup("Obrázek");
+
+		$this->addImageFields(self::NUMBER_OF_IMAGE);
+
+		$this->addGroup("Uživatelské údaje");
 		$this->addText('name', 'Jméno:')
 			->addRule(Form::FILLED, 'Prosím vyplňte jméno');
 		$this->addText('surname', 'Příjmení:')
@@ -62,12 +67,9 @@ class NewCompetitionImageForm extends UserGalleryImagesBaseForm {
 		$this->addText('phone', 'Telefon:')
 			->addRule(Form::FILLED, 'Prosím vyplňte telefon');
 
-		$this->addImageFields(self::NUMBER_OF_IMAGE);
-		$this->genderCheckboxes();
-
 		$this->addSubmit("submit", "Přidat fotku")->setAttribute('class', 'btn-main medium');
 
-		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
+		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -86,10 +88,9 @@ class NewCompetitionImageForm extends UserGalleryImagesBaseForm {
 
 			$gallery = $this->userGalleryDao->findByUser($uID);
 			if (empty($gallery)) {
-				$gallery = $this->createDefaultGalleryIfNotExist($uID);
+				$gallery = $this->userGalleryDao->createDefaultGallery($uID);
 			}
 
-			$this->userGalleryDao->updateGender($gallery->id, $values->man, $values->women, $values->couple, $values->more);
 			$allow = $this->saveImages($images, $uID, $gallery->id);
 			$galleryData = $this->userGalleryDao->getLastImageByUser($uID);
 			$this->competitionsImagesDao->insert(array("imageID" => $galleryData->lastImageID, "competitionID" => $this->galleryID, "userID" => $uID, "name" => $values->name, "surname" => $values->surname, "phone" => $values->phone));
