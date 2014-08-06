@@ -50,7 +50,7 @@ class ContactDao extends AbstractDao {
 
 	/**
 	 * Označí zprávu jako přečtenou podle jejího ID
-	 * @param type $messageID ID zprávy, která bude označena jako přečtená
+	 * @param int $messageID ID zprávy, která bude označena jako přečtená
 	 */
 	public function markViewed($messageID) {
 		$sel = $this->getTable()->get($messageID);
@@ -70,8 +70,8 @@ class ContactDao extends AbstractDao {
 
 	/**
 	 * Vrátí část zpráv podle požadavků paginatoru
-	 * @param type int $limit Počet zpráv
-	 * @param type int $offset Velikost množiny pro výběr
+	 * @param int $limit Počet zpráv
+	 * @param int $offset Velikost množiny pro výběr
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function getLimit($limit, $offset = 0) {

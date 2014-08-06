@@ -1,3 +1,13 @@
+{block head}
+	{control css 'bootstrap/forms-medium.less'}
+	<style>
+		#contact-form{ max-width: 400px;}
+	</style>
+{/block}
+
 {block content}
-	{control contactForm}
+	<h2>Kontaktujte nás</h2>
+	<div id="contact-form">
+		{control contactForm}
+	</div>
 {/block}
