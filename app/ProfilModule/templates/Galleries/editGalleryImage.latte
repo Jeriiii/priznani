@@ -20,9 +20,9 @@
 		</div> 
              <div class="clear"></div>
 			 {if $competition}
-				<a n:href="addToCompetition! $galleryImage->id, $competition->id">Přidat do soutěže {$competition->name}</a>
+				<a n:href="addToCompetition! $galleryImage->id, $competition->id" class="container-medium btn-main btn-small">Přidat do soutěže {$competition->name}</a>
 			 {else}
-				Tento obrázek je v poslední soutěži.
+				 <p>Tento obrázek je v poslední soutěži.</p>
 			{/if}
 			<div class="clear"></div>
 </section>

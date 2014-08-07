@@ -13,7 +13,7 @@ use NetteExt\Path\GalleryPathCreator;
 use NetteExt\File;
 use Nette\Mail\IMailer;
 
-class RegistrationForm extends BaseBootstrapForm {
+class RegistrationForm extends BaseForm {
 
 	private $id;
 
@@ -56,9 +56,9 @@ class RegistrationForm extends BaseBootstrapForm {
 			)
 			->addRule(Form::FILLED, "Musíte souhlasit s podmínkami.");
 
-		$this->addSubmit('send', 'Registrovat')
-			->setAttribute('class', 'btn-main medium');
-		//$this->addProtection('Vypršel časový limit, odešlete formulář znovu');
+		$this->addSubmit('send', 'Registrovat');
+
+		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

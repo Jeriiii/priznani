@@ -60,6 +60,7 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'btn-main medium');
 
+		$this->setBootstrapRender();
 		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;

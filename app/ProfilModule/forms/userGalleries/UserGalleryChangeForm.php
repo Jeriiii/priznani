@@ -46,6 +46,8 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 		));
 
 		$this->addSubmit('send', 'Změnit')->setAttribute('class', 'btn-main medium');
+
+		$this->setBootstrapRender();
 		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;

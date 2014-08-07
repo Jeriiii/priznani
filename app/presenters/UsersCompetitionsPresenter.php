@@ -140,7 +140,7 @@ class UsersCompetitionsPresenter extends BasePresenter {
 	 * @return \POSComponent\Galleries\Images\UsersCompetitionsGallery
 	 */
 	public function createComponentGallery() {
-		$imagesID = $this->competitionsImagesDao->getByCompetitions($this->gallery->id);
+		$imagesID = $this->competitionsImagesDao->getApprovedByComp($this->gallery->id);
 		$iID = array_keys($imagesID);
 		$images = $this->userImageDao->getAllById($iID);
 		$httpRequest = $this->context->httpRequest;
@@ -153,10 +153,10 @@ class UsersCompetitionsPresenter extends BasePresenter {
 	 * @return \POSComponent\Galleries\UserImagesInGallery\CompetitionsImagesInGallery
 	 */
 	protected function createComponentUsersImagesInGallery() {
-		$imagesID = $this->competitionsImagesDao->getByCompetitions($this->gallery->id);
+		$imagesID = $this->competitionsImagesDao->getApprovedByComp($this->gallery->id);
 		$iID = array_keys($imagesID);
 		$images = $this->userImageDao->getAllById($iID);
-		return new CompetitionsImagesInGallery($this->gallery->id, $images, $this->userDao);
+		return new CompetitionsImagesInGallery($images, $this->userDao);
 	}
 
 	public function createComponentNewImageForm($name) {

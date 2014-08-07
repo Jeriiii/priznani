@@ -42,6 +42,7 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'submit-button');
 
+		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

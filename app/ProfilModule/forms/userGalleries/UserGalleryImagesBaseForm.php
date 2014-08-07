@@ -17,7 +17,7 @@ use POS\Model\StreamDao;
 /**
  * Základní formulář pro nahrávání a ukládání obrázků
  */
-class UserGalleryImagesBaseForm extends BaseBootstrapForm {
+class UserGalleryImagesBaseForm extends BaseForm {
 
 	/**
 	 * @var \POS\Model\UserGalleryDao
@@ -151,7 +151,8 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	 * @return Database\Table\IRow
 	 */
 	private function saveImageToDB($galleryID, $name, $description, $suffix, $allow) {
-		$image = $this->userImageDao->insertImage($name, $suffix, $description, $galleryID, $allow);
+		$approved = $allow == TRUE ? 1 : 0;
+		$image = $this->userImageDao->insertImage($name, $suffix, $description, $galleryID, $approved);
 		$this->userGalleryDao->updateBestAndLastImage($galleryID, $image->id, $image->id);
 
 		//aktualizace streamu - vyhodí galerii ve streamu nahoru
@@ -210,14 +211,6 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 		$this->addCheckbox('couple', 'pár');
 
 		$this->addCheckbox('more', '3 a více');
-	}
-
-	/**
-	 * Vytvoří userovi defaultní galerii
-	 * @param $userID ID usera, kterému se galerie vytvoří
-	 */
-	public function createDefaultGalleryIfNotExist($userID) {
-		$gallery = $this->userGalleryDao->createDefaultGallery($userID);
 	}
 
 }

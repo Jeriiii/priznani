@@ -50,7 +50,9 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 
 		$images = $this->userImageDao->getUnapproved($compIndexes);
 		$this->template->images = $images;
-		$this->template->compCount = count($compImages);
+
+		$this->template->usrCount = $images->count("id");
+		$this->template->compCount = $compImages->count("id");
 	}
 
 	public function renderAcceptCompetitionImages() {
@@ -58,16 +60,18 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		$compIndexes = $this->getImagesIndexes($images);
 		$usrImages = $this->userImageDao->getUnapproved($compIndexes);
 		$this->template->images = $images;
-		$this->template->usrCount = count($usrImages);
+
+		$this->template->compCount = $images->count("id");
+		$this->template->usrCount = $usrImages->count("id");
 	}
 
 	public function handleAcceptImage($imgId, $galleryId) {
-		$image = $this->userImageDao->find($imgId);
-		$image->update(array('allow' => 1));
+		$image = $this->userImageDao->approve($imgId);
 
 		$userID = $this->userGalleryDao->find($image->galleryID)->userID;
 
 		$this->streamDao->aliveGallery($galleryId, $userID);
+		$this->invalidateMenuData();
 
 		if ($this->isAjax("imageAcceptance")) {
 			$this->invalidateControl('imageAcceptance');
@@ -84,6 +88,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		File::removeImage($image->id, $image->suffix, $galleryFolder);
 
 		$image->delete();
+		$this->invalidateMenuData();
 
 		if ($this->isAjax("imageAcceptance")) {
 			$this->invalidateControl('imageAcceptance');
@@ -92,10 +97,10 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		}
 	}
 
-	public function handleAcceptCompetitionImage($imageID, $usrImgID) {
-		$this->competitionsImagesDao->acceptImage($imageID);
-		$usrImage = $this->userImageDao->find($usrImgID);
-		$usrImage->update(array('allow' => 1));
+	public function handleAcceptCompetitionImage($imageID) {
+		$comImage = $this->competitionsImagesDao->acceptImage($imageID);
+		$this->streamDao->aliveGallery($comImage->image->galleryID, $comImage->image->gallery->userID);
+		$this->invalidateMenuData();
 
 		if ($this->isAjax()) {
 			$this->redrawControl('imageAcceptance');
@@ -106,6 +111,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 
 	public function handleDeleteCompetitionImage($imageID) {
 		$this->competitionsImagesDao->delete($imageID);
+		$this->invalidateMenuData();
 
 		if ($this->isAjax("imageAcceptance")) {
 			$this->redrawControl('imageAcceptance');

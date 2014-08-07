@@ -10,36 +10,40 @@ class ContactForm extends BaseForm {
 
 	/**
 	 * @var \POS\Model\ContactDao
-	 * @inject
 	 */
 	public $contactDao;
-	public $presenter;
 
 	public function __construct(ContactDao $contactDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
 		$this->contactDao = $contactDao;
-		$this->presenter = $this->getPresenter();
 
-		if ($this->presenter->user->isLoggedIn()) {
-			$email = $this->presenter->user->identity->email;
+		$this->addText('email', 'E-mail');
 
-			$this->addText('email', 'E-mail')
-				->addRule(Form::EMAIL, 'Zadali jste neplatný e-mail')
-				->setDefaultValue($email);
-		} else {
-			$this->addText('email', 'E-mail')
-				->addRule(Form::EMAIL, 'Zadali jste neplatný e-mail');
-		}
 		$this->addText('phone', 'Telefon')
+			->addConditionOn($this["email"], ~Form::FILLED)
 			->setRequired('Zadejte telefonní číslo');
+
+		$this["email"]
+			->addCondition(Form::FILLED)
+			->addRule(Form::EMAIL, 'Zadali jste neplatný e-mail')
+			->addConditionOn($this["phone"], ~Form::FILLED)
+			->addRule(Form::EMAIL, 'Zadali jste neplatný e-mail');
 
 		$this->addTextArea('text', 'Zpráva')
 			->setRequired('Vyplňte text zprávy')
 			->addRule(Form::MAX_LENGTH, 'Zpráva může být dlouhá maximálně %d znaků', 500);
 
-		$this->addSubmit("submit", "Odeslat");
+		$user = $this->presenter->user;
+		if ($user->isLoggedIn()) {
+			$email = $user->identity->email;
+			$this->setDefaults(array(
+				"email" => $email
+			));
+		}
 
+		$this->addSubmit("submit", "Odeslat");
+		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

@@ -8,13 +8,13 @@ Feature: User's info
 		And I am on "/profil.show/user-info"
 		Then I should see "Informace o uživateli"
 		And I should see "Profil uživatele <name>"
-		And I should see "Jméno"
-		And I should see "První věta"
-		And I should see "Druh uživatele"
-		And I should see "O mně"
-		And I should see "Věk"
-		And I should see "Výška"
-		And I should see "Typ těla"
+		And I should see "Jméno <name>"
+		And I should see "První věta <firstSentence>"
+		And I should see "Druh uživatele <userProperty>"
+		And I should see "O mně <about>"
+		And I should see "Věk <age>"
+		And I should see "Výška <tallness>"
+		And I should see "Typ těla <bodyType>"
 		And I should see "Kouřeni cigaret"
 		And I should see "Pití alkoholu"
 		And I should see "Vzdělání"
@@ -37,5 +37,5 @@ Feature: User's info
 		And I should see "Hledám"
 
 		Examples:
-			| user				| name			 |
-			| user@test.cz		| Test User		 |
+			| user				| name			 | firstSentence	 | userProperty | about						| age | tallness     | bodyType |
+			| user@test.cz		| Test User		 | Oh bože, už budu. | Muž          | Hledám zábavu a vzrušení. | 25  | 170 - 180 cm | při těle |

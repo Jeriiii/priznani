@@ -6,6 +6,8 @@
 
 namespace POS\Model;
 
+use POS\Model\UserImageDao;
+
 /**
  * NAME DAO NAMEDao
  * slouží k
@@ -38,10 +40,11 @@ class CompetitionsImagesDao extends AbstractDao {
 	 * @param int $competitionID ID soutěže, z které jsou obrázky vybrány
 	 * @return array Pole indexů obrázků z soutěže
 	 */
-	public function getByCompetitions($competitionID) {
+	public function getApprovedByComp($competitionID) {
 		$sel = $this->getTable();
 		$sel->select(self::COLUMN_IMAGE_ID);
 		$sel->where(self::COLUMN_COMPETITION_ID, $competitionID);
+		$sel->where(self::COLUMN_ALLOWED, 1);
 		return $sel->fetchPairs(self::COLUMN_IMAGE_ID, self::COLUMN_IMAGE_ID);
 	}
 
@@ -111,15 +114,24 @@ class CompetitionsImagesDao extends AbstractDao {
 	}
 
 	/**
-	 * Schválí soutěžní obrázek
+	 * Schválí soutěžní obrázek i obrázek v galerii
 	 * @param int $imageID ID obrázku ke schválení
 	 */
 	public function acceptImage($imageID) {
 		$sel = $this->getTable();
 		$sel->wherePrimary($imageID);
 		$sel->update(array(
-			"allowed" => 1
+			self::COLUMN_ALLOWED => 1
 		));
+
+		//schválení fotky i v user_images
+		$comImage = $sel->fetch();
+		$gallImage = $comImage->image;
+		$gallImage->update(array(
+			UserImageDao::COLUMN_ALLOW => 1
+		));
+
+		return $comImage;
 	}
 
 }
