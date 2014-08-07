@@ -10,6 +10,7 @@ use POS\Model\ChatContactsDao;
 use POS\Model\ChatMessagesDao;
 use \POS\Model\UserDao;
 use \Nette\Utils\Strings;
+use POS\Model\PaymentDao;
 
 /**
  *
@@ -37,6 +38,12 @@ class ChatManager {
 	private $userDao;
 
 	/**
+	 * DAO pro platby
+	 * @var PaymentDao
+	 */
+	private $paymentDao;
+
+	/**
 	 * Kodovac a dekodovac dat
 	 * @var ChatCoder
 	 */
@@ -45,10 +52,11 @@ class ChatManager {
 	/**
 	 * Standardni konstruktor, predani potrebnych DAO z presenteru
 	 */
-	function __construct(ChatContactsDao $contactsDao, ChatMessagesDao $messagesDao, UserDao $userDao) {
+	function __construct(ChatContactsDao $contactsDao, ChatMessagesDao $messagesDao, UserDao $userDao, PaymentDao $paymentDao) {
 		$this->contactsDao = $contactsDao;
 		$this->messagesDao = $messagesDao;
 		$this->userDao = $userDao;
+		$this->paymentDao = $paymentDao;
 		$this->coder = new ChatCoder();
 	}
 
@@ -66,9 +74,10 @@ class ChatManager {
 	 * @param int $idSender id odesilatele
 	 * @param int $idRecipient id prijemce
 	 * @param String $text text zpravy
+	 * @return Nette\Database\Table\IRow | int | bool vytvořená zpráva
 	 */
 	public function sendTextMessage($idSender, $idRecipient, $text) {
-		$this->messagesDao->addTextMessage($idSender, $idRecipient, $text);
+		return $this->messagesDao->addTextMessage($idSender, $idRecipient, $text);
 	}
 
 	/**
@@ -111,6 +120,25 @@ class ChatManager {
 			$session->offsetSet($id, $user[UserDao::COLUMN_USER_NAME]);
 			return $user[UserDao::COLUMN_USER_NAME];
 		}
+	}
+
+	/**
+	 * Vrati vsechny neprectene zpravy, ktere uzivatel ODESLAL
+	 * @param int $idSender odesilatel zprav
+	 * @return array pole ve tvaru id_zpravy => id_prijemce
+	 */
+	public function getAllUnreadedMessagesFromUser($idSender) {
+		$messages = $this->messagesDao->getAllSendedAndUnreadedTextMessages($idSender);
+		return $messages->fetchPairs(ChatMessagesDao::COLUMN_ID, ChatMessagesDao::COLUMN_ID_RECIPIENT);
+	}
+
+	/**
+	 * Vrátí TRUE, pokud je daný uživatel platící
+	 * @param int $idUser id uživatele
+	 * @return bool platící
+	 */
+	public function isUserPaying($idUser) {
+		return $this->paymentDao->isUserPaying($idUser);
 	}
 
 }

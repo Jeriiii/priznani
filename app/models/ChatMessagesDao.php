@@ -43,18 +43,17 @@ class ChatMessagesDao extends AbstractDao {
 	 * @param int $idSender odesilatel zprávy
 	 * @param int $idRecipient příjemce zprávy
 	 * @param String $text text zprávy
-	 * @return Nette\Database\Table\Selection vytvořená zpráva
+	 * @return Nette\Database\Table\IRow | int | bool vytvořená zpráva
 	 */
 	public function addTextMessage($idSender, $idRecipient, $text) {
 		$sel = $this->getTable();
-		$sel->insert(array(
-			self::COLUMN_ID_SENDER => $idSender,
-			self::COLUMN_ID_RECIPIENT => $idRecipient,
-			self::COLUMN_TEXT => $text,
-			self::COLUMN_TYPE => self::TYPE_TEXT_MESSAGE,
-			self::COLUMN_READED => self::MESSAGE_UNREADED
+		return $sel->insert(array(
+				self::COLUMN_ID_SENDER => $idSender,
+				self::COLUMN_ID_RECIPIENT => $idRecipient,
+				self::COLUMN_TEXT => $text,
+				self::COLUMN_TYPE => self::TYPE_TEXT_MESSAGE,
+				self::COLUMN_READED => self::MESSAGE_UNREADED
 		));
-		return $sel;
 	}
 
 	/**
@@ -121,9 +120,22 @@ class ChatMessagesDao extends AbstractDao {
 	 */
 	public function getAllUnreadedTextMessages($idRecipient) {
 		$sel = $this->getTable();
-		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		$sel->where(self::COLUMN_READED, self::MESSAGE_UNREADED); //casem bude vsech neprectenych mene, nez zprav jednoho uzivatele
 		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
+		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
+		return $sel;
+	}
+
+	/**
+	 * Vrátí úplně všechny nepřečtené ODCHOZÍ zprávy daného uživatele
+	 * @param int $idSender id uživatele, který zprávy poslal
+	 * @return Nette\Database\Table\Selection odchozí zprávy
+	 */
+	public function getAllSendedAndUnreadedTextMessages($idSender) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_READED, self::MESSAGE_UNREADED); //casem bude vsech neprectenych mene, nez zprav jednoho uzivatele
+		$sel->where(self::COLUMN_ID_SENDER, $idSender);
+		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		return $sel;
 	}
 
