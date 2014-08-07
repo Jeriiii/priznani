@@ -187,7 +187,9 @@
 			<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
 		    {/if}
 		    <div id="fb-root"></div>
-			<script type="text/javascript" src="{$basePath}/js/jquery-ui.light.min.js"></script>
+			{block jqueryUI}
+				<script type="text/javascript" src="{$basePath}/js/jquery-ui.light.min.js"></script>
+			{/block}
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
             {control js 'layout/user-layout-menu.js', 'activities.js',
 					'chat/core.js', 'chat/init.js',
@@ -195,8 +197,8 @@
 					'chat/jquery.ui.chatbox/chatboxManager.js'}
 			{*include #user-menu-scripts*}
 			{control jsLayout}
-			
-			
+
+
 
 			{if $fbToDatabase}
 				{control fbLikeAndCommentToDatabase}

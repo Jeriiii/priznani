@@ -65,6 +65,7 @@ class ShowPresenter extends ProfilBasePresenter {
 		if (empty($id)) {
 			$id = $this->getUser()->getId();
 		}
+		$this->userID = $id;
 		$this->dataForStream = $this->streamDao->getUserStreamPosts($id);
 	}
 
@@ -172,6 +173,15 @@ class ShowPresenter extends ProfilBasePresenter {
 	 */
 	protected function createComponentUploadPhotoForm($name) {
 		return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+	}
+
+	/**
+	 * formulář pro poslání zprávy
+	 * @param type $name
+	 * @return Frm\SendMessageForm
+	 */
+	protected function createComponentSendMessageForm($name) {
+		return new Frm\SendMessageForm($this->chatManager, $this->userID, $this, $name);
 	}
 
 	/**
