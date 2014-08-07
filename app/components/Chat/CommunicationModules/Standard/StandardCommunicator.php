@@ -80,7 +80,15 @@ class StandardCommunicator extends BaseProjectControl implements ICommunicator {
 	 */
 	private function isActualUserPaying() {
 		$userId = $this->getPresenter()->getUser()->getId();
-		return $this->chatManager->isUserPaying($userId);
+		$session = $this->getPresenter()->getSession('ispaying' . $userId);
+		$session->setExpiration(0);
+		if ($session->offsetExists('isPaying')) {	//kdyz je v session
+			return $session->offsetGet('isPaying');	//vrati hodnotu
+		} else {			//kdyz ne
+			$paying = $this->chatManager->isUserPaying($userId); //podiva se do db
+			$session->offsetSet('isPaying', $paying);   //ulozi do session
+			return $paying;		  //a vrati hodnotu
+		}
 	}
 
 	/**
