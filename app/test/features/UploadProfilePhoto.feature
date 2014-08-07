@@ -6,14 +6,13 @@ Feature: Uploading profile photo
 
 	Scenario Outline: User uploads profile photo and approves it
 		Given I am signed in as "<user>"
+		And I am on "/profil.show/"
+		When I attach the file "<image>" to "imageFile0"
+		And I press "send"
+		Then I should see "<message>"
+		And Approve last image
 		And I go to "/profil.show/"
-		Then I attach the file "<image>" to "imageFile0"
-		Then I press "send"
-		And I should see "<message>"
-		Then I go to "/admin.accept-images/"
-		And I follow "Schválit"
-		When I go to "/profil.show/"
-		Then I should see "<text>"
+		And I should see "<text>"
 		
 		Examples:
 			| user		      | image					| message						| text															|

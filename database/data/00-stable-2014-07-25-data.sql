@@ -1148,7 +1148,7 @@ INSERT INTO `user_galleries` (`id`, `name`, `description`, `userID`, `bestImageI
 
 -- Exportování dat pro tabulku postest.user_images: ~4 rows (přibližně)
 /*!40000 ALTER TABLE `user_images` DISABLE KEYS */;
-INSERT INTO `user_images` (`id`, `suffix`, `name`, `description`, `galleryID`, `allow`, `widthGalScrn`, `heightGalScrn`) VALUES
+INSERT INTO `user_images` (`id`, `suffix`, `name`, `description`, `galleryID`, `approved`, `widthGalScrn`, `heightGalScrn`) VALUES
 	(2, 'jpg', 'Test', '', 2, 1, 700, 500),
 	(3, 'jpg', 'Test', '', 2, 1, 700, 500),
 	(4, 'jpg', '', '', 2, 0, 700, 500),

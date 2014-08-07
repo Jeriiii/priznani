@@ -23,7 +23,6 @@ class UserImageDao extends AbstractDao {
 
 	/* Column name */
 	const COLUMN_ID = "id";
-	const COLUMN_ALLOW = "allow";
 	const COLUMN_NAME = "name";
 	const COLUMN_SUFFIX = "suffix";
 	const COLUMN_DESCRIPTION = "description";
@@ -85,7 +84,7 @@ class UserImageDao extends AbstractDao {
 	public function getUnapproved($indexes) {
 		$sel = $this->getTable();
 		$sel->where('id NOT', $indexes);
-		$sel->where(self::COLUMN_ALLOW, 0);
+		$sel->where(self::COLUMN_APPROVED, 0);
 		return $sel;
 	}
 
@@ -96,7 +95,7 @@ class UserImageDao extends AbstractDao {
 	public function getUnapprovedCount() {
 		$sel = $this->getTable();
 		$sel->select('id');
-		$sel->where(self::COLUMN_ALLOW, 0);
+		$sel->where(self::COLUMN_APPROVED, 0);
 		return $sel->count();
 	}
 
@@ -156,7 +155,7 @@ class UserImageDao extends AbstractDao {
 			self::COLUMN_SUFFIX => $suffix,
 			self::COLUMN_DESCRIPTION => $description,
 			self::COLUMN_GALLERY_ID => $galleryID,
-			self::COLUMN_ALLOW => $allow
+			self::COLUMN_APPROVED => $allow
 		));
 
 		return $image;
@@ -173,7 +172,7 @@ class UserImageDao extends AbstractDao {
 		$galls->where(UserGalleryDao::COLUMN_USER_ID, $userID);
 
 		$sel = $this->getTable();
-		$sel->where(self::COLUMN_ALLOW, 1);
+		$sel->where(self::COLUMN_APPROVED, 1);
 		$sel->where(self::COLUMN_GALLERY_ID, $galls);
 		return $sel->count();
 	}
@@ -200,6 +199,26 @@ class UserImageDao extends AbstractDao {
 		$sel->update(array(
 			self::COLUMN_APPROVED => 1
 		));
+
+		return $sel->fetch();
+	}
+
+	/**
+	 * Schválí poslední přidanouta zatím neschválenou fotku.
+	 * Používá se pro testování.
+	 */
+	public function approveLast() {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_APPROVED, 0);
+		$sel->order(self::COLUMN_ID . " DESC");
+		$image = $sel->fetch();
+		if (!empty($image)) {
+			$image->update(array(
+				self::COLUMN_APPROVED => 1
+			));
+		}
+
+		return $image;
 	}
 
 	/**

@@ -130,6 +130,8 @@ class CompetitionsImagesDao extends AbstractDao {
 		$gallImage->update(array(
 			UserImageDao::COLUMN_ALLOW => 1
 		));
+
+		return $comImage;
 	}
 
 }

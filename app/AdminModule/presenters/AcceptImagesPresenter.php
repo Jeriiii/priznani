@@ -66,8 +66,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	}
 
 	public function handleAcceptImage($imgId, $galleryId) {
-		$image = $this->userImageDao->find($imgId);
-		$image->update(array('allow' => 1));
+		$image = $this->userImageDao->approve($imgId);
 
 		$userID = $this->userGalleryDao->find($image->galleryID)->userID;
 
@@ -99,7 +98,8 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	}
 
 	public function handleAcceptCompetitionImage($imageID) {
-		$this->competitionsImagesDao->acceptImage($imageID);
+		$comImage = $this->competitionsImagesDao->acceptImage($imageID);
+		$this->streamDao->aliveGallery($comImage->image->galleryID, $comImage->image->gallery->userID);
 		$this->invalidateMenuData();
 
 		if ($this->isAjax()) {
