@@ -1,8 +1,7 @@
 Feature: Uploading profile photo
 
-	# záměrně chybí scenario s "/install/test-data"
-	# takže po ručním obnovení DB si zkontrolujte, že ve frontě NENÍ 
-	# VÍCE OBRÁZKŮ ČEKAJÍCÍCH NA SCHVÁLENÍ, ať to nemate behat :-)
+	Scenario:
+		Given I am on "/install/test-data"
 
 	Scenario Outline: User uploads profile photo and approves it
 		Given I am signed in as "<user>"

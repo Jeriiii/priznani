@@ -32,3 +32,4 @@ Feature: Confessions form
 		Examples:
 			| admin			| text							 | flash_message					|
 			| admin@test.cz | Tajně sním o Danu Nekonečném...| Čeká na schválení adminem		|
+

@@ -40,6 +40,9 @@ class FeatureContext extends MinkContext {
 	/** @var \POS\Model\StreamDao */
 	public $streamDao;
 
+	/** @var \POS\Model\ConfessionDao */
+	public $confessionDao;
+
 	/** @var MailManager @inject  */
 	private $mailer;
 
@@ -56,6 +59,7 @@ class FeatureContext extends MinkContext {
 		$this->screenshotManager = $this->context->screenshotManager;
 		$this->userImageDao = $this->context->userImageDao;
 		$this->streamDao = $this->context->streamDao;
+		$this->confessionDao = $this->context->confessionDao;
 		$this->mailer = $this->context->getService('nette.mailer');
 	}
 
