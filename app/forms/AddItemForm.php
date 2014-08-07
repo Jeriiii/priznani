@@ -33,7 +33,10 @@ class AddItemForm extends BaseForm {
 
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-		$this->addAntispam();
+
+		if ($this->testMode == FALSE) {
+			$this->addAntispam();
+		}
 
 		$this->addTextarea("note", "Přiznání", 30, 30, 1)
 			->addRule(Form::FILLED, "Vyplňte prosím text zprávy.");

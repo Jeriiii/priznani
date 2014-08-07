@@ -34,6 +34,15 @@ class FeatureContext extends MinkContext {
 	/** @var ScreenshotManager @inject */
 	private $screenshotManager;
 
+	/** @var \POS\Model\UserImageDao */
+	private $userImageDao;
+
+	/** @var \POS\Model\StreamDao */
+	public $streamDao;
+
+	/** @var \POS\Model\ConfessionDao */
+	public $confessionDao;
+
 	/** @var MailManager @inject  */
 	private $mailer;
 
@@ -48,6 +57,9 @@ class FeatureContext extends MinkContext {
 		$this->userManager = $this->context->userManager;
 		$this->databaseManager = $this->context->databaseManager;
 		$this->screenshotManager = $this->context->screenshotManager;
+		$this->userImageDao = $this->context->userImageDao;
+		$this->streamDao = $this->context->streamDao;
+		$this->confessionDao = $this->context->confessionDao;
 		$this->mailer = $this->context->getService('nette.mailer');
 	}
 
@@ -207,6 +219,27 @@ class FeatureContext extends MinkContext {
 		}
 		$link = $matches[1]; //first link
 		$this->getSession()->visit($this->locatePath($link));
+	}
+
+	/**
+	 * @When /^Approve last image$/
+	 * Schválí poslední přidaný a doposud neschválený obrázek.
+	 * Postupně lze touto metodou schválit všechny obrázky v DB
+	 */
+	public function approveLastImage() {
+		$image = $this->userImageDao->approveLast();
+		if (!empty($image)) {
+			$this->streamDao->aliveGallery($image->galleryID, $image->gallery->userID);
+		}
+	}
+
+	/**
+	 * @When /^I attach to "([^"]*)" the file "([^"]*)"$/
+	 */
+	public function iAttachToTheFile($field, $path) {
+		$absoluteBasePath = APP_DIR . "/test/features/files/";
+
+		$this->attachFileToField($field, $absoluteBasePath . $path);
 	}
 
 }

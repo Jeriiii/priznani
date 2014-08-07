@@ -15,9 +15,6 @@ class CoupleDao extends UserBaseDao {
 
 	const TABLE_NAME = "couple";
 
-	/* Column name */
-	const COLUMN_ID = "id";
-
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
 	}
@@ -33,6 +30,19 @@ class CoupleDao extends UserBaseDao {
 		$sex = $this->getSex($user);
 
 		return $baseData + $sex;
+	}
+
+	/**
+	 * Zaregistruje nový pár
+	 * @param array $data Data obsahující nejen informace o páru, musí se
+	 * proto probrat.
+	 */
+	public function register($data) {
+		$sel = $this->getTable();
+
+		$couple = $this->getBaseUserProperty($data);
+
+		return $sel->insert($couple);
 	}
 
 }

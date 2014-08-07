@@ -36,6 +36,8 @@ class OnePagePresenter extends BasePresenter {
 	 * @inject
 	 */
 	public $confessionDao;
+
+	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $count = 0;
 	private $userID;

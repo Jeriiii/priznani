@@ -6,6 +6,7 @@ use Nette\Application\UI\Form,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer;
 use POS\Model\UserDao;
+use Nette\Http\SessionSection;
 
 class DatingRegistrationSecondForm extends BaseForm {
 
@@ -14,9 +15,14 @@ class DatingRegistrationSecondForm extends BaseForm {
 	 */
 	public $userDao;
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
+	/** @var \Nette\Http\SessionSection */
+	private $regSession;
+
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, SessionSection $regSession = NULL) {
 		parent::__construct($parent, $name);
 		$this->userDao = $userDao;
+		$this->regSession = $regSession;
+
 		$this->addText('email', 'Email')
 			->addRule(Form::FILLED, 'Email není vyplněn.')
 			->addRule(Form::EMAIL, 'Vyplněný email není platného formátu.')
@@ -38,7 +44,18 @@ class DatingRegistrationSecondForm extends BaseForm {
 			->addRule(Form::FILLED, 'O mě není vyplněno.')
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300);
 
+		if (isset($regSession)) {
+			$this->setDefaults(array(
+				'email' => $regSession->email,
+				'user_name' => $regSession->user_name,
+				'first_sentence' => $regSession->first_sentence,
+				'about_me' => $regSession->about_me
+			));
+		}
+
 		$this->onSuccess[] = callback($this, 'submitted');
+		$this->onValidate[] = callback($this, "uniqueUserName");
+		$this->onValidate[] = callback($this, "uniqueEmail");
 		$this->addSubmit('send', 'Do třetí části registrace')
 			->setAttribute("class", "btn btn-success");
 
@@ -49,20 +66,42 @@ class DatingRegistrationSecondForm extends BaseForm {
 		$values = $form->values;
 		$presenter = $this->getPresenter();
 
+		$authenticator = $presenter->context->authenticator;
+		$pass = $authenticator->calculateHash($values->password);
+
+		$this->regSession->email = $values->email;
+		$this->regSession->user_name = $values->user_name;
+		$this->regSession->password = $values->password;
+		$this->regSession->passwordHash = $pass;
+		$this->regSession->first_sentence = $values->first_sentence;
+		$this->regSession->about_me = $values->about_me;
+
+		$presenter->redirect('Datingregistration:PreThirdRegForm');
+	}
+
+	/**
+	 * Zkontroluje, zda je user_name unikátní
+	 * @param Nette\Application\UI\Form $form
+	 */
+	public function uniqueUserName($form) {
+		$values = $form->values;
+
 		$user_name = $this->userDao->findByUserName($values->user_name);
-		//$user_name = $form->getPresenter()->context->createUsers()->where('user_name', $values->user_name)->fetch();
 		if ($user_name) {
 			$form->addError('Toto jméno je již obsazeno.');
-		} else {
-			$email = $this->userDao->findByEmail($values->email);
-			//$email = $form->getPresenter()->context->createUsers()->where('email', $values->email)->fetch();
-			if ($email) {
-				$form->addError('Tento mail již někdo používá.');
-			} else {
-				$authenticator = $presenter->context->authenticator;
-				$pass = $authenticator->calculateHash($values->password);
-				$presenter->redirect('Datingregistration:PreThirdRegForm', $values->email, $values->user_name, $pass, $values->first_sentence, $values->about_me);
-			}
+		}
+	}
+
+	/**
+	 * Zkontroluje, zda je email unikátní
+	 * @param Nette\Application\UI\Form $form
+	 */
+	public function uniqueEmail($form) {
+		$values = $form->values;
+
+		$email = $this->userDao->findByEmail($values->email);
+		if ($email) {
+			$form->addError('Tento mail již někdo používá.');
 		}
 	}
 

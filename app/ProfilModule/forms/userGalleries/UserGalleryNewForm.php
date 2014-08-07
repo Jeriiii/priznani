@@ -43,8 +43,8 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 		$this->addSubmit("submit", "Vytvořit galerie")
 			->setAttribute('class', 'btn-main medium');
 
+		$this->setBootstrapRender();
 		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
-
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -66,9 +66,13 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 			unset($values->agreement);
 
 			$galleryID = $this->saveGallery($values, $userID);
-			$this->saveImages($images, $userID, $galleryID);
+			$allow = $this->saveImages($images, $userID, $galleryID);
 
-			$presenter->flashMessage('Galerie byla vytvořena. Fotky budou nejdříve schváleny adminem.');
+			if ($allow) {
+				$presenter->flashMessage('Galerie byla vytvořena.');
+			} else {
+				$presenter->flashMessage('Galerie byla vytvořena. Fotky budou nejdříve schváleny adminem.');
+			}
 			$presenter->redirect('Galleries:');
 		}
 	}

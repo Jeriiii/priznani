@@ -2,11 +2,14 @@
 
 namespace Nette\Application\UI\Form;
 
-use Nette\Application\UI\Form,
-	Nette\Security as NS,
-	Nette\ComponentModel\IContainer;
+use Nette\Application\UI\Form;
+use Nette\ComponentModel\IContainer;
 use POS\Model\UserDao;
+use Nette\Http\SessionSection;
 
+/**
+ * První formulář registrace
+ */
 class DatingRegistrationFirstForm extends BaseForm {
 
 	/**
@@ -14,28 +17,37 @@ class DatingRegistrationFirstForm extends BaseForm {
 	 */
 	public $userDao;
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
+	/** @var \Nette\Http\SessionSection */
+	private $regSession;
+
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, $regSession = NULL) {
 		parent::__construct($parent, $name);
 
 		$this->userDao = $userDao;
-		$users = $this->userDao;
+		$this->regSession = $regSession;
 
-		$renderer = $this->getRenderer();
-		$renderer->wrappers['controls']['container'] = 'table';
-		$renderer->wrappers['pair']['container'] = 'tr';
-		$renderer->wrappers['label']['container'] = 'td';
-		$renderer->wrappers['control']['container'] = 'td';
+		$this->addGroup('Základní údaje:');
 
 		$this->addText('age', 'Věk')
 			->addRule(Form::FILLED, 'Věk není vyplněn.')
 			->addRule(Form::INTEGER, 'Věk není číslo.')
 			->addRule(Form::RANGE, 'Věk musí být od %d do %d let.', array(18, 120));
 
-		$this->addSelect('user_property', 'Jsem:', $users->getUserPropertyOption());
+		$this->addSelect('user_property', 'Jsem:', $this->userDao->getUserPropertyOption());
 
-		$this->addSelect('interested_in', 'Zajímám se o:', $users->getUserInterestInOption());
+		$this->addGroup('Zajímám se o:');
+
+		$this->addWantToMeet();
+
+		if (isset($regSession)) {
+			$this->setDefaults(array(
+				"age" => $regSession->age,
+				"user_property" => $regSession->user_property
+			));
+		}
 
 		$this->onSuccess[] = callback($this, 'submitted');
+		$this->onValidate[] = callback($this, 'validateWantToMeet');
 		$this->addSubmit('send', 'Do druhé části registrace')
 			->setAttribute("class", "btn btn-success");
 
@@ -46,7 +58,44 @@ class DatingRegistrationFirstForm extends BaseForm {
 		$values = $form->values;
 		$presenter = $this->getPresenter();
 
-		$presenter->redirect('Datingregistration:SecondRegForm', $values->age, $values->user_property, $values->interested_in);
+		//uložení checkboxů
+		foreach ($this->userDao->getUserInterestInOption() as $key => $interest) {
+			$this->regSession['want_to_meet_' . $key] = $values['interested_in_' . $key] == TRUE ? 1 : 0;
+		}
+		$this->regSession['want_to_meet_couple_men'] = 0;
+		$this->regSession['want_to_meet_couple_women'] = 0;
+
+		$this->regSession->role = 'unconfirmed_user';
+		$this->regSession->age = $values->age;
+		$this->regSession->user_property = $values->user_property;
+
+		$presenter->redirect('Datingregistration:SecondRegForm');
+	}
+
+	/**
+	 * Vytváření checkboxů.
+	 */
+	public function addWantToMeet() {
+		foreach ($this->userDao->getUserInterestInOption() as $key => $interest) {
+			$checkBox = $this->addCheckbox('interested_in_' . $key, $interest);
+			$checkBox->setDefaultValue($this->regSession['want_to_meet_' . $key]);
+		}
+	}
+
+	/**
+	 * Zkontroluje, zda je zaškrtlý alespoň jeden checkbox
+	 * @param Nette\Application\UI\Form $form
+	 */
+	public function validateWantToMeet($form) {
+		$values = $form->values;
+
+		foreach ($this->userDao->getUserInterestInOption() as $key => $interest) {
+			if ($values['interested_in_' . $key]) {
+				return;
+			}
+		}
+
+		$this->addError("Zaškrtněte prosím o koho se zajímáte");
 	}
 
 }

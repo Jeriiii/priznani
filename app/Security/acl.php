@@ -34,7 +34,7 @@ class Acl extends Permission {
 		$this->allow('baseadmin', 'Admin:Pages');
 		$this->allow('baseadmin', 'Admin:Forms');
 		$this->allow('baseadmin', 'Admin:AdminNews');
-		$this->allow('baseadmin', 'Admin:Galleries');
+		$this->allow('superadmin', 'Admin:Galleries');
 		$this->allow('baseadmin', 'Admin:AcceptImages');
 		$this->allow('baseadmin', 'Admin:Payments');
 		$this->allow('baseadmin', 'Admin:GameOrders');

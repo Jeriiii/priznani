@@ -60,6 +60,7 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'btn-main medium');
 
+		$this->setBootstrapRender();
 		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
@@ -79,9 +80,13 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 			$uID = $presenter->getUser()->getId();
 
 			$this->userGalleryDao->updateGender($this->galleryID, $values->man, $values->women, $values->couple, $values->more);
-			$this->saveImages($images, $uID, $this->galleryID);
+			$allow = $this->saveImages($images, $uID, $this->galleryID);
 
-			$presenter->flashMessage('Fotky byly přidané. Nyní jsou ve frontě na schválení.');
+			if ($allow) {
+				$presenter->flashMessage('Fotky byly přidané.');
+			} else {
+				$presenter->flashMessage('Fotky byly přidané. Nyní jsou ve frontě na schválení.');
+			}
 			$presenter->redirect('Galleries:listUserGalleryImages', array("galleryID" => $this->galleryID));
 		}
 	}

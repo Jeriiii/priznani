@@ -4,6 +4,7 @@ namespace AdminModule;
 
 use Nette;
 use App\Forms as Frm;
+use Grido\Grid;
 
 /**
  * GameOrdersPresenter Description
@@ -21,14 +22,37 @@ class GameOrdersPresenter extends AdminSpacePresenter {
 	 * @param type $name
 	 */
 	protected function createComponentGrid($name) {
-		$grid = new \Grido\Grid($this, $name);
+		$grid = new Grid($this, $name);
 		$grid->setModel($this->eshopGameOrderDao->getTable());
 
+		$this->addColumns($grid);
+		$this->addFilters($grid);
+
+		//řazení podle id vzestupně
+		$grid->setDefaultSort(array('id' => 'ASC'));
+	}
+
+	/**
+	 * Přidá filtry do gridu.
+	 * @param Grido\Grid $grid
+	 */
+	public function addFilters($grid) {
 		/* filtry */
 		$grid->addFilterText('name', 'Jméno');
 		$grid->addFilterText('surname', 'Příjmení');
 		$grid->addFilterText('email', 'Email');
-		$grid->addFilterDateRange('create', 'Datum objednávky')->setDateFormatInput('d.m.Y');
+
+		//Filtr vyfiltruje objednávky s datem rovným nebo větším vloženému
+		$grid->addFilterDate('create_from', 'Objednávky od:')->setWhere(function($value, $selection) {
+			$date = date('Y-m-d H:i:s', strtotime($value));
+			$selection->where('create >= ?', $date);
+		});
+		//Filtr vyfiltruje objednávky s datem rovným nebo menším vloženému
+		//K datu se přičte 23:59:59
+		$grid->addFilterDate('create_to', 'Objednávky do:')->setWhere(function($value, $selection) {
+			$date = date('Y-m-d H:i:s', strtotime($value . ' + 86399 seconds'));
+			$selection->where('create <= ?', $date);
+		});
 		/* konec filtrů */
 
 		/* seznam her */
@@ -60,39 +84,28 @@ class GameOrdersPresenter extends AdminSpacePresenter {
 				'manazeruvsen' => array('manazeruvsen', '=', 1),
 		));
 		/* konec nastavení */
+	}
 
-		//řazení podle id vzestupně
-		$grid->setDefaultSort(array('id' => 'ASC'));
-
-		/* sloupce komponenty */
+	/**
+	 * Přidá sloupce do gridu
+	 * @param Grido\Grid $grid
+	 */
+	public function addColumns($grid) {
 		$grid->addColumnText("name", "Jméno");
-
 		$grid->addColumnText("surname", "Příjmení");
-
 		$grid->addColumnText("email", "Email");
-
 		$grid->addColumnDate("create", "Objednáno");
 
 		$grid->addColumnText("vasnivefantazie", "v.f.")->setReplacement(array(1 => "✓", 0 => "×"));
-
 		$grid->addColumnText("nespoutanevzruseni", "n.v.")->setReplacement(array(1 => "✓", 0 => "×"));
-
 		$grid->addColumnText("zhaveukolypropary", "z.u.")->setReplacement(array(1 => "✓", 0 => "×"));
-
 		$grid->addColumnText("ceskahralasky", "c.h.")->setReplacement(array(1 => "✓", 0 => "×"));
-
 		$grid->addColumnText("nekonecnaparty", "n.p.")->setReplacement(array(1 => "✓", 0 => "×"));
-
 		$grid->addColumnText("sexyaktivity", "s.a.")->setReplacement(array(1 => "✓", 0 => "×"));
-
 		$grid->addColumnText("ceskachlastacka", "c.ch.")->setReplacement(array(1 => "✓", 0 => "×"));
-
 		$grid->addColumnText("milackuuklidto", "m.u.")->setReplacement(array(1 => "✓", 0 => "×"));
-
 		$grid->addColumnText("sexyhratky", "s.h.")->setReplacement(array(1 => "✓", 0 => "×"));
-
 		$grid->addColumnText("manazeruvsen", "m.s.")->setReplacement(array(1 => "✓", 0 => "×"));
-		/* konec sloupců */
 	}
 
 }

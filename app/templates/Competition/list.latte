@@ -51,10 +51,16 @@
 
 {block beforeContent}
 <div id="metrocontainer">
-	{foreach $galleries as $gallery}
+	{foreach $userCompetitions as $com}
 		{if $iterator->isFirst()}
-			<h2>Galerie</h2>
+			<h2>Soutěže</h2>
 		{/if}
+		<div class="icon-container date">
+			<img src="{$basePath}/{$com->imageUrl}" width="100%" height="100%"/>
+			<a n:href="UsersCompetitions: galleryID => $com->id">{$com->name}</a>
+		</div> 
+	{/foreach}
+	{foreach $galleries as $gallery}
 		<div class="icon-container date">
 			<img src="{$basePath}/{$gallery->imageUrl}" width="100%" height="100%"/>
 			<a n:href="Competition: galleryID => $gallery->id">{$gallery->name}</a>
@@ -63,7 +69,7 @@
 	<div class="clear"></div>
     {foreach $competitions as $com}
 		{if $iterator->isFirst()}
-			<h2>Soutěže</h2>
+			<h2>Uživatelské galerie</h2>
 		{/if}
 		<div class="icon-container date">
 			<img src="{$basePath}/{$com->imageUrl}" width="100%" height="100%"/>

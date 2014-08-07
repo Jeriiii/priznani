@@ -1,15 +1,18 @@
 <?php
 
+/*
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
+ */
+
 namespace ProfilModule;
 
-use Nette\Application\UI\Form as Frm,
-	Nette\ComponentModel\IContainer;
+use Nette\Application\UI\Form as Frm;
 use POSComponent\Galleries\UserGalleries\UserGalleries;
 use POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery;
-use POSComponent\Stream\ProfilStream\ProfilStream;
+use POSComponent\Stream\ProfilStream;
 use POSComponent\UserInfo\UserInfo;
 
-class ShowProfilPresenter extends ProfilBasePresenter {
+class ShowPresenter extends ProfilBasePresenter {
 
 	/**
 	 * @var int ID uživatele, jehož profil je zobrazován
@@ -91,19 +94,22 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 		}
 	}
 
+	public function actionUserImages($id) {
+		if (empty($id)) {
+			$id = $this->getUser()->getId();
+		}
+		$this->userID = $id;
+	}
+
 	/**
 	 * vykresluje template se vsemi fotky uzivateli
 	 * @param type $id
 	 */
 	public function renderUserImages($id) {
-		if (empty($id)) {
-			$id = $this->getUser()->getId();
-		}
-		$user = $this->userDao->find($id);
-		$this->userID = $id;
+		$user = $this->userDao->find($this->userID);
 
 		$this->template->userData = $user;
-		$this->template->userID = $id;
+		$this->template->userID = $this->userID;
 	}
 
 	/**
@@ -139,7 +145,7 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 	 * @return \ProfilStream
 	 */
 	protected function createComponentProfilStream() {
-		return new ProfilStream($this->dataForStream, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+		return new ProfilStream($this->dataForStream, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
 	}
 
 	/**
@@ -155,9 +161,8 @@ class ShowProfilPresenter extends ProfilBasePresenter {
 	 */
 	protected function createComponentUserImagesAll() {
 		$images = $this->userImageDao->getAllFromUser($this->userID);
-		$gallery = $this->userGalleryDao->findByUser($this->userID);
 
-		return new UserImagesInGallery($gallery->id, $images, $this->userDao);
+		return new UserImagesInGallery($images, $this->userDao);
 	}
 
 	/**

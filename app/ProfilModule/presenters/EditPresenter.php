@@ -60,7 +60,10 @@ class EditPresenter extends ProfilBasePresenter {
 	}
 
 	protected function createComponentFirstEditForm($name) {
-		return new Frm\DatingEditFirstForm($this->userPropertyDao, $this->userDao, $this, $name);
+		$userID = $this->getUser()->getId();
+		$user = $this->userDao->find($userID);
+
+		return new Frm\DatingEditFirstForm($this->userPropertyDao, $this->userDao, $user, $this, $name);
 	}
 
 	protected function createComponentSecondEditForm($name) {

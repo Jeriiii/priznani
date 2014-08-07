@@ -42,6 +42,7 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'submit-button');
 
+		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -67,9 +68,13 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 				$idGallery = $defaultGallery->id;
 			}
 
-			$this->saveImages($images, $userID, $idGallery);
+			$allow = $this->saveImages($images, $userID, $idGallery);
 
-			$presenter->flashMessage('Fotky byly přidané. Nyní jsou ve frontě na schválení.');
+			if ($allow) {
+				$presenter->flashMessage('Fotky byly přidané.');
+			} else {
+				$presenter->flashMessage('Fotky byly přidané. Nyní jsou ve frontě na schválení.');
+			}
 			$presenter->redirect('OnePage:default');
 		}
 	}

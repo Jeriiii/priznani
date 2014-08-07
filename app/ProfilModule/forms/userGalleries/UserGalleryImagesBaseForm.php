@@ -17,7 +17,7 @@ use POS\Model\StreamDao;
 /**
  * Základní formulář pro nahrávání a ukládání obrázků
  */
-class UserGalleryImagesBaseForm extends BaseBootstrapForm {
+class UserGalleryImagesBaseForm extends BaseForm {
 
 	/**
 	 * @var \POS\Model\UserGalleryDao
@@ -111,8 +111,15 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 	 * @param \Nette\ArrayHash $values Všechny hodnoty z formuláře.
 	 * @param int $userID ID uživatele.
 	 * @param int $galleryID ID galerie.
+	 * @return boolean TRUE pokud byly fotky automaticky schválené, jinak FALSE
 	 */
 	public function saveImages(array $images, $userID, $galleryID) {
+		//získání počtu user obrázků, které mají allow 1
+		$allowedImagesCount = $this->userImageDao->countAllowedImages($userID);
+
+		//pokud je 3 a více schválených, schválí i nově přidávanou
+		$allow = $allowedImagesCount >= self::AllowLimitForImages ? TRUE : FALSE;
+
 		foreach ($images as $image) {
 			if ($image[self::IMAGE_FILE]->isOK()) {
 				//název obrázku zadaný uživatelem
@@ -123,32 +130,29 @@ class UserGalleryImagesBaseForm extends BaseBootstrapForm {
 				$description = !empty($image[self::IMAGE_DESCRIPTION]) ? $image[self::IMAGE_DESCRIPTION] : "";
 
 				//Uloží obrázek do databáze
-				$imageDB = $this->saveImageToDB($userID, $galleryID, $name, $description, $suffix);
+				$imageDB = $this->saveImageToDB($galleryID, $name, $description, $suffix, $allow);
 
 				//nahraje soubor
 				$this->upload($image[self::IMAGE_FILE], $imageDB->id, $suffix, $galleryID, $userID, 500, 700, 100, 130);
 				unset($image);
 			}
 		}
+
+		return $allow;
 	}
 
 	/**
 	 * Uloží obrázek do databáze.
-	 * @param int $userID ID uživatele.
 	 * @param int $galleryID ID galerie.
 	 * @param string $name Název obrázku zadaný uživatelem.
 	 * @param string $description Popis obrázku zadaný uživatelem.
 	 * @param string $suffix Koncovka obrázku.
+	 * @param boolean $allow Automatické schvalování obrázků.
 	 * @return Database\Table\IRow
 	 */
-	private function saveImageToDB($userID, $galleryID, $name, $description, $suffix) {
-		//získání počtu user obrázků, které mají allow 1
-		$allowedImagesCount = $this->userImageDao->countAllowedImages($userID);
-
-		//pokud je 3 a více schválených, schválí i nově přidávanou
-		$allow = $allowedImagesCount >= self::AllowLimitForImages ? 1 : 0;
-
-		$image = $this->userImageDao->insertImage($name, $suffix, $description, $galleryID, $allow);
+	private function saveImageToDB($galleryID, $name, $description, $suffix, $allow) {
+		$approved = $allow == TRUE ? 1 : 0;
+		$image = $this->userImageDao->insertImage($name, $suffix, $description, $galleryID, $approved);
 		$this->userGalleryDao->updateBestAndLastImage($galleryID, $image->id, $image->id);
 
 		//aktualizace streamu - vyhodí galerii ve streamu nahoru

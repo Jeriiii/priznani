@@ -1,7 +1,7 @@
 <?php
 
 /*
- * @copyright Copyright (c) 2014 Kukral COMPANY s.r.o.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 namespace POS\Model;
@@ -119,6 +119,18 @@ class UserGalleryDao extends BaseGalleryDao {
 			self::COLUMN_PROFILE => 1,
 		));
 		return $profileGallery;
+	}
+
+	/**
+	 * Vrátí poslední obrázek z galerie usera
+	 * @param int $userID ID usera, jemuž patří galerie
+	 * @return @return Database\Table\ActiveRow
+	 */
+	public function getLastImageByUser($userID) {
+		$sel = $this->getTable();
+		$sel->select("lastImageID");
+		$sel->where(self::COLUMN_USER_ID, $userID);
+		return $sel->fetch();
 	}
 
 	/*	 * ****************************** UPDATE **************************** */

@@ -1,0 +1,33 @@
+{layout '../BaseGallery/baseGallery.latte'}
+
+{* competition bloky *}
+
+{define menuButtons}
+<a href="{plink UsersCompetitions:listImages galleryID => $gallery->id}"  class="btn-main btn-small">
+	celá galerie
+</a>
+<a href="{plink Competition:list}"  class="btn-main btn-small">
+	seznam soutěží
+</a>
+{/}
+
+{define imageComment}
+{$image->description}
+{/}
+
+	
+{define uploadImage}
+	{if $user->isLoggedIn()}
+		<a href="{plink Competition:uploadCompetitionImage galleryID => $gallery->id}" id="add-photo-button" class="btn-main medium right">
+			nahrát fotku
+		</a>
+	{/if}
+{/}
+ 
+{define imageMainScreen}
+	<img src="{$image|getImgPath}" alt="{$image->name}"
+		{ifset $imgPaddingTopBottom}
+			style = "padding: {!$imgPaddingTopBottom}px 0;"
+		{/ifset}
+		{if $setWidth} width="700" {else} height="525" {/if} />
+{/}
