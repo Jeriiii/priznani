@@ -17,6 +17,7 @@
 		var opts = $.extend({}, $.fn.chat.defaults, options);
 		setOpts(opts);
 		initializeContactList();
+		reloadWindowUnload();
 		setWaitTime(opts.minRequestTimeout);
 		refreshMessages(0);
 	};
@@ -111,6 +112,8 @@
 			type: 'textMessage',
 			text: msg
 		};
+		blockWindowUnload('Zpráva se stále odesílá, prosíme počkejte několik sekund a pak to zkuste znova.');
+		/* hláška, co se objeví při pokusu obnovit/zavřít okno, zatímco se čeká na odpověď při odeslání zprávy */
 		sendDataByAjax(sendMessageLink, requestData);
 		this.boxManager.addMsg(mydata.name, msg);//pridani zpravy do okna
 		messageSent = true;
@@ -144,9 +147,12 @@
 	 *
 	 */
 	function handleResponse(json) {
-		$.each(json, function(key, values) {//projde vsechny uzivatele, od kterych neco prislo
-			$.each(values, function(messageKey, message) {//vsechny zpravy od kazdeho uzivatele
-				addMessage(key, message.name, message.text);
+		reloadWindowUnload();//odblokovani prevence proti predcasnemu opusteni stranky
+		$.each(json, function(iduser, values) {//projde vsechny uzivatele, od kterych neco prislo
+			var name = values.name;
+			var messages = values.messages;
+			$.each(messages, function(messageKey, message) {//vsechny zpravy od kazdeho uzivatele
+				addMessage(iduser, name, message.text, message.type);
 			});
 		});
 	}
@@ -177,6 +183,37 @@
 
 	}
 
+
+	/**
+	 * Při pokusu zavřít nebo obnovit okno se zeptá uživatele,
+	 * zda chce okno skutečně zavřít/obnovit. Toto dělá v každém případě, dokud
+	 * se nezavolá reloadWindowUnload
+	 * @param {String} reason důvod uvedený v dialogu
+	 */
+	function blockWindowUnload(reason) {
+		window.onbeforeunload = function() {
+			return reason;
+		};
+	}
+
+	/**
+	 * Vypne hlídání zavření/obnovení okna a vrátí jej do počátečního stavu.
+	 */
+	function reloadWindowUnload() {
+		window.onbeforeunload = function() {
+			var unsend = false;
+			$.each($(".ui-chatbox-input-box"), function() {//projde vsechny textarea chatu
+				if ($.trim($(this).val())) {//u kazdeho zkouma hodnotu bez whitespacu
+					unsend = true;
+				}
+			});
+			if (unsend) {
+				return 'Máte rozepsaný příspěvek. Chcete tuto stránku opustit a zahodit tak svou práci?';
+				/* hláška, co se objeví při pokusu obnovit/zavřít okno, zatímco má uživatel rozepsanou zprávu */
+			}
+		};
+	}
+
 	/*
 	 * Vytvori nove okno, nebo otevre stavajici. Pokud je pouze zavrene, otevre ho.
 	 * @param {int|String} id id okna
@@ -196,10 +233,15 @@
 	 * @param {int|String} id id okna
 	 * @param {String} name od koho zprava je
 	 * @param {String} text text zpravy
+	 * @param {int} type typ zpravy
 	 */
-	function addMessage(id, name, text) {
+	function addMessage(id, name, text, type) {
 		addBox(id, name);//vytvori/zobrazi dotycne okno
-		chatboxManager.addMessage(id, name, text);
+		if (type == 0) {
+			chatboxManager.addMessage(id, name, text);
+		} else {
+			chatboxManager.addMessage(id, '', text);
+		}
 	}
 
 
