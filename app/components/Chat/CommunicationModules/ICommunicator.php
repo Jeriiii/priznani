@@ -17,5 +17,5 @@ interface ICommunicator {
 
 	/* zpracovani pozadavku na nove zpravy */
 
-	public function handleRefreshMessages();
+	public function handleRefreshMessages($lastId);
 }

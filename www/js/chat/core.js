@@ -15,6 +15,7 @@
 	/* main */
 	$.fn.chat = function(options) {
 		var opts = $.extend({}, $.fn.chat.defaults, options);
+		window.lastId = 0; //nastaveni globalni promenne posledniho znameho id
 		setOpts(opts);
 		initializeContactList();
 		reloadWindowUnload();
@@ -57,7 +58,7 @@
 			messageSent = false;
 		}
 		setTimeout(function() {
-			console.log("CHAT - refreshing");
+			//console.log("CHAT - refreshing");//pro debug
 			sendRefreshRequest(waitTime);
 		}, waitTime);
 
@@ -67,14 +68,17 @@
 	 * */
 	function sendRefreshRequest(waitTime) {
 		var opts = this.opts;
-		$.getJSON(refreshMessagesLink, function(jsondata) {
+		var data = {
+			'lastId': window.lastId
+		};
+		$.getJSON(refreshMessagesLink, data, function(jsondata) {
 			if ($.isEmptyObject(jsondata)) {
 				waitTime = Math.min(waitTime + opts.timeoutStep, opts.maxRequestTimeout);
-				console.log("CHAT - no new data - request timeout is now: " + waitTime);
+				//console.log("CHAT - no new data - request timeout is now: " + waitTime);//pro debug
 			} else {
 				handleResponse(jsondata);
 				waitTime = opts.minRequestTimeout;
-				console.log("CHAT - data arrived - request timeout is now: " + waitTime);
+				//console.log("CHAT - data arrived - request timeout is now: " + waitTime);//pro debug
 			}
 			refreshMessages(waitTime);
 		}).fail(function() {
@@ -153,6 +157,9 @@
 			var messages = values.messages;
 			$.each(messages, function(messageKey, message) {//vsechny zpravy od kazdeho uzivatele
 				addMessage(iduser, name, message.text, message.type);
+				if (message.id > window.lastId) {//aktualizace nejvyssiho id
+					window.lastId = message.id;
+				}
 			});
 		});
 	}
@@ -161,7 +168,7 @@
 	 * Inicializace seznamu kontaktu - poveseni click eventu etc.
 	 */
 	function initializeContactList() {
-		console.log('CHAT - initializing contact list');
+		//console.log('CHAT - initializing contact list');//pro debug
 
 		var idList = new Array();
 
@@ -224,7 +231,7 @@
 				{
 					title: title
 				});
-		console.log('CHAT - created new box #' + id);
+		//console.log('CHAT - created new box #' + id);//pro debug
 	}
 
 

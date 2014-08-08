@@ -82,29 +82,34 @@ class StandardCommunicator extends BaseProjectControl implements ICommunicator {
 		$userId = $this->getPresenter()->getUser()->getId();
 		$session = $this->getPresenter()->getSession('ispaying' . $userId);
 		$session->setExpiration(0);
-		if ($session->offsetExists('isPaying')) {	//kdyz je v session
-			return $session->offsetGet('isPaying');	//vrati hodnotu
-		} else {			//kdyz ne
+		if ($session->offsetExists('isPaying')) { //kdyz je v session
+			return $session->offsetGet('isPaying'); //vrati hodnotu
+		} else {   //kdyz ne
 			$paying = $this->chatManager->isUserPaying($userId); //podiva se do db
 			$session->offsetSet('isPaying', $paying);   //ulozi do session
-			return $paying;		  //a vrati hodnotu
+			return $paying; //a vrati hodnotu
 		}
 	}
 
 	/**
 	 * Vyřízení žádosti o poslání nových zpráv
 	 */
-	public function handleRefreshMessages() {
-		$this->sendRefreshResponse();
+	public function handleRefreshMessages($lastId) {
+		$userId = $this->getPresenter()->getUser()->getId();
+		if (!$lastId || $lastId == 0) {//pokud jde o prvni pozadavek prohlizece
+			$newMessages = $this->chatManager->getAllUnreadedMessages($userId);
+		} else {
+			$newMessages = $this->chatManager->getAllNewMessages($lastId, $userId);
+		}
+		$this->sendRefreshResponse($newMessages);
 	}
 
 	/**
 	 * Pošle uživateli JSON, obsahující informace o nových zprávách apod.
 	 * Vrací odpověď prohlížeči, vykonání kódu na serveru zde končí.
+	 * @param \Nette\Database\Table\Selection $newMessages nove zpravy
 	 */
-	public function sendRefreshResponse() {
-		$user = $this->getPresenter()->getUser()->getId();
-		$newMessages = $this->chatManager->getAllNewMessages($user);
+	public function sendRefreshResponse($newMessages) {
 		$response = $this->prepareResponseArray($newMessages);
 		if ($this->isActualUserPaying()) {
 			$response = $this->addInfoAboutDeliveredMessages($response);
@@ -135,7 +140,6 @@ class StandardCommunicator extends BaseProjectControl implements ICommunicator {
 
 	private function modifyResponseRowToArray(\Nette\Database\Table\IRow $row) {
 		$rowArray = $row->toArray();
-		unset($rowArray[ChatMessagesDao::COLUMN_ID]); //id odesilatele je uz v prvnim klici pole
 		unset($rowArray[ChatMessagesDao::COLUMN_ID_SENDER]); //id odesilatele je uz v prvnim klici pole
 		unset($rowArray[ChatMessagesDao::COLUMN_ID_RECIPIENT]);  //neposila uzivateli jeho vlastni id
 		unset($rowArray[ChatMessagesDao::COLUMN_READED]);  //neposila zbytecnou informaci

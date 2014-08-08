@@ -85,8 +85,18 @@ class ChatManager {
 	 * @param int $idRecipient id uživatele
 	 * @return \Nette\Database\Table\Selection zpravy
 	 */
-	public function getAllNewMessages($idRecipient) {
+	public function getAllUnreadedMessages($idRecipient) {
 		return $this->messagesDao->getAllUnreadedTextMessages($idRecipient);
+	}
+
+	/**
+	 * Vrátí všechny zprávy novější než zpráva s daným id
+	 * @param int $fromId dané id zpravy
+	 * @param int $idRecipient id příjemce
+	 * @return \Nette\Database\Table\Selection zpravy
+	 */
+	public function getAllNewMessages($fromId, $idRecipient) {
+		return $this->messagesDao->getAllNewerMessagesThan($fromId, $idRecipient);
 	}
 
 	/**

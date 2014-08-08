@@ -127,6 +127,20 @@ class ChatMessagesDao extends AbstractDao {
 	}
 
 	/**
+	 * Vrátí všechny zprávy novější než daná zpráva
+	 * @param int $messageId id dané zprávy
+	 * @param int $idRecipient příjemce zpráv
+	 * @return Nette\Database\Table\Selection  zprávy
+	 */
+	public function getAllNewerMessagesThan($messageId, $idRecipient) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID . ' > ?', $messageId);
+		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
+		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
+		return $sel;
+	}
+
+	/**
 	 * Vrátí úplně všechny nepřečtené ODCHOZÍ zprávy daného uživatele
 	 * @param int $idSender id uživatele, který zprávy poslal
 	 * @return Nette\Database\Table\Selection odchozí zprávy
