@@ -39,7 +39,7 @@ class FriendDao extends AbstractDao {
 	 * @param int $userID1 První uživatel.
 	 * @param int $userID2 Druhý uživatel.
 	 */
-	public function delete($userID1, $userID2) {
+	public function removeRelationship($userID1, $userID2) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_USER_ID_1, $userID1);
 		$sel->where(self::COLUMN_USER_ID_2, $userID2);
