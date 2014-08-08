@@ -7,7 +7,7 @@
 namespace POS\Model;
 
 /**
- * Sledování.
+ * Sledování = odebírání příspěvků od uživatele bez přátelství.
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
@@ -17,9 +17,35 @@ class FollowDao extends AbstractDao {
 
 	/* Column name */
 	const COLUMN_ID = "id";
+	const COLUMN_USER_FROM_ID = "userFromID";
+	const COLUMN_USER_TO_ID = "userToID";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	/**
+	 * Vrátí seznam uživatelů, které uživatel sleduje.
+	 * @param int $userFromID
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function getAllFromUser($userFromID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_FROM_ID, $userFromID);
+
+		return $sel;
+	}
+
+	/**
+	 * Vrátí seznam uživatelů, kteří uživatele sledují.
+	 * @param int $userToID
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function getAllToUser($userToID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_TO_ID, $userToID);
+
+		return $sel;
 	}
 
 }

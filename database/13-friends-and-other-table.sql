@@ -13,7 +13,14 @@ ALTER TABLE `friends`
 	ADD CONSTRAINT `userID2` FOREIGN KEY (`userID2`) REFERENCES `users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE `friends`
-	COMMENT='Přátelství funguje i když je vazba A,B i B,A ale ne najednou.';
+	COMMENT='Přátelství funguje mezi přáteli A a B, jen když je vazba A,B a B,A.';
+
+ALTER TABLE `friends`
+	ADD COLUMN `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+	DROP PRIMARY KEY,
+	ADD PRIMARY KEY (`id`),
+	ADD INDEX `userID1` (`userID1`);
+
 
 /* vytvoří tabulku žádostí o přátelství */
 CREATE TABLE `friendRequest` (
@@ -51,3 +58,5 @@ ALTER TABLE `follows`
 	ADD CONSTRAINT `FK_follows_users` FOREIGN KEY (`userIDFrom`) REFERENCES `users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
 	ADD CONSTRAINT `FK_follows_users_2` FOREIGN KEY (`userIDTo`) REFERENCES `users` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
+ALTER TABLE `follows`
+	COMMENT='Sledování = odebírání příspěvků od uživatele bez přátelství';

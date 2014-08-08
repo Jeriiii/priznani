@@ -17,9 +17,35 @@ class FriendRequestDao extends AbstractDao {
 
 	/* Column name */
 	const COLUMN_ID = "id";
+	const COLUMN_USER_FROM_ID = "userFromID";
+	const COLUMN_USER_TO_ID = "userToID";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	/**
+	 * Vrátí žádosti o přátelství odesnané uživatelem.
+	 * @param int $userFromID
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function getAllFromUser($userFromID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_FROM_ID, $userFromID);
+
+		return $sel;
+	}
+
+	/**
+	 * Vrátí všechny žádosti, které žádají tohoto uživatele o přátelství.
+	 * @param int $userToID
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function getAllToUser($userToID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_TO_ID, $userToID);
+
+		return $sel;
 	}
 
 }
