@@ -91,6 +91,7 @@ class Activities extends BaseProjectControl {
 		} else {
 			$this->presenter->sendResponse(new JsonResponse(array("activities" => $data)));
 		}
+			$this->redrawControl();
 	}
 
 	/**
@@ -99,6 +100,7 @@ class Activities extends BaseProjectControl {
 	public function handleAsk() {
 		$count = $this->getUnviewedActivitiesCount($this->userID);
 		$this->presenter->sendResponse(new JsonResponse(array("count" => $count)));
+		$this->redrawControl();
 	}
 
 	/**
@@ -107,6 +109,7 @@ class Activities extends BaseProjectControl {
 	 */
 	public function handleViewed($activityID) {
 		$this->activitiesDao->markViewed($activityID);
+		$this->redrawControl();
 	}
 
 	/**

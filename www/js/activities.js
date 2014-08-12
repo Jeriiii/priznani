@@ -2,8 +2,10 @@
 var baseUrl = window.location.href;
 //Část url pro handle
 var askUrl = "?do=activities-ask";
-//Spojené url pro použití v ajaxu
-var url = baseUrl + askUrl;
+//Spojené url pro použití v ajaxu bez fid
+var index = baseUrl.indexOf('?_fid=');
+var clearUrl = removeFid(baseUrl, index);
+var url = clearUrl + askUrl;
 
 //Dotaz nanové aktivity při reloadu(tak jako na fb)
 $(document).ready(function(){
@@ -112,7 +114,9 @@ $(document).on("click", '.marker', function(){
 //funkce volá ajax, a povolí načtení každé 3s při kliku
 $(document).on("click", ".activities-btn", function(e){
 	var requestUrl = "?do=activities-loadActivities";
-	var ajaxUrl = baseUrl + requestUrl;
+	var index = baseUrl.indexOf('?_fid=');
+	var clearUrl = removeFid(baseUrl, index);
+	var ajaxUrl = clearUrl + requestUrl;
 	var target = $(e.target);
 	var targetAttr = target.attr('data-ajax-off');
 	
@@ -162,3 +166,11 @@ $(document).on("click", ".activities-btn", function(e){
 
 	}
 });
+
+function removeFid(url, pos) {
+	if(pos !== -1) {
+		url = url.substr(0, pos);
+	}
+
+	return url;
+}
