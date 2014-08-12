@@ -25,6 +25,7 @@ common:
 
 	nette:
 		application:
+			catchExceptions: TRUE
 			errorPresenter: Error
 			
 		session:
