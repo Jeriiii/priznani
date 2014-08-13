@@ -25,7 +25,7 @@ class PosChat extends BaseProjectControl {
 	/**
 	 * Standardni konstruktor, predani sluzby chat manageru
 	 */
-	function __construct(ChatManager $manager, IContainer $parent = NULL, $name = NULL) {
+	function __construct(ChatManager $manager, $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->chatManager = $manager;
 	}
@@ -45,6 +45,14 @@ class PosChat extends BaseProjectControl {
 	 */
 	protected function createComponentContactList() {
 		return new StandardContactList($this->chatManager);
+	}
+
+	/**
+	 * Vytvoření komponenty s konverzacemi (poslední zprávy)
+	 * @return \POSComponent\Chat\StandardConversationList
+	 */
+	protected function createComponentConversationList() {
+		return new StandardConversationList($this->chatManager);
 	}
 
 	/**

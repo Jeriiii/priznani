@@ -12,16 +12,25 @@
 	/* detekce, zda byla poslana zprava*/
 	var messageSent = false;
 
+
 	/* main */
 	$.fn.chat = function(options) {
 		var opts = $.extend({}, $.fn.chat.defaults, options);
-		window.lastId = 0; //nastaveni globalni promenne posledniho znameho id
 		setOpts(opts);
+		initializeChatboxManager();
 		initializeContactList();
+		initializeConversationList();
 		reloadWindowUnload();
 		setWaitTime(opts.minRequestTimeout);
 		refreshMessages(0);
 	};
+
+	/* proměnná pro poslední známé id zprávy */
+	$.fn.chat.lastId = 0;
+
+	/* objekt obsahující potvrzení o přečtení (předtím, než se odešlou) */
+	$.fn.chat.readedQueue = new Array();
+
 
 	$.fn.chat.defaults = {
 		minRequestTimeout: 1000,
@@ -34,8 +43,10 @@
 		/* o kolik se zvýší čekání při přijetí prázdné odpovědi */
 		contactListItems: '.contact-link',
 		/* selektor pro položku (jméno) na seznamu kontaktů */
+		conversationListItems: '.conversation-link',
+		/* selektor pro položku (jméno) na seznamu konverzací */
 		idAttribute: 'data-id',
-		/* atribut položky seznamu kontaktů, kde je její ID */
+		/* atribut položky seznamu kontaktů a konverzací, kde je ID kontaktu (cizího uživatele) */
 		boxContainerSelector: '#contact-boxes',
 		/* selector pro objekt, kde se budou vyvtaret okenka */
 		titleAttribute: 'data-title',
@@ -64,13 +75,59 @@
 
 	}
 	/* Posle na server ajaxovy pozadavek (dotaz) na nove zpravy
+	 * Zaroven posila zpravy o precteni
 	 * @param waitTime aktualni hodnota casu, po ktery se cekalo na zavolani
 	 * */
 	function sendRefreshRequest(waitTime) {
 		var opts = this.opts;
 		var data = {
-			'lastId': window.lastId
+			'chat-communicator-lastid': $.fn.chat.lastId,
+			'chat-communicator-readedmessages': JSON.stringify($.fn.chat.readedQueue)
 		};
+		$.fn.chat.readedQueue = new Array();//vyprazdneni fronty
+
+
+		if ($.fn.chat.lastId == 0) {
+			sendFirstRefreshGet();
+		} else {
+			sendRefreshGet(data);
+		}
+	}
+
+
+	/**
+	 * Pošle požadavek s žádostí o refresh a upraví podle toho čas timeout.
+	 * Počítá s tím, že je požadavek první a podle toho bude zacházet s odpovědí.
+	 * Poté zajistí další zavolání refreshe.
+	 */
+	function sendFirstRefreshGet() {
+		$.getJSON(refreshMessagesLink, function(jsondata) {
+			if ($.isEmptyObject(jsondata)) {//cerstvy uzivatel, vubec zadne zpravy mu neprisly
+				$.fn.chat.lastId = 1; //bude to z DB brat uplne od zacatku
+			} else {
+				$.each(jsondata, function(iduser, values) {//projde "všechny", ale měl by být jeden
+					var messages = values.messages;
+					$.each(messages, function(messageKey, message) {
+						if (message.id > $.fn.chat.lastId) {//aktualizace nejvyssiho id
+							$.fn.chat.lastId = message.id;
+						}//zprava jako takova je zahozena
+					});
+				});
+			}
+			refreshMessages(waitTime);
+		}).fail(function() {
+			refreshMessages(opts.failResponseTimeout);
+		});
+	}
+
+	/**
+	 * Pošle požadavek s žádostí o refresh a upraví podle toho čas timeout.
+	 * Poté zajistí další zavolání refreshe.
+	 * @param {type} data
+	 * @returns {undefined}
+	 */
+	function sendRefreshGet(data) {
+		var opts = this.opts;
 		$.getJSON(refreshMessagesLink, data, function(jsondata) {
 			if ($.isEmptyObject(jsondata)) {
 				waitTime = Math.min(waitTime + opts.timeoutStep, opts.maxRequestTimeout);
@@ -84,10 +141,17 @@
 		}).fail(function() {
 			refreshMessages(opts.failResponseTimeout);
 		});
-
 	}
 
 
+	/**
+	 * Nastavi zpravu jako prectenou (to se automaticky projevi po dalsim
+	 * refreshRequestu i na serveru)
+	 * @param {int} id
+	 */
+	function setReaded(id) {
+		$.fn.chat.readedQueue.push(id);
+	}
 	/**
 	 * Nastaveni options
 	 * @param opts nastaveni k nastaveni
@@ -114,11 +178,12 @@
 		var requestData = {
 			to: id,
 			type: 'textMessage',
-			text: msg
+			text: msg,
+			lastid: $.fn.chat.lastId
 		};
 		blockWindowUnload('Zpráva se stále odesílá, prosíme počkejte několik sekund a pak to zkuste znova.');
 		/* hláška, co se objeví při pokusu obnovit/zavřít okno, zatímco se čeká na odpověď při odeslání zprávy */
-		sendDataByAjax(sendMessageLink, requestData);
+		sendDataByPost(sendMessageLink, requestData);
 		this.boxManager.addMsg(mydata.name, msg);//pridani zpravy do okna
 		messageSent = true;
 	}
@@ -128,7 +193,7 @@
 	 * @param {String} url data, ktera se maji poslat
 	 * @param {Object} data poslana data
 	 */
-	function sendDataByAjax(url, data) {
+	function sendDataByPost(url, data) {
 		var json = JSON.stringify(data);
 
 		$.ajax({
@@ -156,11 +221,23 @@
 			var name = values.name;
 			var messages = values.messages;
 			$.each(messages, function(messageKey, message) {//vsechny zpravy od kazdeho uzivatele
-				addMessage(iduser, name, message.text, message.type);
-				if (message.id > window.lastId) {//aktualizace nejvyssiho id
-					window.lastId = message.id;
+				addMessage(iduser, name, message.name, message.id, message.text, message.type);
+				if (message.id > $.fn.chat.lastId) {//aktualizace nejvyssiho id
+					$.fn.chat.lastId = message.id;
 				}
 			});
+		});
+	}
+
+	/**
+	 * Inicializace spravce okenek
+	 */
+	function initializeChatboxManager() {
+		chatboxManager.init({//chatbox manager pro spravu okenenek
+			messageSent: sendMessage,
+			width: this.opts.boxWidth,
+			gap: this.opts.boxMargin,
+			maxBoxes: this.opts.maxBoxes
 		});
 	}
 
@@ -169,27 +246,80 @@
 	 */
 	function initializeContactList() {
 		//console.log('CHAT - initializing contact list');//pro debug
-
-		var idList = new Array();
-
-		chatboxManager.init({//chatbox manager pro spravu okenenek
-			messageSent: sendMessage,
-			width: this.opts.boxWidth,
-			gap: this.opts.boxMargin,
-			maxBoxes: this.opts.maxBoxes
-		});
-
 		var opts = this.opts;
 		$(this.opts.contactListItems).click(function(event) {//click event na polozkach seznamu
 			event.preventDefault();
 			var id = $(this).attr(opts.idAttribute);
-			idList.push(id);
 			addBox(id, $(this).attr(opts.titleAttribute));
 		});
 
 
 	}
 
+	/**
+	 * Inicializace seznamu konverzaci
+	 */
+	function initializeConversationList() {
+		var opts = this.opts;
+		$(this.opts.conversationListItems).click(function(event) {//click event na polozkach seznamu
+			event.preventDefault();
+			var id = $(this).attr(opts.idAttribute);
+			addBox(id, $(this).attr(opts.titleAttribute));
+		});
+	}
+
+
+
+	/**
+	 * Nacte ajaxem poslednich nekolik zprav do boxu
+	 * @param id id okenka (a uzivatele)
+	 */
+	function loadMessagesIntoBox(id) {
+		var data = {
+			'chat-communicator-fromId': id
+		};
+		var opts = this.opts;
+		blockWindowUnload('Ještě se načítají zprávy, opravdu chcete odejít?');
+		$.getJSON(loadMessagesLink, data, function(jsondata) {
+			handleResponse(jsondata);
+		});
+	}
+
+	/*
+	 * Vytvori nove okno, nebo otevre stavajici. Pokud je pouze zavrene, otevre ho.
+	 * @param {int|String} id id okna
+	 * @param {String} title titulek okna
+	 */
+	function addBox(id, title) {
+		var wascreated = chatboxManager.addBox(id,
+				{
+					title: title
+				});
+		if (wascreated) {//pokud je box novy
+			loadMessagesIntoBox(id);
+		}
+		//console.log('CHAT - created new box #' + id);//pro debug
+	}
+
+
+	/**
+	 * Prida zpravu do okna s danym id a okno otevre
+	 * @param {int|String} id id okna
+	 * @param {String} boxname s kym si pisu (titulek okna)
+	 * @param {String} name od koho zprava je
+	 * @param {int} messid id zpravy
+	 * @param {String} text text zpravy
+	 * @param {int} type typ zpravy
+	 */
+	function addMessage(id, boxname, name, messid, text, type) {
+		addBox(id, boxname);//vytvori/zobrazi dotycne okno
+		if (type == 0) {
+			chatboxManager.addMessage(id, name, text);
+			setReaded(messid);
+		} else {
+			chatboxManager.addMessage(id, '', text);
+		}
+	}
 
 	/**
 	 * Při pokusu zavřít nebo obnovit okno se zeptá uživatele,
@@ -219,36 +349,6 @@
 				/* hláška, co se objeví při pokusu obnovit/zavřít okno, zatímco má uživatel rozepsanou zprávu */
 			}
 		};
-	}
-
-	/*
-	 * Vytvori nove okno, nebo otevre stavajici. Pokud je pouze zavrene, otevre ho.
-	 * @param {int|String} id id okna
-	 * @param {String} title titulek okna
-	 */
-	function addBox(id, title) {
-		chatboxManager.addBox(id,
-				{
-					title: title
-				});
-		//console.log('CHAT - created new box #' + id);//pro debug
-	}
-
-
-	/**
-	 * Prida zpravu do okna s danym id a okno otevre
-	 * @param {int|String} id id okna
-	 * @param {String} name od koho zprava je
-	 * @param {String} text text zpravy
-	 * @param {int} type typ zpravy
-	 */
-	function addMessage(id, name, text, type) {
-		addBox(id, name);//vytvori/zobrazi dotycne okno
-		if (type == 0) {
-			chatboxManager.addMessage(id, name, text);
-		} else {
-			chatboxManager.addMessage(id, '', text);
-		}
 	}
 
 

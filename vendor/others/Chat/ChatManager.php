@@ -100,19 +100,29 @@ class ChatManager {
 	}
 
 	/**
+	 * Vrátí zprávy pro první načtení daného uživatele. Vždy vrátí nějaké relevantní zprávy.
+	 * @param int $userId id daného
+	 * @return \Nette\Database\Table\Selection zpravy
+	 */
+	public function getInitialMessages($userId) {
+		return $this->messagesDao->getLastTextMessages($userId, 1);
+	}
+
+	/**
+	 * Vrátí posledních několik zpráv z konverzace dvou uživatelů
+	 * @param int $firstId id prvního uživatele
+	 * @param int $secondId id druhého uživatele
+	 */
+	public function getLastMessagesBetween($idSender, $idRecipient) {
+		return $this->messagesDao->getLastTextMessagesBetweenUsers($idSender, $idRecipient, 6);
+	}
+
+	/**
 	 * Returns an instance of coder for security
 	 * @return ChatCoder
 	 */
 	public function getCoder() {
 		return $this->coder;
-	}
-
-	/**
-	 * Oznaci vyber zprav za prectene
-	 * @param \Nette\Database\Table\Selection $messages
-	 */
-	public function readMessages($messages) {
-		$this->messagesDao->setMessagesReaded($messages, TRUE);
 	}
 
 	/**
@@ -133,6 +143,16 @@ class ChatManager {
 	}
 
 	/**
+	 * Nastaví všechny zprávy s id v poli jako přečtené/nepřečtené
+	 * @param array $ids neasociativni pole idček
+	 * @param boolean $readed přečtená/nepřečtená
+	 * @return Nette\Database\Table\Selection upravené zprávy
+	 */
+	public function setMessagesReaded($ids, $readed) {
+		return $this->messagesDao->setMultipleMessagesReaded($ids, $readed);
+	}
+
+	/**
 	 * Vrati vsechny neprectene zpravy, ktere uzivatel ODESLAL
 	 * @param int $idSender odesilatel zprav
 	 * @return array pole ve tvaru id_zpravy => id_prijemce
@@ -149,6 +169,14 @@ class ChatManager {
 	 */
 	public function isUserPaying($idUser) {
 		return $this->paymentDao->isUserPaying($idUser);
+	}
+
+	/**
+	 * Vrátí poslední zprávu z (téměř) všech konverzací (existuje maximum konverzací)
+	 * @return \Nette\Database\Table\Selection zpravy
+	 */
+	public function getConversations($idUser) {
+		return $this->messagesDao->getLastMessageFromEachSender($idUser, 10);
 	}
 
 }

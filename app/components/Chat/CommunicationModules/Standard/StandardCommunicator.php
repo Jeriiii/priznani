@@ -6,8 +6,6 @@
 
 namespace POSComponent\Chat;
 
-use POS\Chat\ChatManager;
-use POSComponent\BaseProjectControl;
 use \Nette\Utils\Json;
 use POS\Model\ChatMessagesDao;
 
@@ -16,7 +14,7 @@ use POS\Model\ChatMessagesDao;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class StandardCommunicator extends BaseProjectControl implements ICommunicator {
+class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 
 	/**
 	 * Jmeno session, kam se ukladaji jmena uzivatelu
@@ -34,19 +32,6 @@ class StandardCommunicator extends BaseProjectControl implements ICommunicator {
 	const DELIVERY_MESSAGE = 'Doručeno.';
 
 	/**
-	 * chat manager
-	 * @var ChatManager
-	 */
-	protected $chatManager;
-
-	/**
-	 * Standardni konstruktor, predani sluzby chat manageru
-	 */
-	function __construct(ChatManager $manager) {
-		$this->chatManager = $manager;
-	}
-
-	/**
 	 * Vykreslení komponenty
 	 */
 	public function render() {
@@ -54,6 +39,7 @@ class StandardCommunicator extends BaseProjectControl implements ICommunicator {
 		$template->setFile(dirname(__FILE__) . '/standard.latte');
 		$template->sendMessageLink = $this->link("sendMessage!");
 		$template->refreshMessagesLink = $this->link("refreshMessages!");
+		$template->loadMessagesLink = $this->link("loadMessages!");
 		$template->render();
 	}
 
@@ -70,8 +56,32 @@ class StandardCommunicator extends BaseProjectControl implements ICommunicator {
 			if ($this->isActualUserPaying()) {//pokud je uzivatel platici
 				$this->registerInfoAboutDelivery($data->to, $message->offsetGet(ChatMessagesDao::COLUMN_ID));
 			}
-			$this->sendRefreshResponse();
+			$this->sendRefreshResponse($data->lastid);
 		}
+	}
+
+	/**
+	 * Vyřízení žádosti o poslání nových zpráv
+	 * @param int $lastid posledni zname id
+	 * @param json $readedmessages pole idcek prectenych zprav
+	 */
+	public function handleRefreshMessages($lastid, $readedmessages) {
+		$readedArray = (array) Json::decode($readedmessages);
+		$this->chatManager->setMessagesReaded($readedArray, TRUE); //oznaceni zprav za prectene
+
+		$this->sendRefreshResponse($lastid);
+	}
+
+	/**
+	 * Vrátí zprávy od jednoho uživatele, které poslal přihlášenému uživateli
+	 * @param int $fromId od koho jsou zpravy
+	 */
+	public function handleLoadMessages($fromId) {
+		$realId = $this->chatManager->getCoder()->decodeData($fromId);
+		$userId = $this->getPresenter()->getUser()->getId();
+		$messages = $this->chatManager->getLastMessagesBetween($userId, $realId);
+		$response = $this->prepareResponseArray($messages);
+		$this->getPresenter()->sendJson($response);
 	}
 
 	/**
@@ -92,30 +102,21 @@ class StandardCommunicator extends BaseProjectControl implements ICommunicator {
 	}
 
 	/**
-	 * Vyřízení žádosti o poslání nových zpráv
-	 */
-	public function handleRefreshMessages($lastId) {
-		$userId = $this->getPresenter()->getUser()->getId();
-		if (!$lastId || $lastId == 0) {//pokud jde o prvni pozadavek prohlizece
-			$newMessages = $this->chatManager->getAllUnreadedMessages($userId);
-		} else {
-			$newMessages = $this->chatManager->getAllNewMessages($lastId, $userId);
-		}
-		$this->sendRefreshResponse($newMessages);
-	}
-
-	/**
 	 * Pošle uživateli JSON, obsahující informace o nových zprávách apod.
 	 * Vrací odpověď prohlížeči, vykonání kódu na serveru zde končí.
 	 * @param \Nette\Database\Table\Selection $newMessages nove zpravy
 	 */
-	public function sendRefreshResponse($newMessages) {
+	public function sendRefreshResponse($lastId = 0) {
+		$userId = $this->getPresenter()->getUser()->getId();
+		if (!$lastId || $lastId == 0) {//pokud jde o prvni pozadavek prohlizece
+			$newMessages = $this->chatManager->getInitialMessages($userId); //vrati nam to nejake pro zacatek
+		} else {
+			$newMessages = $this->chatManager->getAllNewMessages($lastId, $userId);
+		}
 		$response = $this->prepareResponseArray($newMessages);
 		if ($this->isActualUserPaying()) {
 			$response = $this->addInfoAboutDeliveredMessages($response);
 		}
-		$this->chatManager->readMessages($newMessages);
-
 		$this->getPresenter()->sendJson($response);
 	}
 
@@ -127,19 +128,55 @@ class StandardCommunicator extends BaseProjectControl implements ICommunicator {
 	private function prepareResponseArray($selection) {
 		$array = array();
 		foreach ($selection as $row) {
-			$sender = $row->offsetGet(ChatMessagesDao::COLUMN_ID_SENDER); //ziskani id odesilatele
-			$senderCoded = $this->chatManager->getCoder()->encodeData($sender);
-			if (!array_key_exists($senderCoded, $array)) {//pokud je tohle prvni zprava od tohoto uzivatele
-				$name = $this->getUsername($sender); //pribaleni uzivatelskeho jmena
-				$array[$senderCoded] = array('name' => $name, 'messages' => array()); //pak vytvori pole na zpravy od tohoto uzivatele
+			$user = $this->getRelatedUser($row);
+			$userCoded = $this->chatManager->getCoder()->encodeData($user);
+			if (!array_key_exists($userCoded, $array)) {//pokud je tohle prvni zprava od tohoto uzivatele
+				$name = $this->getUsername($user); //pribaleni uzivatelskeho jmena uzivatele, s kterym komunikuji
+				$array[$userCoded] = array('name' => $name, 'messages' => array()); //pak vytvori pole na zpravy od tohoto uzivatele
 			}
-			array_push($array[$senderCoded]['messages'], $this->modifyResponseRowToArray($row)); //do pole pod klicem odesilatele v poli $array vlozi pole se zpravou
+			array_push($array[$userCoded]['messages'], $this->modifyResponseRowToArray($row)); //do pole pod klicem odesilatele v poli $array vlozi pole se zpravou
+			usort($array[$userCoded]['messages'], array($this, 'messageSort')); //seřadí zprávy
 		}
 		return $array;
 	}
 
+	/**
+	 * Porovnání dvou zpráv pro usort
+	 * @param mixed $a první zpráva
+	 * @param mixed $b druhá zpráva
+	 */
+	private function messageSort($a, $b) {
+		if ($a[ChatMessagesDao::COLUMN_ID] == $b[ChatMessagesDao::COLUMN_ID]) {
+			return 0;
+		}
+		return ($a[ChatMessagesDao::COLUMN_ID] < $b[ChatMessagesDao::COLUMN_ID]) ? -1 : 1;
+	}
+
+	/**
+	 * Vrátí id  uživatele, který vzhledem k přihlášenému
+	 * uživateli souvisí s danou zprávou (například pokud si píšu s id 80, vrátí id 80,
+	 * ať už jsem psal já jenmu nebo on mně)
+	 * @param \Nette\Database\Table\IRow $row zpráva
+	 * @return int id souvisejícíhouživatele
+	 */
+	private function getRelatedUser($row) {
+		$userId = $this->getPresenter()->getUser()->getId();
+		$relatedUser = $row->offsetGet(ChatMessagesDao::COLUMN_ID_SENDER); //ziskani id odesilatele
+		if ($relatedUser == $userId) {//pokud je prihlaseny user odesilatel
+			$relatedUser = $row->offsetGet(ChatMessagesDao::COLUMN_ID_RECIPIENT); //pak je souvisejici uzivatel prijemce
+		}
+		return $relatedUser;
+	}
+
+	/**
+	 * Modifikuje řádek z pole, které se vrací prohlížeči
+	 * @param \Nette\Database\Table\IRow $row
+	 * @return array pole
+	 */
 	private function modifyResponseRowToArray(\Nette\Database\Table\IRow $row) {
 		$rowArray = $row->toArray();
+		$rowArray['name'] = $this->getUsername($rowArray[ChatMessagesDao::COLUMN_ID_SENDER]); //pribaleni uzivatelskeho jmena uzivatele, ktery poslal zpravu
+		//pozn. muze to byt jiny uzivatel nez ten, s kterym si pisu (typicky ja)
 		unset($rowArray[ChatMessagesDao::COLUMN_ID_SENDER]); //id odesilatele je uz v prvnim klici pole
 		unset($rowArray[ChatMessagesDao::COLUMN_ID_RECIPIENT]);  //neposila uzivateli jeho vlastni id
 		unset($rowArray[ChatMessagesDao::COLUMN_READED]);  //neposila zbytecnou informaci
@@ -240,6 +277,10 @@ class StandardCommunicator extends BaseProjectControl implements ICommunicator {
 		return $array;
 	}
 
+	/**
+	 * Vytvori zpravicku o tom, ze zprava byla prectena
+	 * @return array zpravicka
+	 */
 	private function createDeliveryInfoMessage() {
 		return array(
 			ChatMessagesDao::COLUMN_TEXT => self::DELIVERY_MESSAGE,

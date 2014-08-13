@@ -6,29 +6,12 @@
 
 namespace POSComponent\Chat;
 
-use POS\Chat\ChatManager;
-use POSComponent\BaseProjectControl;
-use POS\Model\UserDao;
-
 /**
  * Reprezentuje seznam kontaktů
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class StandardContactList extends BaseProjectControl implements IContactList {
-
-	/**
-	 * chat manager
-	 * @var ChatManager
-	 */
-	protected $chatManager;
-
-	/**
-	 * Standardni konstruktor, predani sluzby chat manageru
-	 */
-	function __construct(ChatManager $manager) {
-		$this->chatManager = $manager;
-	}
+class StandardContactList extends BaseChatComponent implements IContactList {
 
 	/**
 	 * Vykreslení komponenty

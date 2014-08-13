@@ -11,11 +11,22 @@ namespace POSComponent\Chat;
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
 interface ICommunicator {
-	/* zpracovani prichozi zpravy */
+	/* zpracovani prichozi zpravy
+	 * data prichazeji POSTem
+	 */
 
 	public function handleSendMessage();
 
-	/* zpracovani pozadavku na nove zpravy */
+	/**
+	 * Vyřízení žádosti o poslání nových zpráv
+	 * @param int $lastid posledni zname id
+	 * @param json $readedmessages pole idcek prectenych zprav
+	 */
+	public function handleRefreshMessages($lastId, $readedmessages);
 
-	public function handleRefreshMessages($lastId);
+	/**
+	 * Vrati zpravy od jednoho uzivatele
+	 * @param int $fromId id odesilatele
+	 */
+	public function handleLoadMessages($fromId);
 }

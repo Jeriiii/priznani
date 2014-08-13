@@ -1,0 +1,17 @@
+
+{if $logged}
+<div id="conversations">
+<ul>
+	{foreach $conversations as $conversation}
+		{var $id = $coder->encodeData($conversation->id_sender)}
+		{var $username = $conversation->ref('id_sender')->user_name}
+		<li data-id="{$id}" data-title="{$username}" class="conversation-link">
+		{if $conversation->readed == 0}<strong>{/if}{$username}<br />
+		"{$conversation->text}"
+		{if $conversation->readed == 0}</strong>{/if}
+		</li>
+	{/foreach}
+</ul>
+
+</div>
+{/if}

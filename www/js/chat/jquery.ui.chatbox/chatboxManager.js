@@ -61,6 +61,7 @@ var chatboxManager = function() {
 
 
 	// caller should guarantee the uniqueness of id
+	//returns true if box is created
 	var addBox = function(id, data, name) {
 		var idx1 = showList.indexOf(id);
 		var idx2 = boxList.indexOf(id);
@@ -89,7 +90,9 @@ var chatboxManager = function() {
 			});
 			boxList.push(id);
 			showList.push(id);
+			return true;//da vedet, ze vytvoril novy box
 		}
+		return false;
 	};
 
 
