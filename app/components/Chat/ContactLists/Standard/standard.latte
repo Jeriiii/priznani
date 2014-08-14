@@ -1,2 +1,19 @@
 
-<div id="contacts"></div>
+{if $logged}
+<ul id="contacts">
+	{foreach $contacts as $contact}
+		{var $id = $coder->encodeData($contact->id)}
+		<li id="contact-{$id}" data-id="{$id}" data-title="{$contact->user_name}" class="contact-link">{$contact->user_name}</li>
+	{/foreach}
+</ul>
+{/if}
+<script>
+	{if $logged}
+		var isLoggedIn = true;
+		var mydata = {
+			name: {$username}
+		}
+	{else}
+		var isLoggedIn = false;
+	{/if}
+</script>

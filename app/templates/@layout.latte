@@ -71,6 +71,7 @@
 			<link media="handheld, only screen and (max-width: 480px), only screen and (max-device-width: 854px)" href="{$basePath}/css/mobile-layout.css" type="text/css" rel="stylesheet" />
 
 		{/if}
+		<link rel="stylesheet" href="{$basePath}/css/jqueryUI/jquery-ui.custom.min.css" type="text/css">
 		{block head}{/block}
         <link href='http://fonts.googleapis.com/css?family=Exo:200,600,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		<?php echo $google_analytics; ?>
@@ -182,18 +183,23 @@
 			www.priznaniosexu.cz
 		    </div>
 		    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-			<script type="text/javascript" src="{$basePath}/js/jquery-ui-1.8.18.min.js"></script>
+
 		    {if $existForm}
 			<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
 		    {/if}
 		    <div id="fb-root"></div>
-
+			{block jqueryUI}
+				<script type="text/javascript" src="{$basePath}/js/jquery-ui.light.min.js"></script>
+			{/block}
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
-            {control js 'layout/user-layout-menu.js', 'activities.js', 'chat/core.js', 'chat/init.js', 'chat/jquery.ui.chatbox/jquery.ui.chatbox.js'}
+            {control js 'layout/user-layout-menu.js', 'activities.js',
+					'chat/core.js', 'chat/init.js',
+					'chat/jquery.ui.chatbox/jquery.ui.chatbox.js',
+					'chat/jquery.ui.chatbox/chatboxManager.js'}
 			{*include #user-menu-scripts*}
 			{control jsLayout}
-			
-			
+
+
 
 			{if $fbToDatabase}
 				{control fbLikeAndCommentToDatabase}

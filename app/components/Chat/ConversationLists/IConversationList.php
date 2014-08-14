@@ -10,7 +10,7 @@ namespace POSComponent\Chat;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-interface IContactList {
+interface IConversationList {
 
 	public function render();
 }

@@ -21,8 +21,7 @@ services:
 	activitiesDao: \POS\Model\ActivitiesDao
 	databaseDao: \POS\Model\DatabaseDao
 	contactDao: POS\Model\ContactDao
-	chatContactsDao: POS\Model\ChatContactsDao
-	chatMessagesDao: POS\Model\ChatMessagesDao
+	chatMessagesDao: POS\Model\ChatMessagesDao(@nette.database.chat.context)
 	usersCompetitionsDao: POS\Model\UsersCompetitionsDao
 	competitionsImagesDao: POS\Model\CompetitionsImagesDao
 	followDao: POS\Model\FollowDao

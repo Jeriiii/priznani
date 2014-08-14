@@ -34,4 +34,16 @@ class PaymentDao extends AbstractDao {
 		return $data;
 	}
 
+	/**
+	 * TODO
+	 * Vrátí boolean, jestli je uživatel aktuálně platící
+	 * @param int $idUser id uživatele
+	 * @return bool TRUE - platící / FALSE - neplatící
+	 */
+	public function isUserPaying($idUser) {
+		$sel = $this->getTable();
+		//TODO
+		return TRUE;
+	}
+
 }

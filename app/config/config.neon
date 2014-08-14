@@ -37,6 +37,10 @@ common:
 				dsn: '%database.driver%:host=%database.host%;dbname=%database.dbname%'
 				user: %database.user%
 				password: %database.password%
+			chat:
+				dsn: '%chatDatabase.driver%:host=%chatDatabase.host%;dbname=%chatDatabase.dbname%'
+				user: %chatDatabase.user%
+				password: %chatDatabase.password%
 	
 #	testMode: %testMode%
 
@@ -75,6 +79,13 @@ production < common:
 			user: a42750_pos4
 			password: aB9aStTN
 		productionMode: TRUE
+
+		chatDatabase:
+			#driver: mysql
+			#host: localhost
+			#dbname: poschat
+			#user: root
+			#password: root
 
 development < common:
 	parameters:
