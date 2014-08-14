@@ -204,7 +204,7 @@
 			contentType: 'application/json; charset=utf-8',
 			success: handleResponse,
 			error: function() {
-
+				reloadWindowUnload();
 			}
 		});
 
