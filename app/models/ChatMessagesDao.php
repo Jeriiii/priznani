@@ -241,19 +241,11 @@ class ChatMessagesDao extends AbstractDao {
 	 * @return Nette\Database\Table\Selection zprávy
 	 */
 	public function getLastMessageFromEachSender($idUser, $limit = 10, $offset = 0) {
-//				$sel = $this->getTable();
-//		$sel->select('*, max(' . self::COLUMN_ID . ') AS mxid'); //je treba radit podle maximalniho id, jinak pak ten limit nerespektuje ten order
-//		$sel->where(self::COLUMN_ID_RECIPIENT . ' = ? OR ' . self::COLUMN_ID_SENDER . ' = ?', $idUser, 0);
-//		//to OR id_sender = 0 tam musi byt, aby spravne fungoval GROUP BY id?sender DESC
-//		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
-//		$sel->group(self::COLUMN_ID_SENDER . ' DESC');
-//		$sel->order('mxid DESC');
-//		$sel->limit($limit, $offset);
 		return $this->database->query('SELECT *
-FROM (SELECT * FROM chat_messages ORDER BY id DESC) AS a
-WHERE id_recipient = ? OR id_sender = ?
-GROUP BY id_recipient, id_sender DESC
-LIMIT ' . $limit . ';', $idUser, $idUser);
+										FROM (SELECT * FROM chat_messages ORDER BY id DESC) AS a
+										WHERE id_recipient = ? OR id_sender = ?
+										GROUP BY id_recipient, id_sender DESC
+										LIMIT ' . $limit . ';', $idUser, $idUser);
 	}
 
 	/**

@@ -80,6 +80,13 @@ production < common:
 			password: aB9aStTN
 		productionMode: TRUE
 
+		chatDatabase:
+			#driver: mysql
+			#host: localhost
+			#dbname: poschat
+			#user: root
+			#password: root
+
 development < common:
 	parameters:
 		productionMode: FALSE
