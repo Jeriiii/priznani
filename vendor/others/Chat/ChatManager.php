@@ -6,10 +6,9 @@
 
 namespace POS\Chat;
 
-use POS\Model\ChatContactsDao;
 use POS\Model\ChatMessagesDao;
 use \POS\Model\UserDao;
-use \Nette\Utils\Strings;
+use POS\Model\FriendDao;
 use POS\Model\PaymentDao;
 
 /**
@@ -21,7 +20,7 @@ class ChatManager {
 
 	/**
 	 * DAO pro kontakty
-	 * @var ChatContactsDao
+	 * @var FriendDao
 	 */
 	private $contactsDao;
 
@@ -52,7 +51,7 @@ class ChatManager {
 	/**
 	 * Standardni konstruktor, predani potrebnych DAO z presenteru
 	 */
-	function __construct(ChatContactsDao $contactsDao, ChatMessagesDao $messagesDao, UserDao $userDao, PaymentDao $paymentDao) {
+	function __construct(FriendDao $contactsDao, ChatMessagesDao $messagesDao, UserDao $userDao, PaymentDao $paymentDao) {
 		$this->contactsDao = $contactsDao;
 		$this->messagesDao = $messagesDao;
 		$this->userDao = $userDao;
