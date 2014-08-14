@@ -36,6 +36,8 @@ class PosChat extends BaseProjectControl {
 	public function render() {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/poschat.latte');
+		$user = $this->getPresenter()->getUser();
+		$template->logged = $user->isLoggedIn() && $user->getIdentity();
 		$template->render();
 	}
 

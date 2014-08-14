@@ -21,14 +21,10 @@ class StandardContactList extends BaseChatComponent implements IContactList {
 		$template->setFile(dirname(__FILE__) . '/standard.latte');
 		$user = $this->getPresenter()->getUser();
 		$userIdentity = $user->getIdentity();
-		if ($user->isLoggedIn() && $userIdentity) {
-			$template->coder = $this->chatManager->getCoder();
-			$template->contacts = $this->chatManager->getContacts($userIdentity->getId());
-			$template->username = $userIdentity->user_name;
-			$template->logged = TRUE;
-		} else {
-			$template->logged = FALSE;
-		}
+		$template->coder = $this->chatManager->getCoder();
+		$template->contacts = $this->chatManager->getContacts($userIdentity->getId());
+		$template->username = $userIdentity->user_name;
+		$template->logged = TRUE;
 		$template->render();
 	}
 
