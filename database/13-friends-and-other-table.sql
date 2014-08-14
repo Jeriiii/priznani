@@ -60,3 +60,21 @@ ALTER TABLE `follows`
 
 ALTER TABLE `follows`
 	COMMENT='Sledování = odebírání příspěvků od uživatele bez přátelství';
+
+ALTER TABLE `follows`
+	COMMENT='Sexy = odebírání příspěvků od uživatele bez přátelství, možnost jak nenápadně naznačit že se chce spřátelit';
+RENAME TABLE `follows` TO `you_are_sexy`;
+
+ALTER TABLE `friends`
+	ALTER `userID1` DROP DEFAULT,
+	ALTER `userID2` DROP DEFAULT;
+ALTER TABLE `friends`
+	CHANGE COLUMN `userID1` `user1ID` INT(11) UNSIGNED NOT NULL AFTER `id`,
+	CHANGE COLUMN `userID2` `user2ID` INT(11) UNSIGNED NOT NULL AFTER `user1ID`;
+
+ALTER TABLE `you_are_sexy`
+	ALTER `userIDFrom` DROP DEFAULT,
+	ALTER `userIDTo` DROP DEFAULT;
+ALTER TABLE `you_are_sexy`
+	CHANGE COLUMN `userIDFrom` `userFromID` INT(11) UNSIGNED NOT NULL AFTER `id`,
+	CHANGE COLUMN `userIDTo` `userToID` INT(11) UNSIGNED NOT NULL AFTER `userFromID`;

@@ -17,8 +17,9 @@ class FriendRequestDao extends AbstractDao {
 
 	/* Column name */
 	const COLUMN_ID = "id";
-	const COLUMN_USER_FROM_ID = "userFromID";
-	const COLUMN_USER_TO_ID = "userToID";
+	const COLUMN_USER_FROM_ID = "userIDFrom";
+	const COLUMN_USER_TO_ID = "userIDTo";
+	const COLUMN_MESSAGE = "message";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -46,6 +47,22 @@ class FriendRequestDao extends AbstractDao {
 		$sel->where(self::COLUMN_USER_TO_ID, $userToID);
 
 		return $sel;
+	}
+
+	/**
+	 * Odešle žádost o přítelství
+	 * @param int $userIDFrom ID žadatele
+	 * @param int $userIDTo ID příjemce
+	 * @param string $message Zpráva pro příjemce
+	 */
+	public function sendRequest($userIDFrom, $userIDTo, $message) {
+		$sel = $this->getTable();
+		$request = $sel->insert(array(
+			self::COLUMN_USER_FROM_ID => $userIDFrom,
+			self::COLUMN_USER_TO_ID => $userIDTo,
+			self::COLUMN_MESSAGE => $message
+		));
+		return $request;
 	}
 
 }

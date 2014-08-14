@@ -8,6 +8,7 @@ namespace POS\Model;
 
 /**
  * Tabulka k navázání přátelství.
+ * Přátelství funguje mezi přáteli A a B, jen když je vazba A,B a zároveň B,A.
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
@@ -16,8 +17,8 @@ class FriendDao extends AbstractDao {
 	const TABLE_NAME = "friends";
 
 	/* Column name */
-	const COLUMN_USER_ID_1 = "userID1";
-	const COLUMN_USER_ID_2 = "userID2";
+	const COLUMN_USER_ID_1 = "user1ID";
+	const COLUMN_USER_ID_2 = "user2ID";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -54,6 +55,7 @@ class FriendDao extends AbstractDao {
 	/**
 	 * Vrátí seznam přátel daného uživatele
 	 * @param int $userID
+	 * @return \Nette\Database\Table\Selection
 	 */
 	public function getList($userID) {
 		$sel = $this->getTable();

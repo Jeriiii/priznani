@@ -1,0 +1,22 @@
+{foreach $friends as $friend}
+	{if $iterator->isFirst()}
+		<h2>Přátelé</h2>
+		<table>
+			<thead>
+			<th></th>
+		</thead>
+		<tbody>
+	{/if}
+	<tr>
+		<td>
+		{if $friend->user2->profilFoto}
+		<img src="{$friend->user2->profilFoto|getImgMinPath}" width="80px"/>
+		{/if}
+		</td>
+		<td>{$friend->user2->user_name}</td>
+	</tr>
+	{if $iterator->isLast()}
+		</tbody>
+		</table>
+	{/if}
+{/foreach}

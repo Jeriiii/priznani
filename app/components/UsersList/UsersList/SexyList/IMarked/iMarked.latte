@@ -1,0 +1,10 @@
+{layout '../BaseSexyList/sexyList.latte'}
+
+{define showUser}
+	<td>
+		{if $sexyUser->userTo->profilFoto}
+			<img src="{$sexyUser->userTo->profilFoto|getImgMinPath}" width="80px"/>
+		{/if}
+	</td>
+	<td>{$sexyUser->userTo->user_name}</td>
+{/define}

@@ -25,6 +25,6 @@ services:
 	chatMessagesDao: POS\Model\ChatMessagesDao
 	usersCompetitionsDao: POS\Model\UsersCompetitionsDao
 	competitionsImagesDao: POS\Model\CompetitionsImagesDao
-	followDao: POS\Model\FollowDao
+	youAreSexyDao: POS\Model\YouAreSexyDao
 	friendRequestDao: POS\Model\FriendRequestDao
 	friendDao: POS\Model\FriendDao

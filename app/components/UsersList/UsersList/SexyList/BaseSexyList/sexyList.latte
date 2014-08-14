@@ -1,0 +1,17 @@
+{foreach $sexyUsers as $sexyUser}
+	{if $iterator->isFirst()}
+		<h2>Sexy uživatelé</h2>
+		<table>
+			<thead>
+			<th></th>
+		</thead>
+		<tbody>
+	{/if}
+	<tr>
+		{include #showUser sexyUser => $sexyUser}
+	</tr>
+	{if $iterator->isLast()}
+		</tbody>
+		</table>
+	{/if}
+{/foreach}

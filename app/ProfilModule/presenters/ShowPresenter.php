@@ -11,6 +11,10 @@ use POSComponent\Galleries\UserGalleries\UserGalleries;
 use POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery;
 use POSComponent\Stream\ProfilStream;
 use POSComponent\UserInfo\UserInfo;
+use POSComponent\AddToList\SendFriendRequest;
+use POSComponent\AddToList\YouAreSexy;
+use POSComponent\UsersList\FriendsList;
+use POSComponent\UsersList\SexyList\IMarked;
 
 class ShowPresenter extends ProfilBasePresenter {
 
@@ -54,6 +58,24 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $confessionDao;
+
+	/**
+	 * @var \POS\Model\FriendRequestDao
+	 * @inject
+	 */
+	public $friendRequestDao;
+
+	/**
+	 * @var \POS\Model\YouAreSexyDao
+	 * @inject
+	 */
+	public $youAreSexyDao;
+
+	/**
+	 * @var \POS\Model\FriendDao
+	 * @inject
+	 */
+	public $friendDao;
 	public $dataForStream;
 
 	/**
@@ -62,9 +84,11 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @param type $id
 	 */
 	public function actionDefault($id) {
+
 		if (empty($id)) {
 			$id = $this->getUser()->getId();
 		}
+		$this->userID = $id;
 		$this->dataForStream = $this->streamDao->getUserStreamPosts($id);
 	}
 
@@ -73,15 +97,11 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @param type $id
 	 */
 	public function renderDefault($id) {
-		if (empty($id)) {
-			$id = $this->getUser()->getId();
-		}
 
-		$this->userID = $id;
-		$user = $this->userDao->find($id);
+		$user = $this->userDao->find($this->userID);
 
 		$this->template->userData = $user;
-		$this->template->userID = $id;
+		$this->template->userID = $this->userID;
 		$this->template->count = $this->dataForStream->count("id");
 
 		$profileGalleryID = $this->userGalleryDao->findProfileGallery($this->userID);
@@ -190,6 +210,28 @@ class ShowPresenter extends ProfilBasePresenter {
 			return $packer->pack();
 		});
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+
+	protected function createComponentSendFriendRequest($name) {
+		$userIDFrom = $this->userID;
+		$userIDTo = $this->getUser()->id;
+
+		return new SendFriendRequest($this->friendRequestDao, $userIDFrom, $userIDTo, $this, $name);
+	}
+
+	protected function createComponentYouAreSexy($name) {
+		$userIDFrom = $this->userID;
+		$userIDTo = $this->getUser()->id;
+
+		return new YouAreSexy($this->youAreSexyDao, $userIDFrom, $userIDTo, $this, $name);
+	}
+
+	protected function createComponentFriendsList($name) {
+		return new FriendsList($this->friendDao, $this->userID, $this, $name);
+	}
+
+	protected function createComponentSexyListIMarked($name) {
+		return new IMarked($this->youAreSexyDao, $this->userID, $this, $name);
 	}
 
 }
