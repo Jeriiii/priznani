@@ -71,6 +71,9 @@ if (!Array.indexOf) {
 					$(msgElement).text(msg);
 					e.appendChild(msgElement);
 					$(e).addClass("ui-chatbox-msg");
+					if (!peer) {
+						$(e).addClass("ui-chatbox-nopeer");
+					}
 					$(e).css("maxWidth", $(box).width());
 					$(e).fadeIn();
 					self._scrollToBottom();

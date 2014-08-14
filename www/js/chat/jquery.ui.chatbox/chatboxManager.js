@@ -23,6 +23,7 @@ var chatboxManager = function() {
 		width: 200, //px
 		gap: 20,
 		maxBoxes: 8,
+		offset: 300,
 		messageSent: function(dest, msg) {
 			// override this
 			$("#" + dest).chatbox("option", "boxManager").addMsg(dest, msg);
@@ -39,7 +40,7 @@ var chatboxManager = function() {
 	};
 
 	var getNextOffset = function() {
-		return (config.width + config.gap) * showList.length;
+		return config.offset + ((config.width + config.gap) * showList.length);
 	};
 
 	var boxClosedCallback = function(id) {
@@ -88,6 +89,7 @@ var chatboxManager = function() {
 				messageSent: config.messageSent,
 				boxClosed: boxClosedCallback
 			});
+			$(el).parent().parent().wrap('<div class="ui-chat"></div>');
 			boxList.push(id);
 			showList.push(id);
 			return true;//da vedet, ze vytvoril novy box

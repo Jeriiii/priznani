@@ -253,7 +253,7 @@ class ChatMessagesDao extends AbstractDao {
 FROM (SELECT * FROM chat_messages ORDER BY id DESC) AS a
 WHERE id_recipient = ? OR id_sender = ?
 GROUP BY id_recipient, id_sender DESC
-LIMIT 4;', $idUser, $idUser);
+LIMIT ' . $limit . ';', $idUser, $idUser);
 	}
 
 	/**

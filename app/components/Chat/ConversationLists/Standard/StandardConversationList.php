@@ -24,6 +24,7 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 		$template->coder = $this->chatManager->getCoder();
 		$template->conversations = $this->chatManager->getConversations($userId);
 
+		$template->userfinder = $this;
 		$template->userId = $userId;
 
 
@@ -37,7 +38,7 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 	 * @param int $idRecipient
 	 * @return string jméno příjemce
 	 */
-	private function getCorrectUsername($idSender, $idRecipient) {
+	public function getCorrectUsername($idSender, $idRecipient) {
 		$session = $this->getPresenter()->getSession(StandardCommunicator::USERNAMES_SESSION_NAME);
 		$loggedUserId = $this->getPresenter()->getUser()->getId();
 		if ($idSender == $loggedUserId) {

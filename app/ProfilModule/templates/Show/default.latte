@@ -41,8 +41,11 @@ $(function() {
       hide: {
         effect: "fade",
         duration: 500
-      }
+      },
+		width: 500
     });
+
+	$( "#sendmessage-dialog" ).parent().wrap('<div class="ui-chat"></div>');
 
 	$( "#sendmessage-button" ).click(function() {
       $( "#sendmessage-dialog" ).dialog( "open" );
@@ -57,9 +60,9 @@ $(function() {
 
 <a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right">Poslat zprávu uživateli {$userData->user_name}</a>
 
-<div id="sendmessage-dialog">
-<strong>Poslat zprávu uživateli {$userData->user_name}</strong>
-{control sendMessageForm}
+
+<div id="sendmessage-dialog" title="Poslat zprávu uživateli {$userData->user_name}">
+	{control sendMessageForm}
 </div>
 
 {if $hasProfilePhoto}

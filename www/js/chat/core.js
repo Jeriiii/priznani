@@ -51,12 +51,14 @@
 		/* selector pro objekt, kde se budou vyvtaret okenka */
 		titleAttribute: 'data-title',
 		/* pod kterym atributem u polozky seznamu je text, ktery se ma zobrazit v titulku okenka*/
-		boxWidth: 300,
+		boxWidth: 250,
 		/* sirka okenka s chatem [px] */
 		boxMargin: 30,
 		/* mezera mezi okenky [px] */
-		maxBoxes: 8
-				/* maximalni pocet okenek na obrazovce */
+		maxBoxes: 8,
+		/* maximalni pocet okenek na obrazovce */
+		rightMargin: 260
+				/* odsazeni od prave casti stranky [px] */
 
 	};
 
@@ -237,7 +239,8 @@
 			messageSent: sendMessage,
 			width: this.opts.boxWidth,
 			gap: this.opts.boxMargin,
-			maxBoxes: this.opts.maxBoxes
+			maxBoxes: this.opts.maxBoxes,
+			offset: this.opts.rightMargin
 		});
 	}
 

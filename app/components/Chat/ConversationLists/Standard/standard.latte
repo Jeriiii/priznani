@@ -1,15 +1,15 @@
 
 {if $logged}
 <div id="conversations">
+	<h5>Příchozí zprávy</h5>
 <ul>
 	{foreach $conversations as $conversation}
 		{var $id = $coder->encodeData($conversation->id_sender)}
-		{var $username = $conversation->id}{*verze bez query*}
+		{var $username = $userfinder->getCorrectUsername($conversation->id_sender, $conversation->id_recipient)}
 		{var $unreaded = $conversation->readed == 0 && $userId != $conversation->id_sender}
-		<li data-id="{$id}" data-title="{$username}" class="conversation-link">
-		{if $unreaded}<strong>{/if}{$username}<br />
-		"{$conversation->text}"
-		{if $unreaded}</strong>{/if}
+		<li data-id="{$id}" data-title="{$username}" class="conversation-link {if $unreaded}unreaded{/if}">
+		<strong>{$username}</strong>
+		{$conversation->text}
 		</li>
 	{/foreach}
 </ul>
