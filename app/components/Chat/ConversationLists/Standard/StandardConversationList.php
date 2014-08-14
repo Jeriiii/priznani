@@ -20,7 +20,6 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/standard.latte');
 		$userId = $this->getPresenter()->getUser()->getId();
-		$template->logged = $this->getPresenter()->getUser()->isLoggedIn();
 		$template->coder = $this->chatManager->getCoder();
 		$template->conversations = $this->chatManager->getConversations($userId);
 
