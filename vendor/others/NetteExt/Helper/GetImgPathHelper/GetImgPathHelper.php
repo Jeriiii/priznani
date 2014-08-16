@@ -57,6 +57,20 @@ class GetImgPathHelper {
 	}
 
 	/**
+	 * Vrátí cestu k defaultní profilové fotce.
+	 * @return string
+	 */
+	public function getImgDefProf($female = FALSE) {
+		$basePath = $this->getBasePath();
+		if ($female) {
+			$femaleProfPhoto = "female-profile-blank.jpg";
+		} else {
+			$maleProfPhoto = "blank_profil.png";
+		}
+		return ImagePathCreator::getBasePath("users", $basePath) . "blank_profil.png";
+	}
+
+	/**
 	 * Vrací cestu k uživatelskému obrázku.
 	 * @param Nette\Database\Table\ActiveRow $streamItem Řádek z databáze ze streamu.
 	 * @param string $galleryType Typ galerie (uživatelská nebo normální)

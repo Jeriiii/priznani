@@ -15,10 +15,11 @@ namespace NetteExt\Helper;
 use \Nette\Database\Table\ActiveRow;
 use Nette\Utils\Html;
 
-class ShowUserHelper {
+class ShowProfHelper {
 	/* názvy helperů */
 
-	const NAME = "showUserMin";
+	const NAME = "showProf";
+	const NAME_MIN = "showProfMin";
 
 	/* typy nastavení */
 	const TYPE_EL_SPAN = "span";
@@ -39,41 +40,36 @@ class ShowUserHelper {
 	 * Vytvoří miniaturu profilové fotky užvatele, vedle něj napíše jeho jméno
 	 * a celé to obalí do odkazu na Profil:Show presenter
 	 * @param \Nette\Database\Table\ActiveRow $user
-	 * @param string $typeEl Typ elementu, do kterého se má prvek vykreslit
 	 * @param array|null $href Vlasní odkaz. První prvek pole je odkaz, druhý prvek je pole parametrů.
+	 * @param boolen $min TRUE = Zobrazení bez jména vedle fotky.
 	 * @return \Nette\Utils\Html
-	 * @throws \Exception Typ elementu nebyl nalezen.
 	 */
-	public function showUserMin(ActiveRow $user, $typeEl = self::TYPE_EL_SPAN, $href = null) {
-		switch ($typeEl) {
-			case self::TYPE_EL_TABLE:
-				return $this->createShowUserMin($user, $href);
-			case self::TYPE_EL_SPAN:
-				return $this->createShowUserMin($user, $href);
-			default:
-				throw new \Exception("Type " . $typeEl . " was not found");
-		}
+	public function showProf(ActiveRow $user, $href = null, $min = FALSE) {
+		return $this->createShowProf($user, $href, $min);
 	}
 
 	/**
 	 * Vytvoří celý element ve spanech.
 	 * @param \Nette\Database\Table\ActiveRow $user Zádnam o uživateli.
 	 * @param array $href Vlasní odkaz. První prvek pole je odkaz, druhý prvek je pole parametrů.
+	 * @param boolean $min TRUE = Zobrazení bez jména vedle fotky.
 	 * @return \Nette\Utils\Html
 	 */
-	private function createShowUserMin(ActiveRow $user, $href) {
-		/* profilová fotka */
-		$elPhoto = $this->createPhoto("span", $user);
-
-		/* jméno */
-		$elName = Html::el("span", $user->user_name);
-
+	private function createShowProf(ActiveRow $user, $href, $min) {
 		/* Výsledek je celý v odkazu */
 		$elLink = $this->createLink($href, $user);
 
-		/* Spojení do výsledného elementu */
+		/* profilová fotka */
+		$elPhoto = $this->createPhoto("span", $user);
 		$elLink->add($elPhoto);
-		$elLink->add($elName);
+
+		/* přidá jméno */
+		if (!$min) {
+			$elName = Html::el("span", $user->user_name);
+			$elLink->add($elName);
+		}
+
+
 
 		return $elLink;
 	}
@@ -86,14 +82,19 @@ class ShowUserHelper {
 	 */
 	private function createPhoto($el, $user) {
 		$elPhoto = Html::el($el);
+		$img = Html::el("img");
+
 		if (isset($user->profilFotoID)) {
-			$img = Html::el("img");
 			$src = $this->getImgPathHelper->getImgMinPath($user->profilFoto, GetImgPathHelper::TYPE_USER_GALLERY);
-			$img->src($src);
-			$img->alt($user->user_name);
-			$img->width("80px");
-			$elPhoto->add($img);
+		} else {
+			//$femalePhoto = $user->property->user_property == "women" ? TRUE : FALSE;
+			$src = $this->getImgPathHelper->getImgDefProf(/* $femalePhoto */);
 		}
+
+		$img->src($src);
+		$img->alt($user->user_name);
+		$img->width("80px");
+		$elPhoto->add($img);
 		return $elPhoto;
 	}
 

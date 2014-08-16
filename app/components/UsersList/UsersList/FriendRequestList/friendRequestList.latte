@@ -11,7 +11,7 @@
 		<tbody>
 	{/if}
 	<tr>
-		<td>{$friendRequest->userFrom|showUserMin}</td>
+		<td>{$friendRequest->userFrom|showProf}</td>
 		<td><a n:href="accept! id => $friendRequest->id">Přijmout</a></td>
 		<td><a n:href="reject! id => $friendRequest->id">Odmítnout</a></td>
 	</tr>
