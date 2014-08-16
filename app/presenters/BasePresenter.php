@@ -162,7 +162,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 * @return \POSComponent\Chat\PosChat
 	 */
 	protected function createComponentChat($name) {
-		return new POSComponent\Chat\PosChat($this->chatManager, NULL, $name);
+		return new POSComponent\Chat\PosChat($this->chatManager, $this, $name);
 	}
 
 	/**
@@ -297,7 +297,10 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'default.css',
 			'layout/layout.less',
 			'mobile/responsive-menu.less',
-			'chat/jquery.ui.chatbox.css'));
+			'chat/jquery.ui.chatbox.css',
+			'chat/default.less',
+			'chat/jquery-ui.less'
+		));
 
 		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
@@ -333,7 +336,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 	public function createComponentJsLayout() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
-		$files->addFiles(array('baseAjax.js', 'order.js', 'fbBase.js', 'leftMenu.js'));
+		$files->addFiles(array('iedebug.js', 'baseAjax.js', 'order.js', 'fbBase.js', 'leftMenu.js'));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {

@@ -8,12 +8,7 @@
 		<tbody>
 	{/if}
 	<tr>
-		<td>
-		{if $friend->user2->profilFoto}
-		<img src="{$friend->user2->profilFoto|getImgMinPath}" width="80px"/>
-		{/if}
-		</td>
-		<td>{$friend->user2->user_name}</td>
+		<td>{$friend->user2|showUserMin}</td>
 	</tr>
 	{if $iterator->isLast()}
 		</tbody>

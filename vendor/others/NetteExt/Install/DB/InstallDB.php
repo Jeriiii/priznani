@@ -18,6 +18,7 @@ class InstallDB {
 
 	const TABLE_POS = "pos";
 	const TABLE_POS_TEST = "postest";
+	const TABLE_POS_CHAT = "poschat";
 
 	/** @var \POS\Model\DatabaseDao */
 	private $dbDao;
@@ -47,6 +48,7 @@ class InstallDB {
 	public function installAll() {
 		$this->installPosDb();
 		$this->instalPostestDb();
+		$this->instalPoschatDb();
 	}
 
 	/**
@@ -68,7 +70,18 @@ class InstallDB {
 		$sql->setSqlAllDB();
 		$this->executeSql($sql);
 
-		$this->messages->addMessage("Databáze " . self::TABLE_POS_TEST . " byla úspěšně nainstalovány");
+		$this->messages->addMessage("Databáze " . self::TABLE_POS_TEST . " byla úspěšně nainstalována");
+	}
+
+	/**
+	 * Reinstaluje a naplní daty databázi chatu.
+	 */
+	public function instalPoschatDb() {
+		$sql = new Sql(self::TABLE_POS_CHAT);
+		$sql->setSqlChatDB();
+		$this->executeSql($sql);
+
+		$this->messages->addMessage("Databáze " . self::TABLE_POS_CHAT . " byla úspěšně nainstalována");
 	}
 
 	/**

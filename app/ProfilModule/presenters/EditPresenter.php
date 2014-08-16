@@ -6,6 +6,7 @@ use Nette\Application\UI\Form as Frm,
 	Nette\ComponentModel\IContainer;
 use Nette\Security\User;
 use POSComponent\Galleries\UserGalleries\MyUserGalleries;
+use POSComponent\UsersList\FriendRequestList;
 
 class EditPresenter extends ProfilBasePresenter {
 
@@ -32,6 +33,12 @@ class EditPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $userGalleryDao;
+
+	/**
+	 * @var \POS\Model\FriendRequestDao
+	 * @inject
+	 */
+	public $friendRequestDao;
 
 	public function startup() {
 		parent::startup();
@@ -92,6 +99,10 @@ class EditPresenter extends ProfilBasePresenter {
 
 	public function createComponentMyUserGalleries() {
 		return new MyUserGalleries($this->userDao, $this->userGalleryDao);
+	}
+
+	protected function createComponentFriendRequest($name) {
+		return new FriendRequestList($this->friendRequestDao, $this->getUser()->id, $this, $name);
 	}
 
 }

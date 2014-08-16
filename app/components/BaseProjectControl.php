@@ -19,8 +19,8 @@ class BaseProjectControl extends Control {
 		$template = parent::createTemplate($class);
 
 		$url = $this->presenter->context->httpRequest->url;
-
-		$helperRegistrator = new HelperRegistrator($url);
+		$linkCallback = callback($this->presenter, "link");
+		$helperRegistrator = new HelperRegistrator($url, $linkCallback);
 		$helperRegistrator->registerHelpers($template);
 
 		return $template;

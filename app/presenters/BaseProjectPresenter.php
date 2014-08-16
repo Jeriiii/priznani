@@ -28,8 +28,9 @@ class BaseProjectPresenter extends Nette\Application\UI\Presenter {
 		$template = parent::createTemplate($class);
 
 		$url = $this->context->httpRequest->url;
+		$linkCallback = callback($this, "link");
 
-		$helperRegistrator = new HelperRegistrator($url);
+		$helperRegistrator = new HelperRegistrator($url, $linkCallback);
 		$helperRegistrator->registerHelpers($template);
 
 		return $template;

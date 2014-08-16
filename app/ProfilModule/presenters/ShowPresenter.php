@@ -195,6 +195,15 @@ class ShowPresenter extends ProfilBasePresenter {
 	}
 
 	/**
+	 * formulář pro poslání zprávy
+	 * @param type $name
+	 * @return Frm\SendMessageForm
+	 */
+	protected function createComponentSendMessageForm($name) {
+		return new Frm\SendMessageForm($this->chatManager, $this->userID, $this, $name);
+	}
+
+	/**
 	 * WebLoader pro minifikace skriptu
 	 * @return \WebLoader\Nette\JavaScriptLoader
 	 */
