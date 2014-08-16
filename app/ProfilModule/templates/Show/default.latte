@@ -6,14 +6,19 @@
 		margin-top: 0;
 	}
     </style>
-    {control css 'stream/list.less'}
+    {control css 'stream/list.less', 'chat/popup.less'}
 {/block}
+
+{block jqueryUI}
+	<script type="text/javascript" src="{$basePath}/js/jquery-ui.modals.min.js"></script>
+{/block}
+
 {block foot}
 	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>
 {control js}
 <script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
 <script>
-	$(document).ready(function () {	
+	$(document).ready(function () {
 		$( ".stream-form" ).tabs();
 		$("body").stream({
 			rows: {$count},
@@ -25,10 +30,40 @@
 		$("#frmaddConfessionForm-note").animate({ height: "200px"}, 500);
 	});
 </script>
+<script>
+$(function() {
+	$( "#sendmessage-dialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "fade",
+        duration: 500
+      },
+      hide: {
+        effect: "fade",
+        duration: 500
+      },
+		width: 500
+    });
+
+	$( "#sendmessage-dialog" ).parent().wrap('<div class="ui-chat"></div>');
+
+	$( "#sendmessage-button" ).click(function() {
+      $( "#sendmessage-dialog" ).dialog( "open" );
+    });
+});
+
+</script>
 {/block}
 {block content}
 
 <h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
+
+<a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right">Poslat zprávu uživateli {$userData->user_name}</a>
+
+
+<div id="sendmessage-dialog" title="Poslat zprávu uživateli {$userData->user_name}">
+	{control sendMessageForm}
+</div>
 
 {if $hasProfilePhoto}
 	<img src="{$profilePhoto|getImgSqrPath}" alt="{$profilePhoto->name}"/>
@@ -55,7 +90,9 @@
 <h2>Nahrání profilovky</h2>
 
 {control uploadPhotoForm}
-       
+
+
+
 
 
 {/block}

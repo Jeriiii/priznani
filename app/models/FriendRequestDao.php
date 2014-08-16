@@ -17,8 +17,8 @@ class FriendRequestDao extends AbstractDao {
 
 	/* Column name */
 	const COLUMN_ID = "id";
-	const COLUMN_USER_FROM_ID = "userIDFrom";
-	const COLUMN_USER_TO_ID = "userIDTo";
+	const COLUMN_USER_FROM_ID = "userFromID";
+	const COLUMN_USER_TO_ID = "userToID";
 	const COLUMN_MESSAGE = "message";
 
 	public function getTable() {
@@ -63,6 +63,47 @@ class FriendRequestDao extends AbstractDao {
 			self::COLUMN_MESSAGE => $message
 		));
 		return $request;
+	}
+
+	/**
+	 * Vytoření pátelství, smazáná žádosti.
+	 * @param int $friendRequestID ID žádosti.
+	 */
+	public function accept($friendRequestID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($friendRequestID);
+		$friendRequest = $sel->fetch();
+
+		/* vytvoření přátelství */
+		$this->createFriendship($friendRequest);
+
+		/* smazání žádosti */
+		$this->delete($friendRequestID);
+	}
+
+	/**
+	 * Vytvoření přátelství.
+	 * @param \Nette\Database\Table\ActiveRow $friendRequest Žádost.
+	 */
+	private function createFriendship($friendRequest) {
+		/* vytvoření přátelství */
+		$friends = $this->createSelection(FriendDao::TABLE_NAME);
+		$friends->insert(array(
+			FriendDao::COLUMN_USER_ID_1 => $friendRequest->userFromID,
+			FriendDao::COLUMN_USER_ID_2 => $friendRequest->userToID
+		));
+		$friends->insert(array(
+			FriendDao::COLUMN_USER_ID_2 => $friendRequest->userFromID,
+			FriendDao::COLUMN_USER_ID_1 => $friendRequest->userToID
+		));
+	}
+
+	/**
+	 * Odmítnutí / smazání žádosti
+	 * @param int $friendRequestID ID žádosti.
+	 */
+	public function reject($friendRequestID) {
+		$this->delete($friendRequestID);
 	}
 
 }

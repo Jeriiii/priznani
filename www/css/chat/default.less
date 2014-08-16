@@ -1,0 +1,149 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 30.7.2014, 9:36:40
+    Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
+*/
+
+#chat-interface{
+	position: fixed;
+		top: 0;
+		right: 0;
+		width: 250px;
+		height: 100%;
+		overflow: hidden;
+		background: #F4F5F8;
+		z-index: 15000;
+		border-left: 1px solid #fafafa;
+		
+		ul{
+			margin: 0;
+		}
+		
+	#contacts, #conversations{
+
+			li{
+				cursor: pointer;
+				width: 90%;
+				padding: 8px 4%;
+				
+			}
+
+
+	}
+	#contacts{
+		height: 60%;
+		overflow: auto;
+		border-bottom: 1px solid #aaa;
+
+		li{
+				cursor: pointer;
+				width: 90%;
+				padding: 8px 4%;
+				margin: 2px 1%;
+				border: 1px solid #8F8F8F;
+				color: #FFF;
+				font: 500 16px Arial;
+				-webkit-border-radius: 4px;
+				-moz-border-radius: 4px;
+				border-radius: 4px;
+				height: 20px;
+				line-height: 20px;
+				text-shadow: 0 0 1px #FFF;
+				.posgradient();
+				border-radius: 12px;
+			}
+	}
+
+	#conversations {
+		overflow: hidden;
+		height: 40%;
+		h5{
+			position: relative;
+			z-index: 1000;
+			padding: 3% 5px;
+			height: 4%;
+			border-bottom: 1px solid #ddd;
+		}
+		ul{
+			position: relative;
+			z-index: 900;
+			overflow: auto;
+			height: 90%;
+			li{
+				border-bottom: 1px solid #ddd;
+				margin: 0;
+				
+				&:hover{
+				background: #eee;
+				}
+				&.unreaded{
+					background: #dedede;
+				}
+				strong{
+					display: block;
+				}
+			}
+			
+			
+		}
+	}
+}
+.ui-chat{//chatbox
+	
+		 
+		 .ui-chatbox-input-box{
+			resize: none;
+			color: #333 !important;
+			 font-size: 16px !important;
+			 padding: 8px;
+			
+		 }
+		 
+		 .ui-widget-header{
+			background: #CF0707 !important;
+			background: -moz-linear-gradient(top,#cf0707 0,#890302 100%) !important;
+			background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#CF0707),color-stop(100%,#890302)) !important;
+			background: -webkit-linear-gradient(top,#CF0707 0,#890302 100%) !important;
+			background: -o-linear-gradient(top,#cf0707 0,#890302 100%) !important;
+			background: -ms-linear-gradient(top,#cf0707 0,#890302 100%) !important;
+			background: linear-gradient(to bottom,#CF0707 0,#890302 100%) !important;
+		 }
+		 
+		 .ui-state-focus{
+			 color: white !important;
+		 }
+		 
+		 .ui-chatbox-msg {
+			 font-size: 16px;
+			 color: #222;
+			 b{
+				 color: #333;
+			 }
+			 
+			 &.ui-chatbox-nopeer{
+				 font-size: 14px;
+				padding: 0px 15px 6px 50px;
+				margin-top: 4px;
+				color: #666;
+			 }
+			 
+			 
+		 }
+	
+}
+
+.posgradient(){
+	background: #CF0707;
+	background: -moz-linear-gradient(top,#cf0707 0,#890302 100%);
+	background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#CF0707),color-stop(100%,#890302));
+	background: -webkit-linear-gradient(top,#CF0707 0,#890302 100%);
+	background: -o-linear-gradient(top,#cf0707 0,#890302 100%);
+	background: -ms-linear-gradient(top,#cf0707 0,#890302 100%);
+	background: linear-gradient(to bottom,#CF0707 0,#890302 100%);
+	filter: progid:dximagetransform.Microsoft.gradient(startcolorstr='#cf0707',endcolorstr='#890302',gradienttype=0);
+}
+

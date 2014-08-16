@@ -1,10 +1,7 @@
 {layout '../BaseSexyList/sexyList.latte'}
 
 {define showUser}
-	<td>
-		{if $sexyUser->userFrom->profilFoto}
-			<img src="{$sexyUser->userFrom->profilFoto|getImgMinPath}" width="80px"/>
-		{/if}
-	</td>
-	<td>{$sexyUser->userFrom->user_name}</td>
+	<td>{$sexyUser->userFrom|showUserMin}</td>
 {/define}
+
+{define heading}Jsem pro ně sexy{/define}

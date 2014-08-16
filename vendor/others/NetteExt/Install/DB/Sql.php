@@ -20,6 +20,8 @@ class Sql {
 	const DIR_STABLE = "stable";
 	const DIR_PATCH = "patch";
 	const DIR_DATA = "data";
+	const DIR_CHAT = "chat";
+	const DIR_CHAT_DATA = "chat/data";
 
 	/** @var string Název databáze */
 	private $dbName;
@@ -56,7 +58,8 @@ class Sql {
 	}
 
 	/**
-	 * Nastaví SQL pro smazání a celé vytvoření jedné databáze.
+	 * Nastaví SQL pro smazání a celé vytvoření jedné databáze. Neobsahuje
+	 * data pro chat databázi
 	 * Tu pak i naplní daty.
 	 */
 	public function setSqlAllDB() {
@@ -66,6 +69,16 @@ class Sql {
 		$this->addPatches();
 		$this->addDevelopSql();
 		$this->addData();
+	}
+
+	/**
+	 * Nastaví SQL pro smazání a celé databáze pro chat.
+	 * Tu pak i naplní daty.
+	 */
+	public function setSqlChatDB() {
+
+		$this->addStartSql(TRUE);
+		$this->addChat();
 	}
 
 	/**
@@ -131,6 +144,14 @@ class Sql {
 	 */
 	public function addData() {
 		$this->addSqlFiles(self::DIR_DATA);
+	}
+
+	/**
+	 * Přidá chat data do DB
+	 */
+	public function addChat() {
+		$this->addSqlFiles(self::DIR_CHAT);
+		$this->addSqlFiles(self::DIR_CHAT_DATA);
 	}
 
 	/**

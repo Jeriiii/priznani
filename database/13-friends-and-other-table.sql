@@ -78,3 +78,10 @@ ALTER TABLE `you_are_sexy`
 ALTER TABLE `you_are_sexy`
 	CHANGE COLUMN `userIDFrom` `userFromID` INT(11) UNSIGNED NOT NULL AFTER `id`,
 	CHANGE COLUMN `userIDTo` `userToID` INT(11) UNSIGNED NOT NULL AFTER `userFromID`;
+
+ALTER TABLE `friendrequest`
+	ALTER `userIDFrom` DROP DEFAULT,
+	ALTER `userIDTo` DROP DEFAULT;
+ALTER TABLE `friendrequest`
+	CHANGE COLUMN `userIDFrom` `userFromID` INT(11) UNSIGNED NOT NULL AFTER `id`,
+	CHANGE COLUMN `userIDTo` `userToID` INT(11) UNSIGNED NOT NULL AFTER `userFromID`;

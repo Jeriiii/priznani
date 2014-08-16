@@ -37,6 +37,8 @@ class BaseSexyList extends UsersList {
 	public function baseRender($templateName) {
 		$this->template->setFile(dirname(__FILE__) . '/../' . $templateName);
 		$this->template->sexyUsers = $this->sexyUsers;
+//		dump($this->sexyUsers);
+//		die();
 		$this->template->render();
 	}
 

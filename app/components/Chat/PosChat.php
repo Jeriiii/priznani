@@ -1,9 +1,7 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 namespace POSComponent\Chat;
@@ -16,7 +14,7 @@ use POSComponent\BaseProjectControl;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class PosChat extends BaseProjectControl implements IChat {
+class PosChat extends BaseProjectControl {
 
 	/**
 	 * chat manager
@@ -27,19 +25,9 @@ class PosChat extends BaseProjectControl implements IChat {
 	/**
 	 * Standardni konstruktor, predani sluzby chat manageru
 	 */
-	function __construct(ChatManager $manager, IContainer $parent = NULL, $name = NULL) {
+	function __construct(ChatManager $manager, $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->chatManager = $manager;
-	}
-
-	/**
-	 * Pošle zprávu daného uživatele jinému uživateli
-	 * @param int $idSender odesilatel
-	 * @param int $idRecipient prijemce
-	 * @param Strin $text text zpravy
-	 */
-	public function sendTextMessage($idSender, $idRecipient, $text) {
-
 	}
 
 	/**
@@ -48,6 +36,8 @@ class PosChat extends BaseProjectControl implements IChat {
 	public function render() {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/poschat.latte');
+		$user = $this->getPresenter()->getUser();
+		$template->logged = $user->isLoggedIn() && $user->getIdentity();
 		$template->render();
 	}
 
@@ -57,6 +47,14 @@ class PosChat extends BaseProjectControl implements IChat {
 	 */
 	protected function createComponentContactList() {
 		return new StandardContactList($this->chatManager);
+	}
+
+	/**
+	 * Vytvoření komponenty s konverzacemi (poslední zprávy)
+	 * @return \POSComponent\Chat\StandardConversationList
+	 */
+	protected function createComponentConversationList() {
+		return new StandardConversationList($this->chatManager);
 	}
 
 	/**

@@ -40,17 +40,20 @@ class ChatMessagesDao extends AbstractDao {
 
 	/**
 	 * Přidá novou textovou zprávu ("odešle" novou zprávu)
+	 * @param int $idSender odesilatel zprávy
+	 * @param int $idRecipient příjemce zprávy
 	 * @param String $text text zprávy
-	 * @return Nette\Database\Table\Selection vytvořená zpráva
+	 * @return Nette\Database\Table\IRow | int | bool vytvořená zpráva
 	 */
-	public function addTextMessage($text) {
+	public function addTextMessage($idSender, $idRecipient, $text) {
 		$sel = $this->getTable();
-		$sel->insert(array(
-			self::COLUMN_TEXT => $text,
-			self::COLUMN_TYPE => self::TYPE_TEXT_MESSAGE,
-			self::COLUMN_READED => self::MESSAGE_UNREADED
+		return $sel->insert(array(
+				self::COLUMN_ID_SENDER => $idSender,
+				self::COLUMN_ID_RECIPIENT => $idRecipient,
+				self::COLUMN_TEXT => $text,
+				self::COLUMN_TYPE => self::TYPE_TEXT_MESSAGE,
+				self::COLUMN_READED => self::MESSAGE_UNREADED
 		));
-		return $sel;
 	}
 
 	/**
@@ -111,15 +114,54 @@ class ChatMessagesDao extends AbstractDao {
 	}
 
 	/**
+	 * Nastaví všechny zprávy s id v poli jako přečtené/nepřečtené
+	 * @param array $ids neasociativni pole idček
+	 * @param boolean $readed přečtená/nepřečtená
+	 * @return Nette\Database\Table\Selection upravené zprávy
+	 */
+	public function setMultipleMessagesReaded(array $ids, $readed) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID, $ids);
+		return $this->setSelectionReaded($sel, $readed);
+	}
+
+	/**
 	 * Vrátí úplně všechny nepřečtené příchozí zprávy daného uživatele
 	 * @param int $idRecipient id uživatele, kterému mají zprávy přijít
 	 * @return Nette\Database\Table\Selection příchozí zprávy
 	 */
 	public function getAllUnreadedTextMessages($idRecipient) {
 		$sel = $this->getTable();
-		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		$sel->where(self::COLUMN_READED, self::MESSAGE_UNREADED); //casem bude vsech neprectenych mene, nez zprav jednoho uzivatele
 		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
+		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
+		return $sel;
+	}
+
+	/**
+	 * Vrátí všechny zprávy novější než daná zpráva
+	 * @param int $messageId id dané zprávy
+	 * @param int $idRecipient příjemce zpráv
+	 * @return Nette\Database\Table\Selection  zprávy
+	 */
+	public function getAllNewerMessagesThan($messageId, $idRecipient) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID . ' > ?', $messageId);
+		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
+		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
+		return $sel;
+	}
+
+	/**
+	 * Vrátí úplně všechny nepřečtené ODCHOZÍ zprávy daného uživatele
+	 * @param int $idSender id uživatele, který zprávy poslal
+	 * @return Nette\Database\Table\Selection odchozí zprávy
+	 */
+	public function getAllSendedAndUnreadedTextMessages($idSender) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_READED, self::MESSAGE_UNREADED); //casem bude vsech neprectenych mene, nez zprav jednoho uzivatele
+		$sel->where(self::COLUMN_ID_SENDER, $idSender);
+		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		return $sel;
 	}
 
@@ -131,9 +173,9 @@ class ChatMessagesDao extends AbstractDao {
 	 */
 	public function getAllNewMessagesBy($idSender, $idRecipient) {
 		$sel = $this->getTable();
-		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		$sel->where(self::COLUMN_READED, self::MESSAGE_UNREADED); //casem bude vsech neprectenych mene, nez zprav jednoho uzivatele
 		$sel->where(self::COLUMN_ID_SENDER, $idSender);
+		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
 		return $sel;
 	}
@@ -147,9 +189,27 @@ class ChatMessagesDao extends AbstractDao {
 	 */
 	public function getLastTextMessages($idUser, $amount = 10, $offset = 0) {
 		$sel = $this->getTable();
-		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		$sel->where(self::COLUMN_ID_SENDER . '=? OR ' . self::COLUMN_ID_RECIPIENT . '=?', $idUser, $idUser);
 		$sel->order(self::COLUMN_ID . ' DESC');
+		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
+		$sel->limit($amount, $offset);
+		return $sel;
+	}
+
+	/**
+	 * Vrátí poslední zprávy mezi dvěma uživateli
+	 * Lze nastavit offset (krok) OD KONCE
+	 * @param int $idUser id uživatele
+	 * @param int $idSecondUser id druhého uživatele
+	 * @param int $amount počet zpráv
+	 * @return Nette\Database\Table\Selection zprávy
+	 */
+	public function getLastTextMessagesBetweenUsers($idUser, $idSecondUser, $amount = 10, $offset = 0) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID_SENDER . '=? AND ' . self::COLUMN_ID_RECIPIENT . '=?' .
+			' OR ' . self::COLUMN_ID_RECIPIENT . '=? AND ' . self::COLUMN_ID_SENDER . '=?', $idUser, $idSecondUser, $idUser, $idSecondUser);
+		$sel->order(self::COLUMN_ID . ' DESC');
+		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		$sel->limit($amount, $offset);
 		return $sel;
 	}
@@ -170,6 +230,22 @@ class ChatMessagesDao extends AbstractDao {
 		$sel->order(self::COLUMN_ID . ' DESC');
 		$sel->limit($amount, $offset);
 		return $sel;
+	}
+
+	/**
+	 * Vrátí poslední zprávu konverzace každého (až do daného maxima) uživatele (pokud nějakou posílal)
+	 * Nedávné zprávy jsou přednostní.
+	 * @param int $idUser id koho se zprávy týkají
+	 * @param int $limit maximální počet uživatelů
+	 * @param int $offset maximální počet uživatelů
+	 * @return Nette\Database\Table\Selection zprávy
+	 */
+	public function getLastMessageFromEachSender($idUser, $limit = 10, $offset = 0) {
+		return $this->database->query('SELECT *
+										FROM (SELECT * FROM chat_messages ORDER BY id DESC) AS a
+										WHERE id_recipient = ? OR id_sender = ?
+										GROUP BY id_recipient, id_sender DESC
+										LIMIT ' . $limit . ';', $idUser, $idUser);
 	}
 
 	/**
