@@ -28,8 +28,8 @@ class BaseSearch extends BaseProjectControl {
 	public function render() {
 		$this->template->setFile(dirname(__FILE__) . '/baseSearch.latte');
 
-		// TO DO
-
+		$listOfUsers = $this->users->fetchAll();
+		$this->template->items = $listOfUsers;
 		$this->template->render();
 	}
 
