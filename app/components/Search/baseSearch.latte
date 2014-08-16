@@ -1,8 +1,13 @@
-{includeblock 'searchMenu.latte'}
-
-
 <ul style="margin: 0 auto;">
-	<li>
-	{* TO DO *}
-	</li>
+	<p>
+	
+	{foreach $items as $item}
+		<li>
+			<p>
+				{$item|showProf: array(':Profil:Show:default', 'id' => $item->id)}
+			</p>
+		</li>
+	
+	{/foreach}
+	</p>
 </ul>

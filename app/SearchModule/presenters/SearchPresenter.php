@@ -12,6 +12,12 @@ class SearchPresenter extends SearchBasePresenter {
 	private $user;
 	private $fotos;
 
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
 	public function beforeRender() {
 		parent::beforeRender();
 		$this->setSexMode();
@@ -299,6 +305,13 @@ class SearchPresenter extends SearchBasePresenter {
 
 	protected function createComponentAdvancedSearchForm($name) {
 		$form = new Frm\AdvancedSearchForm($this, $name);
+		return $form;
+	}
+
+	protected function createComponentBaseSearch($name) {
+
+		$items = $this->userDao->getTable('users');
+		$form = new \POSComponent\Search\BaseSearch($items);
 		return $form;
 	}
 
