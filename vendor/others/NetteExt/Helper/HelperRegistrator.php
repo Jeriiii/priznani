@@ -1,7 +1,5 @@
 <?php
 
-namespace NetteExt\Helper;
-
 /*
  * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
@@ -11,13 +9,16 @@ namespace NetteExt\Helper;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
+
+namespace NetteExt\Helper;
+
 class HelperRegistrator {
 
 	/** @var GetImgPathHelper */
 	public $getImgPathHelper;
 
-	/** @var ShowUserHelper */
-	public $showUserHelper;
+	/** @var ShowProfHelper */
+	public $showProfHelper;
 
 	/** @var array Callback na fci link */
 	private $linkCallback;
@@ -29,7 +30,7 @@ class HelperRegistrator {
 	public function __construct($url, $linkCallback) {
 		$this->getImgPathHelper = new GetImgPathHelper($url);
 		$this->linkCallback = $linkCallback;
-		$this->showUserHelper = new ShowUserHelper($this->getImgPathHelper, $linkCallback);
+		$this->showProfHelper = new ShowProfHelper($this->getImgPathHelper, $linkCallback);
 	}
 
 	/**
@@ -38,13 +39,16 @@ class HelperRegistrator {
 	 */
 	public function registerHelpers($template) {
 		$this->registerGetImgPathHelpers($template);
-		$this->registerShowUserHelpers($template);
+		$this->registerShowProfHelpers($template);
 	}
 
-	private function registerShowUserHelpers($template) {
-		$showUserHelper = $this->showUserHelper;
-		$template->registerHelper(ShowUserHelper::NAME, function($user, $typeEl = ShowUserHelper::TYPE_EL_SPAN) use ($showUserHelper) {
-			return $showUserHelper->showUserMin($user, $typeEl);
+	private function registerShowProfHelpers($template) {
+		$showProfHelper = $this->showProfHelper;
+		$template->registerHelper(ShowProfHelper::NAME, function($user, $href = null) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, FALSE);
+		});
+		$template->registerHelper(ShowProfHelper::NAME_MIN, function($user, $href = null) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, TRUE);
 		});
 	}
 
