@@ -8,12 +8,14 @@
 namespace POS\Chat;
 
 /**
- * Description of Coder
+ * Třída sloužící ke kódování a dekódování vložených dat,
+ * navržená pro potřeby chatu.
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
 class ChatCoder {
-	/* !!! kodovani by melo byt deterministicke - zakodovani stejne hodnoty jsou take stejna !!! */
+	/* !!! kodovani by melo byt deterministicke - zakodovani stejne hodnoty jsou take stejna
+	 *  (kdyz zakoduji treba 87, vyhodi to vzdy stejnou kodovanou hodnotu) !!! */
 
 	/**
 	 * Zakoduje vlozena data do stringu kvuli bezpecnosti (prevede je na retezec)

@@ -12,7 +12,8 @@ use POS\Model\FriendDao;
 use POS\Model\PaymentDao;
 
 /**
- *
+ * Správce chatu, používaný pro obecné operace chatu, které se týkají přístupu k modelům
+ * a k jiným datům.
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
@@ -109,8 +110,8 @@ class ChatManager {
 
 	/**
 	 * Vrátí posledních několik zpráv z konverzace dvou uživatelů
-	 * @param int $firstId id prvního uživatele
-	 * @param int $secondId id druhého uživatele
+	 * @param int $idSender id prvního uživatele
+	 * @param int $idRecipient id druhého uživatele
 	 */
 	public function getLastMessagesBetween($idSender, $idRecipient) {
 		return $this->messagesDao->getLastTextMessagesBetweenUsers($idSender, $idRecipient, 6);

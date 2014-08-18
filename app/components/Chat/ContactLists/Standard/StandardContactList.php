@@ -7,7 +7,7 @@
 namespace POSComponent\Chat;
 
 /**
- * Reprezentuje seznam kontaktů
+ * Reprezentuje seznam kontaktů a vykresluje jej
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */

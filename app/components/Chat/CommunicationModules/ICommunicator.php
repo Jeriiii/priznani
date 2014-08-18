@@ -7,7 +7,7 @@
 namespace POSComponent\Chat;
 
 /**
- *
+ * Obecné rozhraní komunikátoru chatu
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
 interface ICommunicator {
