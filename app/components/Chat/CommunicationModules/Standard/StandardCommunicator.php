@@ -105,7 +105,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	/**
 	 * Pošle uživateli JSON, obsahující informace o nových zprávách apod.
 	 * Vrací odpověď prohlížeči, vykonání kódu na serveru zde končí.
-	 * @param \Nette\Database\Table\Selection $newMessages nove zpravy
+	 * @param int $lastId id poslední známé zprávy
 	 */
 	public function sendRefreshResponse($lastId = 0) {
 		$userId = $this->getPresenter()->getUser()->getId();
