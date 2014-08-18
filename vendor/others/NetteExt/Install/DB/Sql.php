@@ -34,7 +34,14 @@ class Sql {
 
 	public function __construct($dbName) {
 		$this->dbName = $dbName;
-		$this->sqlRootDir = WWW_DIR . "/../" . self::DIR_DATABASE;
+		$testing = (isset($_SERVER['TESTING']) && $_SERVER['TESTING']) ||
+			(isset($_SERVER['HTTP_X_TESTING']) && $_SERVER['HTTP_X_TESTING']);
+
+		if ($testing) {
+			$this->sqlRootDir = WWW_DIR . "/../../../" . self::DIR_DATABASE;
+		} else {
+			$this->sqlRootDir = WWW_DIR . "/../" . self::DIR_DATABASE;
+		}
 	}
 
 	/**
