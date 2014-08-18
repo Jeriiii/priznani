@@ -10,7 +10,8 @@ use \Nette\Utils\Json;
 use POS\Model\ChatMessagesDao;
 
 /**
- * Slouží přímo ke komunikaci mezi uživateli
+ * Slouží přímo ke komunikaci mezi serverem a prohlížečem, zpracovává
+ * požadavky a vrací odpovědi. Veškerá komunikace ajaxem probíhá zde.
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */

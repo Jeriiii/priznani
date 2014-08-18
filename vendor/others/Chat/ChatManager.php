@@ -12,7 +12,8 @@ use POS\Model\FriendDao;
 use POS\Model\PaymentDao;
 
 /**
- *
+ * Správce chatu, používaný pro obecné operace chatu, které se týkají přístupu k modelům
+ * a k jiným datům.
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */

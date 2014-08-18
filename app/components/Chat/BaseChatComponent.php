@@ -10,7 +10,7 @@ use POS\Chat\ChatManager;
 use POSComponent\BaseProjectControl;
 
 /**
- * Reprezentuje seznam kontaktů
+ * Základ pro každou komponentu chatu
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */

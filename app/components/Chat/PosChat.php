@@ -10,7 +10,7 @@ use POS\Chat\ChatManager;
 use POSComponent\BaseProjectControl;
 
 /**
- * Description of PosChat
+ * Komponenta celého webového chatu na POS
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
