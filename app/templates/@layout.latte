@@ -188,7 +188,7 @@
 			<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
 		    {/if}
 		    <div id="fb-root"></div>
-			{block jqueryUI}
+			{block jqueryUI}{* překrývá se, pokud je potřeba přiřadit jiné (větší) jQuery *}
 				<script type="text/javascript" src="{$basePath}/js/jquery-ui.light.min.js"></script>
 			{/block}
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
