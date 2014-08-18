@@ -51,9 +51,9 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		$json = file_get_contents("php://input"); //vytánutí všech dat z POST požadavku - data ve formátu JSON
 		$data = Json::decode($json); //prijata zprava dekodovana z JSONu
 		if ($data && !empty($data) && $data->type == 'textMessage') {//ulozeni zpravy do DB
-			$sender = $this->getPresenter()->getUser()->getId();
+			$senderId = $this->getPresenter()->getUser()->getId();
 			$data->to = (int) $this->chatManager->getCoder()->decodeData($data->to); //dekodovani id
-			$message = $this->chatManager->sendTextMessage($sender, $data->to, $data->text); //ulozeni zpravy
+			$message = $this->chatManager->sendTextMessage($senderId, $data->to, $data->text); //ulozeni zpravy
 			if ($this->isActualUserPaying()) {//pokud je uzivatel platici
 				$this->registerInfoAboutDelivery($data->to, $message->offsetGet(ChatMessagesDao::COLUMN_ID));
 			}

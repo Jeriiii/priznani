@@ -76,23 +76,23 @@ class DatabaseManager {
 	 */
 	function initScripts() {
 		$installDB = new InstallDB($this->databaseDao);
-		$installDB->instalPostestDb();
-		//$installDB->dataTestDb();
-		//$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$ON_START_FOLDER_NAME);
+		//$installDB->instalPostestDb();
+		$installDB->dataTestDb();
+		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$ON_START_FOLDER_NAME);
 	}
 
 	/**
 	 * Executes scripts from feature start folder
 	 */
 	function featureStartScripts() {
-		//$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_START_FOLDER_NAME);
+		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_START_FOLDER_NAME);
 	}
 
 	/**
 	 * Executes scripts from feature end folder
 	 */
 	function featureEndScripts() {
-		//$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_END_FOLDER_NAME);
+		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_END_FOLDER_NAME);
 	}
 
 	/**

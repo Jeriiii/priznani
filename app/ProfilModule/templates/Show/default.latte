@@ -15,8 +15,9 @@
 
 {block foot}
 	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>
+	<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
 {control js}
-<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
+
 <script>
 	$(document).ready(function () {
 		$( ".stream-form" ).tabs();
@@ -29,29 +30,6 @@
 	$("#frmaddConfessionForm-note").click(function() {
 		$("#frmaddConfessionForm-note").animate({ height: "200px"}, 500);
 	});
-</script>
-<script>
-$(function() {
-	$( "#sendmessage-dialog" ).dialog({
-      autoOpen: false,
-      show: {
-        effect: "fade",
-        duration: 500
-      },
-      hide: {
-        effect: "fade",
-        duration: 500
-      },
-		width: 500
-    });
-
-	$( "#sendmessage-dialog" ).parent().wrap('<div class="ui-chat"></div>');
-
-	$( "#sendmessage-button" ).click(function() {
-      $( "#sendmessage-dialog" ).dialog( "open" );
-    });
-});
-
 </script>
 {/block}
 {block content}

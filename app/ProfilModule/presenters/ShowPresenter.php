@@ -211,7 +211,8 @@ class ShowPresenter extends ProfilBasePresenter {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
 			'stream.js',
-			'nette.ajax.js'
+			'nette.ajax.js',
+			'chat/popup.js'
 		));
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {
