@@ -27,3 +27,4 @@ services:
 	youAreSexyDao: POS\Model\YouAreSexyDao
 	friendRequestDao: POS\Model\FriendRequestDao
 	friendDao: POS\Model\FriendDao
+	statusDao: POS\Model\StatusDao

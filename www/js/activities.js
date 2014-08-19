@@ -66,15 +66,7 @@ $(document).on("click", '.closer', function() {
 	$('#activities .closer').remove();
 });
 
-//Při ajaxovém načítání ukáže spinner a upraví okno aktivit
-$(document).ajaxStart(function() {
-	//activitiesDrop.height(60).css('overflow-y', 'hidden');//zakomentovano od Kotyho kvuli stylum
-	loading.show();
-})
-		.ajaxStop(function() {
-			//activitiesDrop.height(150).css('overflow-y', 'scroll');//zakomentovano od Kotyho kvuli stylum
-			loading.hide();
-		});
+
 // Při kliknutí na jednu aktivitu složí url a odešle ajax pro označení jako přečtená.
 $(document).on("click", '#activities-droplink a', function() {
 	//Získání id aktivity
@@ -123,7 +115,7 @@ $(document).on("click", ".activities-btn", function(e) {
 	//Otevře okno s aktivitama
 	activitiesDrop.fadeIn();
 	$("a.activities-btn").before(close);
-
+	loading.show();
 	//Obstarává poslání ajax dotazu na vykreslení aktivit, v případě kliku v intervalu 3s nenačte nové
 	if (targetAttr !== '1') {
 		$('#activities .new-counter').remove();
@@ -132,6 +124,7 @@ $(document).on("click", ".activities-btn", function(e) {
 			async: true,
 			success: function(response) {
 				activitiesBtn.attr('data-ajax-off', '1');
+				loading.hide();
 			},
 			complete: function(payload) {
 				var data = JSON.parse(payload.responseText);
