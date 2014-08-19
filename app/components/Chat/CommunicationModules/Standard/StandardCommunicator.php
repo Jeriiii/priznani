@@ -109,7 +109,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	public function sendRefreshResponse($lastId = 0) {
 		$userId = $this->getPresenter()->getUser()->getId();
 		if (!$lastId || $lastId == 0) {//pokud jde o prvni pozadavek prohlizece
-			$newMessages = $this->chatManager->getInitialMessages($userId); //vrati nam to nejake pro zacatek
+			$newMessages = $this->chatManager->getInitialMessages($userId); //vrati nam to nejake zpravy pro zacatek
 		} else {
 			$newMessages = $this->chatManager->getAllNewMessages($lastId, $userId);
 		}
@@ -187,7 +187,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * Vrátí uživatelské jméno uživatele s daným id
 	 * Šetří databázi.
 	 * @param int $id id uživatele
-	 * @return String Uzivatelske jmeno
+	 * @return string Uzivatelske jmeno
 	 */
 	public function getUsername($id) {
 		$session = $this->getPresenter()->getSession(self::USERNAMES_SESSION_NAME);

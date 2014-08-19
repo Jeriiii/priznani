@@ -115,7 +115,7 @@ class ChatMessagesDao extends AbstractDao {
 
 	/**
 	 * Nastaví všechny zprávy s id v poli jako přečtené/nepřečtené
-	 * @param array $ids neasociativni pole idček
+	 * @param array $ids neasociativni pole idček zpráv
 	 * @param boolean $readed přečtená/nepřečtená
 	 * @return Nette\Database\Table\Selection upravené zprávy
 	 */
