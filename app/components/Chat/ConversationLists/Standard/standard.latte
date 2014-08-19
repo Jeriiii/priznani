@@ -8,7 +8,7 @@
 		{var $unreaded = $conversation->readed == 0 && $userId != $conversation->id_sender}
 		<li data-id="{$id}" data-title="{$username}" class="conversation-link {if $unreaded}unreaded{/if}">
 		<strong>{$username}</strong>
-		{$conversation->text}
+		<p class="lastmessage">{$conversation->text}</p>
 		</li>
 	{/foreach}
 </ul>
