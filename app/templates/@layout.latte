@@ -192,7 +192,9 @@
 				<script type="text/javascript" src="{$basePath}/js/jquery-ui.light.min.js"></script>
 			{/block}
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
-            {control js 'layout/user-layout-menu.js', 'activities.js',
+            {control js 'layout/user-layout-menu.js',
+					'activities.js',
+					'nette.ajax.js',
 					'chat/core.js', 'chat/init.js',
 					'chat/jquery.ui.chatbox/jquery.ui.chatbox.js',
 					'chat/jquery.ui.chatbox/chatboxManager.js'}

@@ -14,15 +14,22 @@ use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\ConfessionDao;
 use POS\Model\StreamDao;
+use POS\Model\StatusDao;
 
 class UserStream extends BaseStream {
 
 	/** @var \POS\Model\StreamDao */
 	public $streamDao;
 
-	public function __construct($data, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
+	/**
+	 * @var \POS\Model\StatusDao
+	 */
+	public $statusDao;
+
+	public function __construct($data, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
 		parent::__construct($data, $userGalleryDao, $userImageDao, $confDao);
 		$this->streamDao = $streamDao;
+		$this->statusDao = $statusDao;
 	}
 
 	public function render() {
@@ -54,6 +61,10 @@ class UserStream extends BaseStream {
 
 	protected function createComponentFilterForm($name) {
 		return new Frm\FilterStreamForm($this, $name);
+	}
+
+	protected function createComponentStatusForm($name) {
+		return new Frm\AddStatusForm($this->streamDao, $this->statusDao, $this, $name);
 	}
 
 }
