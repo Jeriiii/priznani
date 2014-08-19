@@ -188,6 +188,7 @@
 		sendDataByPost(sendMessageLink, requestData);
 		this.boxManager.addMsg(mydata.name, msg);//pridani zpravy do okna
 		messageSent = true;
+		actualizeMessageInConversationList(id, data.title, msg);
 	}
 	;
 	/**
@@ -224,6 +225,9 @@
 			var messages = values.messages;
 			$.each(messages, function(messageKey, message) {//vsechny zpravy od kazdeho uzivatele
 				addMessage(iduser, name, message.name, message.id, message.text, message.type);
+				if (message.type == 0) {//textové zprávy se aktualizují v seznamu konverzací
+					actualizeMessageInConversationList(iduser, name, message.text);
+				}
 				if (message.id > $.fn.chat.lastId) {//aktualizace nejvyssiho id
 					$.fn.chat.lastId = message.id;
 				}
@@ -272,6 +276,27 @@
 	}
 
 
+	/**
+	 * Aktualizuje seznam konverzací danou zprávou
+	 * @param {int} id uživatele, se kterým si píšu (resp. id konverzace)
+	 * @param {String} name jméno uživatele, se kterým si píšu
+	 * @param {String} text text zprávy, kterou posílám
+	 */
+	function actualizeMessageInConversationList(id, name, text) {
+		var listItem = $('#conversations li[data-id="' + id + '"]');
+		if (!(listItem.length > 0)) {//pokud v konverzacich neni zaznam
+			var conList = $('#conversations ul');
+			var newListItem = '<li data-id="' + id + '" data-title="' + name + '" class="conversation-link">\n\
+				<strong>' + name + '</strong><p class="lastmessage">' + text + '</p></li>';
+			conList.prepend(newListItem);//prida se do seznamu
+		} else {
+			listItem.removeClass('unreaded');//aktualizuje se po zobrazeni zpravy
+			listItem.find('.lastmessage').text(text);
+		}
+
+	}
+
+
 
 	/**
 	 * Nacte ajaxem poslednich nekolik zprav do boxu
@@ -292,6 +317,7 @@
 	 * Vytvori nove okno, nebo otevre stavajici. Pokud je pouze zavrene, otevre ho.
 	 * @param {int|String} id id okna
 	 * @param {String} title titulek okna
+	 * @return {bool} byl vytvoren nove a naplnen poslednimi zpravami
 	 */
 	function addBox(id, title) {
 		var wascreated = chatboxManager.addBox(id,
@@ -301,6 +327,7 @@
 		if (wascreated) {//pokud je box novy
 			loadMessagesIntoBox(id);
 		}
+		return wascreated;
 		//console.log('CHAT - created new box #' + id);//pro debug
 	}
 
@@ -315,9 +342,11 @@
 	 * @param {int} type typ zpravy
 	 */
 	function addMessage(id, boxname, name, messid, text, type) {
-		addBox(id, boxname);//vytvori/zobrazi dotycne okno
+		var newbox = addBox(id, boxname);//vytvori/zobrazi dotycne okno
 		if (type == 0) {
-			chatboxManager.addMessage(id, name, text);
+			if (!newbox) {//pokud je vytvoren box nove, bude zpravami naplnen automaticky vcetne teto posledni
+				chatboxManager.addMessage(id, name, text);
+			}
 			setReaded(messid);
 		} else {
 			chatboxManager.addMessage(id, '', text);
