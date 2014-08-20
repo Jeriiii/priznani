@@ -1,4 +1,6 @@
 
+
+/* vloží do tabulky zpráv vycpávkové zprávy */
 -- Dumping data for table pos.chat_messages: ~40 rows (approximately)
 /*!40000 ALTER TABLE `chat_messages` DISABLE KEYS */;
 INSERT INTO `chat_messages` (`id`, `id_sender`, `id_recipient`, `text`, `type`, `readed`) VALUES

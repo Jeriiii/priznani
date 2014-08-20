@@ -118,7 +118,7 @@ class ChatManager {
 	}
 
 	/**
-	 * Returns an instance of coder for security
+	 * Vrátí instanci Coderu k použití
 	 * @return ChatCoder
 	 */
 	public function getCoder() {

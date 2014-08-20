@@ -24,7 +24,6 @@ class StandardContactList extends BaseChatComponent implements IContactList {
 		$template->coder = $this->chatManager->getCoder();
 		$template->contacts = $this->chatManager->getContacts($userIdentity->getId());
 		$template->username = $userIdentity->user_name;
-		$template->logged = TRUE;
 		$template->render();
 	}
 
