@@ -3,6 +3,9 @@
  * @author Jan Kotalík
  */
 
+/**
+ * Jádro celého chatu - klientská část. Tento plugin zajišťuje klientskou funkci chatu
+ */
 ;
 (function($) {
 
@@ -31,34 +34,34 @@
 	/* objekt obsahující potvrzení o přečtení (předtím, než se odešlou) */
 	$.fn.chat.readedQueue = new Array();
 
-
+	/* implicitní hodnoty nastavení pluginu */
 	$.fn.chat.defaults = {
-		minRequestTimeout: 1000,
 		/* minimální čekání mezi zasíláním požadavků. Této hodnoty dosáhne chat při aktivním používání */
-		maxRequestTimeout: 8000,
+		minRequestTimeout: 1000,
 		/* maximální čekání mezi zasíláním požadavků na nové zprávy. Této hodnoty postupně dosáhne neaktivní chat. */
-		failResponseTimeout: 10000,
+		maxRequestTimeout: 8000,
 		/* pokud selže požadavek, toto je doba čekání, po které se to zkusí znovu */
-		timeoutStep: 500,
+		failResponseTimeout: 10000,
 		/* o kolik se zvýší čekání při přijetí prázdné odpovědi */
-		contactListItems: '.contact-link',
+		timeoutStep: 500,
 		/* selektor pro položku (jméno) na seznamu kontaktů */
-		conversationListItems: '.conversation-link',
+		contactListItems: '.contact-link',
 		/* selektor pro položku (jméno) na seznamu konverzací */
-		idAttribute: 'data-id',
+		conversationListItems: '.conversation-link',
 		/* atribut položky seznamu kontaktů a konverzací, kde je ID kontaktu (cizího uživatele) */
-		boxContainerSelector: '#contact-boxes',
+		idAttribute: 'data-id',
 		/* selector pro objekt, kde se budou vyvtaret okenka */
-		titleAttribute: 'data-title',
+		boxContainerSelector: '#contact-boxes',
 		/* pod kterym atributem u polozky seznamu je text, ktery se ma zobrazit v titulku okenka*/
-		boxWidth: 250,
+		titleAttribute: 'data-title',
 		/* sirka okenka s chatem [px] */
-		boxMargin: 30,
+		boxWidth: 250,
 		/* mezera mezi okenky [px] */
-		maxBoxes: 8,
+		boxMargin: 30,
 		/* maximalni pocet okenek na obrazovce */
+		maxBoxes: 8,
+		/* odsazeni od prave casti stranky [px] */
 		rightMargin: 260
-				/* odsazeni od prave casti stranky [px] */
 
 	};
 
