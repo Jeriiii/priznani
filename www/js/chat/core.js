@@ -99,7 +99,10 @@
 
 	/**
 	 * Pošle požadavek s žádostí o refresh a upraví podle toho čas timeout.
-	 * Počítá s tím, že je požadavek první a podle toho bude zacházet s odpovědí.
+	 * Počítá s tím, že je požadavek první a slouží pro prvotní zjištění ID
+	 * poslední zprávy. Zprávy z odpovědi jako takové zahazuje a použije pouze id.
+	 * Nastaví id poslední zprávy. Pokud nic nepřijde, nastaví co nejmenší ID,
+	 * které dává smysl.
 	 * Poté zajistí další zavolání refreshe.
 	 */
 	function sendFirstRefreshGet() {
@@ -124,7 +127,8 @@
 
 	/**
 	 * Pošle požadavek s žádostí o refresh a upraví podle toho čas timeout.
-	 * Poté zajistí další zavolání refreshe.
+	 * Poté zajistí další zavolání refreshe. Příchozí data jsou standardně
+	 * zpracována pomocí funkce handleResponse.
 	 * @param {type} data
 	 * @returns {undefined}
 	 */
