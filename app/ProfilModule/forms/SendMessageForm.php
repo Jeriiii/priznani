@@ -17,7 +17,7 @@ class SendMessageForm extends EditBaseForm {
 
 	/**
 	 *
-	 * @var int id prijemce
+	 * @var int Id prijemce
 	 */
 	private $idRecipient;
 
@@ -28,7 +28,7 @@ class SendMessageForm extends EditBaseForm {
 
 		$this->addTextArea('text', '', 40, 20)
 			->addRule(Form::FILLED, 'Nejprve vyplňte zprávu.')
-			->addRule(Form::MAX_LENGTH, 'Maximální délka zprávy je 65535 znaků.', 65535);
+			->addRule(Form::MAX_LENGTH, 'Maximální délka zprávy je %d znaků.', 1000);
 
 		$this->addSubmit('send', 'Odeslat')
 			->setAttribute("class", "btn-main medium button");

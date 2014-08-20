@@ -1,0 +1,7 @@
+<ul class="content">
+	{foreach $items as $item}
+		<li>
+			{$item|showProf: array(':Profil:Show:default', 'id' => $item->id)}
+		</li>
+	{/foreach}
+</ul>

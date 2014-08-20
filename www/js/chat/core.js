@@ -201,7 +201,7 @@
 		messageSent = true;
 		actualizeMessageInConversationList(id, data.title, msg);
 	}
-	;
+	
 	/**
 	 * Pomocí AJAXU konvertuje data do formátu JSON a pošle je na danou adresu
 	 * @param {String} url data, která se mají poslat
@@ -388,7 +388,7 @@
 				}
 			});
 			if (unsend) {
-				return 'Máte rozepsaný příspěvek. Chcete tuto stránku opustit a zahodit tak svou práci?';
+				return 'Máte rozepsaný příspěvek. Chcete tuto stránku přesto opustit?';
 				/* hláška, co se objeví při pokusu obnovit/zavřít okno, zatímco má uživatel rozepsanou zprávu */
 			}
 		};
