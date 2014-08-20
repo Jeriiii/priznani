@@ -62,7 +62,8 @@
 
 	};
 
-	/** pravidelne obnovuje stav prichozich zprav
+	/**
+	 * Pravidelně obnovuje stav příchozích zpráv
 	 * @param waitTime cas, ktery bude cekat pred refreshem
 	 * */
 	function refreshMessages(waitTime) {
@@ -76,10 +77,11 @@
 		}, waitTime);
 
 	}
-	/* Posle na server ajaxovy pozadavek (dotaz) na nove zpravy
-	 * Zaroven posila informace o tom, které zprávy si uživatel přečetl
+	/**
+	 * Pošle na server ajaxový požadavek (dotaz) na nové zprávy
+	 * Zaroven posílá informace o tom, které zprávy si uživatel přečetl
 	 * a tudíž se mají označit za přečtené.
-	 * @param waitTime aktualni hodnota casu, po ktery se cekalo na zavolani
+	 * @param waitTime aktualní hodnota času, po který se čekalo na zavolání
 	 * */
 	function sendRefreshRequest(waitTime) {
 		var chatopts = this.chatopts;
@@ -130,8 +132,7 @@
 	 * Pošle požadavek s žádostí o refresh a upraví podle toho čas timeout.
 	 * Poté zajistí další zavolání refreshe. Příchozí data jsou standardně
 	 * zpracována pomocí funkce handleResponse.
-	 * @param {type} data
-	 * @returns {undefined}
+	 * @param {Object} data k odeslání
 	 */
 	function sendRefreshGet(data) {
 		var chatopts = this.chatopts;
@@ -152,15 +153,15 @@
 
 
 	/**
-	 * Nastavi zpravu jako prectenou (to se automaticky projevi po dalsim
+	 * Nastaví zprávu jako přečtenou (to se automaticky projeví po dalším
 	 * refreshRequestu i na serveru)
-	 * @param {int} id
+	 * @param {int} id zprávy
 	 */
 	function setReaded(id) {
 		$.fn.chat.readedQueue.push(id);
 	}
 	/**
-	 * Nastaveni options
+	 * Nastavení options
 	 * @param chatopts nastaveni k nastaveni
 	 */
 	function setChatOpts(chatopts) {
@@ -168,18 +169,18 @@
 	}
 
 	/**
-	 * Nastaveni cas cekani na pocatecni hodnotu
-	 * @param {int} time cas k nastaveni
+	 * Nastavení času čekání na počáteční hodnotu
+	 * @param {int} time čas k nastavení
 	 */
 	function setWaitTime(time) {
 		waitTime = time;
 	}
 
 	/**
-	 * Posila zpravu na server. Vola se automaticky pro odeslani zpravy v okenku chatboxu
+	 * Posílá zpravu na server. Volá se automaticky pro odeslaní zprávy v okénku chatboxu
 	 * jako callback k odeslání zprávy (pomocí enteru etc).
 	 * @param {int|String} id
-	 * @param {Object} data data souvisejici s okenkem z chatbox.js - napriklad titulek okenka apod.
+	 * @param {Object} data data související s okénkem z chatbox.js - například titulek okna apod.
 	 * předává je chatboxManager
 	 * @param {String} msg
 	 */
@@ -199,9 +200,9 @@
 	}
 	;
 	/**
-	 * Pomoci AJAXU konvertuje data do formatu JSON a posle je na danou adresu
-	 * @param {String} url data, ktera se maji poslat
-	 * @param {Object} data poslana data
+	 * Pomocí AJAXU konvertuje data do formátu JSON a pošle je na danou adresu
+	 * @param {String} url data, která se mají poslat
+	 * @param {Object} data poslaná data
 	 */
 	function sendDataByPost(url, data) {
 		var json = JSON.stringify(data);
@@ -221,7 +222,7 @@
 	}
 
 	/**
-	 * Zpracuje odpoved serveru. Priklad toho, jak maji vypadat data v jsonu, najdete v dokumentaci
+	 * Zpracuje odpověď serveru. Příklad toho, jak mají vypadat data v jsonu, najdete v dokumentaci
 	 * @param {Object} json data ze serveru, DEKODOVANY JSON
 	 *
 	 */
@@ -243,7 +244,7 @@
 	}
 
 	/**
-	 * Inicializace spravce okenek
+	 * Inicializace správce okének
 	 */
 	function initializeChatboxManager() {
 		chatboxManager.init({//chatbox manager pro spravu okenenek
@@ -256,7 +257,7 @@
 	}
 
 	/**
-	 * Inicializace seznamu kontaktu - poveseni click eventu etc.
+	 * Inicializace seznamu kontaktů - pověšení click eventů etc.
 	 */
 	function initializeContactList() {
 		//console.log('CHAT - initializing contact list');//pro debug
@@ -271,7 +272,7 @@
 	}
 
 	/**
-	 * Inicializace seznamu konverzaci
+	 * Inicializace seznamu konverzací
 	 */
 	function initializeConversationList() {
 		var chatopts = this.chatopts;
@@ -306,8 +307,8 @@
 
 
 	/**
-	 * Nacte ajaxem poslednich nekolik zprav do boxu
-	 * @param id id okenka (a uzivatele)
+	 * Načte ajaxem posledních několik zprav do okénka
+	 * @param id id okénka (a užvatele)
 	 */
 	function loadMessagesIntoBox(id) {
 		var data = {
@@ -320,8 +321,8 @@
 		});
 	}
 
-	/*
-	 * Vytvori nove okno, nebo otevre stavajici. Pokud je pouze zavrene, otevre ho.
+	/**
+	 * Vytvoří nové okno, nebo otevře stávající.
 	 * @param {int|String} id id okna
 	 * @param {String} title titulek okna
 	 * @return {bool} byl vytvoren nove a naplnen poslednimi zpravami
@@ -340,7 +341,7 @@
 
 
 	/**
-	 * Prida zpravu do okna s danym id a okno otevre
+	 * Přidá zprávu do okna s daným id a okno otevře
 	 * @param {int|String} id id okna
 	 * @param {String} boxname s kym si pisu (titulek okna)
 	 * @param {String} name od koho zprava je
