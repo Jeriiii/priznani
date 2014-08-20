@@ -28,3 +28,4 @@ services:
 	friendRequestDao: POS\Model\FriendRequestDao
 	friendDao: POS\Model\FriendDao
 	statusDao: POS\Model\StatusDao
+	userChangePasswordDao:  POS\Model\UserChangePasswordDao
