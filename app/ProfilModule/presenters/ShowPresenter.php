@@ -150,7 +150,7 @@ class ShowPresenter extends ProfilBasePresenter {
 		$this->template->userData = $user;
 
 		$property = $userProperty->user_property;
-		if ($property == 'couple' || $property == 'coupleMan' || $property == 'coupleWoman') {
+		if ($property == 'c' || $property == 'cm' || $property == 'cw') {
 			$this->template->userPartnerProfile = $this->coupleDao->getPartnerData($user->coupleID);
 		}
 		$this->template->mode = "listAll";

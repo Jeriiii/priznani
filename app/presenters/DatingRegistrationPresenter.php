@@ -46,9 +46,9 @@ class DatingRegistrationPresenter extends BasePresenter {
 		//SEND EMAIL
 		$this->sendMail($userSession);
 
-		if ($userSession->user_property == "man") {
+		if ($userSession->user_property == "m") {
 			$this->flashMessage("Byl jste úspěšně zaregistrován. Prosím potvrďte svůj email.");
-		} else if ($userSession->user_property == "woman") {
+		} else if ($userSession->user_property == "w") {
 			$this->flashMessage("Byla jste úspěšně zaregistrována. Prosím potvrďte svůj email.");
 		} else {
 			$this->flashMessage("Byli jste úspěšně zaregistrováni. Prosím potvrďte svůj email.");
@@ -82,20 +82,20 @@ class DatingRegistrationPresenter extends BasePresenter {
 		$registrationDataUser = $this->getRegSession();
 		$registrationDataCouple = $this->getRegSessionForCouple();
 
-		if ($registrationDataUser->user_property == "man") {
+		if ($registrationDataUser->user_property == "m") {
 			$this->setView("thirdRegManForm");
-		} else if ($registrationDataUser->user_property == "woman") {
+		} else if ($registrationDataUser->user_property == "w") {
 			$this->setView("thirdRegWomanForm");
-		} else if ($registrationDataUser->user_property == "group") {
+		} else if ($registrationDataUser->user_property == "g") {
 			$this->redirect("DatingRegistration:register");
-		} else if ($registrationDataUser->user_property == "coupleWoman") {
-			$registrationDataCouple->user_property = 'woman';
+		} else if ($registrationDataUser->user_property == "cw") {
+			$registrationDataCouple->user_property = 'w';
 			$this->setView("thirdRegWomanForm");
-		} else if ($registrationDataUser->user_property == "couple") {
-			$registrationDataCouple->user_property = 'man';
+		} else if ($registrationDataUser->user_property == "c") {
+			$registrationDataCouple->user_property = 'm';
 			$this->setView("thirdRegWomanForm");
-		} else if ($registrationDataUser->user_property == "coupleMan") {
-			$registrationDataCouple->user_property = 'man';
+		} else if ($registrationDataUser->user_property == "cm") {
+			$registrationDataCouple->user_property = 'm';
 			$this->setView("thirdRegManForm");
 		}
 	}
@@ -116,9 +116,9 @@ class DatingRegistrationPresenter extends BasePresenter {
 
 		$registrationDataUser->firstMemberId = $user->id;
 
-		if ($registrationDataUser->user_property == "coupleWoman") {
+		if ($registrationDataUser->user_property == "cw") {
 			$this->redirect("DatingRegistration:fourthRegWomanForm");
-		} else if ($registrationDataUser->user_property == "coupleMan" || $registrationDataUser->user_property == "couple") {
+		} else if ($registrationDataUser->user_property == "cm" || $registrationDataUser->user_property == "c") {
 			$this->redirect("DatingRegistration:fourthRegManForm");
 		} else {
 			/* dokončení registrace */
