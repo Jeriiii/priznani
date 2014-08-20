@@ -77,7 +77,8 @@
 
 	}
 	/* Posle na server ajaxovy pozadavek (dotaz) na nove zpravy
-	 * Zaroven posila zpravy o precteni
+	 * Zaroven posila informace o tom, které zprávy si uživatel přečetl
+	 * a tudíž se mají označit za přečtené.
 	 * @param waitTime aktualni hodnota casu, po ktery se cekalo na zavolani
 	 * */
 	function sendRefreshRequest(waitTime) {
