@@ -1,7 +1,9 @@
 /*
  * @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
  */
-
+/**
+ * Stará se o okénka pro odeslání zprávy do chatu, o jeho vyvolání, skrytí a správné vykreslení
+ */
 $(function() {
 	$("#sendmessage-dialog").dialog({
 		autoOpen: false,
