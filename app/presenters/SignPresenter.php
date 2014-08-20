@@ -22,10 +22,19 @@ class SignPresenter extends BasePresenter {
 	public $userDao;
 
 	/**
+	 * @var \POS\Model\UserChangePasswordDao
+	 * @inject
+	 */
+	public $userChangePasswordDao;
+
+	/**
 	 * @var \Nette\Mail\IMailer
 	 * @inject
 	 */
 	public $mailer;
+
+	/* uživatel pro práci se změnou hesla */
+	public $userForPassChange;
 
 	public function startup() {
 		parent::startup();
@@ -46,12 +55,21 @@ class SignPresenter extends BasePresenter {
 		}
 	}
 
-	/**
-	 * Sign in form component factory.
-	 * @return Nette\Application\UI\Form
-	 */
-	protected function createComponentSignInForm($name) {
-		return new Frm\signInForm($this, $name);
+	public function actionChangePassword($ticket) {
+		$dbData = $this->userChangePasswordDao->findTicket($ticket);
+		$date = new Nette\DateTime();
+		$date->modify('-7 days');
+
+		if (!$dbData) {
+			$this->flashMessage("Žádost o nové heslo nebyla nalezena, odešlete prosím novou.", "info");
+			$this->redirect("Sign:forgottenPass");
+		}
+		if ($dbData->create < $date) {
+			$this->flashMessage("Žádost o nové heslo je příliš stará, odešlete prosím novou.", "info");
+			$this->redirect("Sign:forgottenPass", array("email" => $dbData->user->email));
+		}
+
+		$this->userForPassChange = $dbData->user;
 	}
 
 	public function actionOut() {
@@ -61,12 +79,24 @@ class SignPresenter extends BasePresenter {
 		$this->redirect('Sign:in');
 	}
 
+	/**
+	 * Sign in form component factory.
+	 * @return Nette\Application\UI\Form
+	 */
+	protected function createComponentSignInForm($name) {
+		return new Frm\signInForm($this, $name);
+	}
+
 	protected function createComponentRegistrationForm($name) {
 		return new Frm\registrationForm($this->userDao, $this->mailer, $this, $name);
 	}
 
 	protected function createComponentForgottenPasswordForm($name) {
-		return new Frm\forgottenPasswordForm($this->userDao, $this->mailer, $this, $name);
+		return new Frm\forgottenPasswordForm($this->userChangePasswordDao, $this->userDao, $this->mailer, $this, $name);
+	}
+
+	protected function createComponentChangePasswordForm($name) {
+		return new Frm\ChangePasswordForm($this->userDao, $this->userChangePasswordDao, $this->userForPassChange, $this->mailer, $this, $name);
 	}
 
 }
