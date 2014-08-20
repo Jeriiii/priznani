@@ -76,14 +76,15 @@ class DatabaseManager {
 	 */
 	function initScripts() {
 		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$ON_START_FOLDER_NAME);
-		$installDB = new InstallDB($this->databaseDao);
-		//$installDB->dataPostestDb();
 	}
 
 	/**
 	 * Executes scripts from feature start folder
 	 */
 	function featureStartScripts() {
+		$installDB = new InstallDB($this->databaseDao);
+		//$installDB->instalPostestDb();
+		$installDB->dataTestDb();
 		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_START_FOLDER_NAME);
 	}
 

@@ -153,8 +153,8 @@ class FeatureContext extends MinkContext {
 	 */
 	public function iLookOnThePage() {
 		$html = $this->getSession()->getDriver()->getContent();
-
-		throw new PendingException($this->screenshotManager->saveHtml($html));
+		$baseUrl = $this->getMinkParameter('base_url');
+		throw new PendingException($this->screenshotManager->getHtmlLink($html, $baseUrl));
 	}
 
 	/**

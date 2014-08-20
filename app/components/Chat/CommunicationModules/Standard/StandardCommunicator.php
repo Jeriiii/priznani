@@ -10,7 +10,8 @@ use \Nette\Utils\Json;
 use POS\Model\ChatMessagesDao;
 
 /**
- * Slouží přímo ke komunikaci mezi uživateli
+ * Slouží přímo ke komunikaci mezi serverem a prohlížečem, zpracovává
+ * požadavky a vrací odpovědi. Veškerá komunikace ajaxem probíhá zde.
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
@@ -47,12 +48,12 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * Zpracuje poslani zpravy zaslane prohlizecem ve formatu JSON
 	 */
 	public function handleSendMessage() {
-		$json = file_get_contents("php://input");
-		$data = Json::decode($json); //prijata zprava
+		$json = file_get_contents("php://input"); //vytánutí všech dat z POST požadavku - data ve formátu JSON
+		$data = Json::decode($json); //prijata zprava dekodovana z JSONu
 		if ($data && !empty($data) && $data->type == 'textMessage') {//ulozeni zpravy do DB
-			$sender = $this->getPresenter()->getUser()->getId();
+			$senderId = $this->getPresenter()->getUser()->getId();
 			$data->to = (int) $this->chatManager->getCoder()->decodeData($data->to); //dekodovani id
-			$message = $this->chatManager->sendTextMessage($sender, $data->to, $data->text); //ulozeni zpravy
+			$message = $this->chatManager->sendTextMessage($senderId, $data->to, $data->text); //ulozeni zpravy
 			if ($this->isActualUserPaying()) {//pokud je uzivatel platici
 				$this->registerInfoAboutDelivery($data->to, $message->offsetGet(ChatMessagesDao::COLUMN_ID));
 			}
@@ -104,7 +105,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	/**
 	 * Pošle uživateli JSON, obsahující informace o nových zprávách apod.
 	 * Vrací odpověď prohlížeči, vykonání kódu na serveru zde končí.
-	 * @param \Nette\Database\Table\Selection $newMessages nove zpravy
+	 * @param int $lastId id poslední známé zprávy
 	 */
 	public function sendRefreshResponse($lastId = 0) {
 		$userId = $this->getPresenter()->getUser()->getId();

@@ -114,6 +114,7 @@ class ShowProfHelper {
 
 		$href = $this->link($href);
 		$elLink->href($href);
+		$elLink->title($user->user_name);
 
 		return $elLink;
 	}
