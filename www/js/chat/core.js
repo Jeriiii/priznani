@@ -7,7 +7,7 @@
 (function($) {
 
 	/* nastavení */
-	var opts;
+	var chatopts;
 
 	/* detekce, zda byla poslana zprava*/
 	var messageSent = false;
@@ -15,13 +15,13 @@
 
 	/* main */
 	$.fn.chat = function(options) {
-		var opts = $.extend({}, $.fn.chat.defaults, options);
-		setOpts(opts);
+		var chatopts = $.extend({}, $.fn.chat.defaults, options);
+		setChatOpts(chatopts);
 		initializeChatboxManager();
 		initializeContactList();
 		initializeConversationList();
 		reloadWindowUnload();
-		setWaitTime(opts.minRequestTimeout);
+		setWaitTime(chatopts.minRequestTimeout);
 		refreshMessages(0);
 	};
 
@@ -67,7 +67,7 @@
 	 * */
 	function refreshMessages(waitTime) {
 		if (messageSent) {//pokud byla ted nekdy odeslana zprava
-			waitTime = this.opts.minRequestTimeout;
+			waitTime = this.chatopts.minRequestTimeout;
 			messageSent = false;
 		}
 		setTimeout(function() {
@@ -81,7 +81,7 @@
 	 * @param waitTime aktualni hodnota casu, po ktery se cekalo na zavolani
 	 * */
 	function sendRefreshRequest(waitTime) {
-		var opts = this.opts;
+		var chatopts = this.chatopts;
 		var data = {
 			'chat-communicator-lastid': $.fn.chat.lastId,
 			'chat-communicator-readedmessages': JSON.stringify($.fn.chat.readedQueue)
@@ -118,7 +118,7 @@
 			}
 			refreshMessages(waitTime);
 		}).fail(function() {
-			refreshMessages(opts.failResponseTimeout);
+			refreshMessages(chatopts.failResponseTimeout);
 		});
 	}
 
@@ -129,19 +129,19 @@
 	 * @returns {undefined}
 	 */
 	function sendRefreshGet(data) {
-		var opts = this.opts;
+		var chatopts = this.chatopts;
 		$.getJSON(refreshMessagesLink, data, function(jsondata) {
 			if ($.isEmptyObject(jsondata)) {
-				waitTime = Math.min(waitTime + opts.timeoutStep, opts.maxRequestTimeout);
+				waitTime = Math.min(waitTime + chatopts.timeoutStep, chatopts.maxRequestTimeout);
 				//console.log("CHAT - no new data - request timeout is now: " + waitTime);//pro debug
 			} else {
 				handleResponse(jsondata);
-				waitTime = opts.minRequestTimeout;
+				waitTime = chatopts.minRequestTimeout;
 				//console.log("CHAT - data arrived - request timeout is now: " + waitTime);//pro debug
 			}
 			refreshMessages(waitTime);
 		}).fail(function() {
-			refreshMessages(opts.failResponseTimeout);
+			refreshMessages(chatopts.failResponseTimeout);
 		});
 	}
 
@@ -156,10 +156,10 @@
 	}
 	/**
 	 * Nastaveni options
-	 * @param opts nastaveni k nastaveni
+	 * @param chatopts nastaveni k nastaveni
 	 */
-	function setOpts(opts) {
-		this.opts = opts;
+	function setChatOpts(chatopts) {
+		this.chatopts = chatopts;
 	}
 
 	/**
@@ -241,10 +241,10 @@
 	function initializeChatboxManager() {
 		chatboxManager.init({//chatbox manager pro spravu okenenek
 			messageSent: sendMessage,
-			width: this.opts.boxWidth,
-			gap: this.opts.boxMargin,
-			maxBoxes: this.opts.maxBoxes,
-			offset: this.opts.rightMargin
+			width: this.chatopts.boxWidth,
+			gap: this.chatopts.boxMargin,
+			maxBoxes: this.chatopts.maxBoxes,
+			offset: this.chatopts.rightMargin
 		});
 	}
 
@@ -253,11 +253,11 @@
 	 */
 	function initializeContactList() {
 		//console.log('CHAT - initializing contact list');//pro debug
-		var opts = this.opts;
-		$(this.opts.contactListItems).click(function(event) {//click event na polozkach seznamu
+		var chatopts = this.chatopts;
+		$(this.chatopts.contactListItems).click(function(event) {//click event na polozkach seznamu
 			event.preventDefault();
-			var id = $(this).attr(opts.idAttribute);
-			addBox(id, $(this).attr(opts.titleAttribute));
+			var id = $(this).attr(chatopts.idAttribute);
+			addBox(id, $(this).attr(chatopts.titleAttribute));
 		});
 
 
@@ -267,11 +267,11 @@
 	 * Inicializace seznamu konverzaci
 	 */
 	function initializeConversationList() {
-		var opts = this.opts;
-		$(this.opts.conversationListItems).click(function(event) {//click event na polozkach seznamu
+		var chatopts = this.chatopts;
+		$(this.chatopts.conversationListItems).click(function(event) {//click event na polozkach seznamu
 			event.preventDefault();
-			var id = $(this).attr(opts.idAttribute);
-			addBox(id, $(this).attr(opts.titleAttribute));
+			var id = $(this).attr(chatopts.idAttribute);
+			addBox(id, $(this).attr(chatopts.titleAttribute));
 		});
 	}
 
@@ -287,7 +287,7 @@
 		if (!(listItem.length > 0)) {//pokud v konverzacich neni zaznam
 			var conList = $('#conversations ul');
 			var newListItem = '<li data-id="' + id + '" data-title="' + name + '" class="conversation-link">\n\
-				<strong>' + name + '</strong><p class="lastmessage">' + text + '</p></li>';
+			<strong>' + name + '</strong><p class="lastmessage">' + text + '</p></li>';
 			conList.prepend(newListItem);//prida se do seznamu
 		} else {
 			listItem.removeClass('unreaded');//aktualizuje se po zobrazeni zpravy
@@ -306,7 +306,7 @@
 		var data = {
 			'chat-communicator-fromId': id
 		};
-		var opts = this.opts;
+		var chatopts = this.chatopts;
 		blockWindowUnload('Ještě se načítají zprávy, opravdu chcete odejít?');
 		$.getJSON(loadMessagesLink, data, function(jsondata) {
 			handleResponse(jsondata);
