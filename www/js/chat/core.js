@@ -171,9 +171,11 @@
 	}
 
 	/**
-	 * Posila zpravu na server. Vola se automaticky pro odeslani zpravy v okenku
+	 * Posila zpravu na server. Vola se automaticky pro odeslani zpravy v okenku chatboxu
+	 * jako callback k odeslání zprávy (pomocí enteru etc).
 	 * @param {int|String} id
-	 * @param {Object} data data souvisejici s okenkem
+	 * @param {Object} data data souvisejici s okenkem z chatbox.js - napriklad titulek okenka apod.
+	 * předává je chatboxManager
 	 * @param {String} msg
 	 */
 	function sendMessage(id, data, msg) {
