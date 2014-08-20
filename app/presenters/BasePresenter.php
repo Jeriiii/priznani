@@ -336,7 +336,27 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 	public function createComponentJsLayout() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
-		$files->addFiles(array('iedebug.js', 'baseAjax.js', 'order.js', 'fbBase.js', 'leftMenu.js'));
+		$files->addFiles(array('iedebug.js', 'baseAjax.js', 'order.js', 'fbBase.js', 'leftMenu.js', 'user-layout-menu.js'));
+
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+		$compiler->addFilter(function ($code) {
+			$packer = new JavaScriptPacker($code, "None");
+			return $packer->pack();
+		});
+
+		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+
+	public function createComponentJsLayoutLoggedIn() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
+		$files->addFiles(array(
+			'activities.js',
+			'chat/core.js',
+			'chat/init.js',
+			'chat/jquery.ui.chatbox/jquery.ui.chatbox.js',
+			'chat/jquery.ui.chatbox/chatboxManager.js'
+		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {

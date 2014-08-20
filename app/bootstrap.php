@@ -13,9 +13,10 @@ require __DIR__ . '/../vendor/Nette/loader.php';
 
 $configurator = new Nette\Configurator;
 
-//$configurator->setDebugMode(TRUE);  // debug mode MUST NOT be enabled on production server
+//$configurator->setDebugMode(FALSE);  // zapne produkci
 // Enable Nette Debugger for error visualisation & logging
 //$configurator->setProductionMode($configurator::AUTO);
+
 $configurator->enableDebugger(__DIR__ . '/../log');
 
 // Enable RobotLoader - this will load all classes automatically
@@ -85,6 +86,11 @@ Container::extensionMethod('addDateTimePicker', function (Container $_this, $nam
 	return $_this[$name] = new Nette\Extras\DateTimePicker($label, $cols, $maxLength);
 });
 Kdyby\BootstrapFormRenderer\DI\RendererExtension::register($configurator);
+
+// Na PRODUKCI se nastaví odchytávání vyjímek
+if (!$configurator->isDebugMode()) {
+	$container->application->catchExceptions = TRUE;
+}
 
 return $container;
 

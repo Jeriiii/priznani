@@ -36,11 +36,11 @@ abstract class UserBaseDao extends AbstractDao {
 	protected function getSex($userProperty) {
 		$property = $userProperty->user_property;
 		/* žena */
-		if ($property == "woman" || $property == "couple" || $property == "coupleWoman") {
+		if ($property == "w" || $property == "c" || $property == "cw") {
 			return $this->getWomanData($userProperty);
 		}
 		/* muž */
-		if ($property == "man" || $property == "coupleMan") {
+		if ($property == "m" || $property == "cm") {
 			return $this->getManData($userProperty);
 		}
 		/* skupina */
@@ -254,12 +254,12 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserPropertyOption() {
 		return array(
-			'woman' => 'Žena',
-			'man' => 'Muž',
-			'couple' => 'Pár',
-			'coupleWoman' => 'Pár dvě ženy',
-			'coupleMan' => 'Pár dva muži',
-			'group' => 'Skupina',
+			'w' => 'Žena',
+			'm' => 'Muž',
+			'c' => 'Pár',
+			'cw' => 'Pár dvě ženy',
+			'cm' => 'Pár dva muži',
+			'g' => 'Skupina',
 		);
 	}
 
@@ -268,10 +268,10 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserInterestInOption() {
 		return array(
-			'women' => 'Žena',
-			'men' => 'Muž',
-			'couple' => 'Pár',
-			'group' => 'Skupina',
+			'w' => 'Žena',
+			'm' => 'Muž',
+			'c' => 'Pár',
+			'g' => 'Skupina',
 		);
 	}
 

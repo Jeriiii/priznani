@@ -30,6 +30,15 @@ class UserDao extends UserBaseDao {
 	const COLUMN_ADMIN_SCORE = "admin_score";
 	const COLUMN_CONFIRMED = "confirmed";
 	const COLUMN_PASSWORD = "password";
+
+	/**
+	 * w - women
+	 * m - man
+	 * c - couple
+	 * cw - coupleWomen
+	 * cm - coupleMen
+	 * g - group
+	 */
 	const COLUMN_USER_NAME = "user_name";
 
 	/**
