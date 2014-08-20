@@ -90,8 +90,8 @@
 		$.fn.chat.readedQueue = new Array();//vyprazdneni fronty
 
 
-		if ($.fn.chat.lastId == 0) {
-			sendFirstRefreshGet();
+		if ($.fn.chat.lastId == 0) {//pokud posledni id zpravy neexistuje (ještě žádné zprávy nejsou k dispozici)
+			sendFirstRefreshGet();//zjistí id poslední relevantní zprávy
 		} else {
 			sendRefreshGet(data);
 		}
