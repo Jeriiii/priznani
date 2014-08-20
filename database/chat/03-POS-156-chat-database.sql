@@ -1,4 +1,5 @@
 
+/* vytvoří tabulku na zprávy i s komentáři*/
 -- Dumping structure for table pos.chat_messages
 CREATE TABLE IF NOT EXISTS `chat_messages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

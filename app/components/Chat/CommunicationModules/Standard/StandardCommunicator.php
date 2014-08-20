@@ -8,6 +8,7 @@ namespace POSComponent\Chat;
 
 use \Nette\Utils\Json;
 use POS\Model\ChatMessagesDao;
+use Nette\Database\Table\IRow;
 
 /**
  * Slouží přímo ke komunikaci mezi serverem a prohlížečem, zpracovává
@@ -50,7 +51,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	public function handleSendMessage() {
 		$json = file_get_contents("php://input"); //vytánutí všech dat z POST požadavku - data ve formátu JSON
 		$data = Json::decode($json); //prijata zprava dekodovana z JSONu
-		if ($data && !empty($data) && $data->type == 'textMessage') {//ulozeni zpravy do DB
+		if (!empty($data) && $data->type == 'textMessage') {//ulozeni zpravy do DB
 			$senderId = $this->getPresenter()->getUser()->getId();
 			$data->to = (int) $this->chatManager->getCoder()->decodeData($data->to); //dekodovani id
 			$message = $this->chatManager->sendTextMessage($senderId, $data->to, $data->text); //ulozeni zpravy
@@ -93,11 +94,11 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		$userId = $this->getPresenter()->getUser()->getId();
 		$session = $this->getPresenter()->getSession('ispaying' . $userId);
 		$session->setExpiration(0);
-		if ($session->offsetExists('isPaying')) { //kdyz je v session
-			return $session->offsetGet('isPaying'); //vrati hodnotu
+		if ($session->isPaying) { //kdyz je v session
+			return $session->isPaying; //vrati hodnotu
 		} else {   //kdyz ne
 			$paying = $this->chatManager->isUserPaying($userId); //podiva se do db
-			$session->offsetSet('isPaying', $paying);   //ulozi do session
+			$session->isPaying = $paying;   //ulozi do session
 			return $paying; //a vrati hodnotu
 		}
 	}
@@ -122,23 +123,23 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	}
 
 	/**
-	 * Převede výběr z tabulky na pole, kterému bude možné odeslat zpět prohlížeči
-	 * @param Selection $selection vyber z tabulky
-	 * @return array pole ve formatu pro JSON
+	 * Převede výběr z tabulky zpráv na pole, které bude možné odeslat zpět prohlížeči
+	 * @param Selection $messages vyber z tabulky chat_messages
+	 * @return array pole ve formatu pro JSON ve tvaru dokumentace chatu
 	 */
-	private function prepareResponseArray($selection) {
-		$array = array();
-		foreach ($selection as $row) {
-			$user = $this->getRelatedUser($row);
-			$userCoded = $this->chatManager->getCoder()->encodeData($user);
-			if (!array_key_exists($userCoded, $array)) {//pokud je tohle prvni zprava od tohoto uzivatele
-				$name = $this->getUsername($user); //pribaleni uzivatelskeho jmena uzivatele, s kterym komunikuji
-				$array[$userCoded] = array('name' => $name, 'messages' => array()); //pak vytvori pole na zpravy od tohoto uzivatele
+	private function prepareResponseArray($messages) {
+		$responseArray = array();
+		foreach ($messages as $message) {
+			$userId = $this->getRelatedUserId($message);
+			$userIdCoded = $this->chatManager->getCoder()->encodeData($userId);
+			if (!array_key_exists($userIdCoded, $responseArray)) {//pokud je tohle prvni zprava od tohoto uzivatele
+				$name = $this->getUsername($userId); //pribaleni uzivatelskeho jmena uzivatele, s kterym komunikuji
+				$responseArray[$userIdCoded] = array('name' => $name, 'messages' => array()); //pak vytvori pole na zpravy od tohoto uzivatele
 			}
-			array_push($array[$userCoded]['messages'], $this->modifyResponseRowToArray($row)); //do pole pod klicem odesilatele v poli $array vlozi pole se zpravou
-			usort($array[$userCoded]['messages'], array($this, 'messageSort')); //seřadí zprávy
+			$responseArray[$userIdCoded]['messages'][] = $this->modifyResponseRowToArray($message); //do pole pod klicem odesilatele v poli $responseArray vlozi pole se zpravou
+			usort($responseArray[$userIdCoded]['messages'], array($this, 'messageSort')); //seřadí zprávy
 		}
-		return $array;
+		return $responseArray;
 	}
 
 	/**
@@ -157,31 +158,31 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * Vrátí id  uživatele, který vzhledem k přihlášenému
 	 * uživateli souvisí s danou zprávou (například pokud si píšu s id 80, vrátí id 80,
 	 * ať už jsem psal já jenmu nebo on mně)
-	 * @param \Nette\Database\Table\IRow $row zpráva
+	 * @param \Nette\Database\Table\IRow $message zpráva
 	 * @return int id souvisejícíhouživatele
 	 */
-	private function getRelatedUser($row) {
+	private function getRelatedUserId($message) {
 		$userId = $this->getPresenter()->getUser()->getId();
-		$relatedUser = $row->offsetGet(ChatMessagesDao::COLUMN_ID_SENDER); //ziskani id odesilatele
-		if ($relatedUser == $userId) {//pokud je prihlaseny user odesilatel
-			$relatedUser = $row->offsetGet(ChatMessagesDao::COLUMN_ID_RECIPIENT); //pak je souvisejici uzivatel prijemce
+		$relatedUserId = $message->offsetGet(ChatMessagesDao::COLUMN_ID_SENDER); //ziskani id odesilatele
+		if ($relatedUserId == $userId) {//pokud je prihlaseny user odesilatel
+			$relatedUserId = $message->offsetGet(ChatMessagesDao::COLUMN_ID_RECIPIENT); //pak je souvisejici uzivatel prijemce
 		}
-		return $relatedUser;
+		return $relatedUserId;
 	}
 
 	/**
 	 * Modifikuje řádek z pole, které se vrací prohlížeči
-	 * @param \Nette\Database\Table\IRow $row
+	 * @param \Nette\Database\Table\IRow $message
 	 * @return array pole
 	 */
-	private function modifyResponseRowToArray(\Nette\Database\Table\IRow $row) {
-		$rowArray = $row->toArray();
-		$rowArray['name'] = $this->getUsername($rowArray[ChatMessagesDao::COLUMN_ID_SENDER]); //pribaleni uzivatelskeho jmena uzivatele, ktery poslal zpravu
+	private function modifyResponseRowToArray(IRow $message) {
+		$messageArray = $message->toArray();
+		$messageArray['name'] = $this->getUsername($messageArray[ChatMessagesDao::COLUMN_ID_SENDER]); //pribaleni uzivatelskeho jmena uzivatele, ktery poslal zpravu
 		//pozn. muze to byt jiny uzivatel nez ten, s kterym si pisu (typicky ja)
-		unset($rowArray[ChatMessagesDao::COLUMN_ID_SENDER]); //id odesilatele je uz v prvnim klici pole
-		unset($rowArray[ChatMessagesDao::COLUMN_ID_RECIPIENT]);  //neposila uzivateli jeho vlastni id
-		unset($rowArray[ChatMessagesDao::COLUMN_READED]);  //neposila zbytecnou informaci
-		return $rowArray;
+		unset($messageArray[ChatMessagesDao::COLUMN_ID_SENDER]); //id odesilatele je uz v prvnim klici pole
+		unset($messageArray[ChatMessagesDao::COLUMN_ID_RECIPIENT]);  //neposila uzivateli jeho vlastni id
+		unset($messageArray[ChatMessagesDao::COLUMN_READED]);  //neposila zbytecnou informaci
+		return $messageArray;
 	}
 
 	/**

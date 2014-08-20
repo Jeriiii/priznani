@@ -7,8 +7,8 @@
 namespace POS\Model;
 
 /**
- * NAME DAO NAMEDao
- * slouží k
+ * Slouží k práci se zprávami chatu v databázi.
+ * Zajištuje jejich ukládání, různé způsobi načítání, aktualizaci stavu apod.
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */

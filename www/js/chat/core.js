@@ -3,11 +3,14 @@
  * @author Jan Kotalík
  */
 
+/**
+ * Jádro celého chatu - klientská část. Tento plugin zajišťuje klientskou funkci chatu
+ */
 ;
 (function($) {
 
 	/* nastavení */
-	var opts;
+	var chatopts;
 
 	/* detekce, zda byla poslana zprava*/
 	var messageSent = false;
@@ -15,13 +18,13 @@
 
 	/* main */
 	$.fn.chat = function(options) {
-		var opts = $.extend({}, $.fn.chat.defaults, options);
-		setOpts(opts);
+		var chatopts = $.extend({}, $.fn.chat.defaults, options);
+		setChatOpts(chatopts);
 		initializeChatboxManager();
 		initializeContactList();
 		initializeConversationList();
 		reloadWindowUnload();
-		setWaitTime(opts.minRequestTimeout);
+		setWaitTime(chatopts.minRequestTimeout);
 		refreshMessages(0);
 	};
 
@@ -31,43 +34,44 @@
 	/* objekt obsahující potvrzení o přečtení (předtím, než se odešlou) */
 	$.fn.chat.readedQueue = new Array();
 
-
+	/* implicitní hodnoty nastavení pluginu */
 	$.fn.chat.defaults = {
-		minRequestTimeout: 1000,
 		/* minimální čekání mezi zasíláním požadavků. Této hodnoty dosáhne chat při aktivním používání */
-		maxRequestTimeout: 8000,
+		minRequestTimeout: 1000,
 		/* maximální čekání mezi zasíláním požadavků na nové zprávy. Této hodnoty postupně dosáhne neaktivní chat. */
-		failResponseTimeout: 10000,
+		maxRequestTimeout: 8000,
 		/* pokud selže požadavek, toto je doba čekání, po které se to zkusí znovu */
-		timeoutStep: 500,
+		failResponseTimeout: 10000,
 		/* o kolik se zvýší čekání při přijetí prázdné odpovědi */
-		contactListItems: '.contact-link',
+		timeoutStep: 500,
 		/* selektor pro položku (jméno) na seznamu kontaktů */
-		conversationListItems: '.conversation-link',
+		contactListItems: '.contact-link',
 		/* selektor pro položku (jméno) na seznamu konverzací */
-		idAttribute: 'data-id',
+		conversationListItems: '.conversation-link',
 		/* atribut položky seznamu kontaktů a konverzací, kde je ID kontaktu (cizího uživatele) */
-		boxContainerSelector: '#contact-boxes',
+		idAttribute: 'data-id',
 		/* selector pro objekt, kde se budou vyvtaret okenka */
-		titleAttribute: 'data-title',
+		boxContainerSelector: '#contact-boxes',
 		/* pod kterym atributem u polozky seznamu je text, ktery se ma zobrazit v titulku okenka*/
-		boxWidth: 250,
+		titleAttribute: 'data-title',
 		/* sirka okenka s chatem [px] */
-		boxMargin: 30,
+		boxWidth: 250,
 		/* mezera mezi okenky [px] */
-		maxBoxes: 8,
+		boxMargin: 30,
 		/* maximalni pocet okenek na obrazovce */
+		maxBoxes: 8,
+		/* odsazeni od prave casti stranky [px] */
 		rightMargin: 260
-				/* odsazeni od prave casti stranky [px] */
 
 	};
 
-	/** pravidelne obnovuje stav prichozich zprav
+	/**
+	 * Pravidelně obnovuje stav příchozích zpráv
 	 * @param waitTime cas, ktery bude cekat pred refreshem
 	 * */
 	function refreshMessages(waitTime) {
 		if (messageSent) {//pokud byla ted nekdy odeslana zprava
-			waitTime = this.opts.minRequestTimeout;
+			waitTime = this.chatopts.minRequestTimeout;
 			messageSent = false;
 		}
 		setTimeout(function() {
@@ -76,12 +80,14 @@
 		}, waitTime);
 
 	}
-	/* Posle na server ajaxovy pozadavek (dotaz) na nove zpravy
-	 * Zaroven posila zpravy o precteni
-	 * @param waitTime aktualni hodnota casu, po ktery se cekalo na zavolani
+	/**
+	 * Pošle na server ajaxový požadavek (dotaz) na nové zprávy
+	 * Zaroven posílá informace o tom, které zprávy si uživatel přečetl
+	 * a tudíž se mají označit za přečtené.
+	 * @param waitTime aktualní hodnota času, po který se čekalo na zavolání
 	 * */
 	function sendRefreshRequest(waitTime) {
-		var opts = this.opts;
+		var chatopts = this.chatopts;
 		var data = {
 			'chat-communicator-lastid': $.fn.chat.lastId,
 			'chat-communicator-readedmessages': JSON.stringify($.fn.chat.readedQueue)
@@ -89,8 +95,8 @@
 		$.fn.chat.readedQueue = new Array();//vyprazdneni fronty
 
 
-		if ($.fn.chat.lastId == 0) {
-			sendFirstRefreshGet();
+		if ($.fn.chat.lastId == 0) {//pokud posledni id zpravy neexistuje (ještě žádné zprávy nejsou k dispozici)
+			sendFirstRefreshGet();//zjistí id poslední relevantní zprávy
 		} else {
 			sendRefreshGet(data);
 		}
@@ -99,7 +105,10 @@
 
 	/**
 	 * Pošle požadavek s žádostí o refresh a upraví podle toho čas timeout.
-	 * Počítá s tím, že je požadavek první a podle toho bude zacházet s odpovědí.
+	 * Počítá s tím, že je požadavek první a slouží pro prvotní zjištění ID
+	 * poslední zprávy. Zprávy z odpovědi jako takové zahazuje a použije pouze id.
+	 * Nastaví id poslední zprávy. Pokud nic nepřijde, nastaví co nejmenší ID,
+	 * které dává smysl.
 	 * Poté zajistí další zavolání refreshe.
 	 */
 	function sendFirstRefreshGet() {
@@ -118,62 +127,64 @@
 			}
 			refreshMessages(waitTime);
 		}).fail(function() {
-			refreshMessages(opts.failResponseTimeout);
+			refreshMessages(chatopts.failResponseTimeout);
 		});
 	}
 
 	/**
 	 * Pošle požadavek s žádostí o refresh a upraví podle toho čas timeout.
-	 * Poté zajistí další zavolání refreshe.
-	 * @param {type} data
-	 * @returns {undefined}
+	 * Poté zajistí další zavolání refreshe. Příchozí data jsou standardně
+	 * zpracována pomocí funkce handleResponse.
+	 * @param {Object} data k odeslání
 	 */
 	function sendRefreshGet(data) {
-		var opts = this.opts;
+		var chatopts = this.chatopts;
 		$.getJSON(refreshMessagesLink, data, function(jsondata) {
 			if ($.isEmptyObject(jsondata)) {
-				waitTime = Math.min(waitTime + opts.timeoutStep, opts.maxRequestTimeout);
+				waitTime = Math.min(waitTime + chatopts.timeoutStep, chatopts.maxRequestTimeout);
 				//console.log("CHAT - no new data - request timeout is now: " + waitTime);//pro debug
 			} else {
 				handleResponse(jsondata);
-				waitTime = opts.minRequestTimeout;
+				waitTime = chatopts.minRequestTimeout;
 				//console.log("CHAT - data arrived - request timeout is now: " + waitTime);//pro debug
 			}
 			refreshMessages(waitTime);
 		}).fail(function() {
-			refreshMessages(opts.failResponseTimeout);
+			refreshMessages(chatopts.failResponseTimeout);
 		});
 	}
 
 
 	/**
-	 * Nastavi zpravu jako prectenou (to se automaticky projevi po dalsim
+	 * Nastaví zprávu jako přečtenou (to se automaticky projeví po dalším
 	 * refreshRequestu i na serveru)
-	 * @param {int} id
+	 * @param {int} id zprávy
 	 */
 	function setReaded(id) {
 		$.fn.chat.readedQueue.push(id);
 	}
 	/**
-	 * Nastaveni options
-	 * @param opts nastaveni k nastaveni
+	 * Nastavení options
+	 * @param chatopts nastaveni k nastaveni
 	 */
-	function setOpts(opts) {
-		this.opts = opts;
+	function setChatOpts(chatopts) {
+		this.chatopts = chatopts;
 	}
 
 	/**
-	 * Nastaveni cas cekani na pocatecni hodnotu
-	 * @param {int} time cas k nastaveni
+	 * Nastavení času čekání na počáteční hodnotu
+	 * @param {int} time čas k nastavení
 	 */
 	function setWaitTime(time) {
 		waitTime = time;
 	}
 
 	/**
-	 * Posila zpravu na server. Vola se automaticky pro odeslani zpravy v okenku
+	 * Posílá zpravu na server. Volá se automaticky pro odeslaní zprávy v okénku chatboxu
+	 * jako callback k odeslání zprávy (pomocí enteru etc).
 	 * @param {int|String} id
-	 * @param {Object} data data souvisejici s okenkem
+	 * @param {Object} data data související s okénkem z chatbox.js - například titulek okna apod.
+	 * předává je chatboxManager
 	 * @param {String} msg
 	 */
 	function sendMessage(id, data, msg) {
@@ -192,9 +203,9 @@
 	}
 	;
 	/**
-	 * Pomoci AJAXU konvertuje data do formatu JSON a posle je na danou adresu
-	 * @param {String} url data, ktera se maji poslat
-	 * @param {Object} data poslana data
+	 * Pomocí AJAXU konvertuje data do formátu JSON a pošle je na danou adresu
+	 * @param {String} url data, která se mají poslat
+	 * @param {Object} data poslaná data
 	 */
 	function sendDataByPost(url, data) {
 		var json = JSON.stringify(data);
@@ -214,7 +225,7 @@
 	}
 
 	/**
-	 * Zpracuje odpoved serveru. Priklad toho, jak maji vypadat data v jsonu, najdete v dokumentaci
+	 * Zpracuje odpověď serveru. Příklad toho, jak mají vypadat data v jsonu, najdete v dokumentaci
 	 * @param {Object} json data ze serveru, DEKODOVANY JSON
 	 *
 	 */
@@ -236,42 +247,42 @@
 	}
 
 	/**
-	 * Inicializace spravce okenek
+	 * Inicializace správce okének
 	 */
 	function initializeChatboxManager() {
 		chatboxManager.init({//chatbox manager pro spravu okenenek
 			messageSent: sendMessage,
-			width: this.opts.boxWidth,
-			gap: this.opts.boxMargin,
-			maxBoxes: this.opts.maxBoxes,
-			offset: this.opts.rightMargin
+			width: this.chatopts.boxWidth,
+			gap: this.chatopts.boxMargin,
+			maxBoxes: this.chatopts.maxBoxes,
+			offset: this.chatopts.rightMargin
 		});
 	}
 
 	/**
-	 * Inicializace seznamu kontaktu - poveseni click eventu etc.
+	 * Inicializace seznamu kontaktů - pověšení click eventů etc.
 	 */
 	function initializeContactList() {
 		//console.log('CHAT - initializing contact list');//pro debug
-		var opts = this.opts;
-		$(this.opts.contactListItems).click(function(event) {//click event na polozkach seznamu
+		var chatopts = this.chatopts;
+		$(this.chatopts.contactListItems).click(function(event) {//click event na polozkach seznamu
 			event.preventDefault();
-			var id = $(this).attr(opts.idAttribute);
-			addBox(id, $(this).attr(opts.titleAttribute));
+			var id = $(this).attr(chatopts.idAttribute);
+			addBox(id, $(this).attr(chatopts.titleAttribute));
 		});
 
 
 	}
 
 	/**
-	 * Inicializace seznamu konverzaci
+	 * Inicializace seznamu konverzací
 	 */
 	function initializeConversationList() {
-		var opts = this.opts;
-		$(this.opts.conversationListItems).click(function(event) {//click event na polozkach seznamu
+		var chatopts = this.chatopts;
+		$(this.chatopts.conversationListItems).click(function(event) {//click event na polozkach seznamu
 			event.preventDefault();
-			var id = $(this).attr(opts.idAttribute);
-			addBox(id, $(this).attr(opts.titleAttribute));
+			var id = $(this).attr(chatopts.idAttribute);
+			addBox(id, $(this).attr(chatopts.titleAttribute));
 		});
 	}
 
@@ -287,7 +298,7 @@
 		if (!(listItem.length > 0)) {//pokud v konverzacich neni zaznam
 			var conList = $('#conversations ul');
 			var newListItem = '<li data-id="' + id + '" data-title="' + name + '" class="conversation-link">\n\
-				<strong>' + name + '</strong><p class="lastmessage">' + text + '</p></li>';
+			<strong>' + name + '</strong><p class="lastmessage">' + text + '</p></li>';
 			conList.prepend(newListItem);//prida se do seznamu
 		} else {
 			listItem.removeClass('unreaded');//aktualizuje se po zobrazeni zpravy
@@ -299,22 +310,22 @@
 
 
 	/**
-	 * Nacte ajaxem poslednich nekolik zprav do boxu
-	 * @param id id okenka (a uzivatele)
+	 * Načte ajaxem posledních několik zprav do okénka
+	 * @param id id okénka (a užvatele)
 	 */
 	function loadMessagesIntoBox(id) {
 		var data = {
 			'chat-communicator-fromId': id
 		};
-		var opts = this.opts;
+		var chatopts = this.chatopts;
 		blockWindowUnload('Ještě se načítají zprávy, opravdu chcete odejít?');
 		$.getJSON(loadMessagesLink, data, function(jsondata) {
 			handleResponse(jsondata);
 		});
 	}
 
-	/*
-	 * Vytvori nove okno, nebo otevre stavajici. Pokud je pouze zavrene, otevre ho.
+	/**
+	 * Vytvoří nové okno, nebo otevře stávající.
 	 * @param {int|String} id id okna
 	 * @param {String} title titulek okna
 	 * @return {bool} byl vytvoren nove a naplnen poslednimi zpravami
@@ -333,7 +344,7 @@
 
 
 	/**
-	 * Prida zpravu do okna s danym id a okno otevre
+	 * Přidá zprávu do okna s daným id a okno otevře
 	 * @param {int|String} id id okna
 	 * @param {String} boxname s kym si pisu (titulek okna)
 	 * @param {String} name od koho zprava je
