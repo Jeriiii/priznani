@@ -189,7 +189,7 @@
 		this.boxManager.addMsg(mydata.name, msg);//pridani zpravy do okna
 		messageSent = true;
 	}
-	;
+	
 	/**
 	 * Pomoci AJAXU konvertuje data do formatu JSON a posle je na danou adresu
 	 * @param {String} url data, ktera se maji poslat
@@ -348,7 +348,7 @@
 				}
 			});
 			if (unsend) {
-				return 'Máte rozepsaný příspěvek. Chcete tuto stránku opustit a zahodit tak svou práci?';
+				return 'Máte rozepsaný příspěvek. Chcete tuto stránku přesto opustit?';
 				/* hláška, co se objeví při pokusu obnovit/zavřít okno, zatímco má uživatel rozepsanou zprávu */
 			}
 		};
