@@ -12,5 +12,8 @@ namespace POSComponent\Chat;
  */
 interface IConversationList {
 
+	/**
+	 * vykreslí seznam konverzací
+	 */
 	public function render();
 }

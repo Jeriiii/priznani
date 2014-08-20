@@ -12,5 +12,8 @@ namespace POSComponent\Chat;
  */
 interface IContactList {
 
+	/**
+	 * vykreslí seznam kontaktů
+	 */
 	public function render();
 }
