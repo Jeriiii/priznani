@@ -8,6 +8,7 @@ namespace POSComponent\Chat;
 
 use \Nette\Utils\Json;
 use POS\Model\ChatMessagesDao;
+use Nette\Database\Table\IRow;
 
 /**
  * Slouží přímo ke komunikaci mezi serverem a prohlížečem, zpracovává
@@ -174,7 +175,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * @param \Nette\Database\Table\IRow $row
 	 * @return array pole
 	 */
-	private function modifyResponseRowToArray(\Nette\Database\Table\IRow $row) {
+	private function modifyResponseRowToArray(IRow $row) {
 		$rowArray = $row->toArray();
 		$rowArray['name'] = $this->getUsername($rowArray[ChatMessagesDao::COLUMN_ID_SENDER]); //pribaleni uzivatelskeho jmena uzivatele, ktery poslal zpravu
 		//pozn. muze to byt jiny uzivatel nez ten, s kterym si pisu (typicky ja)
