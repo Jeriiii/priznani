@@ -28,6 +28,7 @@ class UserImageDao extends AbstractDao {
 	const COLUMN_DESCRIPTION = "description";
 	const COLUMN_GALLERY_ID = "galleryID";
 	const COLUMN_APPROVED = "approved";
+	const COLUMN_LIKES = "likes";
 
 	/**
 	 * @var \POS\Model\UserGalleryDao
@@ -232,6 +233,23 @@ class UserImageDao extends AbstractDao {
 		$data = Arrays::addVal(self::COLUMN_DESCRIPTION, $descrition, $data);
 
 		parent::update($imageID, $data);
+	}
+
+	/**
+	 * Zvýší počet lajků u obrázků o jednen
+	 * @param int $imageID ID obrázku, kterému zvedneme lajky
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function addLike($imageID) {
+		$sel = $this->getTable();
+		$image = $sel->get($imageID);
+		if (!empty($image)) {
+			$image->update(array(
+				self::COLUMN_LIKES => $image->likes + 1
+			));
+		}
+
+		return $image;
 	}
 
 }
