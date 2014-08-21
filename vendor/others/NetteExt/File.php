@@ -29,13 +29,53 @@ class File extends Object {
 	}
 
 	/**
-	 * Odstraní adresář.
+	 * Odstraní adresář. Adresář musí být prázdný.
 	 * @param type $filePath Celá cesta k adresáři.
 	 * @param type $ifExist Odstraní adresář jen když existuje.
 	 */
 	public static function removeDir($filePath, $ifExist = TRUE) {
 		if ($ifExist && file_exists($filePath)) {
 			rmdir($filePath);
+		}
+	}
+
+	/**
+	 * Vymaže celý obsah složky
+	 * @param string $filePath Celá cesta k adresáři.
+	 */
+	public static function clearDir($filePath) {
+		$objects = scandir($filePath);
+
+		foreach ($objects as $object) {
+			self::removeContentDirOrFile($filePath, $object);
+		}
+	}
+
+	/**
+	 * Odstraní adresář a rekurzivně vše co je v něm.
+	 * @param string $filePath Celá cesta k adresáři.
+	 */
+	public static function recursiveRemoveDir($filePath) {
+		self::clearDir($filePath);
+		rmdir($filePath);
+	}
+
+	/**
+	 * Smaže soubor nebo OBSAH složky. Samotnou složku zachová.
+	 * @param string $path Celá cesta k adresáři ve kterém se object nachází.
+	 * @param string $object Název adresáře či souboru
+	 */
+	private static function removeContentDirOrFile($path, $object) {
+		if ($object != "." && $object != "..") {
+			$filePath = $path . "/" . $object;
+			if (is_dir($filePath)) {
+				/* pokud jde o složku, nejdřív smaže její obsah */
+				self::recursiveRemoveDir($filePath);
+			} else {
+				/* pokud jde o soubor, rovnou ho smaže */
+
+				unlink($filePath);
+			}
 		}
 	}
 

@@ -14,7 +14,7 @@ namespace NetteExt\Install;
  */
 use NetteExt\Install\Messages;
 
-class DirChecker {
+class DirChecker extends \Nette\Object {
 	/* adresáře, které by měli existovat */
 
 	private $dirs = array();

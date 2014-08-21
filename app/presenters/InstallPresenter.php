@@ -6,14 +6,10 @@
  * @author     Petr Kukrál
  * @package    jkbusiness
  */
-use Nette\Utils\Finder;
 use NetteExt\Install\DB\InstallDB;
-use SQLParser\PHPSQLParser;
-use Nette\Database;
-use Nette\Diagnostics\Debugger;
-use Nette\Environment;
 use NetteExt\Install\DirChecker;
 use NetteExt\Install\Messages;
+use NetteExt\Install\ClearCasch;
 
 class InstallPresenter extends BasePresenter {
 
@@ -41,9 +37,23 @@ class InstallPresenter extends BasePresenter {
 		$dirCheker = new DirChecker($messages);
 		$dirCheker->check();
 
+		/* vyčistí cache */
+		$clearCache = new ClearCasch($messages);
+		$clearCache->clearCache();
+
 		/* obnoví kompletně celou DB pos i postest */
 		$instalDB = new InstallDB($this->dbDao, $messages);
 		$instalDB->installAll();
+
+		$messages->flash($this);
+		$this->redirect("Install:");
+	}
+
+	public function actionClearCache() {
+		$messages = new Messages;
+
+		$clearCache = new ClearCasch($messages);
+		$clearCache->clearCache();
 
 		$messages->flash($this);
 		$this->redirect("Install:");
