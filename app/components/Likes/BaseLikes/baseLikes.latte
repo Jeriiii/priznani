@@ -1,0 +1,14 @@
+{snippet}
+	{if $user->isLoggedIn()}
+		{if $liked}
+			Je sexy ({$image->likes})
+		{else}
+			<a class="ajax btn-main" n:href="Sexy! $user->id, $image->id">Sexy ({$image->likes})<a/>
+		{/if}
+	{else}
+		k ohodnocení obrázku se musíte <a href="{plink Sign:in}">přihlásit</a>
+	{/if}
+{/snippet}
+<script>
+	$.nette.init();
+</script>

@@ -61,6 +61,12 @@ class UsersCompetitionsPresenter extends BasePresenter {
 	 */
 	public $streamDao;
 
+	/**
+	 * @var POS\Model\ImageLikesDao
+	 * @inject
+	 */
+	public $imageLikesDao;
+
 	public function actionDefault($imageID, $galleryID) {
 		//určitá galerie
 		if (!empty($galleryID)) {
@@ -145,7 +151,7 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		$images = $this->userImageDao->getAllById($iID);
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
-		return new UsersCompetitionsGallery($images, $this->compImage->image, $this->gallery, $domain, $this->partymode, $this->userImageDao);
+		return new UsersCompetitionsGallery($images, $this->compImage->image, $this->gallery, $domain, $this->partymode, $this->userImageDao, $this->imageLikesDao);
 	}
 
 	/**
