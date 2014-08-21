@@ -27,10 +27,10 @@ class BaseForm extends Form {
 	private $primaryBtnClass = "btn-main medium";
 
 	/** @var string Třída labelu */
-	private $lableClass = "";
+	private $lableClass = "control-label";
 
 	/** @var string Třída inputu */
-	private $inputClass = "";
+	private $inputClass = "controls";
 
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
@@ -55,7 +55,7 @@ class BaseForm extends Form {
 
 		foreach ($this->getControls() as $control) {
 			if ($control instanceof Controls\Button) {
-				$control->getControlPrototype()->addClass(empty($usedPrimary) ? $this->primaryBtnClass : 'btn btn-default');
+				$control->getControlPrototype()->addClass(empty($usedPrimary) ? $this->getPrimaryBtwClass() : 'btn btn-default');
 				$usedPrimary = TRUE;
 			} elseif ($control instanceof Controls\TextBase || $control instanceof Controls\SelectBox || $control instanceof Controls\MultiSelectBox) {
 				$control->getControlPrototype()->addClass('form-control');
@@ -80,6 +80,14 @@ class BaseForm extends Form {
 		$this->lableClass = $this->lableClass . $lableCCols . " " . "control-label";
 		$this->inputClass = $this->inputClass . $inputCCols;
 		$this->formClass = "form-horizontal";
+	}
+
+	/**
+	 * getter vrací class pro primární tlačítko
+	 * @return string Class tlačítka
+	 */
+	protected function getPrimaryBtwClass() {
+		return $this->primaryBtnClass;
 	}
 
 }
