@@ -12,14 +12,14 @@
 				<li class="last"><a href="#tabs-3">Fotky</a></li>
 			</ul>
 			{if $user->isLoggedIn()}
-			<div id="tabs-1">
-				{form statusForm}
-					{input message class=>'form-field', placeholder=>'Napiš co právě děláš...', rows => 3}
-					<div class="submit-container">
-						{input submit class => 'submit-button'}
-					</div>
-				{/form}
-			</div>
+				<div id="tabs-1">
+					{form statusForm}
+						{input message class=>'form-field', placeholder=>'Napiš co právě děláš...', rows => 3}
+						<div class="submit-container">
+							{input submit class => 'submit-button'}
+						</div>
+					{/form}
+				</div>
 			{/if}
 			<div id="tabs-2">
 				{form addConfessionForm class=>'form-container'}
