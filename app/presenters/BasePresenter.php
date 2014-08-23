@@ -13,6 +13,7 @@ use Nette\Application\UI\Form as Frm,
 	\Nette\Utils\Strings,
 	Nette\Http\Url,
 	Nette\Http\Request;
+use Nette\Security\User;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -106,6 +107,29 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 
 		$this->fillJsVariablesWithLinks();
+	}
+
+	/**
+	 * Zkontroluje, zda je uživatel přihlášen. Pokud ne, přesměruje ho na přihlášení.
+	 */
+	protected function checkLoggedIn() {
+		$user = $this->getUser();
+		if (!$user->isLoggedIn()) {
+			if ($user->getLogoutReason() === User::INACTIVITY) {
+				$this->flashMessage('Uplynula doba neaktivity! Systém vás z bezpečnostních důvodů odhlásil.', 'warning');
+			} else {
+				$this->flashMessage('Nejdříve se musíte přihlásit');
+			}
+			$backlink = $this->backlink();
+			$httpRequest = $this->context->getByType('Nette\Http\Request');
+			$query = $httpRequest->getQuery();
+			$this->redirect(':Sign:in', array('backlink' => $backlink, 'backquery' => $query));
+		} else { //kontrola opravnění pro vztup do příslušné sekce
+			if (!$user->isAllowed($this->name, $this->action)) {
+				$this->flashMessage('Nejdříve se musíte přihlásit.', 'warning');
+				$this->redirect(':Homepage:');
+			}
+		}
 	}
 
 	protected function createComponentOrders($name) {

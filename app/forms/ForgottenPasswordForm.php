@@ -36,7 +36,7 @@ class ForgottenPasswordForm extends BaseForm {
 		$this->userDao = $userDao;
 		$this->userChangePasswordDao = $userChangePasswordDao;
 		$this->addText('email', 'Email:', 30, 50);
-		$this->addSubmit('send', 'Získat nové heslo');
+		$this->addSubmit('send', 'Změnit heslo');
 
 		if (!empty($email)) {
 			$this->setDefaults(array("email" => $email));

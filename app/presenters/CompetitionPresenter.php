@@ -83,6 +83,10 @@ class CompetitionPresenter extends BasePresenter {
 		} else {
 			$this->setSexMode();
 		}
+
+		if ($this->action == "uploadCompetitionImage") {
+			$this->checkLoggedIn();
+		}
 	}
 
 	public function beforeRender() {

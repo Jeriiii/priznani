@@ -16,6 +16,12 @@ class SignPresenter extends BasePresenter {
 	public $backlink = '';
 
 	/**
+	 * @var array Pole proměnných ve zpětném odkazu.
+	 * @persistent
+	 */
+	private $backquery;
+
+	/**
 	 * @var \POS\Model\UserDao
 	 * @inject
 	 */
@@ -41,6 +47,11 @@ class SignPresenter extends BasePresenter {
 		if ($this->getUser()->isLoggedIn() && $this->action != "out") {
 			$this->redirect("OnePage:");
 		}
+	}
+
+	public function actionIn($backlink, $backquery) {
+		$this->backlink = $backlink;
+		$this->backquery = $backquery;
 	}
 
 	public function renderIn($confirmed, $code) {
@@ -84,7 +95,7 @@ class SignPresenter extends BasePresenter {
 	 * @return Nette\Application\UI\Form
 	 */
 	protected function createComponentSignInForm($name) {
-		return new Frm\signInForm($this, $name);
+		return new Frm\signInForm($this->backlink, $this->backquery, $this, $name);
 	}
 
 	protected function createComponentRegistrationForm($name) {

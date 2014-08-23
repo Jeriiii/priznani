@@ -93,7 +93,14 @@ class NewCompetitionImageForm extends UserGalleryImagesBaseForm {
 
 			$allow = $this->saveImages($images, $uID, $gallery->id);
 			$galleryData = $this->userGalleryDao->getLastImageByUser($uID);
-			$this->competitionsImagesDao->insert(array("imageID" => $galleryData->lastImageID, "competitionID" => $this->galleryID, "userID" => $uID, "name" => $values->name, "surname" => $values->surname, "phone" => $values->phone));
+			$this->competitionsImagesDao->insert(array(
+				"imageID" => $galleryData->lastImageID,
+				"competitionID" => $this->galleryID,
+				"userID" => $uID,
+				"name" => $values->name,
+				"surname" => $values->surname,
+				"phone" => $values->phone
+			));
 			$this->usersCompetitionsDao->updateLastImage($this->galleryID, $galleryData->lastImageID);
 
 			if ($allow) {

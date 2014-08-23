@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Formulář pro přihlášení uživatele
+ */
+
 namespace Nette\Application\UI\Form;
 
 use Nette\Application\UI\Form,
@@ -12,11 +16,20 @@ use Nette\Application\UI\Form,
 
 class SignInForm extends BaseForm {
 
-	private $id;
+	/**
+	 * @var string Cesta zpět odkud uživatel přišel
+	 */
+	private $backlink;
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
+	/**
+	 * @var array Pole proměnných ve zpětném odkazu.
+	 */
+	private $backquery;
+
+	public function __construct($banklink, $backquery, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-		//form
+		$this->backlink = $banklink;
+		$this->backquery =;
 
 		$this->addText('email', 'E-mail:', 30, 200)
 			->addRule(Form::FILLED, "Zadejte svůj email");
@@ -50,7 +63,9 @@ class SignInForm extends BaseForm {
 			//if (!empty($presenter->backlink)) {
 			$presenter->flashMessage("Byl jste úspěšně přihlášen");
 			//}
-			if ($presenter->user->isInRole("admin") || $presenter->user->isInRole("superadmin")) {
+			if (!empty($this->backlink)) {
+				$presenter->redirect($this->backlink);
+			} elseif ($presenter->user->isInRole("admin") || $presenter->user->isInRole("superadmin")) {
 				$presenter->redirect('Admin:Forms:forms');
 			} else {
 				$presenter->redirect('Homepage:');
