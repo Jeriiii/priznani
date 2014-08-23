@@ -122,8 +122,11 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			}
 			$backlink = $this->backlink();
 			$httpRequest = $this->context->getByType('Nette\Http\Request');
-			$query = $httpRequest->getQuery();
-			$this->redirect(':Sign:in', array('backlink' => $backlink, 'backquery' => $query));
+			$backquery = $httpRequest->getQuery();
+			$backlinkSession = $this->getSession('backlink');
+			$backlinkSession->link = $backlink;
+			$backlinkSession->query = $backquery;
+			$this->redirect(':Sign:in', array('backlink' => TRUE));
 		} else { //kontrola opravnění pro vztup do příslušné sekce
 			if (!$user->isAllowed($this->name, $this->action)) {
 				$this->flashMessage('Nejdříve se musíte přihlásit.', 'warning');

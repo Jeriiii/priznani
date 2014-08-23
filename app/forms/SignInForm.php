@@ -6,30 +6,21 @@
 
 namespace Nette\Application\UI\Form;
 
-use Nette\Application\UI\Form,
-	Nette\Security as NS,
-	Nette\ComponentModel\IContainer,
-	Nette\DateTime,
-	Nette\Utils\Strings,
-	Nette\Mail\Message,
-	Nette\Utils\Html;
+use Nette\Application\UI\Form;
+use Nette\Security as NS;
+use Nette\ComponentModel\IContainer;
+use Nette\Utils\Html;
 
 class SignInForm extends BaseForm {
 
 	/**
-	 * @var string Cesta zpět odkud uživatel přišel
+	 * @var boolean Cesta zpět odkud uživatel přišel
 	 */
 	private $backlink;
 
-	/**
-	 * @var array Pole proměnných ve zpětném odkazu.
-	 */
-	private $backquery;
-
-	public function __construct($banklink, $backquery, IContainer $parent = NULL, $name = NULL) {
+	public function __construct($banklink, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->backlink = $banklink;
-		$this->backquery =;
 
 		$this->addText('email', 'E-mail:', 30, 200)
 			->addRule(Form::FILLED, "Zadejte svůj email");
@@ -63,8 +54,8 @@ class SignInForm extends BaseForm {
 			//if (!empty($presenter->backlink)) {
 			$presenter->flashMessage("Byl jste úspěšně přihlášen");
 			//}
-			if (!empty($this->backlink)) {
-				$presenter->redirect($this->backlink);
+			if ($this->backlink == TRUE) {
+				$this->redirectBacklink();
 			} elseif ($presenter->user->isInRole("admin") || $presenter->user->isInRole("superadmin")) {
 				$presenter->redirect('Admin:Forms:forms');
 			} else {
@@ -72,6 +63,23 @@ class SignInForm extends BaseForm {
 			}
 		} catch (NS\AuthenticationException $e) {
 			$form->addError(Html::el('div')->setText($e->getMessage())->setClass('alert alert-danger'));
+		}
+	}
+
+	/**
+	 * Přesměruje uživatele na dříve prohlíženou stránku
+	 */
+	private function redirectBacklink() {
+		/* nastaven backlink */
+		$backlinkSession = $this->presenter->getSession('backlink');
+		$link = $backlinkSession->link;
+		$query = $backlinkSession->query;
+		$backlinkSession->remove();
+		$presenter = $this->presenter;
+		if (!empty($link)) {
+			$presenter->redirect($link, $query);
+		} else {
+			$presenter->redirect('Homepage:');
 		}
 	}
 

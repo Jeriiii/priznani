@@ -12,8 +12,12 @@ use Nette\Application\UI,
 
 class SignPresenter extends BasePresenter {
 
-	/** @persistent */
-	public $backlink = '';
+	/**
+	 * @var boolean Pokud je TRUE, existuje v session odkaz kam chceme po
+	 * přihlášení přesměrovat.
+	 * @persistent
+	 */
+	public $backlink = FALSE;
 
 	/**
 	 * @var array Pole proměnných ve zpětném odkazu.
@@ -49,9 +53,8 @@ class SignPresenter extends BasePresenter {
 		}
 	}
 
-	public function actionIn($backlink, $backquery) {
+	public function actionIn($backlink) {
 		$this->backlink = $backlink;
-		$this->backquery = $backquery;
 	}
 
 	public function renderIn($confirmed, $code) {
@@ -95,7 +98,7 @@ class SignPresenter extends BasePresenter {
 	 * @return Nette\Application\UI\Form
 	 */
 	protected function createComponentSignInForm($name) {
-		return new Frm\signInForm($this->backlink, $this->backquery, $this, $name);
+		return new Frm\signInForm($this->backlink, $this, $name);
 	}
 
 	protected function createComponentRegistrationForm($name) {
