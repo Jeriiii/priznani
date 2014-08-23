@@ -30,3 +30,6 @@ services:
 	statusDao: POS\Model\StatusDao
 	userChangePasswordDao:  POS\Model\UserChangePasswordDao
 	imageLikesDao:	POS\Model\ImageLikesDao
+	cityDao:	POS\Model\CityDao
+	districtDao:	POS\Model\DistrictDao
+	regionDao:	POS\Model\RegionDao
