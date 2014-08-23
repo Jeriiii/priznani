@@ -17,11 +17,9 @@
 
 	
 {define uploadImage}
-	{if $user->isLoggedIn()}
-		<a href="{plink Competition:uploadCompetitionImage galleryID => $gallery->id}" id="add-photo-button" class="btn-main medium right">
-			nahrát fotku
-		</a>
-	{/if}
+	<a href="{plink Competition:uploadCompetitionImage galleryID => $gallery->id}" id="add-photo-button" class="btn-main medium right">
+		nahrát fotku
+	</a>
 {/}
  
 {define imageMainScreen}

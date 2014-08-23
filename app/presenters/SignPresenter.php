@@ -12,8 +12,18 @@ use Nette\Application\UI,
 
 class SignPresenter extends BasePresenter {
 
-	/** @persistent */
-	public $backlink = '';
+	/**
+	 * @var boolean Pokud je TRUE, existuje v session odkaz kam chceme po
+	 * přihlášení přesměrovat.
+	 * @persistent
+	 */
+	public $backlink = FALSE;
+
+	/**
+	 * @var array Pole proměnných ve zpětném odkazu.
+	 * @persistent
+	 */
+	private $backquery;
 
 	/**
 	 * @var \POS\Model\UserDao
@@ -41,6 +51,10 @@ class SignPresenter extends BasePresenter {
 		if ($this->getUser()->isLoggedIn() && $this->action != "out") {
 			$this->redirect("OnePage:");
 		}
+	}
+
+	public function actionIn($backlink) {
+		$this->backlink = $backlink;
 	}
 
 	public function renderIn($confirmed, $code) {
@@ -84,7 +98,7 @@ class SignPresenter extends BasePresenter {
 	 * @return Nette\Application\UI\Form
 	 */
 	protected function createComponentSignInForm($name) {
-		return new Frm\signInForm($this, $name);
+		return new Frm\signInForm($this->backlink, $this, $name);
 	}
 
 	protected function createComponentRegistrationForm($name) {

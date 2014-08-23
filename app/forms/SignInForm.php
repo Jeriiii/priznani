@@ -1,22 +1,26 @@
 <?php
 
+/**
+ * Formulář pro přihlášení uživatele
+ */
+
 namespace Nette\Application\UI\Form;
 
-use Nette\Application\UI\Form,
-	Nette\Security as NS,
-	Nette\ComponentModel\IContainer,
-	Nette\DateTime,
-	Nette\Utils\Strings,
-	Nette\Mail\Message,
-	Nette\Utils\Html;
+use Nette\Application\UI\Form;
+use Nette\Security as NS;
+use Nette\ComponentModel\IContainer;
+use Nette\Utils\Html;
 
 class SignInForm extends BaseForm {
 
-	private $id;
+	/**
+	 * @var boolean Cesta zpět odkud uživatel přišel
+	 */
+	private $backlink;
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
+	public function __construct($banklink, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-		//form
+		$this->backlink = $banklink;
 
 		$this->addText('email', 'E-mail:', 30, 200)
 			->addRule(Form::FILLED, "Zadejte svůj email");
@@ -50,13 +54,32 @@ class SignInForm extends BaseForm {
 			//if (!empty($presenter->backlink)) {
 			$presenter->flashMessage("Byl jste úspěšně přihlášen");
 			//}
-			if ($presenter->user->isInRole("admin") || $presenter->user->isInRole("superadmin")) {
+			if ($this->backlink == TRUE) {
+				$this->redirectBacklink();
+			} elseif ($presenter->user->isInRole("admin") || $presenter->user->isInRole("superadmin")) {
 				$presenter->redirect('Admin:Forms:forms');
 			} else {
 				$presenter->redirect('Homepage:');
 			}
 		} catch (NS\AuthenticationException $e) {
 			$form->addError(Html::el('div')->setText($e->getMessage())->setClass('alert alert-danger'));
+		}
+	}
+
+	/**
+	 * Přesměruje uživatele na dříve prohlíženou stránku
+	 */
+	private function redirectBacklink() {
+		/* nastaven backlink */
+		$backlinkSession = $this->presenter->getSession('backlink');
+		$link = $backlinkSession->link;
+		$query = $backlinkSession->query;
+		$backlinkSession->remove();
+		$presenter = $this->presenter;
+		if (!empty($link)) {
+			$presenter->redirect($link, $query);
+		} else {
+			$presenter->redirect('Homepage:');
 		}
 	}
 
