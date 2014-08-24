@@ -275,6 +275,17 @@ abstract class UserBaseDao extends AbstractDao {
 		);
 	}
 
+	public static function getArrWantToMeet() {
+		return array(
+			"want_to_meet_men" => "muže",
+			"want_to_meet_women" => "ženu",
+			"want_to_meet_couple" => "pár",
+			"want_to_meet_couple_men" => "pár mužů",
+			"want_to_meet_couple_women" => "pár žen",
+			"want_to_meet_group" => "skupinu"
+		);
+	}
+
 	/**
 	 * vrací pole s překlady pro user state - stav uživatele např. zadaný
 	 */
