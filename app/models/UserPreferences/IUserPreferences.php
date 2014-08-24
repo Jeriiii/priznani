@@ -5,10 +5,13 @@
  */
 
 /**
- * Objekt který vybere výsledky podle preferencí uživatele
+ * Rozhraní které musí každá Preference implementovat
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class UserPreferences {
-	//put your code here
+
+namespace POS\UserPreferences;
+
+interface IUserPreferences {
+
 }
