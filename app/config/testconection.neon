@@ -4,4 +4,4 @@ parameters:
 		host: 127.0.0.1
 		dbname: postest
 		user: root
-		password:
+		password: root

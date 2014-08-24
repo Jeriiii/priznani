@@ -19,6 +19,12 @@ class DirChecker extends \Nette\Object {
 
 	private $dirs = array();
 
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao = NULL;
+
 	/** @var Messages */
 	private $messages;
 
@@ -34,17 +40,40 @@ class DirChecker extends \Nette\Object {
 	 * Zkontroluje zda složky existují. Pokud ne, vytvoří je.
 	 */
 	public function check() {
-		// přidá složky ke skontrolování
-		$this->addDirs();
+		// přidá statické složky ke zkontrolování - ty co se musí vytvořit vždy
+		$this->addStaticDirs();
+		// přidá složky závislé na uživateli
+		if (isset($this->userDao)) {
+			$this->addUserDirs();
+		}
 
 		//zkontroluje složky
 		$this->checkDirs();
 	}
 
 	/**
+	 * Přidá kontrolu i uživatelských složek.
+	 * @param \POS\Model\UserDao $userDao
+	 */
+	public function addUsers($userDao) {
+		$this->userDao = $userDao;
+	}
+
+	/**
+	 * Přidá složky závislé na uživatelích
+	 */
+	public function addUserDirs() {
+		$users = $this->userDao->getAll();
+		$basePath = WWW_DIR . "/images/userGalleries/";
+		foreach ($users as $user) {
+			$this->addToExistDirs($basePath . $user->id . "/");
+		}
+	}
+
+	/**
 	 * Přidá složky ke zkontrolování.
 	 */
-	private function addDirs() {
+	private function addStaticDirs() {
 		// přidání složek pro galerie
 		$this->addToExistDirs(WWW_DIR . "/images/galleries/");
 		$this->addToExistDirs(WWW_DIR . "/images/userGalleries/");
