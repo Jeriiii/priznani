@@ -131,9 +131,9 @@
 						{control userMenu}
                         <div class="clear"></div>
                  </div>
-				{if $user->isLoggedIn()}
+				{*if $user->isLoggedIn()}
 					{control activities}
-				{/if}
+				{/if*}
 		{if $partymode}
 		    {cache}
 				<a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
@@ -164,7 +164,7 @@
 		<div class="clear"></div>
 	    </section>
 
-		{control chat}
+		{*control chat*}
 		<footer class="inner">
 		    <div id="footline"></div>
 		    <div class="left">
@@ -196,9 +196,9 @@
 			{*include #user-menu-scripts*}
 
 			{control jsLayout}
-			{if $user->isLoggedIn()}
+			{*if $user->isLoggedIn()}
 				{control jsLayoutLoggedIn}
-			{/if}
+			{/if*}
 
 
 
