@@ -1,13 +1,7 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of UserStream
+ * Stream na úvodní stránce, zobrazuje všechny příspěvky co by chtěl uživatel vidět.
  *
  * @author Mario
  */
@@ -19,31 +13,30 @@ use POSComponent\Stream\BaseStream\BaseStream;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\ConfessionDao;
+use POS\Model\StreamDao;
+use POS\Model\StatusDao;
 
 class UserStream extends BaseStream {
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 */
+	/** @var \POS\Model\StreamDao */
 	public $streamDao;
 
-	public function __construct($data, $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
-		parent::__construct($data, $streamDao, $userGalleryDao, $userImageDao, $confDao);
-		$this->streamDao = $streamDao;
-	}
+	/**
+	 * @var \POS\Model\StatusDao
+	 */
+	public $statusDao;
 
-	//put your code here
-	private $offset = null;
+	public function __construct($data, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
+		parent::__construct($data, $userGalleryDao, $userImageDao, $confDao);
+		$this->streamDao = $streamDao;
+		$this->statusDao = $statusDao;
+	}
 
 	public function render() {
 		$mode = 'mainStream';
 		$templateName = "../UserStream/userStream.latte";
 
 		$this->renderBase($mode, $templateName);
-	}
-
-	public function handleGetMoreData($offset) {
-		parent::handleGetMoreData($offset);
 	}
 
 	/**
@@ -68,6 +61,10 @@ class UserStream extends BaseStream {
 
 	protected function createComponentFilterForm($name) {
 		return new Frm\FilterStreamForm($this, $name);
+	}
+
+	protected function createComponentStatusForm($name) {
+		return new Frm\AddStatusForm($this->streamDao, $this->statusDao, $this, $name);
 	}
 
 }

@@ -36,6 +36,14 @@ class OnePagePresenter extends BasePresenter {
 	 * @inject
 	 */
 	public $confessionDao;
+
+	/**
+	 * @var \POS\Model\StatusDao
+	 * @inject
+	 */
+	public $statusDao;
+
+	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $count = 0;
 	private $userID;
@@ -49,10 +57,11 @@ class OnePagePresenter extends BasePresenter {
 	public function renderDefault() {
 		$this->template->count = $this->count;
 		$this->template->userID = $this->userID;
+		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+		return new UserStream($this->dataForStream, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
 	}
 
 	public function createComponentJs() {

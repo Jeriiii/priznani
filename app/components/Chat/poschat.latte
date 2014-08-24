@@ -1,0 +1,15 @@
+{if $logged}
+	<div id="chat-interface">
+	{control contactList}
+
+	{control conversationList}
+	</div>
+	{control communicator}
+	<script>
+	var isLoggedIn = true;
+	</script>
+	{else}
+	<script>
+	var isLoggedIn = false;
+	</script>
+{/if}

@@ -1,0 +1,17 @@
+{foreach $friends as $friend}
+	{if $iterator->isFirst()}
+		<h2>Přátelé</h2>
+		<table>
+			<thead>
+			<th></th>
+		</thead>
+		<tbody>
+	{/if}
+	<tr>
+		<td>{$friend->user2|showProf}</td>
+	</tr>
+	{if $iterator->isLast()}
+		</tbody>
+		</table>
+	{/if}
+{/foreach}

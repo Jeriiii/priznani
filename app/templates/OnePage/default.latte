@@ -7,6 +7,7 @@
 	<nav id="stream-menu">
 	    <a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>
 	    <a n:href=":Profil:Galleries:userGalleryNew" class="btn-main btn-small" title="Profil">Vytvořit galerii</a>
+		{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
 	    <div class="clear"></div>
 	</nav>
 	{control userStream}
@@ -19,7 +20,6 @@
 
 {block foot}
 {control js}
-<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
 <script>
 	$(document).ready(function () {
 		$( ".stream-form" ).tabs();
@@ -28,8 +28,11 @@
 			addoffset: 4
 		});
 	});
-	$("#frmaddConfessionForm-note").click(function() {
-		$("#frmaddConfessionForm-note").animate({ height: "200px"}, 500);
+	$("#frm-userStream-addConfessionForm-note").click(function() {
+		$("#frm-userStream-addConfessionForm-note").animate({ height: "200px"}, 500);
+	});
+	$("#frm-userStream-statusForm-message").click(function() {
+		$("#frm-userStream-statusForm-message").animate({ height: "200px"}, 500);
 	});
 </script>
 {/block}

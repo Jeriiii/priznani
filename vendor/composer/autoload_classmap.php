@@ -6,4 +6,24 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Tester\\Assert' => $vendorDir . '/Nette/tester/Tester/Framework/Assert.php',
+    'Tester\\AssertException' => $vendorDir . '/Nette/tester/Tester/Framework/Assert.php',
+    'Tester\\CodeCoverage\\Collector' => $vendorDir . '/Nette/tester/Tester/CodeCoverage/Collector.php',
+    'Tester\\CodeCoverage\\ReportGenerator' => $vendorDir . '/Nette/tester/Tester/CodeCoverage/ReportGenerator.php',
+    'Tester\\DataProvider' => $vendorDir . '/Nette/tester/Tester/Framework/DataProvider.php',
+    'Tester\\DomQuery' => $vendorDir . '/Nette/tester/Tester/Framework/DomQuery.php',
+    'Tester\\Dumper' => $vendorDir . '/Nette/tester/Tester/Framework/Dumper.php',
+    'Tester\\Environment' => $vendorDir . '/Nette/tester/Tester/Framework/Environment.php',
+    'Tester\\Helpers' => $vendorDir . '/Nette/tester/Tester/Framework/Helpers.php',
+    'Tester\\Runner\\CommandLine' => $vendorDir . '/Nette/tester/Tester/Runner/CommandLine.php',
+    'Tester\\Runner\\Job' => $vendorDir . '/Nette/tester/Tester/Runner/Job.php',
+    'Tester\\Runner\\OutputHandler' => $vendorDir . '/Nette/tester/Tester/Runner/OutputHandler.php',
+    'Tester\\Runner\\Output\\ConsolePrinter' => $vendorDir . '/Nette/tester/Tester/Runner/Output/ConsolePrinter.php',
+    'Tester\\Runner\\Output\\Logger' => $vendorDir . '/Nette/tester/Tester/Runner/Output/Logger.php',
+    'Tester\\Runner\\Output\\TapPrinter' => $vendorDir . '/Nette/tester/Tester/Runner/Output/TapPrinter.php',
+    'Tester\\Runner\\PhpExecutable' => $vendorDir . '/Nette/tester/Tester/Runner/PhpExecutable.php',
+    'Tester\\Runner\\Runner' => $vendorDir . '/Nette/tester/Tester/Runner/Runner.php',
+    'Tester\\Runner\\TestHandler' => $vendorDir . '/Nette/tester/Tester/Runner/TestHandler.php',
+    'Tester\\TestCase' => $vendorDir . '/Nette/tester/Tester/Framework/TestCase.php',
+    'Tester\\TestCaseException' => $vendorDir . '/Nette/tester/Tester/Framework/TestCase.php',
 );

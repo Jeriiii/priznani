@@ -24,7 +24,7 @@ README.md
 /www/images/userGalleries/
 www/css/bootstrap/help/reseni
 /www/images/users/profils/
-/app/test/config/behat.local.yml
+app/test/config/behat.local
 www/cache/*
 !www/cache/js
 www/cache/js/*
@@ -37,4 +37,6 @@ app/test/sql/featurestart/*
 !app/test/sql/featurestart/.gitkeep
 app/test/sql/featureend/*
 !app/test/sql/featureend/.gitkeep
+app/test/config/behat.local.yml
 
+nbproject/licenseheader.txt

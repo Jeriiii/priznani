@@ -61,7 +61,7 @@
 			<meta property="og:site_name" content="priznaniosexu.cz" />
 			<meta property="og:description" content="Stala se Vám v posteli nějaká zajímavá, vtipná či šokující příhoda, ale bojíte se to veřejně říct? Přiznejte se na http://priznaniosexu.cz/. Všechna přiznání jsou 100% ANONYMNÍ. " />
 			{/ifset}
-			{control css 'default.css', 'layout/layout.less', 'mobile/responsive-menu.less'}
+			{control cssLayout}
 <!--			<link rel="stylesheet" href="{$basePath}/css/layout.css" type="text/css">
 			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">-->
 			<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
@@ -71,6 +71,7 @@
 			<link media="handheld, only screen and (max-width: 480px), only screen and (max-device-width: 854px)" href="{$basePath}/css/mobile-layout.css" type="text/css" rel="stylesheet" />
 
 		{/if}
+		<link rel="stylesheet" href="{$basePath}/css/jqueryUI/jquery-ui.custom.min.css" type="text/css">
 		{block head}{/block}
         <link href='http://fonts.googleapis.com/css?family=Exo:200,600,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		<?php echo $google_analytics; ?>
@@ -130,7 +131,9 @@
 						{control userMenu}
                         <div class="clear"></div>
                  </div>
-
+				{if $user->isLoggedIn()}
+					{control activities}
+				{/if}
 		{if $partymode}
 		    {cache}
 				<a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
@@ -148,7 +151,6 @@
 		{*block nextAdmission}{/block*}
 		{block orders}{/block}
 		{block nextAdmission}{/block}
-
 		<div class="clear"></div>
 
 	    </header>
@@ -162,6 +164,7 @@
 		<div class="clear"></div>
 	    </section>
 
+		{control chat}
 		<footer class="inner">
 		    <div id="footline"></div>
 		    <div class="left">
@@ -180,22 +183,30 @@
 			www.priznaniosexu.cz
 		    </div>
 		    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+
 		    {if $existForm}
 			<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
 		    {/if}
 		    <div id="fb-root"></div>
-
+			{block jqueryUI}{* překrývá se, pokud je potřeba přiřadit jiné (větší) jQuery *}
+				<script type="text/javascript" src="{$basePath}/js/jquery-ui.light.min.js"></script>
+			{/block}
 			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
-            {control js 'layout/user-layout-menu.js'}
+
 			{*include #user-menu-scripts*}
+
 			{control jsLayout}
+			{if $user->isLoggedIn()}
+				{control jsLayoutLoggedIn}
+			{/if}
+
+
 
 			{if $fbToDatabase}
 				{control fbLikeAndCommentToDatabase}
 
-			{/if}                             
+			{/if}
 		{block foot}{/block}
-
 			<div class="clear"></div>
 		</footer>
 	</body>

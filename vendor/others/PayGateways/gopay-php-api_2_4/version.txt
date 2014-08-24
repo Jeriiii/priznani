@@ -1,0 +1,31 @@
+GP-PHP-API verze 2.4
+=====================
+- refundace plateb
+- částečné refundace plateb
+- vypis plateb ve formátu CSV, ABO a XLS
+
+GP-PHP-API verze 2.3
+=====================
+- doplneno explicitni pretypovavani ciselnych vstupnich parametru
+
+
+GP-PHP-API verze 2.2
+=====================
+- zruseni opakovani opakovane platby 
+- vyvolani opakovani platby pozadavkem
+- zruseni predautorizace platby
+- provedeni predautorizovane platby
+
+
+GP-PHP-API verze 2.1
+=====================
+- vypis pohybu na uctu
+
+
+GP-PHP-API verze 2.0
+=====================
+
+Přechod na nove WS rozhraní
+- nove WS, nove funkcionality (predautorizace plateb, opakovane platby)
+- pro bezchybnou funkci doporucujeme prejit zcela na nove API
+ 

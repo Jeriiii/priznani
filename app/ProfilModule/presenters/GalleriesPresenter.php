@@ -44,10 +44,22 @@ class GalleriesPresenter extends \BasePresenter {
 	public $userImageDao;
 
 	/**
+	 * @var \POS\Model\UsersCompetitionsDao
+	 * @inject
+	 */
+	public $usersCompetitionsDao;
+
+	/**
 	 * @var \POS\Model\StreamDao
 	 * @inject
 	 */
 	public $streamDao;
+
+	/**
+	 * @var \POS\Model\CompetitionsImagesDao
+	 * @inject
+	 */
+	public $competitionsImagesDao;
 
 	public function startup() {
 		parent::startup();
@@ -77,6 +89,15 @@ class GalleriesPresenter extends \BasePresenter {
 		$this->galleryID = $galleryID;
 		$this->imageID = $imageID;
 
+		$competitionData = $this->usersCompetitionsDao->getLastCompetitionNameAndId();
+		$competitionImage = $this->competitionsImagesDao->findByImgAndCmpId($this->imageID, $competitionData->id);
+
+		// Ochrana před opakovaným vložením
+		if (!$competitionImage) {
+			$this->template->competition = $competitionData;
+		} else {
+			$this->template->competition = FALSE;
+		}
 		$this->template->galleryImage = $this->userImageDao->find($imageID);
 	}
 
@@ -181,6 +202,17 @@ class GalleriesPresenter extends \BasePresenter {
 		}
 	}
 
+	/**
+	 * Přidá fotku uživatele do poslední soutěže
+	 * @param type $imageID ID obrázku, který bude přidán do soutěže
+	 * @param type $competitionID ID soutěže, do které bude obrázek přidán
+	 */
+	public function handleAddToCompetition($imageID, $competitionID) {
+		$this->competitionsImagesDao->insertImageToCompetition($imageID, $this->user->id, $competitionID);
+		$this->flashMessage('Fotka byla přidaná. Nyní je ve frontě na schválení.');
+		$this->redirect('this');
+	}
+
 	protected function createComponentUserGalleryNew($name) {
 		return new Frm\UserGalleryNewForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this, $name);
 	}
@@ -220,7 +252,7 @@ class GalleriesPresenter extends \BasePresenter {
 	protected function createComponentUserImagesInGallery() {
 		$images = $this->userImageDao->getInGallery($this->galleryID);
 
-		return new UserImagesInGallery($this->galleryID, $images, $this->userDao);
+		return new UserImagesInGallery($images, $this->userDao);
 	}
 
 	protected function createComponentGallery() {

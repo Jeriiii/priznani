@@ -13,6 +13,7 @@ use Nette\Application\UI\Form as Frm,
 	\Nette\Utils\Strings,
 	Nette\Http\Url,
 	Nette\Http\Request;
+use Nette\Security\User;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -30,6 +31,18 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	protected $cssVariables = array();
 	/* proměnné pro js překlad */
 	protected $jsVariables = array();
+
+	/**
+	 * @var \POS\Model\ActivitiesDao
+	 * @inject
+	 */
+	public $activitiesDao;
+
+	/**
+	 * @var \POS\Chat\ChatManager
+	 * @inject
+	 */
+	public $chatManager;
 
 	public function startup() {
 		AntispamControl::register();
@@ -96,6 +109,32 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$this->fillJsVariablesWithLinks();
 	}
 
+	/**
+	 * Zkontroluje, zda je uživatel přihlášen. Pokud ne, přesměruje ho na přihlášení.
+	 */
+	protected function checkLoggedIn() {
+		$user = $this->getUser();
+		if (!$user->isLoggedIn()) {
+			if ($user->getLogoutReason() === User::INACTIVITY) {
+				$this->flashMessage('Uplynula doba neaktivity! Systém vás z bezpečnostních důvodů odhlásil.', 'warning');
+			} else {
+				$this->flashMessage('Nejdříve se musíte přihlásit');
+			}
+			$backlink = $this->backlink();
+			$httpRequest = $this->context->getByType('Nette\Http\Request');
+			$backquery = $httpRequest->getQuery();
+			$backlinkSession = $this->getSession('backlink');
+			$backlinkSession->link = $backlink;
+			$backlinkSession->query = $backquery;
+			$this->redirect(':Sign:in', array('backlink' => TRUE));
+		} else { //kontrola opravnění pro vztup do příslušné sekce
+			if (!$user->isAllowed($this->name, $this->action)) {
+				$this->flashMessage('Nejdříve se musíte přihlásit.', 'warning');
+				$this->redirect(':Homepage:');
+			}
+		}
+	}
+
 	protected function createComponentOrders($name) {
 		$nav = new Navigation($this, $name);
 		$filters = array(
@@ -145,6 +184,15 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	}
 
 	/**
+	 * Vytvoření komponenty pro chat
+	 * @param String $name
+	 * @return \POSComponent\Chat\PosChat
+	 */
+	protected function createComponentChat($name) {
+		return new POSComponent\Chat\PosChat($this->chatManager, $this, $name);
+	}
+
+	/**
 	 * Hlavní navigace v pravé části lišty v layoutu
 	 * @param type $name
 	 */
@@ -179,6 +227,15 @@ abstract class BasePresenter extends BaseProjectPresenter {
 				$nav->setCurrentNode($article);
 			}
 		}
+	}
+
+	/**
+	 * Vytovří komponentu pro aktivity
+	 * @return \Activities Komponenta aktivit
+	 */
+	protected function createComponentActivities() {
+		$activities = new Activities($this->getUser()->id, $this->activitiesDao);
+		return $activities;
 	}
 
 	/**
@@ -249,7 +306,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
-	public function createComponentCssdual() {
+	public function createComponentCssLayout() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
 		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
 
@@ -262,6 +319,15 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$compiler->addFileFilter(function ($code, $compiler, $path) {
 			return cssmin::minify($code);
 		});
+
+		$files->addFiles(array(
+			'default.css',
+			'layout/layout.less',
+			'mobile/responsive-menu.less',
+			'chat/jquery.ui.chatbox.css',
+			'chat/default.less',
+			'chat/jquery-ui.less'
+		));
 
 		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
@@ -297,7 +363,27 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 	public function createComponentJsLayout() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
-		$files->addFiles(array('baseAjax.js', 'order.js', 'fbBase.js', 'leftMenu.js'));
+		$files->addFiles(array('iedebug.js', 'baseAjax.js', 'order.js', 'fbBase.js', 'leftMenu.js', 'user-layout-menu.js', '../nette.ajax.js'));
+
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+		$compiler->addFilter(function ($code) {
+			$packer = new JavaScriptPacker($code, "None");
+			return $packer->pack();
+		});
+
+		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+
+	public function createComponentJsLayoutLoggedIn() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
+		$files->addFiles(array(
+			'activities.js',
+			'chat/core.js',
+			'chat/init.js',
+			'chat/jquery.ui.chatbox/jquery.ui.chatbox.js',
+			'chat/jquery.ui.chatbox/chatboxManager.js'
+		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {

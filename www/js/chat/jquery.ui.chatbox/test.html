@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>jQuery UI Chatbox Plugin</title>
+		<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="http://localhost/priznani/www/js/jquery-ui-1.8.18.min.js"></script>
+		<link type="text/css" href="http://localhost/priznani/www/css/chat/jquery.ui.chatbox.css" rel="stylesheet" />
+		<script type="text/javascript" src="http://localhost/priznani/www/js/chat/jquery.ui.chatbox/jquery.ui.chatbox.js"></script>
+		<script type="text/javascript" src="http://localhost/priznani/www/js/chat/jquery.ui.chatbox/chatboxManager.js"></script>
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+
+				var counter = 0;
+				var idList = new Array();
+
+				var broadcastMessageCallback = function(from, msg) {
+					for (var i = 0; i < idList.length; i++) {
+						chatboxManager.addBox(idList[i]);
+						$("#" + idList[i]).chatbox("option", "boxManager").addMsg(from, msg);
+					}
+				}
+
+
+				// chatboxManager is excerpt from the original project
+				// the code is not very clean, I just want to reuse it to manage multiple chatboxes
+				chatboxManager.init({messageSent: broadcastMessageCallback});
+
+				$("#link_add").click(function(event, ui) {
+					counter++;
+					var id = "box" + counter;
+					idList.push(id);
+					chatboxManager.addBox(id,
+							{dest: "dest" + counter, // not used in demo
+								title: "box" + counter,
+								first_name: "First" + counter,
+								last_name: "Last" + counter
+										//you can add your own options too
+							});
+					event.preventDefault();
+				});
+
+			});
+		</script>
+	</head>
+	<body>
+
+		<p><a id="link_add" href="#">Add Chatbox</a></p>
+
+
+	</body>
+</html>

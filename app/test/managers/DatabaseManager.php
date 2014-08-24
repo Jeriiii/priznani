@@ -13,6 +13,10 @@ namespace Test;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
+use NetteExt\Install\DB\InstallDB;
+use POS\Model\DatabaseDao;
+use Nette\Database\Context;
+
 class DatabaseManager {
 
 	/**
@@ -34,12 +38,18 @@ class DatabaseManager {
 	private $database;
 
 	/**
+	 * @var \POS\Model\DatabaseDao
+	 */
+	public $databaseDao;
+
+	/**
 	 *
 	 * @param string $sqlFolder Absolute path to folder with scripts
 	 */
-	function __construct($sqlFolder, \Nette\Database\Context $database) {
+	function __construct($sqlFolder, Context $database, DatabaseDao $databaseDao) {
 		$this->sqlFolder = $sqlFolder;
 		$this->database = $database;
+		$this->databaseDao = $databaseDao;
 	}
 
 	/**
@@ -72,6 +82,9 @@ class DatabaseManager {
 	 * Executes scripts from feature start folder
 	 */
 	function featureStartScripts() {
+		$installDB = new InstallDB($this->databaseDao);
+		//$installDB->instalPostestDb();
+		$installDB->dataTestDb();
 		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_START_FOLDER_NAME);
 	}
 

@@ -28,6 +28,12 @@ class UserManager {
 	private $userDao;
 
 	/**
+	 *
+	 * @var string id of used session
+	 */
+	private $sessionId;
+
+	/**
 	 * Creates the session manager.
 	 * @param \POS\Model\UserDao $userDao
 	 */
@@ -55,19 +61,18 @@ class UserManager {
 
 	/**
 	 * Saves user into session (he is "logged in")
-	 * @param \Nette\Database\Table\IRow $user
-	 * @param array $roles
+	 * @param \Nette\Database\Table\IRow $user user's row in database
+	 * @param array $roles roles of the user
 	 * @return string id of created session
 	 */
 	public function saveUserIntoSession($user, $roles) {
-		$identity = new \Nette\Security\Identity($user->id, $roles);
+		$identity = new \Nette\Security\Identity($user->id, $roles, $user->toArray());
 		$this->session->start();
 		$userStorage = new UserStorage($this->session);
 		$userStorage->setIdentity($identity);
 		$userStorage->setAuthenticated(TRUE);
-		$id = $this->session->getId();
+		$this->sessionId = $this->session->getId();
 		$this->session->close();
-		return $id;
 	}
 
 	/**
@@ -76,6 +81,26 @@ class UserManager {
 	 */
 	public function getSession() {
 		return $this->session;
+	}
+
+	/**
+	 * Returns used session id
+	 * @return string id of used session
+	 */
+	public function getSessionId() {
+		return $this->sessionId;
+	}
+
+	/**
+	 * Clears sessions initialized with this manager
+	 */
+	public function clearSession() {
+		if ($this->sessionId !== NULL) {
+			session_id($this->sessionId);
+			session_start();
+			session_destroy();
+			$this->sessionId = NULL;
+		}
 	}
 
 }

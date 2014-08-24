@@ -1,0 +1,39 @@
+{block head}
+	<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/css/bootstrap.min.css" type="text/css">
+	<style>
+	h1 {
+		margin-top: 0;
+	}
+    </style>
+{/block}
+{block foot}
+	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>
+{/block}
+{block content}
+
+<h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
+
+
+{include 'menu.latte' $userID => 'id'}     
+	
+	<h2>Informace o uživateli</h2>
+	{control userInfo $mode, $userID}
+	
+	{ifset $userPartnerProfile}
+    <h2>Informace o partnerovi</h2>
+    <table class="table table-condensed">
+            <tbody>
+            {foreach $userPartnerProfile as $labelPartner => $dataPartner}
+                    {if !empty($dataPartner)}	
+                    <tr>	
+                            <th>{$labelPartner}</th>
+                            <td>{$dataPartner}</td>
+                    </tr>	
+                    {/if}
+            {/foreach}
+            <tbody>
+    </table>
+    {/ifset}
+
+{/block}

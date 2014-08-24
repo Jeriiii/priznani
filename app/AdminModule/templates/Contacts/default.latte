@@ -1,0 +1,31 @@
+{block content}
+{snippet messages}
+	<table class="table table-striped">
+		<thead>
+		<th>Uživatel</th>
+		<th>Telefon</th>
+		<th>Email</th>
+		<th>Zpráva</th>
+		<th>Vytvořeno</th>
+		<th></th>
+	</thead>
+	<tbody>
+		{foreach $contacts as $item}
+			<tr>
+				<td>{$item->user->user_name}</td>
+				<td>{$item->phone}</td>
+				<td>{$item->email}</td>
+				<td>{$item->text}</td>
+				<td>{$item->created|date:'d.m.Y'}</td>
+				{if !$item->viewed}
+					<td><a class="ajax btn btn-warning" n:href="viewed! $item->id">Přečteno</a></td>
+				{else}
+					<td><a class="ajax btn btn-success disabled">Přečteno</a></td>
+				{/if}
+			</tr>
+		{/foreach}
+	</tbody>
+	</table>
+		{control paginator}
+{/snippet}
+{/block}

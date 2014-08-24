@@ -3,13 +3,27 @@
 {define addNewPost}
 		<div class="stream-form">
 			<ul id="stream-form-tabs">
-				<li><a href="#tabs-1">Přiznání</a></li>
+				{if $user->isLoggedIn()}
+					<li><a href="#tabs-1">Status</a></li>
+					<li class="separator"></li>
+				{/if}
+				<li><a href="#tabs-2">Přiznání</a></li>
 				<li class="separator"></li>
-				<li class="last"><a href="#tabs-2">Fotky</a></li>
+				<li class="last"><a href="#tabs-3">Fotky</a></li>
 			</ul>
-			<div id="tabs-1">
+			{if $user->isLoggedIn()}
+				<div id="tabs-1">
+					{form statusForm}
+						{input message class=>'form-field', placeholder=>'Napiš co právě děláš...', rows => 3}
+						<div class="submit-container">
+							{input submit class => 'submit-button'}
+						</div>
+					{/form}
+				</div>
+			{/if}
+			<div id="tabs-2">
 				{form addConfessionForm class=>'form-container'}
-					{input note class=>'form-field', placeholder=>'Přiznej se...', rows => 3}
+					{input note class=>'form-field', placeholder=>'Přiznej se, vše bude anonymní...', rows => 3}
 					<div class="submit-container">
 						{input submit class => 'submit-button'}
 					</div>
@@ -17,7 +31,7 @@
 					{input nick class => 'hidden'}
 				{/form}
 			</div>
-			<div id="tabs-2">
+			<div id="tabs-3" class="stream-add-images">
 				{if $user->isLoggedIn()}
 					{control newStreamImageForm}
 				{else}

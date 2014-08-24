@@ -1,0 +1,78 @@
+<?php
+
+/*
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
+ */
+
+/**
+ * Registruje další helpery do šablony
+ *
+ * @author Petr Kukrál <p.kukral@kukral.eu>
+ */
+
+namespace NetteExt\Helper;
+
+class HelperRegistrator {
+
+	/** @var GetImgPathHelper */
+	public $getImgPathHelper;
+
+	/** @var ShowProfHelper */
+	public $showProfHelper;
+
+	/** @var array Callback na fci link */
+	private $linkCallback;
+
+	/**
+	 * @param \Nette\Http\Url $url
+	 * @param array $linkCallback Callback na fci link
+	 */
+	public function __construct($url, $linkCallback) {
+		$this->getImgPathHelper = new GetImgPathHelper($url);
+		$this->linkCallback = $linkCallback;
+		$this->showProfHelper = new ShowProfHelper($this->getImgPathHelper, $linkCallback);
+	}
+
+	/**
+	 * Zaregistruje všechny helpery
+	 * @param Nette\Templating\ITemplate $template
+	 */
+	public function registerHelpers($template) {
+		$this->registerGetImgPathHelpers($template);
+		$this->registerShowProfHelpers($template);
+	}
+
+	private function registerShowProfHelpers($template) {
+		$showProfHelper = $this->showProfHelper;
+		$template->registerHelper(ShowProfHelper::NAME, function($user, $href = null) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, FALSE);
+		});
+		$template->registerHelper(ShowProfHelper::NAME_MIN, function($user, $href = null) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, TRUE);
+		});
+	}
+
+	/**
+	 * Zaregistruje GetImgPath helpery
+	 * @param Nette\Templating\ITemplate $template
+	 */
+	private function registerGetImgPathHelpers($template) {
+		$getImgPathHelper = $this->getImgPathHelper;
+		$template->registerHelper(GetImgPathHelper::NAME, function($image, $gallType = GetImgPathHelper::TYPE_USER_GALLERY) use ($getImgPathHelper) {
+			return $getImgPathHelper->getImgPath($image, $gallType);
+		});
+		$template->registerHelper(GetImgPathHelper::NAME_MIN, function($image, $gallType = GetImgPathHelper::TYPE_USER_GALLERY) use ($getImgPathHelper) {
+			return $getImgPathHelper->getImgMinPath($image, $gallType);
+		});
+		$template->registerHelper(GetImgPathHelper::NAME_MIN_SQR, function($image, $gallType = GetImgPathHelper::TYPE_USER_GALLERY) use ($getImgPathHelper) {
+			return $getImgPathHelper->getImgSqrPath($image, $gallType);
+		});
+		$template->registerHelper(GetImgPathHelper::NAME_SCRN, function($image, $gallType = GetImgPathHelper::TYPE_USER_GALLERY) use ($getImgPathHelper) {
+			return $getImgPathHelper->getImgScrnPath($image, $gallType);
+		});
+		$template->registerHelper(GetImgPathHelper::NAME_STREAM, function($streamItem, $gallType = GetImgPathHelper::TYPE_USER_GALLERY) use ($getImgPathHelper) {
+			return $getImgPathHelper->getStreamImgPath($streamItem, $gallType);
+		});
+	}
+
+}

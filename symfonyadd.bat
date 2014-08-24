@@ -1,0 +1,12 @@
+git add vendor\symfony\browser-kit\Symfony\Component\BrowserKit\*
+git add vendor\symfony\config\Symfony\Component\Config\*
+git add vendor\symfony\console\Symfony\Component\Console\*
+git add vendor\symfony\css-selector\Symfony\Component\CssSelector\*
+git add vendor\symfony\dependency-injection\Symfony\Component\DependencyInjection\*
+git add vendor\symfony\dom-crawler\Symfony\Component\DomCrawler\*
+git add vendor\symfony\event-dispatcher\Symfony\Component\EventDispatcher\*
+git add vendor\symfony\filesystem\Symfony\Component\Filesystem\*
+git add vendor\symfony\finder\Symfony\Component\Finder\*
+git add vendor\symfony\process\Symfony\Component\Process\*
+git add vendor\symfony\translation\Symfony\Component\Translation\*
+git add vendor\symfony\yaml\Symfony\Component\Yaml\*

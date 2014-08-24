@@ -4,59 +4,47 @@ namespace Nette\Application\UI\Form;
 
 use Nette\Application\UI\Form,
 	Nette\Security as NS,
-	Nette\ComponentModel\IContainer;
+	Nette\ComponentModel\IContainer,
+	POS\Model\UserDao,
+	POS\Model\UserPropertyDao;
+use Nette\Database\Table\ActiveRow;
 
-class DatingEditFirstForm extends EditBaseForm {
+class DatingEditFirstForm extends DatingRegistrationFirstForm {
 
-	private $userModel;
+	/**
+	 * @var \POS\Model\UserDao
+	 */
+	public $userDao;
+
+	/**
+	 * @var \POS\Model\UserPropertyDao
+	 */
+	public $userPropertyDao;
 	private $id_user;
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
+	public function __construct(UserPropertyDao $userPropertyDao, UserDao $userDao, ActiveRow $user, IContainer $parent = NULL, $name = NULL) {
 
-		$presenter = $this->getPresenter();
-		$this->userModel = $this->getPresenter()->context->userModel;
-		$this->id_user = $presenter->getUser()->getId();
-		$userInfo = $presenter->context->userModel->findUser(array('id' => $this->id_user));
+		$this->userPropertyDao = $userPropertyDao;
+		$userProperty = $this->userPropertyDao->find($user->propertyID);
 
-		$this->addText('age', 'Věk')
-			->setDefaultValue($userInfo->age)
-			->addRule(Form::FILLED, 'Věk není vyplněn.')
-			->addRule(Form::INTEGER, 'Věk není číslo.')
-			->addRule(Form::RANGE, 'Věk musí být od %d do %d let.', array(18, 120));
+		parent::__construct($userDao, $parent, $name, $userProperty);
 
-		$UserPropertyOption = array(
-			'woman' => 'Žena',
-			'man' => 'Muž',
-			'couple' => 'Pár',
-			'coupleWoman' => 'Pár dvě ženy',
-			'coupleMan' => 'Pár dva muži',
-			'group' => 'Skupina',
-		);
-		$this->addSelect('user_property', 'Jsem:', $UserPropertyOption)
-			->setDefaultValue($userInfo->user_property);
-
-		$InterestOption = array(
-			'woman' => 'Žena',
-			'man' => 'Muž',
-			'couple' => 'Pár',
-			'group' => 'Skupina',
-		);
-		$this->addSelect('interested_in', 'Zajímám se o:', $InterestOption)
-			->setDefaultValue($userInfo->interested_in);
-
-		$this->onSuccess[] = callback($this, 'editformSubmitted');
-		$this->addSubmit('send', 'Uložit')
-			->setAttribute("class", "btn btn-info");
+		$this["send"]->caption = "Uložit";
+		$this["send"]->setAttribute("class", "btn btn-info");
 
 		return $this;
 	}
 
-	public function editformSubmitted($form) {
+	public function submitted($form) {
 		$values = $form->values;
 		$presenter = $this->getPresenter();
-
-		$presenter->redirect('Editprofil:EditFirstForm', $values->age, $values->user_property, $values->interested_in);
+		$this->id_user = $presenter->getUser()->getId();
+		$record = $this->userDao->find($this->id_user);
+		if (!$record) {
+			throw new BadRequestException;
+		}
+		$this->userPropertyDao->update($record->propertyID, array(/* 'age' => $values->age, */'user_property' => $values->user_property, 'interested_in' => $values->interested_in));
+		$presenter->redirect('this');
 	}
 
 }

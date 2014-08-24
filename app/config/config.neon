@@ -14,6 +14,8 @@ common:
 		facebook:
 			appId: '639745929384551' # musi byt string
 			secret: '6db6f485163d65b16d4758520e1011b9'
+		#testovací režim
+		testMode: FALSE
 
 	php:
 		date.timezone: Europe/Prague
@@ -22,6 +24,10 @@ common:
 
 
 	nette:
+		application:
+#			catchExceptions: TRUE
+			errorPresenter: Error
+			
 		session:
 			autoStart: smart
 			expiration: +30 days
@@ -31,24 +37,32 @@ common:
 				dsn: '%database.driver%:host=%database.host%;dbname=%database.dbname%'
 				user: %database.user%
 				password: %database.password%
-
+			chat:
+				dsn: '%chatDatabase.driver%:host=%chatDatabase.host%;dbname=%chatDatabase.dbname%'
+				user: %chatDatabase.user%
+				password: %chatDatabase.password%
+	
+#	testMode: %testMode%
 
 	services:
 		database: @POS\Model\UserDao
 
-		userModel: UserModel
+		#facebook: Facebook( {appId: %facebook.appId%, secret: %facebook.secret%} )
 
-		facebook: Facebook( {appId: %facebook.appId%, secret: %facebook.secret%} )
-
-		facebookAuthenticator: FacebookAuthenticator
+		#facebookAuthenticator: FacebookAuthenticator
 
 		authenticator: Authenticator
+
+		chatManager: POS\Chat\ChatManager
 		authorizator:
 			class: Acl
 
 		
 production < common:
 
+	nette:
+		application:
+			catchExceptions: TRUE
 
 	parameters:
 		database:
@@ -65,5 +79,16 @@ production < common:
 			dbname: d42750_pos4
 			user: a42750_pos4
 			password: aB9aStTN
+		productionMode: TRUE
+
+		chatDatabase:
+			#driver: mysql
+			#host: localhost
+			#dbname: poschat
+			#user: root
+			#password: root
 
 development < common:
+
+	parameters:
+		productionMode: FALSE

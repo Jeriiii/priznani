@@ -4,21 +4,31 @@ namespace Nette\Application\UI\Form;
 
 use Nette\Application\UI\Form,
 	Nette\Security as NS,
-	Nette\ComponentModel\IContainer;
+	Nette\ComponentModel\IContainer,
+        POS\Model\UserDao,
+        POS\Model\UserPropertyDao;
 
 class InterestedInForm extends EditBaseForm {
 
-	private $userModel;
+        /**
+	 * @var \POS\Model\UserDao
+	 */
+	public $userDao;
+        /**
+	 * @var \POS\Model\UserPropertyDao
+	 */
+        public $userPropertyDao;
 	private $id_user;
 	private $record;
 
-	public function __construct(IContainer $parent = NULL, $name = NULL) {
+	public function __construct(UserPropertyDao $userPropertyDao, UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
+                $this->userDao = $userDao;
+                $this->userPropertyDao = $userPropertyDao;
 		$presenter = $this->getPresenter();
-		$this->userModel = $this->getPresenter()->context->userModel;
 		$this->id_user = $presenter->getUser()->getId();
-		$userInfo = $presenter->context->userModel->findUser(array('id' => $this->id_user));
+		$userInfo = $this->userDao->find($this->id_user);
 
 		$this->addGroup('Zajímám se o');
 		$threesome = array(
@@ -26,35 +36,35 @@ class InterestedInForm extends EditBaseForm {
 			'1' => 'ano',
 		);
 		$this->addSelect('threesome', 'Trojku:', $threesome)
-			->setDefaultValue($userInfo->threesome);
+			->setDefaultValue($userInfo->property->threesome);
 
 		$anal = array(
 			'0' => 'ne',
 			'1' => 'ano',
 		);
 		$this->addSelect('anal', 'Anální sex:', $anal)
-			->setDefaultValue($userInfo->anal);
+			->setDefaultValue($userInfo->property->anal);
 
 		$group = array(
 			'0' => 'ne',
 			'1' => 'ano',
 		);
 		$this->addSelect('group', 'Skupinový:', $group)
-			->setDefaultValue($userInfo->group);
+			->setDefaultValue($userInfo->property->group);
 
 		$bdsm = array(
 			'0' => 'ne',
 			'1' => 'ano',
 		);
 		$this->addSelect('bdsm', 'BDSM:', $bdsm)
-			->setDefaultValue($userInfo->bdsm);
+			->setDefaultValue($userInfo->property->bdsm);
 
 		$swallow = array(
 			'0' => 'ne',
 			'1' => 'ano',
 		);
 		$this->addSelect('swallow', 'Polykání:', $swallow)
-			->setDefaultValue($userInfo->swallow);
+			->setDefaultValue($userInfo->property->swallow);
 
 
 		$cum = array(
@@ -62,49 +72,49 @@ class InterestedInForm extends EditBaseForm {
 			'1' => 'ano',
 		);
 		$this->addSelect('cum', 'Sperma:', $cum)
-			->setDefaultValue($userInfo->cum);
+			->setDefaultValue($userInfo->property->cum);
 
 		$oral = array(
 			'0' => 'ne',
 			'1' => 'ano',
 		);
 		$this->addSelect('oral', 'Orální sex:', $oral)
-			->setDefaultValue($userInfo->oral);
+			->setDefaultValue($userInfo->property->oral);
 
 		$piss = array(
 			'0' => 'ne',
 			'1' => 'ano',
 		);
 		$this->addSelect('piss', 'Piss:', $piss)
-			->setDefaultValue($userInfo->piss);
+			->setDefaultValue($userInfo->property->piss);
 
 		$sex_massage = array(
 			'0' => 'ne',
 			'1' => 'ano',
 		);
 		$this->addSelect('sex_massage', 'Sex masáž:', $sex_massage)
-			->setDefaultValue($userInfo->sex_massage);
+			->setDefaultValue($userInfo->property->sex_massage);
 
 		$petting = array(
 			'0' => 'ne',
 			'1' => 'ano',
 		);
 		$this->addSelect('petting', 'Osahávání:', $petting)
-			->setDefaultValue($userInfo->petting);
+			->setDefaultValue($userInfo->property->petting);
 
 		$fisting = array(
 			'0' => 'ne',
 			'1' => 'ano',
 		);
 		$this->addSelect('fisting', 'Fisting:', $fisting)
-			->setDefaultValue($userInfo->fisting);
+			->setDefaultValue($userInfo->property->fisting);
 
 		$deepthrought = array(
 			'0' => 'ne',
 			'1' => 'ano',
 		);
 		$this->addSelect('deepthrought', 'Hluboké kouření:', $deepthrought)
-			->setDefaultValue($userInfo->deepthrought);
+			->setDefaultValue($userInfo->property->deepthrought);
 
 		$this->onSuccess[] = callback($this, 'editformSubmitted');
 		$this->addSubmit('send', 'Uložit')
@@ -118,13 +128,13 @@ class InterestedInForm extends EditBaseForm {
 		$presenter = $this->getPresenter();
 		$this->id_user = $presenter->getUser()->getId();
 
-		$this->record = $presenter->context->userModel->findUser(array('id' => $this->id_user));
+		$this->record = $this->userDao->find($this->id_user);
 		if (!$this->record) {
 			throw new BadRequestException;
 		}
-		$presenter->context->userModel->updateUser($this->record, array('threesome' => $values->threesome, 'anal' => $values->anal, 'group' => $values->group, 'bdsm' => $values->bdsm, 'swallow' => $values->swallow, 'cum' => $values->cum, 'oral' => $values->oral, 'piss' => $values->piss, 'sex_massage' => $values->sex_massage, 'petting' => $values->petting, 'fisting' => $values->fisting, 'deepthrought' => $values->deepthrought,));
+		$this->userPropertyDao->update($this->record->propertyID, array('threesome' => $values->threesome, 'anal' => $values->anal, 'group' => $values->group, 'bdsm' => $values->bdsm, 'swallow' => $values->swallow, 'cum' => $values->cum, 'oral' => $values->oral, 'piss' => $values->piss, 'sex_massage' => $values->sex_massage, 'petting' => $values->petting, 'fisting' => $values->fisting, 'deepthrought' => $values->deepthrought,));
 		$presenter->flashMessage('Změna doplňujících údajů byla úspěšná');
-		$presenter->redirect("EditProfil:default");
+		$presenter->redirect("this");
 	}
 
 }

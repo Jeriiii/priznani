@@ -149,4 +149,18 @@ class StreamDao extends AbstractDao {
 		$sel->delete();
 	}
 
+	/**
+	* Přidá nový status do streamu
+	* @param int $stausID ID statusu
+	* @param int $userID ID uživatele
+	*/
+	public function addNewStatus($stausID, $userID) {
+		$sel = $this->getTable();
+		$sel->insert(array(
+			"statusID" => $stausID,
+			"userID" => $userID,
+			"create" => new DateTime(),
+		));
+	}
+
 }

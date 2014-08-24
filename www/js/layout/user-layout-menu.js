@@ -16,3 +16,5 @@
     $("body").click(function(a){ 
         !$(a.target).parents().is("#usermenu")&&isvisible&&droplink.trigger('click');
     });
+	  
+	

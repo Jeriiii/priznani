@@ -13,8 +13,10 @@ require __DIR__ . '/../vendor/Nette/loader.php';
 
 $configurator = new Nette\Configurator;
 
+//$configurator->setDebugMode(FALSE);  // zapne produkci
 // Enable Nette Debugger for error visualisation & logging
 //$configurator->setProductionMode($configurator::AUTO);
+
 $configurator->enableDebugger(__DIR__ . '/../log');
 
 // Enable RobotLoader - this will load all classes automatically
@@ -26,7 +28,8 @@ $configurator->createRobotLoader()
 	->register();
 
 //pokud se automaticky testuje
-$testing = isset($_SERVER['TESTING']) && $_SERVER['TESTING'];
+$testing = (isset($_SERVER['TESTING']) && $_SERVER['TESTING']) ||
+	(isset($_SERVER['HTTP_X_TESTING']) && $_SERVER['HTTP_X_TESTING']);
 
 // Create Dependency Injection container from config.neon file
 $configurator->addConfig(__DIR__ . '/config/config.neon');
@@ -42,6 +45,7 @@ $router = new RouteList;
 
 $container->router = $router;
 $router[] = new Route('index.php', 'OnePage:default', Route::ONE_WAY);
+
 $router[] = new Route('//[www.]priznanizparty.cz/[/<presenter>/<url>]', array(
 	'presenter' => 'Page',
 	'action' => 'default',
@@ -62,12 +66,18 @@ $router[] = new Route('//priznaniosexu.cz/poradna/<id>', array(
 	'action' => 'advice',
 	'id' => '<id>'
 	));
+
 $router[] = new Route('<presenter>/<action>[/<url>]', 'OnePage:default');
 
 Container::extensionMethod('addDateTimePicker', function (Container $_this, $name, $label, $cols = NULL, $maxLength = NULL) {
 	return $_this[$name] = new Nette\Extras\DateTimePicker($label, $cols, $maxLength);
 });
 Kdyby\BootstrapFormRenderer\DI\RendererExtension::register($configurator);
+
+// Na PRODUKCI se nastaví odchytávání vyjímek
+if (!$configurator->isDebugMode()) {
+	$container->application->catchExceptions = TRUE;
+}
 
 return $container;
 

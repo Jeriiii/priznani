@@ -32,24 +32,16 @@ class AdminPresenter extends AdminSpacePresenter {
 	}
 
 	public function renderAccounts() {
+		$unconfirmedPag = $this["unconfirmedPaginator"]->getPaginator();
+		$userPag = $this["userPaginator"]->getPaginator();
+		$adminPag = $this["adminPaginator"]->getPaginator();
+		$superadminPag = $this["superadminPaginator"]->getPaginator();
 
-		$adminPaginator = $this["adminPaginator"]->getPaginator();
-		$adminPaginator->itemCount = $this->userDao->getInRoleAdmin()->count();
-
-		$superadminPaginator = $this["superadminPaginator"]->getPaginator();
-		$superadminPaginator->itemCount = $this->userDao->getInRoleSuperadmin()->count();
-
-		$userPaginator = $this["userPaginator"]->getPaginator();
-		$userPaginator->itemCount = $this->userDao->getInRoleUsers()->count();
-
-		$unconfirmedPaginator = $this["unconfirmedPaginator"]->getPaginator();
-		$unconfirmedPaginator->itemCount = $this->userDao->getInRoleUnconfirmed()->count();
-
-		$this->template->unconfirmed_users = $this->userDao->getInRoleUnconfirmedForPaginator($unconfirmedPaginator->itemsPerPage, $unconfirmedPaginator->offset);
-		$this->template->users = $this->userDao->getInRoleUsersForPaginator($userPaginator->itemsPerPage, $userPaginator->offset);
-		$this->template->admins = $this->userDao->getInRoleAdminForPaginator($adminPaginator->itemsPerPage, $adminPaginator->offset);
-		$this->template->superadmins = $this->userDao->getInRoleSuperadminForPaginator($superadminPaginator->itemsPerPage, $superadminPaginator->offset);
-		$this->template->totalCount = $this->userDao->getTable()->count();
+		$this->template->unconfirmed_users = $this->userDao->getInRoleUnconfirmedLimit($unconfirmedPag->itemsPerPage, $unconfirmedPag->offset);
+		$this->template->users = $this->userDao->getInRoleUsersLimit($userPag->itemsPerPage, $userPag->offset);
+		$this->template->admins = $this->userDao->getInRoleAdminLimit($adminPag->itemsPerPage, $adminPag->offset);
+		$this->template->superadmins = $this->userDao->getInRoleSuperadminLimit($superadminPag->itemsPerPage, $superadminPag->offset);
+		$this->template->totalCount = $this->userDao->getTotalCount();
 	}
 
 	protected function createComponentPasswordForm($name) {
@@ -63,7 +55,9 @@ class AdminPresenter extends AdminSpacePresenter {
 	 */
 	protected function createComponentSuperadminPaginator($name) {
 		$vp = new \VisualPaginator($this, $name);
-		$vp->getPaginator()->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
+		$paginator = $vp->getPaginator();
+		$paginator->itemCount = $this->userDao->getInRoleSuperadmin()->count();
+		$paginator->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
 		return $vp;
 	}
 
@@ -74,7 +68,9 @@ class AdminPresenter extends AdminSpacePresenter {
 	 */
 	protected function createComponentAdminPaginator($name) {
 		$vp = new \VisualPaginator($this, $name);
-		$vp->getPaginator()->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
+		$paginator = $vp->getPaginator();
+		$paginator->itemCount = $this->userDao->getInRoleAdmin()->count();
+		$paginator->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
 		return $vp;
 	}
 
@@ -85,7 +81,9 @@ class AdminPresenter extends AdminSpacePresenter {
 	 */
 	protected function createComponentUserPaginator($name) {
 		$vp = new \VisualPaginator($this, $name);
-		$vp->getPaginator()->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
+		$paginator = $vp->getPaginator();
+		$paginator->itemCount = $this->userDao->getInRoleUsers()->count();
+		$paginator->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
 		return $vp;
 	}
 
@@ -96,7 +94,9 @@ class AdminPresenter extends AdminSpacePresenter {
 	 */
 	protected function createComponentUnconfirmedPaginator($name) {
 		$vp = new \VisualPaginator($this, $name);
-		$vp->getPaginator()->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
+		$paginator = $vp->getPaginator();
+		$paginator->itemCount = $this->userDao->getInRoleUnconfirmed()->count();
+		$paginator->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
 		return $vp;
 	}
 

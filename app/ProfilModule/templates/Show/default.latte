@@ -1,0 +1,76 @@
+{block head}
+	<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/css/bootstrap.min.css" type="text/css">
+	<style>
+	h1 {
+		margin-top: 0;
+	}
+    </style>
+    {control css 'stream/list.less', 'chat/popup.less'}
+{/block}
+
+{block jqueryUI}
+	<script type="text/javascript" src="{$basePath}/js/jquery-ui.modals.min.js"></script>
+{/block}
+
+{block foot}
+	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>
+	<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
+{control js}
+
+<script>
+	$(document).ready(function () {
+		$( ".stream-form" ).tabs();
+		$("body").stream({
+			rows: {$count},
+			addoffset: 4,
+			offsetName: 'profilStream-offset'
+		});
+	});
+	$("#frmaddConfessionForm-note").click(function() {
+		$("#frmaddConfessionForm-note").animate({ height: "200px"}, 500);
+	});
+</script>
+{/block}
+{block content}
+
+<h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
+
+<a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right">Poslat zprávu uživateli {$userData->user_name}</a>
+
+
+<div id="sendmessage-dialog" title="Poslat zprávu uživateli {$userData->user_name}">
+	{control sendMessageForm}
+</div>
+
+{if $hasProfilePhoto}
+	<img src="{$profilePhoto|getImgSqrPath}" alt="{$profilePhoto->name}"/>
+{/if}
+
+{include 'menu.latte' $userID => 'id'}
+
+{control sendFriendRequest}
+{control youAreSexy}
+
+{control friendsList}
+
+{control sexyListIMarked}
+
+<h2>Zeď</h2>
+{control userGalleries 'listFew', $userID}
+
+<h2>Příspěvky uživatele</h2>
+{control profilStream}
+
+<h2>Informace o uživateli</h2>
+{control userInfo "listFew", $userID}
+
+<h2>Nahrání profilovky</h2>
+
+{control uploadPhotoForm}
+
+
+
+
+
+{/block}

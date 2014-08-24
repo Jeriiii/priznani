@@ -50,9 +50,9 @@ class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm {
 			"description" => $image->description
 		));
 
-		$this->addSubmit('send', 'Změnit')
-			->setAttribute('class', 'btn-main medium');
-		//$this->addProtection('Vypršel časový limit, odešlete formulář znovu');
+		$this->addSubmit('send', 'Změnit');
+
+		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -63,7 +63,7 @@ class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm {
 
 		$this->userImageDao->update($this->imageID, $values);
 
-		$presenter->flashMessage('Fotka byla úspěšně změněna');
+		$presenter->flashMessage('Fotka byla úspěšně změněna. Nyní je ve frontě na schválení.');
 		$presenter->redirect("Galleries:listUserGalleryImages", $this->galleryID);
 	}
 

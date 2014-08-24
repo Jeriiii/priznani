@@ -46,6 +46,30 @@ class CompetitionPresenter extends BasePresenter {
 	 */
 	public $streamDao;
 
+	/**
+	 * @var POS\Model\UsersCompetitionsDao
+	 * @inject
+	 */
+	public $usersCompetitionsDao;
+
+	/**
+	 * @var POS\Model\UserGalleryDao
+	 * @inject
+	 */
+	public $userGalleryDao;
+
+	/**
+	 * @var POS\Model\UserImageDao
+	 * @inject
+	 */
+	public $userImageDao;
+
+	/**
+	 * @var POS\Model\CompetitionsImagesDao
+	 * @inject
+	 */
+	public $competitionsImagesDao;
+
 	public function startup() {
 		parent::startup();
 
@@ -58,6 +82,10 @@ class CompetitionPresenter extends BasePresenter {
 			$this->setPartyMode();
 		} else {
 			$this->setSexMode();
+		}
+
+		if ($this->action == "uploadCompetitionImage") {
+			$this->checkLoggedIn();
 		}
 	}
 
@@ -74,6 +102,7 @@ class CompetitionPresenter extends BasePresenter {
 
 		$this->template->competitions = $this->galleryDao->getGallery($mode);
 		$this->template->galleries = $this->galleryDao->getCompetition($mode);
+		$this->template->userCompetitions = $this->usersCompetitionsDao->getAll();
 	}
 
 	public function actionListImages($galleryID) {
@@ -236,6 +265,10 @@ class CompetitionPresenter extends BasePresenter {
 		$this->galleryID = $galleryID;
 	}
 
+	public function actionUploadCompetitionImage($galleryID) {
+		$this->galleryID = $galleryID;
+	}
+
 	public function renderUploadImage($galleryID) {
 		$photos = $this->imageDao->getAll("DESC");
 		$this->template->photo1 = $photos->fetch();
@@ -261,6 +294,10 @@ class CompetitionPresenter extends BasePresenter {
 
 	protected function createComponentImageNew($name) {
 		return new Frm\ImageNewForm($this->imageDao, $this->galleryID, $this, $name);
+	}
+
+	public function createComponentNewCompImageForm($name) {
+		return new Frm\NewCompetitionImageForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this->usersCompetitionsDao, $this->competitionsImagesDao, $this, $name);
 	}
 
 	public function createComponentJs() {

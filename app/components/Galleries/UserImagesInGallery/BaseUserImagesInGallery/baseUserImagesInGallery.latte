@@ -19,11 +19,12 @@
 	{ifset #addNewImage}
 		{include #addNewImage}
 	{/ifset}
-    {foreach $images as $image}        
+	{foreach $images as $image}        
 		<div class="img-container">                           
-			<img src="{$basePath}/images/userGalleries/{$userData->id}/{$image->galleryID}/minSqr{$image->id}.{$image->suffix}" width="100%" height="100%"/>
-			<a class="view" href="{plink Galleries:image imageID => $image->id, galleryID => $image->galleryID}">{$image->name}</a>
-			
+			<img src="{$image|getImgSqrPath}" width="100%" height="100%"/>
+			{* link, na který se odkáže po kliknutí *}
+			{include #imageLink "image" => $image}
+
 			{ifset #imageEditButtons}
 				{include #imageEditButtons "image" => $image}
 			{/ifset}
@@ -31,7 +32,10 @@
 		{ifset #modalDeleteImage}
 			{include #modalDeleteImage "image" => $image, "iterator" => $iterator}
 		{/ifset}
-    {/foreach}
+	{/foreach}
+	{if $images->count() == 0}
+		Uživatel nemá žádné fotky. Požádejte ho o vložení fotek.
+	{/if}
     <div class="clear"></div>
 </section>
 {/}

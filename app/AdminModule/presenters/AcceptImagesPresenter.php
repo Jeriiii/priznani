@@ -1,9 +1,7 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 /**
@@ -40,18 +38,40 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	 */
 	public $userGalleryDao;
 
+	/**
+	 * @var \POS\Model\CompetitionsImagesDao
+	 * @inject
+	 */
+	public $competitionsImagesDao;
+
 	public function renderDefault() {
-		$images = $this->userImageDao->getUnapproved();
+		$compImages = $this->competitionsImagesDao->getUnapproved();
+		$compIndexes = $this->getImagesIndexes($compImages);
+
+		$images = $this->userImageDao->getUnapproved($compIndexes);
 		$this->template->images = $images;
+
+		$this->template->usrCount = $images->count("id");
+		$this->template->compCount = $compImages->count("id");
+	}
+
+	public function renderAcceptCompetitionImages() {
+		$images = $this->competitionsImagesDao->getUnapproved();
+		$compIndexes = $this->getImagesIndexes($images);
+		$usrImages = $this->userImageDao->getUnapproved($compIndexes);
+		$this->template->images = $images;
+
+		$this->template->compCount = $images->count("id");
+		$this->template->usrCount = $usrImages->count("id");
 	}
 
 	public function handleAcceptImage($imgId, $galleryId) {
-		$image = $this->userImageDao->find($imgId);
-		$image->update(array('allow' => 1));
+		$image = $this->userImageDao->approve($imgId);
 
 		$userID = $this->userGalleryDao->find($image->galleryID)->userID;
 
 		$this->streamDao->aliveGallery($galleryId, $userID);
+		$this->invalidateMenuData();
 
 		if ($this->isAjax("imageAcceptance")) {
 			$this->invalidateControl('imageAcceptance');
@@ -68,12 +88,46 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		File::removeImage($image->id, $image->suffix, $galleryFolder);
 
 		$image->delete();
+		$this->invalidateMenuData();
 
 		if ($this->isAjax("imageAcceptance")) {
 			$this->invalidateControl('imageAcceptance');
 		} else {
 			$this->redirect("this");
 		}
+	}
+
+	public function handleAcceptCompetitionImage($imageID) {
+		$comImage = $this->competitionsImagesDao->acceptImage($imageID);
+		$this->streamDao->aliveGallery($comImage->image->galleryID, $comImage->image->gallery->userID);
+		$this->invalidateMenuData();
+
+		if ($this->isAjax()) {
+			$this->redrawControl('imageAcceptance');
+		} else {
+			$this->redirect('this');
+		}
+	}
+
+	public function handleDeleteCompetitionImage($imageID) {
+		$this->competitionsImagesDao->delete($imageID);
+		$this->invalidateMenuData();
+
+		if ($this->isAjax("imageAcceptance")) {
+			$this->redrawControl('imageAcceptance');
+		} else {
+			$this->redirect("this");
+		}
+	}
+
+	public function getImagesIndexes($images) {
+		$indexes = array();
+
+		foreach ($images as $item) {
+			$indexes[] = $item->image->id;
+		}
+
+		return $indexes;
 	}
 
 }

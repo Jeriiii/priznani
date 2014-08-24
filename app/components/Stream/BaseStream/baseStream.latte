@@ -1,25 +1,12 @@
-
 {block beforeContent}
 <section class="content">
 	<div id="stream">
-            
-                {ifset #addNewPost}
-                        {include #addNewPost}
-                {/ifset}                        
-                        
+		{ifset #addNewPost}
+				{include #addNewPost}
+		{/ifset}                                
 		<div n:snippet="posts" data-ajax-append="true">
-
 			{foreach $stream as $dataItem}
 				<div class="stream-item">
-					{*ifset $dataItem->imageID}
-						<div class="stream-img">
-							<img src="{$basePath}/images/galleries/{$dataItem->image->galleryID}/{$dataItem->image->id}.{$dataItem->image->suffix}" />
-						</div>
-						<h3>{$dataItem->image->name}</h3>
-						<p>{$dataItem->image->comment}</p>
-					{/ifset*}
-
-
 					{ifset $dataItem->userGalleryID}
 						{if $user->isLoggedIn()}
 							<a href="{plink :Profil:Galleries: userID => $dataItem->userID}" title="{$dataItem->user->user_name}"><h3>{$dataItem->user->user_name}</h3></a>
@@ -28,7 +15,7 @@
 								<h3>{$dataItem->userGallery->name}</h3>
 							</a>
 							<a href="{plink :Profil:Galleries:image imageID => $dataItem->userGallery->lastImage->id, galleryID => $dataItem->userGallery->id}" class="imagehref">
-								<img src="{$basePath}/images/userGalleries/{$dataItem->userID}/{$dataItem->userGallery->id}/{$dataItem->userGallery->lastImage->id}.{$dataItem->userGallery->lastImage->suffix}" alt="{$dataItem->userGallery->name}" />
+								<img src="{$dataItem|getStrmImgPath}" alt="{$dataItem->userGallery->name}" />
 								<p>{$dataItem->userGallery->lastImage->description}</p>
 							</a>
 						{else}
@@ -39,7 +26,7 @@
 						{if $user->isLoggedIn()}
 							<a href="{plink :Competition: imageID => $dataItem->gallery->lastImageID}" title="{$dataItem->gallery->name}"><h3>{$dataItem->gallery->name}</h3></a>
 							<a href="{plink :Competition: imageID => $dataItem->gallery->lastImageID}" class="imagehref">
-								<img src="{$basePath}/images/galleries/{$dataItem->galleryID}/{$dataItem->gallery->lastImageID}.{$dataItem->gallery->lastImage->suffix}" alt="{$dataItem->gallery->name}" />
+								<img src="{$dataItem|getStrmImgPath:'g'}" alt="{$dataItem->gallery->name}" />
 								<p>{$dataItem->gallery->lastImage->comment}</p>
 							</a>
 						{else}
