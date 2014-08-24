@@ -5,6 +5,7 @@ CREATE TABLE `city` (
 	`districtID` INT(10) UNSIGNED NULL DEFAULT NULL,
 	PRIMARY KEY (`id`)
 )
+COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
 
 CREATE TABLE `district` (
@@ -14,6 +15,7 @@ CREATE TABLE `district` (
 	PRIMARY KEY (`id`)
 )
 COMMENT='okres'
+COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
 
 CREATE TABLE `region` (
@@ -22,4 +24,5 @@ CREATE TABLE `region` (
 	PRIMARY KEY (`id`)
 )
 COMMENT='kraj'
+COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
