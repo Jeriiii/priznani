@@ -22,9 +22,6 @@ class BaseUserPreferences {
 	/** @var \POS\Model\UserPropertyDao */
 	protected $userPropertyDao;
 
-	/** @var ActiveRow Přihlášený uživatel, podle kterého se vybírá */
-	protected $user;
-
 	/** @var ActiveRow Vlastnosti přihlášeného uživatele. */
 	protected $userProperty;
 
@@ -36,9 +33,8 @@ class BaseUserPreferences {
 
 	const NAME_CACHE_USERS = "bestUsers";
 
-	public function __construct(ActiveRow $user, UserPropertyDao $userPropertyDao) {
-		$this->user = $user;
-		$this->userPref = $user->property;
+	public function __construct(ActiveRow $userProperty, UserPropertyDao $userPropertyDao) {
+		$this->userProperty = $userProperty;
 		$this->userPropertyDao = $userPropertyDao;
 		$this->bestUsers = NULL;
 

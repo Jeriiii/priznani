@@ -95,14 +95,16 @@ class UserPropertyDao extends UserBaseDao {
 	 */
 	public function iWantToMeet(ActiveRow $userProperty, Selection $users) {
 
+		$iWantToMeetPeople = array();
+
 		$iWantToMeetMen = $userProperty->want_to_meet_men;
 		if ($iWantToMeetMen) {
-			$users->where(self::COLUMN_USER_PROPERTY, self::PROPERTY_MAN);
+			$iWantToMeetPeople [] = self::COLUMN_USER_PROPERTY . "==" . self::PROPERTY_MAN;
 		}
 
 		$iWantToMeetWomen = $userProperty->want_to_meet_women;
 		if ($iWantToMeetWomen) {
-			$users->where(self::COLUMN_USER_PROPERTY, self::PROPERTY_WOMAN);
+			$users->where(self::COLUMN_USER_PROPERTY == . self::PROPERTY_WOMAN);
 		}
 
 		$iWantToMeetCouple = $userProperty->want_to_meet_couple;
@@ -125,7 +127,12 @@ class UserPropertyDao extends UserBaseDao {
 			$users->where(self::COLUMN_USER_PROPERTY, self::PROPERTY_GROUP);
 		}
 
-		return $users;
+		$condition = "";
+		foreach ($iWantToMeetPeople as $iWant) {
+
+		}
+
+		return $users->where($condition);
 	}
 
 	/**

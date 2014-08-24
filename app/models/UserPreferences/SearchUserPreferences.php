@@ -20,25 +20,33 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 		$users = $this->userPropertyDao->getAll();
 		$userProperty = $this->userProperty;
 
+		dump($userProperty->id);
+		dump($users->fetch());
+
 		/* hledání podle - hledám muže, hledám ženu ... */
 		$users = $this->userPropertyDao->iWantToMeet($userProperty, $users);
-		$users = $this->userPropertyDao->theyWantToMeet($userProperty, $users);
+		//$users = $this->userPropertyDao->theyWantToMeet($userProperty, $users);
+
+		dump($users->fetch());
+
+		die();
 
 		$this->saveBestUsers($users);
 	}
 
 	public function getBestUsers() {
 		$this->bestUsers = $this->cache->load(self::NAME_CACHE_USERS);
-		if ($this->bestUsers === NULL) {
-			$this->calculate();
-		}
+
+		//if ($this->bestUsers === NULL) {
+		$this->calculate();
+		//}
 
 		return $this->bestUsers;
 	}
 
 	/**
-	 *
-	 * @param type $users
+	 * Uloží hledané uživatele do cache.
+	 * @param Nette\Database\Table\Selection $users Hledaní uživatelé.
 	 */
 	public function saveBestUsers($users) {
 		$arrUsers = array();

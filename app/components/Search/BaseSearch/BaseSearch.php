@@ -20,7 +20,7 @@ class BaseSearch extends BaseProjectControl {
 
 	protected $users;
 
-	public function __construct(Selection $users, $parent = NULL, $name = NULL) {
+	public function __construct($users, $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->users = $users;
 	}
@@ -28,8 +28,7 @@ class BaseSearch extends BaseProjectControl {
 	public function render() {
 		$this->template->setFile(dirname(__FILE__) . '/baseSearch.latte');
 
-		$listOfUsers = $this->users->fetchAll();
-		$this->template->items = $listOfUsers;
+		$this->template->items = $this->users;
 		$this->template->render();
 	}
 

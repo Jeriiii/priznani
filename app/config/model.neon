@@ -11,7 +11,6 @@ services:
 	imageDao: \POS\Model\ImageDao
 	videoDao: \POS\Model\VideoDao
 	coupleDao: \POS\Model\CoupleDao
-	polls: Polls
 	#facebook: Facebook
 	streamDao: \POS\Model\StreamDao
 	embedVideos: embedVideos
