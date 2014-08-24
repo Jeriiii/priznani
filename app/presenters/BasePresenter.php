@@ -5,8 +5,7 @@
  *
  * Základní třída pro všechny presentery nastavující společné části.
  *
- * @author     Petr Kukrál
- * @package    jkbusiness
+ * @author	Petr Kukrál
  */
 use Nette\Application\UI\Form as Frm,
 	\Navigation\Navigation,
@@ -27,9 +26,10 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	public $advicemode = FALSE;
 	public $datemode = FALSE;
 
-	/* proměnné pro css překlad */
+	/** @var array proměnné pro css překlad */
 	protected $cssVariables = array();
-	/* proměnné pro js překlad */
+
+	/** @var array proměnné pro js překlad */
 	protected $jsVariables = array();
 
 	/**
@@ -50,61 +50,15 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	}
 
 	public function beforeRender() {
-		if ($this->name == "Competition") {
-			$this->template->fbToDatabase = FALSE;
-			if ($this->action == "default") {
-				$this->template->existForm = FALSE;
-			} else {
-				$this->template->existForm = TRUE;
-			}
-		} else {
-			$this->template->existForm = TRUE;
-			$this->template->fbToDatabase = TRUE;
-			if ($this->name != "Sign") {
-				//die("Stránky přiznáníosexu jsou dočasně mimo provoz.");
-			}
-		}
 		$this->template->partymode = $this->partymode;
 		if ($this->getUser()->isLoggedIn()) {
 			$this->template->identity = $this->getUser()->getIdentity();
 		}
-//		$user = $this->getUser();
-//		$authorizator = new MyAuthorizator;
-//		$httpRequest = $this->context->httpRequest;
-//		$this->domain = $httpRequest
-//							->getUrl()
-//							->host;
-//
-//		if($this->domain == "priznanizparby" || $this->domain == "priznanizparby.cz" || $httpRequest->getQuery('url') == "priznanizparby")
-//		{
-//			$this->partystyle = TRUE;die();
-//		}
-//		else
-//		{
-//			$this->partystyle = FALSE;
-//		}
-//		$this->template->partystyle = $this->partystyle;
 
 		$this->template->domain = $this->domain;
 
 		$this->template->facebook_html = "";
 		$this->template->facebook_script = "";
-
-		$name = "UA-34882037-3";
-		$this->template->google_analytics = "
-				<script type='text/javascript'>
-					var _gaq = _gaq || [];
-					  _gaq.push(['_setAccount', '" . $name . "']);
-					  _gaq.push(['_trackPageview']);
-
-					  (function() {
-						var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-						ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-						var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-					  })();
-				</script>
-			";
-
 
 		$this->fillJsVariablesWithLinks();
 	}
@@ -202,20 +156,17 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$nav->setMenuTemplate(APP_DIR . '/components/Navigation/usermenu.phtml');
 		$navigation = array();
 
-		//prihlaseny uzivatel
-		if ($this->getUser()->isLoggedIn()) {
 
+		if ($this->getUser()->isLoggedIn()) {
+			//prihlaseny uzivatel
 			if ($user->isInRole('admin') || $user->isInRole('superadmin')) {
 				$navigation["Administrace"] = $this->link(":Admin:Admin:default");
 			}
 
 			$navigation["Moje galerie"] = $this->link(":Profil:Galleries:");
-//			$navigation["Přiznání"] = $this->link(":Page:");
-//			$navigation["Nastavení"] = $this->link("#");
 			$navigation["Odhlásit se"] = $this->link(":Sign:out");
-
-			//neprihlaseny uzivatel
 		} else {
+			//neprihlaseny uzivatel
 			$navigation["Přihlášení"] = $this->link(":Sign:in");
 			$navigation["Registrace"] = $this->link(":Sign:registration");
 		}
@@ -363,7 +314,17 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 	public function createComponentJsLayout() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
-		$files->addFiles(array('iedebug.js', 'baseAjax.js', 'order.js', 'fbBase.js', 'leftMenu.js', 'user-layout-menu.js', '../nette.ajax.js'));
+		$files->addFiles(array(
+			'iedebug.js',
+			'baseAjax.js',
+			'order.js',
+			'fbBase.js',
+			'leftMenu.js',
+			'user-layout-menu.js',
+			'../nette.ajax.js',
+			'../mobile/responsive-menu.js',
+			'../forms/netteForms.js'
+		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {
