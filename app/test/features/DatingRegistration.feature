@@ -7,7 +7,7 @@ Feature: Dating registration
 		Given I am on "/dating-registration/"
 		When I fill in "30" for "age"
 		And I select "Pár" from "user_property"
-		And I check "interested_in_couple"
+		And I check "want_to_meet_couple"
 		And I press "send"
 		Then I should be on "/dating-registration/second-reg-form"
 		When I fill in "<email>" for "email"
