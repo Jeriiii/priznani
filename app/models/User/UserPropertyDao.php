@@ -6,6 +6,9 @@
 
 namespace POS\Model;
 
+use Nette\Database\Table\ActiveRow;
+use Nette\Database\Table\Selection;
+
 /**
  * NAME DAO NAMEDao
  * slouží k
@@ -43,6 +46,11 @@ class UserPropertyDao extends UserBaseDao {
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getUsers() {
+		$sel = $this->getTable();
+		$sel->select("users.*, :user_properties.*");
 	}
 
 	/**

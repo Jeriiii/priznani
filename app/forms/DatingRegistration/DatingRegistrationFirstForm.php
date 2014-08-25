@@ -59,11 +59,9 @@ class DatingRegistrationFirstForm extends BaseForm {
 		$presenter = $this->getPresenter();
 
 		//uložení checkboxů
-		foreach ($this->userDao->getUserInterestInOption() as $key => $interest) {
-			$this->regSession['want_to_meet_' . $key] = $values['interested_in_' . $key] == TRUE ? 1 : 0;
+		foreach ($this->userDao->getArrWantToMeet() as $key => $interest) {
+			$this->regSession[$key] = $values[$key] == TRUE ? 1 : 0;
 		}
-		$this->regSession['want_to_meet_couple_men'] = 0;
-		$this->regSession['want_to_meet_couple_women'] = 0;
 
 		$this->regSession->role = 'unconfirmed_user';
 		$this->regSession->age = $values->age;
@@ -76,9 +74,9 @@ class DatingRegistrationFirstForm extends BaseForm {
 	 * Vytváření checkboxů.
 	 */
 	public function addWantToMeet() {
-		foreach ($this->userDao->getUserInterestInOption() as $key => $interest) {
-			$checkBox = $this->addCheckbox('interested_in_' . $key, $interest);
-			$checkBox->setDefaultValue($this->regSession['want_to_meet_' . $key]);
+		foreach ($this->userDao->getArrWantToMeet() as $key => $want) {
+			$checkBox = $this->addCheckbox($key, $want);
+			$checkBox->setDefaultValue($this->regSession[$key]);
 		}
 	}
 
@@ -89,8 +87,8 @@ class DatingRegistrationFirstForm extends BaseForm {
 	public function validateWantToMeet($form) {
 		$values = $form->values;
 
-		foreach ($this->userDao->getUserInterestInOption() as $key => $interest) {
-			if ($values['interested_in_' . $key]) {
+		foreach ($this->userDao->getArrWantToMeet() as $key => $interest) {
+			if ($values[$key]) {
 				return;
 			}
 		}

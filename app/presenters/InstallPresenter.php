@@ -19,6 +19,12 @@ class InstallPresenter extends BasePresenter {
 	 */
 	public $dbDao;
 
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
 	public function startup() {
 		parent::startup();
 		// ochrana proti spuštění instalace na ostrém serveru
@@ -35,6 +41,7 @@ class InstallPresenter extends BasePresenter {
 
 		/* zkontroluje zda existují složky */
 		$dirCheker = new DirChecker($messages);
+		$dirCheker->addUsers($this->userDao);
 		$dirCheker->check();
 
 		/* vyčistí cache */
@@ -50,45 +57,45 @@ class InstallPresenter extends BasePresenter {
 	}
 
 	public function actionClearCache() {
-		$messages = new Messages;
+	$messages = new Messages;
 
-		$clearCache = new ClearCasch($messages);
-		$clearCache->clearCache();
+	$clearCache = new ClearCasch($messages);
+	$clearCache->clearCache();
 
-		$messages->flash($this);
-		$this->redirect("Install:");
-	}
+	$messages->flash($this);
+	$this->redirect("Install:");
+}
 
-	public function actionTestData() {
-		$messages = new Messages;
+public function actionTestData() {
+$messages = new Messages;
 
-		$instalDB = new InstallDB($this->dbDao, $messages);
-		$instalDB->dataTestDb();
+$instalDB = new InstallDB($this->dbDao, $messages);
+$instalDB->dataTestDb();
 
-		$messages->flash($this);
-		$this->redirect("Install:");
-	}
+$messages->flash($this);
+$this->redirect("Install:");
+}
 
-	public function actionData() {
-		$messages = new Messages;
+public function actionData() {
+$messages = new Messages;
 
-		$instalDB = new InstallDB($this->dbDao, $messages);
-		$instalDB->dataDb();
-		$instalDB->dataTestDb();
+$instalDB = new InstallDB($this->dbDao, $messages);
+$instalDB->dataDb();
+$instalDB->dataTestDb();
 
-		$messages->flash($this);
-		$this->redirect("Install:");
-	}
+$messages->flash($this);
+$this->redirect("Install:");
+}
 
-	public function actionAllData() {
-		$messages = new Messages;
+public function actionAllData() {
+$messages = new Messages;
 
-		$instalDB = new InstallDB($this->dbDao, $messages);
-		$instalDB->dataDb();
-		$instalDB->dataTestDb();
+$instalDB = new InstallDB($this->dbDao, $messages);
+$instalDB->dataDb();
+$instalDB->dataTestDb();
 
-		$messages->flash($this);
-		$this->redirect("Install:");
-	}
+$messages->flash($this);
+$this->redirect("Install:");
+}
 
 }

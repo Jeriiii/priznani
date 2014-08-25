@@ -8,6 +8,8 @@ namespace POS\Model;
 
 use Nette\Database\SqlLiteral;
 use Authorizator;
+use Nette\Database\Table\ActiveRow;
+use Nette\Database\Table\Selection;
 
 /**
  * Uživatelé UsersDao
@@ -354,6 +356,122 @@ class UserDao extends UserBaseDao {
 		$sel->update(array(
 			self::COLUMN_ROLE => $role
 		));
+	}
+
+	/*	 * **************** PREFERENCE ********************* */
+
+	/**
+	 * Spojí uživatele podle toho kdo jsou (muž, žena, pár ...) a koho hledají.
+	 * @param \Nette\Database\Table\ActiveRow $userProperty
+	 * @param \Nette\Database\Table\Selection $users
+	 */
+	public function whoWantsWhom(ActiveRow $userProperty, Selection $users) {
+		$this->iWantToMeet($userProperty, $users);
+		$this->theyWantToMeet($userProperty, $users);
+	}
+
+	/**
+	 * Hledání podle toho koho uživatel hledá (muže, ženy, pár atd...)
+	 * @param \Nette\Database\Table\ActiveRow $userProperty Vlastnosti (v tomto smyslu preference) uživatele
+	 * @param \Nette\Database\Table\Selection $users Neprotřídení uživatelé.
+	 * @return \Nette\Database\Table\Selection Hledaní uživatelé.
+	 */
+	public function iWantToMeet(ActiveRow $userProperty, Selection $users) {
+
+		$iWantPeople = array();
+
+		/* Skládání dotazu */
+
+		$iWantMen = $userProperty->want_to_meet_men;
+		$iWantPeople = $this->iWantSomeone($iWantMen, self::PROPERTY_MAN, $iWantPeople);
+
+		$iWantWomen = $userProperty->want_to_meet_women;
+		$iWantPeople = $this->iWantSomeone($iWantWomen, self::PROPERTY_WOMAN, $iWantPeople);
+
+		$iWantCouple = $userProperty->want_to_meet_couple;
+		$iWantPeople = $this->iWantSomeone($iWantCouple, self::PROPERTY_COUPLE, $iWantPeople);
+
+		$iWantCoupleMen = $userProperty->want_to_meet_couple_men;
+		$iWantPeople = $this->iWantSomeone($iWantCoupleMen, self::PROPERTY_COUPLE_MAN, $iWantPeople);
+
+		$iWantCoupleWomen = $userProperty->want_to_meet_couple_women;
+		$iWantPeople = $this->iWantSomeone($iWantCoupleWomen, self::PROPERTY_COUPLE_WOMAN, $iWantPeople);
+
+		$iWantGroup = $userProperty->want_to_meet_group;
+		$iWantPeople = $this->iWantSomeone($iWantGroup, self::PROPERTY_GROUP, $iWantPeople);
+
+		/* Převedení do stringu s OR clauzulí mezi jednotlivými dotazy */
+
+		$condition = implode(" OR ", $iWantPeople["con"]);
+
+		return $users->where($condition, $iWantPeople["args"]);
+	}
+
+	/**
+	 * Pokud chci potkat nějaký typ uživatele (muž, žena, pár ...), vloží
+	 * ho to do pole $iWantPeople ze kterého se vytváří výdledný dotaz pro
+	 * vybrání uživatelů.
+	 * @param boolean $iWantToMeetSomeone Chci potkat tento druh uživatele?
+	 * @param array $propertySomeone Druh uživatele - muž, žena ...
+	 * @param array $iWantPeople Pole druhů uživatelů, které chci potkat.
+	 * @return array Pole druhů uživatelů, které chci potkat.
+	 */
+	private function iWantSomeone($iWantToMeetSomeone, $propertySomeone, $iWantPeople) {
+		if ($iWantToMeetSomeone) {
+			$iWantPeople["con"][] = self::COLUMN_PROPERTY_ID . "." . self::COLUMN_USER_PROPERTY . " = ?";
+			$iWantPeople["args"][] = $propertySomeone;
+		}
+
+		return $iWantPeople;
+	}
+
+	/**
+	 * Hledání podle toho, jestli uživatele hledají mě (uživatele hledají muže a já jsem muž,
+	 * tak je to vybere, ale nevybere to ty co hledají ženy).
+	 * @param \Nette\Database\Table\ActiveRow $userProperty Vlastnosti (v tomto smyslu preference) uživatele
+	 * @param \Nette\Database\Table\Selection $users Neprotřídení uživatelé.
+	 * @return \Nette\Database\Table\Selection Hledaní uživatelé.
+	 */
+	public function theyWantToMeet(ActiveRow $userProperty, Selection $users) {
+		$property = $userProperty->user_property;
+
+		$man = $property == self::PROPERTY_MAN ? TRUE : FALSE;
+		if ($man) {
+			$users->where(UserPropertyDao::COLUMN_WANT_TO_MEET_MEN, 1);
+		}
+
+		$woman = $property == self::PROPERTY_WOMAN ? TRUE : FALSE;
+		if ($woman) {
+			$users->where(UserPropertyDao::COLUMN_WANT_TO_MEET_WOMEN, 1);
+		}
+
+		$couple = $property == self::PROPERTY_COUPLE ? TRUE : FALSE;
+		if ($couple) {
+			$users->where(UserPropertyDao::COLUMN_WANT_TO_MEET_COUPLE, 1);
+		}
+
+		$coupleMen = $property == self::PROPERTY_COUPLE_MAN ? TRUE : FALSE;
+		if ($coupleMen) {
+			$users->where(UserPropertyDao::COLUMN_WANT_TO_MEET_COUPLE_MEN, 1);
+		}
+
+		$coupleWomen = $property == self::PROPERTY_COUPLE_WOMAN ? TRUE : FALSE;
+		if ($coupleWomen) {
+			$users->where(UserPropertyDao::COLUMN_WANT_TO_MEET_COUPLE_WOMEN, 1);
+		}
+
+		$group = $property == self::PROPERTY_GROUP ? TRUE : FALSE;
+		if ($group) {
+			$users->where(UserPropertyDao::COLUMN_WANT_TO_MEET_GROUP, 1);
+		}
+
+		return $users;
+	}
+
+	private function theyWantSomeone() {
+		if ($coupleWomen) {
+			$users->where(UserPropertyDao::COLUMN_WANT_TO_MEET_COUPLE_WOMEN, 1);
+		}
 	}
 
 }

@@ -8,6 +8,7 @@ Feature: Uploading profile photo
 		And I am on "/profil.show/"
 		When I attach the file "<image>" to "imageFile0"
 		And I press "send"
+		And I look on the page
 		Then I should see "<message>"
 		And Approve last image
 		And I go to "/profil.show/"
@@ -16,3 +17,13 @@ Feature: Uploading profile photo
 		Examples:
 			| user		      | image					| message						| text															|
 			| admin@test.cz	  | profile_photo_woman.jpg	| Profilové foto bylo uloženo.  | Test Admin > Profilové fotky	|
+
+	Scenario: User uploads profile photo and approves it
+		Given I am signed in as "admin@test.cz"
+		And I am on "/profil.show/"
+		When I attach the file "profile_photo_woman.jpg" to "imageFile0"
+		And I press "send"
+		Then I should see "Profilové foto bylo uloženo."
+		And Approve last image
+		And I go to "/profil.show/"
+		And I should see "Test Admin > Profilové fotky"

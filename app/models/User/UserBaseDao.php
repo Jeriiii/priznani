@@ -30,6 +30,14 @@ abstract class UserBaseDao extends AbstractDao {
 	const COLUMN_BRA_SIZE = "bra_size";
 	const COLUMN_HAIR_COLOUR = "hair_colour";
 
+	/* Druh uživatele */
+	const PROPERTY_MAN = "m";
+	const PROPERTY_WOMAN = "w";
+	const PROPERTY_COUPLE = "c";
+	const PROPERTY_COUPLE_MAN = "cm";
+	const PROPERTY_COUPLE_WOMAN = "cw";
+	const PROPERTY_GROUP = "g";
+
 	/**
 	 * vrátí specifické věci pro pohlaví
 	 */
@@ -272,6 +280,17 @@ abstract class UserBaseDao extends AbstractDao {
 			'm' => 'Muž',
 			'c' => 'Pár',
 			'g' => 'Skupina',
+		);
+	}
+
+	public static function getArrWantToMeet() {
+		return array(
+			"want_to_meet_men" => "muže",
+			"want_to_meet_women" => "ženu",
+			"want_to_meet_couple" => "pár",
+			"want_to_meet_couple_men" => "pár mužů",
+			"want_to_meet_couple_women" => "pár žen",
+			"want_to_meet_group" => "skupinu"
 		);
 	}
 
