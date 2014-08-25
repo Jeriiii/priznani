@@ -112,6 +112,7 @@ class ChatManager {
 	 * Vrátí posledních několik zpráv z konverzace dvou uživatelů
 	 * @param int $idSender id prvního uživatele
 	 * @param int $idRecipient id druhého uživatele
+	 * @return \Nette\Database\Table\Selection zprávy
 	 */
 	public function getLastMessagesBetween($idSender, $idRecipient) {
 		return $this->messagesDao->getLastTextMessagesBetweenUsers($idSender, $idRecipient, 6);
