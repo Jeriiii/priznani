@@ -8,7 +8,7 @@ use Nette\Application\Routers\RouteList,
 	Nette\Forms\Container;
 
 // Load Nette Framework
-require __DIR__ . '/../vendor2/Nette/loader.php';
+require __DIR__ . '/../vendor/Nette/loader.php';
 
 
 $configurator = new Nette\Configurator;
@@ -20,11 +20,11 @@ $configurator = new Nette\Configurator;
 $configurator->enableDebugger(__DIR__ . '/../log');
 
 // Enable RobotLoader - this will load all classes automatically
-$configurator->setTempDirectory(__DIR__ . '/../temp2');
+$configurator->setTempDirectory(__DIR__ . '/../temp');
 
 $configurator->createRobotLoader()
 	->addDirectory(__DIR__)
-	->addDirectory(__DIR__ . '/../vendor2/others')
+	->addDirectory(__DIR__ . '/../vendor/others')
 	->register();
 
 //pokud se automaticky testuje
@@ -44,7 +44,7 @@ $container = $configurator->createContainer();
 $router = new RouteList;
 
 $container->router = $router;
-$router[] = new Route('index2.php', 'OnePage:default', Route::ONE_WAY);
+$router[] = new Route('index.php', 'OnePage:default', Route::ONE_WAY);
 
 $router[] = new Route('//[www.]priznanizparty.cz/[/<presenter>/<url>]', array(
 	'presenter' => 'Page',
