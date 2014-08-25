@@ -30,6 +30,14 @@ abstract class UserBaseDao extends AbstractDao {
 	const COLUMN_BRA_SIZE = "bra_size";
 	const COLUMN_HAIR_COLOUR = "hair_colour";
 
+	/* Druh uživatele */
+	const PROPERTY_MAN = "m";
+	const PROPERTY_WOMAN = "w";
+	const PROPERTY_COUPLE = "c";
+	const PROPERTY_COUPLE_MAN = "cm";
+	const PROPERTY_COUPLE_WOMAN = "cw";
+	const PROPERTY_GROUP = "g";
+
 	/**
 	 * vrátí specifické věci pro pohlaví
 	 */

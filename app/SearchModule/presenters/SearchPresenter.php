@@ -6,6 +6,8 @@ use Nette\Application\UI\Form as Frm,
 	Nette\ComponentModel\IContainer,
 	Nette\DateTime;
 use Nette\Diagnostics\Debugger;
+use POS\UserPreferences\SearchUserPreferences;
+use POSComponent\Search\BestMatchSearch;
 
 class SearchPresenter extends SearchBasePresenter {
 
@@ -322,7 +324,8 @@ class SearchPresenter extends SearchBasePresenter {
 
 	protected function createComponentBestMatchSearch($name) {
 		$user = $this->userDao->find($this->getUser()->id);
-		return new \POSComponent\Search\BestMatchSearch($user->property, $this->userPropertyDao, $this, $name);
+		$session = $this->getSession();
+		return new BestMatchSearch($user->property, $this->userDao, $session, $this, $name);
 	}
 
 }

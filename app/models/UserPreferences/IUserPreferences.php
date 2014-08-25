@@ -14,4 +14,9 @@ namespace POS\UserPreferences;
 
 interface IUserPreferences {
 
+	/**
+	 * Přepočítá výsledky hledání uložené v cache. Volá se i v případě,
+	 * kdy je cache prázdná.
+	 */
+	public function calculate();
 }

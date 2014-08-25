@@ -20,7 +20,7 @@ class Image {
 	public $galleryID;
 	public $userID = NULL;
 
-	public function __construct(ActiveRow $image, $typeGall, $typeImg) {
+	public function __construct($image, $typeGall, $typeImg) {
 		if ($typeImg == GetImgPathHelper::TYPE_STREAM) {
 			if ($typeGall == GetImgPathHelper::TYPE_USER_GALLERY) {
 				$this->id = $image->userGallery->lastImageID;

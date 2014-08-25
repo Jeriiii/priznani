@@ -13,19 +13,20 @@
 
 namespace POSComponent\Search;
 
-use POS\Model\UserPropertyDao;
+use POS\Model\UserDao;
 use Nette\Database\Table\ActiveRow;
 use POS\UserPreferences\SearchUserPreferences;
+use Nette\Http\Session;
 
 class BestMatchSearch extends BaseSearch {
 
-	public function __construct(ActiveRow $loggedInUser, UserPropertyDao $userPropertyDao, $parent = NULL, $name = NULL) {
-		$users = $this->getBestUsers($loggedInUser, $userPropertyDao);
+	public function __construct(ActiveRow $loggedInUser, UserDao $userDao, Session $session, $parent = NULL, $name = NULL) {
+		$users = $this->getBestUsers($loggedInUser, $userDao, $session);
 		parent::__construct($users, $parent, $name);
 	}
 
-	private function getBestUsers(ActiveRow $loggedInUser, UserPropertyDao $userPropertyDao) {
-		$searchUser = new SearchUserPreferences($loggedInUser, $userPropertyDao);
+	private function getBestUsers(ActiveRow $loggedInUser, UserDao $userDao, Session $session) {
+		$searchUser = new SearchUserPreferences($loggedInUser, $userDao, $session);
 		$users = $searchUser->getBestUsers();
 		return $users;
 	}

@@ -39,23 +39,23 @@ class ShowProfHelper {
 	/**
 	 * Vytvoří miniaturu profilové fotky užvatele, vedle něj napíše jeho jméno
 	 * a celé to obalí do odkazu na Profil:Show presenter
-	 * @param \Nette\Database\Table\ActiveRow $user
+	 * @param \Nette\Database\Table\ActiveRow|Nette\ArrayHash $user
 	 * @param array|null $href Vlasní odkaz. První prvek pole je odkaz, druhý prvek je pole parametrů.
 	 * @param boolen $min TRUE = Zobrazení bez jména vedle fotky.
 	 * @return \Nette\Utils\Html
 	 */
-	public function showProf(ActiveRow $user, $href = null, $min = FALSE) {
+	public function showProf($user, $href = null, $min = FALSE) {
 		return $this->createShowProf($user, $href, $min);
 	}
 
 	/**
 	 * Vytvoří celý element ve spanech.
-	 * @param \Nette\Database\Table\ActiveRow $user Zádnam o uživateli.
+	 * @param \Nette\Database\Table\ActiveRow|Nette\ArrayHash $user Zádnam o uživateli.
 	 * @param array $href Vlasní odkaz. První prvek pole je odkaz, druhý prvek je pole parametrů.
 	 * @param boolean $min TRUE = Zobrazení bez jména vedle fotky.
 	 * @return \Nette\Utils\Html
 	 */
-	private function createShowProf(ActiveRow $user, $href, $min) {
+	private function createShowProf($user, $href, $min) {
 		/* Výsledek je celý v odkazu */
 		$elLink = $this->createLink($href, $user);
 

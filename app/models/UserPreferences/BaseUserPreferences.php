@@ -12,15 +12,17 @@
 
 namespace POS\UserPreferences;
 
-use POS\Model\UserPropertyDao;
+use POS\Model\UserDao;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 use Nette\Caching\Cache;
+use Nette\Http\Session;
+use Nette\Http\SessionSection;
 
 class BaseUserPreferences {
 
-	/** @var \POS\Model\UserPropertyDao */
-	protected $userPropertyDao;
+	/** @var \POS\Model\UserDao */
+	protected $userDao;
 
 	/** @var ActiveRow Vlastnosti přihlášeného uživatele. */
 	protected $userProperty;
@@ -28,20 +30,18 @@ class BaseUserPreferences {
 	/** @var array Nejlepší uživatelé pro tohoto uživatele */
 	protected $bestUsers;
 
-	/** @var Nette\Caching\Cache Cache pro uložení výsledků. */
-	protected $cache;
+	/** @var Nette\Http\SessionSection Sečna do které se ukládá uživatelské vyhledávání */
+	protected $section;
 
-	const NAME_CACHE_USERS = "bestUsers";
+	const NAME_SESSION_BEST_U = "bestUsers";
 
-	public function __construct(ActiveRow $userProperty, UserPropertyDao $userPropertyDao) {
+	public function __construct(ActiveRow $userProperty, UserDao $userDao, Session $session) {
 		$this->userProperty = $userProperty;
-		$this->userPropertyDao = $userPropertyDao;
+		$this->userDao = $userDao;
 		$this->bestUsers = NULL;
 
-		//umístění cache
-		$storage = new \Nette\Caching\Storages\FileStorage('../temp');
-		// vytvoření cache
-		$this->cache = new Cache($storage);
+		$this->section = $session->getSection(self::NAME_SESSION_BEST_U);
+		$this->section->setExpiration("45 min");
 	}
 
 }

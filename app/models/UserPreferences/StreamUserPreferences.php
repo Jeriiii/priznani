@@ -14,4 +14,8 @@ namespace POS\UserPreferences;
 
 class StreamUserPreferences extends BaseUserPreferences implements IUserPreferences {
 
+	public function calculate() {
+		// TO DO
+	}
+
 }

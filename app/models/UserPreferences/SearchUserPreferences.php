@@ -13,33 +13,32 @@
 namespace POS\UserPreferences;
 
 use Nette\Caching\Cache;
+use Nette\ArrayHash;
 
 class SearchUserPreferences extends BaseUserPreferences implements IUserPreferences {
 
+	/**
+	 * Přepočítá výsledky hledání uložené v cache. Volá se i v případě,
+	 * kdy je cache prázdná.
+	 */
 	public function calculate() {
-		$users = $this->userPropertyDao->getAll();
+		$users = $this->userDao->getAll();
+
 		$userProperty = $this->userProperty;
 
-		dump($userProperty->id);
-		dump($users->fetch());
-
 		/* hledání podle - hledám muže, hledám ženu ... */
-		$users = $this->userPropertyDao->iWantToMeet($userProperty, $users);
-		//$users = $this->userPropertyDao->theyWantToMeet($userProperty, $users);
-
-		dump($users->fetch());
-
-		die();
+		$users = $this->userDao->iWantToMeet($userProperty, $users);
+		$users = $this->userDao->theyWantToMeet($userProperty, $users);
 
 		$this->saveBestUsers($users);
 	}
 
 	public function getBestUsers() {
-		$this->bestUsers = $this->cache->load(self::NAME_CACHE_USERS);
+		$this->bestUsers = $this->section->bestUsers;
 
-		//if ($this->bestUsers === NULL) {
-		$this->calculate();
-		//}
+		if ($this->bestUsers === NULL) {
+			$this->calculate();
+		}
 
 		return $this->bestUsers;
 	}
@@ -51,10 +50,22 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 	public function saveBestUsers($users) {
 		$arrUsers = array();
 		foreach ($users as $user) {
-			$arrUsers[] = $user;
+			$arrUser = $user->toArray();
+			$profilPhoto = $user->profilFoto;
+			if (isset($profilPhoto)) {
+				$profilPhoto->id;
+				$arrUser["profilFoto"] = $profilPhoto->toArray();
+				$gallery = $profilPhoto->gallery;
+				$gallery->id;
+				$arrUser["profilFoto"]["gallery"] = $gallery->toArray();
+			} else {
+				$arrUser["profilFoto"] = FALSE;
+			}
+			$arrUsers[] = ArrayHash::from($arrUser);
 		}
 
-		$this->cache->save(self::NAME_CACHE_USERS, $arrUsers);
+		$this->bestUsers = $arrUsers;
+		$this->section->bestUsers = $this->bestUsers;
 	}
 
 }
