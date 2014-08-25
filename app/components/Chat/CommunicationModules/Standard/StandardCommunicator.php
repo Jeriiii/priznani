@@ -75,15 +75,34 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	}
 
 	/**
-	 * Vrátí zprávy od jednoho uživatele, které poslal přihlášenému uživateli
-	 * @param int $fromId od koho jsou zpravy
+	 * Vrátí zprávy z konverzace jednoho uživatele s přihlášeným uživatelem
+	 * @param int $fromId druhý uživatel
 	 */
 	public function handleLoadMessages($fromId) {
 		$realId = $this->chatManager->getCoder()->decodeData($fromId);
 		$userId = $this->getPresenter()->getUser()->getId();
 		$messages = $this->chatManager->getLastMessagesBetween($userId, $realId);
 		$response = $this->prepareResponseArray($messages);
+
+		$this->registerInfoToLastMessage($realId, $fromId, $response);
+
 		$this->getPresenter()->sendJson($response);
+	}
+
+	/**
+	 * Vezme pole odpovědi a k danému uživateli, se kterým si píšu, zaregistruje žádost
+	 * o potvrzení přijetí poslední zprávy, pokud je tato zpráva odeslána přihlášeným uživatelem
+	 * @param int $userId id uživatele, se kterým si píšu
+	 * @param int $codedId kódované id uživatele, se kterým si píšu
+	 * @param array $response pole odpovědi viz dokumentace
+	 */
+	public function registerInfoToLastMessage($userId, $codedId, $response) {
+		if ($this->isActualUserPaying() && !empty($response)) {//pokud je uzivatel platici
+			$lastMessage = end($response[$codedId]['messages']); //posledni zprava z posilanych
+			if ($lastMessage['fromMe'] == 1) {//zprava je ode me
+				$this->registerInfoAboutDelivery($userId, $lastMessage[ChatMessagesDao::COLUMN_ID]);
+			}
+		}
 	}
 
 	/**
@@ -179,6 +198,12 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		$messageArray = $message->toArray();
 		$messageArray['name'] = $this->getUsername($messageArray[ChatMessagesDao::COLUMN_ID_SENDER]); //pribaleni uzivatelskeho jmena uzivatele, ktery poslal zpravu
 		//pozn. muze to byt jiny uzivatel nez ten, s kterym si pisu (typicky ja)
+		$userId = $this->getPresenter()->getUser()->getId();
+		if ($userId == $messageArray[ChatMessagesDao::COLUMN_ID_SENDER]) {//pokud jsem zpravu odeslal ja (prihlaseny uzivatel)
+			$messageArray['fromMe'] = 1;
+		} else {
+			$messageArray['fromMe'] = 0;
+		}
 		unset($messageArray[ChatMessagesDao::COLUMN_ID_SENDER]); //id odesilatele je uz v prvnim klici pole
 		unset($messageArray[ChatMessagesDao::COLUMN_ID_RECIPIENT]);  //neposila uzivateli jeho vlastni id
 		unset($messageArray[ChatMessagesDao::COLUMN_READED]);  //neposila zbytecnou informaci
