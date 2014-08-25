@@ -13,6 +13,11 @@ use Nette\Application\UI,
 class SignPresenter extends BasePresenter {
 
 	/**
+	 * 	Jméno session, kam se ukládají podružné informace o uživateli (nesouvisející s identitou)
+	 */
+	const USER_INFO_SESSION_NAME = 'userinfo';
+
+	/**
 	 * @var boolean Pokud je TRUE, existuje v session odkaz kam chceme po
 	 * přihlášení přesměrovat.
 	 * @persistent
@@ -89,6 +94,7 @@ class SignPresenter extends BasePresenter {
 	public function actionOut() {
 		$this->getSession('allow')->remove();
 		$this->getUser()->logout();
+		$this->getSession(self::USER_INFO_SESSION_NAME)->remove();
 		$this->flashMessage("Byl jste úspěšně odhlášen");
 		$this->redirect('Sign:in');
 	}
