@@ -197,11 +197,12 @@
 		blockWindowUnload('Zpráva se stále odesílá, prosíme počkejte několik sekund a pak to zkuste znova.');
 		/* hláška, co se objeví při pokusu obnovit/zavřít okno, zatímco se čeká na odpověď při odeslání zprávy */
 		sendDataByPost(sendMessageLink, requestData);
+		clearInfoMessages(id);
 		this.boxManager.addMsg(mydata.name, msg);//pridani zpravy do okna
 		messageSent = true;
 		actualizeMessageInConversationList(id, data.title, msg);
 	}
-	
+
 	/**
 	 * Pomocí AJAXU konvertuje data do formátu JSON a pošle je na danou adresu
 	 * @param {String} url data, která se mají poslat
@@ -354,14 +355,23 @@
 	 */
 	function addMessage(id, boxname, name, messid, text, type) {
 		var newbox = addBox(id, boxname);//vytvori/zobrazi dotycne okno
-		if (type == 0) {
+		clearInfoMessages(id);
+		if (type == 0) {//textova zprava
 			if (!newbox) {//pokud je vytvoren box nove, bude zpravami naplnen automaticky vcetne teto posledni
 				chatboxManager.addMessage(id, name, text);
 			}
 			setReaded(messid);
-		} else {
+		} else {//infozprava
 			chatboxManager.addMessage(id, '', text);
 		}
+	}
+
+	/**
+	 * V daném okně skryje všechny informační zprávy (ty, co nemají odesílatele)
+	 * @param {int} id okna
+	 */
+	function clearInfoMessages(id) {
+		$('#' + id + ' .ui-chatbox-nopeer').css('display', 'none');
 	}
 
 	/**
