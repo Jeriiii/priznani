@@ -75,6 +75,7 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 			} else {
 				$presenter->flashMessage('Fotky byly přidané. Nyní jsou ve frontě na schválení.');
 			}
+
 			$presenter->redirect('OnePage:default');
 		}
 	}
