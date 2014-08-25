@@ -40,6 +40,9 @@ class UserPropertyDao extends UserBaseDao {
 	const COLUMN_WANT_TO_MEET_COUPLE_MEN = "want_to_meet_couple_men";
 	const COLUMN_WANT_TO_MEET_COUPLE_WOMEN = "want_to_meet_couple_women";
 	const COLUMN_WANT_TO_MEET_GROUP = "want_to_meet_group";
+	const COLUMN_CITY_ID = "cityID";
+	const COLUMN_DISTRICT_ID = "districtID";
+	const COLUMN_REGION_ID = "regionID";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -70,7 +73,9 @@ class UserPropertyDao extends UserBaseDao {
 		$property[UserPropertyDao::COLUMN_WANT_TO_MEET_COUPLE_MEN] = $data->want_to_meet_couple_men;
 		$property[UserPropertyDao::COLUMN_WANT_TO_MEET_COUPLE_WOMEN] = $data->want_to_meet_couple_women;
 		$property[UserPropertyDao::COLUMN_WANT_TO_MEET_GROUP] = $data->want_to_meet_group;
-
+		$property[UserPropertyDao::COLUMN_CITY_ID] = $data->cityID;
+		$property[UserPropertyDao::COLUMN_DISTRICT_ID] = $data->districtID;
+		$property[UserPropertyDao::COLUMN_REGION_ID] = $data->regionID;
 		return $sel->insert($property);
 	}
 

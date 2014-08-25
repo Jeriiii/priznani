@@ -29,6 +29,24 @@ class DatingRegistrationPresenter extends BasePresenter {
 	public $coupleDao;
 
 	/**
+	 * @var \POS\Model\CityDao
+	 * @inject
+	 */
+	public $cityDao;
+
+	/**
+	 * @var \POS\Model\DistrictDao
+	 * @inject
+	 */
+	public $districtDao;
+
+	/**
+	 * @var \POS\Model\RegionDao
+	 * @inject
+	 */
+	public $regionDao;
+
+	/**
 	 * @var \Nette\Mail\IMailer
 	 * @inject
 	 */
@@ -70,6 +88,10 @@ class DatingRegistrationPresenter extends BasePresenter {
 		$code = $userSession[UserDao::COLUMN_CONFIRMED];
 		$regForm = new Frm\RegistrationForm($this->userDao, $this->mailer, $this, "regform");
 		$regForm->sendMail($email, $password, $code);
+	}
+
+	public function renderSecondRegForm() {
+		$this->template->cityData = $this->cityDao->getNamesOfProperties();
 	}
 
 	public function renderRegistered() {
@@ -147,7 +169,7 @@ class DatingRegistrationPresenter extends BasePresenter {
 	}
 
 	protected function createComponentSecondRegForm($name) {
-		return new Frm\DatingRegistrationSecondForm($this->userDao, $this, $name, $this->getRegSession());
+		return new Frm\DatingRegistrationSecondForm($this->regionDao, $this->districtDao, $this->cityDao, $this->userDao, $this, $name, $this->getRegSession());
 	}
 
 	protected function createComponentThirdRegManForm($name) {
