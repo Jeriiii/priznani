@@ -299,12 +299,12 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserStateOption() {
 		return array(
-			'free' => 'volný',
-			'maried' => 'ženatý / vdaná',
-			'divorced' => 'rozvedený/á',
-			'separated' => 'oddělený/á',
-			'widow' => 'vdovec / vdova',
-			'engaged' => 'zadaný',
+			1 => 'volný',
+			2 => 'ženatý / vdaná',
+			3 => 'rozvedený/á',
+			4 => 'oddělený/á',
+			5 => 'vdovec / vdova',
+			6 => 'zadaný',
 		);
 	}
 
@@ -313,10 +313,10 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserOrientationOption() {
 		return array(
-			'hetero' => 'hetero',
-			'homo' => 'homo',
-			'bi' => 'bi',
-			'biTry' => 'bi - chtěl bych zkusit',
+			1 => 'hetero',
+			2 => 'homo',
+			3 => 'bi',
+			4 => 'bi - chtěl bych zkusit',
 		);
 	}
 
@@ -338,12 +338,12 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserShapeOption() {
 		return array(
-			'0' => 'hubená',
-			'1' => 'štíhlá',
-			'2' => 'normální',
-			'3' => 'atletická',
-			'4' => 'plnoštíhlá',
-			'5' => 'při těle',
+			0 => 'hubená',
+			1 => 'štíhlá',
+			2 => 'normální',
+			3 => 'atletická',
+			4 => 'plnoštíhlá',
+			5 => 'při těle',
 		);
 	}
 
@@ -352,9 +352,9 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserHabitOption() {
 		return array(
-			'often' => 'často',
-			'no' => 'ne',
-			'occasionlly' => 'příležitostně',
+			1 => 'často',
+			2 => 'ne',
+			3 => 'příležitostně',
 		);
 	}
 
@@ -363,11 +363,11 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserGraduationOption() {
 		return array(
-			'zs' => 'základní',
-			'sou' => 'vyučen/a',
-			'sos' => 'střední',
-			'vos' => 'vyšší odborné',
-			'vs' => 'vysoké',
+			1 => 'základní',
+			2 => 'vyučen/a',
+			3 => 'střední',
+			4 => 'vyšší odborné',
+			5 => 'vysoké',
 		);
 	}
 
@@ -376,10 +376,10 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserPenisLengthOption() {
 		return array(
-			'tiny' => 'malá',
-			'normal' => 'střední',
-			'big' => 'velká',
-			'huge' => 'obrovská',
+			1 => 'malá',
+			2 => 'střední',
+			3 => 'velká',
+			4 => 'obrovská',
 		);
 	}
 
@@ -388,9 +388,9 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserPenisWidthOption() {
 		return array(
-			'tiny' => 'hubený',
-			'normal' => 'střední',
-			'big' => 'tlustý',
+			1 => 'hubený',
+			2 => 'střední',
+			3 => 'tlustý',
 		);
 	}
 
@@ -399,12 +399,12 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserBraSizeOption() {
 		return array(
-			'a' => 'A',
-			'b' => 'B',
-			'c' => 'C',
-			'd' => 'D',
-			'e' => 'E',
-			'f' => 'F',
+			1 => 'A',
+			2 => 'B',
+			3 => 'C',
+			4 => 'D',
+			5 => 'E',
+			6 => 'F',
 		);
 	}
 
