@@ -3,6 +3,15 @@
 {/block}
 
 {block content}
+{foreach $categories as $category}
+	{$category->id}
+{/foreach}<br />
+{foreach $choices as $choice}
+	{$choice->id}
+{/foreach}<br />
+{foreach $results as $result}
+	{$result->id}
+{/foreach}
 <section id="onepage">
 	<nav id="stream-menu">
 	    <a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>

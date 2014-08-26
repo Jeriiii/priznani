@@ -31,10 +31,11 @@ ALTER TABLE `stream_items`
 	ADD COLUMN `age` DATETIME,
 	ADD COLUMN `tallness` INT(6) UNSIGNED NOT NULL DEFAULT '0';
 
-/* vytvoření indexů (klíče jsou dva, protože maximální počet částí klíče je 16)*/
+/* vytvoření indexů (není tam vše, protože maximální počet částí klíče je 16)
+	Vyloučeny byly sloupce, kde se určuje, koho chce poznat. Tam se totiž předpokládá, že to bude jen jeden max dva z nich.
+*/
 ALTER TABLE `stream_categories`
-	ADD UNIQUE INDEX `stream_categories_heavy_key2` (`oral`, `sex_massage`, `anal`, `threesome`, `group`, `fisting`, `petting`, `piss`, `cum`, `swallow`, `bdsm`),
-	ADD UNIQUE INDEX `stream_categories_heavy_key` (`want_to_meet_group`, `want_to_meet_couple_women`, `want_to_meet_couple_men`, `want_to_meet_couple`, `want_to_meet_women`, `want_to_meet_men`);
+	ADD INDEX `stream_categories_heavy_key` (`oral`, `sex_massage`, `anal`, `threesome`, `group`, `fisting`, `petting`, `piss`, `cum`, `swallow`, `bdsm`);
 /* pro tallness index přidán není - příliš nízká selektivita */
 ALTER TABLE `stream_items`
 	ADD INDEX `age` (`age`);

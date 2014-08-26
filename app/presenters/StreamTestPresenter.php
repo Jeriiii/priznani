@@ -1,17 +1,21 @@
 <?php
 
 /**
- * Homepage presenter.
  *
- * Zobrayení úvodní stránky systému
+ * Testovací presenter pro stream. Nepřístupný na produkci.
  *
- * @author     Petr Kukrál
- * @package    jkbusiness
+ * @author     Jan Kotalík
  */
-use Nette\Application\UI\Form as Frm;
 use POSComponent\Stream\UserStream\UserStream;
+use POS\Model\StreamCategoriesDao;
 
 class StreamTestPresenter extends BasePresenter {
+
+	/**
+	 * @var \POS\Model\StreamCategoriesDao
+	 * @inject
+	 */
+	public $streamCategoriesDao;
 
 	/**
 	 * @var \POS\Model\StreamDao
@@ -66,6 +70,18 @@ class StreamTestPresenter extends BasePresenter {
 		$this->template->count = $this->count;
 		$this->template->userID = $this->userID;
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
+		$this->template->categories = $this->streamCategoriesDao->getCategoriesWhatFit(array(
+			StreamCategoriesDao::COLUMN_ANAL => 1,
+			StreamCategoriesDao::COLUMN_SWALLOW => 1,
+			StreamCategoriesDao::COLUMN_GROUP => 0,
+			StreamCategoriesDao::COLUMN_ORAL => 1
+		));
+
+		$this->template->choices = $this->streamDao->getAllItemsWhatFits(array(1, 2, 3));
+		$this->template->results = $this->streamDao->getAllItemsWhatFitsAndRange(array(1, 2, 3), array(
+			'age' => array('2014-06-26 00:27:02', '2014-09-26 22:27:02'),
+			'tallness' => array(180, 200)
+		));
 	}
 
 	protected function createComponentUserStream() {
