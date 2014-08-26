@@ -13,7 +13,7 @@ CREATE TABLE `contacts` (
 	CONSTRAINT `FK_contacts_users` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
 )
 COLLATE='utf8_general_ci'
-ENGINE=InnoDB
+ENGINE=InnoDB;
 
 /* 02 */
 /* kaskádní mazání všech relací s tab. images, galleries, user_images a streams*/
