@@ -75,18 +75,19 @@ production < common:
 			#dbname: d42750_priznan
 			#user: a42750_priznan
 			#password: 845DjQBp
-			host: wm43.wedos.net
-			dbname: d42750_pos4
-			user: a42750_pos4
-			password: aB9aStTN
+			host: wm59.wedos.net
+			dbname: d42750_pos5
+			user: a42750_pos5
+			password: TUuSTbgH
+
 		productionMode: TRUE
 
 		chatDatabase:
-			#driver: mysql
-			#host: localhost
-			#dbname: poschat
-			#user: root
-			#password: root
+			driver: mysql
+			host: wm41.wedos.net
+			dbname: d42750_poschat
+			user: a42750_poschat
+			password: jVXCEMSR
 
 development < common:
 
