@@ -70,19 +70,7 @@ class GalleriesPresenter extends \BasePresenter {
 			"text-padding-top" => "10px"
 		));
 
-		$user = $this->getUser();
-
-		if (!$user->isLoggedIn()) {
-			if ($user->getLogoutReason() === User::INACTIVITY) {
-				$this->flashMessage('Uplynula doba neaktivity! Systém vás z bezpečnostních důvodů odhlásil.', 'warning');
-			}
-			$this->redirect(':Sign:in', array('backlink' => $this->backlink()));
-		} else { //kontrola opravnění pro vztup do příslušné sekce
-			if (!$user->isAllowed($this->name, $this->action)) {
-				$this->flashMessage('Nejdříve se musíte přihlásit.', 'warning');
-				$this->redirect(':Sign:in', array('backlink' => $this->backlink()));
-			}
-		}
+		$this->checkLoggedIn();
 	}
 
 	public function actionEditGalleryImage($imageID, $galleryID) {
