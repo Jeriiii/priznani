@@ -6,6 +6,9 @@ use Nette\Application\UI\Form,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer;
 use POS\Model\UserDao;
+use POS\Model\CityDao;
+use POS\Model\DistrictDao;
+use POS\Model\RegionDao;
 use Nette\Http\SessionSection;
 
 class DatingRegistrationSecondForm extends BaseForm {
@@ -15,13 +18,34 @@ class DatingRegistrationSecondForm extends BaseForm {
 	 */
 	public $userDao;
 
+	/**
+	 * @var \POS\Model\CityDao
+	 */
+	public $cityDao;
+
+	/**
+	 * @var \POS\Model\DistrictDao
+	 */
+	public $districtDao;
+
+	/**
+	 * @var \POS\Model\RegionDao
+	 */
+	public $regionDao;
+
 	/** @var \Nette\Http\SessionSection */
 	private $regSession;
+	private $cityID;
+	private $districtID;
+	private $regionID;
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, SessionSection $regSession = NULL) {
+	public function __construct(RegionDao $regionDao, DistrictDao $districtDao, CityDao $cityDao, UserDao $userDao, IContainer $parent = NULL, $name = NULL, SessionSection $regSession = NULL) {
 		parent::__construct($parent, $name);
 		$this->userDao = $userDao;
 		$this->regSession = $regSession;
+		$this->cityDao = $cityDao;
+		$this->districtDao = $districtDao;
+		$this->regionDao = $regionDao;
 
 		$this->addText('email', 'Email')
 			->addRule(Form::FILLED, 'Email není vyplněn.')
@@ -43,6 +67,8 @@ class DatingRegistrationSecondForm extends BaseForm {
 		$this->addTextArea('about_me', 'O mě (max 300 znaků)', 40, 10)
 			->addRule(Form::FILLED, 'O mě není vyplněno.')
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300);
+		$this->addText('city', 'Bydlím v:')
+			->addRule(Form::FILLED, 'Město není vyplněno.');
 
 		if (isset($regSession)) {
 			$this->setDefaults(array(
@@ -56,6 +82,7 @@ class DatingRegistrationSecondForm extends BaseForm {
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->onValidate[] = callback($this, "uniqueUserName");
 		$this->onValidate[] = callback($this, "uniqueEmail");
+		$this->onValidate[] = callback($this, "existingCity");
 		$this->addSubmit('send', 'Do třetí části registrace')
 			->setAttribute("class", "btn btn-success");
 
@@ -75,6 +102,9 @@ class DatingRegistrationSecondForm extends BaseForm {
 		$this->regSession->passwordHash = $pass;
 		$this->regSession->first_sentence = $values->first_sentence;
 		$this->regSession->about_me = $values->about_me;
+		$this->regSession->cityID = $this->cityID;
+		$this->regSession->districtID = $this->districtID;
+		$this->regSession->regionID = $this->regionID;
 
 		$presenter->redirect('Datingregistration:PreThirdRegForm');
 	}
@@ -103,6 +133,43 @@ class DatingRegistrationSecondForm extends BaseForm {
 		if ($email) {
 			$form->addError('Tento mail již někdo používá.');
 		}
+	}
+
+	/**
+	 * Zkontorluje, zda dané město je v databázi, pokud ano uloží do glob.proměnných
+	 * @param type Nette\Application\UI\Form $form
+	 * @return
+	 */
+	public function existingCity($form) {
+		$values = $form->getValues();
+
+		$data = explode(", ", $values->city);
+
+		if (sizeof($data) < 3) {
+			$form->addError('Neúplná data o městu(město, okres, kraj)');
+		}
+
+		$region = $this->regionDao->findByName($data[2]);
+		if (!$region) {
+			$form->addError('Omlouváme se, toto město není v naší databázi. Prosím, vyberte ze seznamu větší město ve vašem okolí.');
+			return;
+		}
+
+		$district = $this->districtDao->findByNameAndRegionID($data[1], $region->id);
+		if (!$district) {
+			$form->addError('Omlouváme se, toto město není v naší databázi. Prosím, vyberte ze seznamu větší město ve vašem okolí.');
+			return;
+		}
+
+		$city = $this->cityDao->findByNameAndDistrictID($data[0], $district->id);
+		if (!$city) {
+			$form->addError('Omlouváme se, toto město není v naší databázi. Prosím, vyberte ze seznamu větší město ve vašem okolí.');
+			return;
+		}
+
+		$this->regionID = $region->id;
+		$this->districtID = $district->id;
+		$this->cityID = $city->id;
 	}
 
 }

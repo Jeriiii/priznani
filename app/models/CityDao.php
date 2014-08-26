@@ -95,4 +95,14 @@ class CityDao extends AbstractDao {
 		return $data;
 	}
 
+	/**
+	 * Získá potřebná data pro našeptávač v registraci z db.
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function getNamesOfProperties() {
+		$sel = $this->getTable();
+		$data = $sel->select('city.name AS city, districtID.name AS district, districtID.regionID.name AS region');
+		return $data;
+	}
+
 }
