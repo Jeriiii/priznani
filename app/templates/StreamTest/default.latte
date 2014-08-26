@@ -1,0 +1,40 @@
+{block head}
+    {control css 'onepage/default.less', 'stream/list.less'}
+{/block}
+
+{block content}
+<section id="onepage">
+	<nav id="stream-menu">
+	    <a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>
+	    <a n:href=":Profil:Galleries:userGalleryNew" class="btn-main btn-small" title="Profil">Vytvořit galerii</a>
+		{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
+	    <div class="clear"></div>
+	</nav>
+	{control userStream}
+	<div id="right-dock">
+	    {*reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama *}
+	</div>
+	<div class="clear"></div>
+</section>
+{/block}
+
+{block foot}
+{control js}
+<script>
+	$(document).ready(function () {
+		$( ".stream-form" ).tabs();
+		$("body").stream({
+			rows: {$count},
+			addoffset: 4
+		});
+	});
+	$("#frm-userStream-addConfessionForm-note").click(function() {
+		$("#frm-userStream-addConfessionForm-note").animate({ height: "200px"}, 500);
+	});
+	$("#frm-userStream-statusForm-message").click(function() {
+		$("#frm-userStream-statusForm-message").animate({ height: "200px"}, 500);
+	});
+</script>
+{/block}
+
+
