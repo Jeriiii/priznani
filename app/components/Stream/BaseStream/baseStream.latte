@@ -4,7 +4,10 @@
 		{if !$profilePhoto}
 			<div id="profile-photo-upload">
 				Nahrajte si <span class="highlight">profilovou fotku</span>, aby si vás ostatní mohli prohlédnout.
-				{control uploadPhotoForm}
+				{form uploadPhotoForm}
+					{input imageFile0}
+					{input send}
+				{/form}
 			</div>
 		{/if}
 		{ifset #addNewPost}
