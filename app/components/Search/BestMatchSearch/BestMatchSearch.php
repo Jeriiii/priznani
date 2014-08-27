@@ -31,4 +31,8 @@ class BestMatchSearch extends BaseSearch {
 		return $users;
 	}
 
+	public function render($mode) {
+		$this->renderBase($mode);
+	}
+
 }

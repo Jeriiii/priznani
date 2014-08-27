@@ -15,6 +15,7 @@ namespace POSComponent\Stream\BaseStream;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\ConfessionDao;
+use POS\Model\UserDao;
 use POSComponent\BaseProjectControl;
 use Nette\Database\Table\Selection;
 use Nette\Application\UI\Form as Frm;
@@ -42,12 +43,18 @@ class BaseStream extends BaseProjectControl {
 	 */
 	public $confessionDao;
 
-	public function __construct($data, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
+	/**
+	 * @var \POS\Model\UserDao
+	 */
+	public $userDao;
+
+	public function __construct($data, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
 		parent::__construct();
 		$this->dataForStream = $data;
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
 		$this->confessionDao = $confDao;
+		$this->userDao = $userDao;
 	}
 
 	/**
@@ -138,6 +145,17 @@ class BaseStream extends BaseProjectControl {
 	 */
 	protected function createComponentUploadPhotoForm($name) {
 		return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+	}
+
+	/**
+	 * vrací nejlepší osoby pro seznámení s uživatelem
+	 * @param type $name
+	 * @return \POSComponent\Search\BestMatchSearch
+	 */
+	protected function createComponentBestMatchSearch($name) {
+		$user = $this->userDao->find($this->presenter->getUser()->id);
+		$session = $this->presenter->getSession();
+		return new \POSComponent\Search\BestMatchSearch($user->property, $this->userDao, $session, $this, $name);
 	}
 
 }

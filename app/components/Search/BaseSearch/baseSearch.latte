@@ -1,7 +1,15 @@
 <ul class="content">
-	{foreach $items as $item}
-		<li>
-			{$item|showProf: array(':Profil:Show:default', 'id' => $item->id)}
-		</li>
-	{/foreach}
+	{if $mode == 'listAll'}
+		{foreach $items as $item}
+			<li>
+				{$item|showProf: array(':Profil:Show:default', 'id' => $item->id)}
+			</li>
+		{/foreach}
+	{else}
+		{foreach $items as $item}
+			<li>
+				{$item|showProfMin: array(':Profil:Show:default', 'id' => $item->id)}
+			</li>
+		{/foreach}
+	{/if}
 </ul>

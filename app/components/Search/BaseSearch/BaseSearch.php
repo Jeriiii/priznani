@@ -25,10 +25,20 @@ class BaseSearch extends BaseProjectControl {
 		$this->users = $users;
 	}
 
-	public function render() {
+	public function renderBase($mode) {
 		$this->template->setFile(dirname(__FILE__) . '/baseSearch.latte');
 
+		if ($mode == 'listFew') {
+			$this->users = array_slice($this->users, 0, 6);
+		}
+		$rere = array('a', 'b', 'c');
+
+		$this->template->ar = $rere;
+		$this->template->br = array_slice($rere, 0, 2);
+
+
 		$this->template->items = $this->users;
+		$this->template->mode = $mode;
 		$this->template->render();
 	}
 
