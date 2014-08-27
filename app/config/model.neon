@@ -32,3 +32,4 @@ services:
 	cityDao:	POS\Model\CityDao
 	districtDao:	POS\Model\DistrictDao
 	regionDao:	POS\Model\RegionDao
+	streamCategoriesDao:	POS\Model\StreamCategoriesDao

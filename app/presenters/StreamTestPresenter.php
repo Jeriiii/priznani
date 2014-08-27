@@ -1,0 +1,110 @@
+<?php
+
+/**
+ *
+ * Testovací presenter pro stream. Nepřístupný na produkci.
+ *
+ * @author     Jan Kotalík
+ */
+use POSComponent\Stream\UserStream\UserStream;
+use POS\Model\StreamCategoriesDao;
+
+class StreamTestPresenter extends BasePresenter {
+
+	/**
+	 * @var \POS\Model\StreamCategoriesDao
+	 * @inject
+	 */
+	public $streamCategoriesDao;
+
+	/**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
+
+	/**
+	 * @var \POS\Model\UserGalleryDao
+	 * @inject
+	 */
+	public $userGalleryDao;
+
+	/**
+	 * @var \POS\Model\UserImageDao
+	 * @inject
+	 */
+	public $userImageDao;
+
+	/**
+	 * @var \POS\Model\ConfessionDao
+	 * @inject
+	 */
+	public $confessionDao;
+
+	/**
+	 * @var \POS\Model\StatusDao
+	 * @inject
+	 */
+	public $statusDao;
+
+	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
+	public $dataForStream;
+	private $count = 0;
+	private $userID;
+
+	public function startup() {
+		parent::startup();
+		// ochrana proti spuštění na ostrém serveru
+		if ($this->productionMode) {
+			$this->redirect("OnePage:");
+		}
+	}
+
+	public function actionDefault() {
+		$this->dataForStream = $this->streamDao->getAll("DESC");
+		$this->count = $this->dataForStream->count("id");
+		$this->userID = $this->getUser()->getId();
+	}
+
+	public function renderDefault() {
+		$this->template->count = $this->count;
+		$this->template->userID = $this->userID;
+		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
+		$this->template->categories = $this->streamCategoriesDao->getCategoriesWhatFit(array(
+			StreamCategoriesDao::COLUMN_ANAL => 1,
+			StreamCategoriesDao::COLUMN_SWALLOW => 1,
+			StreamCategoriesDao::COLUMN_GROUP => 0,
+			StreamCategoriesDao::COLUMN_ORAL => 1
+		));
+
+		$this->template->choices = $this->streamDao->getAllItemsWhatFits(array(1, 2, 3));
+		$this->template->results = $this->streamDao->getAllItemsWhatFitsAndRange(array(1, 2, 3), array(
+			'age' => array('2014-06-26 00:27:02', '2014-09-26 22:27:02'),
+			'tallness' => array(180, 200)
+		));
+	}
+
+	protected function createComponentUserStream() {
+		return new UserStream($this->dataForStream, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+	}
+
+	public function createComponentJs() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
+		$files->addFiles(array(
+			'stream.js',
+			'nette.ajax.js'
+		));
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+		$compiler->addFilter(function ($code) {
+			$packer = new JavaScriptPacker($code, "None");
+			return $packer->pack();
+		});
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+
+	public function createComponentSearch() {
+		$component = new Search();
+		return $component;
+	}
+
+}

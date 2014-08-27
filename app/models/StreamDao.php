@@ -21,6 +21,9 @@ class StreamDao extends AbstractDao {
 	/* sloupečky */
 	const COLUMN_USER_GALLERY_ID = "userGalleryID";
 	const COLUMN_USER_ID = "userID";
+	const COLUMN_CATEGORY_ID = "categoryID";
+	const COLUMN_AGE = "age";
+	const COLUMN_TALLNESS = "tallness";
 
 	/**
 	 * Vrací tuto tabulku
@@ -150,10 +153,10 @@ class StreamDao extends AbstractDao {
 	}
 
 	/**
-	* Přidá nový status do streamu
-	* @param int $stausID ID statusu
-	* @param int $userID ID uživatele
-	*/
+	 * Přidá nový status do streamu
+	 * @param int $stausID ID statusu
+	 * @param int $userID ID uživatele
+	 */
 	public function addNewStatus($stausID, $userID) {
 		$sel = $this->getTable();
 		$sel->insert(array(
@@ -161,6 +164,45 @@ class StreamDao extends AbstractDao {
 			"userID" => $userID,
 			"create" => new DateTime(),
 		));
+	}
+
+	/**
+	 * Vrátí všechny položky streamu, které mají některé z daných id kategorií
+	 * (tj. které splňují podmínky některé z kategorií)
+	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
+	 * @return \Nette\Database\Table\Selection všechny vyhovující položky
+	 */
+	public function getAllItemsWhatFits(array $categoryIDs) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_CATEGORY_ID, $categoryIDs);
+		return $sel;
+	}
+
+	/**
+	 * Vrátí všechny položky streamu, které splňují některou z daných id kategorií
+	 * (splňují podmínky některé z nich) a mají hodnoty daných sloupců v daném rozsahu
+	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
+	 * @param array $rangedValues pole polí, kde je klíč prvního pole název sloupce a hodnota je druhé pole
+	 * první hodnota druhého pole je pak dolní omezení, druhá hodnota horní omezení
+	 *
+	 * Tedy například: $this->streamDao->getAllItemsWhatFitsAndRange(array(1, 2, 3),
+	 *  array(
+	  'age' => array('2014-06-26 00:27:02', '2014-09-26 22:27:02'),
+	  'tallness' => array(180, 200)
+	  ));
+	 *
+	 * vybere jen položky, co mají kategorii 1, 2 nebo 3 a sloupec age mezi dvěma časy
+	 * a sloupec tallness mezi 180 a 200 (obojí včetně)
+	 *
+	 * @return \Nette\Database\Table\Selection vyhovující položky
+	 */
+	public function getAllItemsWhatFitsAndRange(array $categoryIDs, array $rangedValues) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_CATEGORY_ID, $categoryIDs);
+		foreach ($rangedValues as $column => $ranges) {
+			$sel->where($column . ' BETWEEN ? AND ?', $ranges[0], $ranges[1]);
+		}
+		return $sel;
 	}
 
 }
