@@ -1,6 +1,12 @@
 {block beforeContent}
 <section class="content">
 	<div id="stream">
+		{if !$profilePhoto}
+			<div id="profile-photo-upload">
+				Nahrajte si <span class="highlight">profilovou fotku</span>, aby si vás ostatní mohli prohlédnout.
+				{control uploadPhotoForm}
+			</div>
+		{/if}
 		{ifset #addNewPost}
 				{include #addNewPost}
 		{/ifset}                                
