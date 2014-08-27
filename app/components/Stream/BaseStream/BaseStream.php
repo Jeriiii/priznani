@@ -17,6 +17,7 @@ use POS\Model\UserImageDao;
 use POS\Model\ConfessionDao;
 use POSComponent\BaseProjectControl;
 use Nette\Database\Table\Selection;
+use Nette\Application\UI\Form as Frm;
 
 class BaseStream extends BaseProjectControl {
 
@@ -63,6 +64,10 @@ class BaseStream extends BaseProjectControl {
 		if ($mode == "profilStream") {
 			$this->renderProfileStream($templateName);
 		}
+
+		// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
+		$profileGalleryID = $this->userGalleryDao->findProfileGallery($this->presenter->user->id);
+		$this->template->profilePhoto = $this->userImageDao->getInGallery($profileGalleryID)->fetch();
 
 		$this->template->render();
 	}
@@ -124,6 +129,15 @@ class BaseStream extends BaseProjectControl {
 		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
 			return new \FbLikeAndCom($streamItems[$streamItem]);
 		});
+	}
+
+	/**
+	 * formulář pro nahrávání profilových fotografií
+	 * @param type $name
+	 * @return \Nette\Application\UI\Form\ProfilePhotoUploadForm
+	 */
+	protected function createComponentUploadPhotoForm($name) {
+		return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
 	}
 
 }
