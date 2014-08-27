@@ -52,19 +52,8 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 
 	public function startup() {
 		parent::startup();
-//přesměrování s backlinkem pro případ, že uživatel není přihlášen
-		if (!$this->user->isLoggedIn()) {
-			if ($this->user->getLogoutReason() === User::INACTIVITY) {
-				$this->flashMessage('Uplynula doba neaktivity! Systém vás z bezpečnostních důvodů odhlásil.', 'warning');
-			}
 
-			$this->redirect(':Sign:in', array('backlink' => $this->backlink()));
-		} else { //kontrola opravnění pro vztup do příslušné sekce
-			if (!$this->user->isAllowed($this->name, $this->action)) {
-				$this->flashMessage('Na vstup do této sekce nemáte dostatečná oprávnění!', 'warning');
-				$this->redirect(':Homepage:');
-			}
-		}
+		$this->checkLoggedIn();
 //umístění cache
 		$this->storage = new \Nette\Caching\Storages\FileStorage('../temp');
 // vytvoření cache
