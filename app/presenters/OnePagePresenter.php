@@ -49,12 +49,6 @@ class OnePagePresenter extends BasePresenter {
 	 */
 	public $statusDao;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
-	public $userDao;
-
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $count = 0;

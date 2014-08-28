@@ -8,8 +8,15 @@
  */
 use POSComponent\Stream\UserStream\UserStream;
 use POS\Model\StreamCategoriesDao;
+use POS\UserPreferences\StreamUserPreferences;
 
 class StreamTestPresenter extends BasePresenter {
+
+	/**
+	 *
+	 * @var \POS\UserPreferences\StreamUserPreferences
+	 */
+	public $streamUserPreferences;
 
 	/**
 	 * @var \POS\Model\StreamCategoriesDao
@@ -22,6 +29,18 @@ class StreamTestPresenter extends BasePresenter {
 	 * @inject
 	 */
 	public $streamDao;
+
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
+	/**
+	 * @var \POS\Model\UserPropertyDao
+	 * @inject
+	 */
+	public $userPropertyDao;
 
 	/**
 	 * @var \POS\Model\UserGalleryDao
@@ -61,8 +80,8 @@ class StreamTestPresenter extends BasePresenter {
 	}
 
 	public function actionDefault() {
-		$this->dataForStream = $this->streamDao->getAll("DESC");
-		$this->count = $this->dataForStream->count("id");
+		$this->initializeStreamUserPreferences();
+		$this->fillCorrectDataForStream();
 		$this->userID = $this->getUser()->getId();
 	}
 
@@ -85,7 +104,7 @@ class StreamTestPresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+		return new UserStream($this->dataForStream, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
 	}
 
 	public function createComponentJs() {
@@ -105,6 +124,16 @@ class StreamTestPresenter extends BasePresenter {
 	public function createComponentSearch() {
 		$component = new Search();
 		return $component;
+	}
+
+	private function fillCorrectDataForStream() {
+		$this->dataForStream = $this->streamDao->getAll("DESC");
+		$this->count = $this->dataForStream->count("id");
+	}
+
+	private function initializeStreamUserPreferences() {
+		$userProperty = $this->userPropertyDao->find($this->getUser()->getId());
+		$this->streamUserPreferences = new StreamUserPreferences($userProperty, $this->userDao, $this->streamDao, $this->streamCategoriesDao, $this->getSession());
 	}
 
 }

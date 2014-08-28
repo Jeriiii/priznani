@@ -43,6 +43,7 @@ class UserPropertyDao extends UserBaseDao {
 	const COLUMN_CITY_ID = "cityID";
 	const COLUMN_DISTRICT_ID = "districtID";
 	const COLUMN_REGION_ID = "regionID";
+	const COLUMN_PREFERENCES_ID = "preferencesID";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);

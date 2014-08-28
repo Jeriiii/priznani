@@ -169,18 +169,26 @@ class StreamDao extends AbstractDao {
 	/**
 	 * Vrátí všechny položky streamu, které mají některé z daných id kategorií
 	 * (tj. které splňují podmínky některé z kategorií)
+	 * Položky jsou vraceny od konce.
 	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
+	 * @param int $limit maximální počet vrácených položek (vrací všechny když je limit 0)
+	 * @param int $offset offset limitu položek
 	 * @return \Nette\Database\Table\Selection všechny vyhovující položky
 	 */
-	public function getAllItemsWhatFits(array $categoryIDs) {
+	public function getAllItemsWhatFits(array $categoryIDs, $limit = 0, $offset = 0) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_CATEGORY_ID, $categoryIDs);
+		if ($limit != 0) {
+			$sel->order('id DESC');
+			$sel->limit($limit, $offset);
+		}
 		return $sel;
 	}
 
 	/**
 	 * Vrátí všechny položky streamu, které splňují některou z daných id kategorií
-	 * (splňují podmínky některé z nich) a mají hodnoty daných sloupců v daném rozsahu
+	 * (splňují podmínky některé z nich) a mají hodnoty daných sloupců v daném rozsahu.
+	 * Položky jsou vraceny od konce.
 	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
 	 * @param array $rangedValues pole polí, kde je klíč prvního pole název sloupce a hodnota je druhé pole
 	 * první hodnota druhého pole je pak dolní omezení, druhá hodnota horní omezení
@@ -193,14 +201,19 @@ class StreamDao extends AbstractDao {
 	 *
 	 * vybere jen položky, co mají kategorii 1, 2 nebo 3 a sloupec age mezi dvěma časy
 	 * a sloupec tallness mezi 180 a 200 (obojí včetně)
-	 *
+	 * @param int $limit maximální počet vrácených položek (vrací všechny když je limit 0)
+	 * @param int $offset offset limitu položek
 	 * @return \Nette\Database\Table\Selection vyhovující položky
 	 */
-	public function getAllItemsWhatFitsAndRange(array $categoryIDs, array $rangedValues) {
+	public function getAllItemsWhatFitsAndRange(array $categoryIDs, array $rangedValues, $limit = 0, $offset = 0) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_CATEGORY_ID, $categoryIDs);
 		foreach ($rangedValues as $column => $ranges) {
 			$sel->where($column . ' BETWEEN ? AND ?', $ranges[0], $ranges[1]);
+		}
+		if ($limit != 0) {
+			$sel->order('id DESC');
+			$sel->limit($limit, $offset);
 		}
 		return $sel;
 	}
