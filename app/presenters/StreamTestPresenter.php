@@ -8,8 +8,15 @@
  */
 use POSComponent\Stream\UserStream\UserStream;
 use POS\Model\StreamCategoriesDao;
+use POS\UserPreferences\StreamUserPreferences;
 
 class StreamTestPresenter extends BasePresenter {
+
+	/**
+	 *
+	 * @var \POS\UserPreferences\StreamUserPreferences
+	 */
+	public $streamUserPreferences;
 
 	/**
 	 * @var \POS\Model\StreamCategoriesDao
@@ -22,6 +29,18 @@ class StreamTestPresenter extends BasePresenter {
 	 * @inject
 	 */
 	public $streamDao;
+
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
+	/**
+	 * @var \POS\Model\UserPropertyDao
+	 * @inject
+	 */
+	public $userPropertyDao;
 
 	/**
 	 * @var \POS\Model\UserGalleryDao
@@ -54,15 +73,15 @@ class StreamTestPresenter extends BasePresenter {
 
 	public function startup() {
 		parent::startup();
-		// ochrana proti spuštění na ostrém serveru
-		if ($this->productionMode) {
+		// ochrana proti spuštění na ostrém serveru nebo když je nepřihlášený
+		if ($this->productionMode || !$this->getUser()->isLoggedIn()) {
 			$this->redirect("OnePage:");
 		}
 	}
 
 	public function actionDefault() {
-		$this->dataForStream = $this->streamDao->getAll("DESC");
-		$this->count = $this->dataForStream->count("id");
+		$this->initializeStreamUserPreferences();
+		$this->fillCorrectDataForStream();
 		$this->userID = $this->getUser()->getId();
 	}
 
@@ -70,13 +89,16 @@ class StreamTestPresenter extends BasePresenter {
 		$this->template->count = $this->count;
 		$this->template->userID = $this->userID;
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
+
+
+
+		/* příklady použití nových dao funkcí */
 		$this->template->categories = $this->streamCategoriesDao->getCategoriesWhatFit(array(
 			StreamCategoriesDao::COLUMN_ANAL => 1,
 			StreamCategoriesDao::COLUMN_SWALLOW => 1,
 			StreamCategoriesDao::COLUMN_GROUP => 0,
 			StreamCategoriesDao::COLUMN_ORAL => 1
 		));
-
 		$this->template->choices = $this->streamDao->getAllItemsWhatFits(array(1, 2, 3));
 		$this->template->results = $this->streamDao->getAllItemsWhatFitsAndRange(array(1, 2, 3), array(
 			'age' => array('2014-06-26 00:27:02', '2014-09-26 22:27:02'),
@@ -85,7 +107,7 @@ class StreamTestPresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+		return new UserStream($this->dataForStream, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
 	}
 
 	public function createComponentJs() {
@@ -105,6 +127,16 @@ class StreamTestPresenter extends BasePresenter {
 	public function createComponentSearch() {
 		$component = new Search();
 		return $component;
+	}
+
+	private function fillCorrectDataForStream() {
+		$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
+		//$this->count = $this->dataForStream->count("id");
+	}
+
+	private function initializeStreamUserPreferences() {
+		$userProperty = $this->userPropertyDao->find($this->getUser()->getId());
+		$this->streamUserPreferences = new StreamUserPreferences($userProperty, $this->userDao, $this->streamDao, $this->streamCategoriesDao, $this->getSession());
 	}
 
 }

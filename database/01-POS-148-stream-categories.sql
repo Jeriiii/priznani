@@ -46,3 +46,10 @@ ALTER TABLE `stream_items`
 	ADD COLUMN `categoryID` INT(11) UNSIGNED NULL DEFAULT NULL AFTER `userID`,
 	ADD INDEX `categoryID` (`categoryID`),
 	ADD CONSTRAINT `categoryIDtoBitmap` FOREIGN KEY (`categoryID`) REFERENCES `stream_categories` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+/* přidání klíče jako preference uživatele */
+ALTER TABLE `users_properties`
+	ADD COLUMN `preferencesID` INT(11) UNSIGNED NULL AFTER `hair_colour`,
+	ADD INDEX `preferencesID` (`preferencesID`),
+	ADD CONSTRAINT `FK_users_properties_stream_items_preferences` FOREIGN KEY (`preferencesID`) REFERENCES `stream_categories` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;

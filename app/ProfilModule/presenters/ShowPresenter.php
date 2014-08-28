@@ -165,7 +165,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \ProfilStream
 	 */
 	protected function createComponentProfilStream() {
-		return new ProfilStream($this->dataForStream, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+		return new ProfilStream($this->dataForStream, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
 	}
 
 	/**
