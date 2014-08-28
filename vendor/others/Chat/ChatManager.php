@@ -10,6 +10,7 @@ use POS\Model\ChatMessagesDao;
 use \POS\Model\UserDao;
 use POS\Model\FriendDao;
 use POS\Model\PaymentDao;
+use Nette\Http\Session;
 
 /**
  * Správce chatu, používaný pro obecné operace chatu, které se týkají přístupu k modelům
@@ -50,13 +51,22 @@ class ChatManager {
 	private $coder;
 
 	/**
+	 * Sešna k různému použití
+	 * @var Session
+	 */
+	private $session;
+
+	const CHAT_MINUTE_SESSION_NAME = 'minuteChatCache';
+
+	/**
 	 * Standardni konstruktor, predani potrebnych DAO z presenteru
 	 */
-	function __construct(FriendDao $contactsDao, ChatMessagesDao $messagesDao, UserDao $userDao, PaymentDao $paymentDao) {
+	function __construct(FriendDao $contactsDao, ChatMessagesDao $messagesDao, UserDao $userDao, PaymentDao $paymentDao, Session $session) {
 		$this->contactsDao = $contactsDao;
 		$this->messagesDao = $messagesDao;
 		$this->userDao = $userDao;
 		$this->paymentDao = $paymentDao;
+		$this->session = $session;
 		$this->coder = new ChatCoder();
 	}
 
@@ -174,10 +184,43 @@ class ChatManager {
 
 	/**
 	 * Vrátí poslední zprávu z (téměř) všech konverzací (existuje maximum konverzací)
-	 * @return \Nette\Database\Table\Selection zpravy
+	 * @return array ActiveRows jako položky pole
 	 */
 	public function getConversations($idUser) {
-		return $this->messagesDao->getLastMessageFromEachSender($idUser, 10);
+		$section = $this->session->getSection(self::CHAT_MINUTE_SESSION_NAME);
+		$section->setExpiration('1 minute');
+		if (empty($section->lastConversations)) {
+			$lastChanges = $this->messagesDao->getLastConversationMessagesIDs($idUser, 20)
+				->fetchPairs(ChatMessagesDao::COLUMN_ID_SENDER, ChatMessagesDao::COLUMN_ID_RECIPIENT);
+			$section->lastConversations = $this->filterConversationIDs($idUser, $lastChanges);
+		}
+		$conversationsUsersIDs = $section->lastConversations;
+		$messages = array();
+		foreach ($conversationsUsersIDs as $idOfOtherUser) {
+			$messages[] = $this->messagesDao->getLastTextMessagesBetweenUsers($idUser, $idOfOtherUser, 1)->fetch();
+		}
+		return $messages;
+	}
+
+	/**
+	 * Vyfiltruje pole s ID tak, aby žádné nebylo opakováno dvakrát a mělo
+	 * přednost to, které není daný uživatel
+	 * @param int $idUser id uživatele, kterého chceme odfiltrovat
+	 * @param array $lastChanges pole s ID
+	 */
+	private function filterConversationIDs($idUser, $lastChanges) {
+		$conversationUsers = array();
+		foreach ($lastChanges as $sender => $recipient) {
+			if ($sender != $idUser) {
+				$correctID = $sender;
+			} else {
+				$correctID = $recipient;
+			}
+			if (!in_array($correctID, $conversationUsers)) {
+				$conversationUsers[] = $correctID;
+			}
+		}
+		return $conversationUsers;
 	}
 
 }
