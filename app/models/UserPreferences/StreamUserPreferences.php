@@ -25,11 +25,6 @@ use Nette\Http\Session;
 class StreamUserPreferences extends BaseUserPreferences implements IUserPreferences {
 
 	/**
-	 * Kolik dat vytvoří na začátku (počet řádků)
-	 */
-	const INIT_ITEMS_COUNT = 6;
-
-	/**
 	 * Název sekce v session, kterou používá pro ukládání
 	 */
 	const NAME_SESSION_BEST_STREAM_ITEMS = "bestStreamItems";
@@ -62,10 +57,11 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * kdy je cache prázdná.
 	 */
 	public function calculate() {
-		if (empty($this->streamSection->bestStreamItems)) {
-			$this->initializeStreamItems();
-		}
-		$this->bestStreamItems = $this->streamSection->bestStreamItems;
+//		if (empty($this->streamSection->bestStreamItems)) {//pro verzi se sešnou (nefunkční)
+		$this->initializeStreamItems();
+//		}//pro verzi se sešnou (nefunkční)
+//		$this->bestStreamItems = $this->streamSection->bestStreamItems;//pro verzi se sešnou (nefunkční)
+		return $this->bestStreamItems;
 	}
 
 	/**
@@ -83,9 +79,12 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	}
 
 	private function initializeStreamItems() {
-		$this->streamSection->bestStreamItems = $this->streamDao->getAllItemsWhatFits(array(
+//		$this->streamSection->bestStreamItems = $this->streamDao->getAllItemsWhatFits(array(//pro verzi se sešnou (nefunkční)
+//			$this->userProperty->offsetGet(UserPropertyDao::COLUMN_PREFERENCES_ID)//pro verzi se sešnou (nefunkční)
+//			), self::INIT_ITEMS_COUNT);//pro verzi se sešnou (nefunkční)
+		$this->bestStreamItems = $this->streamDao->getAllItemsWhatFits(array(
 			$this->userProperty->offsetGet(UserPropertyDao::COLUMN_PREFERENCES_ID)
-			), self::INIT_ITEMS_COUNT);
+		));
 	}
 
 }
