@@ -53,7 +53,6 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 
 		$this->bestStreamItems = NULL;
 
-
 		$this->streamSection = $session->getSection(self::NAME_SESSION_BEST_STREAM_ITEMS);
 		$this->streamSection->setExpiration("45 min");
 	}
@@ -63,10 +62,10 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * kdy je cache prázdná.
 	 */
 	public function calculate() {
-		if (empty($this->streamSection->myStreamItems)) {
+		if (empty($this->streamSection->bestStreamItems)) {
 			$this->initializeStreamItems();
 		}
-		$this->streamSection->myStreamItems;
+		$this->bestStreamItems = $this->streamSection->bestStreamItems;
 	}
 
 	/**
@@ -84,7 +83,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	}
 
 	private function initializeStreamItems() {
-		$this->streamSection->myStreamItems = $this->streamDao->getAllItemsWhatFits(array(
+		$this->streamSection->bestStreamItems = $this->streamDao->getAllItemsWhatFits(array(
 			$this->userProperty->offsetGet(UserPropertyDao::COLUMN_PREFERENCES_ID)
 			), self::INIT_ITEMS_COUNT);
 	}

@@ -9,6 +9,7 @@
 use Nette\Application\UI,
 	Nette\Security as NS,
 	Nette\Application\UI\Form as Frm;
+use POS\UserPreferences\StreamUserPreferences;
 
 class SignPresenter extends BasePresenter {
 
@@ -95,6 +96,7 @@ class SignPresenter extends BasePresenter {
 		$this->getSession('allow')->remove();
 		$this->getUser()->logout();
 		$this->getSession(self::USER_INFO_SESSION_NAME)->remove();
+		$this->getSession(StreamUserPreferences::NAME_SESSION_BEST_STREAM_ITEMS)->remove();
 		$this->flashMessage("Byl jste úspěšně odhlášen");
 		$this->redirect('Sign:in');
 	}
