@@ -1,8 +1,10 @@
 {block beforeContent}
 <section class="content">
 	<div id="stream">
-		{control bestMatchSearch 'listFew'}
-		{if !$profilePhoto}
+		{if $user->isLoggedIn()}
+			{control bestMatchSearch 'listFew'}
+		{/if}
+		{if !$profilePhoto &&  $user->isLoggedIn()}
 			<div id="profile-photo-upload">
 				Nahrajte si <span class="highlight">profilovou fotku</span>, aby si vás ostatní mohli prohlédnout.
 				{form uploadPhotoForm}
