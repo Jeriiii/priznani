@@ -190,8 +190,8 @@ class ChatMessagesDao extends AbstractDao {
 	public function getLastTextMessages($idUser, $amount = 10, $offset = 0) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_ID_SENDER . '=? OR ' . self::COLUMN_ID_RECIPIENT . '=?', $idUser, $idUser);
-		$sel->order(self::COLUMN_ID . ' DESC');
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
+		$sel->order(self::COLUMN_ID . ' DESC');
 		$sel->limit($amount, $offset);
 		return $sel;
 	}
@@ -208,8 +208,8 @@ class ChatMessagesDao extends AbstractDao {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_ID_SENDER . '=? AND ' . self::COLUMN_ID_RECIPIENT . '=?' .
 			' OR ' . self::COLUMN_ID_RECIPIENT . '=? AND ' . self::COLUMN_ID_SENDER . '=?', $idUser, $idSecondUser, $idUser, $idSecondUser);
-		$sel->order(self::COLUMN_ID . ' DESC');
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
+		$sel->order(self::COLUMN_ID . ' DESC');
 		$sel->limit($amount, $offset);
 		return $sel;
 	}
@@ -224,9 +224,9 @@ class ChatMessagesDao extends AbstractDao {
 	 */
 	public function getLastTextMessagesBy($idSender, $idRecipient, $amount = 10, $offset = 0) {
 		$sel = $this->getTable();
-		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		$sel->where(self::COLUMN_ID_SENDER, $idSender);
 		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
+		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		$sel->order(self::COLUMN_ID . ' DESC');
 		$sel->limit($amount, $offset);
 		return $sel;
@@ -238,7 +238,7 @@ class ChatMessagesDao extends AbstractDao {
 	 * @param int $idUser id koho se zprávy týkají
 	 * @param int $limit maximální počet uživatelů
 	 * @param int $offset maximální počet uživatelů
-	 * @return Nette\Database\Table\Selection zprávy
+	 * @return \Nette\Database\ResultSet zprávy
 	 */
 	public function getLastMessageFromEachSender($idUser, $limit = 10, $offset = 0) {
 		return $this->database->query('SELECT *
@@ -246,6 +246,23 @@ class ChatMessagesDao extends AbstractDao {
 										WHERE id_recipient = ? OR id_sender = ?
 										GROUP BY id_recipient, id_sender DESC
 										LIMIT ' . $limit . ';', $idUser, $idUser);
+	}
+
+	/**
+	 * Vrátí řádky s id odesílatele a id příjemce, které budou všechny unikátní a budou
+	 * reprezentovat, kdy kdo komu psal (poslední komunikace bude na začátku)
+	 * @param type $idUser kterého uživatele se zprávy týkají
+	 * @param type $limit limit dotazu
+	 * @param type $offset offset dotazu
+	 * @return \Nette\Database\Table\Selection idčka
+	 */
+	public function getLastConversationMessagesIDs($idUser, $limit = 10, $offset = 0) {
+		$sel = $this->getTable();
+		$sel->select('DISTINCT ' . self::COLUMN_ID_SENDER . ', ' . self::COLUMN_ID_RECIPIENT);
+		$sel->where(self::COLUMN_ID_RECIPIENT . '= ?' . ' OR ' . self::COLUMN_ID_SENDER . ' = ?', $idUser, $idUser);
+		$sel->order(self::COLUMN_ID . ' DESC');
+		$sel->limit($limit, $offset);
+		return $sel;
 	}
 
 	/**

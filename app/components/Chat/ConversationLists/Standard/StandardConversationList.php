@@ -20,7 +20,6 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/standard.latte');
 		$userId = $this->getPresenter()->getUser()->getId();
-		$template->coder = $this->chatManager->getCoder();
 		$template->conversations = $this->chatManager->getConversations($userId);
 
 		$template->userfinder = $this;
@@ -44,6 +43,16 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 			return $this->chatManager->getUsername($idRecipient, $session);
 		} else {
 			return $this->chatManager->getUsername($idSender, $session);
+		}
+	}
+
+	public function getCorrectCodedId($idSender, $idRecipient) {
+		$loggedUserId = $this->getPresenter()->getUser()->getId();
+		$coder = $this->chatManager->getCoder();
+		if ($idSender == $loggedUserId) {
+			return $coder->encodeData($idRecipient);
+		} else {
+			return $coder->encodeData($idSender);
 		}
 	}
 
