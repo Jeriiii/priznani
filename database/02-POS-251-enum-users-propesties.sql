@@ -1,5 +1,3 @@
-/* skript mění datový typ VARCHAR v tabulce users_properties na TINYINT*/
-
 /* enum MARITAL_STATE*/
 
 CREATE TABLE `enum_marital_state` (
@@ -18,8 +16,11 @@ INSERT INTO `enum_marital_state` (`marital_state`) VALUES ('vdovec / vdova');
 INSERT INTO `enum_marital_state` (`marital_state`) VALUES ('zadaný');
 
 ALTER TABLE `users_properties` DROP COLUMN `marital_state`;
-ALTER TABLE `users_properties` ADD COLUMN `marital_state` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1';
-ALTER TABLE `users_properties`	ADD CONSTRAINT `FK_users_properties_enum_marital_state` FOREIGN KEY (`marital_state`) REFERENCES `enum_marital_state` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+
+/* zde musí být nastavena default hodnota 1 -> kvůli NOT NULL cizímu klíči*/
+ALTER TABLE `users_properties` ADD COLUMN `marital_state` TINYINT(2) UNSIGNED NOT NULL DEFAULT '1';
+/* cizí klíč nemůže být nastaven při update/delete SET NULL, je to v rozporu s "not null" vlastností klíče, bude tedy defaultně RESTRICT */
+ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_marital_state` FOREIGN KEY (`marital_state`) REFERENCES `enum_marital_state` (`id`);
 
 /* enum ORIENTATION*/
 
@@ -37,8 +38,8 @@ INSERT INTO `enum_orientation` (`orientation`) VALUES ('bi');
 INSERT INTO `enum_orientation` (`orientation`) VALUES ('bi - chtěl bych zkusit');
 
 ALTER TABLE `users_properties` DROP COLUMN `orientation`;
-ALTER TABLE `users_properties` ADD COLUMN `orientation` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1';
-ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_orientation` FOREIGN KEY (`orientation`) REFERENCES `enum_orientation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `users_properties` ADD COLUMN `orientation` TINYINT(2) UNSIGNED NOT NULL DEFAULT '1';
+ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_orientation` FOREIGN KEY (`orientation`) REFERENCES `enum_orientation` (`id`);
 
 /* enum SHAPE */
  
@@ -58,8 +59,8 @@ INSERT INTO `enum_shape` (`shape`) VALUES ('plnoštíhlá');
 INSERT INTO `enum_shape` (`shape`) VALUES ('při těle');
 
 ALTER TABLE `users_properties` DROP COLUMN `shape`;
-ALTER TABLE `users_properties` ADD COLUMN `shape` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1';
-ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_shape` FOREIGN KEY (`shape`) REFERENCES `enum_shape` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `users_properties` ADD COLUMN `shape` TINYINT(2) UNSIGNED NOT NULL DEFAULT '1';
+ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_shape` FOREIGN KEY (`shape`) REFERENCES `enum_shape` (`id`);
 
 /* enum PENIS_LENGTH*/
 
@@ -78,8 +79,8 @@ INSERT INTO `enum_penis_length` (`penis_length`) VALUES ('obrovská');
 
 
 ALTER TABLE `users_properties` DROP COLUMN `penis_length`;
-ALTER TABLE `users_properties` ADD COLUMN `penis_length` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1';
-ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_penis_length` FOREIGN KEY (`penis_length`) REFERENCES `enum_penis_length` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `users_properties` ADD COLUMN `penis_length` TINYINT(2) UNSIGNED NOT NULL DEFAULT '1';
+ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_penis_length` FOREIGN KEY (`penis_length`) REFERENCES `enum_penis_length` (`id`);
 
 /* enum PENIS_WIDTH*/
 
@@ -96,8 +97,8 @@ INSERT INTO `enum_penis_width` (`penis_width`) VALUES ('střední');
 INSERT INTO `enum_penis_width` (`penis_width`) VALUES ('tlustý');
 
 ALTER TABLE `users_properties` DROP COLUMN `penis_width`;
-ALTER TABLE `users_properties` ADD COLUMN `penis_width` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1';
-ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_penis_width` FOREIGN KEY (`penis_width`) REFERENCES `enum_penis_width` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `users_properties` ADD COLUMN `penis_width` TINYINT(2) UNSIGNED NOT NULL DEFAULT '1';
+ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_penis_width` FOREIGN KEY (`penis_width`) REFERENCES `enum_penis_width` (`id`);
 
 /* enum DRINK*/
  
@@ -114,8 +115,8 @@ INSERT INTO `enum_drink` (`drink`) VALUES ('ne');
 INSERT INTO `enum_drink` (`drink`) VALUES ('příležitostně');
 
 ALTER TABLE `users_properties` DROP COLUMN `drink`;
-ALTER TABLE `users_properties` ADD COLUMN `drink` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1';
-ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_drink` FOREIGN KEY (`drink`) REFERENCES `enum_drink` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `users_properties` ADD COLUMN `drink` TINYINT(2) UNSIGNED NOT NULL DEFAULT '1';
+ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_drink` FOREIGN KEY (`drink`) REFERENCES `enum_drink` (`id`);
 
 
 /* enum GRADUATION*/
@@ -135,8 +136,8 @@ INSERT INTO `enum_graduation` (`graduation`) VALUES ('vyšší odborné');
 INSERT INTO `enum_graduation` (`graduation`) VALUES ('vysoké');
 
 ALTER TABLE `users_properties` DROP COLUMN `graduation`;
-ALTER TABLE `users_properties` ADD COLUMN `graduation` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1';
-ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_graduation` FOREIGN KEY (`graduation`) REFERENCES `enum_graduation` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `users_properties` ADD COLUMN `graduation` TINYINT(2) UNSIGNED NOT NULL DEFAULT '1';
+ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_graduation` FOREIGN KEY (`graduation`) REFERENCES `enum_graduation` (`id`);
 
 
 /* enum BRA_SIZE*/
@@ -157,8 +158,8 @@ INSERT INTO `enum_bra_size` (`bra_size`) VALUES ('E');
 INSERT INTO `enum_bra_size` (`bra_size`) VALUES ('F');
 
 ALTER TABLE `users_properties` DROP COLUMN `bra_size`;
-ALTER TABLE `users_properties` ADD COLUMN `bra_size` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1';
-ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_bra_size` FOREIGN KEY (`bra_size`) REFERENCES `enum_bra_size` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `users_properties` ADD COLUMN `bra_size` TINYINT(2) UNSIGNED NOT NULL DEFAULT '1';
+ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_bra_size` FOREIGN KEY (`bra_size`) REFERENCES `enum_bra_size` (`id`);
 
 /* enum SMOKE */
  
@@ -175,5 +176,5 @@ INSERT INTO `enum_smoke` (`smoke`) VALUES ('ne');
 INSERT INTO `enum_smoke` (`smoke`) VALUES ('příležitostně');
 
 ALTER TABLE `users_properties` DROP COLUMN `smoke`;
-ALTER TABLE `users_properties` ADD COLUMN `smoke` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1';
-ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_smoke` FOREIGN KEY (`smoke`) REFERENCES `enum_smoke` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE `users_properties` ADD COLUMN `smoke` TINYINT(2) UNSIGNED NOT NULL DEFAULT '1';
+ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_smoke` FOREIGN KEY (`smoke`) REFERENCES `enum_smoke` (`id`);
