@@ -26,12 +26,23 @@ class DatingRegistrationFirstForm extends BaseForm {
 		$this->userDao = $userDao;
 		$this->regSession = $regSession;
 
-		$this->addGroup('Základní údaje:');
+		$this->addGroup('Datum narození a základní údaje:');
 
-		$this->addText('age', 'Věk')
-			->addRule(Form::FILLED, 'Věk není vyplněn.')
-			->addRule(Form::INTEGER, 'Věk není číslo.')
-			->addRule(Form::RANGE, 'Věk musí být od %d do %d let.', array(18, 120));
+		$months = array(1 => 'leden', 'únor', 'březen', 'duben', 'květen', 'červen', 'červenec', 'srpen', 'září', 'říjen', 'listopad', 'prosinec');
+		$days = range(1, 31);
+		$years = array_combine(range(date("Y"), 1910), range(date("Y"), 1910));
+
+		$this->addSelect('day', 'Den: ', $days)
+			->setPrompt(' - ')
+			->addRule(Form::FILLED, "Prosím vyplňte den Vašeho narození.");
+
+		$this->addSelect('month', 'Měsíc:  ', $months)
+			->setPrompt(' - ')
+			->addRule(Form::FILLED, "Prosím vyplňte měsíc Vašeho narození.");
+
+		$this->addSelect('year', 'Rok: ', $years)
+			->setPrompt(' - ')
+			->addRule(Form::FILLED, "Prosím vyplňte měsíc Vašeho narození.");
 
 		$this->addSelect('user_property', 'Jsem:', $this->userDao->getUserPropertyOption());
 
@@ -58,13 +69,16 @@ class DatingRegistrationFirstForm extends BaseForm {
 		$values = $form->values;
 		$presenter = $this->getPresenter();
 
+		//přičte jedna ke dni - zrušit posun při číslování pole od nuly
+		$date = date_create()->setDate($values->year, $values->month, $values->day + 1);
+
 		//uložení checkboxů
 		foreach ($this->userDao->getArrWantToMeet() as $key => $interest) {
 			$this->regSession[$key] = $values[$key] == TRUE ? 1 : 0;
 		}
 
 		$this->regSession->role = 'unconfirmed_user';
-		$this->regSession->age = $values->age;
+		$this->regSession->age = $date;
 		$this->regSession->user_property = $values->user_property;
 
 		$presenter->redirect('Datingregistration:SecondRegForm');

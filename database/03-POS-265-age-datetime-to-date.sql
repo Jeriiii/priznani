@@ -1,0 +1,1 @@
+ALTER TABLE `stream_items` CHANGE COLUMN `age` `age` DATE NULL DEFAULT NULL AFTER `create`;
