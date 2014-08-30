@@ -145,8 +145,10 @@ class DatingRegistrationSecondForm extends BaseForm {
 
 		$data = explode(", ", $values->city);
 
+
 		if (sizeof($data) < 3) {
 			$form->addError('Neúplná data o městu(město, okres, kraj)');
+			return;
 		}
 
 		$region = $this->regionDao->findByName($data[2]);
