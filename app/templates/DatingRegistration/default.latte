@@ -1,3 +1,48 @@
 {block datingContent}
 <h4>Zaregistrujte se.</h4><br />
-{control firstRegForm}
+
+{form firstRegForm}
+
+	<table>
+		<tr>
+			<td>
+			<legend>Základní údaje: </legend>
+			</td>
+		</tr>
+			
+		<tr>
+			<td>
+				<label for="frm-firstRegForm">Daum narození:</label> 
+				{input day} {input month} {input year}
+			</td>
+		</tr>
+		
+		<tr>
+			<td>{label user_property /}	{input user_property}</td>
+		</tr>
+		
+		<tr>
+			<td>
+			<legend>Zajímám se o: </legend>	
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				{input want_to_meet_men}
+				{input want_to_meet_women}
+				{input want_to_meet_couple}
+				{input want_to_meet_couple_men}
+				{input want_to_meet_couple_women}
+				{input want_to_meet_group}	
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				{input send}
+			
+			<td>
+		</tr>
+    </table>
+{/form}

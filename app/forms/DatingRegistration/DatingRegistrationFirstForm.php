@@ -26,22 +26,22 @@ class DatingRegistrationFirstForm extends BaseForm {
 		$this->userDao = $userDao;
 		$this->regSession = $regSession;
 
-		$this->addGroup('Datum narození a základní údaje:');
+		$this->addGroup('Základní údaje:');
 
 		$months = array(1 => 'leden', 'únor', 'březen', 'duben', 'květen', 'červen', 'červenec', 'srpen', 'září', 'říjen', 'listopad', 'prosinec');
 		$days = range(1, 31);
 		$years = array_combine(range(date("Y"), 1910), range(date("Y"), 1910));
 
 		$this->addSelect('day', 'Den: ', $days)
-			->setPrompt(' - ')
+			->setPrompt('Den')
 			->addRule(Form::FILLED, "Prosím vyplňte den Vašeho narození.");
 
 		$this->addSelect('month', 'Měsíc:  ', $months)
-			->setPrompt(' - ')
+			->setPrompt('Měsíc')
 			->addRule(Form::FILLED, "Prosím vyplňte měsíc Vašeho narození.");
 
 		$this->addSelect('year', 'Rok: ', $years)
-			->setPrompt(' - ')
+			->setPrompt('Rok')
 			->addRule(Form::FILLED, "Prosím vyplňte měsíc Vašeho narození.");
 
 		$this->addSelect('user_property', 'Jsem:', $this->userDao->getUserPropertyOption());
@@ -69,7 +69,7 @@ class DatingRegistrationFirstForm extends BaseForm {
 		$values = $form->values;
 		$presenter = $this->getPresenter();
 
-		//přičte jedna ke dni - zrušit posun při číslování pole od nuly
+		//přičte jedna ke dni - zruší posun při číslování pole 'days' od nuly
 		$date = date_create()->setDate($values->year, $values->month, $values->day + 1);
 
 		//uložení checkboxů
