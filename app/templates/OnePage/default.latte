@@ -5,12 +5,15 @@
 {block content}
 <section id="onepage">
 	<nav id="stream-menu">
-	
 		{if $user->loggedIn}	
-			{$showUsersInfo|showProfMin: array(':Profil:Show:default', 'id' => $showUsersInfo->id)}
-			<b><a n:href=":Profil:Show:default">{$showUsersInfo->user_name}</a></b>
-			<a n:href=":Profil:Edit:default" title="Editovat profil">Editovat profil</a>
-			<a n:href=":Profil:Show:default" class="btn-main btn-small" title="Muj profil">Můj profil</a>
+			<table><tr><td>
+				<img src ="{$image|getImgSqrPath}" width="65px"></td>
+				<td>
+				<b><a n:href=":Profil:Show:default" title="Zobrazit profil">{$userName->user_name}</a></b>
+				<a n:href=":Profil:Edit:default" title="Editovat profil"> Editovat profil</a>
+			</td></tr></table>
+				<a n:href=":Profil:Show:default" class="btn-main btn-small" title="Muj profil"> Můj profil</a>
+
 		{/if}
 		
 		<a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>
