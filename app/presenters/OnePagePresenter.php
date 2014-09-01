@@ -52,22 +52,22 @@ class OnePagePresenter extends BasePresenter {
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $count = 0;
-	private $userID;
-	protected $showUsersInfo;
+	protected $image;
+	protected $userName;
 
 	public function actionDefault() {
 		$this->dataForStream = $this->streamDao->getAll("DESC");
 		$this->count = $this->dataForStream->count("id");
-		$this->userID = $this->getUser()->getId();
-		$this->showUsersInfo = $this->userDao->getTable('users')->select('*')->where('id', $this->userID)->fetch();
+		$userID = $this->getUser()->getId();
+		$userGallery = $this->userGalleryDao->findProfileGallery($userID);
+		$this->image = $this->userImageDao->getTable()->select('*')->where('galleryID', $userGallery)->fetch();
+		$this->userName = $this->userDao->getTable()->select('user_name')->where('id', $userID)->fetch();
 	}
 
 	public function renderDefault() {
 		$this->template->count = $this->count;
-		$this->template->userID = $this->userID;
-		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
-		$this->template->showUsersInfo = $this->showUsersInfo;
-		;
+		$this->template->image = $this->image;
+		$this->template->userName = $this->userName;
 	}
 
 	protected function createComponentUserStream() {
