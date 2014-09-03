@@ -22,7 +22,6 @@ class UsersCompetitionsGallery extends BaseGallery {
 	 * @var \POS\Model\ImageLikesDao
 	 */
 	public $imageLikesDao;
-	protected $image;
 
 	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao) {
 		parent::__construct($images, $image, $gallery, $domain, $partymode);

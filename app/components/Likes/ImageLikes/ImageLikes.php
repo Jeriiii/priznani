@@ -21,21 +21,30 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 	public $image;
 
 	public function __construct(ImageLikesDao $imageLikesDao = NULL, UserImageDao $userImageDao = NULL, $image = NULL, $userID = NULL) {
+		parent::__construct($imageLikesDao, $image, $userID);
 		$this->image = $image;
-		parent::__construct($imageLikesDao, $this->image, $userID);
 		$this->imageLikesDao = $imageLikesDao;
 		$this->userImageDao = $userImageDao;
 	}
 
-	public function render() {
-		parent::render();
-	}
-
 	public function handleSexy($userID, $imageID) {
-		$this->imageLikesDao->addLiked($imageID, $userID);
-		$this->image = $this->userImageDao->addLike($imageID);
+		if ($this->liked == FALSE) {
+			$this->imageLikesDao->addLiked($imageID, $userID);
+		}
+		$this->liked = $this->getLikedByUser($this->userID, $this->image->id);
 
 		$this->redrawControl();
+	}
+
+	/**
+	 *
+	 * @param int $userID ID užovatele, kterého hledáme
+	 * @param int $imageID ID obrázku, který hledáme
+	 * @return bool
+	 */
+	public function getLikedByUser($userID, $imageID) {
+		$liked = $this->imageLikesDao->likedByUser($userID, $imageID);
+		return $liked;
 	}
 
 }

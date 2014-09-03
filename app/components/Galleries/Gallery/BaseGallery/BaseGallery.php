@@ -17,7 +17,7 @@ class BaseGallery extends BaseProjectControl {
 
 	private $images;
 	/* aktualni obrazek */
-	private $image;
+	protected $image;
 	/* aktualni galerie */
 	protected $gallery;
 	/* aktualni domena */

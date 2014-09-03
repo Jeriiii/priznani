@@ -61,6 +61,12 @@ class GalleriesPresenter extends \BasePresenter {
 	 */
 	public $competitionsImagesDao;
 
+	/**
+	 * @var \POS\Model\ImageLikesDao
+	 * @inject
+	 */
+	public $imageLikesDao;
+
 	public function startup() {
 		parent::startup();
 
@@ -254,7 +260,7 @@ class GalleriesPresenter extends \BasePresenter {
 		$domain = $httpRequest->getUrl()->host;
 		//$domain = "http://priznaniosexu.cz";
 
-		return new UsersGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao);
+		return new UsersGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao);
 	}
 
 	protected function createComponentNavigation($name) {

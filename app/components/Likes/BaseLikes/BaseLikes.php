@@ -33,6 +33,11 @@ class BaseLikes extends BaseProjectControl {
 	protected $image;
 
 	/**
+	 * @var bool TRUE pokud uživatel dal like, jinak FALSE.
+	 */
+	protected $liked;
+
+	/**
 	 * @param object $image obrázek, který by se lajkoval
 	 * @param int $userID Id uživatele, který může lajknout
 	 */
@@ -41,6 +46,7 @@ class BaseLikes extends BaseProjectControl {
 		$this->userID = $userID;
 		$this->image = $image;
 		$this->imageLikesDao = $imageLikesDao;
+		$this->liked = $this->getLikedByUser($this->userID, $this->image->id);
 	}
 
 	/**
@@ -51,20 +57,9 @@ class BaseLikes extends BaseProjectControl {
 		$template->setFile(dirname(__FILE__) . '/baseLikes.latte');
 		$template->image = $this->image;
 		if ($this->getPresenter()->user->isLoggedIn()) {
-			$template->liked = $this->getLikedByUser($this->userID, $this->image->id);
+			$template->liked = $this->liked;
 		}
 		$template->render();
-	}
-
-	/**
-	 *
-	 * @param int $userID ID užovatele, kterého hledáme
-	 * @param int $imageID ID obrázku, který hledáme
-	 * @return bool
-	 */
-	public function getLikedByUser($userID, $imageID) {
-		$liked = $this->imageLikesDao->likedByUser($userID, $imageID);
-		return $liked;
 	}
 
 }

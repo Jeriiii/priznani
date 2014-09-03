@@ -13,4 +13,12 @@ namespace POSComponent\BaseLikes;
 interface IBaseLikes {
 
 	public function handleSexy($userID, $imageID);
+
+	/**
+	 * Vrátí informaci, zda uživatel již dal like (= sexy)
+	 * @param int $userID ID užovatele, kterého hledáme
+	 * @param int $imageID ID obrázku, který hledáme
+	 * @return bool
+	 */
+	public function getLikedByUser($userID, $imageID);
 }
