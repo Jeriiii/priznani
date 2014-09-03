@@ -5,10 +5,8 @@ Feature: Dating registration
 
 	Scenario Outline: Registration of a couple 
 		Given I am on "/dating-registration/"
-		And I select "12" from "day"
-		And I select "červen" from "month"
-		And I select "12" from "day"
-		And I select "1990" from "year"
+		When I fill in "30" for "age"
+		And I select "Pár" from "user_property"
 		And I check "want_to_meet_couple"
 		And I press "send"
 		Then I should be on "/dating-registration/second-reg-form"
