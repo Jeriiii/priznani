@@ -53,21 +53,20 @@ class OnePagePresenter extends BasePresenter {
 	public $dataForStream;
 	private $count = 0;
 	private $userID;
-	protected $showUsersInfo;
+	protected $userData;
 
 	public function actionDefault() {
 		$this->dataForStream = $this->streamDao->getAll("DESC");
 		$this->count = $this->dataForStream->count("id");
 		$this->userID = $this->getUser()->getId();
-		$this->showUsersInfo = $this->userDao->getTable('users')->select('*')->where('id', $this->userID)->fetch();
+		$this->userData = $this->userDao->find($this->userID);
 	}
 
 	public function renderDefault() {
 		$this->template->count = $this->count;
 		$this->template->userID = $this->userID;
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
-		$this->template->showUsersInfo = $this->showUsersInfo;
-		;
+		$this->template->userData = $this->userData;
 	}
 
 	protected function createComponentUserStream() {
