@@ -109,7 +109,7 @@ class ShowProfHelper {
 
 		/* pokud není href nastavený, použije se odkaz na už. profil */
 		if (empty($href)) {
-			$href = array("Show:", array("id" => $user->id));
+			$href = array(":Profil:Show:", array("id" => $user->id));
 		}
 
 		$href = $this->link($href);

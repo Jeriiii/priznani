@@ -7,7 +7,7 @@
 	<nav id="stream-menu">
 	
 		{if $user->loggedIn}	
-			{$showUsersInfo|showProfMin: array(':Profil:Show:default', 'id' => $showUsersInfo->id)}
+			{$showUsersInfo|showProfMin}
 			<b><a n:href=":Profil:Show:default">{$showUsersInfo->user_name}</a></b>
 			<a n:href=":Profil:Edit:default" title="Editovat profil">Editovat profil</a>
 			<a n:href=":Profil:Show:default" class="btn-main btn-small" title="Muj profil">Můj profil</a>
