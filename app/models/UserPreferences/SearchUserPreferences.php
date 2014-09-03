@@ -14,6 +14,8 @@ namespace POS\UserPreferences;
 
 use Nette\Caching\Cache;
 use Nette\ArrayHash;
+use NetteExt\Serialize\Relation;
+use NetteExt\Serialize\Serializer;
 
 class SearchUserPreferences extends BaseUserPreferences implements IUserPreferences {
 
@@ -36,9 +38,9 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 	public function getBestUsers() {
 		$this->bestUsers = $this->section->bestUsers;
 
-		if ($this->bestUsers === NULL) {
-			$this->calculate();
-		}
+		//if ($this->bestUsers === NULL) {
+		$this->calculate();
+		//}
 
 		return $this->bestUsers;
 	}
@@ -48,23 +50,14 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * @param Nette\Database\Table\Selection $users Hledaní uživatelé.
 	 */
 	public function saveBestUsers($users) {
-		$arrUsers = array();
-		foreach ($users as $user) {
-			$arrUser = $user->toArray();
-			$profilPhoto = $user->profilFoto;
-			if (isset($profilPhoto)) {
-				$profilPhoto->id;
-				$arrUser["profilFoto"] = $profilPhoto->toArray();
-				$gallery = $profilPhoto->gallery;
-				$gallery->id;
-				$arrUser["profilFoto"]["gallery"] = $gallery->toArray();
-			} else {
-				$arrUser["profilFoto"] = FALSE;
-			}
-			$arrUsers[] = ArrayHash::from($arrUser);
-		}
+		$relProfilPhoto = new Relation("profilFoto");
+		$relGallery = new Relation("gallery");
+		$relProfilPhoto->addRel($relGallery);
 
-		$this->bestUsers = $arrUsers;
+		$ser = new Serializer($users);
+		$ser->addRel($relProfilPhoto);
+
+		$this->bestUsers = $ser->toArrayHash();
 		$this->section->bestUsers = $this->bestUsers;
 	}
 
