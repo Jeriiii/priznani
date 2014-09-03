@@ -29,7 +29,7 @@ class BaseSearch extends BaseProjectControl {
 		$this->template->setFile(dirname(__FILE__) . '/baseSearch.latte');
 
 		if ($mode == 'listFew') {
-			$this->users = array_slice($this->users, 0, 6);
+			$this->users = array_slice((array) $this->users, 0, 6);
 		}
 		$rere = array('a', 'b', 'c');
 
