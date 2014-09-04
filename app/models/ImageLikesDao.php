@@ -34,11 +34,23 @@ class ImageLikesDao extends AbstractDao {
 	 * @param int $userID ID uživatele, který lajkuje
 	 */
 	public function addLiked($imageID, $userID) {
+		/* přidá vazbu mezi obr. a uživatelem */
 		$sel = $this->getTable();
 		$sel->insert(array(
 			self::COLUMN_IMAGE_ID => $imageID,
 			self::COLUMN_USER_ID => $userID,
 		));
+
+		/* zvýší like u obrázku o jedna */
+		$sel = $this->createSelection(UserImageDao::TABLE_NAME);
+		$image = $sel->get($imageID);
+		if (!empty($image)) {
+			$image->update(array(
+				UserImageDao::COLUMN_LIKES => $image->likes + 1
+			));
+		}
+
+		return $image;
 	}
 
 	/**

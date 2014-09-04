@@ -34,10 +34,10 @@ class ActivitiesDao extends AbstractDao {
 
 	/**
 	 * Přidá aktivitu pro obrázek.
-	 * @param type int $creatorID ID uživatele, který aktivitu provádí
-	 * @param type int $ownerID ID uživatele vlastnícího obrázek
-	 * @param type int $imageID ID obrázku
-	 * @param type string $type Typ aktivity (like, comment, ...)
+	 * @param int $creatorID ID uživatele, který aktivitu provádí
+	 * @param int $ownerID ID uživatele vlastnícího obrázek
+	 * @param int $imageID ID obrázku
+	 * @param string $type Typ aktivity (like, comment, ...)
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function createImageActivity($creatorID, $ownerID, $imageID, $type) {
@@ -53,10 +53,10 @@ class ActivitiesDao extends AbstractDao {
 
 	/**
 	 * Přidá aktivitu pro status.
-	 * @param type int $creatorID ID uživatele, který aktivitu provádí
-	 * @param type int $ownerID ID uživatele vlastnícího status
-	 * @param type int $statusID ID statusu
-	 * @param type string $type Typ aktivity (like, comment, ...)
+	 * @param int $creatorID ID uživatele, který aktivitu provádí
+	 * @param int $ownerID ID uživatele vlastnícího status
+	 * @param int $statusID ID statusu
+	 * @param string $type Typ aktivity (like, comment, ...)
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function createStatusActivity($creatorID, $ownerID, $statusID, $type) {
@@ -72,9 +72,9 @@ class ActivitiesDao extends AbstractDao {
 
 	/**
 	 * Přidá aktivitu pro uživatele.
-	 * @param type int $creatorID ID uživatele, který aktivitu provádí
-	 * @param type int $ownerID ID uživatele, kterého se aktivita týká
-	 * @param type string $type Typ aktivity (změna infa o sobě, šťouch, ...)
+	 * @param int $creatorID ID uživatele, který aktivitu provádí
+	 * @param int $ownerID ID uživatele, kterého se aktivita týká
+	 * @param string $type Typ aktivity (změna infa o sobě, šťouch, ...)
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function createUserActivity($creatorID, $ownerID, $type) {
@@ -89,7 +89,7 @@ class ActivitiesDao extends AbstractDao {
 
 	/**
 	 * Vrátí aktivity pro jednoho usera.
-	 * @param type int $userID
+	 * @param int $userID
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function getActivitiesByUserId($userID) {
@@ -100,7 +100,7 @@ class ActivitiesDao extends AbstractDao {
 
 	/**
 	 * 	Vrátí počet nepřčtených aktivit dného usera
-	 * @param type $userID ID vlastníka aktivit
+	 * @param $userID ID vlastníka aktivit
 	 * @return int
 	 */
 	public function getCountOfUnviewed($userID) {
