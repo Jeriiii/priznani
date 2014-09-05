@@ -12,5 +12,3 @@ ALTER TABLE `users_properties` DROP COLUMN `hair_colour`;
 ALTER TABLE `users_properties` ADD COLUMN `hair_colour` TINYINT(2) UNSIGNED NULL;
 
 ALTER TABLE `users_properties` ADD CONSTRAINT `FK_users_properties_enum_hair_colour` FOREIGN KEY (`hair_colour`) REFERENCES `enum_hair_colour` (`id`);
-
-UPDATE `enum_hair_colour` SET `id`=0 WHERE  `id`=5;
