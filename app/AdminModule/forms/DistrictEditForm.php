@@ -53,12 +53,7 @@ class DistrictEditForm extends DistrictNewForm {
 		);
 
 		/* ohlídání duplicit */
-		try {
-			$this->districtDao->updateDistrict($district->id, $data);
-		} catch (\POS\Exception\DuplicateRowException $ex) {
-			$this->getPresenter()->flashMessage("Tento okres již existuje!", 'danger');
-			$this->getPresenter()->redirect('Cities:addDistrict');
-		}
+		$this->districtDao->updateDistrict($district->id, $data);
 
 		$this->getPresenter()->flashMessage('Okres byl upraven', 'success');
 		$this->getPresenter()->redirect('Cities:');

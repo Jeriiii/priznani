@@ -44,9 +44,8 @@ class CityGrid extends Grid {
 		$districts = $this->districtDao->getDistrictsInArray();
 		$regions = $this->regionDao->getRegionsInArray();
 
-		$this->addColumnText("id", "ID")
-			->setDefaultSort('ASC');
 		$this->addColumnText("city", "Město")
+			->setDefaultSort('ASC')
 			->setFilterText()
 			->setColumn('city.name');
 		$this->addColumnText("district", "Okres")
