@@ -69,7 +69,7 @@
 
 
 	// Při kliknutí na jednu aktivitu složí url a odešle ajax pro označení jako přečtená.
-	$(document).on("click", '#activities-droplink a', function() {
+	$(document).on("click", '#activities-droplink button', function() {
 		//Získání id aktivity
 		var activityID = $(this).attr('data-activity');
 		//Část url volání handleru
@@ -112,7 +112,7 @@
 		var ajaxUrl = clearUrl + requestUrl;
 		var target = $(e.target);
 		var targetAttr = target.attr('data-ajax-off');
-
+		
 		//Otevře okno s aktivitama
 		activitiesDrop.fadeIn();
 		$("a.activities-btn").before(close);
@@ -124,10 +124,10 @@
 				url: ajaxUrl,
 				async: true,
 				success: function(response) {
-					activitiesBtn.attr('data-ajax-off', '1');
-					loading.hide();
 				},
 				complete: function(payload) {
+					activitiesBtn.attr('data-ajax-off', '1');
+					loading.hide();
 					var data = JSON.parse(payload.responseText);
 
 					//Pokud uživatel nemá žádnou událost, vypíše se mu to.
@@ -147,7 +147,7 @@
 						$.each(data, function(key, value) {
 							$.each(value, function(key, value) {
 								var div = "<div class=" + value.divClass + ">" + value.divText + "</div>";
-								$(".marker").after("<a class=item data-activity=" + value.activityID + " href=" + value.href + ">" + div + "</a>");
+								$(".marker").after("<a class=item data-activity=" + value.activityID + " href=" + value.href + ">" + div + "</a><button data-activity='" + value.activityID + "' >Přečtené</button>");
 							});
 						});
 					}
