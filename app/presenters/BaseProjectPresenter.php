@@ -1,6 +1,7 @@
 <?php
 
 use NetteExt\Helper\HelperRegistrator;
+use Nette\Security\User;
 
 /**
  * BaseHelperPresenter Description
