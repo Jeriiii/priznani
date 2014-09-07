@@ -87,7 +87,7 @@ class CityDao extends AbstractDao {
 
 	/**
 	 * Získá potřebná data pro Grido z db.
-	 * @return Nette\Database\Table\ActiveRow
+	 * @return Nette\Database\Table\Selection
 	 */
 	public function getCitiesData() {
 		$sel = $this->getTable();

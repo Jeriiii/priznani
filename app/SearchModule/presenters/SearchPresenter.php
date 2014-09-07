@@ -26,6 +26,18 @@ class SearchPresenter extends SearchBasePresenter {
 	 */
 	public $userPropertyDao;
 
+	/**
+	 * @var \POS\Model\CityDao
+	 * @inject
+	 */
+	public $cityDao;
+
+	/**
+	 * uchovává parametry pro podrobné hledání
+	 * @var array
+	 */
+	public $searchData;
+
 	public function beforeRender() {
 		parent::beforeRender();
 		$this->setSexMode();
@@ -229,7 +241,7 @@ class SearchPresenter extends SearchBasePresenter {
 			$filterGraduation = NULL;
 		}
 
-		//pole obsahující jednotlivé části dotazu uživatele (některé pole mohou být prázdné)
+//pole obsahující jednotlivé části dotazu uživatele (některé pole mohou být prázdné)
 		$AdvancedFilter = array(
 			'orientation' => $filterOrientation,
 			'user_property' => $filterInterested,
@@ -241,7 +253,7 @@ class SearchPresenter extends SearchBasePresenter {
 			'graduation' => $filterGraduation
 		);
 
-		//cyklus, který filtruje dotaz podle neprázdných, vyplněných, uživatelských údajů
+//cyklus, který filtruje dotaz podle neprázdných, vyplněných, uživatelských údajů
 		$where = array();
 		foreach ($AdvancedFilter as $varname => $varvalue) {
 			if ($varname == 'age' && !empty($varvalue)) {
@@ -255,7 +267,7 @@ class SearchPresenter extends SearchBasePresenter {
 		$this->template->advancedUsersData = $this->getPaginator($advancedUsersData, "12");
 		$this->template->fotos = $this->context->createUsersFoto()->getAllUserFotos()->order('id DESC');
 
-		// převyplněný předchozí výběr uživatele
+// převyplněný předchozí výběr uživatele
 		$this['advancedSearchForm']->setDefaults(array(
 			'orientation' => $orientation,
 			'interested_in' => array(
@@ -285,7 +297,7 @@ class SearchPresenter extends SearchBasePresenter {
 		} else {
 			$this->template->usersDataLastDay = false;
 		}
-		//	Debugger::dump($this->template->usersDataLastDay);
+//	Debugger::dump($this->template->usersDataLastDay);
 		$this->template->usersData = $this->getPaginator($usersData, "4");
 		$this->template->fotos = $this->context->createUsersFoto()->getAllUserFotos()->order('id DESC');
 	}
@@ -311,6 +323,109 @@ class SearchPresenter extends SearchBasePresenter {
 
 	}
 
+	/*
+	 * v případě parametrů z hledání se tyto uloží do pole
+	 */
+
+	public function actionAdvanced($age_from, $age_to, $sex, $penis_length, $penis_width, $bra_size, $orientation, $shape, $hair_color, $tallness_from, $tallness_to, $drink, $smoke, $graduation, $notCare, $threesome, $anal, $group, $bdsm, $swallow, $cum, $oral, $piss, $sex_massage, $petting, $fisting, $deepthroat, $cityID, $districtID, $regionID) {
+
+		$data = array();
+
+		if ($age_from != NULL) {
+			$data['age_from'] = $age_from;
+		}
+		if ($age_to != NULL) {
+			$data['age_to'] = $age_to;
+		}
+		if ($sex != NULL) {
+			$data['sex'] = $sex;
+		}
+		if ($penis_length != NULL) {
+			$data['penis_length'] = $penis_length;
+		}
+		if ($penis_width != NULL) {
+			$data['penis_width'] = $penis_width;
+		}
+		if ($bra_size != NULL) {
+			$data['bra_size'] = $bra_size;
+		}
+		if ($orientation != NULL) {
+			$data['orientation'] = $orientation;
+		}
+		if ($shape != NULL) {
+			$data['shape'] = $shape;
+		}
+		if ($hair_color != NULL) {
+			$data['hair_color'] = $hair_color;
+		}
+		if ($tallness_from != NULL) {
+			$data['tallness_from'] = $tallness_from;
+		}
+		if ($tallness_to != NULL) {
+			$data['tallness_to'] = $tallness_to;
+		}
+		if ($drink != NULL) {
+			$data['drink'] = $drink;
+		}
+		if ($smoke != NULL) {
+			$data['smoke'] = $smoke;
+		}
+		if ($graduation != NULL) {
+			$data['graduation'] = $graduation;
+		}
+		if ($notCare != NULL) {
+			$data['notCare'] = TRUE;
+			if ($threesome != NULL) {
+				$data['threesome'] = $threesome;
+			}
+			if ($anal != NULL) {
+				$data['anal'] = $anal;
+			}
+			if ($group != NULL) {
+				$data['group'] = $group;
+			}
+			if ($bdsm != NULL) {
+				$data['bdsm'] = $bdsm;
+			}
+			if ($swallow != NULL) {
+				$data['swallow'] = $swallow;
+			}
+			if ($cum != NULL) {
+				$data['cum'] = $cum;
+			}
+			if ($oral != NULL) {
+				$data['oral'] = $oral;
+			}
+			if ($piss != NULL) {
+				$data['piss'] = $piss;
+			}
+			if ($sex_massage != NULL) {
+				$data['sex_massage'] = $sex_massage;
+			}
+			if ($petting != NULL) {
+				$data['petting'] = $petting;
+			}
+			if ($fisting != NULL) {
+				$data['fisting'] = $fisting;
+			}
+			if ($deepthroat != NULL) {
+				$data['deepthroat'] = $deepthroat;
+			}
+			if ($cityID != NULL) {
+				$data['cityID'] = $cityID;
+			}
+			if ($districtID != NULL) {
+				$data['districtID'] = $districtID;
+			}
+			if ($regionID != NULL) {
+				$data['regionID'] = $regionID;
+			}
+		} else {
+			$data['notCare'] = FALSE;
+		}
+		$this->searchData = $data;
+	}
+
 	protected function createComponentAdvancedSearchForm($name) {
 		$form = new Frm\AdvancedSearchForm($this, $name);
 		return $form;
@@ -326,6 +441,15 @@ class SearchPresenter extends SearchBasePresenter {
 		$user = $this->userDao->find($this->getUser()->id);
 		$session = $this->getSession();
 		return new BestMatchSearch($user->property, $this->userDao, $session, $this, $name);
+	}
+
+	/**
+	 * Komponenta s formulářem pro podrobné vyhledávání
+	 * @param type $name
+	 * @return \POSComponent\Search\AdvancedSearch
+	 */
+	protected function createComponentAdvancedSearch($name) {
+		return new \POSComponent\Search\AdvancedSearch($this->cityDao, $this->userDao, $this->searchData, $this, $name);
 	}
 
 }
