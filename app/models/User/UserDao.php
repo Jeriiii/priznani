@@ -107,6 +107,125 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Vyhledá užigvatele podle zadaných kriterií
+	 * @param array $data pole dat, podle kterých se provede hledání
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function findBySearchData($data) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_PROPERTY_ID . ".age >= ", $data['age_from']);
+		$sel->where(self::COLUMN_PROPERTY_ID . ".age <= ", $data['age_to']);
+		if (!empty($data['sex'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".user_property", $data['sex']);
+		}
+		if (!empty($data['penis_length'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length", $data['penis_length']);
+		}
+		if (!empty($data['penis_width'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_width", $data['penis_width']);
+		}
+		if (!empty($data['bra_size'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".'bra_size", $data['bra_size']);
+		}
+		if (!empty($data['orientation'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".orientation", $data['orientation']);
+		}
+		if (!empty($data['shape'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".shape", $data['shape']);
+		}
+		if (!empty($data['hair_color'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".hair_colour", $data['hair_color']);
+		}
+		if (!empty($data['tallness_from'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".tallness >= ?", $data['tallness_from']);
+		}
+		if (!empty($data['tallness_to'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".tallness <= ?", $data['tallness_to']);
+		}
+		if (!empty($data['drink'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".drink", $data['drink']);
+		}
+		if (!empty($data['smoke'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".smoke", $data['smoke']);
+		}
+		if (!empty($data['graduation'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".graduation", $data['graduation']);
+		}
+		if (!$data['notCare']) {
+			if (!empty($data['threesome'])) {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".threesome", $data['threesome']);
+			} else {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".threesome", 0);
+			}
+			if (!empty($data['anal'])) {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".anal", $data['anal']);
+			} else {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".anal", 0);
+			}
+			if (!empty($data['group'])) {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".group", $data['group']);
+			} else {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".group", 0);
+			}
+			if (!empty($data['bdsm'])) {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".bdsm", $data['bdsm']);
+			} else {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".bdsm", 0);
+			}
+			if (!empty($data['swallow'])) {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".swallow", $data['swallow']);
+			} else {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".swallow", 0);
+			}
+			if (!empty($data['cum'])) {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".cum", $data['cum']);
+			} else {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".cum", 0);
+			}
+			if (!empty($data['oral'])) {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".oral", $data['oral']);
+			} else {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".oral", 0);
+			}
+			if (!empty($data['piss'])) {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".piss", $data['piss']);
+			} else {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".piss", 0);
+			}
+			if (!empty($data['sex_massage'])) {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".sex_massage", $data['sex_massage']);
+			} else {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".sex_massage", 0);
+			}
+			if (!empty($data['petting'])) {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".petting", $data['petting']);
+			} else {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".petting", 0);
+			}
+			if (!empty($data['fisting'])) {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".fisting", $data['fisting']);
+			} else {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".fisting", 0);
+			}
+			if (!empty($data['deepthroat'])) {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".deepthrought", $data['deepthroat']);
+			} else {
+				$sel->where(self::COLUMN_PROPERTY_ID . ".deepthrought", 0);
+			}
+		}
+		if (!empty($data['cityID'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".cityID", $data['cityID']);
+		}
+		if (!empty($data['districtID'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".districtID", $data['districtID']);
+		}
+		if (!empty($data['regionID'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".regionID", $data['regionID']);
+		}
+		return $sel;
+	}
+
+	/**
 	 * Zaregistruje uživatele
 	 * @param array $data Data obsahující nejen informace o páru, musí se
 	 * proto probrat.
