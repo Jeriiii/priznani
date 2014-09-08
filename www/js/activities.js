@@ -1,14 +1,10 @@
 ;(function($) {
 	//Url projektu
-	var baseUrl = window.location.href;
+	var baseUrl = window.location.origin + window.location.pathname;
 	//Část url pro handle
 	var askUrl = "?do=activities-ask";
-	//Spojené url pro použití v ajaxu bez fid
-	var index = baseUrl.indexOf('?_fid=');
-	//Url bez fid
-	var clearUrl = removeFid(baseUrl, index);
 	//složená url pro dotaz na nové aktivity
-	var url = clearUrl + askUrl;
+	var url = baseUrl + askUrl;
 
 	//Dotaz nanové aktivity při reloadu(tak jako na fb)
 	$(document).ready(function() {
@@ -107,12 +103,8 @@
 	$(activitiesBtn).click(function(e) {
 		//část url s handlerem pro load aktivit
 		var requestUrl = "?do=activities-loadActivities";
-		//zjištění pozice fid
-		var index = baseUrl.indexOf('?_fid=');
-		//vyčištění url od fid
-		var clearUrl = removeFid(baseUrl, index);
 		//celá url pro ajax na load aktivit
-		var ajaxUrl = clearUrl + requestUrl;
+		var ajaxUrl = baseUrl + requestUrl;
 		//klinutý element
 		var target = $(e.target);
 		//atribut, který se přidá po kliknutí
@@ -164,13 +156,5 @@
 
 		}
 	});
-	//Odstraní fid z url
-	function removeFid(url, pos) {
-		if (pos !== -1) {
-			url = url.substr(0, pos);
-		}
-
-		return url;
-}
 
 })(jQuery);
