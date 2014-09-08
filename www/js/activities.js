@@ -5,7 +5,9 @@
 	var askUrl = "?do=activities-ask";
 	//Spojené url pro použití v ajaxu bez fid
 	var index = baseUrl.indexOf('?_fid=');
+	//Url bez fid
 	var clearUrl = removeFid(baseUrl, index);
+	//složená url pro dotaz na nové aktivity
 	var url = clearUrl + askUrl;
 
 	//Dotaz nanové aktivity při reloadu(tak jako na fb)
@@ -46,7 +48,9 @@
 
 	// div, který překreje tlačítko při ukázání aktivit, a který pak aktivity zavře
 	var loading = $('#loadingDiv');
+	// div zvoneček
 	var activitiesBtn = $('.activities-btn');
+	// div s aktivitami
 	var activitiesDrop = $('#activities-droplink');
 
 	//pokud se klikne mimo buttonek na zavírání nebo seznam aktivit, zavře se okno aktivit,
@@ -82,8 +86,10 @@
 	});
 
 	//Vyvolá revalidaci komponenty po označení všech odpovědí jako přečtených
-	$(document).on("click", '.marker', function() {
+	$('.marker').click(function() {
+		//část url s handlerem pro load aktivit
 		var requestUrl = "?do=activities-loadActivities";
+		//složená url pro načtení aktivit
 		var wholeUrl = baseUrl + requestUrl;
 		$.nette.ajax({
 			url: wholeUrl,
@@ -98,12 +104,18 @@
 	});
 
 	//funkce volá ajax, a povolí načtení každé 3s při kliku
-	$(document).on("click", ".activities-btn", function(e) {
+	$(activitiesBtn).click(function(e) {
+		//část url s handlerem pro load aktivit
 		var requestUrl = "?do=activities-loadActivities";
+		//zjištění pozice fid
 		var index = baseUrl.indexOf('?_fid=');
+		//vyčištění url od fid
 		var clearUrl = removeFid(baseUrl, index);
+		//celá url pro ajax na load aktivit
 		var ajaxUrl = clearUrl + requestUrl;
+		//klinutý element
 		var target = $(e.target);
+		//atribut, který se přidá po kliknutí
 		var targetAttr = target.attr('data-ajax-off');
 		
 		//Otevře nebo zavře okno s aktivitama
@@ -152,7 +164,7 @@
 
 		}
 	});
-
+	//Odstraní fid z url
 	function removeFid(url, pos) {
 		if (pos !== -1) {
 			url = url.substr(0, pos);
