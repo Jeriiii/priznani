@@ -45,28 +45,21 @@
 	}
 
 	// div, který překreje tlačítko při ukázání aktivit, a který pak aktivity zavře
-	var close = '<div class="closer"></div>';
 	var loading = $('#loadingDiv');
 	var activitiesBtn = $('.activities-btn');
 	var activitiesDrop = $('#activities-droplink');
 
-	//Pokud se klikne mimo okno aktivit, zavře ho a odstraní zavíraci div
-	//Je immuni, když se kliká na zavírací element, protože ten si obstará zavření sám
-	$(document).mouseup(function(e)
-	{
-		if (!activitiesDrop.is(e.target) && activitiesDrop.has(e.target).length === 0 && !$('.closer').is(e.target))
-		{
-			activitiesDrop.fadeOut();
-			$('#activities .closer').remove();
+	//pokud se klikne mimo buttonek na zavírání nebo seznam aktivit, zavře se okno aktivit,
+	//pokud je otevřené
+	$('html').click(function(){
+    if( !$(event.target).is(activitiesBtn) ){
+		if( !$(event.target).is(activitiesDrop)) {
+			if(activitiesDrop.is(':visible')) {
+				$(activitiesDrop).fadeOut();
+			}
 		}
-	});
-
-	//Zavře okno s aktivitama a smaže zavírací div
-	$(document).on("click", '.closer', function() {
-		activitiesDrop.fadeOut();
-		$('#activities .closer').remove();
-	});
-
+    }
+});
 
 	// Při kliknutí na jednu aktivitu složí url a odešle ajax pro označení jako přečtená.
 	$(document).on("click", '#activities-droplink button', function() {
@@ -113,12 +106,11 @@
 		var target = $(e.target);
 		var targetAttr = target.attr('data-ajax-off');
 		
-		//Otevře okno s aktivitama
-		activitiesDrop.fadeIn();
-		$("a.activities-btn").before(close);
-		loading.show();
+		//Otevře nebo zavře okno s aktivitama
+		activitiesDrop.fadeToggle();
 		//Obstarává poslání ajax dotazu na vykreslení aktivit, v případě kliku v intervalu 3s nenačte nové
 		if (targetAttr !== '1') {
+			loading.show();
 			$('#activities .new-counter').remove();
 			$.nette.ajax({
 				url: ajaxUrl,
