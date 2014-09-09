@@ -23,12 +23,12 @@ class BaseLikes extends BaseProjectControl {
 	public $imageLikesDao;
 
 	/**
-	 * ID lajkujícího uživatele
+	 * @var int ID lajkujícího uživatele
 	 */
 	protected $userID;
 
 	/**
-	 * obrázek
+	 * @var Nette\Database\Table\ActiveRow Obrázek pro lajknutí
 	 */
 	protected $image;
 
@@ -38,7 +38,8 @@ class BaseLikes extends BaseProjectControl {
 	protected $liked;
 
 	/**
-	 * @param object $image obrázek, který by se lajkoval
+	 * Konstruktor základní komponenty, předáváme si v něm potřebné proměnné
+	 * @param Nette\Database\Table\ActiveRow $image obrázek, který by se lajkoval
 	 * @param int $userID Id uživatele, který může lajknout
 	 */
 	public function __construct(ImageLikesDao $imageLikesDao = NULL, $image = NULL, $userID = NULL) {
