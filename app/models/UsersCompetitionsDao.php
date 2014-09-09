@@ -50,7 +50,7 @@ class UsersCompetitionsDao extends AbstractDao {
 		$sel = $this->getTable();
 		$sel->get($competitionID);
 		$sel->update(array(
-			"lastImageID" => $imageID
+			self::COLUMN_LAST_IMAGE_ID => $imageID
 		));
 	}
 
@@ -60,8 +60,8 @@ class UsersCompetitionsDao extends AbstractDao {
 	 */
 	public function getLastCompetitionNameAndId() {
 		$sel = $this->getTable();
-		$sel->select('id, name');
-		$sel->order('id DESC');
+		$sel->select(self::COLUMN_ID . ', ' . self::COLUMN_NAME);
+		$sel->order(self::COLUMN_ID . ' DESC');
 		return $sel->fetch();
 	}
 
