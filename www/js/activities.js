@@ -109,12 +109,18 @@
 		var target = $(e.target);
 		//atribut, který se přidá po kliknutí
 		var targetAttr = target.attr('data-ajax-off');
-		
+
+		//pokud se má okno s aktivitami otevřít, ukáže spinner, pokud se má zavřít, neukáže ho
+		if(!activitiesDrop.is(':visible')) {
+			loading.show();
+		} else {
+			loading.hide();
+		}
+
 		//Otevře nebo zavře okno s aktivitama
 		activitiesDrop.fadeToggle();
 		//Obstarává poslání ajax dotazu na vykreslení aktivit, v případě kliku v intervalu 3s nenačte nové
 		if (targetAttr !== '1') {
-			loading.show();
 			$('#activities .new-counter').remove();
 			$.nette.ajax({
 				url: ajaxUrl,
@@ -149,12 +155,11 @@
 					}
 				}
 			});
-			//Nastaví time na 3s, kvůli zamezení posílání ajaxu kadým klikem v rychlém sledu
+		}
+		//Nastaví time na 3s, kvůli zamezení posílání ajaxu kadým klikem v rychlém sledu
 			setTimeout(function() {
 				target.removeAttr('data-ajax-off');
 			}, 3000);
-
-		}
 	});
 
 })(jQuery);
