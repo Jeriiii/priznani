@@ -41,10 +41,10 @@ class ContactDao extends AbstractDao {
 	public function addNewContact($userID, $email, $phone, $text) {
 		$sel = $this->getTable();
 		$sel->insert(array(
-			"userID" => $userID,
-			"email" => $email,
-			"phone" => $phone,
-			"text" => $text
+			self::COLUMN_USER_ID => $userID,
+			self::COLUMN_EMAIL => $email,
+			self::COLUMN_PHONE => $phone,
+			self::COLUMN_TEXT => $text
 		));
 	}
 
@@ -55,7 +55,7 @@ class ContactDao extends AbstractDao {
 	public function markViewed($messageID) {
 		$sel = $this->getTable()->get($messageID);
 		$sel->update(array(
-			"viewed" => 1
+			self::COLUMN_VIEWED => 1
 		));
 	}
 
@@ -86,7 +86,7 @@ class ContactDao extends AbstractDao {
 	 */
 	public function getUnviewedCount() {
 		$sel = $this->getTable();
-		$sel->select('id');
+		$sel->select(self::COLUMN_ID);
 		$sel->where(self::COLUMN_VIEWED, 0);
 		return $sel->count();
 	}
