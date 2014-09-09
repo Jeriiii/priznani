@@ -1,9 +1,7 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 use POSComponent\BaseProjectControl;
@@ -13,7 +11,7 @@ use Nette\Application\Responses\JsonResponse;
 /**
  * Komponenta pro vykreslení aktivit uživatele.
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class Activities extends BaseProjectControl {
 
@@ -91,7 +89,7 @@ class Activities extends BaseProjectControl {
 		} else {
 			$this->presenter->sendResponse(new JsonResponse(array("activities" => $data)));
 		}
-			$this->redrawControl();
+		$this->redrawControl();
 	}
 
 	/**

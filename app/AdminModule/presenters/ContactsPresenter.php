@@ -5,8 +5,14 @@ namespace AdminModule;
 use Nette;
 use App\Forms as Frm;
 
+/*
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
+ */
+
 /**
- * TempPresenter Description
+ * Adminstrace zpráv
+ *
+ * @author Daniel Holubář
  */
 class ContactsPresenter extends AdminSpacePresenter {
 

@@ -7,10 +7,10 @@
 namespace POS\Model;
 
 /**
- * NAME DAO NAMEDao
- * slouží k
+ * UsersCompetitionsDao
+ * slouží k práce s uživatelskými soutěžemi
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class UsersCompetitionsDao extends AbstractDao {
 

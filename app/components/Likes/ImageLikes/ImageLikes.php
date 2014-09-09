@@ -1,7 +1,7 @@
 <?php
 
 /*
- * @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 namespace POSComponent\BaseLikes;
@@ -12,7 +12,7 @@ use POS\Model\UserImageDao;
 /**
  * Description of ImageLikes
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class ImageLikes extends BaseLikes implements IBaseLikes {
 

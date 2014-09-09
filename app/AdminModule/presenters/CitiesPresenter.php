@@ -7,6 +7,8 @@ use Nette\Application\UI\Form as Frm;
 
 /**
  * TempPresenter Description
+ *
+ * @author Daniel Holubář
  */
 class CitiesPresenter extends AdminSpacePresenter {
 
