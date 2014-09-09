@@ -39,7 +39,7 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 	 * @param Nette\Database\Table\ActiveRow $image obrázek, kterému se lajk přičte
 	 * @param int $userID ID uživatele, který lajkuje
 	 */
-	public function __construct(ImageLikesDao $imageLikesDao = NULL, UserImageDao $userImageDao = NULL, $image = NULL, $userID = NULL) {
+	public function __construct(ImageLikesDao $imageLikesDao, UserImageDao $userImageDao, $image, $userID) {
 		parent::__construct($imageLikesDao, $image, $userID);
 		$this->image = $image;
 		$this->imageLikesDao = $imageLikesDao;
@@ -55,7 +55,7 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 		if ($this->liked == FALSE) {
 			$this->imageLikesDao->addLiked($imageID, $userID);
 		}
-		$this->liked = $this->getLikedByUser($this->userID, $this->image->id);
+		$this->liked = $this->getLikedByUser($userID, $imageID);
 
 		$this->redrawControl();
 	}
