@@ -42,7 +42,7 @@ class BaseLikes extends BaseProjectControl {
 	 * @param Nette\Database\Table\ActiveRow $image obrázek, který by se lajkoval
 	 * @param int $userID Id uživatele, který může lajknout
 	 */
-	public function __construct(ImageLikesDao $imageLikesDao = NULL, $image = NULL, $userID = NULL) {
+	public function __construct(ImageLikesDao $imageLikesDao, $image, $userID) {
 		parent::__construct();
 		$this->userID = $userID;
 		$this->image = $image;
