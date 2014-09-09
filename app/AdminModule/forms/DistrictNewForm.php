@@ -42,7 +42,7 @@ class DistrictNewForm extends BaseForm {
 			->setItems($regions)
 			->addRule(Form::FILLED, "Musíte vybrat kraj");
 
-		$this->addSubmit("submit", "Vložit");
+		$this->addSubmit("submit", "Uložit");
 		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 	}

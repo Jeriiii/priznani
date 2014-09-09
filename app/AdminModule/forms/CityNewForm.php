@@ -42,7 +42,7 @@ class CityNewForm extends BaseForm {
 			->setItems($districts)
 			->addRule(Form::FILLED, "Musíte vybrat okres");
 
-		$this->addSubmit("submit", "Vložit");
+		$this->addSubmit("submit", "Uložit");
 		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 	}
