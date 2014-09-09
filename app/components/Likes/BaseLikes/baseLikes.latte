@@ -1,5 +1,7 @@
 {snippet}
+	{* pokud je uživatel přihlášený, dovolíme mu lajkovat *}
 	{if $user->isLoggedIn()}
+		{* pokud už uživatel tento obrázek lajkl, ukážeme jen text s celkovým počtem lajků *}
 		{if $liked}
 			Je sexy ({$image->likes})
 		{else}
