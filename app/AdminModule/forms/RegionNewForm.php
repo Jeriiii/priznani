@@ -30,7 +30,7 @@ class RegionNewForm extends BaseForm {
 		$this->addText("name", "Jméno kraje:")
 			->addRule(Form::FILLED, "Musíte zadat jméno kraje.");
 
-		$this->addSubmit("submit", "Vložit");
+		$this->addSubmit("submit", "Uložit");
 		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 	}
