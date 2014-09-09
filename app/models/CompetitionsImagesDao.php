@@ -9,10 +9,10 @@ namespace POS\Model;
 use POS\Model\UserImageDao;
 
 /**
- * NAME DAO NAMEDao
- * slouží k
+ * CompetitionImagesDao
+ * slouží k práci se soutěžníma obrázkama
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class CompetitionsImagesDao extends AbstractDao {
 

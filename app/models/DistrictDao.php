@@ -12,7 +12,7 @@ use POS\Exception\DuplicateRowException;
  * District DAO
  * Administrace okresů
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class DistrictDao extends AbstractDao {
 

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 namespace POSComponent\BaseLikes;
@@ -13,7 +13,7 @@ use Nette\Application\Responses\JsonResponse;
 /**
  * Komponenta pro vykreslení aktivit uživatele.
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class BaseLikes extends BaseProjectControl {
 

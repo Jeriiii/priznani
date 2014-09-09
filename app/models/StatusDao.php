@@ -10,7 +10,7 @@ namespace POS\Model;
  * StatusDAO
  * slouží k práci se statusama
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class StatusDao extends AbstractDao {
 

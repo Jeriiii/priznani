@@ -12,7 +12,7 @@ use POS\Exception\DuplicateRowException;
  * City DAO
  * Administrace měst
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class CityDao extends AbstractDao {
 

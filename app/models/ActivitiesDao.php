@@ -10,7 +10,7 @@ namespace POS\Model;
  * Aktivity ActivitiesDao
  * slouží k práci s aktivitami
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class ActivitiesDao extends AbstractDao {
 
