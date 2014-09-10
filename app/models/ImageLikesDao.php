@@ -17,7 +17,7 @@ class ImageLikesDao extends AbstractDao {
 	/** @var Nette\Database */
 	protected $database;
 
-	const TABLE_NAME = "image_likes";
+	const TABLE_NAME = "like_images";
 
 	/* Column name */
 	const COLUMN_ID = "id";
