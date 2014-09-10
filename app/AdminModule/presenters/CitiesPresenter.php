@@ -59,34 +59,46 @@ class CitiesPresenter extends AdminSpacePresenter {
 	 */
 	protected function createComponentGrid($name) {
 		$grid = new \Grido\Grid($this, $name);
-		$grid->setModel($this->cityDao->getCitiesData());
+		$grid->setModel($this->cityDao->getAll());
 
 		$districts = $this->districtDao->getDistrictsInArray();
 		$regions = $this->regionDao->getRegionsInArray();
 
 		/* sloupce komponenty */
-		$grid->addColumnText("id", "ID")
-			->setDefaultSort('ASC');
-		$grid->addColumnText("city", "Město")
+		$grid->addColumnText("name", "Město")
 			->setFilterText()
-			->setColumn('city.name');
+			->setSuggestion();
 		$grid->addColumnText("district", "Okres")
-			->setFilterSelect($districts)
-			->setColumn('districtID.id');
+			->setColumn('districtID.name')
+			->setCustomRender(function($item) {
+				return $item->district->name;
+			})
+			->setFilterText()
+			->setColumn('districtID.name')
+			->setSuggestion(function($item) {
+				return $item->district->name;
+			});
 		$grid->addColumnText("region", "Kraj")
-			->setFilterSelect($regions)
-			->setColumn('districtID.regionID.id');
+			->setColumn('districtID.regionID.name')
+			->setCustomRender(function($item) {
+				return $item->district->region->name;
+			})
+			->setFilterText()
+			->setColumn('districtID.regionID.name')
+			->setSuggestion(function($item) {
+				return $item->district->region->name;
+			});
 		$grid->addActionHref('edit_city', 'Upravit město', 'Cities:editCity')
 			->setCustomHref(function($item) {
-				return '..\admin.cities\edit-city?city=' . $item->city . '&districtID=' . $item->districtID;
+				return '..\admin.cities\edit-city?city=' . $item->name . '&districtID=' . $item->district->id;
 			});
 		$grid->addActionHref('edit_district', 'Upravit okres', 'Cities:editDistrict')
 			->setCustomHref(function($item) {
-				return '..\admin.cities\edit-district?district=' . $item->district . '&regionID=' . $item->regionID;
+				return '..\admin.cities\edit-district?district=' . $item->district->name . '&regionID=' . $item->district->region->id;
 			});
 		$grid->addActionHref('edit_region', 'Upravit kraj', 'Cities:editRegion')
 			->setCustomHref(function($item) {
-				return '..\admin.cities\edit-region?region=' . $item->region;
+				return '..\admin.cities\edit-region?region=' . $item->district->region->name;
 			});
 		/* konec sloupců */
 	}
