@@ -13,17 +13,17 @@ namespace POSComponent\BaseLikes;
 interface IBaseLikes {
 
 	/**
-	 * Signál pro provedení lajku, přičte lajk obrázku a zaznamená, kdo lajkl
+	 * Signál pro provedení lajku, přičte lajk obrázku/statusu a zaznamená, kdo lajkl
 	 * @param int $userID ID uživatele, který lajkl obrázek
-	 * @param int $imageID ID lajknutého obrázku
+	 * @param int $ID ID lajknutého obrázku/statusu
 	 */
-	public function handleSexy($userID, $imageID);
+	public function handleLike($userID, $ID);
 
 	/**
 	 * Vrátí informaci, zda uživatel již dal like (= sexy)
-	 * @param int $userID ID užovatele, kterého hledáme
-	 * @param int $imageID ID obrázku, který hledáme
+	 * @param int $userID ID uživatele, kterého hledáme
+	 * @param int $ID ID obrázku/statusu, který hledáme
 	 * @return bool
 	 */
-	public function getLikedByUser($userID, $imageID);
+	public function getLikedByUser($userID, $ID);
 }

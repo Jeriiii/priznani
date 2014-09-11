@@ -40,9 +40,10 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 	 * @param int $userID ID uživatele, který lajkuje
 	 */
 	public function __construct(ImageLikesDao $imageLikesDao, UserImageDao $userImageDao, $image, $userID) {
-		parent::__construct($imageLikesDao, $image, $userID);
-		$this->image = $image;
 		$this->imageLikesDao = $imageLikesDao;
+		$this->liked = $this->getLikedByUser($userID, $image->id);
+		parent::__construct($imageLikesDao, $image, NULL, $userID, $this->liked);
+		$this->image = $image;
 		$this->userImageDao = $userImageDao;
 	}
 
@@ -51,11 +52,10 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 	 * @param int $userID ID uživatele, který lajkl obrázek
 	 * @param int $imageID ID lajknutého obrázku
 	 */
-	public function handleSexy($userID, $imageID) {
+	public function handleLike($userID, $imageID) {
 		if ($this->liked == FALSE) {
 			$this->imageLikesDao->addLiked($imageID, $userID);
 		}
-		$this->liked = $this->getLikedByUser($userID, $imageID);
 
 		$this->redrawControl();
 	}

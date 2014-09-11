@@ -23,6 +23,7 @@ class StatusDao extends AbstractDao {
 	const COLUMN_ID = "id";
 	const COLUMN_USER_ID = "userID";
 	const COLUMN_TEXT = "message";
+	const COLUMN_LIKES = "likes";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
