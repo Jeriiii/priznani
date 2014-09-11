@@ -16,6 +16,7 @@ use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\ConfessionDao;
 use POS\Model\UserDao;
+use POS\Model\ImageLikesDao;
 use POSComponent\BaseProjectControl;
 use Nette\Database\Table\Selection;
 use Nette\Application\UI\Form as Frm;
@@ -48,13 +49,19 @@ class BaseStream extends BaseProjectControl {
 	 */
 	public $userDao;
 
-	public function __construct($data, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
+	/**
+	 * @var \POS\Model\ImageLikesDao
+	 */
+	public $imageLikesDao;
+
+	public function __construct($data, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
 		parent::__construct();
 		$this->dataForStream = $data;
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
 		$this->confessionDao = $confDao;
 		$this->userDao = $userDao;
+		$this->imageLikesDao = $imageLikesDao;
 	}
 
 	/**
@@ -156,6 +163,18 @@ class BaseStream extends BaseProjectControl {
 		$user = $this->userDao->find($this->presenter->getUser()->id);
 		$session = $this->presenter->getSession();
 		return new \POSComponent\Search\BestMatchSearch($user->property, $this->userDao, $session, $this, $name);
+	}
+
+	/**
+	 * možnost lajknutí uživatelské fotky na streamu
+	 * @return \Nette\Application\UI\Multiplier
+	 */
+	protected function createComponentLikeImages() {
+		$streamItems = $this->dataForStream;
+
+		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
+			return new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->userImageDao, $streamItems->offsetGet($streamItem)->userGallery->lastImage, $this->presenter->user->id);
+		});
 	}
 
 }
