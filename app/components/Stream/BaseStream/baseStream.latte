@@ -55,6 +55,12 @@
 						<a href="{plink Page:advice id => $dataItem->adviceID}" title="Poradna o sexu"><h3>Poradna</h3></a>
 						<p>{$dataItem->ref('advices', 'adviceID')->note}</p>
 					{/ifset}
+					{ifset $dataItem->statusID}
+						{var $status = $dataItem->ref('status', 'statusID')}
+						{$status->user|showProf}
+						<p>{$status->message}</p>
+						{control likeStatus-$dataItem->id}
+					{/ifset}
 					{*<div class="votes">
 						{control pollsControl-$dataItem->id}
 					</div>*}  

@@ -76,6 +76,12 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $friendDao;
+
+	/**
+	 * @var \POS\Model\ImageLikesDao
+	 * @inject
+	 */
+	public $imageLikesDao;
 	public $dataForStream;
 
 	/**
@@ -165,7 +171,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \ProfilStream
 	 */
 	protected function createComponentProfilStream() {
-		return new ProfilStream($this->dataForStream, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+		return new ProfilStream($this->dataForStream, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
 	}
 
 	/**
