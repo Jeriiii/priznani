@@ -19,6 +19,9 @@ use POS\Model\RegionDao;
  */
 class InsertManyCitiesForm extends BaseForm {
 
+	/** Maximální délka názvu města */
+	const MAX_CITY_LENGHT = 40;
+
 	/**
 	 * @var \POS\Model\DistrictDao
 	 */
@@ -54,6 +57,8 @@ class InsertManyCitiesForm extends BaseForm {
 		$values = $form->values;
 		$data = $this->getCitiesFromString($values->data);
 
+		$this->cityDao->begginTransaction();
+
 		foreach ($data as $item) {
 			$region = $this->manageRegion($item[2]);
 
@@ -61,14 +66,17 @@ class InsertManyCitiesForm extends BaseForm {
 
 			$this->manageCity($item[0], $district->id);
 		}
+
+		$this->cityDao->endTransaction();
+
 		$this->getPresenter()->flashMessage("Záznamy vloženy", "success");
 		$this->getPresenter()->redirect('Cities:');
 	}
 
 	/**
-	 * convert string to array
-	 * @param string $string input string
-	 * @return array
+	 * Převede celý vložený vstup na pole polý s městem, okresem a krajem.
+	 * @param string $string Vložený vstup.
+	 * @return array Pole polý s městem, okresem a krajem.
 	 */
 	private function getCitiesFromString($string) {
 		$citiesLines = explode("\n", \Nette\Utils\Strings::trim($string));
@@ -123,15 +131,21 @@ class InsertManyCitiesForm extends BaseForm {
 	 * Prohledá db, jestli už město neexistuje, pokud ne, uloží ho,
 	 * pokud ano vypíše flashMessage
 	 * @param string $name jméno města
-	 * @return Nette\Database\Table\ActiveRow
+	 * @return Nette\Database\Table\ActiveRow|bool FALSE když mšsto přesáhne max. délku názvu
 	 */
 	public function manageCity($name, $districtID) {
-		$city = $this->cityDao->findByNameAndDistrictID($name, $districtID);
-
-		if (!$city) {
-			$city = $this->cityDao->addCity($name, $districtID);
+		//kontrola delky nazvu
+		if (strlen($name) > self::MAX_CITY_LENGHT) {
+			$this->getPresenter()->flashMessage("Město " . $name . " je delší než " . self::MAX_CITY_LENGHT . " znaků.", "warning");
+			return FALSE;
 		} else {
-			$this->getPresenter()->flashMessage("Město " . $name . " již v databázi je.", "warning");
+			$city = $this->cityDao->findByNameAndDistrictID($name, $districtID);
+
+			if (!$city) {
+				$city = $this->cityDao->addCity($name, $districtID);
+			} else {
+				$this->getPresenter()->flashMessage("Město " . $name . " již v databázi je.", "warning");
+			}
 		}
 
 		return $city;

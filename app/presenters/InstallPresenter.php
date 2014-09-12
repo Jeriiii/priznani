@@ -36,7 +36,7 @@ class InstallPresenter extends BasePresenter {
 	}
 
 	public function actionAll() {
-		ini_set('max_execution_time', 300);
+		ini_set('max_execution_time', 400);
 		$messages = new Messages;
 
 		/* zkontroluje zda existují složky */
@@ -57,45 +57,45 @@ class InstallPresenter extends BasePresenter {
 	}
 
 	public function actionClearCache() {
-	$messages = new Messages;
+		$messages = new Messages;
 
-	$clearCache = new ClearCasch($messages);
-	$clearCache->clearCache();
+		$clearCache = new ClearCasch($messages);
+		$clearCache->clearCache();
 
-	$messages->flash($this);
-	$this->redirect("Install:");
-}
+		$messages->flash($this);
+		$this->redirect("Install:");
+	}
 
-public function actionTestData() {
-$messages = new Messages;
+	public function actionTestData() {
+		$messages = new Messages;
 
-$instalDB = new InstallDB($this->dbDao, $messages);
-$instalDB->dataTestDb();
+		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB->dataTestDb();
 
-$messages->flash($this);
-$this->redirect("Install:");
-}
+		$messages->flash($this);
+		$this->redirect("Install:");
+	}
 
-public function actionData() {
-$messages = new Messages;
+	public function actionData() {
+		$messages = new Messages;
 
-$instalDB = new InstallDB($this->dbDao, $messages);
-$instalDB->dataDb();
-$instalDB->dataTestDb();
+		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB->dataDb();
+		$instalDB->dataTestDb();
 
-$messages->flash($this);
-$this->redirect("Install:");
-}
+		$messages->flash($this);
+		$this->redirect("Install:");
+	}
 
-public function actionAllData() {
-$messages = new Messages;
+	public function actionAllData() {
+		$messages = new Messages;
 
-$instalDB = new InstallDB($this->dbDao, $messages);
-$instalDB->dataDb();
-$instalDB->dataTestDb();
+		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB->dataDb();
+		$instalDB->dataTestDb();
 
-$messages->flash($this);
-$this->redirect("Install:");
-}
+		$messages->flash($this);
+		$this->redirect("Install:");
+	}
 
 }

@@ -56,13 +56,8 @@ class DistrictDao extends AbstractDao {
 	 * @param int $id ID okresu
 	 * @param array $data Pole se jménem okresu a krajem, do kterého patří
 	 * @return Nette\Database\Table\ActiveRow
-	 * @throws DuplicateRowException
 	 */
 	public function updateDistrict($id, $data) {
-		$rowExist = $this->findByNameAndRegionID($data["name"], $data["regionID"]);
-		if (!empty($rowExist)) {
-			throw new DuplicateRowException;
-		}
 
 		$sel = $this->getTable();
 		$sel->wherePrimary($id);
