@@ -63,7 +63,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	}
 
 	/**
-	 * Vyřízení žádosti o poslání nových zpráv
+	 * Vyřízení žádosti o poslání nových zpráv (prohlížeč se ptá serveru, zda nejsou nějaké nové zprávy)
 	 * @param int $lastid posledni zname id
 	 * @param json $readedmessages pole idcek prectenych zprav
 	 */

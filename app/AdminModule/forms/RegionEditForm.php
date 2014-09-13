@@ -49,13 +49,7 @@ class RegionEditForm extends RegionNewForm {
 			"name" => $values->name,
 		);
 
-		/* ohlídání duplicit */
-		try {
-			$this->regionDao->updateRegion($region->id, $data);
-		} catch (\POS\Exception\DuplicateRowException $ex) {
-			$this->getPresenter()->flashMessage("Tento kraj již existuje!", 'danger');
-			$this->getPresenter()->redirect('Cities:addRegion');
-		}
+		$this->regionDao->updateRegion($region->id, $data);
 
 		$this->getPresenter()->flashMessage('Kraj byl upraven', 'success');
 		$this->getPresenter()->redirect('Cities:');

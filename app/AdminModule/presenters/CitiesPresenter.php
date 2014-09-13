@@ -4,6 +4,7 @@ namespace AdminModule;
 
 use Nette;
 use Nette\Application\UI\Form as Frm;
+use POS\Grids\CityGrid;
 
 /**
  * TempPresenter Description
@@ -35,6 +36,10 @@ class CitiesPresenter extends AdminSpacePresenter {
 	public $regionID;
 	public $region;
 
+	public function actionInsertData() {
+		ini_set('max_execution_time', 3000);
+	}
+
 	public function renderDefault() {
 
 	}
@@ -57,50 +62,8 @@ class CitiesPresenter extends AdminSpacePresenter {
 	 * Komponenta grido vykresluje přehledně tabulky s daty o městech
 	 * @param type $name
 	 */
-	protected function createComponentGrid($name) {
-		$grid = new \Grido\Grid($this, $name);
-		$grid->setModel($this->cityDao->getAll());
-
-		$districts = $this->districtDao->getDistrictsInArray();
-		$regions = $this->regionDao->getRegionsInArray();
-
-		/* sloupce komponenty */
-		$grid->addColumnText("name", "Město")
-			->setFilterText()
-			->setSuggestion();
-		$grid->addColumnText("district", "Okres")
-			->setColumn('districtID.name')
-			->setCustomRender(function($item) {
-				return $item->district->name;
-			})
-			->setFilterText()
-			->setColumn('districtID.name')
-			->setSuggestion(function($item) {
-				return $item->district->name;
-			});
-		$grid->addColumnText("region", "Kraj")
-			->setColumn('districtID.regionID.name')
-			->setCustomRender(function($item) {
-				return $item->district->region->name;
-			})
-			->setFilterText()
-			->setColumn('districtID.regionID.name')
-			->setSuggestion(function($item) {
-				return $item->district->region->name;
-			});
-		$grid->addActionHref('edit_city', 'Upravit město', 'Cities:editCity')
-			->setCustomHref(function($item) {
-				return '..\admin.cities\edit-city?city=' . $item->name . '&districtID=' . $item->district->id;
-			});
-		$grid->addActionHref('edit_district', 'Upravit okres', 'Cities:editDistrict')
-			->setCustomHref(function($item) {
-				return '..\admin.cities\edit-district?district=' . $item->district->name . '&regionID=' . $item->district->region->id;
-			});
-		$grid->addActionHref('edit_region', 'Upravit kraj', 'Cities:editRegion')
-			->setCustomHref(function($item) {
-				return '..\admin.cities\edit-region?region=' . $item->district->region->name;
-			});
-		/* konec sloupců */
+	protected function createComponentCityGrid($name) {
+		return new CityGrid($this->cityDao, $this->districtDao, $this->regionDao, $this, $name);
 	}
 
 	public function createComponentDatForm($name) {

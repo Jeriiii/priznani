@@ -53,12 +53,7 @@ class CityEditForm extends CityNewForm {
 		);
 
 		/* ohlídání duplicit */
-		try {
-			$this->cityDao->update($city->id, $data);
-		} catch (\POS\Exception\DuplicateRowException $ex) {
-			$this->getPresenter()->flashMessage("Toto město již existuje!", 'danger');
-			$this->getPresenter()->redirect('Cities:addCity');
-		}
+		$this->cityDao->update($city->id, $data);
 
 		$this->getPresenter()->flashMessage('Město bylo upraveno', 'success');
 		$this->getPresenter()->redirect('Cities:');

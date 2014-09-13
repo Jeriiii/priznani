@@ -56,14 +56,8 @@ class CityDao extends AbstractDao {
 	 * @param int $id ID města, které bude aktualizováno
 	 * @param array $data Pole se jménem a okresem, do kterého město patří
 	 * @return Nette\Database\Table\ActiveRow
-	 * @throws DuplicateRowException
 	 */
 	public function updateCity($id, $data) {
-		$rowExist = $this->findByNameAndDistrictID($data["name"], $data["districtID"]);
-		if (!empty($rowExist)) {
-			throw new DuplicateRowException;
-		}
-
 		$sel = $this->getTable();
 		$sel->wherePrimary($id);
 		$district = $sel->update($data);

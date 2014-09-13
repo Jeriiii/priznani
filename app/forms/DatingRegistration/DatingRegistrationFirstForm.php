@@ -42,7 +42,7 @@ class DatingRegistrationFirstForm extends BaseForm {
 
 		$this->addSelect('year', 'Rok: ', $years)
 			->setPrompt('Rok')
-			->addRule(Form::FILLED, "Prosím vyplňte měsíc Vašeho narození.");
+			->addRule(Form::FILLED, "Prosím vyplňte rok Vašeho narození.");
 
 		$this->addSelect('user_property', 'Jsem:', $this->userDao->getUserPropertyOption());
 
@@ -70,7 +70,8 @@ class DatingRegistrationFirstForm extends BaseForm {
 		$presenter = $this->getPresenter();
 
 		//přičte jedna ke dni - zruší posun při číslování pole 'days' od nuly
-		$date = date_create()->setDate($values->year, $values->month, $values->day + 1);
+		$age = new DateTime();
+		$age->setDate($values->year, $values->month, $values->day + 1);
 
 		//uložení checkboxů
 		foreach ($this->userDao->getArrWantToMeet() as $key => $interest) {
@@ -78,7 +79,7 @@ class DatingRegistrationFirstForm extends BaseForm {
 		}
 
 		$this->regSession->role = 'unconfirmed_user';
-		$this->regSession->age = $date;
+		$this->regSession->age = $age;
 		$this->regSession->user_property = $values->user_property;
 
 		$presenter->redirect('Datingregistration:SecondRegForm');

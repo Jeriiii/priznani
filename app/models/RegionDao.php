@@ -53,13 +53,8 @@ class RegionDao extends AbstractDao {
 	 * @param int $id ID kraje
 	 * @param array $data pole obsahující jméno
 	 * @return Nette\Database\Table\ActiveRow
-	 * @throws DuplicateRowException
 	 */
 	public function updateRegion($id, $data) {
-		$rowExist = $this->findByName($data["name"]);
-		if (!empty($rowExist)) {
-			throw new DuplicateRowException;
-		}
 
 		$sel = $this->getTable();
 		$sel->wherePrimary($id);
