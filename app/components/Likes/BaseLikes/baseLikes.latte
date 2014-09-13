@@ -1,14 +1,18 @@
 {snippet}
+	{* pokud je uživatel přihlášený, dovolíme mu lajkovat *}
 	{if $user->isLoggedIn()}
+		{* pokud už uživatel tento obrázek lajkl, ukážeme jen text s celkovým počtem lajků *}
 		{if $liked}
-			Je sexy ({$image->likes})
+			{* vypíše text podle toho, jestli se jedná o obrázek/status *}
+			{if $label == "obrázku"}
+				Je sexy ({$item->likes})
+			{else}
+				Líbí ({$item->likes})
+			{/if}
 		{else}
-			<a class="ajax btn-main" n:href="Sexy! $user->id, $image->id">Sexy ({$image->likes})<a/>
+			<a class="ajax btn-main" n:href="Like! $user->id, $item->id">{$button} ({$item->likes})<a/>
 		{/if}
 	{else}
-		k ohodnocení obrázku se musíte <a href="{plink Sign:in}">přihlásit</a>
+		k ohodnocení {$label} se musíte <a href="{plink Sign:in}">přihlásit</a>
 	{/if}
 {/snippet}
-<script>
-	$.nette.init();
-</script>

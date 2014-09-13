@@ -182,6 +182,9 @@
 			{control jsLayout}
 			{if $user->isLoggedIn()}
 				{control jsLayoutLoggedIn}
+				<script>
+					$('body').activities();
+				</script>
 			{/if}
 
 			{control fbLikeAndCommentToDatabase}

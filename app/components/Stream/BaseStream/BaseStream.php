@@ -16,6 +16,8 @@ use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\ConfessionDao;
 use POS\Model\UserDao;
+use POS\Model\ImageLikesDao;
+use POS\Model\LikeStatusDao;
 use POSComponent\BaseProjectControl;
 use Nette\Database\Table\Selection;
 use Nette\Application\UI\Form as Frm;
@@ -48,13 +50,25 @@ class BaseStream extends BaseProjectControl {
 	 */
 	public $userDao;
 
-	public function __construct($data, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
+	/**
+	 * @var \POS\Model\ImageLikesDao
+	 */
+	public $imageLikesDao;
+
+	/**
+	 * @var \POS\Model\LikeStatusDao
+	 */
+	public $likeStatusDao;
+
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
 		parent::__construct();
 		$this->dataForStream = $data;
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
 		$this->confessionDao = $confDao;
 		$this->userDao = $userDao;
+		$this->imageLikesDao = $imageLikesDao;
+		$this->likeStatusDao = $likeStatusDao;
 	}
 
 	/**
@@ -72,7 +86,7 @@ class BaseStream extends BaseProjectControl {
 			$this->renderProfileStream($templateName);
 		}
 
-		// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
+// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
 		$profileGalleryID = $this->userGalleryDao->findProfileGallery($this->presenter->user->id);
 		$this->template->profilePhoto = $this->userImageDao->getInGallery($profileGalleryID)->fetch();
 
@@ -103,7 +117,7 @@ class BaseStream extends BaseProjectControl {
 	 * Metoda nastavuje novy offset pro nacitani dalsich prispevku uzivatele
 	 */
 	public function setNewOffset() {
-		// musí se nastavit i v jQuery pluginu
+// musí se nastavit i v jQuery pluginu
 		$limit = 4;
 		if (!empty($this->offset)) {
 			$this->template->stream = $this->dataForStream->limit($limit, $this->offset);
@@ -156,6 +170,30 @@ class BaseStream extends BaseProjectControl {
 		$user = $this->userDao->find($this->presenter->getUser()->id);
 		$session = $this->presenter->getSession();
 		return new \POSComponent\Search\BestMatchSearch($user->property, $this->userDao, $session, $this, $name);
+	}
+
+	/**
+	 * možnost lajknutí uživatelské fotky na streamu
+	 * @return \Nette\Application\UI\Multiplier multiplier pro dynamické vykreslení více komponent
+	 */
+	protected function createComponentLikeImages() {
+		$streamItems = $this->dataForStream;
+
+		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
+			return new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->userImageDao, $streamItems->offsetGet($streamItem)->userGallery->lastImage, $this->presenter->user->id);
+		});
+	}
+
+	/**
+	 * možnost lajknutí uživatelského statusu na streamu
+	 * @return \Nette\Application\UI\Multiplier multiplier pro dynamické vykreslení více komponent
+	 */
+	protected function createComponentLikeStatus() {
+		$streamItems = $this->dataForStream;
+
+		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
+			return new \POSComponent\BaseLikes\StatusLikes($this->likeStatusDao, $streamItems->offsetGet($streamItem)->status, $this->presenter->user->id);
+		});
 	}
 
 }

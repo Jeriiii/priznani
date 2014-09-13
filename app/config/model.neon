@@ -33,3 +33,4 @@ services:
 	districtDao:	POS\Model\DistrictDao
 	regionDao:	POS\Model\RegionDao
 	streamCategoriesDao:	POS\Model\StreamCategoriesDao
+	likeStatus:	POS\Model\LikeStatusDao

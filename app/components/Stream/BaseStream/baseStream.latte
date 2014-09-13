@@ -30,6 +30,7 @@
 								<img src="{$dataItem|getStrmImgPath}" alt="{$dataItem->userGallery->name}" />
 								<p>{$dataItem->userGallery->lastImage->description}</p>
 							</a>
+							{control likeImages-$dataItem->id}
 						{else}
 							<strong>Obrázky se zobrazují pouze registrovaným uživatelům. <a href="{plink :Sign:registration}">Registrujte se</a>.</strong>
 						{/if}
@@ -53,6 +54,12 @@
 					{ifset $dataItem->adviceID}
 						<a href="{plink Page:advice id => $dataItem->adviceID}" title="Poradna o sexu"><h3>Poradna</h3></a>
 						<p>{$dataItem->ref('advices', 'adviceID')->note}</p>
+					{/ifset}
+					{ifset $dataItem->statusID}
+						{var $status = $dataItem->ref('status', 'statusID')}
+						{$status->user|showProf}
+						<p>{$status->message}</p>
+						{control likeStatus-$dataItem->id}
 					{/ifset}
 					{*<div class="votes">
 						{control pollsControl-$dataItem->id}

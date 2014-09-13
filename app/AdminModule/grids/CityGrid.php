@@ -31,7 +31,7 @@ class CityGrid extends Grid {
 		$this->districtDao = $districtDao;
 		$this->regionDao = $regionDao;
 
-		$this->setModel($cityDao->getCitiesData());
+		$this->setModel($cityDao->getAll());
 
 		$this->addColumns();
 		$this->addActionHrefs();
@@ -44,16 +44,29 @@ class CityGrid extends Grid {
 		$districts = $this->districtDao->getDistrictsInArray();
 		$regions = $this->regionDao->getRegionsInArray();
 
-		$this->addColumnText("city", "Město")
-			->setDefaultSort('ASC')
+		$this->addColumnText("name", "Město")
 			->setFilterText()
-			->setColumn('city.name');
+			->setSuggestion();
 		$this->addColumnText("district", "Okres")
-			->setFilterSelect($districts)
-			->setColumn('districtID.id');
+			->setColumn('districtID.name')
+			->setCustomRender(function($item) {
+				return $item->district->name;
+			})
+			->setFilterText()
+			->setColumn('districtID.name')
+			->setSuggestion(function($item) {
+				return $item->district->name;
+			});
 		$this->addColumnText("region", "Kraj")
-			->setFilterSelect($regions)
-			->setColumn('districtID.regionID.id');
+			->setColumn('districtID.regionID.name')
+			->setCustomRender(function($item) {
+				return $item->district->region->name;
+			})
+			->setFilterText()
+			->setColumn('districtID.regionID.name')
+			->setSuggestion(function($item) {
+				return $item->district->region->name;
+			});
 	}
 
 	/**
@@ -62,15 +75,15 @@ class CityGrid extends Grid {
 	private function addActionHrefs() {
 		$this->addActionHref('edit_city', 'Upravit město', 'Cities:editCity')
 			->setCustomHref(function($item) {
-				return '..\admin.cities\edit-city?city=' . $item->city . '&districtID=' . $item->districtID;
+				return '..\admin.cities\edit-city?city=' . $item->name . '&districtID=' . $item->district->id;
 			});
 		$this->addActionHref('edit_district', 'Upravit okres', 'Cities:editDistrict')
 			->setCustomHref(function($item) {
-				return '..\admin.cities\edit-district?district=' . $item->district . '&regionID=' . $item->regionID;
+				return '..\admin.cities\edit-district?district=' . $item->district->name . '&regionID=' . $item->district->region->id;
 			});
 		$this->addActionHref('edit_region', 'Upravit kraj', 'Cities:editRegion')
 			->setCustomHref(function($item) {
-				return '..\admin.cities\edit-region?region=' . $item->region;
+				return '..\admin.cities\edit-region?region=' . $item->district->region->name;
 			});
 	}
 

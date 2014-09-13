@@ -9,10 +9,10 @@ namespace POS\Model;
 use POS\Model\UserImageDao;
 
 /**
- * NAME DAO NAMEDao
- * slouží k
+ * CompetitionImagesDao
+ * slouží k práci se soutěžníma obrázkama
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class CompetitionsImagesDao extends AbstractDao {
 
@@ -69,7 +69,7 @@ class CompetitionsImagesDao extends AbstractDao {
 	 */
 	public function findByImgId($imageID) {
 		$sel = $this->getTable();
-		$sel->where('imageID', $imageID);
+		$sel->where(self::COLUMN_IMAGE_ID, $imageID);
 		return $sel->fetch();
 	}
 
@@ -82,8 +82,8 @@ class CompetitionsImagesDao extends AbstractDao {
 	public function findByImgAndCmpId($imageID, $competitionID) {
 		$sel = $this->getTable();
 		$sel->where(array(
-			"imageID" => $imageID,
-			"competitionID" => $competitionID,
+			self::COLUMN_IMAGE_ID => $imageID,
+			self::COLUMN_COMPETITION_ID => $competitionID,
 		));
 		return $sel->fetch();
 	}
@@ -98,9 +98,9 @@ class CompetitionsImagesDao extends AbstractDao {
 		$sel = $this->getTable();
 		$sel->get($competitionID);
 		$sel->insert(array(
-			"imageID" => $imageID,
-			"competitionID" => $competitionID,
-			"userID" => $userID
+			self::COLUMN_IMAGE_ID => $imageID,
+			self::COLUMN_COMPETITION_ID => $competitionID,
+			self::COLUMN_USER_ID => $userID
 		));
 	}
 

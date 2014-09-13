@@ -31,11 +31,6 @@ class BaseSearch extends BaseProjectControl {
 		if ($mode == 'listFew') {
 			$this->users = array_slice((array) $this->users, 0, 6);
 		}
-		$rere = array('a', 'b', 'c');
-
-		$this->template->ar = $rere;
-		$this->template->br = array_slice($rere, 0, 2);
-
 
 		$this->template->items = $this->users;
 		$this->template->mode = $mode;

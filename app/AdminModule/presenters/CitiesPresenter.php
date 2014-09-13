@@ -8,6 +8,8 @@ use POS\Grids\CityGrid;
 
 /**
  * TempPresenter Description
+ *
+ * @author Daniel Holubář
  */
 class CitiesPresenter extends AdminSpacePresenter {
 

@@ -10,7 +10,7 @@ namespace POS\Model;
  * Aktivity ActivitiesDao
  * slouží k práci s aktivitami
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class ActivitiesDao extends AbstractDao {
 
@@ -95,7 +95,8 @@ class ActivitiesDao extends AbstractDao {
 	public function getActivitiesByUserId($userID) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_EVENT_OWNER_ID, $userID);
-		return $sel->order('id ASC');
+		$sel->where(self::COLUMN_VIEWED, 0);
+		return $sel->order(self::COLUMN_ID . ' ASC');
 	}
 
 	/**

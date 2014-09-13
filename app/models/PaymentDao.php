@@ -10,7 +10,7 @@ namespace POS\Model;
  * PAYMENT DAO PaymentDao
  * slouží k práci s tabulkou payments - platby VIP
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class PaymentDao extends AbstractDao {
 

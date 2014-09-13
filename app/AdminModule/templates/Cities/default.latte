@@ -1,9 +1,16 @@
+{block head}
+	<link href="{$basePath}/css/typeahead.css" rel="stylesheet">
+{/block}
 {block content}
-	<div style="margin-bottom:10px">
-		<a class="btn btn-success" n:href="Cities:addCity">Přidat město</a>
-		<a class="btn btn-success" n:href="Cities:addDistrict">Přidat okres</a>
-		<a class="btn btn-success" n:href="Cities:addRegion">Přidat kraj</a>
-		<a class="btn btn-info" n:href="Cities:insertData">Vložit hromadně</a>
-	</div>
+<div style="margin-bottom:10px">
+	<a class="btn btn-success" n:href="Cities:addCity">Přidat město</a>
+	<a class="btn btn-success" n:href="Cities:addDistrict">Přidat okres</a>
+	<a class="btn btn-success" n:href="Cities:addRegion">Přidat kraj</a>
+	<a class="btn btn-info" n:href="Cities:insertData">Vložit hromadně</a>
+</div>
 	{control cityGrid}
+{/block}
+{block foot}
+	<script type="text/javascript" src="{$basePath}/js/jquery.hashchange.min.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/typeahead.min.js"></script>
 {/block}

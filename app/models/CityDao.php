@@ -12,7 +12,7 @@ use POS\Exception\DuplicateRowException;
  * City DAO
  * Administrace měst
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class CityDao extends AbstractDao {
 
@@ -81,7 +81,7 @@ class CityDao extends AbstractDao {
 
 	/**
 	 * Získá potřebná data pro Grido z db.
-	 * @return Nette\Database\Table\ActiveRow
+	 * @return Nette\Database\Table\Selection
 	 */
 	public function getCitiesData() {
 		$sel = $this->getTable();

@@ -322,6 +322,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'leftMenu.js',
 			'user-layout-menu.js',
 			'../nette.ajax.js',
+			'initAjax.js',
 			'../mobile/responsive-menu.js',
 			'../forms/netteForms.js'
 		));

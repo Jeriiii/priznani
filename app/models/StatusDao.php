@@ -10,7 +10,7 @@ namespace POS\Model;
  * StatusDAO
  * slouží k práci se statusama
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class StatusDao extends AbstractDao {
 
@@ -23,6 +23,7 @@ class StatusDao extends AbstractDao {
 	const COLUMN_ID = "id";
 	const COLUMN_USER_ID = "userID";
 	const COLUMN_TEXT = "message";
+	const COLUMN_LIKES = "likes";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
