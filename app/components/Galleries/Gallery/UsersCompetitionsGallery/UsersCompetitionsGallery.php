@@ -10,6 +10,7 @@ namespace POSComponent\Galleries\Images;
 
 use POS\Model\UserImageDao;
 use POS\Model\ImageLikesDao;
+use POS\Model\CommentImagesDao;
 
 class UsersCompetitionsGallery extends BaseGallery {
 
@@ -23,12 +24,18 @@ class UsersCompetitionsGallery extends BaseGallery {
 	 */
 	public $imageLikesDao;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao) {
+	/**
+	 * @var \POS\Model\CommentImagesDao
+	 */
+	public $commentImagesDao;
+
+	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, CommentImagesDao $commentImagesDao, ImageLikesDao $imageLikesDao) {
 		parent::__construct($images, $image, $gallery, $domain, $partymode);
 		parent::setUserImageDao($userImageDao);
 		$this->image = $image;
 		$this->userImageDao = $userImageDao;
 		$this->imageLikesDao = $imageLikesDao;
+		$this->commentImagesDao = $commentImagesDao;
 	}
 
 	public function render() {
@@ -42,6 +49,10 @@ class UsersCompetitionsGallery extends BaseGallery {
 			$likes = new \POSComponent\BaseLikes\ImageLikes();
 		}
 		return $likes;
+	}
+
+	public function createComponentComments() {
+		return new \POSComponent\Comments\BaseComments($this->commentImagesDao, $this->image->id);
 	}
 
 }
