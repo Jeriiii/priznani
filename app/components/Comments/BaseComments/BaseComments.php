@@ -8,6 +8,7 @@ namespace POSComponent\Comments;
 
 use POSComponent\BaseProjectControl;
 use Nette\Application\UI\Form as Frm;
+use POS\Model\LikeCommentDao;
 
 /**
  * Komponenta pro vykreslení tlačítek na lajkování.
@@ -19,23 +20,44 @@ class BaseComments extends BaseProjectControl {
 	/**
 	 * @var \POS\Model\AbstractDao
 	 */
-	public $dao;
+	private $dao;
 
 	/**
 	 *
 	 * @var int ID ID objektu, který komentujeme
 	 */
-	public $ID;
+	private $ID;
+
+	/**
+	 *
+	 * @var type \POS\Model\LikeCommentDao
+	 */
+	private $likeCommentDao;
+
+	/**
+	 * Dva komentáře daného obrázku
+	 * @var Nette\Database\Table\Selection
+	 */
+	public $newestComments;
+
+	/**
+	 * Všechny komentáře daného obrázku
+	 * @var Nette\Database\Table\Selection
+	 */
+	public $allComments;
 
 	/**
 	 * @const počet zobrazovaných komentářů
 	 */
 	const NUMBER_OF_SHOWED_COMMENTS = 2;
 
-	public function __construct($dao, $ID) {
+	public function __construct(LikeCommentDao $likeCommentDao, $dao, $ID, $newestComments, $allComments) {
 		parent::__construct();
 		$this->dao = $dao;
 		$this->ID = $ID;
+		$this->newestComments = $newestComments;
+		$this->allComments = $allComments;
+		$this->likeCommentDao = $likeCommentDao;
 	}
 
 	/**
@@ -44,8 +66,8 @@ class BaseComments extends BaseProjectControl {
 	public function render() {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/baseComments.latte');
-		$template->newestComments = $this->dao->getTwoNewestComments($this->ID);
-		$template->allComments = $this->dao->getAllImageComments($this->ID);
+		$template->newestComments = $this->newestComments;
+		$template->allComments = $this->allComments;
 		$template->commentsNumber = self::NUMBER_OF_SHOWED_COMMENTS;
 		$template->render();
 	}
@@ -59,4 +81,14 @@ class BaseComments extends BaseProjectControl {
 		return new Frm\CommentNewForm($this->dao, $this->ID, $this, $name);
 	}
 
+	/**
+	 * možnost lajknutí komentáře
+	 * @return \Nette\Application\UI\Multiplier multiplier pro dynamické vykreslení více komponent
+	 */
+//	public function createComponentLikeComment() {
+//		$imageComments = $this->allComments;
+//		return new \Nette\Application\UI\Multiplier(function ($imageComment) use ($imageComments) {
+//			return new \POSComponent\BaseLikes\CommentLikes($this->likeCommentDao, $imageComments->offsetGet($imageComment), $this->presenter->user->id);
+//		});
+//	}
 }
