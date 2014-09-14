@@ -36,14 +36,13 @@ class CommentImagesDao extends AbstractDao {
 	 */
 	public function getAllImageComments($ID) {
 		$sel = $this->getTable();
-		$sel->where(array(
-			self::COLUMN_IMAGE_ID => $ID,
+		return $sel->where(array(
+				self::COLUMN_IMAGE_ID => $ID,
 		));
-		return $sel->order(self::COLUMN_ID . ' DESC');
 	}
 
 	/**
-	 * Vrátí dva komentáře obrázku
+	 * Vrátí první dva komentáře obrázku
 	 * @param int $ID ID obrázku, jehož komentáře chceme
 	 * @return Nette\Database\Table\Selection
 	 */
@@ -52,7 +51,6 @@ class CommentImagesDao extends AbstractDao {
 		$sel->where(array(
 			self::COLUMN_IMAGE_ID => $ID,
 		));
-		$sel->order(self::COLUMN_ID . ' DESC');
 		return $sel->limit(2);
 	}
 
