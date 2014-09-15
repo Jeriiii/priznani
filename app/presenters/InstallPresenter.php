@@ -41,8 +41,6 @@ class InstallPresenter extends BasePresenter {
 
 		/* zkontroluje zda existují složky */
 		$dirCheker = new DirChecker($messages);
-		$dirCheker->addUsers($this->userDao);
-		$dirCheker->check();
 
 		/* vyčistí cache */
 		$clearCache = new ClearCasch($messages);
@@ -51,6 +49,10 @@ class InstallPresenter extends BasePresenter {
 		/* obnoví kompletně celou DB pos i postest */
 		$instalDB = new InstallDB($this->dbDao, $messages);
 		$instalDB->installAll();
+
+		/* zkontroluje, zda existují uživateslké složky */
+		$dirCheker->addUsers($this->userDao);
+		$dirCheker->check();
 
 		$messages->flash($this);
 		$this->redirect("Install:");
