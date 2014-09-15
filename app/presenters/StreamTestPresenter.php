@@ -72,6 +72,12 @@ class StreamTestPresenter extends BasePresenter {
 	 */
 	public $imageLikesDao;
 
+	/**
+	 * @var \POS\Model\LikeStatusDao
+	 * @inject
+	 */
+	public $likeStatusDao;
+
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $userID;
@@ -109,7 +115,7 @@ class StreamTestPresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
 	}
 
 	public function createComponentJs() {
