@@ -86,7 +86,6 @@ class OnePagePresenter extends BasePresenter {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
 			'stream.js',
-			'nette.ajax.js'
 		));
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {
