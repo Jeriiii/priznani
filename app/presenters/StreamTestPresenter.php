@@ -112,6 +112,7 @@ class StreamTestPresenter extends BasePresenter {
 			'age' => array('2014-06-26 00:27:02', '2014-09-26 22:27:02'),
 			'tallness' => array(180, 200)
 		));
+		/**/
 	}
 
 	protected function createComponentUserStream() {
