@@ -6,6 +6,7 @@ use Nette\Application\UI\Form;
 use Nette\ComponentModel\IContainer;
 use POS\Model\UserDao;
 use Nette\Http\SessionSection;
+use Nette\DateTime;
 
 /**
  * První formulář registrace
