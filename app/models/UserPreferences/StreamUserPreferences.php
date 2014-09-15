@@ -36,7 +36,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	/**
 	 * Počet prvků uložených do sešny při její inicializaci (když neexistuje a kvůli tomu se vytváří)
 	 */
-	const INIT_ITEMS_COUNT = 20;
+	const INIT_ITEMS_COUNT = 4;
 
 	/** @var \Nette\ArrayHash všechny preferenční příspevky tohoto uživatele - data pro tento jediný požadavek */
 	public $data;
@@ -71,6 +71,9 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		return $this;
 	}
 
+	/**
+	 * Načte z databáze nová data z databáze, uloží je do sešny a přidá k aktuálním datům
+	 */
 	public function addNewData() {
 		$newestItems = $this->streamDao->getAllItemsWhatFitsSince(array(
 			$this->userProperty->offsetGet(UserPropertyDao::COLUMN_PREFERENCES_ID)
@@ -93,19 +96,35 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		return $this;
 	}
 
+	/**
+	 * Implementace funkce limit, aby fungovala jako ta v PDO objektech
+	 * @param int $limit limit vrácených položek
+	 * @param offset $offset offset vrácených položek
+	 * @return \POS\UserPreferences\StreamUserPreferences položky z dat
+	 */
 	public function limit($limit, $offset = 0) {
 		$this->loadNewItems($limit, $offset);
 		$this->cutData($limit, $offset);
 		return $this;
 	}
 
+	/**
+	 * Vrátí počet položek v aktuálních datech.
+	 * @return int počet položek
+	 */
 	public function count() {
-		if (empty($this->data)) {
+		if (empty($this->data)) {//pokud objekt ani neexistuje
 			return 0;
 		}
 		return $this->data->count();
 	}
 
+	/**
+	 * Donačte nové položky do seznamu a sešny podle potřeby. Potřebné položky
+	 * se udávají stejným způsobem jako v mySQL, jen nad aktuálními načtenými daty
+	 * @param int $limit limit počtu položek
+	 * @param int $offset offset položek
+	 */
 	private function loadNewItems($limit, $offset) {
 		if ($this->data->count() < $limit + $offset) {
 			$minCount = $offset - $this->data->count();
@@ -117,6 +136,10 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		}
 	}
 
+	/**
+	 * Přidá položky streamu z jiného ArrayHash před položky v datech
+	 * @param ArrayHash $newItems vkládané pole položek streamu (také v ArrayHash)
+	 */
 	private function prependToData($newItems) {
 		if ($newItems) {
 			foreach ($this->data as $item) {
@@ -126,6 +149,10 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		}
 	}
 
+	/**
+	 * Přidá položky streamu z jiného ArrayHash za položky v datech
+	 * @param ArrayHash $newItems vkládané pole položek streamu (také v ArrayHash)
+	 */
 	private function appendToData($newItems) {
 		if ($newItems) {
 			foreach ($newItems as $item) {
@@ -135,6 +162,12 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		}
 	}
 
+	/**
+	 * Ořeže aktuální data podle daného limitu a offsetu. (jako v mySQL)
+	 * Neukládá data do session cache
+	 * @param int $limit limit dat
+	 * @param int $offset offset dat
+	 */
 	private function cutData($limit, $offset) {
 		$actualPosition = 0;
 		$newData = new ArrayHash();
@@ -150,6 +183,10 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		$this->data = $newData;
 	}
 
+	/**
+	 * Vrátí nejnovější položku aktuálních dat (horní položku), pokud existuje
+	 * @return ArrayHash|NULL
+	 */
 	public function getNewestItem() {
 		if (empty($this->data)) {
 			return NULL;
@@ -159,6 +196,10 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		}
 	}
 
+	/**
+	 * Vrátí ID nejnovější položky v datech
+	 * @return int id položky streamu
+	 */
 	public function getNewestId() {
 		$newestItem = $this->getNewestItem();
 		if ($newestItem) {
@@ -169,7 +210,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	}
 
 	/**
-	 * Naplní nejlepší vhodná data do sešny.
+	 * Naplní nejlepší vhodná data do sešny. Použití pouze pro inicializaci
 	 */
 	private function initializeStreamItems() {
 		$streamItems = $this->streamDao->getAllItemsWhatFits(array(
@@ -180,6 +221,11 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		$this->data = $this->streamSection->cachedStreamItems;
 	}
 
+	/**
+	 * Vytvoří serializér se všemi potřebnými závislostmi
+	 * @param \Nette\Database\Table\Selection $streamItems PDO objekt, který se má serializovat
+	 * @return \NetteExt\Serialize\Serializer
+	 */
 	public function getSerializer($streamItems) {
 		$serializer = new Serializer($streamItems);
 		$confessionsRel = new Relation('confession');
@@ -202,10 +248,19 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		return $serializer;
 	}
 
+	/**
+	 * Implementace interfacu iteratoru, aby bylo možné procházet položky foreachem
+	 * @return type
+	 */
 	public function getIterator() {
 		return $this->data->getIterator();
 	}
 
+	/**
+	 * Vrátí položku aktivních dat podle klíče
+	 * @param int $key klíče
+	 * @return ArrayHash položka
+	 */
 	public function offsetGet($key) {
 		return $this->data->offsetGet($key);
 	}
