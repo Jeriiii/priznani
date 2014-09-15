@@ -92,4 +92,21 @@ class EditPresenter extends ProfilBasePresenter {
 		return new FriendRequestList($this->friendRequestDao, $this->getUser()->id, $this, $name);
 	}
 
+	/**
+	 * WebLoader pro minifikace skriptu
+	 * @return \WebLoader\Nette\JavaScriptLoader
+	 */
+	public function createComponentJs() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
+		$files->addFiles(array(
+			'slimbox2.js'
+		));
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+		$compiler->addFilter(function ($code) {
+			$packer = new \JavaScriptPacker($code, "None");
+			return $packer->pack();
+		});
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+
 }
