@@ -48,7 +48,7 @@ class InstallDB {
 	public function installAll() {
 		$this->installPosDb();
 		$this->instalPostestDb();
-		$this->instalPoschatDb();
+		//$this->instalPoschatDb();
 	}
 
 	/**
