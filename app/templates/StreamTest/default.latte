@@ -4,12 +4,15 @@
 
 {block content}
 {* příklady použití nových dao funkcí *}
+Kategorie, co se hodí:
 {foreach $categories as $category}
 	{$category->id}
 {/foreach}<br />
+Výsledky co se hodí:
 {foreach $choices as $choice}
 	{$choice->id}
 {/foreach}<br />
+Výsledky, co se hodí a mají specifikovaný rozsah:
 {foreach $results as $result}
 	{$result->id}
 {/foreach}
@@ -35,7 +38,6 @@
 	$(document).ready(function () {
 		$( ".stream-form" ).tabs();
 		$("body").stream({
-			rows: {$count},
 			addoffset: 4
 		});
 	});

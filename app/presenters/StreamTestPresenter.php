@@ -68,7 +68,6 @@ class StreamTestPresenter extends BasePresenter {
 
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
-	private $count = 0;
 	private $userID;
 
 	public function startup() {
@@ -86,11 +85,8 @@ class StreamTestPresenter extends BasePresenter {
 	}
 
 	public function renderDefault() {
-		$this->template->count = $this->count;
 		$this->template->userID = $this->userID;
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
-
-
 
 		/* příklady použití nových dao funkcí */
 		$this->template->categories = $this->streamCategoriesDao->getCategoriesWhatFit(array(
@@ -131,7 +127,6 @@ class StreamTestPresenter extends BasePresenter {
 
 	private function fillCorrectDataForStream() {
 		$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
-		//$this->count = $this->dataForStream->count("id");
 	}
 
 	private function initializeStreamUserPreferences() {

@@ -40,7 +40,12 @@ class Serializer {
 		$data = array();
 		foreach ($this->sel as $row) {
 			$arrItem = $this->serializeRow($row);
-			$data[] = ArrayHash::from($arrItem);
+			$dataRow = ArrayHash::from($arrItem);
+			if (array_key_exists("id", $arrItem)) {
+				$data[$row->id] = $dataRow;
+			} else {
+				$data[] = $dataRow;
+			}
 		}
 
 		return ArrayHash::from($data);

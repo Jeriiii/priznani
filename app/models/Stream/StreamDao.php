@@ -186,8 +186,24 @@ class StreamDao extends AbstractDao {
 	}
 
 	/**
-	 * Vrátí všechny položky streamu, které splňují některou z daných id kategorií
-	 * (splňují podmínky některé z nich) a mají hodnoty daných sloupců v daném rozsahu.
+	 * Vrátí všechny položky streamu, které mají některé z daných id kategorií
+	 * (tj. které splňují podmínky některé z kategorií) a jsou novější než zadané ID
+	 * (jejich ID je vyšší). Jsou seřazené sestupně.
+	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
+	 * @param int $lastId id poslední předchozí položky
+	 * @return \Nette\Database\Table\Selection všechny vyhovující položky
+	 */
+	public function getAllItemsWhatFitsSince(array $categoryIDs, $lastId) {
+		$sel = $this->getTable();
+		$sel->where('id > ?', $lastId);
+		$sel->where(self::COLUMN_CATEGORY_ID, $categoryIDs);
+		$sel->order('id DESC');
+		return $sel;
+	}
+
+	/**
+	 * Vrátí všechny položky streamu, které spadají do některé z daných id kategorií
+	 * (splňují podmínky některé z nich) a mají hodnoty daných sloupců v daném rozsahu. (např. sloupec 'tallness' mezi 180 a 200)
 	 * Položky jsou vraceny od konce.
 	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
 	 * @param array $rangedValues pole polí, kde je klíč prvního pole název sloupce a hodnota je druhé pole

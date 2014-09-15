@@ -134,7 +134,7 @@ class BaseStream extends BaseProjectControl {
 		$streamItems = $this->dataForStream;
 
 		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			return new \FbLikeAndCom($streamItems[$streamItem]);
+			return new \FbLikeAndCom($streamItems->offsetGet($streamItem));
 		});
 	}
 

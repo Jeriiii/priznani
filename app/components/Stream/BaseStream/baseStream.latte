@@ -15,7 +15,7 @@
 		{/if}
 		{ifset #addNewPost}
 				{include #addNewPost}
-		{/ifset}                                
+		{/ifset}
 		<div n:snippet="posts" data-ajax-append="true">
 			{foreach $stream as $dataItem}
 				<div class="stream-item">
@@ -47,16 +47,17 @@
 					{/ifset}
 					{ifset $dataItem->confessionID}
 						<a href="{plink Page:confession id => $dataItem->confessionID}" title="Přiznání o sexu"><h3>Přiznání</h3></a>
-						<p>{$dataItem->ref('confessions', 'confessionID')->note}</p>
+						<p>{$dataItem->confession->note}</p>
+
 					{/ifset}
 
 					{ifset $dataItem->adviceID}
 						<a href="{plink Page:advice id => $dataItem->adviceID}" title="Poradna o sexu"><h3>Poradna</h3></a>
-						<p>{$dataItem->ref('advices', 'adviceID')->note}</p>
+						<p>{$dataItem->advice->note}</p>
 					{/ifset}
 					{*<div class="votes">
 						{control pollsControl-$dataItem->id}
-					</div>*}  
+					</div>*}
 					<div class="fb-components">
 						{control fbControl-$dataItem->id}
 					</div>
@@ -73,7 +74,7 @@
 	 </div>
 	 <div class="clear"></div>
 
-	
+
 </section>
 {/block}
 {block pageContent}
