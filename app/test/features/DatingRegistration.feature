@@ -5,7 +5,10 @@ Feature: Dating registration
 
 	Scenario Outline: Registration of a couple 
 		Given I am on "/dating-registration/"
-		When I fill in "30" for "age"
+		When I select "<day>" from "day"
+		And I select "<month>" from "month"
+		And I select "<year>" from "year"
+		And I select "<property>" from "user_property"
 		And I select "Pár" from "user_property"
 		And I check "want_to_meet_couple"
 		And I press "send"
@@ -16,6 +19,7 @@ Feature: Dating registration
 		And I fill in "<passwordVerify>" for "passwordVerify"
 		And I fill in "<first_sentence>" for "first_sentence"
 		And I fill in "<about_me>" for "about_me"
+		And I fill in "<city>" for "city"
 		And I press "send"
 		Then I should be on "/dating-registration/pre-third-reg-form"
 		When I select "ženatý / vdaná" from "marital_state"
@@ -53,5 +57,5 @@ Feature: Dating registration
 		And I should see "Novákovi"
 
 		Examples:
-			| age	| email				| user_name		| password		| passwordVerify	| first_sentence	| about_me			| 
-			| 29	| novakovi@test.cz	| Novákovi		| heslo123		| heslo123			| Vítej u Nováků	| Jsme Novákovi	| 
+			| day	| month	| year	| property	| email				| user_name		| password		| passwordVerify	| first_sentence	| about_me		| city							 | 
+			| 1		| leden	| 1985	|Pár		|novakovi@test.cz	| Novákovi		| heslo123		| heslo123			| Vítej u Nováků	| Jsme Novákovi	| Blatec, Olomouc, Olomoucký kraj | 
