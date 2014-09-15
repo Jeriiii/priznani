@@ -3,9 +3,7 @@
 	{foreach $newestComments as $comment}
 		<div class="comment">
 			{$comment->comment}
-			{*snippet $comment->id}
 				{control likeComment-$comment->id}
-			{/snippet*}
 		</div>
 	{/foreach}
 	{if count($allComments) > $commentsNumber}
@@ -14,9 +12,7 @@
 				{if $iterator->counter > $commentsNumber}
 					<div class="comment">
 						{$comment->comment}
-						{*snippet $comment->id}
 							{control likeComment-$comment->id}
-						{/snippet*}
 					</div>
 				{/if}
 			{/foreach}

@@ -85,10 +85,11 @@ class BaseComments extends BaseProjectControl {
 	 * možnost lajknutí komentáře
 	 * @return \Nette\Application\UI\Multiplier multiplier pro dynamické vykreslení více komponent
 	 */
-//	public function createComponentLikeComment() {
-//		$imageComments = $this->allComments;
-//		return new \Nette\Application\UI\Multiplier(function ($imageComment) use ($imageComments) {
-//			return new \POSComponent\BaseLikes\CommentLikes($this->likeCommentDao, $imageComments->offsetGet($imageComment), $this->presenter->user->id);
-//		});
-//	}
+	public function createComponentLikeComment() {
+		$imageComments = $this->allComments;
+		return new \Nette\Application\UI\Multiplier(function ($imageComment) use ($imageComments) {
+			return new \POSComponent\BaseLikes\CommentLikes($this->likeCommentDao, $imageComments->offsetGet($imageComment), $this->presenter->user->id);
+		});
+	}
+
 }

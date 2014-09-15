@@ -35,7 +35,7 @@ class StatusLikes extends BaseLikes implements IBaseLikes {
 	public function __construct(LikeStatusDao $likeStatusDao, $status, $userID) {
 		$this->likeStatusDao = $likeStatusDao;
 		$this->liked = $this->getLikedByUser($userID, $status->id);
-		parent::__construct($likeStatusDao, NULL, $status, NULL, $userID);
+		parent::__construct($likeStatusDao, NULL, $status, NULL, $userID, $this->liked);
 		$this->status = $status;
 	}
 
