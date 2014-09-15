@@ -95,6 +95,8 @@ class FeatureContext extends MinkContext {
 	public function sendTestInfo() {
 		$this->getSession()->setRequestHeader('X-Testing', '1');
 		$this->getSession()->setRequestHeader('X-Requested-With', 'Behat');
+		$this->getSession()->setRequestHeader('Accept-Language', 'cs-CZ,cs;q=0.8,en;q=0.6');
+		$this->getSession()->setRequestHeader('Accept-Encoding', 'gzip,deflate,sdch');
 	}
 
 	/**
@@ -165,6 +167,13 @@ class FeatureContext extends MinkContext {
 	}
 
 	/**
+	 * @Then /^I look on( the) status code$/
+	 */
+	public function iLookOnTheStatusCode() {
+		throw new PendingException($this->getSession()->getStatusCode());
+	}
+
+	/**
 	 * When email should arrive
 	 * @Then /^I should receive( an)? email$/
 	 */
@@ -219,6 +228,33 @@ class FeatureContext extends MinkContext {
 		}
 		$link = $matches[1]; //first link
 		$this->getSession()->visit($this->locatePath($link));
+	}
+
+	/**
+	 * @Given /^I am testing ajax$/
+	 */
+	public function iAmTestingAjax() {
+		$this->getSession()->setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+	}
+
+	/**
+	 * @Then /^There should be "([^"]*)" in response$/
+	 */
+	public function thereShouldBeInResponse($text) {
+		$response = $this->getSession()->getDriver()->getContent();
+		if (strpos($response, $text) === false) {
+			throw new Exception('String "' . $text . '" should be in the response, but it was not.');
+		}
+	}
+
+	/**
+	 * @Then /^There should not be "([^"]*)" in response$/
+	 */
+	public function thereShouldNotBeInResponse($text) {
+		$response = $this->getSession()->getDriver()->getContent();
+		if (strpos($response, $text) !== false) {
+			throw new Exception('String "' . $text . '" should not be in the response, but it was.');
+		}
 	}
 
 	/**
