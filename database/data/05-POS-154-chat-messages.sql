@@ -47,3 +47,7 @@ INSERT INTO `chat_messages` (`id`, `id_sender`, `id_recipient`, `text`, `type`, 
 /*!40000 ALTER TABLE `chat_messages` ENABLE KEYS */;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
+INSERT INTO `friends` (`user1ID`, `user2ID`) VALUES (4, 3);
+INSERT INTO `friends` (`user1ID`, `user2ID`) VALUES (3, 4);
+INSERT INTO `friends` (`user1ID`, `user2ID`) VALUES (3, 1);

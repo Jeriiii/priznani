@@ -37,10 +37,6 @@ common:
 				dsn: '%database.driver%:host=%database.host%;dbname=%database.dbname%'
 				user: %database.user%
 				password: %database.password%
-			chat:
-				dsn: '%chatDatabase.driver%:host=%chatDatabase.host%;dbname=%chatDatabase.dbname%'
-				user: %chatDatabase.user%
-				password: %chatDatabase.password%
 	
 #	testMode: %testMode%
 
