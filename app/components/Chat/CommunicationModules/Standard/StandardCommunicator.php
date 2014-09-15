@@ -96,7 +96,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * @param int $codedId kódované id uživatele, se kterým si píšu
 	 * @param array $response pole odpovědi viz dokumentace
 	 */
-	public function registerInfoToLastMessage($userId, $codedId, $response) {
+	private function registerInfoToLastMessage($userId, $codedId, $response) {
 		if ($this->isActualUserPaying() && !empty($response)) {//pokud je uzivatel platici
 			$lastMessage = end($response[$codedId]['messages']); //posledni zprava z posilanych
 			if ($lastMessage['fromMe'] == 1) {//zprava je ode me
@@ -127,7 +127,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * Vrací odpověď prohlížeči, vykonání kódu na serveru zde končí.
 	 * @param int $lastId id poslední známé zprávy
 	 */
-	public function sendRefreshResponse($lastId = 0) {
+	private function sendRefreshResponse($lastId = 0) {
 		$userId = $this->getPresenter()->getUser()->getId();
 		if (!$lastId || $lastId == 0) {//pokud jde o prvni pozadavek prohlizece
 			$newMessages = $this->chatManager->getInitialMessages($userId); //vrati nam to nejake zpravy pro zacatek
@@ -216,7 +216,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * @param int $id id uživatele
 	 * @return string Uzivatelske jmeno
 	 */
-	public function getUsername($id) {
+	private function getUsername($id) {
 		$session = $this->getPresenter()->getSession(self::USERNAMES_SESSION_NAME);
 		$session->setExpiration(0);
 		return $this->chatManager->getUsername($id, $session);
@@ -229,7 +229,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * @param int $idRecipient id příjemce
 	 * @param int $idMessage id sledované zprávy
 	 */
-	public function registerInfoAboutDelivery($idRecipient, $idMessage) {
+	private function registerInfoAboutDelivery($idRecipient, $idMessage) {
 		$session = $this->getDeliverySession();
 		$session->offsetSet($idRecipient, $idMessage);
 	}
@@ -243,7 +243,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * @param array $responseArray pole odpovědi, kam se má informace přidat
 	 * @return array doplnene pole
 	 */
-	public function addInfoAboutDeliveredMessages($responseArray) {
+	private function addInfoAboutDeliveredMessages($responseArray) {
 		$session = $this->getDeliverySession();
 		$userId = $this->getPresenter()->getUser()->getId();
 		$undeliveredMessages = $this->chatManager->getAllUnreadedMessagesFromUser($userId);
