@@ -58,7 +58,7 @@ class LikeStatusDao extends AbstractDao {
 	 * @param int $userID ID uživatele, který lajkuje
 	 */
 	public function removeLiked($statusID, $userID) {
-		/* přidá vazbu mezi obr. a uživatelem */
+		/* přidá vazbu mezi statusem a uživatelem */
 		$sel = $this->getTable();
 		$sel->where(array(
 			self::COLUMN_STATUS_ID => $statusID,

@@ -10,6 +10,8 @@ namespace POSComponent\Galleries\Images;
 
 use POS\Model\UserImageDao;
 use POS\Model\ImageLikesDao;
+use POS\Model\CommentImagesDao;
+use POS\Model\LikeCommentDao;
 
 class UsersCompetitionsGallery extends BaseGallery {
 
@@ -23,12 +25,24 @@ class UsersCompetitionsGallery extends BaseGallery {
 	 */
 	public $imageLikesDao;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao) {
+	/**
+	 * @var \POS\Model\CommentImagesDao
+	 */
+	public $commentImagesDao;
+
+	/**
+	 * @var \POS\Model\LikeCommentDao
+	 */
+	public $likeCommentDao;
+
+	public function __construct($images, $image, $gallery, $domain, $partymode, LikeCommentDao $likeCommentDao, UserImageDao $userImageDao, CommentImagesDao $commentImagesDao, ImageLikesDao $imageLikesDao) {
 		parent::__construct($images, $image, $gallery, $domain, $partymode);
 		parent::setUserImageDao($userImageDao);
 		$this->image = $image;
 		$this->userImageDao = $userImageDao;
 		$this->imageLikesDao = $imageLikesDao;
+		$this->commentImagesDao = $commentImagesDao;
+		$this->likeCommentDao = $likeCommentDao;
 	}
 
 	public function render() {
@@ -36,12 +50,11 @@ class UsersCompetitionsGallery extends BaseGallery {
 	}
 
 	public function createComponentLikes() {
-		if ($this->presenter->user->isLoggedIn()) {
-			$likes = new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->userImageDao, $this->image, $this->presenter->user->id);
-		} else {
-			$likes = new \POSComponent\BaseLikes\ImageLikes();
-		}
-		return $likes;
+		return new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->userImageDao, $this->image, $this->presenter->user->id);
+	}
+
+	public function createComponentComments() {
+		return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image->id);
 	}
 
 }

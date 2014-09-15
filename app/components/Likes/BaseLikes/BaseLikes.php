@@ -39,6 +39,11 @@ class BaseLikes extends BaseProjectControl {
 	protected $status;
 
 	/**
+	 * @var Nette\Database\Table\ActiveRow comment obrázku pro lajknutí
+	 */
+	protected $imageComment;
+
+	/**
 	 * @var bool TRUE pokud uživatel dal like, jinak FALSE.
 	 */
 	protected $liked;
@@ -49,9 +54,9 @@ class BaseLikes extends BaseProjectControl {
 	const IMAGE_LIKE_BUTTON = "Sexy";
 
 	/**
-	 * @const STATUS_LIKE_BUTTON text lajkovacího tlačítka pro statusy
+	 * @const COMMON_LIKE_BUTTON obecný text lajkovacího tlačítka
 	 */
-	const STATUS_LIKE_BUTTON = "Líbí";
+	const COMMON_LIKE_BUTTON = "Líbí";
 
 	/**
 	 * @const IMAGE_LABEL text do informace o přihlášení kvůli hodnocení obrázku
@@ -64,24 +69,33 @@ class BaseLikes extends BaseProjectControl {
 	const STATUS_LABEL = "statusu";
 
 	/**
+	 * @const COMMENT_LABEL text do informace o přihlášení kvůli hodnocení statusu
+	 */
+	const COMMENT_LABEL = "komentáře";
+
+	/**
 	 * Konstruktor komponenty, pokud používáme k tvorbě lajkování obrázků, vkládáme dao spojené s obrázky, pokud
-	 * používáme k tvorbě komponenty pro lajk statusů, vkládáme dao spojené se statusy
-	 * @param \POS\Model\ImageLikesDao|\POS\Model\LikeStatusDao $dao dao, které se vkládá podle potřeby
-	 * lajknutí obrázku/statusu
+	 * používáme k tvorbě komponenty pro lajk statusů, vkládáme dao spojené se statusy, pokud chceme lajkovat commenty obrázků,
+	 * vkládáme příslušné dao.
+	 * @param \POS\Model\ImageLikesDao|\POS\Model\LikeStatusDao|\POS\Model\LikeCommentDao $dao dao, které se vkládá podle potřeby
+	 * lajknutí obrázku/statusu/commentu obrázku
 	 * @param Nette\Database\Table\ActiveRow $image lajkovaný obrázek
 	 * @param Nette\Database\Table\ActiveRow $status lajkovaný status
+	 * @param Nette\Database\Table\ActiveRow $imageComment lajkovaný comment obrázku
 	 * @param int $userID ID lajkující uživatele
-	 * @param bool $liked informace o tom jesli už uživatel tento obrázek/status lajkl, nebo ne
+	 * @param bool $liked informace o tom jesli už uživatel tento obrázek/status/comment obrázku lajkl, nebo ne
 	 */
-	public function __construct($dao, $image, $status, $userID, $liked) {
+	public function __construct($dao, $image, $status, $imageComment, $userID, $liked) {
 		parent::__construct();
 		$this->userID = $userID;
 		$this->dao = $dao;
 		$this->liked = $liked;
 		if ($image != NULL) {
 			$this->image = $image;
-		} else {
+		} else if ($status != NULL) {
 			$this->status = $status;
+		} else {
+			$this->imageComment = $imageComment;
 		}
 	}
 
@@ -97,10 +111,14 @@ class BaseLikes extends BaseProjectControl {
 			$template->item = $this->image;
 			$template->button = self::IMAGE_LIKE_BUTTON;
 			$template->label = self::IMAGE_LABEL;
-		} else {
+		} else if ($this->dao instanceof LikeStatusDao) {
 			$template->item = $this->status;
-			$template->button = self::STATUS_LIKE_BUTTON;
+			$template->button = self::COMMON_LIKE_BUTTON;
 			$template->label = self::STATUS_LABEL;
+		} else {
+			$template->item = $this->imageComment;
+			$template->button = self::COMMON_LIKE_BUTTON;
+			$template->label = self::COMMENT_LABEL;
 		}
 		$template->render();
 	}

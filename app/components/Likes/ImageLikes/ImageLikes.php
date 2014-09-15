@@ -42,7 +42,7 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 	public function __construct(ImageLikesDao $imageLikesDao, UserImageDao $userImageDao, $image, $userID) {
 		$this->imageLikesDao = $imageLikesDao;
 		$this->liked = $this->getLikedByUser($userID, $image->id);
-		parent::__construct($imageLikesDao, $image, NULL, $userID, $this->liked);
+		parent::__construct($imageLikesDao, $image, NULL, NULL, $userID, $this->liked);
 		$this->image = $image;
 		$this->userImageDao = $userImageDao;
 	}
