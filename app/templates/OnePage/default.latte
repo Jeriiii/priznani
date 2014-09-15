@@ -5,14 +5,14 @@
 {block content}
 <section id="onepage">
 	<nav id="stream-menu">
-	
-		{if $user->loggedIn}	
+
+		{if $user->loggedIn}
 			{$userData|showProfMin}
 			<b><a n:href=":Profil:Show:default">{$userData->user_name}</a></b>
 			<a n:href=":Profil:Edit:default" title="Editovat profil">Editovat profil</a>
 			<a n:href=":Profil:Show:default" class="btn-main btn-small" title="Muj profil">Můj profil</a>
 		{/if}
-		
+
 		<a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>
 	    <a n:href=":Profil:Galleries:userGalleryNew" class="btn-main btn-small" title="Profil">Vytvořit galerii</a>
 		{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
@@ -32,7 +32,6 @@
 	$(document).ready(function () {
 		$( ".stream-form" ).tabs();
 		$("body").stream({
-			rows: {$count},
 			addoffset: 4
 		});
 	});
