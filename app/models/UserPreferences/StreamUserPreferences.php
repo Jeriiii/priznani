@@ -85,7 +85,6 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 */
 	public function getBestStreamItems() {
 		$this->data = $this->streamSection->cachedStreamItems;
-		$this->streamSection->cachedStreamItems = NULL;
 		if ($this->data === NULL) {
 			$this->initializeStreamItems(); //pokud uživatel přišel prvně
 		} else {//není třeba ptát se dvakrát při prvním příchodu
