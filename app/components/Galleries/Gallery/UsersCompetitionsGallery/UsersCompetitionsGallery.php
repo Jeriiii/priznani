@@ -53,6 +53,10 @@ class UsersCompetitionsGallery extends BaseGallery {
 		return new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->image, $this->presenter->user->id);
 	}
 
+	/**
+	 * Komponenta pro komentování obrázků
+	 * @return \POSComponent\Comments\ImageComments
+	 */
 	public function createComponentComments() {
 		return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image);
 	}

@@ -69,6 +69,10 @@ class CommentImagesDao extends AbstractDao implements ICommentDao {
 		return $sel;
 	}
 
+	/**
+	 * smaže komentář
+	 * @param int $commentID ID komentáře, který má být smazán
+	 */
 	public function delete($commentID) {
 		$sel = $this->getTable();
 		$sel->wherePrimary($commentID);

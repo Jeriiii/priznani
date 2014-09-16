@@ -120,6 +120,10 @@ class BaseComments extends BaseProjectControl {
 		});
 	}
 
+	/**
+	 * Signál pro smazání komentáře
+	 * @param type $commentID ID komentáře, který chceme smazat
+	 */
 	public function handleDeleteComment($commentID) {
 		$this->commentDao->delete($commentID);
 
