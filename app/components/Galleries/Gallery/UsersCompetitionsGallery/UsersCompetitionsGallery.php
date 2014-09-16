@@ -54,7 +54,7 @@ class UsersCompetitionsGallery extends BaseGallery {
 	}
 
 	public function createComponentComments() {
-		return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image->id);
+		return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image);
 	}
 
 }

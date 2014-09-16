@@ -51,10 +51,10 @@ class BaseComments extends BaseProjectControl {
 	/** @var boolean TRUE = zobrazí všechny komentáře */
 	private $showAllComments = FALSE;
 
-	public function __construct(ILikeDao $likeCommentDao, ICommentDao $commentDao, $itemID) {
+	public function __construct(ILikeDao $likeCommentDao, ICommentDao $commentDao, ActiveRow $item) {
 		parent::__construct();
 		$this->commentDao = $commentDao;
-		$this->item = $commentDao->find($itemID);
+		$this->item = $item;
 		$this->likeCommentDao = $likeCommentDao;
 	}
 
@@ -65,7 +65,7 @@ class BaseComments extends BaseProjectControl {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/baseComments.latte');
 		$template->comments = $this->getComments();
-		$template->countComments = $this->item->image->comments;
+		$template->countComments = $this->item->comments;
 		$template->minShowComments = self::MIN_OF_SHOWED_COMMENTS;
 		$template->showAllComments = $this->showAllComments;
 		$template->render();
@@ -73,6 +73,7 @@ class BaseComments extends BaseProjectControl {
 
 	public function handleShowAllComment() {
 		$this->showAllComments = TRUE;
+
 		$this->redrawControl();
 	}
 
@@ -105,7 +106,9 @@ class BaseComments extends BaseProjectControl {
 	 * @return \Nette\Application\UI\Multiplier multiplier pro dynamické vykreslení více komponent
 	 */
 	public function createComponentLikeComment() {
-		$imageComments = $this->getComments();
+		// můžu tu vybrat klidně všechny, protože oni se vyberou jen stejně ty, která chce komponenta na lajkování
+		// a ne všechny příspěvky z db
+		$imageComments = $this->commentDao->getAllComments($this->item->id);
 		return new \Nette\Application\UI\Multiplier(function ($imageComment) use ($imageComments) {
 			return new \POSComponent\BaseLikes\CommentLikes($this->likeCommentDao, $imageComments->offsetGet($imageComment), $this->presenter->user->id);
 		});
