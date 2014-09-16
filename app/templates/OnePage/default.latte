@@ -15,6 +15,11 @@
 
 		<a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>
 	    <a n:href=":Profil:Galleries:userGalleryNew" class="btn-main btn-small" title="Profil">Vytvořit galerii</a>
+		
+		{if $user->loggedIn}
+			<a n:href=":Profil:Edit:friendRequests" class="btn-main btn-small" title="Pratelstvi">{$countFriendRequests} Žádosti o přátelství</a>
+		{/if}
+				
 		{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
 	    <div class="clear"></div>
 	</nav>
