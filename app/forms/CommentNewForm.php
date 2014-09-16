@@ -62,8 +62,8 @@ class CommentNewForm extends BaseForm {
 
 		if ($this->presenter->isAjax()) {
 			$form->setValues(array(), TRUE);
-			$this->parent->redrawControl('commentForm');
-			$this->parent->redrawControl('list');
+			$this->baseCommentComp->redrawControl('commentForm');
+			$this->baseCommentComp->redrawControl('list');
 			$this->baseCommentComp->countComments ++;
 		} else {
 			$this->presenter->redirect('this');
