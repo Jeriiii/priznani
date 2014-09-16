@@ -17,14 +17,9 @@ use POS\Model\LikeStatusDao;
 class StatusLikes extends BaseLikes implements IBaseLikes {
 
 	/**
-	 * @var \POS\Model\LikeStatusDao
+	 * @const STATUS_LABEL text do informace o přihlášení kvůli hodnocení statusu
 	 */
-	public $likeStatusDao;
-
-	/**
-	 * @var Nette\Database\Table\ActiveRow Status pro lajknutí
-	 */
-	public $status;
+	const STATUS_LABEL = "statusu";
 
 	/**
 	 * Kontruktor komponenty, předáváme potřebné proměnné
@@ -33,10 +28,7 @@ class StatusLikes extends BaseLikes implements IBaseLikes {
 	 * @param int $userID ID uživatele, který lajkuje status
 	 */
 	public function __construct(LikeStatusDao $likeStatusDao, $status, $userID) {
-		$this->likeStatusDao = $likeStatusDao;
-		$this->liked = $this->getLikedByUser($userID, $status->id);
-		parent::__construct($likeStatusDao, NULL, $status, NULL, $userID, $this->liked);
-		$this->status = $status;
+		parent::__construct($likeStatusDao, $status, $userID, self::STATUS_LABEL);
 	}
 
 	/**
@@ -46,21 +38,12 @@ class StatusLikes extends BaseLikes implements IBaseLikes {
 	 */
 	public function handleLike($userID, $statusID) {
 		if ($this->liked == FALSE) {
-			$this->likeStatusDao->addLiked($statusID, $userID);
+			$this->justLike = TRUE;
+			$this->liked = TRUE;
+			$this->likeDao->addLiked($statusID, $userID);
 		}
 
 		$this->redrawControl();
-	}
-
-	/**
-	 * Vrátí informaci, zda uživatel již dal like
-	 * @param int $userID ID užovatele, kterého hledáme
-	 * @param int $statusID ID statusu, který hledáme
-	 * @return bool
-	 */
-	public function getLikedByUser($userID, $statusID) {
-		$liked = $this->likeStatusDao->likedByUser($userID, $statusID);
-		return $liked;
 	}
 
 }

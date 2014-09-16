@@ -50,7 +50,7 @@ class UsersCompetitionsGallery extends BaseGallery {
 	}
 
 	public function createComponentLikes() {
-		return new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->userImageDao, $this->image, $this->presenter->user->id);
+		return new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->image, $this->presenter->user->id);
 	}
 
 	public function createComponentComments() {

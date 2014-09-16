@@ -52,7 +52,7 @@ class UsersGallery extends BaseGallery {
 
 	public function createComponentLikes() {
 		if ($this->presenter->user->isLoggedIn()) {
-			$likes = new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->userImageDao, $this->image, $this->presenter->user->id);
+			$likes = new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->image, $this->presenter->user->id);
 		} else {
 			$likes = new \POSComponent\BaseLikes\ImageLikes();
 		}

@@ -12,7 +12,7 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class LikeCommentDao extends AbstractDao {
+class LikeCommentDao extends AbstractDao implements ILikeDao {
 
 	/** @var Nette\Database */
 	protected $database;

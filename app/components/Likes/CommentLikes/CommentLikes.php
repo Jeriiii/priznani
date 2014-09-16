@@ -16,11 +16,11 @@ use POS\Model\LikeCommentDao;
  */
 class CommentLikes extends BaseLikes implements IBaseLikes {
 
-	/**
-	 * @var \POS\Model\LikeCommentDao
-	 */
-	public $likeCommentDao;
-	public $comment;
+	/** Název tlačítka */
+	const COMMON_LIKE_BUTTON = "Líbí";
+
+	/** Název funkce */
+	const COMMENT_LABEL = "komentáře";
 
 	/**
 	 * Kontruktor komponenty, předáváme potřebné proměnné
@@ -29,10 +29,7 @@ class CommentLikes extends BaseLikes implements IBaseLikes {
 	 * @param int $userID ID uživatele, který lajkuje comment
 	 */
 	public function __construct(LikeCommentDao $likeCommentDao, $comment, $userID) {
-		$this->likeCommentDao = $likeCommentDao;
-		$this->liked = $this->getLikedByUser($userID, $comment->id);
-		parent::__construct($likeCommentDao, NULL, NULL, $comment, $userID, $this->liked);
-		$this->comment = $comment;
+		parent::__construct($likeCommentDao, $comment, $userID, self::COMMENT_LABEL, self::COMMON_LIKE_BUTTON);
 	}
 
 	/**
@@ -42,20 +39,11 @@ class CommentLikes extends BaseLikes implements IBaseLikes {
 	 */
 	public function handleLike($userID, $commentID) {
 		if ($this->liked == FALSE) {
-			$this->likeCommentDao->addLiked($commentID, $userID);
+			$this->justLike = TRUE;
+			$this->liked = TRUE;
+			$this->likeDao->addLiked($commentID, $userID);
 		}
 		$this->redrawControl();
-	}
-
-	/**
-	 * Vrátí informaci, zda uživatel již dal like
-	 * @param int $userID ID užovatele, kterého hledáme
-	 * @param int $commentID ID commentu, který hledáme
-	 * @return bool
-	 */
-	public function getLikedByUser($userID, $commentID) {
-		$liked = $this->likeCommentDao->likedByUser($userID, $commentID);
-		return $liked;
 	}
 
 }

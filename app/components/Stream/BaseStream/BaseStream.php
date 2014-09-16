@@ -180,7 +180,7 @@ class BaseStream extends BaseProjectControl {
 		$streamItems = $this->dataForStream;
 
 		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			return new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->userImageDao, $streamItems->offsetGet($streamItem)->userGallery->lastImage, $this->presenter->user->id);
+			return new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $streamItems->offsetGet($streamItem)->userGallery->lastImage, $this->presenter->user->id);
 		});
 	}
 

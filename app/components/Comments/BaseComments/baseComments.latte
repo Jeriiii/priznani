@@ -1,0 +1,14 @@
+{snippet commentForm}
+	{control commentNewForm}
+{/snippet}
+{snippet}
+	{foreach $comments as $comment}
+		<div class="comment">
+			{$comment->comment}
+				{control likeComment-$comment->id}
+		</div>
+	{/foreach}
+	{if !$showAllComments && $minShowComments < $countComments}
+	<a n:href="showAllComment!" class="ajax">Zobrazit další komentáře ({$countComments - $minShowComments})</a>
+	{/if}
+{/snippet}
