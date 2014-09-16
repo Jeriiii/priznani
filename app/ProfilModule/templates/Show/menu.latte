@@ -2,8 +2,11 @@
 
 {block menu}
 <nav>
-	<span><a n:href="default $userID">Zeď</a></span>
-	<span><a n:href="userImages $userID">Fotky</a></span>
-	<span><a n:href="userInfo $userID">Informace</a></span>
+	{if $user->loggedIn && $user->id == $userID}
+		<span><a n:href=":Profil:Edit:default">Editovat</a></span>	
+	{/if}
+		<span><a n:href="default $userID">Zeď</a></span>
+		<span><a n:href="userImages $userID">Fotky</a></span>
+		<span><a n:href="userInfo $userID">Informace</a></span>
 </nav>
 {/block}
