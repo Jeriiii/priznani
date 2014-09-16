@@ -157,10 +157,11 @@ class ChatManager {
 	 * Nastaví všechny zprávy s id v poli jako přečtené/nepřečtené
 	 * @param array $ids neasociativni pole idček
 	 * @param boolean $readed přečtená/nepřečtená
+	 * @param int $idUser id příjemce kvůli bezpečnosti
 	 * @return Nette\Database\Table\Selection upravené zprávy
 	 */
-	public function setMessagesReaded($ids, $readed) {
-		return $this->messagesDao->setMultipleMessagesReaded($ids, $readed);
+	public function setMessagesReaded($ids, $idUser, $readed) {
+		return $this->messagesDao->setMultipleMessagesReaded($ids, $idUser, $readed);
 	}
 
 	/**

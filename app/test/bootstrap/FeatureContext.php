@@ -18,7 +18,9 @@ use Behat\MinkExtension\Context\MinkContext;
 use Nette\DI\Container;
 use \Behat\Behat\Exception\PendingException;
 use \Behat\Behat\Event\StepEvent;
+use POS\Model\TestDao;
 use Exception;
+use Nette\Utils\Json;
 
 class FeatureContext extends MinkContext {
 
@@ -49,6 +51,9 @@ class FeatureContext extends MinkContext {
 	/** @var string  */
 	private $lastEmail;
 
+	/** @var TestDao */
+	private $testDao;
+
 	/**
 	 * Initialization of context
 	 */
@@ -61,6 +66,7 @@ class FeatureContext extends MinkContext {
 		$this->streamDao = $this->context->streamDao;
 		$this->confessionDao = $this->context->confessionDao;
 		$this->mailer = $this->context->getService('nette.mailer');
+		$this->testDao = $this->context->testDao;
 	}
 
 	/**
@@ -167,6 +173,14 @@ class FeatureContext extends MinkContext {
 	}
 
 	/**
+	 * @Then /^I recreate data in database$/
+	 */
+	public function iRecreateData() {
+		$databaseManager = DatabaseManager::getInstance();
+		$databaseManager->featureStartScripts(); //usage of end sql scripts
+	}
+
+	/**
 	 * @Then /^I look on( the) status code$/
 	 */
 	public function iLookOnTheStatusCode() {
@@ -254,6 +268,88 @@ class FeatureContext extends MinkContext {
 		$response = $this->getSession()->getDriver()->getContent();
 		if (strpos($response, $text) !== false) {
 			throw new Exception('String "' . $text . '" should not be in the response, but it was.');
+		}
+	}
+
+	private function sendPostRequest($url, $data) {
+		$sessionName = $this->userManager->getSession()->getName();
+		$sessid = $this->getSession()->getCookie($sessionName); //zjištování id sešny kvůli přihlášení
+		$ch = curl_init();
+		//open connection
+		curl_setopt($ch, CURLOPT_HEADER, TRUE);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, FALSE);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POST, TRUE);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_COOKIE, $sessionName . '=' . $sessid);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			'X-Requested-With: XMLHttpRequest',
+			'X-Testing: 1'
+		));
+		//execute post
+		$result = curl_exec($ch);
+
+		if (!$result) {
+			throw new Exception("Sending request failed.");
+		}
+	}
+
+	/*	 * ***********************CHAT****************************** */
+
+	/**
+	 * Pošle POST požadavek tak, jako kdyby se odesílala zpráva do chatu
+	 * @Given /^I send chat message "([^"]*)" to "([^"]*)"$/
+	 */
+	public function iSendChatMessageTo($text, $idUser) {
+		$url = $this->getMinkParameter('base_url') . '?do=chat-communicator-sendMessage';
+		$data = array(
+			"to" => $idUser, 'type' => 'textMessage', 'text' => $text, 'lastid' => 0
+		);
+		$json = json_encode($data);
+		$this->sendPostRequest($url, $json);
+	}
+
+	/**
+	 * @Then /^I read messages in response$/
+	 */
+	public function iReadMessagesInResponse() {
+		$response = $this->getSession()->getDriver()->getContent();
+		$readRequestString = '&chat-communicator-readedmessages='; //sestavení proměnné v url
+		$responseArray = Json::decode($response);
+		if (empty($responseArray)) {//ošetření prázdné odpovědi
+			return;
+		}
+		$glue = '[';
+		foreach ($responseArray as $usersArray) {//projetí všech zpráv a jejich id
+			foreach ($usersArray->messages as $message) {
+				$readRequestString = $readRequestString . $glue . $message->id;
+				$glue = '%2C';
+			}
+		}
+		$readRequestString = $readRequestString . ']';
+		$this->getSession()->visit($this->locatePath('/?do=chat-communicator-refreshMessages&chat-communicator-lastid=1' . $readRequestString));
+	}
+
+	/*	 * *********************DATABAZE**************************** */
+
+	/**
+	 * @Given /^There should be "([^"]*)" in column "([^"]*)" in "([^"]*)"$/
+	 */
+	public function thereShouldBeInColumnIn($data, $column, $table) {
+		$rows = $this->testDao->getFromTableWithColumn($data, $column, $table);
+		if (!$rows->fetch()) {
+			throw new Exception('There should be "' . $data . '" in column "' . $column . '" in table "' . $table . ', but it was not');
+		}
+	}
+
+	/**
+	 * @Given /^There should not be "([^"]*)" in column "([^"]*)" in "([^"]*)"$/
+	 */
+	public function thereShouldNotBeInColumnIn($data, $column, $table) {
+		$rows = $this->testDao->getFromTableWithColumn($data, $column, $table);
+		if ($rows->fetch()) {
+			throw new Exception('There should not be "' . $data . '" in column "' . $column . '" in table "' . $table . ', but it was');
 		}
 	}
 

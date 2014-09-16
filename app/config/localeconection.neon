@@ -5,9 +5,3 @@ parameters:
 		dbname: pos
 		user: root
 		password: root
-	chatDatabase:
-		driver: mysql
-		host: localhost
-		dbname: poschat
-		user: root
-		password: root

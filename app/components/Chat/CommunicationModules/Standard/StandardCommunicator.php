@@ -51,8 +51,9 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	public function handleSendMessage() {
 		$json = file_get_contents("php://input"); //vytánutí všech dat z POST požadavku - data ve formátu JSON
 		$data = Json::decode($json); //prijata zprava dekodovana z JSONu
-		if (!empty($data) && $data->type == 'textMessage') {//ulozeni zpravy do DB
-			$senderId = $this->getPresenter()->getUser()->getId();
+		$user = $this->getPresenter()->getUser();
+		if (!empty($data) && $data->type == 'textMessage' && $user->isLoggedIn()) {//ulozeni zpravy do DB
+			$senderId = $user->getId();
 			$data->to = (int) $this->chatManager->getCoder()->decodeData($data->to); //dekodovani id
 			$message = $this->chatManager->sendTextMessage($senderId, $data->to, $data->text); //ulozeni zpravy
 			if ($this->isActualUserPaying()) {//pokud je uzivatel platici
@@ -68,10 +69,13 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * @param json $readedmessages pole idcek prectenych zprav
 	 */
 	public function handleRefreshMessages($lastid, $readedmessages) {
-		$readedArray = (array) Json::decode($readedmessages);
-		$this->chatManager->setMessagesReaded($readedArray, TRUE); //oznaceni zprav za prectene
+		$user = $this->getPresenter()->getUser();
+		if ($user->isLoggedIn()) {
+			$readedArray = (array) Json::decode($readedmessages);
+			$this->chatManager->setMessagesReaded($readedArray, $user->getId(), TRUE); //oznaceni zprav za prectene
 
-		$this->sendRefreshResponse($lastid);
+			$this->sendRefreshResponse($lastid);
+		}
 	}
 
 	/**
