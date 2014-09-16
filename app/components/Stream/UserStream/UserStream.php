@@ -29,8 +29,8 @@ class UserStream extends BaseStream {
 	 */
 	public $statusDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
-		parent::__construct($data, $likeStatusDao, $imageLikesDao, $userDao, $userGalleryDao, $userImageDao, $confDao);
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao) {
+		parent::__construct($data, $likeStatusDao, $imageLikesDao, $userDao, $userGalleryDao, $userImageDao, $confDao, $streamDao);
 		$this->streamDao = $streamDao;
 		$this->statusDao = $statusDao;
 	}

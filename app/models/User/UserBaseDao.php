@@ -85,7 +85,6 @@ abstract class UserBaseDao extends AbstractDao {
 			'Skupinový sex' => $user->group,
 			'BDSM' => $user->bdsm,
 			'Polykání' => $user->swallow,
-			'Sperma' => $user->cum,
 			'Orální sex' => $user->oral,
 			'Piss' => $user->piss,
 			'Sex masáž' => $user->sex_massage,

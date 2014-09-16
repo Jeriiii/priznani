@@ -6,7 +6,7 @@
 <section id="onepage">
 	<nav id="stream-menu">
 	
-		{if $user->loggedIn}	
+		{if $user->isLoggedIn()}	
 			{$userData|showProfMin}
 			<b><a n:href=":Profil:Show:default">{$userData->user_name}</a></b>
 			<a n:href=":Profil:Edit:default" title="Editovat profil">Editovat profil</a>
@@ -15,6 +15,15 @@
 		
 		<a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>
 	    <a n:href=":Profil:Galleries:userGalleryNew" class="btn-main btn-small" title="Profil">Vytvořit galerii</a>
+		{if $user->isLoggedIn()}
+			<a n:href=":Profil:Edit:default" class="btn-main btn-small" title="Změna statusu">
+			{if !empty($userData->property->statusID)}
+				Chci {$userData->property->status->name}
+			{else}
+				Nastavit status
+			{/if}
+			</a>
+		{/if}
 		{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
 	    <div class="clear"></div>
 	</nav>
