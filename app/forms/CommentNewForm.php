@@ -26,14 +26,13 @@ class CommentNewForm extends BaseForm {
 	 * @var int ID Id prvku, který komentujeme
 	 */
 	public $ID;
-	public $parent;
 
 	public function __construct($dao, $ID, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-		$this->parent = $parent;
 
 		$this->dao = $dao;
 		$this->ID = $ID;
+
 
 		//$this->getElementPrototype()->addAttributes(array('class' => 'ma-pekna-trida'));
 		/* formulář */
@@ -51,7 +50,8 @@ class CommentNewForm extends BaseForm {
 	public function submitted(CommentNewForm $form) {
 		$values = $form->getValues();
 
-		$this->dao->insertNewComment($this->ID, $values->comment);
+		$userID = $this->presenter->user->id;
+		$this->dao->insertNewComment($this->ID, $userID, $values->comment);
 
 		if ($this->presenter->isAjax()) {
 			$form->setValues(array(), TRUE);

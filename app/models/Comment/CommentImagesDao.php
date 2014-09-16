@@ -21,6 +21,7 @@ class CommentImagesDao extends AbstractDao implements ICommentDao {
 	const COLUMN_IMAGE_ID = "imageID";
 	const COLUMN_LIKES = "likes";
 	const COLUMN_COMMENT = "comment";
+	const COLUMN_USER_ID = "userID";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -51,16 +52,36 @@ class CommentImagesDao extends AbstractDao implements ICommentDao {
 	/**
 	 * Vloží komentář k obrázku
 	 * @param int $imageID ID obrázku, který komentujeme
+	 * @param int $userID ID uživatele co komentář napsal.
 	 * @param string $comment komentář obrázku
 	 * @return Nette\Database\Table\ActiveRow
 	 */
-	public function insertNewComment($imageID, $comment) {
+	public function insertNewComment($imageID, $userID, $comment) {
 		$sel = $this->getTable();
 		$sel->insert(array(
 			self::COLUMN_IMAGE_ID => $imageID,
 			self::COLUMN_COMMENT => $comment,
+			self::COLUMN_USER_ID => $userID
 		));
 
+		$this->incrementCountImage($imageID);
+
+		return $sel;
+	}
+
+	public function delete($commentID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($commentID);
+		$comment = $sel->fetch();
+		$this->decrementCountImage($comment->imageID);
+		parent::delete($commentID);
+	}
+
+	/**
+	 * Zvýšení počtu komentářů u obrázku o jedna.
+	 * @param int $imageID
+	 */
+	public function incrementCountImage($imageID) {
 		/* zvýšení počtu komentářů u obrázku o jedna */
 		$selImg = $this->createSelection(UserImageDao::TABLE_NAME);
 		$selImg->wherePrimary($imageID);
@@ -68,8 +89,20 @@ class CommentImagesDao extends AbstractDao implements ICommentDao {
 		$image->update(array(
 			UserImageDao::COLUMN_COMMENTS => $image->comments + 1
 		));
+	}
 
-		return $sel;
+	/**
+	 * Sníží počtu komentářů u obrázku o jedna.
+	 * @param int $imageID
+	 */
+	public function decrementCountImage($imageID) {
+		/* zvýšení počtu komentářů u obrázku o jedna */
+		$selImg = $this->createSelection(UserImageDao::TABLE_NAME);
+		$selImg->wherePrimary($imageID);
+		$image = $selImg->fetch();
+		$image->update(array(
+			UserImageDao::COLUMN_COMMENTS => $image->comments - 1
+		));
 	}
 
 }

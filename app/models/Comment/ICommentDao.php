@@ -30,8 +30,9 @@ interface ICommentDao {
 	/**
 	 * Vloží komentář k obrázku
 	 * @param int $itemID ID příspěvku, který komentujeme
+	 * @param int $userID ID uživatele co komentář napsal.
 	 * @param string $comment Komentář obrázku
 	 * @return Nette\Database\Table\ActiveRow
 	 */
-	public function insertNewComment($itemID, $comment);
+	public function insertNewComment($itemID, $userID, $comment);
 }
