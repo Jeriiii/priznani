@@ -1,11 +1,12 @@
-{*snippet commentForm*}
-	{if $user->isLoggedIn()}
-	{control commentNewForm}
-	{else}
-		K přidání komentáře se nejdříve musíte <a href="{plink :Sign:in}">přihlásit</a>.
-	{/if}
-{*/snippet*}
-{snippet}
+{if $user->isLoggedIn()}
+	{snippet commentForm}
+		{control commentNewForm}
+	{/snippet}
+{else}
+	K přidání komentáře se nejdříve musíte <a href="{plink :Sign:in}">přihlásit</a>.
+{/if}
+
+{snippet list}
 	{foreach $comments as $comment}
 		<div class="comment">
 			{if $user->id == $comment->userID}

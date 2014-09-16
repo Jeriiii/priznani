@@ -44,6 +44,11 @@ class BaseComments extends BaseProjectControl {
 	public $comments = null;
 
 	/**
+	 * @var int počet komentářů
+	 */
+	public $countComments = null;
+
+	/**
 	 * @const počet zobrazovaných komentářů
 	 */
 	const MIN_OF_SHOWED_COMMENTS = 2;
@@ -56,6 +61,7 @@ class BaseComments extends BaseProjectControl {
 		$this->commentDao = $commentDao;
 		$this->item = $item;
 		$this->likeCommentDao = $likeCommentDao;
+		$this->countComments = $this->item->comments;
 	}
 
 	/**
@@ -65,7 +71,7 @@ class BaseComments extends BaseProjectControl {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/baseComments.latte');
 		$template->comments = $this->getComments();
-		$template->countComments = $this->item->comments;
+		$template->countComments = $this->countComments;
 		$template->minShowComments = self::MIN_OF_SHOWED_COMMENTS;
 		$template->showAllComments = $this->showAllComments;
 		$template->render();

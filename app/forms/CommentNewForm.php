@@ -9,6 +9,7 @@ namespace Nette\Application\UI\Form;
 use Nette\Application\UI\Form;
 use Nette\Utils\Html;
 use Nette\ComponentModel\IContainer;
+use POSComponent\Comments\BaseComments;
 
 /**
  * Formulář pro komentář prvku
@@ -27,9 +28,15 @@ class CommentNewForm extends BaseForm {
 	 */
 	public $ID;
 
-	public function __construct($dao, $ID, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
+	/**
+	 * @var BaseComments $baseCommentComp Základní komponenta pro komentáře
+	 */
+	private $baseCommentComp;
 
+	public function __construct($dao, $ID, BaseComments $baseCommentComp = NULL, $name = NULL) {
+		parent::__construct($baseCommentComp, $name);
+
+		$this->baseCommentComp = $baseCommentComp;
 		$this->dao = $dao;
 		$this->ID = $ID;
 
@@ -43,7 +50,7 @@ class CommentNewForm extends BaseForm {
 		$this->addSubmit("submit", "Vložit");
 		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
-		//$this->getElementPrototype()->addClass('ajax');
+		$this->getElementPrototype()->addClass('ajax');
 		return $this;
 	}
 
@@ -53,16 +60,14 @@ class CommentNewForm extends BaseForm {
 		$userID = $this->presenter->user->id;
 		$this->dao->insertNewComment($this->ID, $userID, $values->comment);
 
-//		if ($this->presenter->isAjax()) {
-//			//nefunguje?
-//			$this->getPresenter()->redrawControl("commentForm");
-//		} else {
-		$this->presenter->redirect('this');
-//		}
-		//$this->presenter->redrawControl("commentNewForm");
-//		} else {
-//			$this->presenter->redirect('this');
-//		}
+		if ($this->presenter->isAjax()) {
+			$form->setValues(array(), TRUE);
+			$this->parent->redrawControl('commentForm');
+			$this->parent->redrawControl('list');
+			$this->baseCommentComp->countComments ++;
+		} else {
+			$this->presenter->redirect('this');
+		}
 	}
 
 }
