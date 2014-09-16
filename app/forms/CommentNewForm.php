@@ -54,7 +54,10 @@ class CommentNewForm extends BaseForm {
 		$this->dao->insertNewComment($this->ID, $values->comment);
 
 		if ($this->presenter->isAjax()) {
-			$this->getParent()->redrawControl();
+			//nefunguje?
+			$this->getPresenter()->redrawControl("commentForm");
+		} else {
+			$this->presenter->redirect('this');
 		}
 		//$this->presenter->redrawControl("commentNewForm");
 //		} else {
