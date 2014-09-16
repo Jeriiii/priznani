@@ -36,6 +36,7 @@ class CommentNewForm extends BaseForm {
 	public function __construct($dao, $ID, BaseComments $baseCommentComp = NULL, $name = NULL) {
 		parent::__construct($baseCommentComp, $name);
 
+		$this->ajax();
 		$this->baseCommentComp = $baseCommentComp;
 		$this->dao = $dao;
 		$this->ID = $ID;
@@ -46,11 +47,10 @@ class CommentNewForm extends BaseForm {
 
 		$this->addText("comment", "", 30, 35)
 			->addRule(Form::FILLED, "Musíte zadat text do komentáře.");
-
 		$this->addSubmit("submit", "Vložit");
 		$this->setBootstrapRender();
+
 		$this->onSuccess[] = callback($this, 'submitted');
-		$this->getElementPrototype()->addClass('ajax');
 		return $this;
 	}
 
@@ -61,7 +61,7 @@ class CommentNewForm extends BaseForm {
 		$this->dao->insertNewComment($this->ID, $userID, $values->comment);
 
 		if ($this->presenter->isAjax()) {
-			$form->setValues(array(), TRUE);
+			$form->clearFields();
 			$this->baseCommentComp->redrawControl('commentForm');
 			$this->baseCommentComp->redrawControl('list');
 			$this->baseCommentComp->countComments ++;
