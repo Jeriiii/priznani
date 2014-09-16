@@ -16,10 +16,8 @@ use POS\Model\LikeCommentDao;
  */
 class ImageComments extends BaseComments {
 
-	public function __construct(LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, $imageID) {
-		$newestComments = $commentImagesDao->getTwoNewestComments($imageID);
-		$allComments = $commentImagesDao->getAllImageComments($imageID);
-		parent::__construct($likeCommentDao, $commentImagesDao, $imageID, $newestComments, $allComments);
+	public function __construct(LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, $image) {
+		parent::__construct($likeCommentDao, $commentImagesDao, $image);
 	}
 
 }

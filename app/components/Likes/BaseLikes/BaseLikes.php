@@ -10,6 +10,9 @@ use POSComponent\BaseProjectControl;
 use POS\Model\ImageLikesDao;
 use POS\Model\LikeStatusDao;
 use Nette\Application\Responses\JsonResponse;
+use POS\Model\AbstractDao;
+use Nette\Database\Table\ActiveRow;
+use POS\Model\ILikeDao;
 
 /**
  * Komponenta pro vykreslení tlačítek na lajkování.
@@ -19,9 +22,9 @@ use Nette\Application\Responses\JsonResponse;
 class BaseLikes extends BaseProjectControl {
 
 	/**
-	 * @var \POS\Model\ImageLikesDao|\POS\Model\LikeStatusDao
+	 * @var ILikeDao
 	 */
-	public $dao;
+	public $likeDao;
 
 	/**
 	 * @var int ID lajkujícího uživatele
@@ -49,24 +52,40 @@ class BaseLikes extends BaseProjectControl {
 	protected $liked;
 
 	/**
-	 * @const IMAGE_LIKE_BUTTON text lajkovacího tlačítka pro obrázky
+	 * @var ActiveRow Příspěvek u kterého se má zobrazit počet like nebo se lajknout
 	 */
-	const IMAGE_LIKE_BUTTON = "Sexy";
+	protected $likeItem;
+
+	/**
+	 * @var bool TRUE pokud právě lajknul příspěvek. Používá se k tomu
+	 * že $item, třeba obrázek se pošle v konstruktoru a má konečné
+	 * hodnoty třeba poč. like 5. Pak se teprve spustí signál na like,
+	 * který zvýší v tabulce poč. like na 6, ale $item už je dávno uložený
+	 * a má pořád počet liků 5. Po reloadu stránky si již načte správný počet
+	 * liků ze změněné tabulky. Takže chyba nastává jen tehdy, pokud
+	 * právě likneme příspěvek. A na to slouží $justLike. Když je na TRUE
+	 * tak to znamená, že má přičíst k aktuálnímu stavu jedna. Zároveň
+	 * se nastavuje na TRUE pouze tehdy, když je spuštěn signál na
+	 * lajkování.
+	 */
+	protected $justLike = FALSE;
+
+	/**
+	 * @var string Název tlačítka na lajkování.
+	 */
+	protected $nameLikeButton = "Líbí";
+
+	/**
+	 * @var string Název lajkovací fce k doplnění věty: K ohodnocení $nameLabel se musíte přihlásit
+	 */
+	protected $nameLabel = null;
+
+	const DEFAULT_NAME_LIKE_BUTTON = "Líbí";
 
 	/**
 	 * @const COMMON_LIKE_BUTTON obecný text lajkovacího tlačítka
 	 */
 	const COMMON_LIKE_BUTTON = "Líbí";
-
-	/**
-	 * @const IMAGE_LABEL text do informace o přihlášení kvůli hodnocení obrázku
-	 */
-	const IMAGE_LABEL = "obrázku";
-
-	/**
-	 * @const STATUS_LABEL text do informace o přihlášení kvůli hodnocení statusu
-	 */
-	const STATUS_LABEL = "statusu";
 
 	/**
 	 * @const COMMENT_LABEL text do informace o přihlášení kvůli hodnocení statusu
@@ -76,27 +95,22 @@ class BaseLikes extends BaseProjectControl {
 	/**
 	 * Konstruktor komponenty, pokud používáme k tvorbě lajkování obrázků, vkládáme dao spojené s obrázky, pokud
 	 * používáme k tvorbě komponenty pro lajk statusů, vkládáme dao spojené se statusy, pokud chceme lajkovat commenty obrázků,
-	 * vkládáme příslušné dao.
-	 * @param \POS\Model\ImageLikesDao|\POS\Model\LikeStatusDao|\POS\Model\LikeCommentDao $dao dao, které se vkládá podle potřeby
+	 * vkládáme příslušné dao atd.
+	 * @param \POS\Model\ImageLikesDao|\POS\Model\LikeStatusDao|\POS\Model\LikeCommentDao $likeDao dao, které se vkládá podle potřeby
 	 * lajknutí obrázku/statusu/commentu obrázku
-	 * @param Nette\Database\Table\ActiveRow $image lajkovaný obrázek
-	 * @param Nette\Database\Table\ActiveRow $status lajkovaný status
-	 * @param Nette\Database\Table\ActiveRow $imageComment lajkovaný comment obrázku
+	 * @param Nette\Database\Table\ActiveRow $likeItem Příspěvek u kterého se má zobrazit počet like nebo se lajknout
 	 * @param int $userID ID lajkující uživatele
-	 * @param bool $liked informace o tom jesli už uživatel tento obrázek/status/comment obrázku lajkl, nebo ne
+	 * @param string $nameLabel viz. kom. třídy
+	 * @param string $nameLikeButton viz. kom. třídy
 	 */
-	public function __construct($dao, $image, $status, $imageComment, $userID, $liked) {
+	public function __construct(ILikeDao $likeDao, ActiveRow $likeItem, $userID, $nameLabel, $nameLikeButton = self::DEFAULT_NAME_LIKE_BUTTON) {
 		parent::__construct();
+		$this->likeDao = $likeDao;
+		$this->liked = $this->getLikedByUser($userID, $likeItem->id);
 		$this->userID = $userID;
-		$this->dao = $dao;
-		$this->liked = $liked;
-		if ($image != NULL) {
-			$this->image = $image;
-		} else if ($status != NULL) {
-			$this->status = $status;
-		} else {
-			$this->imageComment = $imageComment;
-		}
+		$this->likeItem = $likeItem;
+		$this->nameLabel = $nameLabel;
+		$this->nameLikeButton = $nameLikeButton;
 	}
 
 	/**
@@ -106,21 +120,24 @@ class BaseLikes extends BaseProjectControl {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/baseLikes.latte');
 		$template->liked = $this->liked;
-		/* naplnění daty podle toho, jestli pracujeme s obrázky nebo statusy */
-		if ($this->dao instanceof ImageLikesDao) {
-			$template->item = $this->image;
-			$template->button = self::IMAGE_LIKE_BUTTON;
-			$template->label = self::IMAGE_LABEL;
-		} else if ($this->dao instanceof LikeStatusDao) {
-			$template->item = $this->status;
-			$template->button = self::COMMON_LIKE_BUTTON;
-			$template->label = self::STATUS_LABEL;
-		} else {
-			$template->item = $this->imageComment;
-			$template->button = self::COMMON_LIKE_BUTTON;
-			$template->label = self::COMMENT_LABEL;
-		}
+		$template->justLike = $this->justLike;
+		$template->button = $this->nameLikeButton;
+		$template->label = $this->nameLabel;
+		/* pokud uživatel právě liknul, přičteme +1. Viz komentář u proměnné $justLike */
+		$template->likes = $this->justLike ? $this->likeItem->likes + 1 : $this->likeItem->likes;
+		$template->item = $this->likeItem;
 		$template->render();
+	}
+
+	/**
+	 * Vrátí informaci, zda uživatel již dal like
+	 * @param int $userID ID užovatele, kterého hledáme
+	 * @param int $commentID ID commentu, který hledáme
+	 * @return bool
+	 */
+	private function getLikedByUser($userID, $commentID) {
+		$liked = $this->likeDao->likedByUser($userID, $commentID);
+		return $liked;
 	}
 
 }

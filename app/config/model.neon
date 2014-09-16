@@ -35,3 +35,5 @@ services:
 	streamCategoriesDao:	POS\Model\StreamCategoriesDao
 	likeStatusDao:	POS\Model\LikeStatusDao
 	commentImagesDao:	POS\Model\CommentImagesDao
+	likeCommentDao:	POS\Model\LikeCommentDao
+

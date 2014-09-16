@@ -5,14 +5,14 @@
 		{if $liked}
 			{* vypíše text podle toho, jestli se jedná o obrázek/status *}
 			{if $label == "obrázku"}
-				Je sexy ({$item->likes})
+				Je sexy ({$likes})
 			{else}
-				Líbí ({$item->likes})
+				Líbí ({$likes})
 			{/if}
 		{else}
-			<a class="ajax btn-main" n:href="Like! $user->id, $item->id">{$button} ({$item->likes})<a/>
+			<a class="ajax btn-main" n:href="Like! $user->id, $item->id">{$button} ({$likes})<a/>
 		{/if}
 	{else}
-		k ohodnocení {$label} se musíte <a href="{plink Sign:in}">přihlásit</a>
+		k ohodnocení {$label} se musíte <a href="{plink :Sign:in}">přihlásit</a>
 	{/if}
 {/snippet}

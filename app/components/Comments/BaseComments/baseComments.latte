@@ -1,0 +1,22 @@
+{if $user->isLoggedIn()}
+	{snippet commentForm}
+		{control commentNewForm}
+	{/snippet}
+{else}
+	K přidání komentáře se nejdříve musíte <a href="{plink :Sign:in}">přihlásit</a>.
+{/if}
+
+{snippet list}
+	{foreach $comments as $comment}
+		<div class="comment">
+			{if $user->id == $comment->userID}
+				<a n:href="deleteComment! $comment->id" class="ajax">Smazat</a>
+			{/if}
+			{$comment->comment}
+			{control likeComment-$comment->id}
+		</div>
+	{/foreach}
+	{if !$showAllComments && $minShowComments < $countComments}
+	<a n:href="showAllComment!" class="ajax">Zobrazit další komentáře ({$countComments - $minShowComments})</a>
+	{/if}
+{/snippet}
