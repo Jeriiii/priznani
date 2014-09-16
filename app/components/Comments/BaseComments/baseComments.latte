@@ -1,5 +1,9 @@
 {*snippet commentForm*}
+	{if $user->isLoggedIn()}
 	{control commentNewForm}
+	{else}
+		K přidání komentáře se nejdříve musíte <a href="{plink :Sign:in}">přihlásit</a>.
+	{/if}
 {*/snippet*}
 {snippet}
 	{foreach $comments as $comment}
