@@ -21,6 +21,7 @@ class CommentImagesDao extends AbstractDao implements ICommentDao {
 	const COLUMN_IMAGE_ID = "imageID";
 	const COLUMN_LIKES = "likes";
 	const COLUMN_COMMENT = "comment";
+	const COLUMN_USER_ID = "userID";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -51,14 +52,16 @@ class CommentImagesDao extends AbstractDao implements ICommentDao {
 	/**
 	 * Vloží komentář k obrázku
 	 * @param int $imageID ID obrázku, který komentujeme
+	 * @param int $userID ID uživatele co komentář napsal.
 	 * @param string $comment komentář obrázku
 	 * @return Nette\Database\Table\ActiveRow
 	 */
-	public function insertNewComment($imageID, $comment) {
+	public function insertNewComment($imageID, $userID, $comment) {
 		$sel = $this->getTable();
 		$sel->insert(array(
 			self::COLUMN_IMAGE_ID => $imageID,
 			self::COLUMN_COMMENT => $comment,
+			self::COLUMN_USER_ID => $userID
 		));
 
 		/* zvýšení počtu komentářů u obrázku o jedna */

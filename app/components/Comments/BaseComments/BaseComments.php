@@ -114,4 +114,10 @@ class BaseComments extends BaseProjectControl {
 		});
 	}
 
+	public function handleDeleteComment($commentID) {
+		$this->commentDao->delete($commentID);
+
+		$this->redrawControl();
+	}
+
 }
