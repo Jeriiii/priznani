@@ -32,10 +32,30 @@ class BaseForm extends Form {
 	/** @var string Třída inputu */
 	private $inputClass = "controls";
 
+	/** @var boolean TRUE = Ajaxové zpracování formuláře */
+	private $ajax = FALSE;
+
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->testMode = $this->getPresenter()->testMode;
 		$this->productionMode = $this->getPresenter()->productionMode;
+	}
+
+	/**
+	 * Nastaví ajax zpracování.
+	 */
+	protected function ajax() {
+		$this->getElementPrototype()->addClass('ajax');
+		$this->formClass .= " ajax"; //protoze pri bootstraprenderu by se to prepsalo
+		$this->ajax = TRUE;
+	}
+
+	/**
+	 * Smaže všechna data co jsou vyplněná v polých. Používá se zpravidla
+	 * po zpracování ajaxem v metodě submited.
+	 */
+	public function clearFields() {
+		$this->setValues(array(), TRUE);
 	}
 
 	/**
@@ -55,7 +75,8 @@ class BaseForm extends Form {
 
 		foreach ($this->getControls() as $control) {
 			if ($control instanceof Controls\Button) {
-				$control->getControlPrototype()->addClass(empty($usedPrimary) ? $this->getPrimaryBtwClass() : 'btn btn-default');
+				$btnClass = empty($usedPrimary) ? $this->getPrimaryBtwClass() : 'btn btn-default';
+				$control->getControlPrototype()->addClass($btnClass);
 				$usedPrimary = TRUE;
 			} elseif ($control instanceof Controls\TextBase || $control instanceof Controls\SelectBox || $control instanceof Controls\MultiSelectBox) {
 				$control->getControlPrototype()->addClass('form-control');

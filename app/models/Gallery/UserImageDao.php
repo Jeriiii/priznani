@@ -29,6 +29,7 @@ class UserImageDao extends AbstractDao {
 	const COLUMN_GALLERY_ID = "galleryID";
 	const COLUMN_APPROVED = "approved";
 	const COLUMN_LIKES = "likes";
+	const COLUMN_COMMENTS = "comments";
 
 	/**
 	 * @var \POS\Model\UserGalleryDao

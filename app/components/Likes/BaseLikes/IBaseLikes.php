@@ -18,12 +18,4 @@ interface IBaseLikes {
 	 * @param int $ID ID lajknutého obrázku/statusu
 	 */
 	public function handleLike($userID, $ID);
-
-	/**
-	 * Vrátí informaci, zda uživatel již dal like (= sexy)
-	 * @param int $userID ID uživatele, kterého hledáme
-	 * @param int $ID ID obrázku/statusu, který hledáme
-	 * @return bool
-	 */
-	public function getLikedByUser($userID, $ID);
 }

@@ -18,19 +18,14 @@ use POS\Model\UserImageDao;
 class ImageLikes extends BaseLikes implements IBaseLikes {
 
 	/**
-	 * @var \POS\Model\ImageLikesDao
+	 * @const IMAGE_LABEL text do informace o přihlášení kvůli hodnocení obrázku
 	 */
-	public $imageLikesDao;
+	const IMAGE_LABEL = "obrázku";
 
 	/**
-	 * @var \POS\Model\UserImageDao
+	 * @const IMAGE_LIKE_BUTTON text lajkovacího tlačítka pro obrázky
 	 */
-	public $userImageDao;
-
-	/**
-	 * @var Nette\Database\Table\ActiveRow Obrázek pro lajknutí
-	 */
-	public $image;
+	const IMAGE_LIKE_BUTTON = "Sexy";
 
 	/**
 	 * Konstruktor komponenty, předáváme potřebné proměnné
@@ -39,12 +34,8 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 	 * @param Nette\Database\Table\ActiveRow $image obrázek, kterému se lajk přičte
 	 * @param int $userID ID uživatele, který lajkuje
 	 */
-	public function __construct(ImageLikesDao $imageLikesDao, UserImageDao $userImageDao, $image, $userID) {
-		$this->imageLikesDao = $imageLikesDao;
-		$this->liked = $this->getLikedByUser($userID, $image->id);
-		parent::__construct($imageLikesDao, $image, NULL, NULL, $userID, $this->liked);
-		$this->image = $image;
-		$this->userImageDao = $userImageDao;
+	public function __construct(ImageLikesDao $imageLikesDao, $image, $userID) {
+		parent::__construct($imageLikesDao, $image, $userID, self::IMAGE_LABEL, self::IMAGE_LIKE_BUTTON);
 	}
 
 	/**
@@ -54,21 +45,12 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 	 */
 	public function handleLike($userID, $imageID) {
 		if ($this->liked == FALSE) {
-			$this->imageLikesDao->addLiked($imageID, $userID);
+			$this->justLike = TRUE;
+			$this->liked = TRUE;
+			$this->likeDao->addLiked($imageID, $userID);
 		}
 
 		$this->redrawControl();
-	}
-
-	/**
-	 * Vrátí informaci, zda uživatel již dal like (= sexy)
-	 * @param int $userID ID užovatele, kterého hledáme
-	 * @param int $imageID ID obrázku, který hledáme
-	 * @return bool
-	 */
-	public function getLikedByUser($userID, $imageID) {
-		$liked = $this->imageLikesDao->likedByUser($userID, $imageID);
-		return $liked;
 	}
 
 }
