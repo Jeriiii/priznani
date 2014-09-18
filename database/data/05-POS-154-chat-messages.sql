@@ -4,8 +4,8 @@
 -- Dumping data for table pos.chat_messages: ~40 rows (approximately)
 /*!40000 ALTER TABLE `chat_messages` DISABLE KEYS */;
 INSERT INTO `chat_messages` (`id`, `id_sender`, `id_recipient`, `text`, `type`, `readed`) VALUES
-	(1, 87, 87, 'fsdfdf', 0, 1),
-	(2, 87, 87, 'dwa', 0, 1),
+	(1, 3, 4, 'přečetl sis to?', 0, 0),
+	(2, 3, 4, 'a ty sis přečetl tohle?', 0, 0),
 	(3, 87, 87, 'd', 0, 1),
 	(4, 1, 87, 'werwer', 0, 1),
 	(5, 1, 87, 'fsdf', 0, 1),
