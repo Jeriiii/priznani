@@ -8,7 +8,11 @@ use Nette\Utils\Strings;
 use Nette\Utils\Html;
 use POS\Model\UserDao;
 use POS\Model\UserChangePasswordDao;
+use Nette\Mail\IMailer;
 
+/**
+ * Formář na obnovu zapomenutého hesla
+ */
 class ForgottenPasswordForm extends BaseForm {
 
 	/**
@@ -27,7 +31,7 @@ class ForgottenPasswordForm extends BaseForm {
 	 */
 	public $mailer;
 
-	public function __construct(UserChangePasswordDao $userChangePasswordDao, UserDao $userDao, \Nette\Mail\IMailer $mailer, IContainer $parent = NULL, $name = NULL) {
+	public function __construct(UserChangePasswordDao $userChangePasswordDao, UserDao $userDao, IMailer $mailer, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
 		$email = $this->getPresenter()->getParameter('email');
@@ -36,7 +40,7 @@ class ForgottenPasswordForm extends BaseForm {
 		$this->userDao = $userDao;
 		$this->userChangePasswordDao = $userChangePasswordDao;
 		$this->addText('email', 'Email:', 30, 50);
-		$this->addSubmit('send', 'Změnit heslo');
+		$this->addSubmit('send', 'Získat nové heslo');
 
 		if (!empty($email)) {
 			$this->setDefaults(array("email" => $email));
@@ -58,7 +62,7 @@ class ForgottenPasswordForm extends BaseForm {
 			$this->userChangePasswordDao->deleteUserTickets($user->id);
 			$this->userChangePasswordDao->addNewTicket($user->id, $ticket);
 			$this->sendMail($user->email, $ticket);
-			$presenter->flashMessage("Byl vám odeslán email s dalšími instrukcemi");
+			$presenter->flashMessage("Byl vám odeslán email s odkazem na změnu hesla.");
 		}
 	}
 
