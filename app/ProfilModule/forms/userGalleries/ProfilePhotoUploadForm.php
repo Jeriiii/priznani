@@ -64,6 +64,7 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 			} else {
 				$presenter->flashMessage('Profilové foto bylo uloženo. Nyní je ve frontě na schválení.');
 			}
+
 			$presenter->redirect('this');
 		} else {
 			$this->addError("Vyberte platný soubor");
