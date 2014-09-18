@@ -12,6 +12,7 @@ services:
 	databaseManager: \Test\DatabaseManager(%appDir%/test/sql)
 	screenshotManager: \Test\ScreenshotManager(%tempDir%/test/screenshots)
 	nette.mailer: \Test\MailManager(%tempDir%/test/emails)
+	testDao: POS\Model\TestDao
 
 parameters:
 		#testovací režim

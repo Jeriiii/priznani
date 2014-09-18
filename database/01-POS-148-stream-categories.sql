@@ -52,4 +52,4 @@ ALTER TABLE `stream_items`
 ALTER TABLE `users_properties`
 	ADD COLUMN `preferencesID` INT(11) UNSIGNED NULL AFTER `hair_colour`,
 	ADD INDEX `preferencesID` (`preferencesID`),
-	ADD CONSTRAINT `FK_users_properties_stream_items_preferences` FOREIGN KEY (`preferencesID`) REFERENCES `stream_categories` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+	ADD CONSTRAINT `FK_users_properties_stream_items_preferences` FOREIGN KEY (`preferencesID`) REFERENCES `stream_categories` (`id`) ON UPDATE SET NULL ON DELETE SET NULL;

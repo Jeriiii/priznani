@@ -93,6 +93,7 @@ class ChatMessagesDao extends AbstractDao {
 
 	/**
 	 * Nastaví zprávu jako přečtenou/nepřečtenou
+	 * Nekontroluje příjemce zpráv.
 	 * @param int $id id zprávy
 	 * @param boolean $readed přečtená/nepřečtená
 	 * @return Nette\Database\Table\Selection upravená zpráva
@@ -105,6 +106,7 @@ class ChatMessagesDao extends AbstractDao {
 
 	/**
 	 * Nastaví všechny zprávy jako přečtené/nepřečtené
+	 * Nekontroluje příjemce zpráv.
 	 * @param Nette\Database\Table\Selection $selection výběr prvků k úpravě
 	 * @param boolean $readed přečtená/nepřečtená
 	 * @return Nette\Database\Table\Selection upravené zprávy
@@ -117,11 +119,13 @@ class ChatMessagesDao extends AbstractDao {
 	 * Nastaví všechny zprávy s id v poli jako přečtené/nepřečtené
 	 * @param array $ids neasociativni pole idček zpráv
 	 * @param boolean $readed přečtená/nepřečtená
+	 * @param int $idRecipient id příjemce kvůli bezpečnosti
 	 * @return Nette\Database\Table\Selection upravené zprávy
 	 */
-	public function setMultipleMessagesReaded(array $ids, $readed) {
+	public function setMultipleMessagesReaded(array $ids, $idRecipient, $readed) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_ID, $ids);
+		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
 		return $this->setSelectionReaded($sel, $readed);
 	}
 
