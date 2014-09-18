@@ -50,19 +50,6 @@ ALTER TABLE `user_categories`
 
 /* připojení do obecných kategorií */
 ALTER TABLE `user_categories`
-	DROP COLUMN `fisting`,
-	DROP COLUMN `petting`,
-	DROP COLUMN `sex_massage`,
-	DROP COLUMN `piss`,
-	DROP COLUMN `oral`,
-	DROP COLUMN `cum`,
-	DROP COLUMN `swallow`,
-	DROP COLUMN `bdsm`,
-	DROP COLUMN `group`,
-	DROP COLUMN `anal`,
-	DROP COLUMN `threesome`;
-
-ALTER TABLE `user_categories`
 	ADD COLUMN `likes` INT(10) UNSIGNED NULL DEFAULT NULL AFTER `tallness`,
 	ADD CONSTRAINT `FK_user_categories_category_likes` FOREIGN KEY (`likes`) REFERENCES `category_likes` (`id`) ON UPDATE SET NULL ON DELETE SET NULL;
 
