@@ -1172,8 +1172,8 @@ INSERT INTO `users_competitions` (`id`, `name`, `description`, `imageUrl`, `curr
 -- Exportování dat pro tabulku pos.users_properties: ~4 rows (přibližně)
 /*!40000 ALTER TABLE `users_properties` DISABLE KEYS */;
 INSERT INTO `users_properties` (`id`, `age`, `user_property`, `first_sentence`, `about_me`, `marital_state`, `orientation`, `tallness`, `shape`, `penis_length`, `penis_width`, `smoke`, `drink`, `graduation`, `bra_size`, `hair_colour`, `threesome`, `anal`, `group`, `bdsm`, `swallow`, `cum`, `oral`, `piss`, `sex_massage`, `petting`, `fisting`, `deepthrought`, `want_to_meet_men`, `want_to_meet_women`, `want_to_meet_couple`, `want_to_meet_couple_men`, `want_to_meet_couple_women`, `want_to_meet_group`, `cityID`, `districtID`, `regionID`) VALUES
-	(3, '1988-09-18', 'm', 'Oh bože, už budu.', 'Hledám zábavu a vzrušení.', 1, 1, 180, '5', 3, 2, 3, 1, 5, 2, 2, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, NULL, NULL, NULL),
-	(4, '1986-09-10', 'w', 'To je ale macek.', 'Moc ráda bych nějakýho svalouše co to umí v posteli.', 1, 1, 160, '5', NULL, NULL, 1, 2, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NULL, NULL, NULL);
+	(3, '1988-09-18', 'm', 'Oh bože, už budu.', 'Hledám zábavu a vzrušení.', 1, 1, 4, '5', 3, 2, 3, 1, 5, 2, 2, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, NULL, NULL, NULL),
+	(4, '1986-09-10', 'w', 'To je ale macek.', 'Moc ráda bych nějakýho svalouše co to umí v posteli.', 1, 1, 2, '5', NULL, NULL, 1, 2, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `users_properties` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.user_change_password: ~0 rows (přibližně)

@@ -55,3 +55,10 @@ INSERT INTO `enum_bra_size` (`bra_size`) VALUES ('F');
 INSERT INTO `enum_smoke` (`smoke`) VALUES ('často');
 INSERT INTO `enum_smoke` (`smoke`) VALUES ('ne');
 INSERT INTO `enum_smoke` (`smoke`) VALUES ('příležitostně');
+
+/* vložení enumu do tabulky s výškou */
+INSERT INTO `pos`.`enum_tallness` (`tallness`) VALUES (160);
+INSERT INTO `pos`.`enum_tallness` (`tallness`) VALUES (170);
+INSERT INTO `pos`.`enum_tallness` (`tallness`) VALUES (180);
+INSERT INTO `pos`.`enum_tallness` (`tallness`) VALUES (190);
+INSERT INTO `pos`.`enum_tallness` (`tallness`) VALUES (200);

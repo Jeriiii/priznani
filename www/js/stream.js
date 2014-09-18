@@ -12,7 +12,6 @@
 		setOpts(opts);
 		setAjaxLocation(opts);
 		//alert("sdf");
-		$.nette.init();
 		timeCheckStream();
 	};
 

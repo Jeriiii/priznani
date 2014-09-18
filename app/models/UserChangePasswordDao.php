@@ -7,8 +7,7 @@
 namespace POS\Model;
 
 /**
- * NAME DAO NAMEDao
- * slouží k
+ * Slouží ke správě ticketů zapomenutého hesla
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
