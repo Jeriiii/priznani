@@ -52,7 +52,7 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 		return $this;
 	}
 
-	public function submitted(DatingRegistrationBaseForm $form) {
+	public function submitted($form) {
 		$values = $form->getValues();
 		$presenter = $this->getPresenter();
 

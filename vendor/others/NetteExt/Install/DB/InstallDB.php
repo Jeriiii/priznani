@@ -26,14 +26,15 @@ class InstallDB {
 	/** @var Database\Context */
 	private $dbConection;
 
-	/** @var Messages */
+	/** @var Messages Zprávy co se zobrazí uživateli */
 	private $messages;
 
-	/**
-	 * @param \POS\Model\DatabaseDao $dbDao
-	 */
-	public function __construct($dbDao, $messages = NULL) {
+	/** @var boolean TRUE = Je instalace DB zaplá testovacím nástrojem? Jinak FALSE. */
+	private $testingMode;
+
+	public function __construct($dbDao, $testingMode, $messages = NULL) {
 		$this->dbDao = $dbDao;
+		$this->testingMode = $testingMode;
 		$this->dbConection = $dbDao->getDatabase();
 		if (isset($messages)) {
 			$this->messages = $messages;
@@ -55,7 +56,7 @@ class InstallDB {
 	 * Reinstaluje a naplní daty normální databázi.
 	 */
 	public function installPosDb() {
-		$sql = new Sql(self::TABLE_POS);
+		$sql = new Sql($this->testingMode, self::TABLE_POS);
 		$sql->setSqlAllDB();
 		$this->executeSql($sql);
 
@@ -66,7 +67,7 @@ class InstallDB {
 	 * Reinstaluje a naplní daty testovací databázi.
 	 */
 	public function instalPostestDb() {
-		$sql = new Sql(self::TABLE_POS_TEST);
+		$sql = new Sql($this->testingMode, self::TABLE_POS_TEST);
 		$sql->setSqlAllDB();
 		$this->executeSql($sql);
 
@@ -77,7 +78,7 @@ class InstallDB {
 	 * Reinstaluje a naplní daty databázi chatu.
 	 */
 	public function instalPoschatDb() {
-		$sql = new Sql(self::TABLE_POS_CHAT);
+		$sql = new Sql($this->testingMode, self::TABLE_POS_CHAT);
 		$sql->setSqlChatDB();
 		$this->executeSql($sql);
 
@@ -96,7 +97,7 @@ class InstallDB {
 	}
 
 	private function recoveryData($dbName) {
-		$sql = new Sql($dbName);
+		$sql = new Sql($this->testingMode, $dbName);
 		$sql->setData($this->dbDao);
 		$this->executeSql($sql);
 
