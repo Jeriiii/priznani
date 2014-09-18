@@ -56,7 +56,7 @@ class InstallDB {
 	 * Reinstaluje a naplní daty normální databázi.
 	 */
 	public function installPosDb() {
-		$sql = new Sql($this->testingMode, self::TABLE_POS);
+		$sql = new Sql(self::TABLE_POS, $this->testingMode);
 		$sql->setSqlAllDB();
 		$this->executeSql($sql);
 
@@ -67,7 +67,7 @@ class InstallDB {
 	 * Reinstaluje a naplní daty testovací databázi.
 	 */
 	public function instalPostestDb() {
-		$sql = new Sql($this->testingMode, self::TABLE_POS_TEST);
+		$sql = new Sql(self::TABLE_POS_TEST, $this->testingMode);
 		$sql->setSqlAllDB();
 		$this->executeSql($sql);
 
@@ -78,7 +78,7 @@ class InstallDB {
 	 * Reinstaluje a naplní daty databázi chatu.
 	 */
 	public function instalPoschatDb() {
-		$sql = new Sql($this->testingMode, self::TABLE_POS_CHAT);
+		$sql = new Sql(self::TABLE_POS_CHAT, $this->testingMode);
 		$sql->setSqlChatDB();
 		$this->executeSql($sql);
 
@@ -97,7 +97,7 @@ class InstallDB {
 	}
 
 	private function recoveryData($dbName) {
-		$sql = new Sql($this->testingMode, $dbName);
+		$sql = new Sql($dbName, $this->testingMode);
 		$sql->setData($this->dbDao);
 		$this->executeSql($sql);
 
