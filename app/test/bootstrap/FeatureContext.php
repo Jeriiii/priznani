@@ -69,6 +69,8 @@ class FeatureContext extends MinkContext {
 		$this->testDao = $this->context->testDao;
 	}
 
+	/*	 * ***********************HOOKS****************************** */
+
 	/**
 	 * Called once before testing. Prepares database
 	 * @BeforeSuite
@@ -122,6 +124,8 @@ class FeatureContext extends MinkContext {
 		$this->userManager->clearSession();
 	}
 
+	/*	 * ***********************BASE****************************** */
+
 	/**
 	 * Sets cookie of virtual browser
 	 * @param String $name name of cookie
@@ -173,19 +177,13 @@ class FeatureContext extends MinkContext {
 	}
 
 	/**
-	 * @Then /^I recreate data in database$/
-	 */
-	public function iRecreateData() {
-		$databaseManager = DatabaseManager::getInstance();
-		$databaseManager->featureStartScripts(); //usage of end sql scripts
-	}
-
-	/**
 	 * @Then /^I look on( the) status code$/
 	 */
 	public function iLookOnTheStatusCode() {
 		throw new PendingException($this->getSession()->getStatusCode());
 	}
+
+	/*	 * ***********************EMAILY****************************** */
 
 	/**
 	 * When email should arrive
@@ -244,6 +242,8 @@ class FeatureContext extends MinkContext {
 		$this->getSession()->visit($this->locatePath($link));
 	}
 
+	/*	 * ***********************AJAX****************************** */
+
 	/**
 	 * @Given /^I am testing ajax$/
 	 */
@@ -252,25 +252,11 @@ class FeatureContext extends MinkContext {
 	}
 
 	/**
-	 * @Then /^There should be "([^"]*)" in response$/
+	 * Pošle na danou url daná data pomocí postu s testovacími hlavičkami
+	 * @param string $url celá url
+	 * @param array $data data v poli
+	 * @throws Exception výjimka při selhání
 	 */
-	public function thereShouldBeInResponse($text) {
-		$response = $this->getSession()->getDriver()->getContent();
-		if (strpos($response, $text) === false) {
-			throw new Exception('String "' . $text . '" should be in the response, but it was not.');
-		}
-	}
-
-	/**
-	 * @Then /^There should not be "([^"]*)" in response$/
-	 */
-	public function thereShouldNotBeInResponse($text) {
-		$response = $this->getSession()->getDriver()->getContent();
-		if (strpos($response, $text) !== false) {
-			throw new Exception('String "' . $text . '" should not be in the response, but it was.');
-		}
-	}
-
 	private function sendPostRequest($url, $data) {
 		$sessionName = $this->userManager->getSession()->getName();
 		$sessid = $this->getSession()->getCookie($sessionName); //zjištování id sešny kvůli přihlášení
@@ -334,7 +320,7 @@ class FeatureContext extends MinkContext {
 	/*	 * *********************DATABAZE**************************** */
 
 	/**
-	 * @Given /^There should be "([^"]*)" in column "([^"]*)" in "([^"]*)"$/
+	 * @Given /^there should be "([^"]*)" in column "([^"]*)" in "([^"]*)"$/
 	 */
 	public function thereShouldBeInColumnIn($data, $column, $table) {
 		$rows = $this->testDao->getFromTableWithColumn($data, $column, $table);
@@ -344,7 +330,7 @@ class FeatureContext extends MinkContext {
 	}
 
 	/**
-	 * @Given /^There should not be "([^"]*)" in column "([^"]*)" in "([^"]*)"$/
+	 * @Given /^there should not be "([^"]*)" in column "([^"]*)" in "([^"]*)"$/
 	 */
 	public function thereShouldNotBeInColumnIn($data, $column, $table) {
 		$rows = $this->testDao->getFromTableWithColumn($data, $column, $table);
@@ -352,6 +338,16 @@ class FeatureContext extends MinkContext {
 			throw new Exception('There should not be "' . $data . '" in column "' . $column . '" in table "' . $table . ', but it was');
 		}
 	}
+
+	/**
+	 * @Then /^I recreate data in database$/
+	 */
+	public function iRecreateData() {
+		$databaseManager = DatabaseManager::getInstance();
+		$databaseManager->featureStartScripts(); //usage of end sql scripts
+	}
+
+	/*	 * **************************SOUBORY********************************** */
 
 	/**
 	 * @When /^Approve last image$/

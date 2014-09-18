@@ -154,8 +154,9 @@
 		{block content}{/block}
 		<div class="clear"></div>
 	    </section>
-
-		{control chat}
+		{if $user->isLoggedIn()}
+			{control chat}
+		{/if}
 		<footer class="inner">
 		    <div id="footline"></div>
 		    <div class="left">

@@ -35,13 +35,12 @@
 {block content}
 
 <h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
-
+{if $user->isLoggedIn()}
 <a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right">Poslat zprávu uživateli {$userData->user_name}</a>
-
-
 <div id="sendmessage-dialog" title="Poslat zprávu uživateli {$userData->user_name}">
 	{control sendMessageForm}
 </div>
+{/if}
 
 {if $hasProfilePhoto}
 	<img src="{$profilePhoto|getImgSqrPath}" alt="{$profilePhoto->name}"/>
