@@ -75,7 +75,8 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 				'email' => $regSession->email,
 				'user_name' => $regSession->user_name,
 				'first_sentence' => $regSession->first_sentence,
-				'about_me' => $regSession->about_me
+				'about_me' => $regSession->about_me,
+				'city' => $regSession->city . ", " . $regSession->district . ", " . $regSession->region,
 			));
 		}
 
@@ -96,15 +97,20 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 		$authenticator = $presenter->context->authenticator;
 		$pass = $authenticator->calculateHash($values->password);
 
+		$dataAboutCities = $this->getDataAboutCity($values);
+		$city = $dataAboutCities[0];
+		$district = $dataAboutCities[1];
+		$region = $dataAboutCities[2];
+
 		$this->regSession->email = $values->email;
 		$this->regSession->user_name = $values->user_name;
 		$this->regSession->password = $values->password;
 		$this->regSession->passwordHash = $pass;
 		$this->regSession->first_sentence = $values->first_sentence;
 		$this->regSession->about_me = $values->about_me;
-		$this->regSession->cityID = $this->cityID;
-		$this->regSession->districtID = $this->districtID;
-		$this->regSession->regionID = $this->regionID;
+		$this->regSession->city = $city;
+		$this->regSession->district = $district;
+		$this->regSession->region = $region;
 
 		$presenter->redirect('Datingregistration:PreThirdRegForm');
 	}
@@ -136,14 +142,14 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 	}
 
 	/**
-	 * Zkontorluje, zda dané město je v databázi, pokud ano uloží do glob.proměnných
-	 * @param type Nette\Application\UI\Form $form
+	 * Zkontorluje, zda dané město je v databázi
+	 * @param Nette\Application\UI\Form $form
 	 * @return
 	 */
 	public function existingCity($form) {
 		$values = $form->getValues();
 
-		$data = explode(", ", $values->city);
+		$data = $this->getDataAboutCity($values);
 
 
 		if (sizeof($data) < 3) {
@@ -168,10 +174,15 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 			$form->addError('Omlouváme se, toto město není v naší databázi. Prosím, vyberte ze seznamu větší město ve vašem okolí.');
 			return;
 		}
+	}
 
-		$this->regionID = $region->id;
-		$this->districtID = $district->id;
-		$this->cityID = $city->id;
+	/**
+	 * Uloží data z řetězce do pole
+	 * @param array $values
+	 * @return array Pole s daty o městu: 0 => ID města, 1 => ID okresu, 2 => ID kraje
+	 */
+	private function getDataAboutCity($values) {
+		return explode(", ", $values->city);
 	}
 
 }
