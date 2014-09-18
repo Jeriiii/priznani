@@ -11,7 +11,7 @@ use POS\Model\DistrictDao;
 use POS\Model\RegionDao;
 use Nette\Http\SessionSection;
 
-class DatingRegistrationSecondForm extends BaseForm {
+class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 
 	/**
 	 * @var \POS\Model\UserDao

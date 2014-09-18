@@ -8,10 +8,10 @@ use Nette\Application\UI\Form,
 use POS\Model\UserDao;
 
 /*
- * rozšiřuje DatingRegistrationBaseForm o konkrétní věci pro ženu
+ * rozšiřuje DatingRegistrationBaseSomebodyForm o konkrétní věci pro ženu
  */
 
-class DatingRegistrationBaseWomanForm extends DatingRegistrationBaseForm {
+class DatingRegistrationBaseWomanForm extends DatingRegistrationBaseSomebodyForm {
 
 	/**
 	 * @var \POS\Model\UserDao
@@ -25,7 +25,9 @@ class DatingRegistrationBaseWomanForm extends DatingRegistrationBaseForm {
 
 		$this->addSelect('bra_size', 'Velikost košíčků:', $users->getUserBraSizeOption());
 
-		$this->addText('hair_colour', 'Barva vlasů:');
+		$this->addSelect('hair_colour', 'Barva vlasů:', $users->getUserHairs())
+			->setPrompt("- vyberte -")
+			->addRule(Form::FILLED, "Vyberte prosím barvu vlasů");
 	}
 
 	public function submitted($form) {

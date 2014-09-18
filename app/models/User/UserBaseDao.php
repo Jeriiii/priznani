@@ -407,4 +407,17 @@ abstract class UserBaseDao extends AbstractDao {
 		);
 	}
 
+	/**
+	 * vrací pole s překlady pro barvu vlasů
+	 */
+	public static function getUserHairs() {
+		return array(
+			1 => 'blond',
+			2 => 'hnědá',
+			3 => 'zrzavá',
+			4 => 'černá',
+			5 => 'jiná',
+		);
+	}
+
 }

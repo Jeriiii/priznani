@@ -8,10 +8,10 @@ use Nette\Application\UI\Form,
 use POS\Model\UserDao;
 
 /*
- * rozšiřuje DatingRegistrationBaseForm o konkrétní věci pro muže
+ * rozšiřuje DatingRegistrationBaseSomebodyForm o konkrétní věci pro muže
  */
 
-class DatingRegistrationBaseManForm extends DatingRegistrationBaseForm {
+class DatingRegistrationBaseManForm extends DatingRegistrationBaseSomebodyForm {
 
 	/**
 	 * @var \POS\Model\UserDao
