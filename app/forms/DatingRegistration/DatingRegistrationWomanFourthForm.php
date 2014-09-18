@@ -22,10 +22,7 @@ class DatingRegistrationWomanFourthForm extends DatingRegistrationBaseWomanForm 
 		parent::__construct($userDao, $parent, $name);
 
 		$this->regSession = $regSession;
-		$this->addText('age', 'Věk')
-			->addRule(Form::FILLED, 'Věk není vyplněn.')
-			->addRule(Form::INTEGER, 'Věk není číslo.')
-			->addRule(Form::RANGE, 'Věk musí být od %d do %d let.', array(18, 120));
+		$this->addAge();
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->addSubmit('send', 'Dokončit registraci')
@@ -38,7 +35,7 @@ class DatingRegistrationWomanFourthForm extends DatingRegistrationBaseWomanForm 
 		parent::submitted($form);
 		$values = $form->values;
 
-		$this->regSession->age = $values->age;
+		$this->regSession->age = $this->getAge($values);
 		$this->regSession->marital_state = $values->marital_state;
 		$this->regSession->orientation = $values->orientation;
 		$this->regSession->tallness = $values->tallness;

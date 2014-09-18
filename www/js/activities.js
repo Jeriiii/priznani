@@ -99,7 +99,7 @@
 	
 	//pokud jsou otevřené aktivity a klikne se mimo, zavřou se
 	function closeActivitiesOnOutClick(activitiesBtn, activitiesDrop) {
-		$('html').click(function(){
+		$('body').click(function(){
 		if( !$(event.target).is(activitiesBtn, activitiesDrop) ){
 			if( !$(event.target).is(activitiesDrop)) {
 				if($(activitiesDrop).is(':visible')) {

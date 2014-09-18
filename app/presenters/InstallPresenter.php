@@ -47,7 +47,7 @@ class InstallPresenter extends BasePresenter {
 		$clearCache->clearCache();
 
 		/* obnoví kompletně celou DB pos i postest */
-		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
 		$instalDB->installAll();
 
 		/* zkontroluje, zda existují uživateslké složky */
@@ -71,7 +71,7 @@ class InstallPresenter extends BasePresenter {
 	public function actionTestData() {
 		$messages = new Messages;
 
-		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
 		$instalDB->dataTestDb();
 
 		$messages->flash($this);
@@ -81,7 +81,7 @@ class InstallPresenter extends BasePresenter {
 	public function actionData() {
 		$messages = new Messages;
 
-		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
 		$instalDB->dataDb();
 		$instalDB->dataTestDb();
 
@@ -92,7 +92,7 @@ class InstallPresenter extends BasePresenter {
 	public function actionAllData() {
 		$messages = new Messages;
 
-		$instalDB = new InstallDB($this->dbDao, $messages);
+		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
 		$instalDB->dataDb();
 		$instalDB->dataTestDb();
 

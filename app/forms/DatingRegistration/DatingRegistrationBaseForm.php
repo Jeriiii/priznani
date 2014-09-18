@@ -2,55 +2,55 @@
 
 namespace Nette\Application\UI\Form;
 
-use Nette\Application\UI\Form,
-	Nette\Security as NS,
-	Nette\ComponentModel\IContainer;
-use POS\Model\UserDao;
+use Nette\DateTime;
+use Nette\Application\UI\Form;
 
-/*
- * slouží jako základ pro ženy, muže a páry
- * konkrétně se jedná o třetí a čtvrté formuláře
+/**
+ * Základní formulář pro celou registraci.
  */
-
 class DatingRegistrationBaseForm extends BaseForm {
 
-	protected $presenter;
-
 	/**
-	 * @var \POS\Model\UserDao
+	 * Přidá výběr věku uživatele.
+	 * @param int $year Rok narození uživatele.
+	 * @param int $month Měsíc narození uživatele.
+	 * @param int $day Den narození uživatele.
 	 */
-	public $userDao;
+	public function addAge($year = null, $month = null, $day = null) {
+		$months = array(1 => 'leden', 'únor', 'březen', 'duben', 'květen', 'červen', 'červenec', 'srpen', 'září', 'říjen', 'listopad', 'prosinec');
+		$days = array_combine(range(1, 31), range(1, 31));
+		$years = array_combine(range(date("Y"), 1910), range(date("Y"), 1910));
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($parent, $name);
-		$this->userDao = $userDao;
-		$users = $this->userDao;
+		$this->addSelect('day', 'Den narození: ', $days)
+			->setPrompt('Den')
+			->addRule(Form::FILLED, "Prosím vyplňte den Vašeho narození.");
 
-		$this->addSelect('marital_state', 'Stav:', $users->getUserStateOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte Váš stav");
-		$this->addSelect('orientation', 'Orientace:', $users->getUserOrientationOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte váší orientaci");
-		$this->addSelect('tallness', 'Výška:', $users->getUserTallnessOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte váši výšku");
-		$this->addSelect('shape', 'Postava:', $users->getUserShapeOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte váší postavu");
-		$this->addSelect('smoke', 'Kouřím:', $users->getUserHabitOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte zda kouříte");
-		$this->addSelect('drink', 'Alkohol:', $users->getUserHabitOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte zda pijete");
-		$this->addSelect('graduation', 'Vzdělání:', $users->getUserGraduationOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte Vaše vzdělání");
+		$this->addSelect('month', 'Měsíc narození:  ', $months)
+			->setPrompt('Měsíc')
+			->addRule(Form::FILLED, "Prosím vyplňte měsíc Vašeho narození.");
+
+		$this->addSelect('year', 'Rok narození: ', $years)
+			->setPrompt('Rok')
+			->addRule(Form::FILLED, "Prosím vyplňte rok Vašeho narození.");
+
+		if (isset($day)) {
+			$this->setDefaults(array(
+				"day" => $day,
+				"month" => $month,
+				"year" => $year
+			));
+		}
 	}
 
-	public function submitted($form) {
-		$this->presenter = $this->getPresenter();
+	/**
+	 * Vytvoří datum narození ze zadaných hodnot do formuláře.
+	 * @param Nette\ArrayHash $values Hodnoty formuláře.
+	 * @return Nette\DateTime Datum narození uživatele.
+	 */
+	public function getAge($values) {
+		$age = new DateTime();
+		$age->setDate($values->year, $values->month, $values->day);
+		return $age;
 	}
 
 }

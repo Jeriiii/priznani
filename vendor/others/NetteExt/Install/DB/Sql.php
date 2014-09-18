@@ -32,12 +32,18 @@ class Sql {
 	/** @var string Cesta do kořenové složky s SQL */
 	private $sqlRootDir;
 
-	public function __construct($dbName) {
+	public function __construct($dbName, $testingMode) {
 		$this->dbName = $dbName;
-		$testing = (isset($_SERVER['TESTING']) && $_SERVER['TESTING']) ||
-			(isset($_SERVER['HTTP_X_TESTING']) && $_SERVER['HTTP_X_TESTING']);
+		$this->setRootDir($testingMode);
+	}
 
-		if ($testing) {
+	/**
+	 * Nastaví kořenovou složku SQL scriptů.
+	 * @param boolean $testingMode Je instalace SQL zapnutá testovacím nástrojem?
+	 */
+	private function setRootDir($testingMode) {
+		if ($testingMode) {
+			/* testovací prostředí má nastavené jako WWW_DIR */
 			$this->sqlRootDir = WWW_DIR . "/../../../" . self::DIR_DATABASE;
 		} else {
 			$this->sqlRootDir = WWW_DIR . "/../" . self::DIR_DATABASE;
