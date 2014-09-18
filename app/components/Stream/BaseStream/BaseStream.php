@@ -21,6 +21,7 @@ use POS\Model\LikeStatusDao;
 use POSComponent\BaseProjectControl;
 use Nette\Database\Table\Selection;
 use Nette\Application\UI\Form as Frm;
+use POS\Model\StreamDao;
 
 class BaseStream extends BaseProjectControl {
 
@@ -60,7 +61,12 @@ class BaseStream extends BaseProjectControl {
 	 */
 	public $likeStatusDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
+	/**
+	 * @var \POS\Model\StreamDao
+	 */
+	public $streamDao;
+
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao) {
 		parent::__construct();
 		$this->dataForStream = $data;
 		$this->userGalleryDao = $userGalleryDao;
@@ -69,6 +75,7 @@ class BaseStream extends BaseProjectControl {
 		$this->userDao = $userDao;
 		$this->imageLikesDao = $imageLikesDao;
 		$this->likeStatusDao = $likeStatusDao;
+		$this->streamDao = $streamDao;
 	}
 
 	/**

@@ -5,6 +5,7 @@ namespace Nette\Application\UI\Form;
 use POS\Model\UserGalleryDao,
 	POS\Model\UserImageDao,
 	POS\Model\StreamDao;
+use POS\Model\UserDao;
 
 /**
  * Formulář pro nahrávání profilových fotek.

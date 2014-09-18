@@ -37,7 +37,6 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 
 		$this->addImageFields(self::NUMBER_OF_IMAGE, FALSE, FALSE);
 
-		$this->addGroup('Kategorie');
 		$this->genderCheckboxes();
 
 		$this->addSubmit("submit", "Vytvořit galerie")

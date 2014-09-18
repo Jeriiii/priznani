@@ -40,17 +40,39 @@ class EditPresenter extends ProfilBasePresenter {
 	 */
 	public $friendRequestDao;
 
+	/**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
+
+	/**
+	 * @var \POS\Model\UserImageDao
+	 * @inject
+	 */
+	public $userImageDao;
+
+	/**
+	 * @var \POS\Model\EnumStatusDao
+	 * @inject
+	 */
+	public $enumStatusDao;
+
+	/** @var ActiveRow User kterému se mají editovat data */
+	private $userData;
+
 	public function startup() {
 		parent::startup();
 		$this->checkLoggedIn();
 	}
 
-	public function renderDefault($id) {
-		if (empty($id)) {
-			$id = $this->getUser()->getId();
-		}
-		$user = $this->userDao->find($id);
-		$this->template->userData = $user;
+	public function actionDefault() {
+		$userID = $this->getUser()->getId();
+		$this->userData = $this->userDao->find($userID);
+	}
+
+	public function renderDefault() {
+		$this->template->userData = $this->userData;
 	}
 
 	protected function createComponentFirstEditForm($name) {
@@ -107,6 +129,14 @@ class EditPresenter extends ProfilBasePresenter {
 			return $packer->pack();
 		});
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+
+	protected function createComponentProfilePhotoForm($name) {
+		return new Frm \ ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+	}
+
+	protected function createComponentStatusChangeForm($name) {
+		return new Frm \ StatusChangeForm($this->userData->property, $this->enumStatusDao, $this, $name);
 	}
 
 }

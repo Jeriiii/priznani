@@ -25,7 +25,6 @@ Feature: User's info
 		And I should see "Skupinový sex <group>"
 		And I should see "BDSM <BDSM>"
 		And I should see "Polykání <swallow>"
-		And I should see "Sperma <sperm>"
 		And I should see "Orální sex <oral>"
 		And I should see "Piss <piss>"
 		And I should see "Sex masáž <massage>"

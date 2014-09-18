@@ -86,7 +86,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao);
 	}
 
 	public function createComponentJs() {

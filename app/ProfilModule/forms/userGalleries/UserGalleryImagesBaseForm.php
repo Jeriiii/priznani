@@ -204,6 +204,8 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	}
 
 	public function genderCheckboxes() {
+		$this->addGroup('Na fotce jsou (zaškrtněte):');
+
 		$this->addCheckbox('man', 'jen muži');
 
 		$this->addCheckbox('women', 'jen ženy');

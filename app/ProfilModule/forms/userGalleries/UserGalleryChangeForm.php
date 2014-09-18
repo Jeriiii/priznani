@@ -32,8 +32,6 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 
 		$gallery = $this->userGalleryDao->find($galleryID);
 
-		$this->addGroup('Kategorie');
-
 		$this->genderCheckboxes();
 
 		$this->setDefaults(array(

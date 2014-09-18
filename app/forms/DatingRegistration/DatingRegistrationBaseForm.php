@@ -41,7 +41,7 @@ class DatingRegistrationBaseForm extends BaseForm {
 		$this->addSelect('smoke', 'Kouřím:', $users->getUserHabitOption())
 			->setPrompt("- vyberte -")
 			->addRule(Form::FILLED, "Vyberte zda kouříte");
-		$this->addSelect('drink', 'Piju:', $users->getUserHabitOption())
+		$this->addSelect('drink', 'Alkohol:', $users->getUserHabitOption())
 			->setPrompt("- vyberte -")
 			->addRule(Form::FILLED, "Vyberte zda pijete");
 		$this->addSelect('graduation', 'Vzdělání:', $users->getUserGraduationOption())

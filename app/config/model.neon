@@ -36,4 +36,4 @@ services:
 	likeStatusDao:	POS\Model\LikeStatusDao
 	commentImagesDao:	POS\Model\CommentImagesDao
 	likeCommentDao:	POS\Model\LikeCommentDao
-
+	enumStatusDao: POS\Model\EnumStatusDao
