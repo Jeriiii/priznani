@@ -7,7 +7,7 @@
 /**
  * DataGrid pro procházení měst, okresů a krajů. Vše najednou.
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 
 namespace POS\Grids;

@@ -14,7 +14,7 @@ use POS\Model\DistrictDao;
 /**
  * Upraví okres
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class DistrictEditForm extends DistrictNewForm {
 
