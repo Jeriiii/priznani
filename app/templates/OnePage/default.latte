@@ -29,6 +29,11 @@
 		{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
 	    <div class="clear"></div>
 	</nav>
+		<div id="best-match">
+			{if $user->isLoggedIn()}
+				{control bestMatchSearch 'listFew'}
+			{/if}
+		</div>
 	{control userStream}
 	<div id="right-dock">
 	    {*reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama *}

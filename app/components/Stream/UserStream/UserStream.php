@@ -15,7 +15,6 @@ use POS\Model\UserImageDao;
 use POS\Model\ConfessionDao;
 use POS\Model\StreamDao;
 use POS\Model\StatusDao;
-use POS\Model\UserDao;
 use POS\Model\ImageLikesDao;
 use POS\Model\LikeStatusDao;
 
@@ -29,8 +28,8 @@ class UserStream extends BaseStream {
 	 */
 	public $statusDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
-		parent::__construct($data, $likeStatusDao, $imageLikesDao, $userDao, $userGalleryDao, $userImageDao, $confDao, $streamDao);
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
+		parent::__construct($data, $likeStatusDao, $imageLikesDao, $userGalleryDao, $userImageDao, $confDao, $streamDao);
 		$this->streamDao = $streamDao;
 		$this->statusDao = $statusDao;
 	}

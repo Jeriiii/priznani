@@ -47,11 +47,6 @@ class BaseStream extends BaseProjectControl {
 	public $confessionDao;
 
 	/**
-	 * @var \POS\Model\UserDao
-	 */
-	public $userDao;
-
-	/**
 	 * @var \POS\Model\ImageLikesDao
 	 */
 	public $imageLikesDao;
@@ -66,13 +61,12 @@ class BaseStream extends BaseProjectControl {
 	 */
 	public $streamDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao) {
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao) {
 		parent::__construct();
 		$this->dataForStream = $data;
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
 		$this->confessionDao = $confDao;
-		$this->userDao = $userDao;
 		$this->imageLikesDao = $imageLikesDao;
 		$this->likeStatusDao = $likeStatusDao;
 		$this->streamDao = $streamDao;
@@ -166,17 +160,6 @@ class BaseStream extends BaseProjectControl {
 	 */
 	protected function createComponentUploadPhotoForm($name) {
 		return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
-	}
-
-	/**
-	 * vrací nejlepší osoby pro seznámení s uživatelem
-	 * @param type $name
-	 * @return \POSComponent\Search\BestMatchSearch
-	 */
-	protected function createComponentBestMatchSearch($name) {
-		$user = $this->userDao->find($this->presenter->getUser()->id);
-		$session = $this->presenter->getSession();
-		return new \POSComponent\Search\BestMatchSearch($user->property, $this->userDao, $session, $this, $name);
 	}
 
 	/**
