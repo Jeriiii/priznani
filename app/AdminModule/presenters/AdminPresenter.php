@@ -13,7 +13,9 @@ namespace AdminModule;
 
 use Nette\Application\UI\Form as Frm,
 	Nette\Utils\Finder,
-	Nette\DateTime;
+	Nette\DateTime,
+	POS\Model\UserDao,
+	POS\Grids\UsersGrid;
 
 class AdminPresenter extends AdminSpacePresenter {
 
@@ -98,6 +100,14 @@ class AdminPresenter extends AdminSpacePresenter {
 		$paginator->itemCount = $this->userDao->getInRoleUnconfirmed()->count();
 		$paginator->itemsPerPage = self::PAGINATOR_ITEMS_PER_PAGE;
 		return $vp;
+	}
+
+	/**
+	 * Komponenta grido vykresluje přehledně tabulku uživatelů s účty
+	 * @param type $name
+	 */
+	protected function createComponentUsersGrid($name) {
+		return new UsersGrid($this->userDao, $this, $name);
 	}
 
 	public function handledeleteUser($id) {
