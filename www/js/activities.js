@@ -278,8 +278,13 @@
 	function printActivities(data) {
 		$.each(data, function(key, value) {
 			$.each(value, function(key, value) {
-				var div = "<div class=" + value.divClass + ">" + value.divText + "</div>";
-				$(".marker").after("<a class=item data-activity=" + value.activityID + " href=" + value.href + ">" + div + "</a><button data-activity='" + value.activityID + "' >Přečtené</button>");
+				if(value.viewed === 0) {
+					var div = "<div class=" + value.divClass + ">" + value.divText + "</div>";
+					$(".marker").after("<a class=item data-activity=" + value.activityID + " href=" + value.href + ">" + div + "</a><button data-activity='" + value.activityID + "' >Přečtené</button>");
+				} else {
+					var div = "<div class=" + value.divClass + ">" + value.divText + "</div>";
+					$(".marker").after("<a class=item data-activity=" + value.activityID + " href=" + value.href + ">" + div + "</a>");
+				}
 			});
 		});
 	}
