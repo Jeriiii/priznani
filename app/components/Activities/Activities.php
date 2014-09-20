@@ -75,11 +75,11 @@ class Activities extends BaseProjectControl {
 
 		foreach ($activities as $item) {
 			if ($item->statusID != NULL) {
-				$data[] = $activityObj->getUserStatusAction($item->event_creator->user_name, $item->event_type, $item->status->text, $item->id);
+				$data[] = $activityObj->getUserStatusAction($item->event_creator->user_name, $item->event_type, $item->status->text, $item->id, $item->viewed);
 			} elseif ($item->imageID != NULL) {
-				$data[] = $activityObj->getUserImageAction($item->event_creator->user_name, $item->event_type, $item->image, $item->id);
+				$data[] = $activityObj->getUserImageAction($item->event_creator->user_name, $item->event_type, $item->image, $item->id, $item->viewed);
 			} else {
-				$data[] = $activityObj->getUserAction($item->event_creator->user_name, $item->event_type, $item->id);
+				$data[] = $activityObj->getUserAction($item->event_creator->user_name, $item->event_type, $item->id, $item->viewed);
 			}
 		}
 

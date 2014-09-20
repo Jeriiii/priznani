@@ -23,9 +23,10 @@ class Activity {
 	 * @param string $type Typ aktivity (comment, like, ...)
 	 * @param string $status Text statusu
 	 * @param int $activityID ID aktivity
+	 * @param int $viewed (0/1) status přečtení aktivity
 	 * @return array elementy pro složení aktivity
 	 */
-	public function getUserStatusAction($creator, $type, $status, $activityID) {
+	public function getUserStatusAction($creator, $type, $status, $activityID, $viewed) {
 
 		$result = array();
 		if ($type == "comment") {
@@ -36,7 +37,7 @@ class Activity {
 		$result["divClass"] = "activity-item";
 		$result["href"] = "#";
 		$result["activityID"] = $activityID;
-
+		$result["viewed"] = $viewed;
 		return $result;
 	}
 
@@ -46,9 +47,10 @@ class Activity {
 	 * @param string $type Typ aktivity (comment, like, ...)
 	 * @param \Nette\Database\Table\ActiveRow $image objekt obrázku
 	 * @param int $activityID ID aktivity
+	 * @param int $viewed (0/1) status přečtení aktivity
 	 * @return array elementy pro složení aktivity
 	 */
-	public function getUserImageAction($creator, $type, $image, $activityID) {
+	public function getUserImageAction($creator, $type, $image, $activityID, $viewed) {
 		$result = array();
 		if ($type == "comment") {
 			$result["divText"] = 'Uživatel ' . $creator . ' okomentoval váš obrázek ' . $image->name;
@@ -58,7 +60,7 @@ class Activity {
 		$result["divClass"] = "activity-item";
 		$result["href"] = 'profil.galleries/image?imageID=' . $image->id . "&galleryID=" . $image->galleryID;
 		$result["activityID"] = $activityID;
-
+		$result["viewed"] = $viewed;
 		return $result;
 	}
 
@@ -67,9 +69,10 @@ class Activity {
 	 * @param string $creator Jméno vlastníka aktivity
 	 * @param string $type Typ aktivity
 	 * @param int $activityID ID aktivity
+	 * @param int $viewed (0/1) status přečtení aktivity
 	 * @return array elementy pro složení aktivity
 	 */
-	public function getUserAction($creator, $type, $activityID) {
+	public function getUserAction($creator, $type, $activityID, $viewed) {
 
 		$result = array();
 		if ($type == "poke") {
@@ -78,7 +81,7 @@ class Activity {
 		$result["divClass"] = "activity-item";
 		$result["href"] = '#';
 		$result["activityID"] = $activityID;
-
+		$result["viewed"] = $viewed;
 		return $result;
 	}
 
