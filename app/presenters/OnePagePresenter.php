@@ -86,7 +86,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao);
+		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao);
 	}
 
 	public function createComponentJs() {
@@ -105,6 +105,17 @@ class OnePagePresenter extends BasePresenter {
 	public function createComponentSearch() {
 		$component = new Search();
 		return $component;
+	}
+
+	/**
+	 * vrací nejlepší osoby pro seznámení s uživatelem
+	 * @param type $name
+	 * @return \POSComponent\Search\BestMatchSearch
+	 */
+	protected function createComponentBestMatchSearch($name) {
+		$user = $this->userDao->find($this->getUser()->id);
+		$session = $this->getSession();
+		return new \POSComponent\Search\BestMatchSearch($user->property, $this->userDao, $session, $this, $name);
 	}
 
 }
