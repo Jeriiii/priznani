@@ -1,8 +1,14 @@
 ;(function($) {
-	//nastavení
+	/**
+	 * Proměnná pro nastavení
+	 * @type object
+	 */
 	var settings;
 	
-	
+	/**
+	 * zavedení scriptu jako pluginu
+	 * @param {object} options
+	 */
 	$.fn.activities = function(options) {
 		var settings = $.extend({}, $.fn.activities.defaults, options);
 		setSettings(settings);
@@ -18,6 +24,9 @@
 		activityRead(settings.baseUrl, settings.viewedUrl);
 	};
 	
+	/**
+	 * Defaultní hodnoty funkce
+	 */
 	$.fn.activities.defaults = {
 		//Url aktuálního okna
 		baseUrl: window.location.origin + window.location.pathname,
@@ -35,10 +44,10 @@
 		viewedUrl: "do=activities-viewed"
 	};
 	
-	// Při kliknutí na jednu aktivitu složí url a odešle ajax pro označení jako přečtená.
-	
 
-	//Vyvolá revalidaci komponenty po označení všech odpovědí jako přečtených
+	/**
+	 * Vyvolá revalidaci komponenty po označení všech odpovědí jako přečtených
+	 */
 	$('.marker').click(function() {
 		//složená url pro načtení aktivit
 		var wholeUrl = this.settings.baseUrl + this.settings.requestUrl;
@@ -54,7 +63,14 @@
 		});
 	});
 
-	//funkce volá ajax, a povolí načtení každé 3s při kliku
+	/**
+	 * Funkce volá ajax, a povolí načtení každé 3s při kliku
+	 * @param {string} activitiesBtn
+	 * @param {string} activitiesDrop
+	 * @param {string} baseUrl
+	 * @param {string} requestUrl
+	 * @param {string} loading
+	 */
 	function activitiesMain(activitiesBtn, activitiesDrop, baseUrl, requestUrl, loading) {
 		$(activitiesBtn).click(function(e) {
 			//celá url pro ajax na load aktivit
@@ -78,6 +94,11 @@
 		});
 	}
 	
+	/**
+	 * Označí aktivitu jako přečtenou
+	 * @param {string} baseUrl
+	 * @param {string} viewedUrl
+	 */
 	function activityRead(baseUrl, viewedUrl) {
 		$(document).on("click", '#activities-droplink button', function() {
 		//Získání id aktivity
@@ -97,7 +118,12 @@
 	});
 	}
 	
-	//pokud jsou otevřené aktivity a klikne se mimo, zavřou se
+	/**
+	 * Pokud jsou otevřené aktivity a klikne se mimo, zavřou se
+	 * @param {string} activitiesBtn
+	 * @param {string} activitiesDrop
+	 * @returns {undefined}
+	 */
 	function closeActivitiesOnOutClick(activitiesBtn, activitiesDrop) {
 		$('body').click(function(){
 		if( !$(event.target).is(activitiesBtn, activitiesDrop) ){
@@ -110,7 +136,9 @@
 	});
 	}
 	
-	//Ajax dotaz na nové aktivity a vypsání počtu
+	/**
+	 * Ajax dotaz na nové aktivity a vypsání počtu
+	 */
 	function getNewActivitiesCount() {
 		//odeslání ajaxu
 		$.nette.ajax({
@@ -126,7 +154,10 @@
 		});
 	}
 	
-	//pokud jsou nové aktivity, ukíže kolik
+	/**
+	 * Pokud jsou nové aktivity, ukáže kolik
+	 * @param {JSON} payload
+	 */
 	function showNewActivitiesCount(payload) {
 		//Získání části JSONu s daty
 		var json = (payload.responseText);
@@ -143,7 +174,13 @@
 		}
 	}
 	
-	//funkce obsluhuje vykreslování aktivit
+	/**
+	 * Funkce obsluhuje vykreslování aktivit
+	 * @param {string} ajaxUrl
+	 * @param {string} targetAttr
+	 * @param {string} activitiesBtn
+	 * @param {string} loading
+	 */
 	function manageActivities(ajaxUrl, targetAttr, activitiesBtn, loading) {
 		if (targetAttr !== '1') {
 			$('#activities .new-counter').remove();
@@ -185,7 +222,11 @@
 		}
 	}
 	
-	//obluhuje loading div v souvislosti s oknem aktivit
+	/**
+	 * Obluhuje loading div v souvislosti s oknem aktivit
+	 * @param {string} activitiesDrop
+	 * @param {string} loading
+	 */
 	function manageLoadingDiv(activitiesDrop, loading) {
 		if(!$(activitiesDrop).is(':visible')) {
 			$(loading).show();
@@ -194,35 +235,46 @@
 		}
 	}
 	
-	//zkontroluje přítomnost oznámení a případně ho ukáže
+	/**
+	 * Zkontroluje přítomnost oznámení a případně ho ukáže
+	 */
 	function showNoActivitiesSign() {
 		if ($('.no-activities').length === 0) {
 			$(this.settings.loading).after('<div class="no-activities">Zatím nemáte žádné události</div>');
 		}
 	}
 	
-	//zkontroluje přítomnost oznámení a případně ho schová
+	/**
+	 * Zkontroluje přítomnost oznámení a případně ho schová
+	 */
 	function hideNoActivitiesSign() {
 		if ($('.no-activities').length !== 0) {
 			$('.no-activities').hide();
 		}
 	}
 	
-	//promaže buttony označující přečtené aktivity
+	/**
+	 * Promaže buttony označující přečtené aktivity
+	 */
 	function deleteActivitiesButtons(){
 		$('#activities-droplink button').each(function() {
 			$(this).remove();
 		});
 	}
 	
-	//při zavolání promaže okno s aktivitami
+	/**
+	 * Při zavolání promaže okno s aktivitami
+	 */
 	function deleteActivities() {
 		$('#activities-droplink .item').each(function() {
 			$(this).remove();
 		});
 	}
 	
-	//zajišťuje vykreslení všech aktivit
+	/**
+	 * Zajišťuje vykreslení všech aktivit
+	 * @param {JSON} data
+	 */
 	function printActivities(data) {
 		$.each(data, function(key, value) {
 			$.each(value, function(key, value) {
@@ -232,14 +284,21 @@
 		});
 	}
 	
-	//po třech sekundách odstraní informaci o vypnutém ajaxu
+	/**
+	 * Po třech sekundách odstraní informaci o vypnutém ajaxu
+	 * @param {string} activitiesBtn
+	 */
 	function ajaxOffTimer(activitiesBtn) {
 		setTimeout(function() {
 			$(activitiesBtn).removeAttr('data-ajax-off');
 		}, 3000);
 	}
 	
-	//setter na settings
+	/**
+	 * Setter na settings
+	 * @param {Object} settings
+	 * @returns {_L1.setSettings}
+	 */
 	function setSettings(settings) {
 		this.settings = settings;
 	}
