@@ -14,7 +14,7 @@ use POS\Model\DistrictDao;
 /**
  * Vloží nové město do DB, kontroluje duplikáty
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class CityNewForm extends BaseForm {
 

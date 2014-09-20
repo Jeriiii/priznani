@@ -14,7 +14,7 @@ use POS\Model\RegionDao;
 /**
  * Vloží nový kraj do DB, kontroluje duplikáty
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class DistrictNewForm extends BaseForm {
 

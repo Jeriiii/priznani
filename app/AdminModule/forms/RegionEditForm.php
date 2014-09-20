@@ -14,7 +14,7 @@ use POS\Model\DistrictDao;
 /**
  * Upraví kraj
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class RegionEditForm extends RegionNewForm {
 

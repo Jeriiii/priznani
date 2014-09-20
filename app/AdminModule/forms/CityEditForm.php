@@ -14,7 +14,7 @@ use POS\Model\DistrictDao;
 /**
  * Upraví město
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class CityEditForm extends CityNewForm {
 
