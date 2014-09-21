@@ -100,6 +100,7 @@ class ShowPresenter extends ProfilBasePresenter {
 		if (empty($id)) {
 			$id = $this->getUser()->getId();
 		}
+
 		$this->userID = $id;
 		$this->dataForStream = $this->streamDao->getUserStreamPosts($id);
 	}

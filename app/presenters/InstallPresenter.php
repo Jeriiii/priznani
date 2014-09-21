@@ -25,6 +25,18 @@ class InstallPresenter extends BasePresenter {
 	 */
 	public $userDao;
 
+	/**
+	 * @var \POS\Model\CatPropertyWantToMeetDao
+	 * @inject
+	 */
+	public $catPropertyWantToMeetDao;
+
+	/**
+	 * @var \POS\Model\UserPropertyDao
+	 * @inject
+	 */
+	public $userPropertyDao;
+
 	public function startup() {
 		parent::startup();
 		// ochrana proti spuštění instalace na ostrém serveru
@@ -98,6 +110,91 @@ class InstallPresenter extends BasePresenter {
 
 		$messages->flash($this);
 		$this->redirect("Install:");
+	}
+
+	/**
+	 * Speciální metoda vkládající všechny kombinace do tab. s kategoriemi
+	 * na tabulku want to meet a property
+	 */
+	public function insertEnumCatProp() {
+		$properties = array(1, 2, 3, 4, 5, 6);
+		$insert = array();
+		$row = array(
+			"want_to_meet_men" => 0,
+			"want_to_meet_women" => 0,
+			"want_to_meet_couple" => 0,
+			"want_to_meet_couple_men" => 0,
+			"want_to_meet_couple_women" => 0,
+			"want_to_meet_group" => 0,
+			"user_property" => 0
+		);
+
+		//foreach ($properties as $property) {
+		while (1) {
+			if ($row["want_to_meet_group"] == 3) {
+				$row["want_to_meet_group"] = 0;
+				$row["want_to_meet_couple_women"] ++;
+			}
+
+			//$row["want_to_meet_couple_women"] ++;
+			if ($row["want_to_meet_couple_women"] == 3) {
+				$row["want_to_meet_couple_women"] = 0;
+				$row["want_to_meet_couple_men"] ++;
+			}
+
+			//$row["want_to_meet_couple_men"] ++;
+			if ($row["want_to_meet_couple_men"] == 3) {
+				$row["want_to_meet_couple_men"] = 0;
+				$row["want_to_meet_couple"] ++;
+			}
+
+			//$row["want_to_meet_couple"] ++;
+			if ($row["want_to_meet_couple"] == 3) {
+				$row["want_to_meet_couple"] = 0;
+				$row["want_to_meet_women"] ++;
+			}
+
+			//$row["want_to_meet_women"] ++;
+			if ($row["want_to_meet_women"] == 3) {
+				$row["want_to_meet_women"] = 0;
+				$row["want_to_meet_men"] ++;
+			}
+
+			//$row["want_to_meet_men"] ++;
+			if ($row["want_to_meet_men"] == 3) {
+				$row["want_to_meet_couple_women"] = 0;
+				// preteklo, nic se nestane
+			}
+
+			//$row["user_property"] = $property;
+			$insert[] = $row;
+			$row["want_to_meet_group"] ++;
+
+			if ($row["want_to_meet_group"] == 1 && $row["want_to_meet_couple_women"] == 1 && $row["want_to_meet_couple_men"] == 1 && $row["want_to_meet_couple"] == 1 && $row["want_to_meet_women"] == 1 && $row["want_to_meet_men"] == 1) {
+				break;
+			}
+		}
+		//}
+
+		$this->catPropertyWantToMeetDao->begginTransaction();
+		foreach ($properties as $property) {
+			foreach ($insert as $row) {
+				$row["user_property"] = $property;
+				$this->catPropertyWantToMeetDao->insert($row);
+			}
+		}
+		$this->catPropertyWantToMeetDao->endTransaction();
+	}
+
+	private function insertUserCategories() {
+		$catsWTMP = $this->catPropertyWantToMeetDao->getAll();
+		$ids = $catsWTMP->fetchPairs("id", "id");
+
+		$this->userCategoryDao->begginTransaction();
+		foreach ($ids as $id) {
+			$this->userCategoryDao->insert(array("property_want_to_meet" => $id));
+		}
+		$this->userCategoryDao->endTransaction();
 	}
 
 }

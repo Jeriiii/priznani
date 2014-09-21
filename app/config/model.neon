@@ -37,3 +37,5 @@ services:
 	commentImagesDao:	POS\Model\CommentImagesDao
 	likeCommentDao:	POS\Model\LikeCommentDao
 	enumStatusDao: POS\Model\EnumStatusDao
+	catPropertyWantToMeetDao: POS\Model\CatPropertyWantToMeetDao
+	userCategoryDao: POS\Model\UserCategoryDao
