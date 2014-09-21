@@ -23,7 +23,11 @@ class DatingRegistrationBaseManForm extends DatingRegistrationBaseSomebodyForm {
 		$this->userDao = $userDao;
 		$users = $this->userDao;
 
-		$this->addSelect('penis_length', 'Délka penisu:', $users->getUserPenisLengthOption());
+		$this->addText('penis_length', 'Délka penisu:')
+			->setType('number')
+			->addRule(Form::INTEGER, 'Délka musí být číslo.')
+			->addRule(Form::RANGE, 'Maximální délka je 40 cm', array(3, 40));
+
 		$this->addSelect('penis_width', 'Šířka penisu:', $users->getUserPenisWidthOption());
 	}
 
