@@ -324,11 +324,11 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserTallnessOption() {
 		return array(
-			'160' => '< 160 cm',
-			'170' => '160 - 170 cm',
-			'180' => '170 - 180 cm',
-			'190' => '180 - 190 cm',
-			'200' => '> 190 cm',
+			'1' => '< 160 cm',
+			'2' => '160 - 170 cm',
+			'3' => '170 - 180 cm',
+			'4' => '180 - 190 cm',
+			'5' => '> 190 cm',
 		);
 	}
 
