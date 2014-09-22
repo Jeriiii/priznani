@@ -116,7 +116,7 @@ class UserDao extends UserBaseDao {
 		$sel->where(self::COLUMN_PROPERTY_ID . ".age >= ", $data['age_from']);
 		$sel->where(self::COLUMN_PROPERTY_ID . ".age <= ", $data['age_to']);
 		if (!empty($data['sex'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".user_property", $data['sex']);
+			$sel->where(self::COLUMN_PROPERTY_ID . ".type", $data['sex']);
 		}
 		if (!empty($data['penis_length'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length", $data['penis_length']);
@@ -355,7 +355,7 @@ class UserDao extends UserBaseDao {
 			'Jméno' => $user->user_name,
 			'První věta' => $userProperty->first_sentence,
 			/* 'Naposledy online' => $user->last_active, */
-			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->user_property),
+			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->type),
 			/* 'Vytvoření profilu' => $user->created, */
 			/* 'Email' => $user->email, */
 			'O mně' => $userProperty->about_me,
@@ -375,7 +375,7 @@ class UserDao extends UserBaseDao {
 	public function getUserShortInfo($userID) {
 		$userProperty = $this->findProperties($userID);
 		$userShortInfo = array(
-			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->user_property),
+			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->type),
 			'Stav' => UserBaseDao::getTranslateUserState($userProperty->marital_state),
 			'Věk' => $userProperty->age,
 //			'Chtěl bych potkat' => UserBaseDao::getTranslateUserInterestedIn($userProperty->interested_in),
@@ -552,7 +552,7 @@ class UserDao extends UserBaseDao {
 	 * @return \Nette\Database\Table\Selection Hledaní uživatelé.
 	 */
 	public function theyWantToMeet(ActiveRow $userProperty, Selection $users) {
-		$property = $userProperty->user_property;
+		$property = $userProperty->type;
 
 		$man = $property == self::PROPERTY_MAN ? TRUE : FALSE;
 		if ($man) {

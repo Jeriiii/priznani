@@ -244,7 +244,7 @@ class SearchPresenter extends SearchBasePresenter {
 //pole obsahující jednotlivé části dotazu uživatele (některé pole mohou být prázdné)
 		$AdvancedFilter = array(
 			'orientation' => $filterOrientation,
-			'user_property' => $filterInterested,
+			'type' => $filterInterested,
 			'age' => $filterAge,
 			'tallness' => $filterTallness,
 			'shape' => $filterShape,

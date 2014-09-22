@@ -39,11 +39,14 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 		$values = $form->values;
 		$presenter = $this->getPresenter();
 		$this->id_user = $presenter->getUser()->getId();
-		$record = $this->userDao->find($this->id_user);
-		if (!$record) {
+
+		$user = $this->userDao->find($this->id_user);
+		if (!$user) {
 			throw new BadRequestException;
 		}
-		$this->userPropertyDao->update($record->propertyID, array(/* 'age' => $values->age, */'user_property' => $values->user_property, 'interested_in' => $values->interested_in));
+		$values->age = $this->getAge($values);
+
+		$this->userPropertyDao->update($user->propertyID, $values);
 		$presenter->redirect('this');
 	}
 

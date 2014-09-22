@@ -44,6 +44,8 @@ class InstallPresenter extends BasePresenter {
 			$this->redirect("OnePage:");
 		}
 
+		$this->insertEnumCatProp();
+
 		$this->setLayout("layoutInstall");
 	}
 
@@ -126,7 +128,7 @@ class InstallPresenter extends BasePresenter {
 			"want_to_meet_couple_men" => 0,
 			"want_to_meet_couple_women" => 0,
 			"want_to_meet_group" => 0,
-			"user_property" => 0
+			"type" => 0
 		);
 
 		//foreach ($properties as $property) {
@@ -166,7 +168,7 @@ class InstallPresenter extends BasePresenter {
 				// preteklo, nic se nestane
 			}
 
-			//$row["user_property"] = $property;
+			//$row["type"] = $property;
 			$insert[] = $row;
 			$row["want_to_meet_group"] ++;
 
@@ -179,7 +181,7 @@ class InstallPresenter extends BasePresenter {
 		$this->catPropertyWantToMeetDao->begginTransaction();
 		foreach ($properties as $property) {
 			foreach ($insert as $row) {
-				$row["user_property"] = $property;
+				$row["type"] = $property;
 				$this->catPropertyWantToMeetDao->insert($row);
 			}
 		}

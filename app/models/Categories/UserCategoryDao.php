@@ -82,9 +82,9 @@ class UserCategoryDao extends AbstractDao {
 			$property[] = 6;
 		}
 
-		$conProperty = CatPropertyWantToMeetDao::COLUMN_USER_PROPERTY . "= ? ";
+		$conProperty = CatPropertyWantToMeetDao::COLUMN_TYPE . "= ? ";
 		for ($i = 0; $i < (count($property) - 1); $i++) {
-			$conProperty = $conProperty . " OR " . CatPropertyWantToMeetDao::COLUMN_USER_PROPERTY . "= ? ";
+			$conProperty = $conProperty . " OR " . CatPropertyWantToMeetDao::COLUMN_TYPE . "= ? ";
 		}
 		$sel->where($conProperty, $property);
 
@@ -99,32 +99,32 @@ class UserCategoryDao extends AbstractDao {
 	 */
 	private function getWantToMeetCats(ActiveRow $userProperty, Selection $sel) {
 		$selKeys = array(1, 2);
-		if ($userProperty->user_property == UserBaseDao::PROPERTY_MAN) {
+		if ($userProperty->type == UserBaseDao::PROPERTY_MAN) {
 			$sel->where(
 				CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_MEN . "= ? OR " .
 				CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_MEN . "= ?", $selKeys
 			);
-		} else if ($userProperty->user_property == UserBaseDao::PROPERTY_WOMAN) {
+		} else if ($userProperty->type == UserBaseDao::PROPERTY_WOMAN) {
 			$sel->where(
 				CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_WOMEN . "= ? OR " .
 				CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_WOMEN . "= ?", $selKeys
 			);
-		} else if ($userProperty->user_property == UserBaseDao::PROPERTY_COUPLE) {
+		} else if ($userProperty->type == UserBaseDao::PROPERTY_COUPLE) {
 			$sel->where(
 				CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_COUPLE . "= ? OR " .
 				CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_COUPLE . "= ?", $selKeys
 			);
-		} else if ($userProperty->user_property == UserBaseDao::PROPERTY_COUPLE_MAN) {
+		} else if ($userProperty->type == UserBaseDao::PROPERTY_COUPLE_MAN) {
 			$sel->where(
 				CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_COUPLE_MEN . "= ? OR " .
 				CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_COUPLE_MEN . "= ?", $selKeys
 			);
-		} else if ($userProperty->user_property == UserBaseDao::PROPERTY_COUPLE_WOMAN) {
+		} else if ($userProperty->type == UserBaseDao::PROPERTY_COUPLE_WOMAN) {
 			$sel->where(
 				CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_COUPLE_WOMEN . "= ? OR " .
 				CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_COUPLE_WOMEN . "= ?", $selKeys
 			);
-		} else if ($userProperty->user_property == UserBaseDao::PROPERTY_GROUP) {
+		} else if ($userProperty->type == UserBaseDao::PROPERTY_GROUP) {
 			$sel->where(
 				CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_GROUP . "= ? OR " .
 				CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_GROUP . "= ?", $selKeys

@@ -18,7 +18,7 @@ class CatPropertyWantToMeetDao extends AbstractDao {
 
 	/* Column name */
 	const COLUMN_ID = "id";
-	const COLUMN_USER_PROPERTY = "user_property";
+	const COLUMN_TYPE = "type";
 	const COLUMN_WANT_TO_MEET_MEN = "want_to_meet_men";
 	const COLUMN_WANT_TO_MEET_WOMEN = "want_to_meet_women";
 	const COLUMN_WANT_TO_MEET_COUPLE = "want_to_meet_couple";

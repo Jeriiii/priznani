@@ -12,11 +12,15 @@ class DatingRegistrationBaseForm extends BaseForm {
 
 	/**
 	 * Přidá výběr věku uživatele.
-	 * @param int $year Rok narození uživatele.
-	 * @param int $month Měsíc narození uživatele.
-	 * @param int $day Den narození uživatele.
+	 * @param date|null $age Věk uživatele
 	 */
-	public function addAge($year = null, $month = null, $day = null) {
+	public function addAge($age) {
+		if (isset($age)) {
+			$date = new DateTime($age);
+			$year = $date->format("Y");
+			$month = intval($date->format("m")); // intval - ochrana proti 01,02 a pod.
+			$day = intval($date->format("d")); // intval - ochrana proti 01,02 a pod.
+		}
 		$months = array(1 => 'leden', 'únor', 'březen', 'duben', 'květen', 'červen', 'červenec', 'srpen', 'září', 'říjen', 'listopad', 'prosinec');
 		$days = array_combine(range(1, 31), range(1, 31));
 		$years = array_combine(range(date("Y"), 1910), range(date("Y"), 1910));
@@ -50,6 +54,9 @@ class DatingRegistrationBaseForm extends BaseForm {
 	public function getAge($values) {
 		$age = new DateTime();
 		$age->setDate($values->year, $values->month, $values->day);
+		unset($values["year"]);
+		unset($values["month"]);
+		unset($values["day"]);
 		return $age;
 	}
 

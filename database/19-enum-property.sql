@@ -32,3 +32,5 @@ ALTER TABLE `user_categories`
 ALTER TABLE `category_property_want_to_meet`
 	ADD UNIQUE INDEX `all_colums` (`want_to_meet_group`, `want_to_meet_couple_women`, `want_to_meet_couple_men`, `want_to_meet_couple`, `want_to_meet_women`, `want_to_meet_men`, `user_property`);
 
+
+

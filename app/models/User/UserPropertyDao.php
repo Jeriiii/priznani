@@ -119,4 +119,43 @@ class UserPropertyDao extends UserBaseDao {
 		return $data;
 	}
 
+	/**
+	 * Přepočítá kategorii uživatele do které spadá.
+	 * @param \Nette\Database\Table\ActiveRow $userProperty Uživatel.
+	 */
+	public function recalculateCategory(ActiveRow $userProperty) {
+		/* vyhledávání podle subkategorie - property want to meet */
+		$catPWTM = $this->getCatPWTM($userProperty);
+
+		// TO DO další subkategorie
+
+		$selCat = $this->createSelection(UserCategoryDao::TABLE_NAME);
+		$selCat->where(UserCategoryDao::COLUMN_PROPERTY_WANT_TO_MEET, $catPWTM->id);
+
+		// TO DO další výběry podle subkategorií
+
+		$cat = $selCat->fetch();
+		$userProperty->update(array(
+			UserPropertyDao::COLUMN_PREFERENCES_ID => $cat->id
+		));
+	}
+
+	/**
+	 * Vrátí subkategorii property - want to meet které daný uživatel odpovídá.
+	 * @param \Nette\Database\Table\ActiveRow $userProperty Vlastnosti uživatele.
+	 * @return \Nette\Database\Table\ActiveRow|FALSE|null
+	 */
+	private function getCatPWTM(ActiveRow $userProperty) {
+		$selCatPWTM = $this->createSelection(CatPropertyWantToMeetDao::TABLE_NAME);
+		$selCatPWTM->where(CatPropertyWantToMeetDao::COLUMN_TYPE, $userProperty->type);
+		$selCatPWTM->where(CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_COUPLE, $userProperty->want_to_meet_couple);
+		$selCatPWTM->where(CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_COUPLE_MEN, $userProperty->want_to_meet_couple_men);
+		$selCatPWTM->where(CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_COUPLE_WOMEN, $userProperty->want_to_meet_couple_women);
+		$selCatPWTM->where(CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_MEN, $userProperty->want_to_meet_men);
+		$selCatPWTM->where(CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_WOMEN, $userProperty->want_to_meet_women);
+		$selCatPWTM->where(CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_GROUP, $userProperty->want_to_meet_group);
+
+		return $selCatPWTM->fetch();
+	}
+
 }

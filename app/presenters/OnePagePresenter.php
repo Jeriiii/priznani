@@ -81,17 +81,6 @@ class OnePagePresenter extends BasePresenter {
 	public function actionDefault() {
 		$this->dataForStream = $this->streamDao->getAll("DESC");
 		$this->userID = $this->getUser()->getId();
-
-
-
-		$user = $this->userDao->find($this->userID);
-		$cats = $this->userCategoryDao->getMine($user->property);
-		$arrCats = array();
-		foreach ($cats as $cat) {
-			$arrCats[$cat->id] = $cat;
-		}
-		dump($arrCats);
-		die();
 		$this->userData = $this->userDao->find($this->userID);
 	}
 
