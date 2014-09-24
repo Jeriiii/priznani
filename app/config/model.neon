@@ -37,3 +37,7 @@ services:
 	commentImagesDao:	POS\Model\CommentImagesDao
 	likeCommentDao:	POS\Model\LikeCommentDao
 	enumStatusDao: POS\Model\EnumStatusDao
+	userPositionDao:	POS\Model\UserPositionDao
+	enumPositionDao:	POS\Model\EnumPositionDao
+	enumPlaceDao:	POS\Model\EnumPlaceDao
+	userPlaceDao:	POS\Model\UserPlaceDao

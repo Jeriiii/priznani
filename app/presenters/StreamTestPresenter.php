@@ -78,6 +78,30 @@ class StreamTestPresenter extends BasePresenter {
 	 */
 	public $likeStatusDao;
 
+	/**
+	 * @var \POS\Model\UserPositionDao
+	 * @inject
+	 */
+	public $userPositionDao;
+
+	/**
+	 * @var \POS\Model\EnumPositionDao
+	 * @inject
+	 */
+	public $enumPositionDao;
+
+	/**
+	 * @var \POS\Model\UserPlaceDao
+	 * @inject
+	 */
+	public $userPlaceDao;
+
+	/**
+	 * @var \POS\Model\EnumPlaceDao
+	 * @inject
+	 */
+	public $enumPlaceDao;
+
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $userID;
@@ -116,7 +140,7 @@ class StreamTestPresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao);
+		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao);
 	}
 
 	public function createComponentJs() {

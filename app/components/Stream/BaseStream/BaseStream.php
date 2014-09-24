@@ -18,6 +18,10 @@ use POS\Model\ConfessionDao;
 use POS\Model\UserDao;
 use POS\Model\ImageLikesDao;
 use POS\Model\LikeStatusDao;
+use POS\Model\UserPositionDao;
+use POS\Model\EnumPositionDao;
+use POS\Model\EnumPlaceDao;
+use POS\Model\UserPlaceDao;
 use POSComponent\BaseProjectControl;
 use Nette\Database\Table\Selection;
 use Nette\Application\UI\Form as Frm;
@@ -61,7 +65,32 @@ class BaseStream extends BaseProjectControl {
 	 */
 	public $streamDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao) {
+	/**
+	 * @var \POS\Model\UserPositionDao
+	 */
+	public $userPositionDao;
+
+	/**
+	 * @var \POS\Model\EnumPositionDao
+	 */
+	public $enumPositionDao;
+
+	/**
+	 * @var \POS\Model\UserPlaceDao
+	 */
+	public $userPlaceDao;
+
+	/**
+	 * @var \POS\Model\EnumPlaceDao
+	 */
+	public $enumPlaceDao;
+
+	/**
+	 * @var \POS\Model\UserDao
+	 */
+	public $userDao;
+
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao) {
 		parent::__construct();
 		$this->dataForStream = $data;
 		$this->userGalleryDao = $userGalleryDao;
@@ -70,6 +99,11 @@ class BaseStream extends BaseProjectControl {
 		$this->imageLikesDao = $imageLikesDao;
 		$this->likeStatusDao = $likeStatusDao;
 		$this->streamDao = $streamDao;
+		$this->userDao = $userDao;
+		$this->userPositionDao = $userPositionDao;
+		$this->enumPositionDao = $enumPositionDao;
+		$this->userPlaceDao = $userPlaceDao;
+		$this->enumPlaceDao = $enumPlaceDao;
 	}
 
 	/**
@@ -85,6 +119,21 @@ class BaseStream extends BaseProjectControl {
 
 		if ($mode == "profilStream") {
 			$this->renderProfileStream($templateName);
+		}
+		/* zda-li zobrazit dotaz na blíbenou polohu nebo pozici */
+
+		if ($this->presenter->user->isLoggedIn()) {
+			$placePosSession = $this->presenter->getSession('placePosSession');
+			$placePosSession->count++;
+			$this->template->placePosSession = $placePosSession;
+			$placePosSession->setExpiration(0, 'password');
+
+			$userProperty = $this->userDao->findProperties($this->presenter->user->id);
+			$place = $this->userPlaceDao->isFilled($userProperty->id);
+			$position = $this->userPositionDao->isFilled($userProperty->id);
+
+			$this->template->place = $place;
+			$this->template->position = $position;
 		}
 
 // Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
@@ -184,6 +233,10 @@ class BaseStream extends BaseProjectControl {
 		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
 			return new \POSComponent\BaseLikes\StatusLikes($this->likeStatusDao, $streamItems->offsetGet($streamItem)->status, $this->presenter->user->id);
 		});
+	}
+
+	protected function createComponentPlacesAndPositionsForm($name) {
+		return new Frm\PlacesAndPositionsForm($this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->userDao, $this, $name);
 	}
 
 }
