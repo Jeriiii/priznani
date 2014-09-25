@@ -7,6 +7,10 @@ use Nette\Application\UI\Form as Frm,
 use Nette\Security\User;
 use POSComponent\Galleries\UserGalleries\MyUserGalleries;
 use POSComponent\UsersList\FriendRequestList;
+use POS\Model\UserPositionDao;
+use POS\Model\EnumPositionDao;
+use POS\Model\EnumPlaceDao;
+use POS\Model\UserPlaceDao;
 
 class EditPresenter extends ProfilBasePresenter {
 
@@ -57,6 +61,30 @@ class EditPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $enumStatusDao;
+
+	/**
+	 * @var \POS\Model\UserPositionDao
+	 * @inject
+	 */
+	public $userPositionDao;
+
+	/**
+	 * @var \POS\Model\EnumPositionDao
+	 * @inject
+	 */
+	public $enumPositionDao;
+
+	/**
+	 * @var \POS\Model\UserPlaceDao
+	 * @inject
+	 */
+	public $userPlaceDao;
+
+	/**
+	 * @var \POS\Model\EnumPlaceDao
+	 * @inject
+	 */
+	public $enumPlaceDao;
 
 	/** @var ActiveRow User kterému se mají editovat data */
 	private $userData;
@@ -112,6 +140,10 @@ class EditPresenter extends ProfilBasePresenter {
 
 	protected function createComponentFriendRequest($name) {
 		return new FriendRequestList($this->friendRequestDao, $this->getUser()->id, $this, $name);
+	}
+
+	protected function createComponentEditPlacesPositionsForm($name) {
+		return new Frm\EditPlacesPositionsForm($this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->userDao, $this, $name);
 	}
 
 	/**

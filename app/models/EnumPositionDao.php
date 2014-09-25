@@ -40,4 +40,17 @@ class EnumPositionDao extends AbstractDao {
 		return $sel->fetch();
 	}
 
+	/**
+	 * Vybere vyplněné pozice
+	 * @param $positionId id polohy
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function getFilledPositions($positionId) {
+		$sel = $this->getTable();
+		$sel->select('*')->where(array(
+			self::COLUMN_ID => $positionId
+		));
+		return $sel->fetch();
+	}
+
 }

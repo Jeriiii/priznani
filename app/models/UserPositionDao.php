@@ -29,16 +29,35 @@ class UserPositionDao extends AbstractDao {
 	}
 
 	/**
-	 * Vloží do DB oblíbenou polohu
+	 * Vloží do DB oblíbenou polohu, kontroluje duplicitu
 	 * @param string $userPropertyID id user_properties
 	 * @param int $positionID id oblíbené polohy
 	 */
 	public function insertNewPosition($userPropertyID, $positionID) {
+		$rowExist = $this->findPosItem($userPropertyID, $positionID);
+		if (!empty($rowExist)) {
+			return;
+		} else {
+			$sel = $this->getTable();
+			$sel->insert(array(
+				self::COLUMN_USER_PROPERTIES_ID => $userPropertyID,
+				self::COLUMN_USER_ENUM_POSITION_ID => $positionID,
+			));
+		}
+	}
+
+	/**
+	 * Najde záznam dle usera a id pozice
+	 * @param string $userPropertyID id user_properties
+	 * @param int $positionID id oblíbené polohy
+	 */
+	public function findPosItem($userPropertyID, $positionID) {
 		$sel = $this->getTable();
-		$sel->insert(array(
+		$sel->where(array(
 			self::COLUMN_USER_PROPERTIES_ID => $userPropertyID,
-			self::COLUMN_USER_ENUM_POSITION_ID => $positionID,
+			self::COLUMN_USER_ENUM_POSITION_ID => $positionID
 		));
+		return $sel->fetch();
 	}
 
 	/**
@@ -56,6 +75,34 @@ class UserPositionDao extends AbstractDao {
 			return 0;
 		} else {
 			return 1;
+		}
+	}
+
+	/**
+	 * Vytahne vyplněné info dle uživatele
+	 * @param string $userPropertyID id user_properties
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function getFilled($userPropertyID) {
+		$sel = $this->getTable();
+		return $sel->select('*')->where(self::COLUMN_USER_PROPERTIES_ID, $userPropertyID)->fetchAll();
+	}
+
+	/**
+	 * Smaže záznam, pokud uživatel odškrtne svou oblíbenou pozici
+	 * @param string $userPropertyID id user_properties
+	 * @param int $positionID id oblíbené polohy
+	 */
+	public function deleteSelPosition($userPropertyID, $positionID) {
+		$rowExist = $this->findPosItem($userPropertyID, $positionID);
+		if (empty($rowExist)) {
+			return;
+		} else {
+			$sel = $this->getTable();
+			$sel->select('*')->where(array(
+				self::COLUMN_USER_PROPERTIES_ID => $userPropertyID,
+				self::COLUMN_USER_ENUM_POSITION_ID => $positionID,
+			))->delete();
 		}
 	}
 

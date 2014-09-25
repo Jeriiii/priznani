@@ -34,11 +34,30 @@ class UserPlaceDao extends AbstractDao {
 	 * @param int $placeID id oblíbeného místa
 	 */
 	public function insertNewPlace($userPropertyID, $placeID) {
+		$rowExist = $this->findPlaceItem($userPropertyID, $placeID);
+		if (!empty($rowExist)) {
+			return;
+		} else {
+			$sel = $this->getTable();
+			$sel->insert(array(
+				self::COLUMN_USER_PROPERTIES_ID => $userPropertyID,
+				self::COLUMN_ENUM_PLACE_ID => $placeID,
+			));
+		}
+	}
+
+	/**
+	 * Najde záznam dle usera a id místa
+	 * @param string $userPropertyID id user_properties
+	 * @param int $placeID id oblíbené polohy
+	 */
+	public function findPlaceItem($userPropertyID, $placeID) {
 		$sel = $this->getTable();
-		$sel->insert(array(
+		$sel->where(array(
 			self::COLUMN_USER_PROPERTIES_ID => $userPropertyID,
-			self::COLUMN_ENUM_PLACE_ID => $placeID,
+			self::COLUMN_ENUM_PLACE_ID => $placeID
 		));
+		return $sel->fetch();
 	}
 
 	/**
@@ -50,12 +69,40 @@ class UserPlaceDao extends AbstractDao {
 	public function isFilled($userPropertyID) {
 		$sel = $this->getTable();
 
-		$temp = $sel->select('*')->where(array(self::COLUMN_USER_PROPERTIES_ID => $userPropertyID))->fetch();
+		$temp = $sel->select('*')->where(self::COLUMN_USER_PROPERTIES_ID, $userPropertyID)->fetch();
 
 		if ($temp == FALSE) {
 			return 0;
 		} else {
 			return 1;
+		}
+	}
+
+	/**
+	 * Vytahne vyplněné info dle uživatele
+	 * @param string $userPropertyID id user_properties
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function getFilled($userPropertyID) {
+		$sel = $this->getTable();
+		return $sel->select('*')->where(self::COLUMN_USER_PROPERTIES_ID, $userPropertyID)->fetchAll();
+	}
+
+	/**
+	 * Smaže záznam, pokud uživatel odškrtne svou oblíbenou pozici
+	 * @param string $userPropertyID id user_properties
+	 * @param int $placeID id oblíbeného místa
+	 */
+	public function deleteSelPlace($userPropertyID, $placeID) {
+		$rowExist = $this->findPlaceItem($userPropertyID, $placeID);
+		if (empty($rowExist)) {
+			return;
+		} else {
+			$sel = $this->getTable();
+			$sel->select('*')->where(array(
+				self::COLUMN_USER_PROPERTIES_ID => $userPropertyID,
+				self::COLUMN_ENUM_PLACE_ID => $placeID,
+			))->delete();
 		}
 	}
 
