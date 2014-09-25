@@ -39,6 +39,16 @@ class PlacesAndPositionsForm extends BaseForm {
 	 * @var \POS\Model\UserDao
 	 */
 	public $userDao;
+	public $fromBack;
+	public $position69;
+	public $riding;
+	public $side;
+	public $missionary;
+	public $bed;
+	public $car;
+	public $nature;
+	public $unusual;
+	public $public;
 
 	public function __construct(UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, Userdao $userDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
@@ -48,18 +58,18 @@ class PlacesAndPositionsForm extends BaseForm {
 		$this->userPlaceDao = $userPlaceDao;
 		$this->enumPlaceDao = $enumPlaceDao;
 		$this->userDao = $userDao;
-
-		$this->addCheckbox('fromBack', 'zezadu');
-		$this->addCheckbox('position69', '69');
-		$this->addCheckbox('missionary', 'misionář');
-		$this->addCheckbox('riding', 'na koníčka');
-		$this->addCheckbox('side', 'na boku');
-
-		$this->addCheckbox('bed', 'postel');
-		$this->addCheckbox('car', 'auto');
-		$this->addCheckbox('nature', 'příroda');
-		$this->addCheckbox('unusual', 'neobvyklé místo');
-		$this->addCheckbox('public', 'na veřejnosti');
+		$this->addGroup('Oblíbené polohy při milování');
+		$this->fromBack = $this->addCheckbox('fromBack', 'zezadu');
+		$this->position69 = $this->addCheckbox('position69', '69');
+		$this->missionary = $this->addCheckbox('missionary', 'misionář');
+		$this->riding = $this->addCheckbox('riding', 'na koníčka');
+		$this->side = $this->addCheckbox('side', 'na boku');
+		$this->addGroup('Oblíbená místa při milování');
+		$this->bed = $this->addCheckbox('bed', 'postel');
+		$this->car = $this->addCheckbox('car', 'auto');
+		$this->nature = $this->addCheckbox('nature', 'příroda');
+		$this->unusual = $this->addCheckbox('unusual', 'neobvyklé místo');
+		$this->public = $this->addCheckbox('public', 'na veřejnosti');
 
 		$this->addSubmit('send', 'Odeslat');
 		$this->setBootstrapRender();
@@ -67,7 +77,7 @@ class PlacesAndPositionsForm extends BaseForm {
 		return $this;
 	}
 
-	public function submitted(PlacesAndPositionsForm $form) {
+	public function submitted($form) {
 		$values = $form->getValues();
 		$presenter = $this->getPresenter();
 		$userProperty = $this->userDao->findProperties($presenter->user->id);

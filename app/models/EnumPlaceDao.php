@@ -40,4 +40,17 @@ class EnumPlaceDao extends AbstractDao {
 		return $sel->fetch();
 	}
 
+	/**
+	 * Vybere vyplněná místa
+	 * @param $placeId id zvoleného místo
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function getFilledPlaces($placeId) {
+		$sel = $this->getTable();
+		$sel->select('*')->where(array(
+			self::COLUMN_ID => $placeId
+		));
+		return $sel->fetch();
+	}
+
 }
