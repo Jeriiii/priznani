@@ -1,1 +1,1 @@
-path-2014-07-25 už není na produkci
+patch-2014-09-26 uz neni na produkci

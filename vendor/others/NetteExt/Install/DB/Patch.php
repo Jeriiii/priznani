@@ -64,7 +64,7 @@ class Patch {
 	private function createPatchFiles() {
 		$patch = fopen($this->patchesPath . $this->patchName . "/patch.sql", "w");
 		foreach ($this->sql->getSql() as $scriptName => $script) {
-			$this->copyPatchScript($script, $this->patchesPath, $this->patchName, $scriptName);
+			$this->copyPatchScript($script, $scriptName);
 			$this->writeScriptToPatch($patch, $scriptName, $script);
 		}
 		fclose($patch);
@@ -84,11 +84,10 @@ class Patch {
 	/**
 	 * Zkopíruje script do složky s patchem.
 	 * @param string $script Celý script
-	 * @param string $path Cesta k patchím.
 	 * @param string $scriptName Název scriptu.
 	 */
-	private function copyPatchScript($script, $path, $scriptName) {
-		$scriptFile = fopen($path . $this->patchName . "/" . self::SCRIPT_DIR_NAME . "/" . $scriptName, "w");
+	private function copyPatchScript($script, $scriptName) {
+		$scriptFile = fopen($this->patchesPath . $this->patchName . "/" . self::SCRIPT_DIR_NAME . "/" . $scriptName, "w");
 		fwrite($scriptFile, $script);
 		fclose($scriptFile);
 	}

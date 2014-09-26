@@ -4,8 +4,3 @@ ALTER TABLE `users_properties`
 ALTER TABLE `users_properties`
 	CHANGE COLUMN `type` `type` TINYINT(3) UNSIGNED NULL DEFAULT '1' COMMENT 'user type' AFTER `statusID`,
 	ADD CONSTRAINT `FK_users_properties_enum_property` FOREIGN KEY (`type`) REFERENCES `enum_property` (`id`) ON UPDATE SET NULL ON DELETE SET NULL;
-
-ALTER TABLE `category_property_want_to_meet`
-	ALTER `user_property` DROP DEFAULT;
-ALTER TABLE `category_property_want_to_meet`
-	CHANGE COLUMN `user_property` `type` TINYINT(1) UNSIGNED NOT NULL AFTER `want_to_meet_men`;

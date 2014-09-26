@@ -51,13 +51,13 @@ class InstallPresenter extends BasePresenter {
 		}
 
 		//$this->insertEnumCatProp();
-		$this->insertUserCategories();
+		//$this->insertUserCategories();
 
 		$this->setLayout("layoutInstall");
 	}
 
 	public function actionAll() {
-		ini_set('max_execution_time', 400);
+		ini_set('max_execution_time', 300);
 		$messages = new Messages;
 
 		/* zkontroluje zda existují složky */
@@ -111,6 +111,7 @@ class InstallPresenter extends BasePresenter {
 	}
 
 	public function actionAllData() {
+		ini_set('max_execution_time', 60);
 		$messages = new Messages;
 
 		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
@@ -121,7 +122,7 @@ class InstallPresenter extends BasePresenter {
 		$this->redirect("Install:");
 	}
 
-	public function actionCreateDBPath() {
+	public function actionCreateDBPatch() {
 		$messages = new Messages;
 
 		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
