@@ -50,6 +50,7 @@ common:
 		authenticator: Authenticator
 
 		chatManager: POS\Chat\ChatManager
+		ajaxObserver: POS\Ajax\AjaxObserver
 		authorizator:
 			class: Acl
 

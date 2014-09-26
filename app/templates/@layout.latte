@@ -154,9 +154,6 @@
 		{block content}{/block}
 		<div class="clear"></div>
 	    </section>
-		{if $user->isLoggedIn()}
-			{control chat}
-		{/if}
 		<footer class="inner">
 		    <div id="footline"></div>
 		    <div class="left">
@@ -181,8 +178,14 @@
 			{/block}
 
 			{control jsLayout}
+			<script>
+				var observer = $('body').ajaxObserver({
+					requestUrl: {$ajaxObserverLink}
+				});
+			</script>
 			{if $user->isLoggedIn()}
 				{control jsLayoutLoggedIn}
+				{control chat}
 				<script>
 					$('body').activities();
 				</script>

@@ -11,11 +11,8 @@
 
 	/* nastavení */
 	var chatopts;
-
 	/* detekce, zda byla poslana zprava*/
 	var messageSent = false;
-
-
 	/* main */
 	$.fn.chat = function(options) {
 		var chatopts = $.extend({}, $.fn.chat.defaults, options);
@@ -26,14 +23,14 @@
 		reloadWindowUnload();
 		setWaitTime(chatopts.minRequestTimeout);
 		refreshMessages(0);
+		observer.register('chat', function(data) {
+			alert('it works!' + data);
+		});
 	};
-
 	/* proměnná pro poslední známé id zprávy */
 	$.fn.chat.lastId = 0;
-
 	/* objekt obsahující potvrzení o přečtení (předtím, než se odešlou) */
 	$.fn.chat.readedQueue = new Array();
-
 	/* implicitní hodnoty nastavení pluginu */
 	$.fn.chat.defaults = {
 		/* minimální čekání mezi zasíláním požadavků. Této hodnoty dosáhne chat při aktivním používání */
@@ -65,6 +62,7 @@
 
 	};
 
+
 	/**
 	 * Pravidelně obnovuje stav příchozích zpráv
 	 * @param waitTime cas, ktery bude cekat pred refreshem
@@ -78,7 +76,6 @@
 			//console.log("CHAT - refreshing");//pro debug
 			sendRefreshRequest(waitTime);
 		}, waitTime);
-
 	}
 	/**
 	 * Pošle na server ajaxový požadavek (dotaz) na nové zprávy
@@ -92,11 +89,11 @@
 			'chat-communicator-lastid': $.fn.chat.lastId,
 			'chat-communicator-readedmessages': JSON.stringify($.fn.chat.readedQueue)
 		};
-		$.fn.chat.readedQueue = new Array();//vyprazdneni fronty
+		$.fn.chat.readedQueue = new Array(); //vyprazdneni fronty
 
 
 		if ($.fn.chat.lastId == 0) {//pokud posledni id zpravy neexistuje (ještě žádné zprávy nejsou k dispozici)
-			sendFirstRefreshGet();//zjistí id poslední relevantní zprávy
+			sendFirstRefreshGet(); //zjistí id poslední relevantní zprávy
 		} else {
 			sendRefreshGet(data);
 		}
@@ -198,7 +195,7 @@
 		/* hláška, co se objeví při pokusu obnovit/zavřít okno, zatímco se čeká na odpověď při odeslání zprávy */
 		sendDataByPost(sendMessageLink, requestData);
 		clearInfoMessages(id);
-		this.boxManager.addMsg(mydata.name, msg);//pridani zpravy do okna
+		this.boxManager.addMsg(mydata.name, msg); //pridani zpravy do okna
 		messageSent = true;
 		actualizeMessageInConversationList(id, data.title, msg);
 	}
@@ -210,7 +207,6 @@
 	 */
 	function sendDataByPost(url, data) {
 		var json = JSON.stringify(data);
-
 		$.ajax({
 			dataType: "json",
 			type: 'POST',
@@ -222,7 +218,6 @@
 				reloadWindowUnload();
 			}
 		});
-
 	}
 
 	/**
@@ -231,7 +226,7 @@
 	 *
 	 */
 	function handleResponse(json) {
-		reloadWindowUnload();//odblokovani prevence proti predcasnemu opusteni stranky
+		reloadWindowUnload(); //odblokovani prevence proti predcasnemu opusteni stranky
 		$.each(json, function(iduser, values) {//projde vsechny uzivatele, od kterych neco prislo
 			var name = values.name;
 			var messages = values.messages;
@@ -271,8 +266,6 @@
 			var id = $(this).attr(chatopts.idAttribute);
 			addBox(id, $(this).attr(chatopts.titleAttribute));
 		});
-
-
 	}
 
 	/**
@@ -300,9 +293,9 @@
 			var conList = $('#conversations ul');
 			var newListItem = '<li data-id="' + id + '" data-title="' + name + '" class="conversation-link">\n\
 			<strong>' + name + '</strong><p class="lastmessage">' + text + '</p></li>';
-			conList.prepend(newListItem);//prida se do seznamu
+			conList.prepend(newListItem); //prida se do seznamu
 		} else {
-			listItem.removeClass('unreaded');//aktualizuje se po zobrazeni zpravy
+			listItem.removeClass('unreaded'); //aktualizuje se po zobrazeni zpravy
 			listItem.find('.lastmessage').text(text);
 		}
 
@@ -354,7 +347,7 @@
 	 * @param {int} type typ zpravy
 	 */
 	function addMessage(id, boxname, name, messid, text, type) {
-		var newbox = addBox(id, boxname);//vytvori/zobrazi dotycne okno
+		var newbox = addBox(id, boxname); //vytvori/zobrazi dotycne okno
 		clearInfoMessages(id);
 		if (type == 0) {//textova zprava
 			if (!newbox) {//pokud je vytvoren box nove, bude zpravami naplnen automaticky vcetne teto posledni
