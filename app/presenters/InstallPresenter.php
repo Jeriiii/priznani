@@ -121,6 +121,16 @@ class InstallPresenter extends BasePresenter {
 		$this->redirect("Install:");
 	}
 
+	public function actionCreateDBPath() {
+		$messages = new Messages;
+
+		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
+		$instalDB->createPath();
+
+		$messages->flash($this);
+		$this->redirect("Install:");
+	}
+
 	/**
 	 * Speciální metoda vkládající všechny kombinace do tab. s kategoriemi
 	 * na tabulku want to meet a property

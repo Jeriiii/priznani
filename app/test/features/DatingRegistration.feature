@@ -8,7 +8,7 @@ Feature: Dating registration
 		When I select "<day>" from "day"
 		And I select "<month>" from "month"
 		And I select "<year>" from "year"
-		And I select "<property>" from "type"
+		And I select "<type>" from "type"
 		And I select "Pár" from "type"
 		And I check "want_to_meet_couple"
 		And I press "send"
@@ -57,5 +57,5 @@ Feature: Dating registration
 		And I should see "Novákovi"
 
 		Examples:
-			| day	| month	| year	| property	| email				| user_name		| password		| passwordVerify	| first_sentence	| about_me		| city							 | 
+			| day	| month	| year	| type	| email				| user_name		| password		| passwordVerify	| first_sentence	| about_me		| city							 | 
 			| 1		| leden	| 1985	|Pár		|novakovi@test.cz	| Novákovi		| heslo123		| heslo123			| Vítej u Nováků	| Jsme Novákovi	| Blatec, Olomouc, Olomoucký kraj | 

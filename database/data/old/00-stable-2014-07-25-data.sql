@@ -269,8 +269,8 @@ INSERT INTO `confessions` (`id`, `note`, `mark`, `inStream`, `was_on_fb`, `creat
 
 -- Exportování dat pro tabulku postest.couple: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `couple` DISABLE KEYS */;
-INSERT INTO `couple` (`id`, `age`, `marital_state`, `orientation`, `tallness`, `shape`, `user_property`, `penis_length`, `penis_width`, `bra_size`, `smoke`, `drink`, `graduation`, `hair_colour`) VALUES
-	(1, 50, 'free', 'hetero', 160, '0', 'woman', NULL, NULL, 'a', 'often', 'often', 'zs', 'test');
+INSERT INTO `couple` (`id`, `age`, `marital_state`, `orientation`, `tallness`, `shape`, `type`, `penis_length`, `penis_width`, `bra_size`, `smoke`, `drink`, `graduation`, `hair_colour`) VALUES
+	(1, 50, 'free', 'hetero', 160, '0', 2, NULL, NULL, 'a', 'often', 'often', 'zs', 'test');
 /*!40000 ALTER TABLE `couple` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku postest.embed_videos: ~24 rows (přibližně)
@@ -1134,9 +1134,9 @@ INSERT INTO `users` (`id`, `propertyID`, `coupleID`, `profilFotoID`, `confirmed`
 
 -- Exportování dat pro tabulku postest.users_properties: ~2 rows (přibližně)
 /*!40000 ALTER TABLE `users_properties` DISABLE KEYS */;
-INSERT INTO `users_properties` (`id`, `age`, `user_property`, `first_sentence`, `about_me`, `marital_state`, `orientation`, `tallness`, `shape`, `penis_length`, `penis_width`, `smoke`, `drink`, `graduation`, `bra_size`, `hair_colour`, `threesome`, `anal`, `group`, `bdsm`, `swallow`, `cum`, `oral`, `piss`, `sex_massage`, `petting`, `fisting`, `deepthrought`, `want_to_meet_men`, `want_to_meet_women`, `want_to_meet_couple`, `want_to_meet_couple_men`, `want_to_meet_couple_women`, `want_to_meet_group`) VALUES
-	(3, 25, 'm', 'Oh bože, už budu.', 'Hledám zábavu a vzrušení.', 'free', 'hetero', 180, '5', 'big', 'normal', 'occasionlly', 'often', 'vs', 'b', 'black', 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0),
-	(4, 27, 'w', 'To je ale macek.', 'Moc ráda bych nějakýho svalouše co to umí v posteli.', 'free', 'hetero', 160, 5, NULL, NULL, 'often', 'no', 'sos', 'c', 'blond', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+INSERT INTO `users_properties` (`id`, `age`, `type`, `first_sentence`, `about_me`, `marital_state`, `orientation`, `tallness`, `shape`, `penis_length`, `penis_width`, `smoke`, `drink`, `graduation`, `bra_size`, `hair_colour`, `threesome`, `anal`, `group`, `bdsm`, `swallow`, `cum`, `oral`, `piss`, `sex_massage`, `petting`, `fisting`, `deepthrought`, `want_to_meet_men`, `want_to_meet_women`, `want_to_meet_couple`, `want_to_meet_couple_men`, `want_to_meet_couple_women`, `want_to_meet_group`) VALUES
+	(3, 25, 1, 'Oh bože, už budu.', 'Hledám zábavu a vzrušení.', 'free', 'hetero', 180, '5', 'big', 'normal', 'occasionlly', 'often', 'vs', 'b', 'black', 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0),
+	(4, 27, 2, 'To je ale macek.', 'Moc ráda bych nějakýho svalouše co to umí v posteli.', 'free', 'hetero', 160, 5, NULL, NULL, 'often', 'no', 'sos', 'c', 'blond', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 /*!40000 ALTER TABLE `users_properties` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku postest.user_galleries: ~2 rows (přibližně)

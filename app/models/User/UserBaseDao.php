@@ -108,7 +108,7 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	protected function getBaseData($user) {
 		return array(
-			'Věk' => $user->age,
+			'Věk' => $this->getAge($user->age),
 			'Výška' => UserBaseDao::getTranslateUserTallness($user->tallness),
 			'Typ těla' => UserBaseDao::getTranslateUserShape($user->shape),
 			'Kouřeni cigaret' => UserBaseDao::getTranslateUserHabit($user->smoke),
@@ -117,6 +117,17 @@ abstract class UserBaseDao extends AbstractDao {
 			'Status' => UserBaseDao::getTranslateUserState($user->marital_state),
 			'Sexuální orientace' => UserBaseDao::getTranslateUserOrientacion($user->orientation),
 		);
+	}
+
+	/**
+	 * Vrátí věk z datumu narození.
+	 * @param date $birth
+	 */
+	protected function getAge($birth) {
+		$now = new \Nette\DateTime;
+		$birth = new \Nette\DateTime($birth);
+		$diff = $now->diff($birth);
+		return $diff->y;
 	}
 
 	/*
@@ -157,7 +168,7 @@ abstract class UserBaseDao extends AbstractDao {
 	protected function getBaseUserProperty($data) {
 		$property[UserPropertyDao::COLUMN_AGE] = $data->age;
 		$property[UserPropertyDao::COLUMN_MARITAL_STATE] = $data->marital_state;
-		$property[UserPropertyDao::COLUMN_USER_PROPERTY] = $data->type;
+		$property[UserPropertyDao::COLUMN_TYPE] = $data->type;
 		$property[UserPropertyDao::COLUMN_ORIENTATION] = $data->orientation;
 		$property[UserPropertyDao::COLUMN_TALLNESS] = $data->tallness;
 		$property[UserPropertyDao::COLUMN_SHAPE] = $data->shape;

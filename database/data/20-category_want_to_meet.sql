@@ -1,5 +1,5 @@
 /* naplnění kategorií want to meet property */
-INSERT INTO `category_property_want_to_meet` (`id`, `want_to_meet_group`, `want_to_meet_couple_women`, `want_to_meet_couple_men`, `want_to_meet_couple`, `want_to_meet_women`, `want_to_meet_men`, `user_property`) VALUES
+INSERT INTO `category_property_want_to_meet` (`id`, `want_to_meet_group`, `want_to_meet_couple_women`, `want_to_meet_couple_men`, `want_to_meet_couple`, `want_to_meet_women`, `want_to_meet_men`, `type`) VALUES
 	(633, 0, 0, 0, 0, 0, 0, 1),
 	(997, 0, 0, 0, 0, 0, 0, 2),
 	(1361, 0, 0, 0, 0, 0, 0, 3),

@@ -85,16 +85,6 @@ class Sql {
 	}
 
 	/**
-	 * Nastaví SQL pro smazání a celé databáze pro chat.
-	 * Tu pak i naplní daty.
-	 */
-	public function setSqlChatDB() {
-
-		$this->addStartSql(TRUE);
-		$this->addChat();
-	}
-
-	/**
 	 * Nastaví SQL pro obnovu dat
 	 * @param \POS\Model\DatabaseDao $dbDao
 	 */
@@ -181,6 +171,14 @@ class Sql {
 		}
 
 		$this->addSql($sql);
+	}
+
+	/**
+	 * Vrátí celou cestu ke kořenové složce s SQL scripty.
+	 * @return string
+	 */
+	public function getSQLRootDir() {
+		return $this->sqlRootDir;
 	}
 
 }

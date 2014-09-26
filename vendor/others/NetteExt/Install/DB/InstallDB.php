@@ -117,4 +117,12 @@ class InstallDB {
 		$this->dbDao->endTransaction();
 	}
 
+	/**
+	 * Vytvoří path z existujících SQL na úpravu DB (bez dat)
+	 */
+	public function createPath() {
+		$patch = new Patch($this->messages);
+		$patch->create();
+	}
+
 }

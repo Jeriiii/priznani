@@ -377,7 +377,7 @@ class UserDao extends UserBaseDao {
 		$userShortInfo = array(
 			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->type),
 			'Stav' => UserBaseDao::getTranslateUserState($userProperty->marital_state),
-			'Věk' => $userProperty->age,
+			'Věk' => $this->getAge($userProperty->age),
 //			'Chtěl bych potkat' => UserBaseDao::getTranslateUserInterestedIn($userProperty->interested_in),
 			'První věta' => $userProperty->first_sentence,
 		);
