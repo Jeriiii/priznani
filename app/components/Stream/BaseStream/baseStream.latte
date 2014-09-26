@@ -9,6 +9,23 @@
 					{input send}
 				{/form}
 			</div>
+		{elseif $profilePhoto && $user->isLoggedIn() &&  $place==0  && $position==0 && $placePosSession->count%5==0}
+			Chcete další téma ke konverzaci? Vyplňte si:
+				{form placesAndPositionsForm}
+					Oblíbená poloha při milování:
+						{input fromBack}
+						{input position69}
+						{input missionary}
+						{input riding}
+						{input side}
+					Oblíbené místo k milování:
+						{input bed}
+						{input car}
+						{input nature}
+						{input unusual}
+						{input public}
+					{input send}
+				{/form}
 		{/if}
 		{ifset #addNewPost}
 				{include #addNewPost}

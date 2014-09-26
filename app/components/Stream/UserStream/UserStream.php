@@ -16,7 +16,12 @@ use POS\Model\ConfessionDao;
 use POS\Model\StreamDao;
 use POS\Model\StatusDao;
 use POS\Model\ImageLikesDao;
+use POS\Model\UserDao;
 use POS\Model\LikeStatusDao;
+use POS\Model\UserPositionDao;
+use POS\Model\EnumPositionDao;
+use POS\Model\UserPlaceDao;
+use POS\Model\EnumPlaceDao;
 
 class UserStream extends BaseStream {
 
@@ -28,8 +33,8 @@ class UserStream extends BaseStream {
 	 */
 	public $statusDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao) {
-		parent::__construct($data, $likeStatusDao, $imageLikesDao, $userGalleryDao, $userImageDao, $confDao, $streamDao);
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao) {
+		parent::__construct($data, $likeStatusDao, $imageLikesDao, $userDao, $userGalleryDao, $userImageDao, $confDao, $streamDao, $userPositionDao, $enumPositionDao, $userPlaceDao, $enumPlaceDao);
 		$this->streamDao = $streamDao;
 		$this->statusDao = $statusDao;
 	}

@@ -39,3 +39,7 @@ services:
 	enumStatusDao: POS\Model\EnumStatusDao
 	catPropertyWantToMeetDao: POS\Model\CatPropertyWantToMeetDao
 	userCategoryDao: POS\Model\UserCategoryDao
+	userPositionDao:	POS\Model\UserPositionDao
+	enumPositionDao:	POS\Model\EnumPositionDao
+	enumPlaceDao:	POS\Model\EnumPlaceDao
+	userPlaceDao:	POS\Model\UserPlaceDao

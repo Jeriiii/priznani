@@ -70,7 +70,7 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	protected function getManData($userProperty) {
 		return array(
-			'Délka penisu' => UserBaseDao::getTranslateUserPenisLength($userProperty->penis_length),
+			'Délka penisu' => $userProperty->penis_length,
 			'Šířka penisu' => UserBaseDao::getTranslateUserPenisWidth($userProperty->penis_width),
 		);
 	}
@@ -231,14 +231,6 @@ abstract class UserBaseDao extends AbstractDao {
 	}
 
 	/**
-	 * vrací překlad user penis lenght - délka penisu uživatele
-	 */
-	public static function getTranslateUserPenisLength($penisLength) {
-		$translate_penis_length = UserBaseDao::getUserPenisLengthOption();
-		return $translate_penis_length[$penisLength];
-	}
-
-	/**
 	 * vrací překlad user penis width - šířka penisu uživatele
 	 */
 	public static function getTranslateUserPenisWidth($penisWidth) {
@@ -367,18 +359,6 @@ abstract class UserBaseDao extends AbstractDao {
 			3 => 'střední',
 			4 => 'vyšší odborné',
 			5 => 'vysoké',
-		);
-	}
-
-	/**
-	 * vrací pole s překlady pro user Penis Length - délka penisu
-	 */
-	public static function getUserPenisLengthOption() {
-		return array(
-			1 => 'malá',
-			2 => 'střední',
-			3 => 'velká',
-			4 => 'obrovská',
 		);
 	}
 
