@@ -24,7 +24,6 @@
 				} else {
 					$.fn.ajaxObserver.regComponents[key] = component;
 				}
-				console.log($.fn.ajaxObserver.regComponents);
 			}
 		};
 
