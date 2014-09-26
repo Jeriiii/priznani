@@ -121,7 +121,7 @@ class OnePagePresenter extends BasePresenter {
 	protected function createComponentBestMatchSearch($name) {
 		$user = $this->userDao->find($this->getUser()->id);
 		$session = $this->getSession();
-		return new \POSComponent\Search\BestMatchSearch($user->property, $this->userDao, $session, $this, $name);
+		return new \POSComponent\Search\BestMatchSearch($user->property, $this->userDao, $this->userCategoryDao, $session, $this, $name);
 	}
 
 }

@@ -38,6 +38,12 @@ class SearchPresenter extends SearchBasePresenter {
 	 */
 	public $searchData;
 
+	/**
+	 * @var \POS\Model\UserCategoryDao
+	 * @inject
+	 */
+	public $userCategoryDao;
+
 	public function beforeRender() {
 		parent::beforeRender();
 		$this->setSexMode();
@@ -440,7 +446,7 @@ class SearchPresenter extends SearchBasePresenter {
 	protected function createComponentBestMatchSearch($name) {
 		$user = $this->userDao->find($this->getUser()->id);
 		$session = $this->getSession();
-		return new BestMatchSearch($user->property, $this->userDao, $session, $this, $name);
+		return new BestMatchSearch($user->property, $this->userDao, $this->userCategoryDao, $session, $this, $name);
 	}
 
 	/**

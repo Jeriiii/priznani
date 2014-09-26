@@ -42,15 +42,15 @@ class UserCategory {
 	}
 
 	/**
-	 * Vrátí seznam kategorií, které uživatel hledá.
+	 * Vrátí seznam IDček kategorií, které uživatel hledá.
 	 * @param boolean $recalculate Přepočítá kategorie.
-	 * @return Nette\ArrayHash Seznam kategorií.
+	 * @return Nette\ArrayHash Seznam IDček kategorií.
 	 */
-	public function getCategories($recalculate = FALSE) {
+	public function getCategoryIDs($recalculate = FALSE) {
 		if ($this->section->categories === NULL || $recalculate) {
 			$categories = $this->userCategoryDao->getMine($this->userProperty);
 			$ser = new Serializer($categories);
-			$this->section->categories = $ser->toArrayHash();
+			$this->section->categories = $ser->getIDs();
 		}
 
 		return $this->section->categories;

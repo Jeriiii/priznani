@@ -37,6 +37,12 @@ class InstallPresenter extends BasePresenter {
 	 */
 	public $userPropertyDao;
 
+	/**
+	 * @var \POS\Model\UserCategoryDao
+	 * @inject
+	 */
+	public $userCategoryDao;
+
 	public function startup() {
 		parent::startup();
 		// ochrana proti spuštění instalace na ostrém serveru
@@ -44,7 +50,8 @@ class InstallPresenter extends BasePresenter {
 			$this->redirect("OnePage:");
 		}
 
-		$this->insertEnumCatProp();
+		//$this->insertEnumCatProp();
+		$this->insertUserCategories();
 
 		$this->setLayout("layoutInstall");
 	}
