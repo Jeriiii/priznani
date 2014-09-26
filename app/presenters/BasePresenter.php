@@ -442,11 +442,13 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 * Zpracování požadavku ajaxObserveru viz dokumentace "ajaxObserver"
 	 */
 	public function handleAjaxRefresh() {
-		$handles = new AjaxCrate();
+		if ($this->isAjax()) {
+			$handles = new AjaxCrate();
 
-		//$handles->addHandle('chat', new ExampleHandle()); //příklad
+			//$handles->addHandle('chat', new ExampleHandle()); //příklad
 
-		$this->ajaxObserver->sendRefreshRequests($this, $handles);
+			$this->ajaxObserver->sendRefreshRequests($this, $handles);
+		}
 	}
 
 }
