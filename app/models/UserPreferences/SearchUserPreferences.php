@@ -25,8 +25,7 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * kdy je cache prázdná.
 	 */
 	public function calculate() {
-		$userCategory = new UserCategory($this->userProperty, $this->userCategoryDao, $this->session);
-		$categoryIDs = $userCategory->getCategoryIDs(TRUE);
+		$categoryIDs = $this->getUserCategories(TRUE);
 		$users = $this->userDao->getByCategories($categoryIDs);
 
 		$this->saveBestUsers($users);

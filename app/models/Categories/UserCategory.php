@@ -44,7 +44,7 @@ class UserCategory {
 	/**
 	 * Vrátí seznam IDček kategorií, které uživatel hledá.
 	 * @param boolean $recalculate Přepočítá kategorie.
-	 * @return Nette\ArrayHash Seznam IDček kategorií.
+	 * @return array Seznam IDček kategorií.
 	 */
 	public function getCategoryIDs($recalculate = FALSE) {
 		if ($this->section->categories === NULL || $recalculate) {

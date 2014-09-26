@@ -16,7 +16,7 @@ use POS\Model\UserPropertyDao;
 use Nette\Database\Table\ActiveRow;
 use POS\Model\UserDao;
 use POS\Model\StreamDao;
-use POS\Model\StreamCategoriesDao;
+use POS\Model\UserCategoryDao;
 use Nette\Http\Session;
 use NetteExt\Serialize\Serializer;
 use NetteExt\Serialize\Relation;
@@ -47,13 +47,9 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	/** @var \POS\Model\StreamDao */
 	protected $streamDao;
 
-	/** @var \POS\Model\StreamCategoriesDao */
-	protected $streamCategoriesDao;
-
-	public function __construct(ActiveRow $userProperty, UserDao $userDao, StreamDao $streamDao, StreamCategoriesDao $streamCategoriesDao, Session $session) {
-		parent::__construct($userProperty, $userDao, $session);
+	public function __construct(ActiveRow $userProperty, UserDao $userDao, StreamDao $streamDao, UserCategoryDao $userCategoryDao, Session $session) {
+		parent::__construct($userProperty, $userDao, $userCategoryDao, $session);
 		$this->streamDao = $streamDao;
-		$this->streamCategoriesDao = $streamCategoriesDao;
 
 		$this->data = NULL;
 
@@ -67,7 +63,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 */
 	public function calculate() {
 		$this->streamSection->cachedStreamItems = NULL;
-		$this->data = $this->streamSection->cachedStreamItems;
+		$this->data = NULL;
 		return $this;
 	}
 
@@ -75,9 +71,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * Načte z databáze nová data z databáze, uloží je do sešny a přidá k aktuálním datům
 	 */
 	public function addNewData() {
-		$newestItems = $this->streamDao->getAllItemsWhatFitsSince(array(
-			$this->userProperty->offsetGet(UserPropertyDao::COLUMN_PREFERENCES_ID)
-			), $this->getNewestId());
+		$newestItems = $this->streamDao->getAllItemsWhatFitsSince($this->getUserCategories(), $this->getNewestId());
 		$newData = $this->getSerializer($newestItems);
 		$this->prependToData($newData->toArrayHash());
 	}
@@ -128,9 +122,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	private function loadNewItems($limit, $offset) {
 		if ($this->data->count() < $limit + $offset) {
 			$minCount = $offset - $this->data->count();
-			$streamItems = $this->streamDao->getAllItemsWhatFits(array(
-				$this->userProperty->offsetGet(UserPropertyDao::COLUMN_PREFERENCES_ID)
-				), $minCount, $limit);
+			$streamItems = $this->streamDao->getAllItemsWhatFits($this->getUserCategories(), $minCount, $limit);
 			$newItems = $this->getSerializer($streamItems);
 			$this->appendToData($newItems->toArrayHash());
 		}
@@ -213,9 +205,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * Naplní nejlepší vhodná data do sešny. Použití pouze pro inicializaci
 	 */
 	private function initializeStreamItems() {
-		$streamItems = $this->streamDao->getAllItemsWhatFits(array(
-			$this->userProperty->offsetGet(UserPropertyDao::COLUMN_PREFERENCES_ID)
-			), self::INIT_ITEMS_COUNT);
+		$streamItems = $this->streamDao->getAllItemsWhatFits($this->getUserCategories(), self::INIT_ITEMS_COUNT);
 		$serializer = $this->getSerializer($streamItems);
 		$this->streamSection->cachedStreamItems = $serializer->toArrayHash(); //nastaveni pole do sešny
 		$this->data = $this->streamSection->cachedStreamItems;

@@ -6,16 +6,12 @@
 {* příklady použití nových dao funkcí *}
 Kategorie, co se hodí:
 {foreach $categories as $category}
-	{$category->id}
+	{$category}
 {/foreach}<br />
 Výsledky co se hodí:
 {foreach $choices as $choice}
 	{$choice->id}
 {/foreach}<br />
-Výsledky, co se hodí a mají specifikovaný rozsah:
-{foreach $results as $result}
-	{$result->id}
-{/foreach}
 {* /////////////// *}
 <section id="onepage">
 	<nav id="stream-menu">

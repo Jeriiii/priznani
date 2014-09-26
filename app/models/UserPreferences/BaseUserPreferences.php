@@ -19,6 +19,7 @@ use Nette\Caching\Cache;
 use Nette\Http\Session;
 use Nette\Http\SessionSection;
 use POS\Model\UserCategoryDao;
+use POS\Model\UserCategory;
 
 class BaseUserPreferences {
 
@@ -40,6 +41,9 @@ class BaseUserPreferences {
 	/** @var Nette\Http\Session Obecná sečna. Pro práci se sečnou využijte připravenou section */
 	protected $session;
 
+	/** @var UserCategory Je opravdu private použijte getter */
+	private $userCategory = NULL;
+
 	const NAME_SESSION_BEST_U = "bestUsers";
 
 	public function __construct(ActiveRow $userProperty, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session) {
@@ -51,6 +55,19 @@ class BaseUserPreferences {
 
 		$this->section = $session->getSection(self::NAME_SESSION_BEST_U);
 		$this->section->setExpiration("45 min");
+	}
+
+	/**
+	 * Vrátí kategorie, o které se přihlášený uživatel zajímá.
+	 * @param boolean $recalculate Přepočítá kategorie.
+	 * @return array IDs kategorií.
+	 */
+	protected function getUserCategories($recalculate = FALSE) {
+		if ($this->userCategory === NULL) {
+			$this->userCategory = new UserCategory($this->userProperty, $this->userCategoryDao, $this->session);
+		}
+		$categoryIDs = $this->userCategory->getCategoryIDs($recalculate);
+		return $categoryIDs;
 	}
 
 }
