@@ -110,10 +110,8 @@ class OnePagePresenter extends BasePresenter {
 	protected $user;
 
 	public function actionDefault() {
-		$this->dataForStream = $this->streamDao->getAll("DESC");
 		$this->userID = $this->getUser()->getId();
 		$this->user = $this->userDao->find($this->userID);
-		$this->initializeStreamUserPreferences();
 		$this->fillCorrectDataForStream();
 	}
 
@@ -160,7 +158,12 @@ class OnePagePresenter extends BasePresenter {
 	 * Uloží preferované příspěvky uživatele do streamu.
 	 */
 	private function fillCorrectDataForStream() {
-		$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
+		if ($this->getUser()->isLoggedIn()) {
+			$this->initializeStreamUserPreferences();
+			$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
+		} else {
+			$this->dataForStream = $this->streamDao->getAll("DESC");
+		}
 	}
 
 	/**

@@ -62,6 +62,10 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 		$this->regSession->age = $this->getAge($values);
 		$this->regSession->type = $values->type;
 
+		foreach ($this->userDao->getArrWantToMeet() as $key => $want) {
+			$this->regSession[$key] = $values[$key];
+		}
+
 		$presenter->redirect('Datingregistration:SecondRegForm');
 	}
 
@@ -72,7 +76,11 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 		foreach ($this->userDao->getArrWantToMeet() as $key => $want) {
 			$radioList = $this->addRadioList($key, $want, $this->wantToMeetOption);
 			$radioList->getSeparatorPrototype()->setName(NULL);
-			$radioList->setDefaultValue($this->regSession[$key]);
+			if (!empty($this->regSession[$key])) {
+				$radioList->setDefaultValue($this->regSession[$key]);
+			} else {
+				$radioList->setDefaultValue(2);
+			}
 		}
 	}
 

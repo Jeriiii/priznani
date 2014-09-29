@@ -24,6 +24,7 @@ class StreamDao extends AbstractDao {
 	const COLUMN_CATEGORY_ID = "categoryID";
 	const COLUMN_AGE = "age";
 	const COLUMN_TALLNESS = "tallness";
+	const COLUMN_CONFESSION_ID = "confessionID";
 
 	/**
 	 * Vrací tuto tabulku
@@ -178,7 +179,7 @@ class StreamDao extends AbstractDao {
 	 */
 	public function getAllItemsWhatFits(array $categoryIDs, $meUserID, $limit = 0, $offset = 0) {
 		$sel = $this->getTable();
-		$sel->where(self::COLUMN_CATEGORY_ID, $categoryIDs);
+		$sel = $this->sortOutByCategories($sel, $categoryIDs);
 		$sel = $this->sortOutUsers($sel, $meUserID);
 
 		//die();
@@ -201,9 +202,14 @@ class StreamDao extends AbstractDao {
 	public function getAllItemsWhatFitsSince(array $categoryIDs, $meUserID, $lastId) {
 		$sel = $this->getTable();
 		$sel->where('id > ?', $lastId);
-		$sel->where(self::COLUMN_CATEGORY_ID, $categoryIDs);
+		$sel = $this->sortOutByCategories($sel, $categoryIDs);
 		$sel = $this->sortOutUsers($sel, $meUserID);
 		$sel->order('id DESC');
+		return $sel;
+	}
+
+	private function sortOutByCategories($sel, array $categoryIDs) {
+		$sel->where(self::COLUMN_CATEGORY_ID . " IN ? OR " . self::COLUMN_CONFESSION_ID . " IS NOT NULL", $categoryIDs);
 		return $sel;
 	}
 
@@ -229,7 +235,7 @@ class StreamDao extends AbstractDao {
 	 */
 	private function sortOutMe($sel, $meUserID) {
 		/* nevezme sam sebe */
-		$sel->where(self::COLUMN_USER_ID . " != ?", $meUserID);
+		$sel->where(self::COLUMN_USER_ID . " != ? OR " . self::COLUMN_USER_ID . " IS NULL", $meUserID);
 		return $sel;
 	}
 
@@ -244,7 +250,7 @@ class StreamDao extends AbstractDao {
 		$blokedUsers = $this->createSelection(UserBlokedDao::TABLE_NAME);
 		$blokedUsers->where(UserBlokedDao::COLUMN_OWNER_ID, $meUserID);
 		if ($blokedUsers->count(UserBlokedDao::COLUMN_ID)) {
-			$sel->where(self::COLUMN_USER_ID . " NOT IN", $blokedUsers);
+			$sel->where(self::COLUMN_USER_ID . " NOT IN ? OR " . self::COLUMN_USER_ID . " IS NULL", $blokedUsers);
 		}
 		return $sel;
 	}

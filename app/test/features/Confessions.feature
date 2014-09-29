@@ -26,6 +26,7 @@ Feature: Confessions form
 		Then I should see "<text>"
 		And I follow "vyřídit" 
 		Then I should not see "<text>"
+		Given I am signed in as "<admin>" # kvůli obnovení příspěvků na streamu
 		When I go to "/"
 		Then I should see "<text>"
 
