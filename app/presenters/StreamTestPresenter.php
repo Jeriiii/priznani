@@ -109,6 +109,9 @@ class StreamTestPresenter extends BasePresenter {
 	/** @var \Nette\Database\Table\ActiveRow Vlastnosti přihlášeného uživatele. */
 	protected $userProperty;
 
+	/** @var \Nette\Database\Table\ActiveRow Přihlášený uživatel. */
+	protected $user;
+
 	public function startup() {
 		parent::startup();
 		// ochrana proti spuštění na ostrém serveru nebo když je nepřihlášený
@@ -119,6 +122,7 @@ class StreamTestPresenter extends BasePresenter {
 
 	public function actionDefault() {
 		$user = $this->userDao->find($this->getUser()->getId());
+		$this->user = $user;
 		$this->userProperty = $user->property;
 		$this->initializeStreamUserPreferences();
 		$this->fillCorrectDataForStream();
@@ -133,12 +137,13 @@ class StreamTestPresenter extends BasePresenter {
 		$userCategory = new POS\Model\UserCategory($this->userProperty, $this->userCategoryDao, $this->getSession());
 		$categoryIDs = $userCategory->getCategoryIDs(TRUE);
 		$this->template->categories = $categoryIDs;
-		$this->template->choices = $this->streamDao->getAllItemsWhatFits($categoryIDs);
+
+		$this->template->choices = $this->streamDao->getAllItemsWhatFits($categoryIDs, $this->user->id);
 		/**/
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao);
+		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao);
 	}
 
 	public function createComponentJs() {
@@ -165,7 +170,8 @@ class StreamTestPresenter extends BasePresenter {
 	}
 
 	private function initializeStreamUserPreferences() {
-		$this->streamUserPreferences = new StreamUserPreferences($this->userProperty, $this->userDao, $this->streamDao, $this->userCategoryDao, $this->getSession());
+
+		$this->streamUserPreferences = new StreamUserPreferences($this->user, $this->userDao, $this->streamDao, $this->userCategoryDao, $this->getSession());
 		$this->streamUserPreferences->calculate();
 	}
 

@@ -32,6 +32,9 @@ class BaseUserPreferences {
 	/** @var ActiveRow Vlastnosti přihlášeného uživatele. */
 	protected $userProperty;
 
+	/** @var ActiveRow Přihlášenéhý uživatel. */
+	protected $user;
+
 	/** @var array Nejlepší uživatelé pro tohoto uživatele */
 	protected $bestUsers;
 
@@ -46,8 +49,9 @@ class BaseUserPreferences {
 
 	const NAME_SESSION_BEST_U = "bestUsers";
 
-	public function __construct(ActiveRow $userProperty, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session) {
-		$this->userProperty = $userProperty;
+	public function __construct(ActiveRow $user, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session) {
+		$this->userProperty = $user->property;
+		$this->user = $user;
 		$this->userDao = $userDao;
 		$this->userCategoryDao = $userCategoryDao;
 		$this->bestUsers = NULL;
@@ -63,9 +67,9 @@ class BaseUserPreferences {
 	 * @return array IDs kategorií.
 	 */
 	protected function getUserCategories($recalculate = FALSE) {
-		if ($this->userCategory === NULL) {
-			$this->userCategory = new UserCategory($this->userProperty, $this->userCategoryDao, $this->session);
-		}
+		//if ($this->userCategory === NULL) {
+		$this->userCategory = new UserCategory($this->userProperty, $this->userCategoryDao, $this->session);
+		//}
 		$categoryIDs = $this->userCategory->getCategoryIDs($recalculate);
 		return $categoryIDs;
 	}

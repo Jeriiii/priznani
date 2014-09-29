@@ -71,7 +71,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * Načte z databáze nová data z databáze, uloží je do sešny a přidá k aktuálním datům
 	 */
 	public function addNewData() {
-		$newestItems = $this->streamDao->getAllItemsWhatFitsSince($this->getUserCategories(), $this->getNewestId());
+		$newestItems = $this->streamDao->getAllItemsWhatFitsSince($this->getUserCategories(), $this->user->id, $this->getNewestId());
 		$newData = $this->getSerializer($newestItems);
 		$this->prependToData($newData->toArrayHash());
 	}
@@ -122,7 +122,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	private function loadNewItems($limit, $offset) {
 		if ($this->data->count() < $limit + $offset) {
 			$minCount = $offset - $this->data->count();
-			$streamItems = $this->streamDao->getAllItemsWhatFits($this->getUserCategories(), $minCount, $limit);
+			$streamItems = $this->streamDao->getAllItemsWhatFits($this->getUserCategories(), $this->user->id, $minCount, $limit);
 			$newItems = $this->getSerializer($streamItems);
 			$this->appendToData($newItems->toArrayHash());
 		}
@@ -205,7 +205,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * Naplní nejlepší vhodná data do sešny. Použití pouze pro inicializaci
 	 */
 	private function initializeStreamItems() {
-		$streamItems = $this->streamDao->getAllItemsWhatFits($this->getUserCategories(), self::INIT_ITEMS_COUNT);
+		$streamItems = $this->streamDao->getAllItemsWhatFits($this->getUserCategories(), $this->user->id, self::INIT_ITEMS_COUNT);
 		$serializer = $this->getSerializer($streamItems);
 		$this->streamSection->cachedStreamItems = $serializer->toArrayHash(); //nastaveni pole do sešny
 		$this->data = $this->streamSection->cachedStreamItems;

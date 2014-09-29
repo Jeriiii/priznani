@@ -480,10 +480,30 @@ class UserDao extends UserBaseDao {
 	/**
 	 * Vrátí uživatele podle kategorií.
 	 * @param array $categoryIDs
+	 * @param int $meID Moje ID - id uživatele.
 	 */
-	public function getByCategories($categoryIDs) {
+	public function getByCategories($categoryIDs, $meID) {
 		$sel = $this->getTable();
 		$sel->where("." . UserDao::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_PREFERENCES_ID . " IN", $categoryIDs);
+		/* nevezme sam sebe */
+		$sel->where(self::TABLE_NAME . "." . self::COLUMN_ID . " != ?", $meID);
+		/* blokovaní uživatelé tohoto uživatele */
+		$blokedUsers = $this->createSelection(UserBlokedDao::TABLE_NAME);
+		$blokedUsers->where(UserBlokedDao::COLUMN_OWNER_ID, $meID);
+		if ($blokedUsers->count(UserBlokedDao::COLUMN_ID)) {
+			$sel->where(self::TABLE_NAME . "." . self::COLUMN_ID . " NOT IN", $blokedUsers);
+		}
+		return $sel;
+	}
+
+	/**
+	 * Vrátí blokovaný uživatele konkrétního uživatele.
+	 * @param int $ownerID ID uživatele, který blokuje jiného.
+	 * @return Nette\Database\Table\Selection
+	 */
+	private function getBlokedUsers($ownerID) {
+		$sel = $this->createSelection(UserBlokedDao::TABLE_NAME);
+		$sel->where(UserBlokedDao::COLUMN_OWNER_ID, $ownerID);
 		return $sel;
 	}
 

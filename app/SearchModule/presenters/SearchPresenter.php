@@ -446,7 +446,7 @@ class SearchPresenter extends SearchBasePresenter {
 	protected function createComponentBestMatchSearch($name) {
 		$user = $this->userDao->find($this->getUser()->id);
 		$session = $this->getSession();
-		return new BestMatchSearch($user->property, $this->userDao, $this->userCategoryDao, $session, $this, $name);
+		return new BestMatchSearch($user, $this->userDao, $this->userCategoryDao, $session, $this, $name);
 	}
 
 	/**

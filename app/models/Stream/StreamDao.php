@@ -171,13 +171,17 @@ class StreamDao extends AbstractDao {
 	 * (tj. které splňují podmínky některé z kategorií)
 	 * Položky jsou vraceny od konce.
 	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
+	 * @param int $meUserID Moje ID uživatele.
 	 * @param int $limit maximální počet vrácených položek (vrací všechny když je limit 0)
 	 * @param int $offset offset limitu položek
 	 * @return \Nette\Database\Table\Selection všechny vyhovující položky
 	 */
-	public function getAllItemsWhatFits(array $categoryIDs, $limit = 0, $offset = 0) {
+	public function getAllItemsWhatFits(array $categoryIDs, $meUserID, $limit = 0, $offset = 0) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_CATEGORY_ID, $categoryIDs);
+		$sel = $this->sortOutUsers($sel, $meUserID);
+
+		//die();
 		if ($limit != 0) {
 			$sel->order('id DESC');
 			$sel->limit($limit, $offset);
@@ -190,18 +194,63 @@ class StreamDao extends AbstractDao {
 	 * (tj. které splňují podmínky některé z kategorií) a jsou novější než zadané ID
 	 * (jejich ID je vyšší). Jsou seřazené sestupně.
 	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
+	 * @param int $meUserID Moje ID uživatele.
 	 * @param int $lastId id poslední předchozí položky
 	 * @return \Nette\Database\Table\Selection všechny vyhovující položky
 	 */
-	public function getAllItemsWhatFitsSince(array $categoryIDs, $lastId) {
+	public function getAllItemsWhatFitsSince(array $categoryIDs, $meUserID, $lastId) {
 		$sel = $this->getTable();
 		$sel->where('id > ?', $lastId);
 		$sel->where(self::COLUMN_CATEGORY_ID, $categoryIDs);
+		$sel = $this->sortOutUsers($sel, $meUserID);
 		$sel->order('id DESC');
 		return $sel;
 	}
 
 	/**
+	 * Vytřídí sebe a blokované uživatele.
+	 * @param \Nette\Database\Table\Selection $sel Nevytříděné příspěvky.
+	 * @param int $meUserID Moje ID uživatele.
+	 * @return \Nette\Database\Table\Selection Vytříděné příspěvky.
+	 */
+	private function sortOutUsers($sel, $meUserID) {
+
+		$sel = $this->sortOutMe($sel, $meUserID);
+		$sel = $this->sortOutBlokedUsers($sel, $meUserID);
+
+		return $sel;
+	}
+
+	/**
+	 * Vytřídění sebe.
+	 * @param \Nette\Database\Table\Selection $sel Nevytříděné příspěvky.
+	 * @param int $meUserID Moje ID uživatele.
+	 * @return \Nette\Database\Table\Selection Vytříděné příspěvky.
+	 */
+	private function sortOutMe($sel, $meUserID) {
+		/* nevezme sam sebe */
+		$sel->where(self::COLUMN_USER_ID . " != ?", $meUserID);
+		return $sel;
+	}
+
+	/**
+	 * Vytřídění blokovaných uživatelů.
+	 * @param \Nette\Database\Table\Selection $sel Nevytříděné příspěvky.
+	 * @param int $meUserID Moje ID uživatele.
+	 * @return \Nette\Database\Table\Selection Vytříděné příspěvky.
+	 */
+	private function sortOutBlokedUsers($sel, $meUserID) {
+		/* blokovaní uživatelé tohoto uživatele */
+		$blokedUsers = $this->createSelection(UserBlokedDao::TABLE_NAME);
+		$blokedUsers->where(UserBlokedDao::COLUMN_OWNER_ID, $meUserID);
+		if ($blokedUsers->count(UserBlokedDao::COLUMN_ID)) {
+			$sel->where(self::COLUMN_USER_ID . " NOT IN", $blokedUsers);
+		}
+		return $sel;
+	}
+
+	/**
+	 * ZASTARALÉ - SMAZAT
 	 * Vrátí všechny položky streamu, které spadají do některé z daných id kategorií
 	 * (splňují podmínky některé z nich) a mají hodnoty daných sloupců v daném rozsahu. (např. sloupec 'tallness' mezi 180 a 200)
 	 * Položky jsou vraceny od konce.
