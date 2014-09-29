@@ -310,16 +310,6 @@ CREATE TABLE IF NOT EXISTS `enum_orientation` (
 -- Export dat nebyl vybrán.
 
 
--- Exportování struktury pro tabulka pos.enum_penis_length
-CREATE TABLE IF NOT EXISTS `enum_penis_length` (
-  `id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
-  `penis_width` varchar(25) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Export dat nebyl vybrán.
-
-
 -- Exportování struktury pro tabulka pos.enum_penis_width
 CREATE TABLE IF NOT EXISTS `enum_penis_width` (
   `id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
@@ -955,4 +945,3 @@ CREATE TABLE IF NOT EXISTS `you_are_sexy` (
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-

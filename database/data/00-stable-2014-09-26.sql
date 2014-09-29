@@ -13,7 +13,7 @@
 /*!40000 ALTER TABLE `activities` DISABLE KEYS */;
 /*!40000 ALTER TABLE `activities` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.advices: ~96 rows (přibližně)
+-- Exportování dat pro tabulku pos.advices: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `advices` DISABLE KEYS */;
 INSERT INTO `advices` (`id`, `note`, `mark`, `was_on_fb`, `create`, `release_date`, `sort_date`, `real`, `fake`, `fblike`, `comment`, `add_to_fb_page`, `adminID`) VALUES
 	(1681, 'Hrozně bych chtěl zkusit sex s černoškou.Strašně mě přitahují a bohužel jich je tady v ČR málo. Má někdo zkušenosti? Stojí to za to? ', 1, 0, '2014-01-30 16:34:39', '2014-03-13 07:00:00', '2014-03-13 07:00:00', 8, 8, 0, 0, 0, NULL),
@@ -118,52 +118,222 @@ INSERT INTO `advices` (`id`, `note`, `mark`, `was_on_fb`, `create`, `release_dat
 /*!40000 ALTER TABLE `category_likes` DISABLE KEYS */;
 /*!40000 ALTER TABLE `category_likes` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.category_property_want_to_meet: ~210 rows (přibližně)
+-- Exportování dat pro tabulku pos.category_property_want_to_meet: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `category_property_want_to_meet` DISABLE KEYS */;
 INSERT INTO `category_property_want_to_meet` (`id`, `want_to_meet_group`, `want_to_meet_couple_women`, `want_to_meet_couple_men`, `want_to_meet_couple`, `want_to_meet_women`, `want_to_meet_men`, `type`) VALUES
 	(633, 0, 0, 0, 0, 0, 0, 1),
+	(997, 0, 0, 0, 0, 0, 0, 2),
+	(1361, 0, 0, 0, 0, 0, 0, 3),
+	(1725, 0, 0, 0, 0, 0, 0, 4),
+	(2089, 0, 0, 0, 0, 0, 0, 5),
 	(2453, 0, 0, 0, 0, 0, 0, 6),
 	(876, 0, 0, 0, 0, 0, 1, 1),
+	(1240, 0, 0, 0, 0, 0, 1, 2),
+	(1604, 0, 0, 0, 0, 0, 1, 3),
+	(1968, 0, 0, 0, 0, 0, 1, 4),
+	(2332, 0, 0, 0, 0, 0, 1, 5),
+	(2696, 0, 0, 0, 0, 0, 1, 6),
 	(714, 0, 0, 0, 0, 1, 0, 1),
+	(1078, 0, 0, 0, 0, 1, 0, 2),
+	(1442, 0, 0, 0, 0, 1, 0, 3),
+	(1806, 0, 0, 0, 0, 1, 0, 4),
+	(2170, 0, 0, 0, 0, 1, 0, 5),
+	(2534, 0, 0, 0, 0, 1, 0, 6),
 	(957, 0, 0, 0, 0, 1, 1, 1),
+	(1321, 0, 0, 0, 0, 1, 1, 2),
+	(1685, 0, 0, 0, 0, 1, 1, 3),
+	(2049, 0, 0, 0, 0, 1, 1, 4),
+	(2413, 0, 0, 0, 0, 1, 1, 5),
+	(2777, 0, 0, 0, 0, 1, 1, 6),
 	(795, 0, 0, 0, 0, 2, 0, 1),
+	(1159, 0, 0, 0, 0, 2, 0, 2),
+	(1523, 0, 0, 0, 0, 2, 0, 3),
+	(1887, 0, 0, 0, 0, 2, 0, 4),
+	(2251, 0, 0, 0, 0, 2, 0, 5),
+	(2615, 0, 0, 0, 0, 2, 0, 6),
 	(660, 0, 0, 0, 1, 0, 0, 1),
+	(1024, 0, 0, 0, 1, 0, 0, 2),
+	(1388, 0, 0, 0, 1, 0, 0, 3),
+	(1752, 0, 0, 0, 1, 0, 0, 4),
+	(2116, 0, 0, 0, 1, 0, 0, 5),
+	(2480, 0, 0, 0, 1, 0, 0, 6),
 	(903, 0, 0, 0, 1, 0, 1, 1),
+	(1267, 0, 0, 0, 1, 0, 1, 2),
+	(1631, 0, 0, 0, 1, 0, 1, 3),
+	(1995, 0, 0, 0, 1, 0, 1, 4),
+	(2359, 0, 0, 0, 1, 0, 1, 5),
+	(2723, 0, 0, 0, 1, 0, 1, 6),
 	(741, 0, 0, 0, 1, 1, 0, 1),
+	(1105, 0, 0, 0, 1, 1, 0, 2),
+	(1469, 0, 0, 0, 1, 1, 0, 3),
+	(1833, 0, 0, 0, 1, 1, 0, 4),
+	(2197, 0, 0, 0, 1, 1, 0, 5),
+	(2561, 0, 0, 0, 1, 1, 0, 6),
 	(984, 0, 0, 0, 1, 1, 1, 1),
+	(1348, 0, 0, 0, 1, 1, 1, 2),
+	(1712, 0, 0, 0, 1, 1, 1, 3),
+	(2076, 0, 0, 0, 1, 1, 1, 4),
+	(2440, 0, 0, 0, 1, 1, 1, 5),
+	(2804, 0, 0, 0, 1, 1, 1, 6),
 	(822, 0, 0, 0, 1, 2, 0, 1),
+	(1186, 0, 0, 0, 1, 2, 0, 2),
+	(1550, 0, 0, 0, 1, 2, 0, 3),
+	(1914, 0, 0, 0, 1, 2, 0, 4),
+	(2278, 0, 0, 0, 1, 2, 0, 5),
+	(2642, 0, 0, 0, 1, 2, 0, 6),
 	(687, 0, 0, 0, 2, 0, 0, 1),
+	(1051, 0, 0, 0, 2, 0, 0, 2),
+	(1415, 0, 0, 0, 2, 0, 0, 3),
+	(1779, 0, 0, 0, 2, 0, 0, 4),
+	(2143, 0, 0, 0, 2, 0, 0, 5),
+	(2507, 0, 0, 0, 2, 0, 0, 6),
 	(930, 0, 0, 0, 2, 0, 1, 1),
+	(1294, 0, 0, 0, 2, 0, 1, 2),
+	(1658, 0, 0, 0, 2, 0, 1, 3),
+	(2022, 0, 0, 0, 2, 0, 1, 4),
+	(2386, 0, 0, 0, 2, 0, 1, 5),
+	(2750, 0, 0, 0, 2, 0, 1, 6),
 	(768, 0, 0, 0, 2, 1, 0, 1),
+	(1132, 0, 0, 0, 2, 1, 0, 2),
+	(1496, 0, 0, 0, 2, 1, 0, 3),
+	(1860, 0, 0, 0, 2, 1, 0, 4),
+	(2224, 0, 0, 0, 2, 1, 0, 5),
+	(2588, 0, 0, 0, 2, 1, 0, 6),
 	(849, 0, 0, 0, 2, 2, 0, 1),
+	(1213, 0, 0, 0, 2, 2, 0, 2),
+	(1577, 0, 0, 0, 2, 2, 0, 3),
+	(1941, 0, 0, 0, 2, 2, 0, 4),
+	(2305, 0, 0, 0, 2, 2, 0, 5),
+	(2669, 0, 0, 0, 2, 2, 0, 6),
 	(642, 0, 0, 1, 0, 0, 0, 1),
+	(1006, 0, 0, 1, 0, 0, 0, 2),
+	(1370, 0, 0, 1, 0, 0, 0, 3),
+	(1734, 0, 0, 1, 0, 0, 0, 4),
+	(2098, 0, 0, 1, 0, 0, 0, 5),
+	(2462, 0, 0, 1, 0, 0, 0, 6),
 	(885, 0, 0, 1, 0, 0, 1, 1),
+	(1249, 0, 0, 1, 0, 0, 1, 2),
+	(1613, 0, 0, 1, 0, 0, 1, 3),
+	(1977, 0, 0, 1, 0, 0, 1, 4),
+	(2341, 0, 0, 1, 0, 0, 1, 5),
+	(2705, 0, 0, 1, 0, 0, 1, 6),
 	(723, 0, 0, 1, 0, 1, 0, 1),
+	(1087, 0, 0, 1, 0, 1, 0, 2),
+	(1451, 0, 0, 1, 0, 1, 0, 3),
+	(1815, 0, 0, 1, 0, 1, 0, 4),
+	(2179, 0, 0, 1, 0, 1, 0, 5),
+	(2543, 0, 0, 1, 0, 1, 0, 6),
 	(966, 0, 0, 1, 0, 1, 1, 1),
+	(1330, 0, 0, 1, 0, 1, 1, 2),
+	(1694, 0, 0, 1, 0, 1, 1, 3),
+	(2058, 0, 0, 1, 0, 1, 1, 4),
+	(2422, 0, 0, 1, 0, 1, 1, 5),
+	(2786, 0, 0, 1, 0, 1, 1, 6),
 	(804, 0, 0, 1, 0, 2, 0, 1),
+	(1168, 0, 0, 1, 0, 2, 0, 2),
+	(1532, 0, 0, 1, 0, 2, 0, 3),
+	(1896, 0, 0, 1, 0, 2, 0, 4),
+	(2260, 0, 0, 1, 0, 2, 0, 5),
+	(2624, 0, 0, 1, 0, 2, 0, 6),
 	(669, 0, 0, 1, 1, 0, 0, 1),
+	(1033, 0, 0, 1, 1, 0, 0, 2),
+	(1397, 0, 0, 1, 1, 0, 0, 3),
+	(1761, 0, 0, 1, 1, 0, 0, 4),
+	(2125, 0, 0, 1, 1, 0, 0, 5),
+	(2489, 0, 0, 1, 1, 0, 0, 6),
 	(912, 0, 0, 1, 1, 0, 1, 1),
+	(1276, 0, 0, 1, 1, 0, 1, 2),
+	(1640, 0, 0, 1, 1, 0, 1, 3),
+	(2004, 0, 0, 1, 1, 0, 1, 4),
+	(2368, 0, 0, 1, 1, 0, 1, 5),
+	(2732, 0, 0, 1, 1, 0, 1, 6),
 	(750, 0, 0, 1, 1, 1, 0, 1),
+	(1114, 0, 0, 1, 1, 1, 0, 2),
+	(1478, 0, 0, 1, 1, 1, 0, 3),
+	(1842, 0, 0, 1, 1, 1, 0, 4),
+	(2206, 0, 0, 1, 1, 1, 0, 5),
+	(2570, 0, 0, 1, 1, 1, 0, 6),
 	(993, 0, 0, 1, 1, 1, 1, 1),
 	(1357, 0, 0, 1, 1, 1, 1, 2),
 	(1721, 0, 0, 1, 1, 1, 1, 3),
 	(2085, 0, 0, 1, 1, 1, 1, 4),
 	(2449, 0, 0, 1, 1, 1, 1, 5),
+	(2813, 0, 0, 1, 1, 1, 1, 6),
 	(831, 0, 0, 1, 1, 2, 0, 1),
+	(1195, 0, 0, 1, 1, 2, 0, 2),
+	(1559, 0, 0, 1, 1, 2, 0, 3),
+	(1923, 0, 0, 1, 1, 2, 0, 4),
+	(2287, 0, 0, 1, 1, 2, 0, 5),
+	(2651, 0, 0, 1, 1, 2, 0, 6),
 	(696, 0, 0, 1, 2, 0, 0, 1),
+	(1060, 0, 0, 1, 2, 0, 0, 2),
+	(1424, 0, 0, 1, 2, 0, 0, 3),
+	(1788, 0, 0, 1, 2, 0, 0, 4),
+	(2152, 0, 0, 1, 2, 0, 0, 5),
+	(2516, 0, 0, 1, 2, 0, 0, 6),
 	(939, 0, 0, 1, 2, 0, 1, 1),
+	(1303, 0, 0, 1, 2, 0, 1, 2),
+	(1667, 0, 0, 1, 2, 0, 1, 3),
+	(2031, 0, 0, 1, 2, 0, 1, 4),
+	(2395, 0, 0, 1, 2, 0, 1, 5),
+	(2759, 0, 0, 1, 2, 0, 1, 6),
 	(777, 0, 0, 1, 2, 1, 0, 1),
+	(1141, 0, 0, 1, 2, 1, 0, 2),
+	(1505, 0, 0, 1, 2, 1, 0, 3),
+	(1869, 0, 0, 1, 2, 1, 0, 4),
+	(2233, 0, 0, 1, 2, 1, 0, 5),
+	(2597, 0, 0, 1, 2, 1, 0, 6),
 	(858, 0, 0, 1, 2, 2, 0, 1),
+	(1222, 0, 0, 1, 2, 2, 0, 2),
+	(1586, 0, 0, 1, 2, 2, 0, 3),
+	(1950, 0, 0, 1, 2, 2, 0, 4),
+	(2314, 0, 0, 1, 2, 2, 0, 5),
+	(2678, 0, 0, 1, 2, 2, 0, 6),
 	(651, 0, 0, 2, 0, 0, 0, 1),
+	(1015, 0, 0, 2, 0, 0, 0, 2),
+	(1379, 0, 0, 2, 0, 0, 0, 3),
+	(1743, 0, 0, 2, 0, 0, 0, 4),
+	(2107, 0, 0, 2, 0, 0, 0, 5),
+	(2471, 0, 0, 2, 0, 0, 0, 6),
 	(894, 0, 0, 2, 0, 0, 1, 1),
+	(1258, 0, 0, 2, 0, 0, 1, 2),
+	(1622, 0, 0, 2, 0, 0, 1, 3),
+	(1986, 0, 0, 2, 0, 0, 1, 4),
+	(2350, 0, 0, 2, 0, 0, 1, 5),
+	(2714, 0, 0, 2, 0, 0, 1, 6),
 	(732, 0, 0, 2, 0, 1, 0, 1),
+	(1096, 0, 0, 2, 0, 1, 0, 2),
+	(1460, 0, 0, 2, 0, 1, 0, 3),
+	(1824, 0, 0, 2, 0, 1, 0, 4),
+	(2188, 0, 0, 2, 0, 1, 0, 5),
+	(2552, 0, 0, 2, 0, 1, 0, 6),
 	(975, 0, 0, 2, 0, 1, 1, 1),
+	(1339, 0, 0, 2, 0, 1, 1, 2),
+	(1703, 0, 0, 2, 0, 1, 1, 3),
+	(2067, 0, 0, 2, 0, 1, 1, 4),
+	(2431, 0, 0, 2, 0, 1, 1, 5),
+	(2795, 0, 0, 2, 0, 1, 1, 6),
 	(813, 0, 0, 2, 0, 2, 0, 1),
+	(1177, 0, 0, 2, 0, 2, 0, 2),
+	(1541, 0, 0, 2, 0, 2, 0, 3),
+	(1905, 0, 0, 2, 0, 2, 0, 4),
+	(2269, 0, 0, 2, 0, 2, 0, 5),
+	(2633, 0, 0, 2, 0, 2, 0, 6),
 	(678, 0, 0, 2, 1, 0, 0, 1),
-	(921, 0, 0, 2, 1, 0, 1, 1);
+	(1042, 0, 0, 2, 1, 0, 0, 2),
+	(1406, 0, 0, 2, 1, 0, 0, 3),
+	(1770, 0, 0, 2, 1, 0, 0, 4),
+	(2134, 0, 0, 2, 1, 0, 0, 5),
+	(2498, 0, 0, 2, 1, 0, 0, 6),
+	(921, 0, 0, 2, 1, 0, 1, 1),
+	(1239, 2, 2, 2, 2, 2, 0, 2),
+	(1603, 2, 2, 2, 2, 2, 0, 3),
+	(1967, 2, 2, 2, 2, 2, 0, 4),
+	(2331, 2, 2, 2, 2, 2, 0, 5),
+	(2695, 2, 2, 2, 2, 2, 0, 6);
 /*!40000 ALTER TABLE `category_property_want_to_meet` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.chat_messages: ~40 rows (přibližně)
+-- Exportování dat pro tabulku pos.chat_messages: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `chat_messages` DISABLE KEYS */;
 INSERT INTO `chat_messages` (`id`, `id_sender`, `id_recipient`, `text`, `type`, `readed`) VALUES
 	(1, 3, 4, 'přečetl sis to?', 0, 0),
@@ -208,7 +378,7 @@ INSERT INTO `chat_messages` (`id`, `id_sender`, `id_recipient`, `text`, `type`, 
 	(54, 4, 3, 'Není to špatný.', 0, 1);
 /*!40000 ALTER TABLE `chat_messages` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.city: ~39 rows (přibližně)
+-- Exportování dat pro tabulku pos.city: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `city` DISABLE KEYS */;
 INSERT INTO `city` (`id`, `name`, `districtID`) VALUES
 	(1, 'Blatec', 1),
@@ -256,14 +426,14 @@ INSERT INTO `city` (`id`, `name`, `districtID`) VALUES
 /*!40000 ALTER TABLE `comment_images` DISABLE KEYS */;
 /*!40000 ALTER TABLE `comment_images` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.competitions_images: ~2 rows (přibližně)
+-- Exportování dat pro tabulku pos.competitions_images: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `competitions_images` DISABLE KEYS */;
 INSERT INTO `competitions_images` (`id`, `imageID`, `userID`, `competitionID`, `phone`, `name`, `surname`, `allowed`) VALUES
 	(1, 3, 3, 1, NULL, NULL, NULL, 1),
 	(2, 2, 3, 1, NULL, NULL, NULL, 1);
 /*!40000 ALTER TABLE `competitions_images` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.confessions: ~148 rows (přibližně)
+-- Exportování dat pro tabulku pos.confessions: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `confessions` DISABLE KEYS */;
 INSERT INTO `confessions` (`id`, `note`, `mark`, `inStream`, `was_on_fb`, `create`, `release_date`, `sort_date`, `real`, `fake`, `fblike`, `comment`, `add_to_fb_page`, `adminID`) VALUES
 	(20100, 'Miluji když ho můžu klukovi vykouřit :) a ráda polykám', 1, 1, 1, '2014-02-15 14:11:08', '2014-03-20 22:00:00', '2014-03-20 22:00:00', 8, 8, 0, 0, 0, 14),
@@ -426,7 +596,7 @@ INSERT INTO `couple` (`id`, `age`, `marital_state`, `orientation`, `tallness`, `
 	(1, '0000-00-00', 'free', 'hetero', 160, '0', 2, NULL, NULL, 'a', 'often', 'often', 'zs', '1');
 /*!40000 ALTER TABLE `couple` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.district: ~77 rows (přibližně)
+-- Exportování dat pro tabulku pos.district: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `district` DISABLE KEYS */;
 INSERT INTO `district` (`id`, `name`, `regionID`) VALUES
 	(1, 'Olomouc', 1),
@@ -508,7 +678,7 @@ INSERT INTO `district` (`id`, `name`, `regionID`) VALUES
 	(77, 'Hlavní město Praha', 14);
 /*!40000 ALTER TABLE `district` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.embed_videos: ~24 rows (přibližně)
+-- Exportování dat pro tabulku pos.embed_videos: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `embed_videos` DISABLE KEYS */;
 INSERT INTO `embed_videos` (`id`, `id_serie`, `name`, `script`) VALUES
 	(1, 1, 'Sex ve třech', '<script type="text/javascript" src="http://1.im.cz/ad/gemius.js"></script><script type="text/javascript" src="http://i.imedia.cz/js/im2.js"></script><object height="382" width="624"><param name="movie" value="http://www.stream.cz/object/774641-prirodoveda-s-alex-sex-ve-trech"><param name="allowfullscreen" value="true"><param name="allowscriptaccess" value="always"><embed id="VideoSpot_774641" name="VideoSpot_774641" src="http://www.stream.cz/object/774641-prirodoveda-s-alex-sex-ve-trech" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" height="382" width="624"></object>'),
@@ -539,17 +709,34 @@ INSERT INTO `embed_videos` (`id`, `id_serie`, `name`, `script`) VALUES
 
 -- Exportování dat pro tabulku pos.enum_bra_size: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_bra_size` DISABLE KEYS */;
+INSERT INTO `enum_bra_size` (`id`, `bra_size`) VALUES
+	(1, 'A'),
+	(2, 'B'),
+	(3, 'C'),
+	(4, 'D'),
+	(5, 'E'),
+	(6, 'F');
 /*!40000 ALTER TABLE `enum_bra_size` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.enum_drink: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_drink` DISABLE KEYS */;
+INSERT INTO `enum_drink` (`id`, `drink`) VALUES
+	(1, 'často'),
+	(2, 'ne'),
+	(3, 'příležitostně');
 /*!40000 ALTER TABLE `enum_drink` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.enum_graduation: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_graduation` DISABLE KEYS */;
+INSERT INTO `enum_graduation` (`id`, `graduation`) VALUES
+	(1, 'základní'),
+	(2, 'vyučen/a'),
+	(3, 'střední'),
+	(4, 'vyšší odborné'),
+	(5, 'vysoké');
 /*!40000 ALTER TABLE `enum_graduation` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.enum_hair_colour: ~5 rows (přibližně)
+-- Exportování dat pro tabulku pos.enum_hair_colour: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_hair_colour` DISABLE KEYS */;
 INSERT INTO `enum_hair_colour` (`id`, `hair_colour`) VALUES
 	(1, 'blond'),
@@ -559,7 +746,7 @@ INSERT INTO `enum_hair_colour` (`id`, `hair_colour`) VALUES
 	(5, 'jiná');
 /*!40000 ALTER TABLE `enum_hair_colour` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.enum_marital_state: ~6 rows (přibližně)
+-- Exportování dat pro tabulku pos.enum_marital_state: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_marital_state` DISABLE KEYS */;
 INSERT INTO `enum_marital_state` (`id`, `marital_state`) VALUES
 	(1, 'volný'),
@@ -570,7 +757,7 @@ INSERT INTO `enum_marital_state` (`id`, `marital_state`) VALUES
 	(6, 'zadaný');
 /*!40000 ALTER TABLE `enum_marital_state` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.enum_orientation: ~4 rows (přibližně)
+-- Exportování dat pro tabulku pos.enum_orientation: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_orientation` DISABLE KEYS */;
 INSERT INTO `enum_orientation` (`id`, `orientation`) VALUES
 	(1, 'hetero'),
@@ -581,9 +768,13 @@ INSERT INTO `enum_orientation` (`id`, `orientation`) VALUES
 
 -- Exportování dat pro tabulku pos.enum_penis_width: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_penis_width` DISABLE KEYS */;
+INSERT INTO `enum_penis_width` (`id`, `penis_width`) VALUES
+	(1, 'hubený'),
+	(2, 'střední'),
+	(3, 'tlustý');
 /*!40000 ALTER TABLE `enum_penis_width` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.enum_place: ~5 rows (přibližně)
+-- Exportování dat pro tabulku pos.enum_place: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_place` DISABLE KEYS */;
 INSERT INTO `enum_place` (`id`, `place`) VALUES
 	(1, 'postel'),
@@ -593,7 +784,7 @@ INSERT INTO `enum_place` (`id`, `place`) VALUES
 	(5, 'na veřejnosti');
 /*!40000 ALTER TABLE `enum_place` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.enum_position: ~5 rows (přibližně)
+-- Exportování dat pro tabulku pos.enum_position: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_position` DISABLE KEYS */;
 INSERT INTO `enum_position` (`id`, `position`) VALUES
 	(1, 'zezadu'),
@@ -605,9 +796,16 @@ INSERT INTO `enum_position` (`id`, `position`) VALUES
 
 -- Exportování dat pro tabulku pos.enum_property: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_property` DISABLE KEYS */;
+INSERT INTO `enum_property` (`id`, `name`) VALUES
+	(1, 'mann'),
+	(2, 'womann'),
+	(3, 'couple'),
+	(4, 'coupleMan'),
+	(5, 'coupleWoman'),
+	(6, 'group');
 /*!40000 ALTER TABLE `enum_property` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.enum_shape: ~6 rows (přibližně)
+-- Exportování dat pro tabulku pos.enum_shape: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_shape` DISABLE KEYS */;
 INSERT INTO `enum_shape` (`id`, `shape`) VALUES
 	(1, 'hubená'),
@@ -620,17 +818,32 @@ INSERT INTO `enum_shape` (`id`, `shape`) VALUES
 
 -- Exportování dat pro tabulku pos.enum_smoke: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_smoke` DISABLE KEYS */;
+INSERT INTO `enum_smoke` (`id`, `smoke`) VALUES
+	(1, 'často'),
+	(2, 'ne'),
+	(3, 'příležitostně');
 /*!40000 ALTER TABLE `enum_smoke` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.enum_status: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_status` DISABLE KEYS */;
+INSERT INTO `enum_status` (`id`, `name`) VALUES
+	(1, 'Poznávat nové přátele'),
+	(2, 'Chatovat'),
+	(3, 'Randit'),
+	(4, 'Sexovat');
 /*!40000 ALTER TABLE `enum_status` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.enum_tallness: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_tallness` DISABLE KEYS */;
+INSERT INTO `enum_tallness` (`id`, `tallness`) VALUES
+	(1, 160),
+	(2, 170),
+	(3, 180),
+	(4, 190),
+	(5, 200);
 /*!40000 ALTER TABLE `enum_tallness` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.eshop_games: ~5 rows (přibližně)
+-- Exportování dat pro tabulku pos.eshop_games: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `eshop_games` DISABLE KEYS */;
 INSERT INTO `eshop_games` (`id`, `name`, `description`, `suffix`, `price`, `tags`) VALUES
 	(1, 'Vášnivé fantazie', '<strong>Vstupte se svým miláčkem do světa vášní a fantazie.</strong> <br>\r\nHráči putují po herním plánu, kde na ně čekají různé události a příjemné úkoly, jejichž sexuální obtížnost se postupně zvyšuje. Dokážete dojít až do cíle? \r\nNa cestě k vrcholu vás ovšem čekají také nástrahy v podobě políček Vězení, ze kterého je nutné se osvobodit (viz speciální kartičky). <br>\r\n<strong>Více jak 100 úkolových karet vám zajistí, aby byla každá hra unikátní a mohli jste tak hrát znovu a znovu.</strong> <br>\r\nErotická sexy společenská hra pro páry, milence, manžele či partnery. Spousta erotických úkolů vám zajistí úžasnou předehru a neskutečný sex. Zaručené oživení vztahu a sexuálního života. Hra je vhodná jako dárek na Vánoce, Valentýn či narozeniny.', 'png', 69, '(pro páry)'),
@@ -640,7 +853,7 @@ INSERT INTO `eshop_games` (`id`, `name`, `description`, `suffix`, `price`, `tags
 	(5, 'Sexy aktivity', 'Hráči hrají buď jednotlivě nebo v týmech. Když je hráč na tahu, tak si vždy volí jakou obtížnost úkolu nebo otázky bude plnit a podle toho se pak posouvá vpřed po herním plánu (pokud splní).\r\n<br/>\r\n<strong>Hra obsahuje tři obtížnosti humorných sexy úkolů a zvídavých otázek spolu s bonusy, které obsahují soutěže, nebo zábavné úkoly pro všechny.</strong>\r\n<br/>\r\nNejoblíbenější hra na domácí pařbu, mejdan či večírek od Origame. Zábava na Silvestr, chatu, chalupu či oslavu. Lehce erotická společenská zábavná hra pro dospělé. Desítky úkolových karet. Lepší než běžné a drahé deskové hry. Levná hra ke stažení a vytisknutí.', 'png', 69, '(na párty)');
 /*!40000 ALTER TABLE `eshop_games` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.eshop_games_orders: ~120 rows (přibližně)
+-- Exportování dat pro tabulku pos.eshop_games_orders: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `eshop_games_orders` DISABLE KEYS */;
 INSERT INTO `eshop_games_orders` (`id`, `name`, `surname`, `email`, `address`, `discount_coupon`, `phone`, `note`, `create`, `vasnivefantazie`, `nespoutanevzruseni`, `zhaveukolypropary`, `ceskahralasky`, `nekonecnaparty`, `sexyaktivity`, `ceskachlastacka`, `milackuuklidto`, `sexyhratky`, `manazeruvsen`, `print`) VALUES
 	(64, 'Jan', 'Říha', 'rihaja@seznam.cz', '', NULL, '721243489', '', '2014-02-10 14:47:52', 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -765,14 +978,14 @@ INSERT INTO `eshop_games_orders` (`id`, `name`, `surname`, `email`, `address`, `
 	(185, 'Nikola', 'Vopěnková', 'vopenkova.nikola@seznam.cz', '', NULL, '720192602', '', '2014-04-30 11:26:04', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 /*!40000 ALTER TABLE `eshop_games_orders` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.files: ~2 rows (přibližně)
+-- Exportování dat pro tabulku pos.files: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `files` DISABLE KEYS */;
 INSERT INTO `files` (`id`, `id_page`, `name`, `suffix`, `special_condition`) VALUES
 	(1, 13, 'Fotogalerie', 'pdf', 1),
 	(2, NULL, 'Obchodní podmínky', 'doc', 0);
 /*!40000 ALTER TABLE `files` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.forms: ~3 rows (přibližně)
+-- Exportování dat pro tabulku pos.forms: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `forms` DISABLE KEYS */;
 INSERT INTO `forms` (`id`, `name`, `type`) VALUES
 	(2, 'Přiznání o sexu', 1),
@@ -784,7 +997,7 @@ INSERT INTO `forms` (`id`, `name`, `type`) VALUES
 /*!40000 ALTER TABLE `friendrequest` DISABLE KEYS */;
 /*!40000 ALTER TABLE `friendrequest` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.friends: ~3 rows (přibližně)
+-- Exportování dat pro tabulku pos.friends: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `friends` DISABLE KEYS */;
 INSERT INTO `friends` (`id`, `user1ID`, `user2ID`) VALUES
 	(1, 4, 3),
@@ -792,7 +1005,7 @@ INSERT INTO `friends` (`id`, `user1ID`, `user2ID`) VALUES
 	(3, 3, 1);
 /*!40000 ALTER TABLE `friends` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.galleries: ~7 rows (přibližně)
+-- Exportování dat pro tabulku pos.galleries: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `galleries` DISABLE KEYS */;
 INSERT INTO `galleries` (`id`, `name`, `sexmode`, `partymode`, `competition`, `description`, `imageUrl`, `current`, `lastImageID`) VALUES
 	(3, 'Obrázky 18+', 0, 0, 0, '', '', 0, NULL),
@@ -804,7 +1017,7 @@ INSERT INTO `galleries` (`id`, `name`, `sexmode`, `partymode`, `competition`, `d
 	(10, 'Vtípky', 0, 0, 0, '', '', 0, NULL);
 /*!40000 ALTER TABLE `galleries` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.images: ~400 rows (přibližně)
+-- Exportování dat pro tabulku pos.images: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
 INSERT INTO `images` (`id`, `galleryID`, `videoID`, `name`, `comment`, `user_name`, `user_phone`, `user_email`, `suffix`, `order`, `userID`, `idInGallery`, `approved`, `widthGalScrn`, `heightGalScrn`) VALUES
 	(48, 4, NULL, 'Vodka pártyyyyy :-)', 'Takhle slaví narozeniny v Budějovicích :-)', 'Petr Kukrál', '773538835', 'p.kukral@jkbusiness.cz', 'jpg', 0, NULL, NULL, 0, 700, 525),
@@ -1221,7 +1434,7 @@ INSERT INTO `images` (`id`, `galleryID`, `videoID`, `name`, `comment`, `user_nam
 /*!40000 ALTER TABLE `like_statuses` DISABLE KEYS */;
 /*!40000 ALTER TABLE `like_statuses` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.party_confessions: ~88 rows (přibližně)
+-- Exportování dat pro tabulku pos.party_confessions: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `party_confessions` DISABLE KEYS */;
 INSERT INTO `party_confessions` (`id`, `note`, `mark`, `was_on_fb`, `create`, `release_date`, `sort_date`, `real`, `fake`, `fblike`, `comment`, `add_to_fb_page`, `adminID`) VALUES
 	(5738, 'Po jedne letni akci zamej sazel cigara :-D', 1, 0, '2014-02-17 09:03:00', '2014-03-17 01:00:00', '2014-03-17 01:00:00', 0, 0, 0, 0, 0, 1),
@@ -1318,7 +1531,7 @@ INSERT INTO `party_confessions` (`id`, `note`, `mark`, `was_on_fb`, `create`, `r
 /*!40000 ALTER TABLE `payments` DISABLE KEYS */;
 /*!40000 ALTER TABLE `payments` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.region: ~14 rows (přibližně)
+-- Exportování dat pro tabulku pos.region: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `region` DISABLE KEYS */;
 INSERT INTO `region` (`id`, `name`) VALUES
 	(1, 'Olomoucký kraj'),
@@ -1341,7 +1554,7 @@ INSERT INTO `region` (`id`, `name`) VALUES
 /*!40000 ALTER TABLE `status` DISABLE KEYS */;
 /*!40000 ALTER TABLE `status` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.stream_items: ~118 rows (přibližně)
+-- Exportování dat pro tabulku pos.stream_items: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `stream_items` DISABLE KEYS */;
 INSERT INTO `stream_items` (`id`, `videoID`, `galleryID`, `statusID`, `userGalleryID`, `confessionID`, `adviceID`, `userID`, `categoryID`, `type`, `create`, `age`, `tallness`) VALUES
 	(5, NULL, NULL, NULL, 2, NULL, NULL, 87, NULL, 1, '16:47:54', NULL, 0),
@@ -1464,7 +1677,7 @@ INSERT INTO `stream_items` (`id`, `videoID`, `galleryID`, `statusID`, `userGalle
 	(16668, NULL, 9, NULL, NULL, NULL, NULL, NULL, NULL, 1, '19:16:49', NULL, 0);
 /*!40000 ALTER TABLE `stream_items` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.users: ~30 rows (přibližně)
+-- Exportování dat pro tabulku pos.users: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `propertyID`, `coupleID`, `profilFotoID`, `wasCategoryChanged`, `confirmed`, `admin_score`, `role`, `last_active`, `created`, `email`, `user_name`, `password`) VALUES
 	(1, NULL, NULL, NULL, 0, '', 10638, 'superadmin', NULL, NULL, 'P.Kukral@seznam.cz', 'Jerry', '3c4d22e96a8af7b8e9e42b336b0c55f2be5929ce9dab5e7b0805e352078eefda79c41f8576b281dfd3bd062e32fd77994001b3f79fbdd28edb7b08931c3aeb49'),
@@ -1509,63 +1722,22 @@ INSERT INTO `users_competitions` (`id`, `name`, `description`, `imageUrl`, `curr
 /*!40000 ALTER TABLE `users_fotos` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users_fotos` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.users_properties: ~2 rows (přibližně)
+-- Exportování dat pro tabulku pos.users_properties: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `users_properties` DISABLE KEYS */;
 INSERT INTO `users_properties` (`id`, `age`, `statusID`, `type`, `first_sentence`, `about_me`, `tallness`, `preferencesID`, `threesome`, `anal`, `group`, `bdsm`, `swallow`, `cum`, `oral`, `piss`, `sex_massage`, `petting`, `fisting`, `deepthrought`, `want_to_meet_men`, `want_to_meet_women`, `want_to_meet_couple`, `want_to_meet_couple_men`, `want_to_meet_couple_women`, `want_to_meet_group`, `cityID`, `districtID`, `regionID`, `marital_state`, `orientation`, `shape`, `penis_length`, `penis_width`, `drink`, `graduation`, `bra_size`, `smoke`, `hair_colour`) VALUES
-	(3, '1988-09-18', NULL, 0, 'Oh bože, už budu.', 'Hledám zábavu a vzrušení.', 4, 16, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, NULL, NULL, NULL, 1, 1, 5, 3, 2, 1, 5, 2, 3, 2),
-	(4, '1986-09-10', NULL, 0, 'To je ale macek.', 'Moc ráda bych nějakýho svalouše co to umí v posteli.', 2, 23, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NULL, NULL, NULL, 1, 1, 5, NULL, NULL, 2, 3, 3, 1, 1);
+	(3, '1988-09-18', NULL, 0, 'Oh bože, už budu.', 'Hledám zábavu a vzrušení.', 4, NULL, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, NULL, NULL, NULL, 1, 1, 5, 3, 2, 1, 5, 2, 3, 2),
+	(4, '1986-09-10', NULL, 0, 'To je ale macek.', 'Moc ráda bych nějakýho svalouše co to umí v posteli.', 2, NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NULL, NULL, NULL, 1, 1, 5, NULL, NULL, 2, 3, 3, 1, 1);
 /*!40000 ALTER TABLE `users_properties` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.user_categories: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `user_categories` DISABLE KEYS */;
-INSERT INTO `user_categories` (`id`, `tallness`, `likes`, `property_want_to_meet`) VALUES
-	(1, 0, NULL, 633),
-	(2, 0, NULL, 642),
-	(3, 0, NULL, 651),
-	(4, 0, NULL, 660),
-	(5, 0, NULL, 669),
-	(6, 0, NULL, 678),
-	(7, 0, NULL, 687),
-	(8, 0, NULL, 696),
-	(9, 0, NULL, 714),
-	(10, 0, NULL, 723),
-	(11, 0, NULL, 732),
-	(12, 0, NULL, 741),
-	(13, 0, NULL, 750),
-	(14, 0, NULL, 768),
-	(15, 0, NULL, 777),
-	(16, 0, NULL, 795),
-	(17, 0, NULL, 804),
-	(18, 0, NULL, 813),
-	(19, 0, NULL, 822),
-	(20, 0, NULL, 831),
-	(21, 0, NULL, 849),
-	(22, 0, NULL, 858),
-	(23, 0, NULL, 876),
-	(24, 0, NULL, 885),
-	(25, 0, NULL, 894),
-	(26, 0, NULL, 903),
-	(27, 0, NULL, 912),
-	(28, 0, NULL, 921),
-	(29, 0, NULL, 930),
-	(30, 0, NULL, 939),
-	(31, 0, NULL, 957),
-	(32, 0, NULL, 966),
-	(33, 0, NULL, 975),
-	(34, 0, NULL, 984),
-	(35, 0, NULL, 993),
-	(36, 0, NULL, 1357),
-	(37, 0, NULL, 1721),
-	(38, 0, NULL, 2085),
-	(39, 0, NULL, 2449),
-	(40, 0, NULL, 2453);
 /*!40000 ALTER TABLE `user_categories` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.user_change_password: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `user_change_password` DISABLE KEYS */;
 /*!40000 ALTER TABLE `user_change_password` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.user_galleries: ~3 rows (přibližně)
+-- Exportování dat pro tabulku pos.user_galleries: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `user_galleries` DISABLE KEYS */;
 INSERT INTO `user_galleries` (`id`, `name`, `description`, `userID`, `bestImageID`, `lastImageID`, `man`, `women`, `couple`, `more`, `default`, `profil_gallery`) VALUES
 	(2, 'Test', '', 87, 4, 4, 0, 0, 1, 0, 0, 0),
@@ -1573,7 +1745,7 @@ INSERT INTO `user_galleries` (`id`, `name`, `description`, `userID`, `bestImageI
 	(4, 'Super fotky', 'Toto je galerie uživatele Test User', 3, 6, 7, 0, 0, 1, 0, 0, 1);
 /*!40000 ALTER TABLE `user_galleries` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.user_images: ~6 rows (přibližně)
+-- Exportování dat pro tabulku pos.user_images: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `user_images` DISABLE KEYS */;
 INSERT INTO `user_images` (`id`, `suffix`, `name`, `description`, `galleryID`, `approved`, `widthGalScrn`, `heightGalScrn`, `likes`, `comments`) VALUES
 	(2, 'jpg', 'Test', '', 2, 1, 700, 500, 0, 0),
