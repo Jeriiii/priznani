@@ -70,7 +70,7 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	protected function getManData($userProperty) {
 		return array(
-			'Délka penisu' => $userProperty->penis_length,
+			'Délka penisu (cm)' => $userProperty->penis_length,
 			'Šířka penisu' => UserBaseDao::getTranslateUserPenisWidth($userProperty->penis_width),
 		);
 	}

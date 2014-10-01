@@ -40,9 +40,11 @@ Feature: Dating registration
 		And I select "ne" from "smoke"
 		And I select "ne" from "drink"
 		And I select "střední" from "graduation"
-		And I select "střední" from "penis_length"
+		And I fill in "15" for "penis_length"
 		And I select "střední" from "penis_width"
-		And I fill in "35" for "age" 
+		When I select "<day>" from "day"
+		And I select "<month>" from "month"
+		And I select "<year>" from "year"
 		And I press "send"
 		Then I should see "Byli jste úspěšně zaregistrováni. Prosím potvrďte svůj email."
 		And I should receive an email
