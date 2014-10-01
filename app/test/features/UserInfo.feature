@@ -31,7 +31,7 @@ Feature: User's info
 		And I should see "Petting <petting>"
 		And I should see "Fisting <fisting>"
 		And I should see "Hluboké kouření <deepThroat>"
-		And I should see "Délka penisu <penisLenght>"
+		And I should see "Délka penisu (cm) <penisLenght>"
 		And I should see "Šířka penisu <penisWidth>"
 		And I should see "Hledám <lookFor>"
 

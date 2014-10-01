@@ -29,7 +29,9 @@ Feature: Uploading photo on main page
 		And I am on "/"
 		And I should see "Fotky"
 		And I attach the file "<image0>" to "imageFile0"
+		And I look on the page
 		And I press "frm-userStream-newStreamImageForm-submit"
+		
 		Then I should see "<message>"
 		Then I should not see "<message2>" 
 		When I go to "/"
@@ -40,3 +42,10 @@ Feature: Uploading photo on main page
 		Examples:
 			| user		      | image0					| message			   | message2                          | text						|
 			| admin@test.cz	  | profile_photo_woman.jpg	| Fotky byly přidané.  | Nyní jsou ve frontě na schválení. | Test Admin > Moje fotky	|
+
+	Scenario: Error when form is not fill
+		Given I am signed in as "<user>"
+		And I am on "/"
+		And I should see "Fotky"
+		And I press "frm-userStream-newStreamImageForm-submit"
+		Then I should see "Musíte vybrat alespoň 1 soubor"
