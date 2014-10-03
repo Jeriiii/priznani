@@ -51,7 +51,7 @@ class InstallPresenter extends BasePresenter {
 		}
 
 		//$this->insertEnumCatProp();
-		$this->insertUserCategories();
+		//$this->insertUserCategories();
 
 		$this->setLayout("layoutInstall");
 	}
