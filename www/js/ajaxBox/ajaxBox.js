@@ -16,19 +16,24 @@
 	/* konstruktor */
 	$.fn.ajaxBox = function(options) {
 		var boxopts = $.extend({}, $.fn.ajaxBox.defaults, options);
-		setBoxOpts(boxopts);
 
-		//obalení okénkem a potřebnými elementy
-		addHtml($(this));
-		///////////////
 
-		addBinds();
-		watchForUpdateNeed();
-		if (boxopts.ajaxObserverId) {
-			observer.register(boxopts.ajaxObserverId, function(data) {
-				boxopts.observerResponseHandle(boxopts, data);
-			});
-		}
+		return this.each(function() {
+			setBoxOpts(boxopts);
+			//obalení okénkem a potřebnými elementy
+			addHtml($(this));
+			///////////////
+
+			addBinds();
+			watchForUpdateNeed();
+			if (boxopts.ajaxObserverId) {
+				observer.register(boxopts.ajaxObserverId, function(data) {
+					boxopts.observerResponseHandle(boxopts, data);
+				});
+			}
+		});
+
+
 	};
 
 
@@ -41,22 +46,27 @@
 		buttonSelector: "",
 		/* URL co se zavolá, když je potřeba načíst obsah. Prázdné nebo NULL, pokud se nemá volat vůbec */
 		loadUrl: '',
-		/* data, která se přibalí k požadavku o první nebo další data. Může to být i funkce */
-		dataToReload: function() {
+		/* data, která se přibalí k požadavku o první nebo další data. Může to být i funkce.
+		 * @param opts - nastavení dotyčné komponenty (lze ji podle toho najít) */
+		dataToReload: function(opts) {
 			return {};
 		},
-		/* funkce, co se zavolá při načtení dat */
-		dataArrived: function(data) {
+		/* funkce, co se zavolá při načtení dat
+		 * @param opts - nastavení dotyčné komponenty (lze ji podle toho najít)
+		 * @param data - data vrácená ze serveru */
+		dataArrived: function(opts, data) {
 		},
-		/* id pro ajax Observer (pokud jej chceme použít)*/
+		/* id pro ajax Observer (pokud jej chceme použít) */
 		ajaxObserverId: '',
-		/* funkce zpracovávající odpověď od AjaxObserveru. Implicitně je přesune do informací u tlačítka */
+		/* funkce zpracovávající odpověď od AjaxObserveru. Implicitně je přesune do informací u tlačítka
+		 * @param opts - nastavení dotyčné komponenty (lze ji podle toho najít)
+		 * @param data - data vrácená ze serveru */
 		observerResponseHandle: function(opts, data) {
-			console.log(data);
 			$(opts.buttonSelector).find('.ajaxbox-button-info').html(data).css('display', 'block');
 		},
-		/*funkce vracející boolean, který rozhoduje o tom, zda bude ještě prováděno ajaxové volání */
-		reloadPermitted: function() {
+		/*funkce vracející boolean, který rozhoduje o tom, zda bude ještě prováděno ajaxové volání
+		 * @param opts - nastavení dotyčné komponenty (lze ji podle toho najít) */
+		reloadPermitted: function(opts) {
 			return true;
 		},
 		/* CSS třída přiřazená rodičovskému elementu - zde lze nastavit rozměry okna apod */
@@ -118,13 +128,13 @@
 	 */
 	function reloadData() {
 		var opts = this.boxOpts;
-		if (opts.loadUrl && opts.reloadPermitted() && !this.ajaxLock) {
+		if (opts.loadUrl && opts.reloadPermitted(opts) && !this.ajaxLock) {
 			this.ajaxLock = true;
 			$.nette.ajax({
 				url: opts.loadUrl,
-				data: opts.dataToReload(),
+				data: opts.dataToReload(opts),
 				success: function(data) {
-					opts.dataArrived(data);
+					opts.dataArrived(opts, data);
 				}
 			});
 			this.ajaxLock = false;
@@ -180,7 +190,7 @@
 		$('body').click(function(event) {//zavření při kliknutí mimo okénka
 			if (!$(event.target).is(opts.buttonSelector, '.ajaxBox')) {
 				if (!$(event.target).is('.ajaxBox *, .ajaxBox')) {
-					$('.ajaxBox').css('display', 'none');
+					$(boxSelector).css('display', 'none');
 				}
 			}
 		});

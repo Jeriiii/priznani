@@ -13,7 +13,7 @@ namespace POSComponent\Chat;
  */
 class StandardConversationList extends BaseChatComponent implements IContactList {
 
-	private $handledConversations;
+	private $handledConversations = FALSE;
 
 	/**
 	 * Vykreslení komponenty
@@ -27,7 +27,7 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 
 
 		$userId = $this->getPresenter()->getUser()->getId();
-		if (empty($this->handledConversations)) {
+		if ($this->handledConversations) {
 			$template->conversations = $this->chatManager->getConversations($userId);
 		} else {
 			$template->conversations = $this->handledConversations;
@@ -41,10 +41,12 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 	}
 
 	public function handleLoad($limit, $offset) {
-		$userId = $this->getPresenter()->getUser()->getId();
-		$this->template->load = TRUE; //jen pro ifset
-		$this->handledConversations = $this->chatManager->getConversations($userId, $limit, $offset, TRUE);
-		$this->redrawControl('conversations');
+		if ($this->getPresenter()->isAjax()) {
+			$userId = $this->getPresenter()->getUser()->getId();
+			$this->template->load = TRUE; //jen pro ifset
+			$this->handledConversations = $this->chatManager->getConversations($userId, $limit, $offset, TRUE);
+			$this->redrawControl('conversations');
+		}
 	}
 
 	/**
