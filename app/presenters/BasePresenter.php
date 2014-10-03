@@ -334,7 +334,8 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'initAjax.js',
 			'../mobile/responsive-menu.js',
 			'../forms/netteForms.js',
-			'../ajaxObserver/core.js'
+			'../ajaxObserver/core.js',
+			'../ajaxBox/ajaxBox.js',
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');

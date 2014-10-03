@@ -191,7 +191,7 @@ class ChatManager {
 		$section = $this->session->getSection(self::CHAT_MINUTE_SESSION_NAME);
 		$section->setExpiration('1 minute');
 		if (empty($section->lastConversations)) {
-			$lastChanges = $this->messagesDao->getLastConversationMessagesIDs($idUser, 20)
+			$lastChanges = $this->messagesDao->getLastConversationMessagesIDs($idUser, 10000)
 				->fetchPairs(ChatMessagesDao::COLUMN_ID_SENDER, ChatMessagesDao::COLUMN_ID_RECIPIENT);
 			$section->lastConversations = $this->filterConversationIDs($idUser, $lastChanges);
 		}

@@ -23,7 +23,7 @@ and open the template in the editor.
 			margin: 0;
 		}
 		
-	#contacts, #conversations{
+	#contacts{
 
 			li{
 				cursor: pointer;
@@ -35,7 +35,7 @@ and open the template in the editor.
 
 	}
 	#contacts{
-		height: 60%;
+		height: 100%;
 		overflow: auto;
 		border-bottom: 1px solid #aaa;
 
@@ -57,10 +57,16 @@ and open the template in the editor.
 				border-radius: 12px;
 			}
 	}
+}
 
-	#conversations {
+#conversations {
 		overflow: hidden;
-		height: 40%;
+		li{
+				cursor: pointer;
+				width: 90%;
+				padding: 8px 4%;
+				
+			}
 		h5{
 			position: relative;
 			z-index: 1000;
@@ -91,7 +97,6 @@ and open the template in the editor.
 			
 		}
 	}
-}
 .ui-chat{//chatbox
 	
 		 
