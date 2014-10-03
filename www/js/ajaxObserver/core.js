@@ -18,11 +18,11 @@
 		refreshRequest();
 
 		return{//vrácení funkce pro registraci, aby se jiné komponenty mohly registrovat u této instance
-			register: function(key, component) {
+			register: function(key, responseFunction) {
 				if (key in $.fn.ajaxObserver.regComponents) {
 					console.log('Duplicate key "' + key + '" registered to AjaxObserver. Try another key.');
 				} else {
-					$.fn.ajaxObserver.regComponents[key] = component;
+					$.fn.ajaxObserver.regComponents[key] = responseFunction;
 				}
 			}
 		};

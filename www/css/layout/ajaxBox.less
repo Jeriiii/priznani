@@ -8,20 +8,19 @@
 
 /*********** vyskakovaci okenko, viz aktivity, nové zprávy apod. Součást ajaxBoxu ***********/
 /* defaults */
-@droplink-width:250px;//sirka okna
-@droplink-height:200px;//vyska okna
-@droplink-info-height: 30px; /* sedy ramecek dole ve vyskakovacim okenku - vyska */
+@window-width:250px;//sirka okna
+@window-height:200px;//vyska okna
+@window-info-height: 30px; /* sedy ramecek dole ve vyskakovacim okenku - vyska */
 @border-color: #eee;
 /**/
 .posAjaxBox{
 	
 	display:none;
 	position: absolute;
-	overflow: auto;
 	top: 60px;
 	right:4px;
-	width:@droplink-width;
-	height:@droplink-height;
+	width:@window-width;
+	height:@window-height;
 	z-index:1000;
 	.box-shadow(0px 2px 13px 0px rgba(50, 50, 50, 0.8));
 	background-color: #fff;
@@ -31,6 +30,13 @@
 		font-size: 12px;
 		color: #222;
 		border-bottom: 1px solid @border-color;
+	}
+	
+	
+	.ajaxBoxContent{
+		height: @window-height - @window-info-height;
+		overflow: auto;
+		
 	}
 	
 	
@@ -50,26 +56,44 @@
 		}
 	}
 	
-	.data{
-		width: auto;
-		height: @droplink-height - @droplink-info-height;
-		overflow: auto;
-		padding: 0 8px;
 		
-		.no-activities{
-			text-align: center;
-			font-size: 16px;
-			color: #aaa;
-		}
+	.window-info{
+		height: @window-info-height;
+		line-height: @window-info-height;
+		font-size: 16px;
+		color: #666;
+		text-align: center;
+		bottom: 0px;
+		width: 100%;
+		overflow: hidden;
+		background: #eee;
+		.box-shadow(inset 0 0 15px 0px #ccc);
+		border-top: 1px solid @border-color;
 	}
-	
+		
+}
+
+.ajaxbox-button-info{
+		position: absolute;		
+		right: 12px;
+		bottom: -3px;
+		font-size: 16px;
+		text-align: center;
+		bottom: 0px;		
+		display: none;		
+		font-weight: bold;
+		padding: 2px;
+		border-radius: 6px;
+		background-color: #fe9430;
+		color: white;
+		.box-shadow(0px 2px 4px 0px #8b0302);
 }
 
 /* generuje styly překrývající defaultní hodnoty okna. Je nutné obalit je selektorem konkrétního okna (tím, který se komponentě dává do parametru theme) */
-.customize-pos-ajax-box(@droplink-width, @droplink-height, @droplink-info-height, @border-color){
+.customize-pos-ajax-box(@window-width, @window-height, @window-info-height, @border-color){
 	
-	width:@droplink-width !important;
-	height:@droplink-height !important;
+	width:@window-width !important;
+	height:@window-height !important;
 	border: 1px solid @border-color !important;
 	
 	.activity-item {
@@ -77,7 +101,13 @@
 	}
 	
 	.data{
-		height: @droplink-height - @droplink-info-height !important;
+		height: @window-height - @window-info-height !important;
+	}
+	
+	.window-info{
+		height: @window-info-height !important;
+		line-height: @droplink-info-height !important;
+		border-top: 1px solid @border-color !important;
 	}
 }
 /***************************************/

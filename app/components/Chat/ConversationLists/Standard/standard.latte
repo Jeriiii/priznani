@@ -5,7 +5,7 @@
 
 	<h5>Příchozí zprávy</h5>
 
-	<ul n:snippet="conversations" {*data-ajax-append="true"*}>
+	<ul n:snippet="conversations" data-ajax-append="true">
 		{ifset $load}
 			{foreach $conversations as $conversation}
 				{var $id = $userfinder->getCorrectCodedId($conversation->id_sender, $conversation->id_recipient)}

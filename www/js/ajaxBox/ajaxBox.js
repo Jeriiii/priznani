@@ -10,6 +10,8 @@
 (function($) {
 
 	var boxOpts;
+	//zamek pro ajaxove pozadavky
+	var ajaxLock = false;
 
 	/* konstruktor */
 	$.fn.ajaxBox = function(options) {
@@ -22,6 +24,11 @@
 
 		addBinds();
 		watchForUpdateNeed();
+		if (boxopts.ajaxObserverId) {
+			observer.register(boxopts.ajaxObserverId, function(data) {
+				boxopts.observerResponseHandle(boxopts, data);
+			});
+		}
 	};
 
 
@@ -32,10 +39,26 @@
 	$.fn.ajaxBox.defaults = {
 		/* Selektor tlačítka, které má otevírat/zavírat okno */
 		buttonSelector: "",
-		/* URL co se zavolá, když se okénko zobrazí. Prázdné nebo NULL, pokud se nemá volat vůbec */
+		/* URL co se zavolá, když je potřeba načíst obsah. Prázdné nebo NULL, pokud se nemá volat vůbec */
 		loadUrl: '',
-		/* URL co se zavolá, když je potřeba donačíst obsah. Prázdné nebo NULL, pokud se nemá volat vůbec. */
-		refreshUrl: '',
+		/* data, která se přibalí k požadavku o první nebo další data. Může to být i funkce */
+		dataToReload: function() {
+			return {};
+		},
+		/* funkce, co se zavolá při načtení dat */
+		dataArrived: function(data) {
+		},
+		/* id pro ajax Observer (pokud jej chceme použít)*/
+		ajaxObserverId: '',
+		/* funkce zpracovávající odpověď od AjaxObserveru. Implicitně je přesune do informací u tlačítka */
+		observerResponseHandle: function(opts, data) {
+			console.log(data);
+			$(opts.buttonSelector).find('.ajaxbox-button-info').html(data).css('display', 'block');
+		},
+		/*funkce vracející boolean, který rozhoduje o tom, zda bude ještě prováděno ajaxové volání */
+		reloadPermitted: function() {
+			return true;
+		},
 		/* CSS třída přiřazená rodičovskému elementu - zde lze nastavit rozměry okna apod */
 		theme: 'posAjaxBox',
 		/* automatické nastavení pozice okénka pod tlačítko (false pokud si ji chcete nastavit ve stylech) Při zapnutí bude pozice nastavena podle šipky */
@@ -46,7 +69,9 @@
 		leftMargin: 0,
 		/* orientace šipky - left|right - šipka je vlevo|vpravo. Podle toho se nastaví i pozice okénka. Předpokládá se, že šipka má nastavené
 		 * css left|right (pozor na to pokud děláte vlastní theme!!!). */
-		arrowOrientation: 'right'
+		arrowOrientation: 'right',
+		/* defaultní zpráva v dolní části okénka*/
+		defaultMessage: ''
 	};
 
 
@@ -56,16 +81,17 @@
 	function addHtml(data) {
 		var opts = this.boxOpts;
 		var button = $(opts.buttonSelector);//tlačítko
-//		button.wrap('<span></span>');
-//		button.parent().css('position', 'relative');
 		data.appendTo('body');
 		data.wrap('<div class="ajaxBox ' + opts.theme + '" data-related="' + opts.buttonSelector + '"></div>');//obalení okénkem
 		$('.ajaxBox').css('display', 'none');//okénko není vidět
 		data.wrap('<div class="ajaxBoxContent"></div>');//zabalení obsahu
-		var box = data.parent().parent();//současný selektor okénka
-		box.append('<span class="loadingGif clear loadIfVisible"></span>');//gif na konci
-		box.append('<div class="arrow-up"></div>');//přidání šipečky
-//		box.appendTo(button.parent());//přesunutí elementu do tlačítka
+		data.wrap('<div class="ajaxBoxData"></div>');//zabalení obsahu
+		var box = data.parent().parent().parent();//současný selektor okénka
+		box.find('.ajaxBoxContent').append('<span class="loadingGif clear loadIfVisible"></span>');//gif na konci
+		box.prepend('<div class="arrow-up"></div>');//přidání šipečky
+		box.append('<div class="window-info">' + opts.defaultMessage + '</div>');//informační boxík okénka (dole)
+		button.append('<div class="ajaxbox-button-info"></div>');
+		button.find('.ajaxbox-button-info').css('display', 'none');
 
 		if (opts.arrowOrientation === 'left') {//orientace okénka
 			box.find('.arrow-up').addClass('on-left');//přidání třídy k šipečce (aby byla vlevo)
@@ -92,28 +118,41 @@
 	 */
 	function reloadData() {
 		var opts = this.boxOpts;
-		if (opts.loadUrl) {
+		if (opts.loadUrl && opts.reloadPermitted() && !this.ajaxLock) {
+			this.ajaxLock = true;
 			$.nette.ajax({
-				url: opts.loadUrl
+				url: opts.loadUrl,
+				data: opts.dataToReload(),
+				success: function(data) {
+					opts.dataArrived(data);
+				}
 			});
+			this.ajaxLock = false;
 		}
 	}
 
 	/**
-	 * Spustí cyklus, který hlídá, zda uživatel nevidí spodní část okénka. Pokud nevidí, pošle ajaxový požadavek
+	 * Spustí cyklus, který hlídá, zda uživatel nevidí spodní část okénka (mimo data). Pokud nevidí, pošle ajaxový požadavek
 	 * */
 	function watchForUpdateNeed() {
 		var opts = this.boxOpts;
-		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"]';
+		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"] .ajaxBoxContent';
 		setInterval(function() {
-			var contentHeight = $(boxSelector + ' .ajaxBoxContent').height();
-			var contentLeftToShow = contentHeight - $(boxSelector).scrollTop();
-			if (contentLeftToShow < $(boxSelector).height()) {
-				reloadData();
+			if (isThisWindowVisible(opts)) {
+				var contentHeight = $(boxSelector + ' .ajaxBoxData').height();
+				var contentLeftToShow = contentHeight - $(boxSelector).scrollTop();
+				if (contentLeftToShow < $(boxSelector).height()) {
+					reloadData();
+				}
 			}
-		}, 300);
+		}, 1000);
 	}
 
+	/** vrátí true|false, je-li dané okénko viditelné*
+	 *
+	 * @param {Object} opts nastavení daného (tohoto) okénka
+	 * @returns {boolean}
+	 */
 	function isThisWindowVisible(opts) {
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"]';
 		return $(boxSelector).is(':visible');
@@ -135,7 +174,6 @@
 			$('.ajaxBox').css('display', 'none');
 			if (!close) {
 				$(boxSelector).css('display', 'block');//otevření jediného okénka
-				reloadData();
 			}
 		});
 

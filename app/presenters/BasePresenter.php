@@ -14,7 +14,8 @@ use Nette\Application\UI\Form as Frm,
 	Nette\Http\Request;
 use Nette\Security\User;
 use POS\Ajax\ExampleHandle,
-	POS\Ajax\AjaxCrate;
+	POS\Ajax\AjaxCrate,
+	POS\Ajax\ChatConversationsHandle;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -447,7 +448,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			$handles = new AjaxCrate();
 
 			//$handles->addHandle('chat', new ExampleHandle()); //příklad
-
+			$handles->addHandle('chatConversationWindow', new ChatConversationsHandle($this->chatManager, $this->getUser()->getId()));
 			$this->ajaxObserver->sendRefreshRequests($this, $handles);
 		}
 	}

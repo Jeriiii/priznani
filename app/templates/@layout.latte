@@ -191,17 +191,9 @@
 					var observer = $('body').ajaxObserver({
 						requestUrl: {$ajaxObserverLink}
 					});
-					//inicializace vyskakovacích okének
-					$('#conversations').ajaxBox({
-							buttonSelector: '#messages-btn',
-							topMargin: -10,
-							loadUrl: loadConversationsLink
-					});
-//					$('#kiss').ajaxBox({
-//							buttonSelector: '#stream-form-tabs'
-//					});
-
+					
 				</script>
+				<script type="text/javascript" src="{$basePath}/js/ajaxbox-init.js"></script>
 			{/if}
 
 

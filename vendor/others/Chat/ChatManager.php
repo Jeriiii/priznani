@@ -185,13 +185,17 @@ class ChatManager {
 
 	/**
 	 * Vrátí poslední zprávu z (téměř) všech konverzací (existuje maximum konverzací)
+	 * @param int $idUser id uživatele
+	 * @param int $limit limit počtu konverzací
+	 * @param int $offset offset počtu konverzací
+	 * @param bool $forceUpdate při TRUE ignoruje data v sešně a vynutí získání nových
 	 * @return array ActiveRows jako položky pole
 	 */
-	public function getConversations($idUser) {
+	public function getConversations($idUser, $limit = 5, $offset = 0, $forceUpdate = FALSE) {
 		$section = $this->session->getSection(self::CHAT_MINUTE_SESSION_NAME);
 		$section->setExpiration('1 minute');
-		if (empty($section->lastConversations)) {
-			$lastChanges = $this->messagesDao->getLastConversationMessagesIDs($idUser, 10000)
+		if (empty($section->lastConversations) || $forceUpdate) {
+			$lastChanges = $this->messagesDao->getLastConversationMessagesIDs($idUser, $limit, $offset)
 				->fetchPairs(ChatMessagesDao::COLUMN_ID_SENDER, ChatMessagesDao::COLUMN_ID_RECIPIENT);
 			$section->lastConversations = $this->filterConversationIDs($idUser, $lastChanges);
 		}

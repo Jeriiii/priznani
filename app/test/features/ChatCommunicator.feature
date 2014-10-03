@@ -26,7 +26,7 @@ Feature: Testing chat messaging with ajax requests and responses
 # sichr test, jestli se všechna předchozí data smazala
 	Scenario: Test recreating database
 		Given I am signed in as "user@test.cz"
-		And there should be "Text zprávy" in column "text" in "chat_messages"
+		And there should not be "Text zprávy" in column "text" in "chat_messages"
 
 
 	Scenario Outline: Receive confirm of reading message

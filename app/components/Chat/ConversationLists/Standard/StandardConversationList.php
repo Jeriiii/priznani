@@ -13,16 +13,25 @@ namespace POSComponent\Chat;
  */
 class StandardConversationList extends BaseChatComponent implements IContactList {
 
+	private $handledConversations;
+
 	/**
 	 * Vykreslení komponenty
 	 */
 	public function render() {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/standard.latte');
-		$userId = $this->getPresenter()->getUser()->getId();
-		$template->conversations = $this->chatManager->getConversations($userId);
+
 
 		$template->userfinder = $this;
+
+
+		$userId = $this->getPresenter()->getUser()->getId();
+		if (empty($this->handledConversations)) {
+			$template->conversations = $this->chatManager->getConversations($userId);
+		} else {
+			$template->conversations = $this->handledConversations;
+		}
 		$template->userId = $userId;
 
 
@@ -31,8 +40,10 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 		$template->render();
 	}
 
-	public function handleLoad() {
+	public function handleLoad($limit, $offset) {
+		$userId = $this->getPresenter()->getUser()->getId();
 		$this->template->load = TRUE; //jen pro ifset
+		$this->handledConversations = $this->chatManager->getConversations($userId, $limit, $offset, TRUE);
 		$this->redrawControl('conversations');
 	}
 
