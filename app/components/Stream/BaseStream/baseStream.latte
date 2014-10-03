@@ -5,8 +5,8 @@
 			<div id="profile-photo-upload">
 				Nahrajte si <span class="highlight">profilovou fotku</span>, aby si vás ostatní mohli prohlédnout.
 				{form uploadPhotoForm}
-					{input imageFile0}
-					{input send}
+					{input uploadPhotoFormImageFile0}
+					{input uploadProfilPhoto}
 				{/form}
 			</div>
 		{elseif $profilePhoto && $user->isLoggedIn() &&  $place==0  && $position==0 && $placePosSession->count%5==0}

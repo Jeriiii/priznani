@@ -1,8 +1,5 @@
 Feature: Dating registration
 
-	Scenario:
-		Given I am on "/install/test-data"
-
 	Scenario Outline: Registration of a couple 
 		Given I am on "/dating-registration/"
 		When I select "<day>" from "day"

@@ -1,8 +1,5 @@
 Feature: Confessions form
 
-	Scenario:
-		Given I am on "/install/test-data"
-
 	Scenario Outline: User can post confession
 		Given I am on "/"
 		And I should see "Přiznání"

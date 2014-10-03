@@ -34,9 +34,9 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	 */
 	public $streamDao;
 
-	const IMAGE_NAME = "imageName";
-	const IMAGE_FILE = "imageFile";
-	const IMAGE_DESCRIPTION = "imageDescription";
+	const IMAGE_NAME = "ImageName";
+	const IMAGE_FILE = "ImageFile";
+	const IMAGE_DESCRIPTION = "ImageDescription";
 
 	/**
 	 * @var int Pokud má uživatel alespoň 3 schválené fotky, schvaluj další automaticky
@@ -83,23 +83,27 @@ class UserGalleryImagesBaseForm extends BaseForm {
 
 	/**
 	 * Přidá určitý počet polí pro vložení obrázku do formuláře
-	 * @param type $count Počet polý obrázků.
-	 * @param type $displayName Má se zobrazit pole pro název obrázku.
-	 * @param type $dislplayDesc Má se zobrazit pole pro popis obrázku.
+	 * @param int $count Počet polý obrázků.
+	 * aby nedocházelo ke kolizím názvů.
+	 * @param boolean $displayName Má se zobrazit pole pro název obrázku.
+	 * @param boolean $dislplayDesc Má se zobrazit pole pro popis obrázku.
 	 */
 	public function addImageFields($count, $displayName = TRUE, $dislplayDesc = TRUE) {
+		/* Pro unikátnost názvu pole - pro testy */
+		$prefixImgName = $this->getImgNamePrefix();
+
 		for ($i = 0; $i < $count; $i++) {
-			$this->addUpload(self::IMAGE_FILE . $i, 'Přidat fotku:')
+			$this->addUpload($prefixImgName . self::IMAGE_FILE . $i, 'Přidat fotku:')
 				->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 * 1024)
 				->addCondition(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif');
 			if ($displayName) {
-				$this->addText(self::IMAGE_NAME . $i, 'Jméno:')
-					->addConditionOn($this[self::IMAGE_FILE . $i], Form::FILLED)
+				$this->addText($prefixImgName . self::IMAGE_NAME . $i, 'Jméno:')
+					->addConditionOn($this[$prefixImgName . self::IMAGE_FILE . $i], Form::FILLED)
 					->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40);
 			}
 			if ($dislplayDesc) {
-				$this->addText(self::IMAGE_DESCRIPTION . $i, 'Popis:')
-					->addConditionOn($this[self::IMAGE_FILE . $i], Form::FILLED)
+				$this->addText($prefixImgName . self::IMAGE_DESCRIPTION . $i, 'Popis:')
+					->addConditionOn($this[$prefixImgName . self::IMAGE_FILE . $i], Form::FILLED)
 					->addRule(Form::MAX_LENGTH, "Maximální délka popisu fotky je %d znaků", 500);
 			}
 		}
@@ -171,10 +175,12 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	 */
 	public function getArrayWithImages(ArrayHash $values, $num) {
 		$images = array();
+		/* Pro unikátnost názvu pole - pro testy */
+		$prefixImgName = $this->getImgNamePrefix();
 		for ($i = 0; $i < $num; $i++) {
-			$images[$i][self::IMAGE_FILE] = $values[self::IMAGE_FILE . $i];
-			$images[$i][self::IMAGE_NAME] = Arrays::getVal($values, self::IMAGE_NAME . $i);
-			$images[$i][self::IMAGE_DESCRIPTION] = Arrays::getVal($values, self::IMAGE_DESCRIPTION . $i);
+			$images[$i][self::IMAGE_FILE] = $values[$prefixImgName . self::IMAGE_FILE . $i];
+			$images[$i][self::IMAGE_NAME] = Arrays::getVal($values, $prefixImgName . self::IMAGE_NAME . $i);
+			$images[$i][self::IMAGE_DESCRIPTION] = Arrays::getVal($values, $prefixImgName . self::IMAGE_DESCRIPTION . $i);
 		}
 		return $images;
 	}
@@ -193,6 +199,14 @@ class UserGalleryImagesBaseForm extends BaseForm {
 			}
 		}
 		return FALSE;
+	}
+
+	/**
+	 * Vrátí prefix k obrázku - používá se pro unikátní název polí.
+	 * @return preffix k obrázku.
+	 */
+	private function getImgNamePrefix() {
+		return $this->name;
 	}
 
 	public function genderCheckboxValidation($form) {

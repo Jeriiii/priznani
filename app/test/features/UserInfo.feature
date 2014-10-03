@@ -1,8 +1,5 @@
 Feature: User's info
 
-	Scenario:
-		Given I am on "/install/test-data"
-
 	Scenario Outline: User's info is complete and visible
 		Given I am signed in as "<user>"
 		And I am on "/profil.show/user-info"
