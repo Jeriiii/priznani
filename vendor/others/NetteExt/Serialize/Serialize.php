@@ -52,6 +52,14 @@ class Serializer {
 	}
 
 	/**
+	 * Vrátí pole IDček (i zanořených z relací).
+	 * @return array Pole IDček.
+	 */
+	public function getIDs() {
+		return array_keys((array) $this->toArrayHash());
+	}
+
+	/**
 	 * Přidá další relaci k základnímu prvku.
 	 * @param NetteExt\Serialize\Relation $rel Další relace co se má přidat.
 	 */

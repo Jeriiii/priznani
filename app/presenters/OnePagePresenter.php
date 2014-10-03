@@ -10,8 +10,15 @@
  */
 use Nette\Application\UI\Form as Frm;
 use POSComponent\Stream\UserStream\UserStream;
+use POS\UserPreferences\StreamUserPreferences;
 
 class OnePagePresenter extends BasePresenter {
+
+	/**
+	 * Vybere do streamu nejvhodnější data vzhledem k preferencím daného uživatele
+	 * @var \POS\UserPreferences\StreamUserPreferences
+	 */
+	public $streamUserPreferences;
 
 	/**
 	 * @var \POS\Model\StreamDao
@@ -68,6 +75,12 @@ class OnePagePresenter extends BasePresenter {
 	public $friendRequestDao;
 
 	/**
+	 * @var \POS\Model\UserCategoryDao
+	 * @inject
+	 */
+	public $userCategoryDao;
+
+	/**
 	 * @var \POS\Model\UserPositionDao
 	 * @inject
 	 */
@@ -94,18 +107,18 @@ class OnePagePresenter extends BasePresenter {
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $userID;
-	protected $userData;
+	protected $user;
 
 	public function actionDefault() {
-		$this->dataForStream = $this->streamDao->getAll("DESC");
 		$this->userID = $this->getUser()->getId();
-		$this->userData = $this->userDao->find($this->userID);
+		$this->user = $this->userDao->find($this->userID);
+		$this->fillCorrectDataForStream();
 	}
 
 	public function renderDefault() {
 		$this->template->userID = $this->userID;
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
-		$this->template->userData = $this->userData;
+		$this->template->userData = $this->user;
 		$this->template->countFriendRequests = count($this->friendRequestDao->getAllToUser($this->userID)->fetchAll());
 	}
 
@@ -137,9 +150,29 @@ class OnePagePresenter extends BasePresenter {
 	 * @return \POSComponent\Search\BestMatchSearch
 	 */
 	protected function createComponentBestMatchSearch($name) {
-		$user = $this->userDao->find($this->getUser()->id);
 		$session = $this->getSession();
-		return new \POSComponent\Search\BestMatchSearch($user->property, $this->userDao, $session, $this, $name);
+		return new \POSComponent\Search\BestMatchSearch($this->user, $this->userDao, $this->userCategoryDao, $session, $this, $name);
+	}
+
+	/**
+	 * Uloží preferované příspěvky uživatele do streamu.
+	 */
+	private function fillCorrectDataForStream() {
+		if ($this->getUser()->isLoggedIn()) {
+			$this->initializeStreamUserPreferences();
+			$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
+		} else {
+			$this->dataForStream = $this->streamDao->getAll("DESC");
+		}
+	}
+
+	/**
+	 * Nastavý preferované příspěvky uživatele.
+	 */
+	private function initializeStreamUserPreferences() {
+		$session = $this->getSession();
+		$this->streamUserPreferences = new StreamUserPreferences($this->user, $this->userDao, $this->streamDao, $this->userCategoryDao, $session);
+		//$this->streamUserPreferences->calculate();
 	}
 
 }

@@ -22,7 +22,7 @@ class DatingRegistrationWomanFourthForm extends DatingRegistrationBaseWomanForm 
 		parent::__construct($userDao, $parent, $name);
 
 		$this->regSession = $regSession;
-		$this->addAge();
+		$this->addAge($regSession->age);
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->addSubmit('send', 'Dokončit registraci')

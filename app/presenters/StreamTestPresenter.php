@@ -19,10 +19,10 @@ class StreamTestPresenter extends BasePresenter {
 	public $streamUserPreferences;
 
 	/**
-	 * @var \POS\Model\StreamCategoriesDao
+	 * @var \POS\Model\UserCategoryDao
 	 * @inject
 	 */
-	public $streamCategoriesDao;
+	public $userCategoryDao;
 
 	/**
 	 * @var \POS\Model\StreamDao
@@ -106,6 +106,12 @@ class StreamTestPresenter extends BasePresenter {
 	public $dataForStream;
 	private $userID;
 
+	/** @var \Nette\Database\Table\ActiveRow Vlastnosti přihlášeného uživatele. */
+	protected $userProperty;
+
+	/** @var \Nette\Database\Table\ActiveRow Přihlášený uživatel. */
+	protected $user;
+
 	public function startup() {
 		parent::startup();
 		// ochrana proti spuštění na ostrém serveru nebo když je nepřihlášený
@@ -115,6 +121,9 @@ class StreamTestPresenter extends BasePresenter {
 	}
 
 	public function actionDefault() {
+		$user = $this->userDao->find($this->getUser()->getId());
+		$this->user = $user;
+		$this->userProperty = $user->property;
 		$this->initializeStreamUserPreferences();
 		$this->fillCorrectDataForStream();
 		$this->userID = $this->getUser()->getId();
@@ -125,17 +134,11 @@ class StreamTestPresenter extends BasePresenter {
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
 
 		/* příklady použití nových dao funkcí */
-		$this->template->categories = $this->streamCategoriesDao->getCategoriesWhatFit(array(
-			StreamCategoriesDao::COLUMN_ANAL => 1,
-			StreamCategoriesDao::COLUMN_SWALLOW => 1,
-			StreamCategoriesDao::COLUMN_GROUP => 0,
-			StreamCategoriesDao::COLUMN_ORAL => 1
-		));
-		$this->template->choices = $this->streamDao->getAllItemsWhatFits(array(1, 2, 3));
-		$this->template->results = $this->streamDao->getAllItemsWhatFitsAndRange(array(1, 2, 3), array(
-			'age' => array('2014-06-26 00:27:02', '2014-09-26 22:27:02'),
-			'tallness' => array(180, 200)
-		));
+		$userCategory = new POS\Model\UserCategory($this->userProperty, $this->userCategoryDao, $this->getSession());
+		$categoryIDs = $userCategory->getCategoryIDs(TRUE);
+		$this->template->categories = $categoryIDs;
+
+		$this->template->choices = $this->streamDao->getAllItemsWhatFits($categoryIDs, $this->user->id);
 		/**/
 	}
 
@@ -167,8 +170,9 @@ class StreamTestPresenter extends BasePresenter {
 	}
 
 	private function initializeStreamUserPreferences() {
-		$userProperty = $this->userPropertyDao->find($this->getUser()->getId());
-		$this->streamUserPreferences = new StreamUserPreferences($userProperty, $this->userDao, $this->streamDao, $this->streamCategoriesDao, $this->getSession());
+
+		$this->streamUserPreferences = new StreamUserPreferences($this->user, $this->userDao, $this->streamDao, $this->userCategoryDao, $this->getSession());
+		$this->streamUserPreferences->calculate();
 	}
 
 }

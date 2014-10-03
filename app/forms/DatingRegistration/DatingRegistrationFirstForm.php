@@ -21,6 +21,9 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 	/** @var \Nette\Http\SessionSection */
 	private $regSession;
 
+	/** @var array Možnosti pro zaškrtnutí s kým se chci potkat. */
+	private $wantToMeetOption = array(1 => "ano", 2 => "nezáleží", 0 => "ne");
+
 	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, $regSession = NULL) {
 		parent::__construct($parent, $name);
 
@@ -29,9 +32,9 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 
 		$this->addGroup('Základní údaje:');
 
-		$this->addAge();
+		$this->addAge($regSession->age);
 
-		$this->addSelect('user_property', 'Jsem:', $this->userDao->getUserPropertyOption());
+		$this->addSelect('type', 'Jsem:', $this->userDao->getUserPropertyOption());
 
 		$this->addGroup('Zajímám se o:');
 
@@ -39,8 +42,7 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 
 		if (isset($regSession)) {
 			$this->setDefaults(array(
-				"age" => $regSession->age,
-				"user_property" => $regSession->user_property
+				"type" => $regSession->type
 			));
 		}
 
@@ -56,14 +58,13 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 		$values = $form->getValues();
 		$presenter = $this->getPresenter();
 
-		//uložení checkboxů
-		foreach ($this->userDao->getArrWantToMeet() as $key => $interest) {
-			$this->regSession[$key] = $values[$key] == TRUE ? 1 : 0;
-		}
-
 		$this->regSession->role = 'unconfirmed_user';
 		$this->regSession->age = $this->getAge($values);
-		$this->regSession->user_property = $values->user_property;
+		$this->regSession->type = $values->type;
+
+		foreach ($this->userDao->getArrWantToMeet() as $key => $want) {
+			$this->regSession[$key] = $values[$key];
+		}
 
 		$presenter->redirect('Datingregistration:SecondRegForm');
 	}
@@ -73,8 +74,13 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 	 */
 	public function addWantToMeet() {
 		foreach ($this->userDao->getArrWantToMeet() as $key => $want) {
-			$checkBox = $this->addCheckbox($key, $want);
-			$checkBox->setDefaultValue($this->regSession[$key]);
+			$radioList = $this->addRadioList($key, $want, $this->wantToMeetOption);
+			$radioList->getSeparatorPrototype()->setName(NULL);
+			if (!empty($this->regSession[$key])) {
+				$radioList->setDefaultValue($this->regSession[$key]);
+			} else {
+				$radioList->setDefaultValue(2);
+			}
 		}
 	}
 
@@ -86,12 +92,12 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 		$values = $form->values;
 
 		foreach ($this->userDao->getArrWantToMeet() as $key => $interest) {
-			if ($values[$key]) {
+			if ($values[$key] == 1) { //alespoň jedno ANO
 				return;
 			}
 		}
 
-		$this->addError("Zaškrtněte prosím o koho se zajímáte");
+		$this->addError("Zaškrtněte prosím o koho se zajímáte - alespoň jedno ano");
 	}
 
 }

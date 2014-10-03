@@ -1,8 +1,5 @@
 Feature: Confessions form
 
-	Scenario:
-		Given I am on "/install/test-data"
-
 	Scenario Outline: User can post confession
 		Given I am on "/"
 		And I should see "Přiznání"
@@ -26,6 +23,7 @@ Feature: Confessions form
 		Then I should see "<text>"
 		And I follow "vyřídit" 
 		Then I should not see "<text>"
+		Given I am signed in as "<admin>" # kvůli obnovení příspěvků na streamu
 		When I go to "/"
 		Then I should see "<text>"
 

@@ -361,13 +361,17 @@ class FeatureContext extends MinkContext {
 		}
 	}
 
-	/**
-	 * @When /^I attach to "([^"]*)" the file "([^"]*)"$/
-	 */
-	public function iAttachToTheFile($field, $path) {
-		$absoluteBasePath = APP_DIR . "/test/features/files/";
-
-		$this->attachFileToField($field, $absoluteBasePath . $path);
-	}
-
+//	/**
+//	 * @When /^I attach to  "([^"]*)" the file "([^"]*)"$/
+//	 */
+//	public function iAttachToTheFile($field, $path) {
+//		$absoluteBasePath = APP_DIR . "/test/features/files/";
+//
+//		$field = $this->fixStepArgument($field);
+//		$this->getSession()->getPage()->attachFileToField($field, $absoluteBasePath . $path);
+//
+////		throw new PendingException($absoluteBasePath . $path);
+////
+//		$this->attachFileToField($field, $absoluteBasePath . $path);
+//	}
 }

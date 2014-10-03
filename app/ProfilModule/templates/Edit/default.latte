@@ -31,17 +31,17 @@
 	{control firstEditForm}
         {control secondEditForm}
 	
-	{if $userData->property->user_property == 'w' || $userData->property->user_property == 'cw' || $userData->property->user_property == 'c'}
+	{if $userData->property->type == 2 || $userData->property->type == 5 || $userData->property->type == 3}
 		{control thirdEditWomanForm}
 	{/if}
-	{if $userData->property->user_property == 'm' || $userData->property->user_property == 'cm' || $userData->property->user_property == 'c'}
+	{if $userData->property->type == 1 || $userData->property->type == 4 || $userData->property->type == 3}
 		{control thirdEditManForm}
 	{/if}
 	
-	{if $userData->property->user_property == 'cw'}
+	{if $userData->property->type == 5}
 		{control fourthEditWomanForm}
 	{/if}
-	{if $userData->property->user_property == 'cm'}
+	{if $userData->property->type == 4}
 		{control fourthEditManForm}
 	{/if}
  

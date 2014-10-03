@@ -43,8 +43,8 @@ class AdvancedForm extends BaseForm {
 
 		$sexType = array(
 			'' => '--------',
-			'm' => 'muž',
-			'w' => 'žena',
+			1 => 'muž',
+			2 => 'žena',
 		);
 
 		$sexChoices = $this->addSelect('sex', 'pohlaví:', $sexType)

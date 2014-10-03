@@ -1,16 +1,13 @@
 Feature: Dating registration
 
-	Scenario:
-		Given I am on "/install/test-data"
-
 	Scenario Outline: Registration of a couple 
 		Given I am on "/dating-registration/"
 		When I select "<day>" from "day"
 		And I select "<month>" from "month"
 		And I select "<year>" from "year"
-		And I select "<property>" from "user_property"
-		And I select "Pár" from "user_property"
-		And I check "want_to_meet_couple"
+		And I select "<type>" from "type"
+		And I select "Pár" from "type"
+		And I fill in "<want_to_meet_men>" for "frm-firstRegForm-want_to_meet_men-1"
 		And I press "send"
 		Then I should be on "/dating-registration/second-reg-form"
 		When I fill in "<email>" for "email"
@@ -30,7 +27,7 @@ Feature: Dating registration
 		And I select "ne" from "drink"
 		And I select "střední" from "graduation"
 		And I select "A" from "bra_size"
-		And I fill in "Hnědá" for "hair_colour"
+		And I select "<hair_colour>" from "hair_colour"
 		And I press "send"
 		Then I should see "Zaregistrujte partnera"
 		When I select "ženatý / vdaná" from "marital_state"
@@ -40,9 +37,11 @@ Feature: Dating registration
 		And I select "ne" from "smoke"
 		And I select "ne" from "drink"
 		And I select "střední" from "graduation"
-		And I select "střední" from "penis_length"
+		And I fill in "15" for "penis_length"
 		And I select "střední" from "penis_width"
-		And I fill in "35" for "age" 
+		When I select "<day>" from "day"
+		And I select "<month>" from "month"
+		And I select "<year>" from "year"
 		And I press "send"
 		Then I should see "Byli jste úspěšně zaregistrováni. Prosím potvrďte svůj email."
 		And I should receive an email
@@ -57,5 +56,5 @@ Feature: Dating registration
 		And I should see "Novákovi"
 
 		Examples:
-			| day	| month	| year	| property	| email				| user_name		| password		| passwordVerify	| first_sentence	| about_me		| city							 | 
-			| 1		| leden	| 1985	|Pár		|novakovi@test.cz	| Novákovi		| heslo123		| heslo123			| Vítej u Nováků	| Jsme Novákovi	| Blatec, Olomouc, Olomoucký kraj | 
+			| day	| month	| year	| want_to_meet_men | type	| email				| user_name		| password		| passwordVerify	| first_sentence	| about_me		| city				| hair_colour |
+			| 1		| leden	| 1985	| 1 | Pár		|novakovi@test.cz	| Novákovi		| heslo123		| heslo123			| Vítej u Nováků	| Jsme Novákovi	| Blatec, Olomouc, Olomoucký kraj | hnědá |

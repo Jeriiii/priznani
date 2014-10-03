@@ -2,18 +2,18 @@
 -- Hostitel:                     127.0.0.1
 -- Verze serveru:                5.6.15-log - MySQL Community Server (GPL)
 -- OS serveru:                   Win64
--- HeidiSQL Verze:               8.3.0.4694
+-- HeidiSQL Verze:               8.2.0.4675
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
--- Exportování dat pro tabulku pos.activities: ~0 rows (přibližně)
+-- Exportování dat pro tabulku postest.activities: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `activities` DISABLE KEYS */;
 /*!40000 ALTER TABLE `activities` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.advices: ~96 rows (přibližně)
+-- Exportování dat pro tabulku postest.advices: ~96 rows (přibližně)
 /*!40000 ALTER TABLE `advices` DISABLE KEYS */;
 INSERT INTO `advices` (`id`, `note`, `mark`, `was_on_fb`, `create`, `release_date`, `sort_date`, `real`, `fake`, `fblike`, `comment`, `add_to_fb_page`, `adminID`) VALUES
 	(1681, 'Hrozně bych chtěl zkusit sex s černoškou.Strašně mě přitahují a bohužel jich je tady v ČR málo. Má někdo zkušenosti? Stojí to za to? ', 1, 0, '2014-01-30 16:34:39', '2014-03-13 07:00:00', '2014-03-13 07:00:00', 8, 8, 0, 0, 0, NULL),
@@ -114,18 +114,7 @@ INSERT INTO `advices` (`id`, `note`, `mark`, `was_on_fb`, `create`, `release_dat
 	(1782, 'Čau, hele musim jít na výtěr z močový trubice..vim, že holky to bolí, jaký to je u kluků? sem celkem posranej', 0, 0, '2014-04-29 20:25:32', NULL, NULL, 0, 0, 0, 0, 0, NULL);
 /*!40000 ALTER TABLE `advices` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.city: ~0 rows (přibližně)
-/*!40000 ALTER TABLE `city` DISABLE KEYS */;
-/*!40000 ALTER TABLE `city` ENABLE KEYS */;
-
--- Exportování dat pro tabulku pos.competitions_images: ~2 rows (přibližně)
-/*!40000 ALTER TABLE `competitions_images` DISABLE KEYS */;
-INSERT INTO `competitions_images` (`id`, `imageID`, `userID`, `competitionID`, `phone`, `name`, `surname`, `allowed`) VALUES
-	(1, 3, 3, 1, NULL, NULL, NULL, 1),
-	(2, 2, 3, 1, NULL, NULL, NULL, 1);
-/*!40000 ALTER TABLE `competitions_images` ENABLE KEYS */;
-
--- Exportování dat pro tabulku pos.confessions: ~148 rows (přibližně)
+-- Exportování dat pro tabulku postest.confessions: ~148 rows (přibližně)
 /*!40000 ALTER TABLE `confessions` DISABLE KEYS */;
 INSERT INTO `confessions` (`id`, `note`, `mark`, `inStream`, `was_on_fb`, `create`, `release_date`, `sort_date`, `real`, `fake`, `fblike`, `comment`, `add_to_fb_page`, `adminID`) VALUES
 	(20100, 'Miluji když ho můžu klukovi vykouřit :) a ráda polykám', 1, 1, 1, '2014-02-15 14:11:08', '2014-03-20 22:00:00', '2014-03-20 22:00:00', 8, 8, 0, 0, 0, 14),
@@ -278,21 +267,13 @@ INSERT INTO `confessions` (`id`, `note`, `mark`, `inStream`, `was_on_fb`, `creat
 	(20252, 'Miluju to když jdu do sauny kde se musí člověk vyslíct a když tam příjde nějáká slečna takhle nahá tak bych na ni nejraději skočil v té sauně, strašně mě ta představa přitahuju a vzrušuje', 1, 1, 0, '2014-02-21 23:03:44', '2014-03-24 11:00:00', '2014-03-24 11:00:00', 11, 8, 0, 0, 0, 16);
 /*!40000 ALTER TABLE `confessions` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.contacts: ~0 rows (přibližně)
-/*!40000 ALTER TABLE `contacts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `contacts` ENABLE KEYS */;
-
--- Exportování dat pro tabulku pos.couple: ~0 rows (přibližně)
+-- Exportování dat pro tabulku postest.couple: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `couple` DISABLE KEYS */;
-INSERT INTO `couple` (`id`, `age`, `marital_state`, `orientation`, `tallness`, `shape`, `user_property`, `penis_length`, `penis_width`, `bra_size`, `smoke`, `drink`, `graduation`, `hair_colour`) VALUES
-	(1, 50, 'free', 'hetero', 160, '0', 'woman', NULL, NULL, 'a', 'often', 'often', 'zs', 1);
+INSERT INTO `couple` (`id`, `age`, `marital_state`, `orientation`, `tallness`, `shape`, `type`, `penis_length`, `penis_width`, `bra_size`, `smoke`, `drink`, `graduation`, `hair_colour`) VALUES
+	(1, 50, 'free', 'hetero', 160, '0', 2, NULL, NULL, 'a', 'often', 'often', 'zs', 'test');
 /*!40000 ALTER TABLE `couple` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.district: ~0 rows (přibližně)
-/*!40000 ALTER TABLE `district` DISABLE KEYS */;
-/*!40000 ALTER TABLE `district` ENABLE KEYS */;
-
--- Exportování dat pro tabulku pos.embed_videos: ~24 rows (přibližně)
+-- Exportování dat pro tabulku postest.embed_videos: ~24 rows (přibližně)
 /*!40000 ALTER TABLE `embed_videos` DISABLE KEYS */;
 INSERT INTO `embed_videos` (`id`, `id_serie`, `name`, `script`) VALUES
 	(1, 1, 'Sex ve třech', '<script type="text/javascript" src="http://1.im.cz/ad/gemius.js"></script><script type="text/javascript" src="http://i.imedia.cz/js/im2.js"></script><object height="382" width="624"><param name="movie" value="http://www.stream.cz/object/774641-prirodoveda-s-alex-sex-ve-trech"><param name="allowfullscreen" value="true"><param name="allowscriptaccess" value="always"><embed id="VideoSpot_774641" name="VideoSpot_774641" src="http://www.stream.cz/object/774641-prirodoveda-s-alex-sex-ve-trech" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" height="382" width="624"></object>'),
@@ -321,7 +302,7 @@ INSERT INTO `embed_videos` (`id`, `id_serie`, `name`, `script`) VALUES
 	(53, 1, 'Jsem homosexuál', '<script type="text/javascript" src="http://1.im.cz/ad/gemius.js"></script><script type="text/javascript" src="http://i.imedia.cz/js/im2.js"></script><object height="382" width="624"><param name="movie" value="http://www.stream.cz/object/794445-prirodoveda-s-alex-jsem-homosexual"><param name="allowfullscreen" value="true"><param name="allowscriptaccess" value="always"><embed id="VideoSpot_794445" name="VideoSpot_794445" src="http://www.stream.cz/object/794445-prirodoveda-s-alex-jsem-homosexual" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" height="382" width="624"></object>');
 /*!40000 ALTER TABLE `embed_videos` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.eshop_games: ~5 rows (přibližně)
+-- Exportování dat pro tabulku postest.eshop_games: ~5 rows (přibližně)
 /*!40000 ALTER TABLE `eshop_games` DISABLE KEYS */;
 INSERT INTO `eshop_games` (`id`, `name`, `description`, `suffix`, `price`, `tags`) VALUES
 	(1, 'Vášnivé fantazie', '<strong>Vstupte se svým miláčkem do světa vášní a fantazie.</strong> <br>\r\nHráči putují po herním plánu, kde na ně čekají různé události a příjemné úkoly, jejichž sexuální obtížnost se postupně zvyšuje. Dokážete dojít až do cíle? \r\nNa cestě k vrcholu vás ovšem čekají také nástrahy v podobě políček Vězení, ze kterého je nutné se osvobodit (viz speciální kartičky). <br>\r\n<strong>Více jak 100 úkolových karet vám zajistí, aby byla každá hra unikátní a mohli jste tak hrát znovu a znovu.</strong> <br>\r\nErotická sexy společenská hra pro páry, milence, manžele či partnery. Spousta erotických úkolů vám zajistí úžasnou předehru a neskutečný sex. Zaručené oživení vztahu a sexuálního života. Hra je vhodná jako dárek na Vánoce, Valentýn či narozeniny.', 'png', 69, '(pro páry)'),
@@ -331,7 +312,7 @@ INSERT INTO `eshop_games` (`id`, `name`, `description`, `suffix`, `price`, `tags
 	(5, 'Sexy aktivity', 'Hráči hrají buď jednotlivě nebo v týmech. Když je hráč na tahu, tak si vždy volí jakou obtížnost úkolu nebo otázky bude plnit a podle toho se pak posouvá vpřed po herním plánu (pokud splní).\r\n<br/>\r\n<strong>Hra obsahuje tři obtížnosti humorných sexy úkolů a zvídavých otázek spolu s bonusy, které obsahují soutěže, nebo zábavné úkoly pro všechny.</strong>\r\n<br/>\r\nNejoblíbenější hra na domácí pařbu, mejdan či večírek od Origame. Zábava na Silvestr, chatu, chalupu či oslavu. Lehce erotická společenská zábavná hra pro dospělé. Desítky úkolových karet. Lepší než běžné a drahé deskové hry. Levná hra ke stažení a vytisknutí.', 'png', 69, '(na párty)');
 /*!40000 ALTER TABLE `eshop_games` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.eshop_games_orders: ~120 rows (přibližně)
+-- Exportování dat pro tabulku postest.eshop_games_orders: ~120 rows (přibližně)
 /*!40000 ALTER TABLE `eshop_games_orders` DISABLE KEYS */;
 INSERT INTO `eshop_games_orders` (`id`, `name`, `surname`, `email`, `address`, `discount_coupon`, `phone`, `note`, `create`, `vasnivefantazie`, `nespoutanevzruseni`, `zhaveukolypropary`, `ceskahralasky`, `nekonecnaparty`, `sexyaktivity`, `ceskachlastacka`, `milackuuklidto`, `sexyhratky`, `manazeruvsen`, `print`) VALUES
 	(64, 'Jan', 'Říha', 'rihaja@seznam.cz', '', NULL, '721243489', '', '2014-02-10 14:47:52', 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -456,14 +437,14 @@ INSERT INTO `eshop_games_orders` (`id`, `name`, `surname`, `email`, `address`, `
 	(185, 'Nikola', 'Vopěnková', 'vopenkova.nikola@seznam.cz', '', NULL, '720192602', '', '2014-04-30 11:26:04', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 /*!40000 ALTER TABLE `eshop_games_orders` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.files: ~2 rows (přibližně)
+-- Exportování dat pro tabulku postest.files: ~2 rows (přibližně)
 /*!40000 ALTER TABLE `files` DISABLE KEYS */;
 INSERT INTO `files` (`id`, `id_page`, `name`, `suffix`, `special_condition`) VALUES
 	(1, 13, 'Fotogalerie', 'pdf', 1),
 	(2, NULL, 'Obchodní podmínky', 'doc', 0);
 /*!40000 ALTER TABLE `files` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.forms: ~3 rows (přibližně)
+-- Exportování dat pro tabulku postest.forms: ~3 rows (přibližně)
 /*!40000 ALTER TABLE `forms` DISABLE KEYS */;
 INSERT INTO `forms` (`id`, `name`, `type`) VALUES
 	(2, 'Přiznání o sexu', 1),
@@ -471,15 +452,7 @@ INSERT INTO `forms` (`id`, `name`, `type`) VALUES
 	(4, 'Přiznání z pařby', 3);
 /*!40000 ALTER TABLE `forms` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.friendrequest: ~0 rows (přibližně)
-/*!40000 ALTER TABLE `friendrequest` DISABLE KEYS */;
-/*!40000 ALTER TABLE `friendrequest` ENABLE KEYS */;
-
--- Exportování dat pro tabulku pos.friends: ~2 rows (přibližně)
-/*!40000 ALTER TABLE `friends` DISABLE KEYS */;
-/*!40000 ALTER TABLE `friends` ENABLE KEYS */;
-
--- Exportování dat pro tabulku pos.galleries: ~7 rows (přibližně)
+-- Exportování dat pro tabulku postest.galleries: ~7 rows (přibližně)
 /*!40000 ALTER TABLE `galleries` DISABLE KEYS */;
 INSERT INTO `galleries` (`id`, `name`, `sexmode`, `partymode`, `competition`, `description`, `imageUrl`, `current`, `lastImageID`) VALUES
 	(3, 'Obrázky 18+', 0, 0, 0, '', '', 0, NULL),
@@ -491,7 +464,7 @@ INSERT INTO `galleries` (`id`, `name`, `sexmode`, `partymode`, `competition`, `d
 	(10, 'Vtípky', 0, 0, 0, '', '', 0, NULL);
 /*!40000 ALTER TABLE `galleries` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.images: ~400 rows (přibližně)
+-- Exportování dat pro tabulku postest.images: ~400 rows (přibližně)
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
 INSERT INTO `images` (`id`, `galleryID`, `videoID`, `name`, `comment`, `user_name`, `user_phone`, `user_email`, `suffix`, `order`, `userID`, `idInGallery`, `approved`, `widthGalScrn`, `heightGalScrn`) VALUES
 	(48, 4, NULL, 'Vodka pártyyyyy :-)', 'Takhle slaví narozeniny v Budějovicích :-)', 'Petr Kukrál', '773538835', 'p.kukral@jkbusiness.cz', 'jpg', 0, NULL, NULL, 0, 700, 525),
@@ -896,7 +869,7 @@ INSERT INTO `images` (`id`, `galleryID`, `videoID`, `name`, `comment`, `user_nam
 	(556, 6, NULL, 'Velikonoce', '', 'Ondra', 'nic', 'nic', 'jpg', 0, 1, NULL, 0, NULL, NULL);
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.party_confessions: ~88 rows (přibližně)
+-- Exportování dat pro tabulku postest.party_confessions: ~88 rows (přibližně)
 /*!40000 ALTER TABLE `party_confessions` DISABLE KEYS */;
 INSERT INTO `party_confessions` (`id`, `note`, `mark`, `was_on_fb`, `create`, `release_date`, `sort_date`, `real`, `fake`, `fblike`, `comment`, `add_to_fb_page`, `adminID`) VALUES
 	(5738, 'Po jedne letni akci zamej sazel cigara :-D', 1, 0, '2014-02-17 09:03:00', '2014-03-17 01:00:00', '2014-03-17 01:00:00', 0, 0, 0, 0, 0, 1),
@@ -989,142 +962,138 @@ INSERT INTO `party_confessions` (`id`, `note`, `mark`, `was_on_fb`, `create`, `r
 	(5825, 'Jednou jsem odjel z diskoteky z Citova až do Přerova na názníku autobusu :D ..je i video :D to byla jazda kurwa', 0, 0, '2014-04-30 09:41:35', NULL, NULL, 0, 0, 0, 0, 0, NULL);
 /*!40000 ALTER TABLE `party_confessions` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.payments: ~0 rows (přibližně)
+-- Exportování dat pro tabulku postest.payments: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `payments` DISABLE KEYS */;
 /*!40000 ALTER TABLE `payments` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.region: ~0 rows (přibližně)
-/*!40000 ALTER TABLE `region` DISABLE KEYS */;
-/*!40000 ALTER TABLE `region` ENABLE KEYS */;
-
--- Exportování dat pro tabulku pos.status: ~0 rows (přibližně)
+-- Exportování dat pro tabulku postest.status: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `status` DISABLE KEYS */;
 /*!40000 ALTER TABLE `status` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.stream_items: ~118 rows (přibližně)
+-- Exportování dat pro tabulku postest.stream_items: ~118 rows (přibližně)
 /*!40000 ALTER TABLE `stream_items` DISABLE KEYS */;
-INSERT INTO `stream_items` (`id`, `videoID`, `galleryID`, `statusID`, `userGalleryID`, `confessionID`, `adviceID`, `userID`, `type`, `create`) VALUES
-	(5, NULL, NULL, NULL, 2, NULL, NULL, 87, 1, '16:47:54'),
-	(16366, NULL, NULL, NULL, NULL, 20100, NULL, NULL, 0, '17:07:32'),
-	(16367, NULL, NULL, NULL, NULL, 20102, NULL, NULL, 0, '17:07:32'),
-	(16368, NULL, NULL, NULL, NULL, 20103, NULL, NULL, 0, '17:07:32'),
-	(16369, NULL, NULL, NULL, NULL, 20106, NULL, NULL, 0, '17:07:32'),
-	(16370, NULL, NULL, NULL, NULL, 20107, NULL, NULL, 0, '17:07:32'),
-	(16371, NULL, NULL, NULL, NULL, 20108, NULL, NULL, 0, '17:07:32'),
-	(16372, NULL, NULL, NULL, NULL, 20109, NULL, NULL, 0, '17:07:32'),
-	(16373, NULL, NULL, NULL, NULL, 20110, NULL, NULL, 0, '17:07:32'),
-	(16374, NULL, NULL, NULL, NULL, 20111, NULL, NULL, 0, '17:07:32'),
-	(16375, NULL, NULL, NULL, NULL, 20114, NULL, NULL, 0, '17:07:32'),
-	(16376, NULL, NULL, NULL, NULL, 20115, NULL, NULL, 0, '17:07:32'),
-	(16377, NULL, NULL, NULL, NULL, 20116, NULL, NULL, 0, '17:07:32'),
-	(16378, NULL, NULL, NULL, NULL, 20117, NULL, NULL, 0, '17:07:32'),
-	(16379, NULL, NULL, NULL, NULL, 20118, NULL, NULL, 0, '17:07:32'),
-	(16380, NULL, NULL, NULL, NULL, 20119, NULL, NULL, 0, '17:07:32'),
-	(16381, NULL, NULL, NULL, NULL, 20120, NULL, NULL, 0, '17:07:32'),
-	(16382, NULL, NULL, NULL, NULL, 20121, NULL, NULL, 0, '17:07:32'),
-	(16383, NULL, NULL, NULL, NULL, 20122, NULL, NULL, 0, '17:07:32'),
-	(16384, NULL, NULL, NULL, NULL, 20123, NULL, NULL, 0, '17:07:32'),
-	(16385, NULL, NULL, NULL, NULL, 20124, NULL, NULL, 0, '17:07:32'),
-	(16386, NULL, NULL, NULL, NULL, 20125, NULL, NULL, 0, '17:07:32'),
-	(16387, NULL, NULL, NULL, NULL, 20126, NULL, NULL, 0, '17:07:32'),
-	(16388, NULL, NULL, NULL, NULL, 20127, NULL, NULL, 0, '17:07:32'),
-	(16389, NULL, NULL, NULL, NULL, 20129, NULL, NULL, 0, '17:07:32'),
-	(16390, NULL, NULL, NULL, NULL, 20130, NULL, NULL, 0, '17:07:32'),
-	(16391, NULL, NULL, NULL, NULL, 20132, NULL, NULL, 0, '17:07:32'),
-	(16392, NULL, NULL, NULL, NULL, 20133, NULL, NULL, 0, '17:07:32'),
-	(16393, NULL, NULL, NULL, NULL, 20135, NULL, NULL, 0, '17:07:32'),
-	(16394, NULL, NULL, NULL, NULL, 20137, NULL, NULL, 0, '17:07:32'),
-	(16395, NULL, NULL, NULL, NULL, 20139, NULL, NULL, 0, '17:07:32'),
-	(16396, NULL, NULL, NULL, NULL, 20138, NULL, NULL, 0, '17:07:32'),
-	(16397, NULL, NULL, NULL, NULL, 20140, NULL, NULL, 0, '17:07:32'),
-	(16398, NULL, NULL, NULL, NULL, 20141, NULL, NULL, 0, '17:07:32'),
-	(16399, NULL, NULL, NULL, NULL, 20142, NULL, NULL, 0, '17:07:32'),
-	(16400, NULL, NULL, NULL, NULL, 20143, NULL, NULL, 0, '17:07:32'),
-	(16401, NULL, NULL, NULL, NULL, 20144, NULL, NULL, 0, '17:07:32'),
-	(16402, NULL, NULL, NULL, NULL, 20145, NULL, NULL, 0, '17:07:32'),
-	(16403, NULL, NULL, NULL, NULL, 20147, NULL, NULL, 0, '17:07:32'),
-	(16404, NULL, NULL, NULL, NULL, 20149, NULL, NULL, 0, '17:07:32'),
-	(16405, NULL, NULL, NULL, NULL, 20151, NULL, NULL, 0, '17:07:32'),
-	(16426, NULL, NULL, NULL, NULL, 20163, NULL, NULL, 0, '17:07:51'),
-	(16427, NULL, NULL, NULL, NULL, 20164, NULL, NULL, 0, '17:07:51'),
-	(16428, NULL, NULL, NULL, NULL, 20165, NULL, NULL, 0, '17:07:51'),
-	(16429, NULL, NULL, NULL, NULL, 20166, NULL, NULL, 0, '17:07:51'),
-	(16430, NULL, NULL, NULL, NULL, 20167, NULL, NULL, 0, '17:07:51'),
-	(16431, NULL, NULL, NULL, NULL, 20168, NULL, NULL, 0, '17:07:51'),
-	(16432, NULL, NULL, NULL, NULL, 20169, NULL, NULL, 0, '17:07:51'),
-	(16433, NULL, NULL, NULL, NULL, 20171, NULL, NULL, 0, '17:07:51'),
-	(16434, NULL, NULL, NULL, NULL, 20172, NULL, NULL, 0, '17:07:51'),
-	(16435, NULL, NULL, NULL, NULL, 20173, NULL, NULL, 0, '17:07:51'),
-	(16436, NULL, NULL, NULL, NULL, 20174, NULL, NULL, 0, '17:07:51'),
-	(16437, NULL, NULL, NULL, NULL, 20175, NULL, NULL, 0, '17:07:51'),
-	(16438, NULL, NULL, NULL, NULL, 20176, NULL, NULL, 0, '17:07:51'),
-	(16439, NULL, NULL, NULL, NULL, 20177, NULL, NULL, 0, '17:07:51'),
-	(16440, NULL, NULL, NULL, NULL, 20178, NULL, NULL, 0, '17:07:51'),
-	(16441, NULL, NULL, NULL, NULL, 20179, NULL, NULL, 0, '17:07:51'),
-	(16442, NULL, NULL, NULL, NULL, 20180, NULL, NULL, 0, '17:07:51'),
-	(16443, NULL, NULL, NULL, NULL, 20181, NULL, NULL, 0, '17:07:51'),
-	(16444, NULL, NULL, NULL, NULL, 20182, NULL, NULL, 0, '17:07:51'),
-	(16445, NULL, NULL, NULL, NULL, 20183, NULL, NULL, 0, '17:07:51'),
-	(16446, NULL, NULL, NULL, NULL, 20186, NULL, NULL, 0, '17:07:51'),
-	(16447, NULL, NULL, NULL, NULL, 20188, NULL, NULL, 0, '17:07:51'),
-	(16448, NULL, NULL, NULL, NULL, 20190, NULL, NULL, 0, '17:07:51'),
-	(16449, NULL, NULL, NULL, NULL, 20192, NULL, NULL, 0, '17:07:51'),
-	(16450, NULL, NULL, NULL, NULL, 20193, NULL, NULL, 0, '17:07:51'),
-	(16451, NULL, NULL, NULL, NULL, 20195, NULL, NULL, 0, '17:07:51'),
-	(16452, NULL, NULL, NULL, NULL, 20196, NULL, NULL, 0, '17:07:51'),
-	(16453, NULL, NULL, NULL, NULL, 20198, NULL, NULL, 0, '17:07:51'),
-	(16454, NULL, NULL, NULL, NULL, 20199, NULL, NULL, 0, '17:07:51'),
-	(16455, NULL, NULL, NULL, NULL, 20201, NULL, NULL, 0, '17:07:51'),
-	(16456, NULL, NULL, NULL, NULL, 20202, NULL, NULL, 0, '17:07:51'),
-	(16457, NULL, NULL, NULL, NULL, 20203, NULL, NULL, 0, '17:07:51'),
-	(16458, NULL, NULL, NULL, NULL, 20204, NULL, NULL, 0, '17:07:51'),
-	(16459, NULL, NULL, NULL, NULL, 20206, NULL, NULL, 0, '17:07:51'),
-	(16460, NULL, NULL, NULL, NULL, 20205, NULL, NULL, 0, '17:07:51'),
-	(16461, NULL, NULL, NULL, NULL, 20208, NULL, NULL, 0, '17:07:51'),
-	(16462, NULL, NULL, NULL, NULL, 20209, NULL, NULL, 0, '17:07:51'),
-	(16463, NULL, NULL, NULL, NULL, 20210, NULL, NULL, 0, '17:07:51'),
-	(16464, NULL, NULL, NULL, NULL, 20212, NULL, NULL, 0, '17:07:51'),
-	(16465, NULL, NULL, NULL, NULL, 20213, NULL, NULL, 0, '17:07:51'),
-	(16466, NULL, NULL, NULL, NULL, 20215, NULL, NULL, 0, '17:07:51'),
-	(16467, NULL, NULL, NULL, NULL, 20216, NULL, NULL, 0, '17:07:51'),
-	(16468, NULL, NULL, NULL, NULL, 20217, NULL, NULL, 0, '17:07:51'),
-	(16469, NULL, NULL, NULL, NULL, 20218, NULL, NULL, 0, '17:07:51'),
-	(16470, NULL, NULL, NULL, NULL, 20219, NULL, NULL, 0, '17:07:51'),
-	(16471, NULL, NULL, NULL, NULL, 20220, NULL, NULL, 0, '17:07:51'),
-	(16472, NULL, NULL, NULL, NULL, 20221, NULL, NULL, 0, '17:07:51'),
-	(16473, NULL, NULL, NULL, NULL, 20222, NULL, NULL, 0, '17:07:51'),
-	(16474, NULL, NULL, NULL, NULL, 20223, NULL, NULL, 0, '17:07:51'),
-	(16475, NULL, NULL, NULL, NULL, 20224, NULL, NULL, 0, '17:07:51'),
-	(16476, NULL, NULL, NULL, NULL, 20225, NULL, NULL, 0, '17:07:51'),
-	(16477, NULL, NULL, NULL, NULL, 20226, NULL, NULL, 0, '17:07:51'),
-	(16478, NULL, NULL, NULL, NULL, 20227, NULL, NULL, 0, '17:07:51'),
-	(16479, NULL, NULL, NULL, NULL, 20228, NULL, NULL, 0, '17:07:51'),
-	(16480, NULL, NULL, NULL, NULL, 20229, NULL, NULL, 0, '17:07:51'),
-	(16481, NULL, NULL, NULL, NULL, 20230, NULL, NULL, 0, '17:07:51'),
-	(16482, NULL, NULL, NULL, NULL, 20231, NULL, NULL, 0, '17:07:51'),
-	(16483, NULL, NULL, NULL, NULL, 20232, NULL, NULL, 0, '17:07:51'),
-	(16484, NULL, NULL, NULL, NULL, 20233, NULL, NULL, 0, '17:07:51'),
-	(16485, NULL, NULL, NULL, NULL, 20235, NULL, NULL, 0, '17:07:51'),
-	(16486, NULL, NULL, NULL, NULL, 20238, NULL, NULL, 0, '17:07:51'),
-	(16487, NULL, NULL, NULL, NULL, 20242, NULL, NULL, 0, '17:07:51'),
-	(16488, NULL, NULL, NULL, NULL, 20244, NULL, NULL, 0, '17:07:51'),
-	(16489, NULL, NULL, NULL, NULL, 20236, NULL, NULL, 0, '17:07:51'),
-	(16490, NULL, NULL, NULL, NULL, 20239, NULL, NULL, 0, '17:07:51'),
-	(16491, NULL, NULL, NULL, NULL, 20237, NULL, NULL, 0, '17:07:51'),
-	(16492, NULL, NULL, NULL, NULL, 20241, NULL, NULL, 0, '17:07:51'),
-	(16493, NULL, NULL, NULL, NULL, 20246, NULL, NULL, 0, '17:07:51'),
-	(16494, NULL, NULL, NULL, NULL, 20247, NULL, NULL, 0, '17:07:51'),
-	(16495, NULL, NULL, NULL, NULL, 20243, NULL, NULL, 0, '17:07:51'),
-	(16496, NULL, NULL, NULL, NULL, 20249, NULL, NULL, 0, '17:07:51'),
-	(16497, NULL, NULL, NULL, NULL, 20250, NULL, NULL, 0, '17:07:51'),
-	(16498, NULL, NULL, NULL, NULL, 20248, NULL, NULL, 0, '17:07:51'),
-	(16499, NULL, NULL, NULL, NULL, 20251, NULL, NULL, 0, '17:07:51'),
-	(16500, NULL, NULL, NULL, NULL, 20252, NULL, NULL, 0, '17:07:51'),
-	(16501, NULL, NULL, NULL, NULL, 20240, NULL, NULL, 0, '17:07:51'),
-	(16668, NULL, 9, NULL, NULL, NULL, NULL, NULL, 1, '19:16:49');
+INSERT INTO `stream_items` (`id`, `videoID`, `galleryID`, `userGalleryID`, `confessionID`, `adviceID`, `userID`, `type`, `create`) VALUES
+	(5, NULL, NULL, 2, NULL, NULL, 87, 1, '16:47:54'),
+	(16366, NULL, NULL, NULL, 20100, NULL, NULL, 0, '17:07:32'),
+	(16367, NULL, NULL, NULL, 20102, NULL, NULL, 0, '17:07:32'),
+	(16368, NULL, NULL, NULL, 20103, NULL, NULL, 0, '17:07:32'),
+	(16369, NULL, NULL, NULL, 20106, NULL, NULL, 0, '17:07:32'),
+	(16370, NULL, NULL, NULL, 20107, NULL, NULL, 0, '17:07:32'),
+	(16371, NULL, NULL, NULL, 20108, NULL, NULL, 0, '17:07:32'),
+	(16372, NULL, NULL, NULL, 20109, NULL, NULL, 0, '17:07:32'),
+	(16373, NULL, NULL, NULL, 20110, NULL, NULL, 0, '17:07:32'),
+	(16374, NULL, NULL, NULL, 20111, NULL, NULL, 0, '17:07:32'),
+	(16375, NULL, NULL, NULL, 20114, NULL, NULL, 0, '17:07:32'),
+	(16376, NULL, NULL, NULL, 20115, NULL, NULL, 0, '17:07:32'),
+	(16377, NULL, NULL, NULL, 20116, NULL, NULL, 0, '17:07:32'),
+	(16378, NULL, NULL, NULL, 20117, NULL, NULL, 0, '17:07:32'),
+	(16379, NULL, NULL, NULL, 20118, NULL, NULL, 0, '17:07:32'),
+	(16380, NULL, NULL, NULL, 20119, NULL, NULL, 0, '17:07:32'),
+	(16381, NULL, NULL, NULL, 20120, NULL, NULL, 0, '17:07:32'),
+	(16382, NULL, NULL, NULL, 20121, NULL, NULL, 0, '17:07:32'),
+	(16383, NULL, NULL, NULL, 20122, NULL, NULL, 0, '17:07:32'),
+	(16384, NULL, NULL, NULL, 20123, NULL, NULL, 0, '17:07:32'),
+	(16385, NULL, NULL, NULL, 20124, NULL, NULL, 0, '17:07:32'),
+	(16386, NULL, NULL, NULL, 20125, NULL, NULL, 0, '17:07:32'),
+	(16387, NULL, NULL, NULL, 20126, NULL, NULL, 0, '17:07:32'),
+	(16388, NULL, NULL, NULL, 20127, NULL, NULL, 0, '17:07:32'),
+	(16389, NULL, NULL, NULL, 20129, NULL, NULL, 0, '17:07:32'),
+	(16390, NULL, NULL, NULL, 20130, NULL, NULL, 0, '17:07:32'),
+	(16391, NULL, NULL, NULL, 20132, NULL, NULL, 0, '17:07:32'),
+	(16392, NULL, NULL, NULL, 20133, NULL, NULL, 0, '17:07:32'),
+	(16393, NULL, NULL, NULL, 20135, NULL, NULL, 0, '17:07:32'),
+	(16394, NULL, NULL, NULL, 20137, NULL, NULL, 0, '17:07:32'),
+	(16395, NULL, NULL, NULL, 20139, NULL, NULL, 0, '17:07:32'),
+	(16396, NULL, NULL, NULL, 20138, NULL, NULL, 0, '17:07:32'),
+	(16397, NULL, NULL, NULL, 20140, NULL, NULL, 0, '17:07:32'),
+	(16398, NULL, NULL, NULL, 20141, NULL, NULL, 0, '17:07:32'),
+	(16399, NULL, NULL, NULL, 20142, NULL, NULL, 0, '17:07:32'),
+	(16400, NULL, NULL, NULL, 20143, NULL, NULL, 0, '17:07:32'),
+	(16401, NULL, NULL, NULL, 20144, NULL, NULL, 0, '17:07:32'),
+	(16402, NULL, NULL, NULL, 20145, NULL, NULL, 0, '17:07:32'),
+	(16403, NULL, NULL, NULL, 20147, NULL, NULL, 0, '17:07:32'),
+	(16404, NULL, NULL, NULL, 20149, NULL, NULL, 0, '17:07:32'),
+	(16405, NULL, NULL, NULL, 20151, NULL, NULL, 0, '17:07:32'),
+	(16426, NULL, NULL, NULL, 20163, NULL, NULL, 0, '17:07:51'),
+	(16427, NULL, NULL, NULL, 20164, NULL, NULL, 0, '17:07:51'),
+	(16428, NULL, NULL, NULL, 20165, NULL, NULL, 0, '17:07:51'),
+	(16429, NULL, NULL, NULL, 20166, NULL, NULL, 0, '17:07:51'),
+	(16430, NULL, NULL, NULL, 20167, NULL, NULL, 0, '17:07:51'),
+	(16431, NULL, NULL, NULL, 20168, NULL, NULL, 0, '17:07:51'),
+	(16432, NULL, NULL, NULL, 20169, NULL, NULL, 0, '17:07:51'),
+	(16433, NULL, NULL, NULL, 20171, NULL, NULL, 0, '17:07:51'),
+	(16434, NULL, NULL, NULL, 20172, NULL, NULL, 0, '17:07:51'),
+	(16435, NULL, NULL, NULL, 20173, NULL, NULL, 0, '17:07:51'),
+	(16436, NULL, NULL, NULL, 20174, NULL, NULL, 0, '17:07:51'),
+	(16437, NULL, NULL, NULL, 20175, NULL, NULL, 0, '17:07:51'),
+	(16438, NULL, NULL, NULL, 20176, NULL, NULL, 0, '17:07:51'),
+	(16439, NULL, NULL, NULL, 20177, NULL, NULL, 0, '17:07:51'),
+	(16440, NULL, NULL, NULL, 20178, NULL, NULL, 0, '17:07:51'),
+	(16441, NULL, NULL, NULL, 20179, NULL, NULL, 0, '17:07:51'),
+	(16442, NULL, NULL, NULL, 20180, NULL, NULL, 0, '17:07:51'),
+	(16443, NULL, NULL, NULL, 20181, NULL, NULL, 0, '17:07:51'),
+	(16444, NULL, NULL, NULL, 20182, NULL, NULL, 0, '17:07:51'),
+	(16445, NULL, NULL, NULL, 20183, NULL, NULL, 0, '17:07:51'),
+	(16446, NULL, NULL, NULL, 20186, NULL, NULL, 0, '17:07:51'),
+	(16447, NULL, NULL, NULL, 20188, NULL, NULL, 0, '17:07:51'),
+	(16448, NULL, NULL, NULL, 20190, NULL, NULL, 0, '17:07:51'),
+	(16449, NULL, NULL, NULL, 20192, NULL, NULL, 0, '17:07:51'),
+	(16450, NULL, NULL, NULL, 20193, NULL, NULL, 0, '17:07:51'),
+	(16451, NULL, NULL, NULL, 20195, NULL, NULL, 0, '17:07:51'),
+	(16452, NULL, NULL, NULL, 20196, NULL, NULL, 0, '17:07:51'),
+	(16453, NULL, NULL, NULL, 20198, NULL, NULL, 0, '17:07:51'),
+	(16454, NULL, NULL, NULL, 20199, NULL, NULL, 0, '17:07:51'),
+	(16455, NULL, NULL, NULL, 20201, NULL, NULL, 0, '17:07:51'),
+	(16456, NULL, NULL, NULL, 20202, NULL, NULL, 0, '17:07:51'),
+	(16457, NULL, NULL, NULL, 20203, NULL, NULL, 0, '17:07:51'),
+	(16458, NULL, NULL, NULL, 20204, NULL, NULL, 0, '17:07:51'),
+	(16459, NULL, NULL, NULL, 20206, NULL, NULL, 0, '17:07:51'),
+	(16460, NULL, NULL, NULL, 20205, NULL, NULL, 0, '17:07:51'),
+	(16461, NULL, NULL, NULL, 20208, NULL, NULL, 0, '17:07:51'),
+	(16462, NULL, NULL, NULL, 20209, NULL, NULL, 0, '17:07:51'),
+	(16463, NULL, NULL, NULL, 20210, NULL, NULL, 0, '17:07:51'),
+	(16464, NULL, NULL, NULL, 20212, NULL, NULL, 0, '17:07:51'),
+	(16465, NULL, NULL, NULL, 20213, NULL, NULL, 0, '17:07:51'),
+	(16466, NULL, NULL, NULL, 20215, NULL, NULL, 0, '17:07:51'),
+	(16467, NULL, NULL, NULL, 20216, NULL, NULL, 0, '17:07:51'),
+	(16468, NULL, NULL, NULL, 20217, NULL, NULL, 0, '17:07:51'),
+	(16469, NULL, NULL, NULL, 20218, NULL, NULL, 0, '17:07:51'),
+	(16470, NULL, NULL, NULL, 20219, NULL, NULL, 0, '17:07:51'),
+	(16471, NULL, NULL, NULL, 20220, NULL, NULL, 0, '17:07:51'),
+	(16472, NULL, NULL, NULL, 20221, NULL, NULL, 0, '17:07:51'),
+	(16473, NULL, NULL, NULL, 20222, NULL, NULL, 0, '17:07:51'),
+	(16474, NULL, NULL, NULL, 20223, NULL, NULL, 0, '17:07:51'),
+	(16475, NULL, NULL, NULL, 20224, NULL, NULL, 0, '17:07:51'),
+	(16476, NULL, NULL, NULL, 20225, NULL, NULL, 0, '17:07:51'),
+	(16477, NULL, NULL, NULL, 20226, NULL, NULL, 0, '17:07:51'),
+	(16478, NULL, NULL, NULL, 20227, NULL, NULL, 0, '17:07:51'),
+	(16479, NULL, NULL, NULL, 20228, NULL, NULL, 0, '17:07:51'),
+	(16480, NULL, NULL, NULL, 20229, NULL, NULL, 0, '17:07:51'),
+	(16481, NULL, NULL, NULL, 20230, NULL, NULL, 0, '17:07:51'),
+	(16482, NULL, NULL, NULL, 20231, NULL, NULL, 0, '17:07:51'),
+	(16483, NULL, NULL, NULL, 20232, NULL, NULL, 0, '17:07:51'),
+	(16484, NULL, NULL, NULL, 20233, NULL, NULL, 0, '17:07:51'),
+	(16485, NULL, NULL, NULL, 20235, NULL, NULL, 0, '17:07:51'),
+	(16486, NULL, NULL, NULL, 20238, NULL, NULL, 0, '17:07:51'),
+	(16487, NULL, NULL, NULL, 20242, NULL, NULL, 0, '17:07:51'),
+	(16488, NULL, NULL, NULL, 20244, NULL, NULL, 0, '17:07:51'),
+	(16489, NULL, NULL, NULL, 20236, NULL, NULL, 0, '17:07:51'),
+	(16490, NULL, NULL, NULL, 20239, NULL, NULL, 0, '17:07:51'),
+	(16491, NULL, NULL, NULL, 20237, NULL, NULL, 0, '17:07:51'),
+	(16492, NULL, NULL, NULL, 20241, NULL, NULL, 0, '17:07:51'),
+	(16493, NULL, NULL, NULL, 20246, NULL, NULL, 0, '17:07:51'),
+	(16494, NULL, NULL, NULL, 20247, NULL, NULL, 0, '17:07:51'),
+	(16495, NULL, NULL, NULL, 20243, NULL, NULL, 0, '17:07:51'),
+	(16496, NULL, NULL, NULL, 20249, NULL, NULL, 0, '17:07:51'),
+	(16497, NULL, NULL, NULL, 20250, NULL, NULL, 0, '17:07:51'),
+	(16498, NULL, NULL, NULL, 20248, NULL, NULL, 0, '17:07:51'),
+	(16499, NULL, NULL, NULL, 20251, NULL, NULL, 0, '17:07:51'),
+	(16500, NULL, NULL, NULL, 20252, NULL, NULL, 0, '17:07:51'),
+	(16501, NULL, NULL, NULL, 20240, NULL, NULL, 0, '17:07:51'),
+	(16668, NULL, 9, NULL, NULL, NULL, NULL, 1, '19:16:49');
 /*!40000 ALTER TABLE `stream_items` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.users: ~33 rows (přibližně)
+-- Exportování dat pro tabulku postest.users: ~30 rows (přibližně)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `propertyID`, `coupleID`, `profilFotoID`, `confirmed`, `admin_score`, `role`, `last_active`, `created`, `email`, `user_name`, `password`) VALUES
 	(1, NULL, NULL, NULL, '', 10638, 'superadmin', NULL, NULL, 'P.Kukral@seznam.cz', 'Jerry', '3c4d22e96a8af7b8e9e42b336b0c55f2be5929ce9dab5e7b0805e352078eefda79c41f8576b281dfd3bd062e32fd77994001b3f79fbdd28edb7b08931c3aeb49'),
@@ -1159,56 +1128,38 @@ INSERT INTO `users` (`id`, `propertyID`, `coupleID`, `profilFotoID`, `confirmed`
 	(94, NULL, NULL, NULL, 'hwa2osf6hmsg9ojhvcw0027wzm0txmccaleqov330p6rjx8glkbpef7ib7bpzhwh77cqlb5r61ze7cqkyxrsphdxiudftnxqfqoe', NULL, 'user', NULL, NULL, 'p.kukral3@seznam.cz', 'Ja2', '8f1a8fe7730c3836d2e747f9aa14441dfbcc5c2a0d567d827f3c2d0ca856395686d562dbd39df20447d6160ec4ca339b9f3282a172a864329674a67ceb412648');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.users_competitions: ~0 rows (přibližně)
-/*!40000 ALTER TABLE `users_competitions` DISABLE KEYS */;
-INSERT INTO `users_competitions` (`id`, `name`, `description`, `imageUrl`, `current`, `lastImageID`) VALUES
-	(1, 'Test competition', 'Test competition', 'images/galleries/5/79.JPG', 0, NULL);
-/*!40000 ALTER TABLE `users_competitions` ENABLE KEYS */;
-
--- Exportování dat pro tabulku pos.users_fotos: ~0 rows (přibližně)
+-- Exportování dat pro tabulku postest.users_fotos: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `users_fotos` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users_fotos` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.users_properties: ~4 rows (přibližně)
+-- Exportování dat pro tabulku postest.users_properties: ~2 rows (přibližně)
 /*!40000 ALTER TABLE `users_properties` DISABLE KEYS */;
-INSERT INTO `users_properties` (`id`, `age`, `user_property`, `first_sentence`, `about_me`, `marital_state`, `orientation`, `tallness`, `shape`, `penis_length`, `penis_width`, `smoke`, `drink`, `graduation`, `bra_size`, `hair_colour`, `threesome`, `anal`, `group`, `bdsm`, `swallow`, `cum`, `oral`, `piss`, `sex_massage`, `petting`, `fisting`, `deepthrought`, `want_to_meet_men`, `want_to_meet_women`, `want_to_meet_couple`, `want_to_meet_couple_men`, `want_to_meet_couple_women`, `want_to_meet_group`, `cityID`, `districtID`, `regionID`) VALUES
-	(3, '1988-09-18', 'm', 'Oh bože, už budu.', 'Hledám zábavu a vzrušení.', 1, 1, 4, '5', 3, 2, 3, 1, 5, 2, 2, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, NULL, NULL, NULL),
-	(4, '1986-09-10', 'w', 'To je ale macek.', 'Moc ráda bych nějakýho svalouše co to umí v posteli.', 1, 1, 2, '5', NULL, NULL, 1, 2, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NULL, NULL, NULL);
+INSERT INTO `users_properties` (`id`, `age`, `type`, `first_sentence`, `about_me`, `marital_state`, `orientation`, `tallness`, `shape`, `penis_length`, `penis_width`, `smoke`, `drink`, `graduation`, `bra_size`, `hair_colour`, `threesome`, `anal`, `group`, `bdsm`, `swallow`, `cum`, `oral`, `piss`, `sex_massage`, `petting`, `fisting`, `deepthrought`, `want_to_meet_men`, `want_to_meet_women`, `want_to_meet_couple`, `want_to_meet_couple_men`, `want_to_meet_couple_women`, `want_to_meet_group`) VALUES
+	(3, 25, 1, 'Oh bože, už budu.', 'Hledám zábavu a vzrušení.', 'free', 'hetero', 180, '5', 'big', 'normal', 'occasionlly', 'often', 'vs', 'b', 'black', 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0),
+	(4, 27, 2, 'To je ale macek.', 'Moc ráda bych nějakýho svalouše co to umí v posteli.', 'free', 'hetero', 160, 5, NULL, NULL, 'often', 'no', 'sos', 'c', 'blond', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 /*!40000 ALTER TABLE `users_properties` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.user_change_password: ~0 rows (přibližně)
-/*!40000 ALTER TABLE `user_change_password` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_change_password` ENABLE KEYS */;
-
--- Exportování dat pro tabulku pos.user_galleries: ~4 rows (přibližně)
+-- Exportování dat pro tabulku postest.user_galleries: ~2 rows (přibližně)
 /*!40000 ALTER TABLE `user_galleries` DISABLE KEYS */;
 INSERT INTO `user_galleries` (`id`, `name`, `description`, `userID`, `bestImageID`, `lastImageID`, `man`, `women`, `couple`, `more`, `default`, `profil_gallery`) VALUES
 	(2, 'Test', '', 87, 4, 4, 0, 0, 1, 0, 0, 0),
-	(3, 'Test jména', '', 1, 5, 5, 0, 1, 0, 0, 0, 0),
-	(4, 'Super fotky', 'Toto je galerie uživatele Test User', 3, 6, 7, 0, 0, 1, 0, 0, 1);
+	(3, 'Test jména', '', 1, 5, 5, 0, 1, 0, 0, 0, 0);
 /*!40000 ALTER TABLE `user_galleries` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.user_images: ~8 rows (přibližně)
+-- Exportování dat pro tabulku postest.user_images: ~4 rows (přibližně)
 /*!40000 ALTER TABLE `user_images` DISABLE KEYS */;
-INSERT INTO `user_images` (`id`, `suffix`, `name`, `description`, `galleryID`, `approved`, `widthGalScrn`, `heightGalScrn`, `likes`) VALUES
-	(2, 'jpg', 'Test', '', 2, 1, 700, 500, 0),
-	(3, 'jpg', 'Test', '', 2, 1, 700, 500, 0),
-	(4, 'jpg', '', '', 2, 0, 700, 500, 0),
-	(5, 'jpg', 'Test jména', '', 3, 0, 700, 500, 0),
-	(6, 'png', 'Foto 1', 'Foto 1 uživatele Test User', 4, 0, 700, 500, 0),
-	(7, 'jpg', 'Foto 2', 'Foto 2 uživatele Test User', 4, 0, 700, 500, 0);
+INSERT INTO `user_images` (`id`, `suffix`, `name`, `description`, `galleryID`, `approved`, `widthGalScrn`, `heightGalScrn`) VALUES
+	(2, 'jpg', 'Test', '', 2, 1, 700, 500),
+	(3, 'jpg', 'Test', '', 2, 1, 700, 500),
+	(4, 'jpg', '', '', 2, 0, 700, 500),
+	(5, 'jpg', 'Test jména', '', 3, 0, 700, 500);
 /*!40000 ALTER TABLE `user_images` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.videos: ~0 rows (přibližně)
+-- Exportování dat pro tabulku postest.videos: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `videos` DISABLE KEYS */;
 INSERT INTO `videos` (`id`, `code`) VALUES
 	(1, 'ROJy9TlhxtY');
 /*!40000 ALTER TABLE `videos` ENABLE KEYS */;
-
--- Exportování dat pro tabulku pos.you_are_sexy: ~0 rows (přibližně)
-/*!40000 ALTER TABLE `you_are_sexy` DISABLE KEYS */;
-/*!40000 ALTER TABLE `you_are_sexy` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-

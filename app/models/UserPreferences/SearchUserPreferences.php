@@ -16,6 +16,7 @@ use Nette\Caching\Cache;
 use Nette\ArrayHash;
 use NetteExt\Serialize\Relation;
 use NetteExt\Serialize\Serializer;
+use POS\Model\UserCategory;
 
 class SearchUserPreferences extends BaseUserPreferences implements IUserPreferences {
 
@@ -24,13 +25,8 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * kdy je cache prázdná.
 	 */
 	public function calculate() {
-		$users = $this->userDao->getAll();
-
-		$userProperty = $this->userProperty;
-
-		/* hledání podle - hledám muže, hledám ženu ... */
-		$users = $this->userDao->iWantToMeet($userProperty, $users);
-		$users = $this->userDao->theyWantToMeet($userProperty, $users);
+		$categoryIDs = $this->getUserCategories(TRUE);
+		$users = $this->userDao->getByCategories($categoryIDs, $this->user->id);
 
 		$this->saveBestUsers($users);
 	}

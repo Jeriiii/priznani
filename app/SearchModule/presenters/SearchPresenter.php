@@ -38,6 +38,12 @@ class SearchPresenter extends SearchBasePresenter {
 	 */
 	public $searchData;
 
+	/**
+	 * @var \POS\Model\UserCategoryDao
+	 * @inject
+	 */
+	public $userCategoryDao;
+
 	public function beforeRender() {
 		parent::beforeRender();
 		$this->setSexMode();
@@ -244,7 +250,7 @@ class SearchPresenter extends SearchBasePresenter {
 //pole obsahující jednotlivé části dotazu uživatele (některé pole mohou být prázdné)
 		$AdvancedFilter = array(
 			'orientation' => $filterOrientation,
-			'user_property' => $filterInterested,
+			'type' => $filterInterested,
 			'age' => $filterAge,
 			'tallness' => $filterTallness,
 			'shape' => $filterShape,
@@ -440,7 +446,7 @@ class SearchPresenter extends SearchBasePresenter {
 	protected function createComponentBestMatchSearch($name) {
 		$user = $this->userDao->find($this->getUser()->id);
 		$session = $this->getSession();
-		return new BestMatchSearch($user->property, $this->userDao, $session, $this, $name);
+		return new BestMatchSearch($user, $this->userDao, $this->userCategoryDao, $session, $this, $name);
 	}
 
 	/**

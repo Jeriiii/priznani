@@ -1,8 +1,5 @@
 Feature: User's info
 
-	Scenario:
-		Given I am on "/install/test-data"
-
 	Scenario Outline: User's info is complete and visible
 		Given I am signed in as "<user>"
 		And I am on "/profil.show/user-info"
@@ -31,11 +28,11 @@ Feature: User's info
 		And I should see "Petting <petting>"
 		And I should see "Fisting <fisting>"
 		And I should see "Hluboké kouření <deepThroat>"
-		And I should see "Délka penisu <penisLenght>"
+		And I should see "Délka penisu (cm) <penisLenght>"
 		And I should see "Šířka penisu <penisWidth>"
 		And I should see "Hledám <lookFor>"
 
 		Examples:
 			| user				| name			 | firstSentence	 | userProperty | about						| age | tallness     | bodyType | smoking		| alcohol	| education | status | orientation	| threesome | anal	| group | BDSM	| swallow	| sperm | oral	| piss	| massage	| petting | fisting | deepThroat | penisLenght	| penisWidth | lookFor			|
-			| user@test.cz		| Test User		 | Oh bože, už budu. | Muž          | Hledám zábavu a vzrušení. | 25  | 170 - 180 cm | při těle | příležitostně | často		| vysoké	| volný	 | hetero		| ano		| ne	| ano	| ano	| ne		| ne	| ano	| ne	| ano		| ano	  |	ne		| ano		 | velká		| střední	 | ženu, ženský pár	|	
+			| user@test.cz		| Test User		 | Oh bože, už budu. | Muž          | Hledám zábavu a vzrušení. | 26  | 180 - 190 cm | plnoštíhlá | příležitostně | často		| vysoké	| volný	 | hetero		| ano		| ne	| ano	| ano	| ne		| ne	| ano	| ne	| ano		| ano	  |	ne		| ano		 | 3		| střední	 | ženu, ženský pár	|	
 			

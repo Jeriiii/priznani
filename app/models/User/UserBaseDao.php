@@ -17,7 +17,7 @@ abstract class UserBaseDao extends AbstractDao {
 
 	const COLUMN_ID = "id";
 	const COLUMN_AGE = "age";
-	const COLUMN_USER_PROPERTY = "user_property";
+	const COLUMN_TYPE = "type";
 	const COLUMN_MARITAL_STATE = "marital_state";
 	const COLUMN_ORIENTATION = "orientation";
 	const COLUMN_TALLNESS = "tallness";
@@ -31,24 +31,24 @@ abstract class UserBaseDao extends AbstractDao {
 	const COLUMN_HAIR_COLOUR = "hair_colour";
 
 	/* Druh uživatele */
-	const PROPERTY_MAN = "m";
-	const PROPERTY_WOMAN = "w";
-	const PROPERTY_COUPLE = "c";
-	const PROPERTY_COUPLE_MAN = "cm";
-	const PROPERTY_COUPLE_WOMAN = "cw";
-	const PROPERTY_GROUP = "g";
+	const PROPERTY_MAN = 1;
+	const PROPERTY_WOMAN = 2;
+	const PROPERTY_COUPLE = 3;
+	const PROPERTY_COUPLE_MAN = 4;
+	const PROPERTY_COUPLE_WOMAN = 5;
+	const PROPERTY_GROUP = 6;
 
 	/**
 	 * vrátí specifické věci pro pohlaví
 	 */
 	protected function getSex($userProperty) {
-		$property = $userProperty->user_property;
+		$property = $userProperty->type;
 		/* žena */
-		if ($property == "w" || $property == "c" || $property == "cw") {
+		if ($property == 2 || $property == 3 || $property == 5) {
 			return $this->getWomanData($userProperty);
 		}
 		/* muž */
-		if ($property == "m" || $property == "cm") {
+		if ($property == 1 || $property == 4) {
 			return $this->getManData($userProperty);
 		}
 		/* skupina */
@@ -70,7 +70,7 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	protected function getManData($userProperty) {
 		return array(
-			'Délka penisu' => $userProperty->penis_length,
+			'Délka penisu (cm)' => $userProperty->penis_length,
 			'Šířka penisu' => UserBaseDao::getTranslateUserPenisWidth($userProperty->penis_width),
 		);
 	}
@@ -108,7 +108,7 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	protected function getBaseData($user) {
 		return array(
-			'Věk' => $user->age,
+			'Věk' => $this->getAge($user->age),
 			'Výška' => UserBaseDao::getTranslateUserTallness($user->tallness),
 			'Typ těla' => UserBaseDao::getTranslateUserShape($user->shape),
 			'Kouřeni cigaret' => UserBaseDao::getTranslateUserHabit($user->smoke),
@@ -117,6 +117,17 @@ abstract class UserBaseDao extends AbstractDao {
 			'Status' => UserBaseDao::getTranslateUserState($user->marital_state),
 			'Sexuální orientace' => UserBaseDao::getTranslateUserOrientacion($user->orientation),
 		);
+	}
+
+	/**
+	 * Vrátí věk z datumu narození.
+	 * @param date $birth
+	 */
+	protected function getAge($birth) {
+		$now = new \Nette\DateTime;
+		$birth = new \Nette\DateTime($birth);
+		$diff = $now->diff($birth);
+		return $diff->y;
 	}
 
 	/*
@@ -157,7 +168,7 @@ abstract class UserBaseDao extends AbstractDao {
 	protected function getBaseUserProperty($data) {
 		$property[UserPropertyDao::COLUMN_AGE] = $data->age;
 		$property[UserPropertyDao::COLUMN_MARITAL_STATE] = $data->marital_state;
-		$property[UserPropertyDao::COLUMN_USER_PROPERTY] = $data->user_property;
+		$property[UserPropertyDao::COLUMN_TYPE] = $data->type;
 		$property[UserPropertyDao::COLUMN_ORIENTATION] = $data->orientation;
 		$property[UserPropertyDao::COLUMN_TALLNESS] = $data->tallness;
 		$property[UserPropertyDao::COLUMN_SHAPE] = $data->shape;
@@ -253,12 +264,12 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserPropertyOption() {
 		return array(
-			'w' => 'Žena',
-			'm' => 'Muž',
-			'c' => 'Pár',
-			'cw' => 'Pár dvě ženy',
-			'cm' => 'Pár dva muži',
-			'g' => 'Skupina',
+			2 => 'Žena',
+			1 => 'Muž',
+			3 => 'Pár',
+			5 => 'Pár dvě ženy',
+			4 => 'Pár dva muži',
+			6 => 'Skupina',
 		);
 	}
 
@@ -267,10 +278,10 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserInterestInOption() {
 		return array(
-			'w' => 'Žena',
-			'm' => 'Muž',
-			'c' => 'Pár',
-			'g' => 'Skupina',
+			2 => 'Žena',
+			1 => 'Muž',
+			3 => 'Pár',
+			6 => 'Skupina',
 		);
 	}
 

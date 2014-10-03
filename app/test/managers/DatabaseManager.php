@@ -83,16 +83,17 @@ class DatabaseManager {
 	 */
 	function featureStartScripts() {
 		$installDB = new InstallDB($this->databaseDao, TRUE);
-		//$installDB->instalPostestDb();
 		$installDB->dataTestDb();
-		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_START_FOLDER_NAME);
+//		 stará verze
+//		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_START_FOLDER_NAME);
 	}
 
 	/**
 	 * Executes scripts from feature end folder
 	 */
 	function featureEndScripts() {
-		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_END_FOLDER_NAME);
+		// stará verze
+		//$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_END_FOLDER_NAME);
 	}
 
 	/**
