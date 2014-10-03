@@ -241,7 +241,7 @@ class ChatManager {
 	private function filterExistingIDs($newPairs, $existing) {
 		$returnArray = array();
 		foreach ($newPairs as $id) {
-			if (!in_array($id, $existing)) {
+			if (!empty($existing) && !in_array($id, $existing)) {
 				$returnArray[] = $id;
 			}
 		}

@@ -9,7 +9,6 @@
 ;
 (function($) {
 
-	var boxOpts;
 	//zamek pro ajaxove pozadavky
 	var ajaxLock = false;
 
@@ -19,20 +18,18 @@
 
 
 		return this.each(function() {
-			setBoxOpts(boxopts);
 			//obalení okénkem a potřebnými elementy
-			addHtml($(this));
+			addHtml($(this), boxopts);
 			///////////////
 
-			addBinds();
-			watchForUpdateNeed();
+			addBinds(boxopts);
+			watchForUpdateNeed(boxopts);
 			if (boxopts.ajaxObserverId) {
 				observer.register(boxopts.ajaxObserverId, function(data) {
 					boxopts.observerResponseHandle(boxopts, data);
 				});
 			}
 		});
-
 
 	};
 
@@ -88,8 +85,7 @@
 	/** obalí data okénkem a nastaví jeho pozici vzhledem k tlačítku
 	 * @param {object} data DOM objekt pro data
 	 * */
-	function addHtml(data) {
-		var opts = this.boxOpts;
+	function addHtml(data, opts) {
 		var button = $(opts.buttonSelector);//tlačítko
 		data.appendTo('body');
 		data.wrap('<div class="ajaxBox ' + opts.theme + '" data-related="' + opts.buttonSelector + '"></div>');//obalení okénkem
@@ -126,8 +122,7 @@
 	/**
 	 * Znovu nebo poprvé načte data zavoláním příslušné url přes nette.ajax
 	 */
-	function reloadData() {
-		var opts = this.boxOpts;
+	function reloadData(opts) {
 		if (opts.loadUrl && opts.reloadPermitted(opts) && !this.ajaxLock) {
 			this.ajaxLock = true;
 			$.nette.ajax({
@@ -144,15 +139,15 @@
 	/**
 	 * Spustí cyklus, který hlídá, zda uživatel nevidí spodní část okénka (mimo data). Pokud nevidí, pošle ajaxový požadavek
 	 * */
-	function watchForUpdateNeed() {
-		var opts = this.boxOpts;
+	function watchForUpdateNeed(opts) {
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"] .ajaxBoxContent';
+		var option = opts;
 		setInterval(function() {
 			if (isThisWindowVisible(opts)) {
 				var contentHeight = $(boxSelector + ' .ajaxBoxData').height();
 				var contentLeftToShow = contentHeight - $(boxSelector).scrollTop();
 				if (contentLeftToShow < $(boxSelector).height()) {
-					reloadData();
+					reloadData(option);
 				}
 			}
 		}, 1000);
@@ -171,8 +166,7 @@
 	/**
 	 * Pověsí na okénka eventy, které je zavřou nebo otevřou, když je potřeba
 	 */
-	function addBinds() {
-		var opts = this.boxOpts;
+	function addBinds(opts) {
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"]';
 
 		$(opts.buttonSelector).click(function(e) {//zavření při otevření jiného okénka
@@ -194,19 +188,6 @@
 				}
 			}
 		});
-	}
-
-
-
-
-
-
-	/**
-	 * Nastavení options
-	 * @param opts nastaveni k nastaveni
-	 */
-	function setBoxOpts(opts) {
-		this.boxOpts = opts;
 	}
 
 

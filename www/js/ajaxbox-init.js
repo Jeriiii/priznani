@@ -34,12 +34,16 @@ $(document).ready(function() {
 				'chat-conversationList-limit': $.convLimit
 			};
 		},
-		ajaxObserverId: 'chatConversationWindow'
+		ajaxObserverId: 'chatConversationWindow',
+		observerResponseHandle: function(opts, data) {
+			if (data) {
+				$(opts.buttonSelector).find('.ajaxbox-button-info').html(data).css('display', 'block');
+			} else {
+				$(opts.buttonSelector).find('.ajaxbox-button-info').css('display', 'none');
+			}
+		}
 	});
 
 
-	$('#contact-9904961').ajaxBox({
-		buttonSelector: '#droplink'
-	});
 
 });
