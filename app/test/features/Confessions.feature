@@ -23,11 +23,11 @@ Feature: Confessions form
 		Then I should see "<text>"
 		And I follow "vyřídit" 
 		Then I should not see "<text>"
-		Given I am signed in as "<admin>" # kvůli obnovení příspěvků na streamu
+		# kvůli obnovení příspěvků na streamu
+		Given I am signed in as "<admin>" 
 		When I go to "/"
 		Then I should see "<text>"
 
 		Examples:
 			| admin			| text							 | flash_message					|
 			| admin@test.cz | Tajně sním o Danu Nekonečném...| Čeká na schválení adminem		|
-
