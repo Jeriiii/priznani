@@ -248,4 +248,12 @@ class ChatManager {
 		return $returnArray;
 	}
 
+	/**
+	 * Vrátí uživatele s daným ID kvůli profilu
+	 * @param type $id
+	 */
+	public function getUserWithId($id) {
+		return $this->userDao->find($id);
+	}
+
 }

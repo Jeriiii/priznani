@@ -9,11 +9,13 @@
 		{ifset $load}
 			{foreach $conversations as $conversation}
 				{var $id = $userfinder->getCorrectCodedId($conversation->id_sender, $conversation->id_recipient)}
+				{var $user = $userfinder->getCorrectUser($conversation->id_sender, $conversation->id_recipient)}
 				{var $username = $userfinder->getCorrectUsername($conversation->id_sender, $conversation->id_recipient)}
 				{var $unreaded = $conversation->readed == 0 && $userId != $conversation->id_sender}
 				<li data-id="{$id}" data-title="{$username}" class="conversation-link {if $unreaded}unreaded{/if}">
+				
 				<strong>{$username}</strong>
-				<p class="lastmessage">{$conversation->text}</p>
+				<p class="lastmessage">{$conversation->text|truncate:30}</p>
 				</li>
 			{/foreach}
 		{/ifset}

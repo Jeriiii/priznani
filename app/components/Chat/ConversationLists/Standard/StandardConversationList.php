@@ -34,7 +34,6 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 		}
 		$template->userId = $userId;
 
-
 		$template->loadLink = $this->link('load!');
 
 		$template->render();
@@ -71,6 +70,12 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 		}
 	}
 
+	/**
+	 * Vrátí ze dvou id to správné uživatelské ID, které není přihlášený uživatel
+	 * @param type $idSender první id
+	 * @param type $idRecipient druhé id
+	 * @return type
+	 */
 	public function getCorrectCodedId($idSender, $idRecipient) {
 		$loggedUserId = $this->getPresenter()->getUser()->getId();
 		$coder = $this->chatManager->getCoder();
@@ -78,6 +83,21 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 			return $coder->encodeData($idRecipient);
 		} else {
 			return $coder->encodeData($idSender);
+		}
+	}
+
+	/**
+	 * Vrátí uživatele s daným ID, který není přihlášený uživatel, aby mohl být vykreslen jeho profil
+	 * @param int $id id prvního uživatele
+	 * @param int $id id druhého uživatele
+	 * @return Selection
+	 */
+	public function getCorrectUser($id1, $id2) {
+		$loggedUserId = $this->getPresenter()->getUser()->getId();
+		if ($id1 == $loggedUserId) {
+			return $this->chatManager->getUserWithId($id2);
+		} else {
+			return $this->chatManager->getUserWithId($id1);
 		}
 	}
 
