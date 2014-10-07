@@ -26,12 +26,9 @@ class AdvancedForm extends BaseForm {
 
 		$ageFrom = $this->addText('age_from', 'od:')
 			->setAttribute('class', 'smallColumn')
-			->setAttribute('placeholder', 18)
-			->addRule(Form::RANGE, 'Věk musí být od %d do %d let.', array(18, 120));
-		$ageTo = $this->addText('age_to', 'do: ')
-			->setAttribute('placeholder', 120)
-			->setAttribute('class', 'smallColumn')
-			->addRule(Form::RANGE, 'Věk musí být od %d do %d let.', array(18, 120));
+			->setAttribute('placeholder', 18);
+		$ageTo = $this->addText('age_to', 'do:')
+			->setAttribute('class', 'smallColumn');
 
 		//přidání políček do skupiny
 		$age->add($ageFrom);
@@ -43,23 +40,24 @@ class AdvancedForm extends BaseForm {
 
 		$sexType = array(
 			'' => '--------',
-			1 => 'muž',
-			2 => 'žena',
+			'1' => 'muž',
+			'2' => 'žena',
+			'3' => 'pár',
+			'4' => 'pár mužů',
+			'5' => 'pár žen',
+			'6' => 'skupina'
 		);
 
 		$sexChoices = $this->addSelect('sex', 'pohlaví:', $sexType)
 			->setAttribute('class', 'columnSelectWidth');
 
-		$penisLengthType = array(
-			'' => '--------',
-			'1' => 'malá',
-			'2' => 'střední',
-			'3' => 'velká',
-			'4' => 'obrovská',
-		);
+		$penisLengthFrom = $this->addText('penis_length_from', 'délka penisu:')
+			->setAttribute('placeholder', 'od(cm)')
+			->setAttribute('class', 'middleColumn');
 
-		$penisLength = $this->addSelect('penis_length', 'délka penisu: ', $penisLengthType)
-			->setAttribute('class', 'columnSelectWidth');
+		$penisLengthTo = $this->addText('penis_length_to', '')
+			->setAttribute('placeholder', 'do(cm)')
+			->setAttribute('class', 'middleColumn');
 
 		$penisWidthType = array(
 			'' => '--------',
@@ -96,7 +94,8 @@ class AdvancedForm extends BaseForm {
 
 		//přidání políček do skupiny
 		$sex->add($sexChoices);
-		$sex->add($penisLength);
+		$sex->add($penisLengthFrom);
+		$sex->add($penisLengthTo);
 		$sex->add($penisWidth);
 		$sex->add($bra);
 		$sex->add($orientation);
@@ -114,16 +113,41 @@ class AdvancedForm extends BaseForm {
 			'6' => 'při těle',
 		);
 
+		$hairColor = array(
+			'' => '--------',
+			'1' => 'blond',
+			'2' => 'hnědá',
+			'3' => 'zrzavá',
+			'4' => 'černá',
+			'5' => 'jiná',
+		);
+
+		$tallness_from = array(
+			'' => 'od(cm)',
+			'1' => 160,
+			'2' => 170,
+			'3' => 180,
+			'4' => 190,
+			'5' => 200
+		);
+
+		$tallness_to = array(
+			'' => 'do(cm)',
+			'1' => 160,
+			'2' => 170,
+			'3' => 180,
+			'4' => 190,
+			'5' => 200
+		);
+
 		$shape = $this->addSelect('shape', 'postava:', $shapeTypes)
 			->setAttribute('class', 'columnSelectWidth');
-		$hair = $this->addText('hair_color', 'barva vlasů:')
+		$hair = $this->addSelect('hair_color', 'barva vlasů:', $hairColor)
 			->setAttribute('class', 'columnWidth');
-		$heightFrom = $this->addText('tallness_from', 'výška:')
-			->setAttribute('placeholder', 'od')
-			->setAttribute('class', 'smallColumn');
-		$heightTo = $this->addText('tallness_to', '')
-			->setAttribute('placeholder', 'do')
-			->setAttribute('class', 'smallColumn');
+		$heightFrom = $this->addSelect('tallness_from', 'výška:', $tallness_from)
+			->setAttribute('class', 'columnTallness');
+		$heightTo = $this->addSelect('tallness_to', '', $tallness_to)
+			->setAttribute('class', 'columnTallness');
 
 		//přidání do skupiny
 		$body->add($shape);
@@ -162,23 +186,65 @@ class AdvancedForm extends BaseForm {
 		//skupina pro obecná políčka(vzdělání a bydliště)
 		$general = $this->addGroup('Obecné');
 
+		$state = array(
+			'' => '--------',
+			'1' => 'volný',
+			'2' => 'ženatý/vdaná',
+			'3' => 'rozvedený/á',
+			'4' => 'oddělený/á',
+			'5' => 'vdovec/vdova',
+			'6' => 'zadaný/á',
+		);
+
+		$maritalState = $this->addSelect('marital_state', 'stav:', $state)
+			->setAttribute('class', 'columnSelectWidth');
+
 		$graduation = $this->addSelect('graduation', 'vzdělání:', $gra)
 			->setAttribute('class', 'columnSelectWidth');
 
-		$cityDataRaw = $this->cityDao->getCitiesData();
-		$cityData = $this->getCityData($cityDataRaw);
+		$dataRaw = $this->cityDao->getCitiesData();
+		$cityData = $this->getCityData($dataRaw);
+		$districtData = $this->getDistrictData($dataRaw);
+		$regionData = $this->getRegiontData($dataRaw);
 
-		$demograph = $this->addSelect('city', 'bydliště:', $cityData)
+		$city = $this->addSelect('city', 'bydliště:', $cityData)
+			->setAttribute('class', 'columnSelectWidth');
+
+		$district = $this->addSelect('district', '', $districtData)
+			->setAttribute('class', 'columnSelectWidth');
+
+		$region = $this->addSelect('region', '', $regionData)
 			->setAttribute('class', 'columnSelectWidth');
 
 		//přidání do skupiny
+		$general->add($maritalState);
 		$general->add($graduation);
-		$general->add($demograph);
+		$general->add($city);
+		$general->add($district);
+		$general->add($region);
+
+		//skupina pro políčka se zájmy koho potkat
+		$intresetdIn = $this->addGroup('Chce potkat');
+
+		$men = $this->addCheckbox('men', 'muži');
+		$women = $this->addCheckbox('women', 'ženy');
+		$couple = $this->addCheckbox('couple', 'pár');
+		$coupleMen = $this->addCheckbox('men_couple', 'pár mužů');
+		$coupleWomen = $this->addCheckbox('women_couple', 'pár žen');
+		$more = $this->addCheckbox('more', 'skupina');
+
+		//přidání do skupiny
+		$intresetdIn->add($men);
+		$intresetdIn->add($women);
+		$intresetdIn->add($couple);
+		$intresetdIn->add($coupleMen);
+		$intresetdIn->add($coupleWomen);
+		$intresetdIn->add($more);
+
 
 		//skupina pro políčka se sexuálními praktikami
 		$practics = $this->addGroup('Sexuální praktiky');
 
-		$notCare = $this->addCheckbox('notCare', 'nezáleží');
 		$threesome = $this->addCheckbox('threesome', 'trojka');
 		$anal = $this->addCheckbox('anal', 'anál');
 		$group = $this->addCheckbox('group', 'skupinový sex');
@@ -193,7 +259,6 @@ class AdvancedForm extends BaseForm {
 		$deepthroat = $this->addCheckbox('deepthroat', 'deepthroat');
 
 		//přidání do skupiny
-		$practics->add($notCare);
 		$practics->add($threesome);
 		$practics->add($anal);
 		$practics->add($group);
@@ -211,38 +276,94 @@ class AdvancedForm extends BaseForm {
 		$this->addSubmit('search', 'Vyhledat');
 
 		$this->setBootstrapRender();
+		$this->onValidate[] = callback($this, 'validateForm');
 		$this->onSuccess[] = callback($this, 'advancedFormSubmitted');
 
 		return $this;
+	}
+
+	public function validateForm($form) {
+		$values = $form->getValues();
+
+		if (!$this->testNumeric($values->age_from)) {
+			$form->addError('Věk musí být kladné číslo.');
+		}
+		if (!$this->testNumeric($values->age_to)) {
+			$form->addError('Věk musí být kladné číslo.');
+		}
+		if (!$this->testNumeric($values->penis_length_from)) {
+			$form->addError('Delka penisu musí být kladné číslo.');
+		}
+		if (!$this->testNumeric($values->penis_length_to)) {
+			$form->addError('Delka penisu musí být kladné číslo.');
+		}
 	}
 
 	public function advancedFormSubmitted(AdvancedForm $form) {
 		$values = $form->getValues();
 		$presenter = $this->getPresenter();
 
-		//roztřídění dat o bydlišti
-		$cityData = explode(',', $values->city);
-		unset($values->city);
-		$values->cityID = $cityData[0];
-		$values->districtID = $cityData[1];
-		$values->regionID = $cityData[2];
-
-
 		$presenter->redirect('Search:advanced', (array) $values);
 	}
 
 	/**
-	 * upraví data o bydlišti do lepšího formátu pro formulář ("ID,ID,ID")
-	 * @param string $cityDataRaw
+	 * upraví města do pole pro select
+	 * @param string $dataRaw
 	 * @return array
 	 */
-	private function getCityData($cityDataRaw) {
+	private function getCityData($dataRaw) {
 		$cityData = array();
-
-		foreach ($cityDataRaw as $item) {
-			$cityData[$item->id . "," . $item->districtID . "," . $item->regionID] = $item->city . "," . $item->district . ", " . $item->region;
+		$cityData[''] = 'město';
+		foreach ($dataRaw as $item) {
+			$cityData[$item->id] = $item->city . " (Okres: " . $item->district . ")";
 		}
 		return $cityData;
+	}
+
+	/**
+	 * upraví okresy do pole pro select
+	 * @param string $dataRaw
+	 * @return array
+	 */
+	private function getDistrictData($dataRaw) {
+		$districtData = array();
+		$districtData[''] = 'okres';
+		foreach ($dataRaw as $item) {
+			$districtData[$item->districtID] = $item->district . " (Kraj: " . $item->region . ")";
+		}
+		return $districtData;
+	}
+
+	/**
+	 * upraví kraje do pole pro select
+	 * @param string $dataRaw
+	 * @return array
+	 */
+	private function getRegiontData($dataRaw) {
+		$regionData = array();
+		$regionData[''] = 'kraj';
+		foreach ($dataRaw as $item) {
+			$regionData[$item->regionID] = $item->region;
+		}
+		return $regionData;
+	}
+
+	/**
+	 * Otestuje, zda zadaný řetězec je kladné číslo
+	 * @param string $text řetězec, které testujeme
+	 * @return boolean
+	 */
+	private function testNumeric($text) {
+		//regulární výraz, pro hledání mínusu v číselném řetězci
+		$pattern = "/-/";
+
+		if (!is_numeric($text) && $text != "") {
+			return FALSE;
+		}
+		if (preg_match($pattern, $text)) {
+			return FALSE;
+		}
+		return TRUE;
 	}
 
 }

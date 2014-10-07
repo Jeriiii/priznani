@@ -333,7 +333,7 @@ class SearchPresenter extends SearchBasePresenter {
 	 * v případě parametrů z hledání se tyto uloží do pole
 	 */
 
-	public function actionAdvanced($age_from, $age_to, $sex, $penis_length, $penis_width, $bra_size, $orientation, $shape, $hair_color, $tallness_from, $tallness_to, $drink, $smoke, $graduation, $notCare, $threesome, $anal, $group, $bdsm, $swallow, $cum, $oral, $piss, $sex_massage, $petting, $fisting, $deepthroat, $cityID, $districtID, $regionID) {
+	public function actionAdvanced($age_from, $age_to, $sex, $penis_length_from, $penis_length_to, $penis_width, $bra_size, $orientation, $shape, $hair_color, $tallness_from, $tallness_to, $drink, $smoke, $marital_state, $graduation, $city, $district, $region, $men, $women, $couple, $men_couple, $women_couple, $more, $threesome, $anal, $group, $bdsm, $swallow, $cum, $oral, $piss, $sex_massage, $petting, $fisting, $deepthroat) {
 
 		$data = array();
 
@@ -346,8 +346,11 @@ class SearchPresenter extends SearchBasePresenter {
 		if ($sex != NULL) {
 			$data['sex'] = $sex;
 		}
-		if ($penis_length != NULL) {
-			$data['penis_length'] = $penis_length;
+		if ($penis_length_from != NULL) {
+			$data['penis_length_from'] = $penis_length_from;
+		}
+		if ($penis_length_to != NULL) {
+			$data['penis_length_to'] = $penis_length_to;
 		}
 		if ($penis_width != NULL) {
 			$data['penis_width'] = $penis_width;
@@ -376,74 +379,98 @@ class SearchPresenter extends SearchBasePresenter {
 		if ($smoke != NULL) {
 			$data['smoke'] = $smoke;
 		}
+		if ($city != NULL) {
+			$data['city'] = $city;
+		}
+		if ($district != NULL) {
+			$data['district'] = $district;
+		}
+		if ($region != NULL) {
+			$data['region'] = $region;
+		}
+		if ($men != NULL) {
+			$data['men'] = $men;
+		}
+		if ($men != NULL) {
+			$data['women'] = $women;
+		}
+		if ($men != NULL) {
+			$data['couple'] = $couple;
+		}
+		if ($men_couple != NULL) {
+			$data['men_couple'] = $men_couple;
+		}
+		if ($women_couple != NULL) {
+			$data['women_couple'] = $women_couple;
+		}
+		if ($more != NULL) {
+			$data['more'] = $more;
+		}
+		if ($marital_state != NULL) {
+			$data['marital_state'] = $marital_state;
+		}
 		if ($graduation != NULL) {
 			$data['graduation'] = $graduation;
 		}
-		if ($notCare != NULL) {
-			$data['notCare'] = TRUE;
-			if ($threesome != NULL) {
-				$data['threesome'] = $threesome;
-			}
-			if ($anal != NULL) {
-				$data['anal'] = $anal;
-			}
-			if ($group != NULL) {
-				$data['group'] = $group;
-			}
-			if ($bdsm != NULL) {
-				$data['bdsm'] = $bdsm;
-			}
-			if ($swallow != NULL) {
-				$data['swallow'] = $swallow;
-			}
-			if ($cum != NULL) {
-				$data['cum'] = $cum;
-			}
-			if ($oral != NULL) {
-				$data['oral'] = $oral;
-			}
-			if ($piss != NULL) {
-				$data['piss'] = $piss;
-			}
-			if ($sex_massage != NULL) {
-				$data['sex_massage'] = $sex_massage;
-			}
-			if ($petting != NULL) {
-				$data['petting'] = $petting;
-			}
-			if ($fisting != NULL) {
-				$data['fisting'] = $fisting;
-			}
-			if ($deepthroat != NULL) {
-				$data['deepthroat'] = $deepthroat;
-			}
-			if ($cityID != NULL) {
-				$data['cityID'] = $cityID;
-			}
-			if ($districtID != NULL) {
-				$data['districtID'] = $districtID;
-			}
-			if ($regionID != NULL) {
-				$data['regionID'] = $regionID;
-			}
-		} else {
-			$data['notCare'] = FALSE;
+		if ($threesome != NULL) {
+			$data['threesome'] = $threesome;
 		}
+		if ($anal != NULL) {
+			$data['anal'] = $anal;
+		}
+		if ($group != NULL) {
+			$data['group'] = $group;
+		}
+		if ($bdsm != NULL) {
+			$data['bdsm'] = $bdsm;
+		}
+		if ($swallow != NULL) {
+			$data['swallow'] = $swallow;
+		}
+		if ($cum != NULL) {
+			$data['cum'] = $cum;
+		}
+		if ($oral != NULL) {
+			$data['oral'] = $oral;
+		}
+		if ($piss != NULL) {
+			$data['piss'] = $piss;
+		}
+		if ($sex_massage != NULL) {
+			$data['sex_massage'] = $sex_massage;
+		}
+		if ($petting != NULL) {
+			$data['petting'] = $petting;
+		}
+		if ($fisting != NULL) {
+			$data['fisting'] = $fisting;
+		}
+		if ($deepthroat != NULL) {
+			$data['deepthroat'] = $deepthroat;
+		}
+
+
 		$this->searchData = $data;
 	}
 
-	protected function createComponentAdvancedSearchForm($name) {
+	protected function
+
+	createComponentAdvancedSearchForm($name) {
 		$form = new Frm\AdvancedSearchForm($this, $name);
 		return $form;
 	}
 
-	protected function createComponentBaseSearch($name) {
+	protected function
+
+	createComponentBaseSearch($name) {
 		$users = $this->userDao->getAll();
 		$form = new \POSComponent\Search\BaseSearch($users);
 		return $form;
 	}
 
-	protected function createComponentBestMatchSearch($name) {
+	protected function
+
+	createComponentBestMatchSearch($name) {
 		$user = $this->userDao->find($this->getUser()->id);
 		$session = $this->getSession();
 		return new BestMatchSearch($user, $this->userDao, $this->userCategoryDao, $session, $this, $name);
@@ -454,7 +481,9 @@ class SearchPresenter extends SearchBasePresenter {
 	 * @param type $name
 	 * @return \POSComponent\Search\AdvancedSearch
 	 */
-	protected function createComponentAdvancedSearch($name) {
+	protected function
+
+	createComponentAdvancedSearch($name) {
 		return new \POSComponent\Search\AdvancedSearch($this->cityDao, $this->userDao, $this->searchData, $this, $name);
 	}
 

@@ -113,19 +113,32 @@ class UserDao extends UserBaseDao {
 	 */
 	public function findBySearchData($data) {
 		$sel = $this->getTable();
-		$sel->where(self::COLUMN_PROPERTY_ID . ".age >= ", $data['age_from']);
-		$sel->where(self::COLUMN_PROPERTY_ID . ".age <= ", $data['age_to']);
+		$timeOne = new \Nette\DateTime();
+		$timeTwo = new \Nette\DateTime();
+
+		if (empty($data)) {
+			return $sel;
+		}
+		if (!empty($data['age_from'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".age <= ?", $timeOne->modify('-' . $data['age_from'] . 'years')->format('Y-12-31'));
+		}
+		if (!empty($data['age_to'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".age >= ?", $timeTwo->modify('-' . $data['age_to'] . 'years')->format('Y-1-1'));
+		}
 		if (!empty($data['sex'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".type", $data['sex']);
 		}
-		if (!empty($data['penis_length'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length", $data['penis_length']);
+		if (!empty($data['penis_length_from'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length >= ?", $data['penis_length_from']);
+		}
+		if (!empty($data['penis_length_to'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length <= ?", $data['penis_length_to']);
 		}
 		if (!empty($data['penis_width'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_width", $data['penis_width']);
 		}
 		if (!empty($data['bra_size'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".'bra_size", $data['bra_size']);
+			$sel->where(self::COLUMN_PROPERTY_ID . ".bra_size", $data['bra_size']);
 		}
 		if (!empty($data['orientation'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".orientation", $data['orientation']);
@@ -148,79 +161,71 @@ class UserDao extends UserBaseDao {
 		if (!empty($data['smoke'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".smoke", $data['smoke']);
 		}
-		if (!empty($data['graduation'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".graduation", $data['graduation']);
+		if (!empty($data['men'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".want_to_meet_men", $data['men']);
 		}
-		if (!$data['notCare']) {
-			if (!empty($data['threesome'])) {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".threesome", $data['threesome']);
-			} else {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".threesome", 0);
-			}
-			if (!empty($data['anal'])) {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".anal", $data['anal']);
-			} else {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".anal", 0);
-			}
-			if (!empty($data['group'])) {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".group", $data['group']);
-			} else {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".group", 0);
-			}
-			if (!empty($data['bdsm'])) {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".bdsm", $data['bdsm']);
-			} else {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".bdsm", 0);
-			}
-			if (!empty($data['swallow'])) {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".swallow", $data['swallow']);
-			} else {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".swallow", 0);
-			}
-			if (!empty($data['cum'])) {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".cum", $data['cum']);
-			} else {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".cum", 0);
-			}
-			if (!empty($data['oral'])) {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".oral", $data['oral']);
-			} else {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".oral", 0);
-			}
-			if (!empty($data['piss'])) {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".piss", $data['piss']);
-			} else {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".piss", 0);
-			}
-			if (!empty($data['sex_massage'])) {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".sex_massage", $data['sex_massage']);
-			} else {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".sex_massage", 0);
-			}
-			if (!empty($data['petting'])) {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".petting", $data['petting']);
-			} else {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".petting", 0);
-			}
-			if (!empty($data['fisting'])) {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".fisting", $data['fisting']);
-			} else {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".fisting", 0);
-			}
-			if (!empty($data['deepthroat'])) {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".deepthrought", $data['deepthroat']);
-			} else {
-				$sel->where(self::COLUMN_PROPERTY_ID . ".deepthrought", 0);
-			}
+		if (!empty($data['women'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".want_to_meet_women", $data['women']);
 		}
-		if (!empty($data['cityID'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".cityID", $data['cityID']);
+		if (!empty($data['couple'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".want_to_meet_couple", $data['couple']);
 		}
-		if (!empty($data['districtID'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".districtID", $data['districtID']);
+		if (!empty($data['men_couple'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".want_to_meet_couple_men", $data['men_couple']);
 		}
-		if (!empty($data['regionID'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".regionID", $data['regionID']);
+		if (!empty($data['women_couple'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".want_to_meet_couple_women", $data['women_couple']);
+		}
+		if (!empty($data['more'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".want_to_meet_group", $data['more']);
+		}
+		if (!empty($data['marital_state'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".marital_state", $data['marital_state']);
+		}
+		if (!empty($data['threesome'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".threesome", $data['threesome']);
+		}
+		if (!empty($data['anal'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".anal", $data['anal']);
+		}
+		if (!empty($data['group'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".group", $data['group']);
+		}
+		if (!empty($data['bdsm'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".bdsm", $data['bdsm']);
+		}
+		if (!empty($data['swallow'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".swallow", $data['swallow']);
+		}
+		if (!empty($data['cum'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".cum", $data['cum']);
+		}
+		if (!empty($data['oral'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".oral", $data['oral']);
+		}
+		if (!empty($data['piss'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".piss", $data['piss']);
+		}
+		if (!empty($data['sex_massage'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".sex_massage", $data['sex_massage']);
+		}
+		if (!empty($data['petting'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".petting", $data['petting']);
+		}
+		if (!empty($data['fisting'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".fisting", $data['fisting']);
+		}
+		if (!empty($data['deepthroat'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".deepthrought", $data['deepthroat']);
+		}
+
+		if (!empty($data['city']) && !empty($data['district']) && !empty($data['region'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".cityID", $data['city']);
+		} else if (!empty($data['city']) && !empty($data['district'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".districtID", $data['district']);
+		}
+		if (!empty($data['region'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".regionID", $data['region']);
 		}
 		return $sel;
 	}

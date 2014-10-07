@@ -33,14 +33,8 @@ class AdvancedSearch extends BaseSearch {
 
 	public function __construct(CityDao $cityDao, UserDao $userDao, $searchData, $parent = NULL, $name = NULL) {
 		$this->userDao = $userDao;
-
-		//pokud nejsou vyhledávací data, nevykreslí žádné uživatele
-		if (empty($searchData['age_from'])) {
-			parent::__construct(array(), $parent, $name);
-		} else {
-			$users = $this->getusers($searchData);
-			parent::__construct($users, $parent, $name);
-		}
+		$users = $this->getusers($searchData);
+		parent::__construct($users, $parent, $name);
 		$this->cityDao = $cityDao;
 	}
 
