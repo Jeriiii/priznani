@@ -7,17 +7,17 @@
  * Třída vyskakovacího ajaxového okénka. Univerzální.
  */
 ;
-(function($) {
+(function ($) {
 
 	//zamek pro ajaxove pozadavky
 	var ajaxLock = false;
 
 	/* konstruktor */
-	$.fn.ajaxBox = function(options) {
+	$.fn.ajaxBox = function (options) {
 		var boxopts = $.extend({}, $.fn.ajaxBox.defaults, options);
 
 
-		return this.each(function() {
+		return this.each(function () {
 			//obalení okénkem a potřebnými elementy
 			addHtml($(this), boxopts);
 			///////////////
@@ -25,7 +25,7 @@
 			addBinds(boxopts);
 			watchForUpdateNeed(boxopts);
 			if (boxopts.ajaxObserverId) {
-				observer.register(boxopts.ajaxObserverId, function(data) {
+				observer.register(boxopts.ajaxObserverId, function (data) {
 					boxopts.observerResponseHandle(boxopts, data);
 				});
 			}
@@ -45,25 +45,25 @@
 		loadUrl: '',
 		/* data, která se přibalí k požadavku o první nebo další data. Může to být i funkce.
 		 * @param opts - nastavení dotyčné komponenty (lze ji podle toho najít) */
-		dataToReload: function(opts) {
+		dataToReload: function (opts) {
 			return {};
 		},
 		/* funkce, co se zavolá při načtení dat
 		 * @param opts - nastavení dotyčné komponenty (lze ji podle toho najít)
 		 * @param data - data vrácená ze serveru */
-		dataArrived: function(opts, data) {
+		dataArrived: function (opts, data) {
 		},
 		/* id pro ajax Observer (pokud jej chceme použít) */
 		ajaxObserverId: '',
 		/* funkce zpracovávající odpověď od AjaxObserveru. Implicitně je přesune do informací u tlačítka
 		 * @param opts - nastavení dotyčné komponenty (lze ji podle toho najít)
 		 * @param data - data vrácená ze serveru */
-		observerResponseHandle: function(opts, data) {
+		observerResponseHandle: function (opts, data) {
 			$(opts.buttonSelector).find('.ajaxbox-button-info').html(data).css('display', 'block');
 		},
 		/*funkce vracející boolean, který rozhoduje o tom, zda bude ještě prováděno ajaxové volání
 		 * @param opts - nastavení dotyčné komponenty (lze ji podle toho najít) */
-		reloadPermitted: function(opts) {
+		reloadPermitted: function (opts) {
 			return true;
 		},
 		/* CSS třída přiřazená rodičovskému elementu - zde lze nastavit rozměry okna apod */
@@ -78,7 +78,9 @@
 		 * css left|right (pozor na to pokud děláte vlastní theme!!!). */
 		arrowOrientation: 'right',
 		/* defaultní zpráva v dolní části okénka*/
-		defaultMessage: ''
+		defaultMessage: '',
+		/* zpráva v headeru okénka */
+		headerHtml: ''
 	};
 
 
@@ -94,6 +96,7 @@
 		data.wrap('<div class="ajaxBoxData"></div>');//zabalení obsahu
 		var box = data.parent().parent().parent();//současný selektor okénka
 		box.find('.ajaxBoxContent').append('<span class="loadingGif clear loadIfVisible"></span>');//gif na konci
+		box.prepend('<div class="ajaxBoxHeader">' + opts.headerHtml + '</div>');//přidání šipečky
 		box.prepend('<div class="arrow-up"></div>');//přidání šipečky
 		box.append('<div class="window-info">' + opts.defaultMessage + '</div>');//informační boxík okénka (dole)
 		button.append('<div class="ajaxbox-button-info"></div>');
@@ -128,7 +131,7 @@
 			$.nette.ajax({
 				url: opts.loadUrl,
 				data: opts.dataToReload(opts),
-				success: function(data) {
+				success: function (data) {
 					opts.dataArrived(opts, data);
 				}
 			});
@@ -142,7 +145,7 @@
 	function watchForUpdateNeed(opts) {
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"] .ajaxBoxContent';
 		var option = opts;
-		setInterval(function() {
+		setInterval(function () {
 			if (isThisWindowVisible(opts)) {
 				var contentHeight = $(boxSelector + ' .ajaxBoxData').height();
 				var contentLeftToShow = contentHeight - $(boxSelector).scrollTop();
@@ -169,7 +172,7 @@
 	function addBinds(opts) {
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"]';
 
-		$(opts.buttonSelector).click(function(e) {//zavření při otevření jiného okénka
+		$(opts.buttonSelector).click(function (e) {//zavření při otevření jiného okénka
 			if ($(e.target).is('.ajaxBox *, .ajaxBox')) {
 				return;
 			}
@@ -181,13 +184,15 @@
 			}
 		});
 
-		$('body').click(function(event) {//zavření při kliknutí mimo okénka
+		$('*').click(function (event) {//zavření při kliknutí mimo okénka
 			if (!$(event.target).is(opts.buttonSelector, '.ajaxBox')) {
 				if (!$(event.target).is('.ajaxBox *, .ajaxBox')) {
 					$(boxSelector).css('display', 'none');
 				}
 			}
 		});
+
+
 	}
 
 

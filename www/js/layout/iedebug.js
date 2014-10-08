@@ -5,7 +5,14 @@
  */
 
 if (!window.console) {
-	console = {log: function() {
+	console = {log: function () {
 		}}
 }
 ; //IE 8 console log fix
+
+//ie8 trim fix
+if (typeof String.prototype.trim !== 'function') {
+	String.prototype.trim = function () {
+		return this.replace(/^\s+|\s+$/g, '');
+	};
+}
