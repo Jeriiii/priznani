@@ -11,24 +11,41 @@ Feature: User can see recent conversations
 		And I send chat message <message> to "<receiverCodedId>"
 		And I am on "/sign/out"
 		Given I am signed in as <receiver>
-		Then I should see "<senderName>" in the "#conversations li[data-title='<senderName>']" element
-		And I should see <message> in the "#conversations li[data-title='<senderName>']" element
+		And I am testing ajax
+		And I am on "/?do=chat-conversationList-load&chat-conversationList-offset=0&chat-conversationList-limit=5"
+		Then the response should contain "<senderName>"
+		And the response should contain <message>
 
 		Examples:
 		|	sender					|	receiver			|	receiverCodedId	|	senderName	|	message					|
 		|	"user@test.cz"			|	"admin@test.cz"		|	8447904			|	Test User	|	"zpráva 123 ### []ččěř"	|
 
 
-Scenario Outline: Seeing messages from myself
+	Scenario Outline: Seeing messages from myself
 		Given I am signed in as <sender>
 		And I send chat message <message> to "<receiverCodedId>"
-		Then I reload the page
-		And I should see "<receiverName>" in the "#conversations li[data-title='<receiverName>']" element
-		And I should see <message> in the "#conversations li[data-title='<receiverName>']" element
+		Then I am testing ajax
+		And I am on "/?do=chat-conversationList-load&chat-conversationList-offset=0&chat-conversationList-limit=5"
+		Then the response should contain "<receiverName>"
+		And the response should contain <message>
 
 		Examples:
 		|	sender					|	receiver			|	receiverCodedId	|	receiverName	|	message					|
 		|	"user@test.cz"			|	"admin@test.cz"		|	8447904			|	Test Admin		|	"zpráva 123 ### []ččěř"	|
+
+	Scenario Outline: Not seeing messages from someone when offset is bigger
+		Given I am signed in as <sender>
+		And I send chat message <message> to "<receiverCodedId>"
+		And I am on "/sign/out"
+		Given I am signed in as <receiver>
+		And I am testing ajax
+		And I am on "/?do=chat-conversationList-load&chat-conversationList-offset=10&chat-conversationList-limit=5"
+		Then the response should not contain "<senderName>"
+		And the response should not contain <message>
+
+		Examples:
+		|	sender					|	receiver			|	receiverCodedId	|	senderName	|	message					|
+		|	"user@test.cz"			|	"admin@test.cz"		|	8447904			|	Test User	|	"zpráva 123 ### []ččěř"	|
 
 
 		
