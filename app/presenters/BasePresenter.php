@@ -13,6 +13,9 @@ use Nette\Application\UI\Form as Frm,
 	Nette\Http\Url,
 	Nette\Http\Request;
 use Nette\Security\User;
+use POS\Ajax\ExampleHandle,
+	POS\Ajax\AjaxCrate,
+	POS\Ajax\ChatConversationsHandle;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -44,6 +47,12 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public $chatManager;
 
+	/**
+	 * @var \POS\Ajax\AjaxObserver
+	 * @inject
+	 */
+	public $ajaxObserver;
+
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
@@ -59,6 +68,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 		$this->template->facebook_html = "";
 		$this->template->facebook_script = "";
+		$this->template->ajaxObserverLink = $this->link('ajaxRefresh!'); //odkaz pro ajaxObserver na pravidelne pozadavky
 
 		$this->fillJsVariablesWithLinks();
 	}
@@ -324,7 +334,9 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'../nette.ajax.js',
 			'initAjax.js',
 			'../mobile/responsive-menu.js',
-			'../forms/netteForms.js'
+			'../forms/netteForms.js',
+			'../ajaxObserver/core.js',
+			'../ajaxBox/ajaxBox.js',
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
@@ -426,6 +438,19 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$this->getUser()->logout();
 		$this->flashMessage("Byl jste úspěšně odhlášen");
 		$this->redirect('this');
+	}
+
+	/**
+	 * Zpracování požadavku ajaxObserveru viz dokumentace "ajaxObserver"
+	 */
+	public function handleAjaxRefresh() {
+		if ($this->isAjax()) {
+			$handles = new AjaxCrate();
+
+			//$handles->addHandle('chat', new ExampleHandle()); //příklad
+			$handles->addHandle('chatConversationWindow', new ChatConversationsHandle($this->chatManager, $this->getUser()->getId()));
+			$this->ajaxObserver->sendRefreshRequests($this, $handles);
+		}
 	}
 
 }

@@ -13,20 +13,44 @@ namespace POSComponent\Chat;
  */
 class StandardConversationList extends BaseChatComponent implements IContactList {
 
+	private $handledConversations = FALSE;
+
 	/**
 	 * Vykreslení komponenty
 	 */
 	public function render() {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/standard.latte');
-		$userId = $this->getPresenter()->getUser()->getId();
-		$template->conversations = $this->chatManager->getConversations($userId);
+
 
 		$template->userfinder = $this;
+
+
+		$userId = $this->getPresenter()->getUser()->getId();
+		if ($this->handledConversations) {
+			$template->conversations = $this->chatManager->getConversations($userId);
+		} else {
+			$template->conversations = $this->handledConversations;
+		}
 		$template->userId = $userId;
 
+		$template->loadLink = $this->link('load!');
 
 		$template->render();
+	}
+
+	/**
+	 * Zpracování požadavku na načtení specifických konverzací
+	 * @param type $limit limit konverzací
+	 * @param type $offset offset konverzací
+	 */
+	public function handleLoad($limit, $offset) {
+		if ($this->getPresenter()->isAjax()) {
+			$userId = $this->getPresenter()->getUser()->getId();
+			$this->template->load = TRUE; //jen pro ifset
+			$this->handledConversations = $this->chatManager->getConversations($userId, $limit, $offset, TRUE);
+			$this->redrawControl('conversations');
+		}
 	}
 
 	/**
@@ -46,6 +70,12 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 		}
 	}
 
+	/**
+	 * Vrátí ze dvou id to správné uživatelské ID, které není přihlášený uživatel
+	 * @param type $idSender první id
+	 * @param type $idRecipient druhé id
+	 * @return type
+	 */
 	public function getCorrectCodedId($idSender, $idRecipient) {
 		$loggedUserId = $this->getPresenter()->getUser()->getId();
 		$coder = $this->chatManager->getCoder();
@@ -53,6 +83,21 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 			return $coder->encodeData($idRecipient);
 		} else {
 			return $coder->encodeData($idSender);
+		}
+	}
+
+	/**
+	 * Vrátí uživatele s daným ID, který není přihlášený uživatel, aby mohl být vykreslen jeho profil
+	 * @param int $id id prvního uživatele
+	 * @param int $id id druhého uživatele
+	 * @return Selection
+	 */
+	public function getCorrectUser($id1, $id2) {
+		$loggedUserId = $this->getPresenter()->getUser()->getId();
+		if ($id1 == $loggedUserId) {
+			return $this->chatManager->getUserWithId($id2);
+		} else {
+			return $this->chatManager->getUserWithId($id1);
 		}
 	}
 

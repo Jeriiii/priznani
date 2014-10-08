@@ -185,15 +185,23 @@ class ChatManager {
 
 	/**
 	 * Vrátí poslední zprávu z (téměř) všech konverzací (existuje maximum konverzací)
+	 * @param int $idUser id uživatele
+	 * @param int $limit limit počtu konverzací
+	 * @param int $offset offset počtu konverzací
+	 * @param bool $forceUpdate při TRUE ignoruje data v sešně a vynutí získání nových
 	 * @return array ActiveRows jako položky pole
 	 */
-	public function getConversations($idUser) {
+	public function getConversations($idUser, $limit = 20, $offset = 0, $forceUpdate = FALSE) {
 		$section = $this->session->getSection(self::CHAT_MINUTE_SESSION_NAME);
 		$section->setExpiration('1 minute');
-		if (empty($section->lastConversations)) {
-			$lastChanges = $this->messagesDao->getLastConversationMessagesIDs($idUser, 20)
-				->fetchPairs(ChatMessagesDao::COLUMN_ID_SENDER, ChatMessagesDao::COLUMN_ID_RECIPIENT);
-			$section->lastConversations = $this->filterConversationIDs($idUser, $lastChanges);
+		if (empty($section->lastConversations) || $forceUpdate) {
+			$lastChanges = $this->messagesDao->getLastConversationMessagesIDs($idUser, $limit, $offset);
+			$filteredIds = $this->filterConversationIDs($idUser, $lastChanges);
+			if ($offset > 0) {//pokud se doptávám na další věci
+				$section->lastConversations = $this->filterExistingIDs($filteredIds, $section->lastConversations);
+			} else {
+				$section->lastConversations = $filteredIds;
+			}
 		}
 		$conversationsUsersIDs = $section->lastConversations;
 		$messages = array();
@@ -207,21 +215,45 @@ class ChatManager {
 	 * Vyfiltruje pole s ID tak, aby žádné nebylo opakováno dvakrát a mělo
 	 * přednost to, které není daný uživatel
 	 * @param int $idUser id uživatele, kterého chceme odfiltrovat
-	 * @param array $lastChanges pole s ID
+	 * @param Selection $lastChanges selection z tabulky zpráv s ID
 	 */
 	private function filterConversationIDs($idUser, $lastChanges) {
 		$conversationUsers = array();
-		foreach ($lastChanges as $sender => $recipient) {
-			if ($sender != $idUser) {
-				$correctID = $sender;
+		foreach ($lastChanges as $message) {
+			if ($message->offsetGet(ChatMessagesDao::COLUMN_ID_SENDER) != $idUser) {
+				$correctID = $message->offsetGet(ChatMessagesDao::COLUMN_ID_SENDER);
 			} else {
-				$correctID = $recipient;
+				$correctID = $message->offsetGet(ChatMessagesDao::COLUMN_ID_RECIPIENT);
 			}
 			if (!in_array($correctID, $conversationUsers)) {
 				$conversationUsers[] = $correctID;
 			}
 		}
 		return $conversationUsers;
+	}
+
+	/**
+	 * Projde dvě pole plná ID a vrátí z nového pole jen ty hodnoty, které nebyly ve starém
+	 * @param array $newPairs nové pole
+	 * @param array $existing staré pole
+	 * @return array nové pole bez hodnot, co byly ve starém
+	 */
+	private function filterExistingIDs($newPairs, $existing) {
+		$returnArray = array();
+		foreach ($newPairs as $id) {
+			if (!empty($existing) && !in_array($id, $existing)) {
+				$returnArray[] = $id;
+			}
+		}
+		return $returnArray;
+	}
+
+	/**
+	 * Vrátí uživatele s daným ID kvůli profilu
+	 * @param type $id
+	 */
+	public function getUserWithId($id) {
+		return $this->userDao->find($id);
 	}
 
 }

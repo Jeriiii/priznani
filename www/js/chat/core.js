@@ -280,7 +280,7 @@
 	 */
 	function initializeConversationList() {
 		var chatopts = this.chatopts;
-		$(this.chatopts.conversationListItems).click(function(event) {//click event na polozkach seznamu
+		$('body').on('click', this.chatopts.conversationListItems, function(event) {//click event na polozkach seznamu
 			event.preventDefault();
 			var id = $(this).attr(chatopts.idAttribute);
 			addBox(id, $(this).attr(chatopts.titleAttribute));

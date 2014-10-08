@@ -128,6 +128,7 @@
 		 </div>
 		{if $user->isLoggedIn()}
 			{control activities}
+			<a href="#" title="Poslední zprávy" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
 		{/if}
 		{if $partymode}
 		    {cache}
@@ -154,9 +155,6 @@
 		{block content}{/block}
 		<div class="clear"></div>
 	    </section>
-		{if $user->isLoggedIn()}
-			{control chat}
-		{/if}
 		<footer class="inner">
 		    <div id="footline"></div>
 		    <div class="left">
@@ -179,14 +177,26 @@
 			{block jqueryUI}{* překrývá se, pokud je potřeba přiřadit jiné (větší) jQuery *}
 				<script type="text/javascript" src="{$basePath}/js/jquery-ui.light.min.js"></script>
 			{/block}
-
 			{control jsLayout}
+
 			{if $user->isLoggedIn()}
 				{control jsLayoutLoggedIn}
+				{control chat}
 				<script>
 					$('body').activities();
 				</script>
+				<script>
+
+					//inicializace ajaxObserveru
+					var observer = $('body').ajaxObserver({
+						requestUrl: {$ajaxObserverLink}
+					});
+					
+				</script>
+				<script type="text/javascript" src="{$basePath}/js/ajaxbox-init.js"></script>
 			{/if}
+
+
 
 			{control fbLikeAndCommentToDatabase}
 
