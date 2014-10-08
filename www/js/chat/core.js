@@ -7,7 +7,7 @@
  * Jádro celého chatu - klientská část. Tento plugin zajišťuje klientskou funkci chatu
  */
 ;
-(function($) {
+(function ($) {
 
 	/* nastavení */
 	var chatopts;
@@ -17,7 +17,7 @@
 
 
 	/* main */
-	$.fn.chat = function(options) {
+	$.fn.chat = function (options) {
 		var chatopts = $.extend({}, $.fn.chat.defaults, options);
 		setChatOpts(chatopts);
 		initializeChatboxManager();
@@ -74,7 +74,7 @@
 			waitTime = this.chatopts.minRequestTimeout;
 			messageSent = false;
 		}
-		setTimeout(function() {
+		setTimeout(function () {
 			//console.log("CHAT - refreshing");//pro debug
 			sendRefreshRequest(waitTime);
 		}, waitTime);
@@ -112,13 +112,13 @@
 	 * Poté zajistí další zavolání refreshe.
 	 */
 	function sendFirstRefreshGet() {
-		$.getJSON(refreshMessagesLink, function(jsondata) {
+		$.getJSON(refreshMessagesLink, function (jsondata) {
 			if ($.isEmptyObject(jsondata)) {//cerstvy uzivatel, vubec zadne zpravy mu neprisly
 				$.fn.chat.lastId = 1; //bude to z DB brat uplne od zacatku
 			} else {
-				$.each(jsondata, function(iduser, values) {//projde "všechny", ale měl by být jeden
+				$.each(jsondata, function (iduser, values) {//projde "všechny", ale měl by být jeden
 					var messages = values.messages;
-					$.each(messages, function(messageKey, message) {
+					$.each(messages, function (messageKey, message) {
 						if (message.id > $.fn.chat.lastId) {//aktualizace nejvyssiho id
 							$.fn.chat.lastId = message.id;
 						}//zprava jako takova je zahozena
@@ -126,7 +126,7 @@
 				});
 			}
 			refreshMessages(waitTime);
-		}).fail(function() {
+		}).fail(function () {
 			refreshMessages(chatopts.failResponseTimeout);
 		});
 	}
@@ -139,7 +139,7 @@
 	 */
 	function sendRefreshGet(data) {
 		var chatopts = this.chatopts;
-		$.getJSON(refreshMessagesLink, data, function(jsondata) {
+		$.getJSON(refreshMessagesLink, data, function (jsondata) {
 			if ($.isEmptyObject(jsondata)) {
 				waitTime = Math.min(waitTime + chatopts.timeoutStep, chatopts.maxRequestTimeout);
 				//console.log("CHAT - no new data - request timeout is now: " + waitTime);//pro debug
@@ -149,7 +149,7 @@
 				//console.log("CHAT - data arrived - request timeout is now: " + waitTime);//pro debug
 			}
 			refreshMessages(waitTime);
-		}).fail(function() {
+		}).fail(function () {
 			refreshMessages(chatopts.failResponseTimeout);
 		});
 	}
@@ -218,7 +218,7 @@
 			data: json,
 			contentType: 'application/json; charset=utf-8',
 			success: handleResponse,
-			error: function() {
+			error: function () {
 				reloadWindowUnload();
 			}
 		});
@@ -232,10 +232,10 @@
 	 */
 	function handleResponse(json) {
 		reloadWindowUnload();//odblokovani prevence proti predcasnemu opusteni stranky
-		$.each(json, function(iduser, values) {//projde vsechny uzivatele, od kterych neco prislo
+		$.each(json, function (iduser, values) {//projde vsechny uzivatele, od kterych neco prislo
 			var name = values.name;
 			var messages = values.messages;
-			$.each(messages, function(messageKey, message) {//vsechny zpravy od kazdeho uzivatele
+			$.each(messages, function (messageKey, message) {//vsechny zpravy od kazdeho uzivatele
 				addMessage(iduser, name, message.name, message.id, message.text, message.type);
 				if (message.type == 0) {//textové zprávy se aktualizují v seznamu konverzací
 					actualizeMessageInConversationList(iduser, name, message.text);
@@ -266,7 +266,7 @@
 	function initializeContactList() {
 		//console.log('CHAT - initializing contact list');//pro debug
 		var chatopts = this.chatopts;
-		$(this.chatopts.contactListItems).click(function(event) {//click event na polozkach seznamu
+		$(this.chatopts.contactListItems).click(function (event) {//click event na polozkach seznamu
 			event.preventDefault();
 			var id = $(this).attr(chatopts.idAttribute);
 			addBox(id, $(this).attr(chatopts.titleAttribute));
@@ -280,7 +280,7 @@
 	 */
 	function initializeConversationList() {
 		var chatopts = this.chatopts;
-		$('body').on('click', this.chatopts.conversationListItems, function(event) {//click event na polozkach seznamu
+		$('body').on('click', this.chatopts.conversationListItems, function (event) {//click event na polozkach seznamu
 			event.preventDefault();
 			var id = $(this).attr(chatopts.idAttribute);
 			addBox(id, $(this).attr(chatopts.titleAttribute));
@@ -295,15 +295,16 @@
 	 * @param {String} text text zprávy, kterou posílám
 	 */
 	function actualizeMessageInConversationList(id, name, text) {
+		var truncated = jQuery.trim(text).substring(0, 35).split(" ").slice(0, -1).join(" ") + "...";
 		var listItem = $('#conversations li[data-id="' + id + '"]');
 		if (!(listItem.length > 0)) {//pokud v konverzacich neni zaznam
 			var conList = $('#conversations ul');
 			var newListItem = '<li data-id="' + id + '" data-title="' + name + '" class="conversation-link">\n\
-			<strong>' + name + '</strong><p class="lastmessage">' + text + '</p></li>';
+			<strong>' + name + '</strong><p class="lastmessage">' + truncated + '</p></li>';
 			conList.prepend(newListItem);//prida se do seznamu
 		} else {
 			listItem.removeClass('unreaded');//aktualizuje se po zobrazeni zpravy
-			listItem.find('.lastmessage').text(text);
+			listItem.find('.lastmessage').text(truncated);
 		}
 
 	}
@@ -320,7 +321,7 @@
 		};
 		var chatopts = this.chatopts;
 		blockWindowUnload('Ještě se načítají zprávy, opravdu chcete odejít?');
-		$.getJSON(loadMessagesLink, data, function(jsondata) {
+		$.getJSON(loadMessagesLink, data, function (jsondata) {
 			handleResponse(jsondata);
 		});
 	}
@@ -381,7 +382,7 @@
 	 * @param {String} reason důvod uvedený v dialogu
 	 */
 	function blockWindowUnload(reason) {
-		window.onbeforeunload = function() {
+		window.onbeforeunload = function () {
 			return reason;
 		};
 	}
@@ -390,9 +391,9 @@
 	 * Vypne hlídání zavření/obnovení okna a vrátí jej do počátečního stavu.
 	 */
 	function reloadWindowUnload() {
-		window.onbeforeunload = function() {
+		window.onbeforeunload = function () {
 			var unsend = false;
-			$.each($(".ui-chatbox-input-box"), function() {//projde vsechny textarea chatu
+			$.each($(".ui-chatbox-input-box"), function () {//projde vsechny textarea chatu
 				if ($.trim($(this).val())) {//u kazdeho zkouma hodnotu bez whitespacu
 					unsend = true;
 				}

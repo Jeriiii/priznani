@@ -33,7 +33,6 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 			$template->conversations = $this->handledConversations;
 		}
 		$template->userId = $userId;
-
 		$template->loadLink = $this->link('load!');
 
 		$template->render();

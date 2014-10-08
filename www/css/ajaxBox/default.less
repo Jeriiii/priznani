@@ -11,6 +11,7 @@
 @window-width:250px;//sirka okna
 @window-height:200px;//vyska okna
 @window-info-height: 30px; /* sedy ramecek dole ve vyskakovacim okenku - vyska */
+@window-header-height: 20px; /* sedy ramecek dole ve vyskakovacim okenku - vyska */
 @border-color: #eee;
 /**/
 .posAjaxBox{
@@ -34,7 +35,7 @@
 	
 	
 	.ajaxBoxContent{
-		height: @window-height - @window-info-height;
+		height: @window-height - @window-info-height - @window-header-height - 4px;/* ty 4px je za padding headeru*/
 		overflow: auto;
 		
 	}
@@ -69,6 +70,12 @@
 		background: #eee;
 		.box-shadow(inset 0 0 15px 0px #ccc);
 		border-top: 1px solid @border-color;
+	}
+	
+	.ajaxBoxHeader{
+		height: @window-header-height;
+		background: white;
+		padding: 2px 5px;
 	}
 		
 }

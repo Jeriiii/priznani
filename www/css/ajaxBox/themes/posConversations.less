@@ -1,0 +1,42 @@
+/*
+* @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
+*//* 
+    Created on : 8.10.2014, 14:36:22
+    Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
+*/
+/* okenko konverzaci */
+@header-height: 20px;
+@width: 320px;
+@height: 350px;
+
+.ajaxBox.posConversations{
+	
+	width: @width;
+	height: @height;
+	
+	
+	.ajaxBoxHeader{
+		padding: 3px 5px;
+		font-weight: 800;
+		font-size: 14px;
+		height: @header-height;
+	}
+	
+	.ajaxBoxContent{
+		height: @height - @header-height - 6px; /* 6 px za padding headeru*/
+	}
+	
+	.window-info{
+		display: none;
+	}
+	
+	.noConvMessages{
+		padding: 3px 5px;
+		color: #666;
+		text-align: center;
+		font-size: 12px;
+	}
+	
+	
+}
+
