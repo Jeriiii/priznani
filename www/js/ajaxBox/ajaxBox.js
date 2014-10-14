@@ -124,6 +124,7 @@
 
 	/**
 	 * Znovu nebo poprvé načte data zavoláním příslušné url přes nette.ajax
+	 * @param {Object} opts nastavení daného (tohoto) okénka
 	 */
 	function reloadData(opts) {
 		if (opts.loadUrl && opts.reloadPermitted(opts) && !this.ajaxLock) {
@@ -141,6 +142,7 @@
 
 	/**
 	 * Spustí cyklus, který hlídá, zda uživatel nevidí spodní část okénka (mimo data). Pokud nevidí, pošle ajaxový požadavek
+	 * @param {Object} opts nastavení daného (tohoto) okénka
 	 * */
 	function watchForUpdateNeed(opts) {
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"] .ajaxBoxContent';
@@ -168,6 +170,7 @@
 
 	/**
 	 * Pověsí na okénka eventy, které je zavřou nebo otevřou, když je potřeba
+	 * @param {Object} opts nastavení daného (tohoto) okénka
 	 */
 	function addBinds(opts) {
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"]';
