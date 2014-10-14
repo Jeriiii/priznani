@@ -17,7 +17,7 @@ $(document).ready(function () {
 		buttonSelector: '#messages-btn',
 		topMargin: -10, //korekce y
 		arrowOrientation: 'right', //šipka bude vpravo
-		theme: "posAjaxBox", //použijí se implicitní styly, ale budou upraveny
+		theme: "posAjaxBox posConversations", //použijí se implicitní styly, ale budou upraveny
 		headerHtml: "Příchozí zprávy", //header
 		loadUrl: loadConversationsLink, /* link (url) vygenerovaný komponentou StandardConversationsList */
 		dataArrived: function (opts, data) {//zkoumá, jestli snippet poslal nějaká data a pokud ne, schová načítací gif a pomocí globálního přepínače zastaví dotazování
