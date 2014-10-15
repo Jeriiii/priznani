@@ -14,6 +14,7 @@ use POSComponent\Galleries\UserGalleries\UserGalleries;
 use POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery;
 use POSComponent\Galleries\UserImagesInGallery\MyUserImagesInGallery;
 use POSComponent\Galleries\Images\UsersGallery;
+use POSComponent\Galleries\Images\VerificationGallery;
 use NetteExt\File;
 use NetteExt\Path\GalleryPathCreator;
 use NetteExt\Path\ImagePathCreator;
@@ -24,6 +25,7 @@ class GalleriesPresenter extends \BasePresenter {
 	public $imageID;
 	public $id_image;
 	private $images;
+	public $verificationExists;
 
 	/**
 	 * @var \POS\Model\UserDao
@@ -86,7 +88,7 @@ class GalleriesPresenter extends \BasePresenter {
 		$competitionData = $this->usersCompetitionsDao->getLastCompetitionNameAndId();
 		$competitionImage = $this->competitionsImagesDao->findByImgAndCmpId($this->imageID, $competitionData->id);
 
-		// Ochrana před opakovaným vložením
+// Ochrana před opakovaným vložením
 		if (!$competitionImage) {
 			$this->template->competition = $competitionData;
 		} else {
@@ -115,12 +117,12 @@ class GalleriesPresenter extends \BasePresenter {
 		$myGallery = FALSE;
 
 		if (!empty($userID)) {
-			//je vlastník
+//je vlastník
 			if ($userID == $this->getUser()->id) {
 				$myGallery = TRUE;
 			}
 		} else {
-			//nebyla zvolena konkrétní galerie
+//nebyla zvolena konkrétní galerie
 			$myGallery = TRUE;
 		}
 
@@ -135,6 +137,10 @@ class GalleriesPresenter extends \BasePresenter {
 
 	public function renderListUserGalleryImages($galleryID) {
 		$gallery = $this->userGaleryDao->find($galleryID);
+
+		if ($gallery->verification_gallery) {
+			$this->redirect("Galleries:verification", array("galleryID" => $gallery->id));
+		}
 
 		//je vlastník
 		if ($gallery->userID == $this->getUser()->id) {
@@ -157,6 +163,27 @@ class GalleriesPresenter extends \BasePresenter {
 		} else {
 			throw new Exception("Musíte nastavit buď ID uživatele, nebo ID galerie.");
 		}
+	}
+
+	public function actionVerification($galleryID) {
+		$galleryData = $this->userGaleryDao->find($galleryID);
+
+		// kontrola, jestli se na galerii chce podívat vlastník
+		if ($galleryData->userID != $this->getUser()->getId()) {
+			$this->flashMessage("Tato galerie je nepřístupná.");
+			$this->redirect("Show:default", array('id' => $galleryData->userID));
+		}
+
+		if (!empty($galleryID)) {
+			$this->verificationExists = TRUE;
+			$this->galleryID = $galleryID;
+			$this->images = $this->userImageDao->getInGallery($galleryID);
+			$image = $galleryData->lastImage;
+			$this->imageID = $image->id;
+		} else {
+			$this->verificationExists = FALSE;
+		}
+		$this->template->exists = $this->verificationExists;
 	}
 
 	public function handledeleteGallery($galleryID) {
@@ -263,23 +290,46 @@ class GalleriesPresenter extends \BasePresenter {
 		return new UsersGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao);
 	}
 
+	/**
+	 * Továrnička na verifikační galerii
+	 * @return VerificationGallery
+	 */
+	public function createComponentVerificationGallery() {
+		if ($this->verificationExists) {
+			$image = $this->userImageDao->find($this->imageID);
+			$gallery = $this->userGaleryDao->find($this->galleryID);
+			$httpRequest = $this->context->httpRequest;
+			$domain = $httpRequest->getUrl()->host;
+			return new VerificationGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this);
+		}
+	}
+
+	/**
+	 * Továrnička na formulář pro verifikační fotku
+	 * @param type $name
+	 * @return \Nette\Application\UI\Form\VerificationImageNewForm
+	 */
+	public function createComponentVerificationForm($name) {
+		return new Frm\VerificationImageNewForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+	}
+
 	protected function createComponentNavigation($name) {
-		//Získání potřebných dat(user id, galerie daného usera)
+//Získání potřebných dat(user id, galerie daného usera)
 		$userID = $this->getUser()->id;
 		$user = $this->userDao->find($userID);
 
-		//vytvoření navigace a naplnění daty
+//vytvoření navigace a naplnění daty
 		$nav = new Navigation($this, $name);
 		$navigation = $nav->setupHomepage($user->user_name, $this->link("Galleries:default"));
-		//označí aktuální stránku jako aktivní v navigaci
+//označí aktuální stránku jako aktivní v navigaci
 		if ($this->isLinkCurrent("Galleries:default")) {
 			$nav->setCurrentNode($navigation);
 		}
 
-		//získání dat pro přípravu galerii do breadcrumbs
+//získání dat pro přípravu galerii do breadcrumbs
 		$galleries = $this->userGaleryDao->getInUser($userID);
 
-		//příprava všech galerií pro možnost použití drobečkové navigace
+//příprava všech galerií pro možnost použití drobečkové navigace
 		foreach ($galleries as $gallery) {
 			$link = $this->link("Galleries:listUserGalleryImage", array("galleryID" => $gallery->id));
 			$sec = $navigation->add($gallery->name, $link);

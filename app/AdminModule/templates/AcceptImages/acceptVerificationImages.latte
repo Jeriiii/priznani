@@ -1,0 +1,30 @@
+{block head}
+	<link rel='stylesheet' href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
+{/block}
+{block content}
+{snippet imageAcceptance}
+	<h2>Ověřovací obrázky</h2>
+	{includeblock 'acceptMenu.latte'}
+	{foreach $images as $data}
+		{if isset($lastImage) && $lastImage->galleryID != $data->galleryID}
+			<hr>
+		{/if}
+		<ul class="inline">
+				<li>
+					<a href='{$data|getImgPath}' rel='lightbox' title="{$data->name}">
+						<img class="accept" src='{$data|getImgPath}' alt="{$data->name}" height="250">
+					</a>
+				</li>
+			<div class="clear"></div>
+		</ul>
+		<div class="clear"></div>
+		<a n:href="acceptImage! $data->id, $data->galleryID, $data->gallery->userID, $data->gallery->verification_gallery" class="btn btn-success ajax">Schválit</a>
+		<a n:href="deleteImage! $data->id" class="btn btn-danger ajax">Smazat</a>
+		<br>
+		{var $lastImage = $data}
+	{/foreach}
+{/snippet}
+{/block}
+{block foot}
+	<script type="text/javascript" src="{$basePath}/js/slimbox2.js"></script>
+{/block}
