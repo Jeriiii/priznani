@@ -29,6 +29,7 @@ class UserGalleryDao extends BaseGalleryDao {
 	const COLUMN_NAME = "name";
 	const COLUMN_DESCRIPTION = "description";
 	const COLUMN_PROFILE = "profil_gallery";
+	const COLUMN_VERIFICATION = "verification_gallery";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -44,6 +45,30 @@ class UserGalleryDao extends BaseGalleryDao {
 		$sel->where(self::COLUMN_USER_ID, $userID);
 		$sel->order(self::COLUMN_ID . " DESC");
 		return $sel;
+	}
+
+	/**
+	 * Vrátí galerie určitého uživatele, které nejsou verifikační.
+	 * @param type $userID ID uživatele, jehož galerie hledáme
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getInUserWithoutVerif($userID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_ID, $userID)->where(self::COLUMN_VERIFICATION, 0);
+		$sel->order(self::COLUMN_ID . " DESC");
+		return $sel;
+	}
+
+	/**
+	 * vrátí ID vlastníka galeria
+	 * @param type $galleryID ID galerie, jejíž vlastníka hledáme
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function getGalleryOwnerID($galleryID) {
+		$sel = $this->getTable();
+		$sel->select('userID');
+		$sel->where(self::COLUMN_ID, $galleryID);
+		return $sel->fetch();
 	}
 
 	/**
@@ -92,6 +117,28 @@ class UserGalleryDao extends BaseGalleryDao {
 	}
 
 	/**
+	 * Vrátí všechny verifikační galerie
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function findVerificationGalleries() {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_VERIFICATION, 1);
+		return $sel;
+	}
+
+	/**
+	 * Vrátí verifiakční galerii určitého uživatele
+	 * @param type $userID ID uživatele, jehož verifikační galerii hledáme
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function findVerificationGalleryByUser($userID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_ID, $userID);
+		$sel->where(self::COLUMN_VERIFICATION, 1);
+		return $sel->fetch();
+	}
+
+	/**
 	 * Vytvoří defaultní galerii uživateli
 	 * @param int $userID ID uživatele.
 	 * @return Database\Table\IRow
@@ -119,6 +166,21 @@ class UserGalleryDao extends BaseGalleryDao {
 			self::COLUMN_PROFILE => 1,
 		));
 		return $profileGallery;
+	}
+
+	/**
+	 * Vytvoří verifikační galerii určitého uživatele
+	 * @param type $userID IDuživatele, pro kterého vytvoříme galerii
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function createVerificationGallery($userID) {
+		$sel = $this->getTable();
+		$verificationGallery = $sel->insert(array(
+			self::COLUMN_NAME => "Ověřovací fotky",
+			self::COLUMN_USER_ID => $userID,
+			self::COLUMN_VERIFICATION => 1,
+		));
+		return $verificationGallery;
 	}
 
 	/**

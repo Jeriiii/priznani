@@ -91,6 +91,18 @@ class UserImageDao extends AbstractDao {
 	}
 
 	/**
+	 * Vrátí neověřené obrázky z galerie
+	 * @param type $galleryID ID galerie, v které hledáme
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getUnapprovedImagesInGallery($galleryID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_GALLERY_ID, $galleryID);
+		$sel->where(self::COLUMN_APPROVED, 0);
+		return $sel;
+	}
+
+	/**
 	 * Vrátí počet nevyřízených fotek
 	 * @return int
 	 */

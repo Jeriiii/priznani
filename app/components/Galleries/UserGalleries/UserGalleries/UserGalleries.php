@@ -23,7 +23,8 @@ class UserGalleries extends BaseUserGalleries {
 	 * @param type $userID ID uživatele, kterého se mají galerie zobrazit
 	 */
 	public function render($mode, $userID) {
-		$galleries = $this->userGalleryDao->getInUser($userID);
+		//vememe pouze galerie, tkeré nejsou verifikační
+		$galleries = $this->userGalleryDao->getInUserWithoutVerif($userID);
 
 		$templateName = "../UserGalleries/userGalleries.latte";
 

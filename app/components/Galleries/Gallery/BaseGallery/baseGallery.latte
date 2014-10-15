@@ -1,7 +1,11 @@
 {includeblock 'baseBlocks.latte'}
 {snippet}
 	<div id="top_container">
-	    <h2 id="image_name">{$image->name|firstUpper}{ifset #isApprovedText}{include #isApprovedText}{/ifset}</h2>
+		{if empty($gallery->verification_gallery)}
+			<h2 id="image_name">{$image->name|firstUpper}{ifset #isApprovedText}{include #isApprovedText}{/ifset}</h2>
+		{else}
+			<h2 id="image_name">{$image->name|firstUpper}{if $image->approved}<br /> - schváleno{else}<br /> - neschváleno{/if}</h2>
+		{/if}
 	    {ifset #uploadImage}
 			{include #uploadImage}
 		{/ifset}
@@ -12,9 +16,11 @@
 	<div id="image_container">
 		<div id="image_content">
 			<div id="image">
-				<div class="fb-like-container" >
-					{include #fbLike} {* baseBlocks.latte *}
-				</div>
+				{if empty($gallery->verification_gallery)}
+					<div class="fb-like-container" >
+						{include #fbLike} {* baseBlocks.latte *}
+					</div>
+				{/if}
 				{include #imageMainScreen}
 				<div class="clear"></div>
 				<div id="voting"></div>
@@ -65,7 +71,9 @@
 			{ifset #infoAboutOvner}{include #infoAboutOvner}{/ifset}
 			{include #adminRemoveImage} {* baseBlocks.latte *}
 		{/if}
-		{include #fbComment}{* baseBlocks.latte *}
+		{if empty($gallery->verification_gallery)}
+			{include #fbComment}{* baseBlocks.latte *}
+		{/if}
 	</div>
 	<script type="text/javascript">FB.XFBML.parse(document.getElementById('fb'));//revalidace fb komponent</script>
 	<div id="horadd" style="text-align: center; margin-bottom: 10px;">

@@ -3,7 +3,8 @@
 {block menu}
 <nav>
 	{if $user->loggedIn && $user->id == $userID}
-		<span><a n:href=":Profil:Edit:default">Editovat</a></span>	
+		<span><a n:href=":Profil:Edit:default">Editovat</a></span>
+		<span><a n:href="Galleries:verificationImageNew">Ověřovací fotka</a></span>
 	{/if}
 		<span><a n:href="default $userID">Zeď</a></span>
 		<span><a n:href="userImages $userID">Fotky</a></span>
