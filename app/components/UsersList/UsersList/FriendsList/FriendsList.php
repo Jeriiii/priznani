@@ -33,9 +33,8 @@ class FriendsList extends UsersList {
 	 * Vykresli šablonu.
 	 */
 	public function render() {
-		$this->template->setFile(dirname(__FILE__) . '/friendsList.latte');
 		$this->template->friends = $this->friendDao->getList($this->userID);
-		$this->template->render();
+		$this->renderTemplate(dirname(__FILE__) . '/' . 'friendsList.latte');
 	}
 
 }

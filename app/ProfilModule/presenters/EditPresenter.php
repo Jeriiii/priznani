@@ -88,6 +88,7 @@ class EditPresenter extends ProfilBasePresenter {
 
 	/** @var ActiveRow User kterému se mají editovat data */
 	private $userData;
+	private $redirect;
 
 	public function startup() {
 		parent::startup();
@@ -95,8 +96,13 @@ class EditPresenter extends ProfilBasePresenter {
 	}
 
 	public function actionDefault() {
+		$this->redirect = $this;
 		$userID = $this->getUser()->getId();
 		$this->userData = $this->userDao->find($userID);
+	}
+
+	public function actionFriendRequests() {
+
 	}
 
 	public function renderDefault() {
