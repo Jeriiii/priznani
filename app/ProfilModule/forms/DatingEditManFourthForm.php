@@ -5,21 +5,22 @@ namespace Nette\Application\UI\Form;
 use Nette\Application\UI\Form,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer,
-        POS\Model\UserDao,
-        POS\Model\CoupleDao;
+	POS\Model\UserDao,
+	POS\Model\CoupleDao;
 
 class DatingEditManFourthForm extends DatingRegistrationBaseManForm {
 
-        /**
+	/**
 	 * @var \POS\Model\UserDao
 	 */
 	public $userDao;
-        /**
+
+	/**
 	 * @var \POS\Model\CoupleDao
 	 */
-        public $coupleDao;
+	public $coupleDao;
 	private $id_user;
-	private $record;
+	private $user;
 	private $record_couple_partner;
 
 	public function __construct(CoupleDao $coupleDao, UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
@@ -27,12 +28,12 @@ class DatingEditManFourthForm extends DatingRegistrationBaseManForm {
 		parent::__construct($userDao, $parent, $name);
 
 		$presenter = $this->getPresenter();
-                $this->coupleDao = $coupleDao;
-                $this->userDao = $userDao;
+		$this->coupleDao = $coupleDao;
+		$this->userDao = $userDao;
 		$this->id_user = $presenter->getUser()->getId();
-		$this->record = $this->userDao->find($this->id_user);
+		$this->user = $this->userDao->find($this->id_user);
 
-		$userPartnerInfo = $this->coupleDao->find($this->record->coupleID);
+		$userPartnerInfo = $this->coupleDao->find($this->user->coupleID);
 
 		$this->addText('age', 'Věk')
 			->setDefaultValue($userPartnerInfo->age)
@@ -65,13 +66,13 @@ class DatingEditManFourthForm extends DatingRegistrationBaseManForm {
 		$presenter = $this->getPresenter();
 		$this->id_user = $presenter->getUser()->getId();
 
-		$this->record = $this->userDao->find($this->id_user);
-		if (!$this->record) {
+		$this->user = $this->userDao->find($this->id_user);
+		if (!$this->user) {
 			throw new BadRequestException;
 		}
-		$this->record_couple_partner = $this->coupleDao->find($this->record->coupleID);
+		$this->record_couple_partner = $this->coupleDao->find($this->user->coupleID);
 
-		$this->coupleDao->update($this->record->coupleID, array('age' => $values->age, 'marital_state' => $values->marital_state, 'orientation' => $values->orientation, 'tallness' => $values->tallness, 'shape' => $values->shape, 'smoke' => $values->smoke, 'drink' => $values->drink, 'graduation' => $values->graduation, 'penis_length' => $values->penis_length, 'penis_width' => $values->penis_width));
+		$this->coupleDao->update($this->user->coupleID, array('age' => $values->age, 'marital_state' => $values->marital_state, 'orientation' => $values->orientation, 'tallness' => $values->tallness, 'shape' => $values->shape, 'smoke' => $values->smoke, 'drink' => $values->drink, 'graduation' => $values->graduation, 'penis_length' => $values->penis_length, 'penis_width' => $values->penis_width));
 		$presenter->flashMessage('Změna osobních údajů vašeho partnera byla úspěšná');
 		$presenter->redirect("this");
 	}
