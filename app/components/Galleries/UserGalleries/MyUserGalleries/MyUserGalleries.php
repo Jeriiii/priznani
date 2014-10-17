@@ -21,10 +21,12 @@ class MyUserGalleries extends BaseUserGalleries {
 	/**
 	 * vyrendrování
 	 * @param type $mode
+	 * @param boolean $paying
 	 */
-	public function render($mode) {
+	public function render($mode, $paying) {
 		$userID = $this->getUser()->id;
 		$galleries = $this->userGalleryDao->getInUser($userID);
+		$this->template->paying = $paying;
 
 		$templateName = "../MyUserGalleries/myUserGalleries.latte";
 
@@ -32,5 +34,3 @@ class MyUserGalleries extends BaseUserGalleries {
 	}
 
 }
-
-?>

@@ -112,6 +112,12 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $enumPlaceDao;
+
+	/**
+	 * @var \POS\Model\UserAllowedDao
+	 * @inject
+	 */
+	public $userAllowedDao;
 	public $dataForStream;
 
 	/**
@@ -219,7 +225,10 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \POSComponent\Galleries\UserGalleries\UserGalleries
 	 */
 	public function createComponentUserGalleries() {
-		return new UserGalleries($this->userDao, $this->userGalleryDao);
+		$session = $this->getSession();
+		$section = $session->getSection('galleriesAccess');
+
+		return new UserGalleries($this->userDao, $this->userGalleryDao, $this->userAllowedDao, $this->friendDao, $section);
 	}
 
 	/**

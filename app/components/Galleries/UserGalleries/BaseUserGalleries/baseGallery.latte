@@ -31,18 +31,20 @@
 			{ifset #galleryEditButtons}
 				{include #galleryEditButtons "gallery" => $gallery, "iterator" => $iterator}
 			{/ifset}
-			
-			{if $gallery->lastImageID && $gallery->bestImageID}
-				<img src="{$basePath}/images/userGalleries/{$userData->id}/{$gallery->id}/minSqr{$gallery->bestImageID}.{$gallery->lastImage->suffix}" width="100%" height="100%"/>
-			{/if}
-			
-			<a class="view" href="{plink Galleries:listUserGalleryImages galleryID => $gallery->id}">{$gallery->name}</a>
+			{if $accessData[$gallery->id]}
+				{if $gallery->lastImageID && $gallery->bestImageID}
+					<img src="{$basePath}/images/userGalleries/{$userData->id}/{$gallery->id}/minSqr{$gallery->bestImageID}.{$gallery->lastImage->suffix}" width="100%" height="100%"/>
+				{/if}
 
+				<a class="view" href="{plink Galleries:listUserGalleryImages galleryID => $gallery->id}">{$gallery->name} {if $gallery->private}<br />(soukromá){/if}</a>
+			{else}
+				<img src="{$basePath}/images/icons/Lock-icon.png" title="{$gallery->name}" width="100%" height="100%"/>
+			{/if}
 		</div>
 		{ifset #modalDeleteGallery}
 			{include #modalDeleteGallery "gallery" => $gallery, "iterator" => $iterator}
 		{/ifset}
-
+		
     {/foreach}
 	<div class="clear"></div>
 </section>

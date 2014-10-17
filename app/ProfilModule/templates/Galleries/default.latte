@@ -4,7 +4,7 @@
 {* drobečkové menu - nyní nemá význam*}
 {*control navigation:breadcrumbs*}
 {if $myGallery}
-	{control myUserGalleries $mode}
+	{control myUserGalleries $mode, $paying}
 {else}
 	{control userGalleries $mode, $userID}
 {/if}
