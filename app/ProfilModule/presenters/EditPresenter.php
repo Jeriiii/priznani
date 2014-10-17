@@ -93,12 +93,13 @@ class EditPresenter extends ProfilBasePresenter {
 	public function startup() {
 		parent::startup();
 		$this->checkLoggedIn();
-	}
 
-	public function actionDefault() {
-		$this->redirect = $this;
 		$userID = $this->getUser()->getId();
 		$this->userData = $this->userDao->find($userID);
+		if (!$this->userData->property) {
+			$this->flashMessage("Nejdříve si vyplňte informace o sobě.");
+			$this->redirect(":DatingRegistration:");
+		}
 	}
 
 	public function actionFriendRequests() {

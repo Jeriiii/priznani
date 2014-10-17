@@ -123,6 +123,15 @@ class ShowPresenter extends ProfilBasePresenter {
 
 		if (empty($id)) {
 			$id = $this->getUser()->getId();
+			if (!$this->userDao->find($id)->property) {
+				$this->flashMessage("Nejdříve si vyplňte informace o sobě.");
+				$this->redirect(":DatingRegistration:");
+			}
+		} else {
+			if (!$this->userDao->find($id)->property) {
+				$this->flashMessage("Tento profil neexistuje, nebo uživatel nemá dokončený profil.");
+				$this->redirect(":OnePage:");
+			}
 		}
 
 		$this->userID = $id;
