@@ -337,6 +337,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'../forms/netteForms.js',
 			'../ajaxObserver/core.js',
 			'../ajaxBox/ajaxBox.js',
+			'../features/jquery.slimscroll.js'
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');

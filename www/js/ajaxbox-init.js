@@ -48,6 +48,12 @@ $(document).ready(function () {
 		}
 	});
 /////////////////////////
-
+	$('h1').ajaxBox({
+		buttonSelector: '#kiss',
+		theme: "posPopUp",
+		autoPosition: 'center',
+		hideOthers: true,
+		headerHtml: 'PopUpOkno'
+	});
 
 });
