@@ -54,6 +54,14 @@ class Activity {
 		$result = array();
 		if ($type == "comment") {
 			$result["divText"] = 'Uživatel ' . $creator . ' okomentoval váš obrázek ' . $image->name;
+		} else if ($type == "approve") {
+			$result["divText"] = 'Uživatel ' . $creator . ' schválil váš obrázek "' . $image->name . '"';
+		} else if ($type == "verification") {
+			$result["divText"] = 'Uživatel ' . $creator . ' schválil váš ověřovací obrázek "' . $image->name . '"';
+		} else if ($type == "invalidate") {
+			$result["divText"] = 'Uživatel ' . $creator . ' zamítl váš ověřovací obrázek "' . $image->name . '"';
+		} else if ($type == "disapprove") {
+			$result["divText"] = 'Uživatel ' . $creator . ' zamítl váš obrázek "' . $image->name . '"';
 		} else {
 			$result["divText"] = 'Uživatel ' . $creator . ' lajknul váš obrázek ' . $image->name;
 		}

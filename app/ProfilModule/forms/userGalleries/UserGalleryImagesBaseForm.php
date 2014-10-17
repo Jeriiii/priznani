@@ -146,6 +146,31 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	}
 
 	/**
+	 * Uloží verifikační formulář do databáze
+	 * @param type $values data z formuláře
+	 * @param type $userID ID uživatele, jemuž obrázek patří
+	 * @param type $galleryID ID galerie, do které obrázek uložíme
+	 */
+	public function saveVerificationImage($values, $userID, $galleryID) {
+		$image = $values->verificationFormImageFile0;
+		if ($image->isOK()) {
+			//název obrázku zadaný uživatelem
+			$name = $values->verificationFormImageName0;
+			//koncovka souboru
+			$suffix = $this->suffix($image->getName());
+			//popis obrázku zadaný uživatelem
+			$description = $values->verificationFormImageDescription0;
+
+			//Uloží obrázek do databáze
+			$imageDB = $this->saveImageToDB($galleryID, $name, $description, $suffix, 0);
+
+			//nahraje soubor
+			$this->upload($image, $imageDB->id, $suffix, $galleryID, $userID, 500, 700, 100, 130);
+			unset($image);
+		}
+	}
+
+	/**
 	 * Uloží obrázek do databáze.
 	 * @param int $galleryID ID galerie.
 	 * @param string $name Název obrázku zadaný uživatelem.

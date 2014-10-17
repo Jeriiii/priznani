@@ -1,0 +1,27 @@
+{layout '../BaseGallery/baseGallery.latte'}
+
+{* competition bloky *}
+
+{define menuButtons}
+<a href="{plink deleteImage! id_image => $image->id, id_gallery => $gallery->id}" class="btn-main medium right">Smazat obrázek</a>
+{/}
+
+{define imageComment}
+	
+{/}
+
+{define uploadImage}
+<a href="{plink Galleries:verificationImageNew}" id="add-photo-button" class="btn-main medium right">Nahrát ověřovací fotku</a>
+{/}
+ 
+{define imageMainScreen}
+	<img src="{$image|getImgPath}" alt="{$image->name}"
+		{ifset $imgPaddingTopBottom}
+			style = "padding: {!$imgPaddingTopBottom}px 0;"
+		{/ifset}
+		{if $setWidth} width="700" {else} height="525" {/if} />
+{/}
+
+{define likes}
+
+{/}
