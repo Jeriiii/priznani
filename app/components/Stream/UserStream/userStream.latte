@@ -40,3 +40,32 @@
 			</div>
 		</div>
 {/}
+
+{define addUserInfo}
+	{if empty($profilePhoto) &&  $user->isLoggedIn()}
+		<div id="profile-photo-upload">
+			Nahrajte si <span class="highlight">profilovou fotku</span>, aby si vás ostatní mohli prohlédnout.
+			{form uploadPhotoForm}
+				{input uploadPhotoFormImageFile0}
+				{input uploadProfilPhoto}
+			{/form}
+		</div>
+	{elseif !empty($profilePhoto) && $user->isLoggedIn() &&  $place==0  && $position==0 && $placePosSession->count%5==0}
+		Chcete další téma ke konverzaci? Vyplňte si:
+			{form placesAndPositionsForm}
+				Oblíbená poloha při milování:
+					{input fromBack}
+					{input position69}
+					{input missionary}
+					{input riding}
+					{input side}
+				Oblíbené místo k milování:
+					{input bed}
+					{input car}
+					{input nature}
+					{input unusual}
+					{input public}
+				{input send}
+			{/form}
+	{/if}
+{/}

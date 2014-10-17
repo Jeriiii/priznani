@@ -120,28 +120,6 @@ class BaseStream extends BaseProjectControl {
 		if ($mode == "profilStream") {
 			$this->renderProfileStream($templateName);
 		}
-		/* zda-li zobrazit dotaz na blíbenou polohu nebo pozici */
-
-		$user = $this->presenter->user;
-		if ($user->isLoggedIn()) {
-			$userProperty = $this->userDao->findProperties($user->id);
-			if ($userProperty) { // ochrana proti uživatelům, co nemají vyplněné user property
-				$placePosSession = $this->presenter->getSession('placePosSession');
-				$placePosSession->count++;
-				$this->template->placePosSession = $placePosSession;
-				$placePosSession->setExpiration(0, 'password');
-
-				$place = $this->userPlaceDao->isFilled($userProperty->id);
-				$position = $this->userPositionDao->isFilled($userProperty->id);
-
-				$this->template->place = $place;
-				$this->template->position = $position;
-			}
-		}
-
-// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
-		$profileGalleryID = $this->userGalleryDao->findProfileGallery($user->id);
-		$this->template->profilePhoto = $this->userImageDao->getInGallery($profileGalleryID)->fetch();
 
 		$this->template->render();
 	}
