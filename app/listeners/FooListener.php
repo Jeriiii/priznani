@@ -10,5 +10,19 @@
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
 class FooListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
-	
+
+	private $mailer;
+
+	public function __construct(IMailer $mailer) {
+		//$this->mailer = $mailer;
+	}
+
+	public function render() {
+		//$this->mailer->send(new Message());
+	}
+
+	public function getSubscribedEvents() {
+		return array();
+	}
+
 }
