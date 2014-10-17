@@ -453,24 +453,18 @@ class SearchPresenter extends SearchBasePresenter {
 		$this->searchData = $data;
 	}
 
-	protected function
-
-	createComponentAdvancedSearchForm($name) {
+	protected function createComponentAdvancedSearchForm($name) {
 		$form = new Frm\AdvancedSearchForm($this, $name);
 		return $form;
 	}
 
-	protected function
-
-	createComponentBaseSearch($name) {
+	protected function createComponentBaseSearch($name) {
 		$users = $this->userDao->getAll();
 		$form = new \POSComponent\Search\BaseSearch($users);
 		return $form;
 	}
 
-	protected function
-
-	createComponentBestMatchSearch($name) {
+	protected function createComponentBestMatchSearch($name) {
 		$user = $this->userDao->find($this->getUser()->id);
 		$session = $this->getSession();
 		return new BestMatchSearch($user, $this->userDao, $this->userCategoryDao, $session, $this, $name);
@@ -481,9 +475,7 @@ class SearchPresenter extends SearchBasePresenter {
 	 * @param type $name
 	 * @return \POSComponent\Search\AdvancedSearch
 	 */
-	protected function
-
-	createComponentAdvancedSearch($name) {
+	protected function createComponentAdvancedSearch($name) {
 		return new \POSComponent\Search\AdvancedSearch($this->cityDao, $this->userDao, $this->searchData, $this, $name);
 	}
 
