@@ -169,11 +169,12 @@
 	}
 
 	/**
-	 * Pověsí na okénka eventy, které je zavřou nebo otevřou, když je potřeba
+	 * Pověsí na okénko (pouze toto jedno!) eventy, které ho zavřou nebo otevřou, když je potřeba
 	 * @param {Object} opts nastavení daného (tohoto) okénka
 	 */
 	function addBinds(opts) {
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"]';
+		var content = $(boxSelector).find('.ajaxBoxContent');
 
 		$(opts.buttonSelector).click(function (e) {//zavření při otevření jiného okénka
 			if ($(e.target).is('.ajaxBox *, .ajaxBox')) {
@@ -193,6 +194,10 @@
 					$(boxSelector).css('display', 'none');
 				}
 			}
+		});
+		//pridani vlastniho posuvniku
+		content.slimScroll({
+			height: content.height() + 'px'
 		});
 
 
