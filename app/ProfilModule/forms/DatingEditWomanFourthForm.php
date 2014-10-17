@@ -5,19 +5,20 @@ namespace Nette\Application\UI\Form;
 use Nette\Application\UI\Form,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer,
-        POS\Model\CoupleDao,
-        POS\Model\UserDao;
+	POS\Model\CoupleDao,
+	POS\Model\UserDao;
 
 class DatingEditWomanFourthForm extends DatingRegistrationBaseWomanForm {
 
-        /**
+	/**
 	 * @var \POS\Model\UserDao
 	 */
 	public $userDao;
-        /**
+
+	/**
 	 * @var \POS\Model\CoupleDao
 	 */
-        public $coupleDao;
+	public $coupleDao;
 	private $id_user;
 	private $record;
 	private $record_couple_partner;
@@ -26,7 +27,7 @@ class DatingEditWomanFourthForm extends DatingRegistrationBaseWomanForm {
 		$this->addGroup('Osobní údaje(partner 2) - Ona');
 		parent::__construct($userDao, $parent, $name);
 
-                $this->coupleDao = $coupleDao;
+		$this->coupleDao = $coupleDao;
 		$presenter = $this->getPresenter();
 		$this->id_user = $presenter->getUser()->getId();
 		$this->record = $this->userDao->find($this->id_user);

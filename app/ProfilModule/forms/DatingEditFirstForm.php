@@ -29,6 +29,10 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 
 		parent::__construct($userDao, $parent, $name, $userProperty);
 
+		if (isset($this["type"])) {
+			unset($this["type"]);
+		}
+
 		$this["send"]->caption = "Uložit";
 		$this["send"]->setAttribute("class", "btn btn-info");
 
