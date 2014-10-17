@@ -77,6 +77,8 @@
 		/* orientace šipky - left|right - šipka je vlevo|vpravo. Podle toho se nastaví i pozice okénka. Předpokládá se, že šipka má nastavené
 		 * css left|right (pozor na to pokud děláte vlastní theme!!!). */
 		arrowOrientation: 'right',
+		/* při true vyvolá pozadí zakrývající vše ostatní (dle stylů) - toto pozadí je ve stylech jako .activeBackground */
+		hideOthers: false,
 		/* defaultní zpráva v dolní části okénka*/
 		defaultMessage: '',
 		/* zpráva v headeru okénka */
@@ -105,21 +107,39 @@
 		if (opts.arrowOrientation === 'left') {//orientace okénka
 			box.find('.arrow-up').addClass('on-left');//přidání třídy k šipečce (aby byla vlevo)
 		}
+		setBoxPosition(opts, box, button);
+		data.css('display', 'block');//zobrazení dat, pokud byla skrytá
+	}
+	/**
+	 * Nastaví pozici okénka dle nastavení
+	 * @param {type} opts parametry
+	 * @param {type} box okénko
+	 * @param {type} button tlačítko okénka
+	 */
+	function setBoxPosition(opts, box, button) {
 		//nastavení správné pozice
 		if (opts.autoPosition) {//nastavení pozice okénka
-			var arrow = box.find('.arrow-up');
-			box.css('top', button.outerHeight() + arrow.outerHeight() + opts.topMargin);//nastavení xové souřadnice
-			if (opts.arrowOrientation === 'left') {//rozdělení podle orientace
-				var arrowCorrection = parseInt(arrow.css('left')) + arrow.outerWidth() / 2;//vzdálenost zleva ke středu šipky
-				box.css('left', button.offset().left + (button.outerWidth() / 2) - arrowCorrection + opts.leftMargin);//nastavení odsazení zleva
-			} else {
-				var arrowCorrection = parseInt(arrow.css('right')) + arrow.outerWidth() / 2;//vzdálenost zprava ke středu šipky
-				var offsetRight = $(window).width() - button.offset().left - button.outerWidth();//offset tlačítka zprava
-				box.css('right', offsetRight + (button.outerWidth() / 2) - arrowCorrection - opts.leftMargin);//nastavení odsazení zprava
+			switch (opts.autoPosition) {
+				case true:
+					var arrow = box.find('.arrow-up');
+					box.css('top', button.outerHeight() + arrow.outerHeight() + opts.topMargin);//nastavení xové souřadnice
+					if (opts.arrowOrientation === 'left') {//rozdělení podle orientace
+						var arrowCorrection = parseInt(arrow.css('left')) + arrow.outerWidth() / 2;//vzdálenost zleva ke středu šipky
+						box.css('left', button.offset().left + (button.outerWidth() / 2) - arrowCorrection + opts.leftMargin);//nastavení odsazení zleva
+					} else {
+						var arrowCorrection = parseInt(arrow.css('right')) + arrow.outerWidth() / 2;//vzdálenost zprava ke středu šipky
+						var offsetRight = $(window).width() - button.offset().left - button.outerWidth();//offset tlačítka zprava
+						box.css('right', offsetRight + (button.outerWidth() / 2) - arrowCorrection - opts.leftMargin);//nastavení odsazení zprava
+					}
+					break;
+				case 'center':
+					box.css('top', ($(window).height() / 2) - (box.height() / 2));
+					box.css('left', ($(window).width() / 2) - (box.width() / 2));
+					break;
+				default:
+					break;
 			}
-
 		}
-		data.css('display', 'block');//zobrazení dat, pokud byla skrytá
 	}
 
 	/**
@@ -183,8 +203,20 @@
 			e.preventDefault();
 			var close = isThisWindowVisible(opts);
 			$('.ajaxBox').css('display', 'none');
+			$('.activeBackground').remove();
 			if (!close) {
 				$(boxSelector).css('display', 'block');//otevření jediného okénka
+				console.log('prest');
+				if (opts.hideOthers) {//vyvolani pozadi
+					$('body').prepend('<div class="activeBackground" data-related="' + opts.buttonSelector + '"></div>');
+					$(boxSelector).css('z-index', '10001');
+					$('.activeBackground').css('position', 'fixed');
+					$('.activeBackground').css('top', 0);
+					$('.activeBackground').css('left', 0);
+					$('.activeBackground').css('z-index', '10000');
+					$('.activeBackground').css('width', $(document).width());
+					$('.activeBackground').css('height', $(document).height());
+				}
 			}
 		});
 
@@ -192,6 +224,8 @@
 			if (!$(event.target).is(opts.buttonSelector, '.ajaxBox')) {
 				if (!$(event.target).is('.ajaxBox *, .ajaxBox')) {
 					$(boxSelector).css('display', 'none');
+					console.log('tee');
+					$('.activeBackground[data-related=' + opts.buttonSelector + ']').remove();
 				}
 			}
 		});
@@ -199,7 +233,6 @@
 		content.slimScroll({
 			height: content.height() + 'px'
 		});
-
 
 	}
 
