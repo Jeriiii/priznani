@@ -158,7 +158,7 @@ class OnePagePresenter extends BasePresenter {
 	 * Uloží preferované příspěvky uživatele do streamu.
 	 */
 	private function fillCorrectDataForStream() {
-		if ($this->getUser()->isLoggedIn()) {
+		if ($this->getUser()->isLoggedIn() && isset($this->user->property)) {
 			$this->initializeStreamUserPreferences();
 			$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
 		} else {

@@ -122,22 +122,25 @@ class BaseStream extends BaseProjectControl {
 		}
 		/* zda-li zobrazit dotaz na blíbenou polohu nebo pozici */
 
-		if ($this->presenter->user->isLoggedIn()) {
-			$placePosSession = $this->presenter->getSession('placePosSession');
-			$placePosSession->count++;
-			$this->template->placePosSession = $placePosSession;
-			$placePosSession->setExpiration(0, 'password');
+		$user = $this->presenter->user;
+		if ($user->isLoggedIn()) {
+			$userProperty = $this->userDao->findProperties($user->id);
+			if ($userProperty) { // ochrana proti uživatelům, co nemají vyplněné user property
+				$placePosSession = $this->presenter->getSession('placePosSession');
+				$placePosSession->count++;
+				$this->template->placePosSession = $placePosSession;
+				$placePosSession->setExpiration(0, 'password');
 
-			$userProperty = $this->userDao->findProperties($this->presenter->user->id);
-			$place = $this->userPlaceDao->isFilled($userProperty->id);
-			$position = $this->userPositionDao->isFilled($userProperty->id);
+				$place = $this->userPlaceDao->isFilled($userProperty->id);
+				$position = $this->userPositionDao->isFilled($userProperty->id);
 
-			$this->template->place = $place;
-			$this->template->position = $position;
+				$this->template->place = $place;
+				$this->template->position = $position;
+			}
 		}
 
 // Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
-		$profileGalleryID = $this->userGalleryDao->findProfileGallery($this->presenter->user->id);
+		$profileGalleryID = $this->userGalleryDao->findProfileGallery($user->id);
 		$this->template->profilePhoto = $this->userImageDao->getInGallery($profileGalleryID)->fetch();
 
 		$this->template->render();

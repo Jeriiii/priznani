@@ -26,4 +26,14 @@ class BaseProjectControl extends Control {
 		return $template;
 	}
 
+	/**
+	 * Nastaví šablonu a vyrendruje ji. Je to poslední funkce v renderu.
+	 * @param string $templatePath Celá cesta k šabloně.
+	 */
+	protected function renderTemplate($templatePath) {
+		$template = $this->template;
+		$template->setFile($templatePath);
+		$template->render();
+	}
+
 }
