@@ -9,6 +9,7 @@ common:
 	includes:
 		- model.neon
 		- localeconection.neon
+		- listeners.neon
 	
 	parameters:
 		facebook:
