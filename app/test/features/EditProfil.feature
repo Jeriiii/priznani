@@ -27,13 +27,17 @@ Feature: Edit user profile
 		And I select "1990" from "year"
 		And I press "frm-firstEditForm-send"
 
-	Scenario: User can change Identity info
+	Scenario Outline: User can change Identity info
 		Given I am signed in as "user@test.cz"
 	    And I am on "/profil.edit/"
 		And I should see "Identifikační údaje"
-		And I fill in "Chcete mě?" for "first_sentence"
-		And I fill in "Hledám pobavení" for "about_me"
+		And I fill in "<first>" for "first_sentence"
+		And I fill in "<about>" for "about_me"
 		And I press "frm-secondEditForm-send"
+
+		Examples:
+		| first			| about				|
+		| Chcete mě?	| Hledám pobavení	|
 
 
 	Scenario Outline: User can change Interests
