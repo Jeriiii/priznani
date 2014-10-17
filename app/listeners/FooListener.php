@@ -13,16 +13,16 @@ class FooListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 
 	private $mailer;
 
-	public function __construct(IMailer $mailer) {
+	public function __construct() {
 		//$this->mailer = $mailer;
 	}
 
 	public function render() {
-		//$this->mailer->send(new Message());
+		$myfile = fopen("testfile.txt", "w");
 	}
 
 	public function getSubscribedEvents() {
-		return array();
+		return array(); //'POSComponent\Chat\PosChat::render'
 	}
 
 }
