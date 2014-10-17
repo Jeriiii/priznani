@@ -25,17 +25,7 @@ Feature: Edit user profile
 		And I select "1" from "frm-firstEditForm-day"
 		And I select "leden" from "month"
 		And I select "1990" from "year"
-		And I select "<type>" from "type"
 		And I press "frm-firstEditForm-send"
- 
-		 Examples:
-         | type			|
-		 | Žena			|
-		 | Muž			|
-		 | Pár			|
-		 | Pár dvě ženy	|
-		 | Pár dva muži	|
-		 | Skupina		|
 
 	Scenario: User can change Identity info
 		Given I am signed in as "user@test.cz"
