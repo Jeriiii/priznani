@@ -8,6 +8,7 @@ namespace POS\Model;
 
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
+use Nette\Database\SqlLiteral;
 
 /**
  * NAME DAO NAMEDao
@@ -44,6 +45,7 @@ class UserPropertyDao extends UserBaseDao {
 	const COLUMN_DISTRICT_ID = "districtID";
 	const COLUMN_REGION_ID = "regionID";
 	const COLUMN_PREFERENCES_ID = "preferencesID";
+	const COLUMN_COINS = "coins";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -117,6 +119,33 @@ class UserPropertyDao extends UserBaseDao {
 		$data->regionID = $region->id;
 
 		return $data;
+	}
+
+	/**
+	 * Přidá uživateli určité množství zlaťáků
+	 * @param int $userID id uživatele, kterého se to týká
+	 * @param int $amount množství zlatek
+	 */
+	public function incraseCoinsBy($userID, $amount) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID, $userID)
+			->update(array(self::COLUMN_COINS => new SqlLiteral(self::COLUMN_COINS . ' + ' . $amount)));
+	}
+
+	/**
+	 * Odebere uživateli určité množství zlaťáků. Nemůže mít méně než 0
+	 * @param int $userID id uživatele, kterého se to týká
+	 * @param int $amount množství zlatek
+	 */
+	public function decraseCoinsBy($userID, $amount) {
+		$sel = $this->getTable();
+		$sel2 = $this->getTable();
+		$current = $sel->wherePrimary($userID)
+			->fetch()
+			->offsetGet(self::COLUMN_COINS);
+		$updated = max(array(0, $current - $amount));
+		return $sel2->where(self::COLUMN_ID, $userID)
+				->update(array(self::COLUMN_COINS => $updated));
 	}
 
 	/**

@@ -1,4 +1,4 @@
 services:
-    foo:
-        class: FooListener
+    coinListener:
+        class: POS\Listeners\CoinListener
         tags: [kdyby.subscriber]
