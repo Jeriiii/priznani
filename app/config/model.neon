@@ -44,3 +44,4 @@ services:
 	enumPlaceDao:	POS\Model\EnumPlaceDao
 	userPlaceDao:	POS\Model\UserPlaceDao
 	userBlokedDao:	POS\Model\UserBlokedDao
+	userAllowedDao:	POS\Model\UserAllowedDao

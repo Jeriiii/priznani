@@ -7,7 +7,7 @@
 </div>
 {/}
 
-{define modalDeleteGallery}
+{define modalDeleteGallery}{dump $gallery}
 <div id="MyModal{$gallery->id}" class="modal fade">
 <div class="modal-dialog">
 	<div class="modal-content">
@@ -28,7 +28,14 @@
 </div>
 {/}
 
-{define galleryEditButtons}
-<a href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" class="btn-action btn-edit" title="editovat galerie"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
-<a data-toggle="modal" href="#MyModal{$gallery->id}" class="btn-action btn-delete" title="smazat galerie"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
-{/}
+	{define galleryEditButtons}
+	{if $gallery->private}
+		{if $paying}
+			<a href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" class="btn-action btn-edit" title="editovat galerie"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
+			<a data-toggle="modal" href="#MyModal{$gallery->id}" class="btn-action btn-delete" title="smazat galerie"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
+		{/if}
+	{else}
+		<a href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" class="btn-action btn-edit" title="editovat galerie"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
+		<a data-toggle="modal" href="#MyModal{$gallery->id}" class="btn-action btn-delete" title="smazat galerie"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
+	{/if}
+	{/}

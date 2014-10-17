@@ -5,11 +5,16 @@
 	<a href="{plink :OnePage:}" id="add-photo-button" class="btn-main btn-small right">
 		zpět na stream
 	</a>
+	{if $myGallery && $private && $paying}
+		<a href="{plink Galleries:userList $galleryID}" class="btn-main btn-small right">
+			přístup
+		</a>
+	{/if}
 </div>
 <div class="clear"></div>
 
 {if $myGallery}
-	{control myUserImagesInGallery "listAll"}
+	{control myUserImagesInGallery "listAll", $paying, $private}
 {else}
 	{control userImagesInGallery "listAll", $galleryOwner}
 {/if}

@@ -23,8 +23,8 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 	public $userImageDao;
 	private $galleryID;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, $isPaying, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $isPaying, $parent, $name);
 		//form
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
@@ -41,6 +41,7 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 			"women" => $gallery->women,
 			"couple" => $gallery->couple,
 			"more" => $gallery->more,
+			"private" => $gallery->private,
 		));
 
 		$this->addSubmit('send', 'Změnit')->setAttribute('class', 'btn-main medium');

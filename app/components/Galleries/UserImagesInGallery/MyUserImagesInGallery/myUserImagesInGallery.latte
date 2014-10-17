@@ -1,10 +1,18 @@
 {layout '../BaseUserImagesInGallery/baseUserImagesInGallery.latte'}
-
 {define addNewImage}
-<div class="img-container">
-	<img src="{$basePath}/images/layout/plus-gallery2.png" width="100%" height="100%"/>			
-	<a href="{plink Galleries:imageNew galleryID => $galleryID}">Přidat novou fotku</a>           
-</div>
+{if $private}
+	{if $paying}
+		<div class="img-container">
+			<img src="{$basePath}/images/layout/plus-gallery2.png" width="100%" height="100%"/>			
+			<a href="{plink Galleries:imageNew galleryID => $galleryID}">Přidat novou fotku</a>           
+		</div>
+	{/if}
+{else}
+	<div class="img-container">
+		<img src="{$basePath}/images/layout/plus-gallery2.png" width="100%" height="100%"/>			
+		<a href="{plink Galleries:imageNew galleryID => $galleryID}">Přidat novou fotku</a>           
+	</div>
+{/if}
 {/}
 
 {define modalDeleteImage}
@@ -45,8 +53,15 @@
 {/}
 
 {define imageEditButtons}
-<a class="btn-action btn-edit" href="{plink Galleries:editGalleryImage imageID => $image->id, galleryID => $image->galleryID, redirekt => FALSE}"  title="editovat fotku"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
-<a data-toggle="modal" href="#MyModal{$image->id}" class="btn-action btn-delete" href="{plink deleteImage! id_image => $image->id, id_gallery => $image->galleryID, redirekt => FALSE}" title="smazat fotku"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
+{if $private}
+	{if $paying}
+		<a class="btn-action btn-edit" href="{plink Galleries:editGalleryImage imageID => $image->id, galleryID => $image->galleryID, redirekt => FALSE}"  title="editovat fotku"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
+		<a data-toggle="modal" href="#MyModal{$image->id}" class="btn-action btn-delete" href="{plink deleteImage! id_image => $image->id, id_gallery => $image->galleryID, redirekt => FALSE}" title="smazat fotku"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
+	{/if}
+{else}
+	<a class="btn-action btn-edit" href="{plink Galleries:editGalleryImage imageID => $image->id, galleryID => $image->galleryID, redirekt => FALSE}"  title="editovat fotku"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
+	<a data-toggle="modal" href="#MyModal{$image->id}" class="btn-action btn-delete" href="{plink deleteImage! id_image => $image->id, id_gallery => $image->galleryID, redirekt => FALSE}" title="smazat fotku"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
+{/if}
 {/}
 
 {define imageLink}
