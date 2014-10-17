@@ -18,7 +18,7 @@ Feature: Edit user profile
 		| Randit					| 3		|
 		| Sexovat				| 4		|
 
-	Scenario Outline: User can change Basic info 
+	Scenario: User can change Basic info 
 	    Given I am signed in as "user@test.cz"
 		And I am on "/profil.edit/"		
 		And I should see "Základní údaje"
