@@ -12,7 +12,7 @@ namespace POS\Ajax;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class AjaxCrate {
+class AjaxCrate extends \Nette\Object {
 
 	private $observerHandles = array();
 

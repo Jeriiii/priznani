@@ -19,7 +19,7 @@ class FooListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 		//$this->mailer = $mailer;
 	}
 
-	public function onPoo() {
+	public function onthis() {
 		$this->dao->setMessageReaded(53, FALSE);
 	}
 
@@ -35,7 +35,7 @@ class FooListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 
 		return array('Nette\Application\Application::onStartup',
 			'\POS\Model\FriendDao::onMess' => 'process',
-			'BasePresenter::onPoo');
+			'\POS\Ajax\AjaxObserver::onPoo' => 'onthis');
 	}
 
 }
