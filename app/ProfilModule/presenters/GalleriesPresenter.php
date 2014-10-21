@@ -9,10 +9,10 @@ use Nette\Security\User;
 use Nette\Http\Request;
 use Nette\Application\UI\Form as Frm;
 use Navigation\Navigation;
-use POSComponent\Galleries\UserGalleries\MyUserGalleries;
-use POSComponent\Galleries\UserGalleries\UserGalleries;
-use POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery;
-use POSComponent\Galleries\UserImagesInGallery\MyUserImagesInGallery;
+use POSComponent\Galleries\UserGalleriesThumbnails\MyUserGalleriesThumbnails;
+use POSComponent\Galleries\UserGalleriesThumbnails\UserGalleriesThumbnails;
+use POSComponent\Galleries\UserImagesGalleryThumbnails\UserGalleryImagesThumbnails;
+use POSComponent\Galleries\UserImagesGalleryThumbnails\MyUserGalleryImagesThumbnails;
 use POSComponent\Galleries\Images\UsersGallery;
 use POSComponent\Galleries\Images\VerificationGallery;
 use NetteExt\File;
@@ -330,7 +330,7 @@ class GalleriesPresenter extends \BasePresenter {
 	public function createComponentMyUserGalleries() {
 		$session = $this->getSession();
 		$section = $session->getSection('galleriesAccess');
-		return new MyUserGalleries($this->userDao, $this->userGaleryDao, $this->userAllowedDao, $this->friendDao, $section);
+		return new MyUserGalleriesThumbnails($this->userDao, $this->userGaleryDao, $this->userAllowedDao, $this->friendDao, $section);
 	}
 
 	/**
@@ -339,7 +339,7 @@ class GalleriesPresenter extends \BasePresenter {
 	protected function createComponentMyUserImagesInGallery() {
 		$images = $this->userImageDao->getInGallery($this->galleryID);
 
-		return new MyUserImagesInGallery($this->galleryID, $images, $this->userDao, $this->userAllowedDao);
+		return new MyUserGalleryImagesThumbnails($this->galleryID, $images, $this->userDao, $this->userAllowedDao);
 	}
 
 	/**
@@ -348,7 +348,7 @@ class GalleriesPresenter extends \BasePresenter {
 	protected function createComponentUserImagesInGallery() {
 		$images = $this->userImageDao->getInGallery($this->galleryID);
 
-		return new UserImagesInGallery($images, $this->userDao);
+		return new UserGalleryImagesThumbnails($images, $this->userDao);
 	}
 
 	protected function createComponentGallery() {

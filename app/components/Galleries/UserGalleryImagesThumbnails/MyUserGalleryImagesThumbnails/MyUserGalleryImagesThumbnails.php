@@ -11,7 +11,7 @@
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
 
-namespace POSComponent\Galleries\UserImagesInGallery;
+namespace POSComponent\Galleries\UserImagesGalleryThumbnails;
 
 use \Nette\Security\User,
 	Nette\Utils\Strings,
@@ -19,7 +19,7 @@ use \Nette\Security\User,
 use POS\Model\UserDao,
 	POS\Model\UserAllowedDao;
 
-class MyUserImagesInGallery extends BaseUserImagesInGallery {
+class MyUserGalleryImagesThumbnails extends BaseUserGalleryImagesThumbnails {
 
 	/** @var int ID galerie */
 	private $galleryID;
@@ -40,7 +40,7 @@ class MyUserImagesInGallery extends BaseUserImagesInGallery {
 	 * @param type $mode
 	 */
 	public function render($mode, $paying, $private) {
-		$templateName = "../MyUserImagesInGallery/myUserImagesInGallery.latte";
+		$templateName = "../MyUserGalleryImagesThumbnails/myUserGalleryImagesThumbnails.latte";
 
 		$this->template->paying = $paying;
 		$this->template->private = $private;

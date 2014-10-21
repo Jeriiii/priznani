@@ -11,7 +11,7 @@
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
 
-namespace POSComponent\Galleries\UserGalleries;
+namespace POSComponent\Galleries\UserGalleriesThumbnails;
 
 use Nette\ComponentModel\IContainer;
 use POS\Model\UserDao;
@@ -21,7 +21,7 @@ use POS\Model\FriendDao;
 use POSComponent\BaseProjectControl;
 use Nette\Http\SessionSection;
 
-class BaseUserGalleries extends BaseProjectControl {
+class BaseUserGalleriesThumbnails extends BaseProjectControl {
 	/* proměnné pro css překlad */
 
 	protected $cssVariables = array();

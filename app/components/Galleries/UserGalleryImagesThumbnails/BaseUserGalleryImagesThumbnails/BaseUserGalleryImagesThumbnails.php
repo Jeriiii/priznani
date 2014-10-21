@@ -6,12 +6,12 @@
  * @author Mario
  */
 
-namespace POSComponent\Galleries\UserImagesInGallery;
+namespace POSComponent\Galleries\UserImagesGalleryThumbnails;
 
 use POS\Model\UserDao;
 use POSComponent\BaseProjectControl;
 
-class BaseUserImagesInGallery extends BaseProjectControl {
+class BaseUserGalleryImagesThumbnails extends BaseProjectControl {
 
 	/** @var array proměnné pro css překlad */
 	protected $cssVariables = array();
@@ -29,7 +29,7 @@ class BaseUserImagesInGallery extends BaseProjectControl {
 		$this->userDao = $userDao;
 	}
 
-	public function renderBase($mode, $owner, $templateName = "baseUserImagesInGallery.latte") {
+	public function renderBase($mode, $owner, $templateName = "baseUserGalleryImagesThumbnails.latte") {
 		$this->setCssParams();
 
 		$this->template->userData = $this->userDao->find($owner);
