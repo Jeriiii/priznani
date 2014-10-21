@@ -44,6 +44,66 @@ class SearchPresenter extends SearchBasePresenter {
 	 */
 	public $userCategoryDao;
 
+	/**
+	 * @var \POS\Model\EnumBraSizeDao
+	 * @inject
+	 */
+	public $enumBraSizeDao;
+
+	/**
+	 * @var \POS\Model\EnumGraduationDao
+	 * @inject
+	 */
+	public $enumGraduationDao;
+
+	/**
+	 * @var \POS\Model\EnumHairColourDao
+	 * @inject
+	 */
+	public $enumHairColourDao;
+
+	/**
+	 * @var \POS\Model\EnumMaritalStateDao
+	 * @inject
+	 */
+	public $enumMaritalStateDao;
+
+	/**
+	 * @var \POS\Model\EnumOrientationDao
+	 * @inject
+	 */
+	public $enumOrientationDao;
+
+	/**
+	 * @var \POS\Model\EnumPenisWidthDao
+	 * @inject
+	 */
+	public $enumPenisWidthDao;
+
+	/**
+	 * @var \POS\Model\EnumPropertyDao
+	 * @inject
+	 */
+	public $enumPropertyDao;
+
+	/**
+	 * @var \POS\Model\EnumShapeDao
+	 * @inject
+	 */
+	public $enumShapeDao;
+
+	/**
+	 * @var \POS\Model\EnumSmokeDao
+	 * @inject
+	 */
+	public $enumSmokeDao;
+
+	/**
+	 * @var \POS\Model\EnumTallnessDao
+	 * @inject
+	 */
+	public $enumTallnessDao;
+
 	public function beforeRender() {
 		parent::beforeRender();
 		$this->setSexMode();
@@ -476,7 +536,7 @@ class SearchPresenter extends SearchBasePresenter {
 	 * @return \POSComponent\Search\AdvancedSearch
 	 */
 	protected function createComponentAdvancedSearch($name) {
-		return new \POSComponent\Search\AdvancedSearch($this->cityDao, $this->userDao, $this->searchData, $this, $name);
+		return new \POSComponent\Search\AdvancedSearch($this->enumBraSizeDao, $this->enumGraduationDao, $this->enumHairColourDao, $this->enumMaritalStateDao, $this->enumOrientationDao, $this->enumPenisWidthDao, $this->enumPropertyDao, $this->enumShapeDao, $this->enumSmokeDao, $this->enumTallnessDao, $this->cityDao, $this->userDao, $this->searchData, $this, $name);
 	}
 
 }
