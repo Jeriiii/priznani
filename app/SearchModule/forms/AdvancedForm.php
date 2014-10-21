@@ -16,6 +16,7 @@ class AdvancedForm extends BaseForm {
 	 * @var \POS\Model\CityDao
 	 */
 	public $cityDao;
+	private $values;
 
 	public function __construct(CityDao $cityDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
@@ -41,6 +42,8 @@ class AdvancedForm extends BaseForm {
 
 		//políčka se sexuálníma praktikama
 		$this->addPracticsFields();
+
+		$this->manageSubmittedFormValues();
 
 		$this->addSubmit('search', 'Vyhledat');
 
@@ -70,6 +73,7 @@ class AdvancedForm extends BaseForm {
 
 	public function advancedFormSubmitted(AdvancedForm $form) {
 		$values = $form->getValues();
+		$this->values = $values;
 		$presenter = $this->getPresenter();
 
 		$presenter->redirect('Search:advanced', (array) $values);
@@ -364,6 +368,15 @@ class AdvancedForm extends BaseForm {
 		$this->addCheckbox('petting', 'petting');
 		$this->addCheckbox('fisting', 'fisting');
 		$this->addCheckbox('deepthroat', 'deepthroat');
+	}
+
+	/**
+	 * Obstará vyplnění hodnot do formuláře po odeslání
+	 */
+	private function manageSubmittedFormValues() {
+		$parameters = $this->getPresenter()->getParameters();
+
+		$this->setDefaults($parameters);
 	}
 
 }
