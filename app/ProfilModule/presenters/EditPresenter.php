@@ -5,7 +5,7 @@ namespace ProfilModule;
 use Nette\Application\UI\Form as Frm,
 	Nette\ComponentModel\IContainer;
 use Nette\Security\User;
-use POSComponent\Galleries\UserGalleries\MyUserGalleries;
+use POSComponent\Galleries\UserGalleriesThumbnails\MyUserGalleriesThumbnails;
 use POSComponent\UsersList\FriendRequestList;
 use POS\Model\UserPositionDao;
 use POS\Model\EnumPositionDao;
@@ -142,7 +142,7 @@ class EditPresenter extends ProfilBasePresenter {
 	}
 
 	public function createComponentMyUserGalleries() {
-		return new MyUserGalleries($this->userDao, $this->userGalleryDao);
+		return new MyUserGalleriesThumbnails($this->userDao, $this->userGalleryDao);
 	}
 
 	protected function createComponentFriendRequest($name) {

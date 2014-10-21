@@ -11,15 +11,15 @@
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
 
-namespace POSComponent\Galleries\UserImagesInGallery;
+namespace POSComponent\Galleries\UserImagesGalleryThumbnails;
 
 use \Nette\Security\User,
 	Nette\Utils\Strings;
 
-class UserImagesInGallery extends BaseUserImagesInGallery {
+class UserGalleryImagesThumbnails extends BaseUserGalleryImagesThumbnails {
 
 	public function render($mode, $owner) {
-		$templateName = "../UserImagesInGallery/userImagesInGallery.latte";
+		$templateName = "../UserGalleryImagesThumbnails/userGalleryImagesThumbnails.latte";
 
 		$this->renderBase($mode, $owner, $templateName);
 	}
