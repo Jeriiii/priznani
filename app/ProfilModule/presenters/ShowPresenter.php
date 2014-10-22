@@ -7,8 +7,8 @@
 namespace ProfilModule;
 
 use Nette\Application\UI\Form as Frm;
-use POSComponent\Galleries\UserGalleries\UserGalleries;
-use POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery;
+use POSComponent\Galleries\UserGalleriesThumbnails\UserGalleriesThumbnails;
+use POSComponent\Galleries\UserImagesGalleryThumbnails\UserGalleryImagesThumbnails;
 use POSComponent\Stream\ProfilStream;
 use POSComponent\UserInfo\UserInfo;
 use POSComponent\AddToList\SendFriendRequest;
@@ -228,7 +228,7 @@ class ShowPresenter extends ProfilBasePresenter {
 		$session = $this->getSession();
 		$section = $session->getSection('galleriesAccess');
 
-		return new UserGalleries($this->userDao, $this->userGalleryDao, $this->userAllowedDao, $this->friendDao, $section);
+		return new UserGalleriesThumbnails($this->userDao, $this->userGalleryDao, $this->userAllowedDao, $this->friendDao, $section);
 	}
 
 	/**
@@ -237,7 +237,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	protected function createComponentUserImagesAll() {
 		$images = $this->userImageDao->getAllFromUser($this->userID);
 
-		return new UserImagesInGallery($images, $this->userDao);
+		return new UserGalleryImagesThumbnails($images, $this->userDao);
 	}
 
 	/**
