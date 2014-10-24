@@ -4,42 +4,16 @@
 
 {block content}
 <section id="onepage">
-	<nav id="stream-menu">
-		{if $user->isLoggedIn() && $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
-			{$userData|showProfMin}
-			<b><a n:href=":Profil:Show:default">{$userData->user_name}</a></b>
-			<a n:href=":Profil:Edit:default" title="Editovat profil">Editovat profil</a>
-			<a n:href=":Profil:Show:default" class="btn-main btn-small" title="Muj profil">Můj profil</a>
-		{/if}
-
-		<a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>
-	    <a n:href=":Profil:Galleries:userGalleryNew" class="btn-main btn-small" title="Profil">Vytvořit galerii</a>
+	{includeblock 'navigation.latte'}
+	<div id="best-match">
 		{if $user->isLoggedIn()}
-			{if $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
-				<a n:href=":Profil:Edit:friendRequests" class="btn-main btn-small" title="Pratelstvi">{$countFriendRequests} Žádosti o přátelství</a>
-				<a n:href=":Profil:Edit:default" class="btn-main btn-small" title="Změna statusu">
-				{if !empty($userData->property->statusID)}
-					Chci {$userData->property->status->name}
-				{else}
-					Nastavit status
-				{/if}
-				</a>
-			{else}
-				<a n:href="DatingRegistration:" class="btn-main btn-small">Doplnit info o sobě</a>
+			{if $userData->property}
+				{control bestMatchSearch 'listFew'}
+			{else} {* vyzve uživatele k dokončení registrace *}
+				Pokud se chcete seznámit, vyplňte o sobě <a n:href="DatingRegistration:" class="btn-main btn-small">další informace</a>.
 			{/if}
 		{/if}
-		{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
-	    <div class="clear"></div>
-	</nav>
-		<div id="best-match">
-			{if $user->isLoggedIn()}
-				{if $userData->property}
-					{control bestMatchSearch 'listFew'}
-				{else} {* vyzve uživatele k dokončení registrace *}
-					Pokud se chcete seznámit, vyplňte o sobě <a n:href="DatingRegistration:" class="btn-main btn-small">další informace</a>.
-				{/if}
-			{/if}
-		</div>
+	</div>
 	{control userStream}
 	<div id="right-dock">
 	    {*reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama *}
@@ -52,9 +26,43 @@
 {control js}
 <script>
 	$(document).ready(function () {
+		
+		$.convRunAjax = true;
+		$.convOffset = 0;
+		$.convLimit = 5;
+		
+		{* záložky u okének na vkládání obsahu/fotek *}
 		$( ".stream-form" ).tabs();
-		$("body").stream({
-			addoffset: 4
+		{* stream *}
+//		$("body").stream({
+//			addoffset: 4
+//		});
+		{* vyskakovací okénko u žádostí o přátelství *}
+		$('#friendRequests').ajaxBox({
+			buttonSelector: '#friendRequestsBtn',
+			theme: "posPopUp",
+			autoPosition: 'center',
+			hideOthers: true,
+			headerHtml: 'Žádosti o přátelství',
+			loadUrl: loadConversationsLink, /* link (url) vygenerovaný komponentou StandardConversationsList */
+			dataArrived: function (opts, data) { //zkoumá, jestli snippet poslal nějaká data a pokud ne, schová načítací gif a pomocí globálního přepínače zastaví dotazování
+				if (data.snippets['snippet-chat-conversationList-conversations'].trim() == "") {
+					$.convRunAjax = false;
+					//$('#conversations').append('<div class="noConvMessages">Žádné další zprávy.</div>');
+					$('div[data-related="' + opts.buttonSelector + '"] .loadingGif').css('display', 'none');
+				}
+			},
+			reloadPermitted: function (opts) { //zastavení dotazování, pokud je globální přepínač false
+				return $.convRunAjax;
+			},
+			dataToReload: function (opts) { //přidá ke každému požadavku ještě offset a limit. Poté zvětší offset.
+				var offset = $.convOffset;
+				$.convOffset += 4;
+				return {
+					'chat-conversationList-offset': offset,
+					'chat-conversationList-limit': $.convLimit
+				};
+			}
 		});
 	});
 	$("#frm-userStream-addConfessionForm-note").click(function() {

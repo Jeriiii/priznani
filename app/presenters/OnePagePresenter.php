@@ -11,6 +11,7 @@
 use Nette\Application\UI\Form as Frm;
 use POSComponent\Stream\UserStream\UserStream;
 use POS\UserPreferences\StreamUserPreferences;
+use POSComponent\UsersList\FriendRequestList;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -119,7 +120,7 @@ class OnePagePresenter extends BasePresenter {
 		$this->template->userID = $this->userID;
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
 		$this->template->userData = $this->userData;
-		$this->template->countFriendRequests = count($this->friendRequestDao->getAllToUser($this->userID)->fetchAll());
+		$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->userID)->count();
 	}
 
 	protected function createComponentUserStream() {
@@ -152,6 +153,10 @@ class OnePagePresenter extends BasePresenter {
 	protected function createComponentBestMatchSearch($name) {
 		$session = $this->getSession();
 		return new \POSComponent\Search\BestMatchSearch($this->userData, $this->userDao, $this->userCategoryDao, $session, $this, $name);
+	}
+
+	protected function createComponentFriendRequest($name) {
+		return new FriendRequestList($this->friendRequestDao, $this->getUser()->id, $this, $name);
 	}
 
 	/**

@@ -1,0 +1,42 @@
+{* celá levá navigace - ne ta v layoutu, ale ty tlačítka nalevo od streamu *}
+{block navigation}
+<nav id="stream-menu">
+	{include #profile}
+	<a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>
+	<a n:href=":Profil:Galleries:userGalleryNew" class="btn-main btn-small" title="Profil">Vytvořit galerii</a>
+	{if $user->isLoggedIn()}
+		{if $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
+			{include #friendRequest}
+			<a n:href=":Profil:Edit:default" class="btn-main btn-small" title="Změna statusu">
+			{if !empty($userData->property->statusID)}
+				Chci {$userData->property->status->name}
+			{else}
+				Nastavit status
+			{/if}
+			</a>
+		{else}
+			<a n:href="DatingRegistration:" class="btn-main btn-small">Doplnit info o sobě</a>
+		{/if}
+	{/if}
+	{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
+	<div class="clear"></div>
+</nav>
+{/block}
+
+{* profilový obrázek, jméno uživatele a tlačítko editovat *}
+{define profile}
+{if $user->isLoggedIn() && $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
+	{$userData|showProfMin}
+	<b><a n:href=":Profil:Show:default">{$userData->user_name}</a></b>
+	<a n:href=":Profil:Edit:default" title="Editovat profil">Editovat profil</a>
+	<a n:href=":Profil:Show:default" class="btn-main btn-small" title="Muj profil">Můj profil</a>
+{/if}
+{/}
+
+{* žádosti o přátelství *}
+{define friendRequest}
+<a class="btn-main btn-small" title="Pratelstvi" id="friendRequestsBtn">{$countFriendRequests} Žádosti o přátelství</a>
+<div id="friendRequests">
+{control friendRequest}
+</div>
+{/}

@@ -98,6 +98,14 @@ abstract class AbstractDao extends Object {
 	}
 
 	/**
+	 * Smaže celou tabulku !!!
+	 */
+	public function deleteAllTable() {
+		$table = $this->getTable();
+		return $table->delete();
+	}
+
+	/**
 	 * Najde prvek podle primárního klíče a aktualizuje mu data
 	 * @param int $id ID prvku.
 	 * @param array $data Data co se mají změnit.

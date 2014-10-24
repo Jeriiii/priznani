@@ -26,8 +26,9 @@ use POSComponent\BaseProjectControl;
 use Nette\Database\Table\Selection;
 use Nette\Application\UI\Form as Frm;
 use POS\Model\StreamDao;
+use IStream;
 
-class BaseStream extends BaseProjectControl {
+class BaseStream extends BaseProjectControl implements IStream {
 
 	/** @var Nette\Database\Table\Selection */
 	protected $dataForStream;
@@ -129,7 +130,7 @@ class BaseStream extends BaseProjectControl {
 	 * @param string $templateName Jméno šablony.
 	 */
 	private function renderMainStream($templateName) {
-		$this->setNewOffset();
+		$this->setData($this->offset);
 
 		$this->template->setFile(dirname(__FILE__) . '/' . $templateName);
 	}
@@ -139,7 +140,7 @@ class BaseStream extends BaseProjectControl {
 	 * @param string $templateName Jméno šablony.
 	 */
 	private function renderProfileStream($templateName) {
-		$this->setNewOffset();
+		$this->setData($this->offset);
 
 		$this->template->setFile(dirname(__FILE__) . '/' . $templateName);
 	}
@@ -147,11 +148,11 @@ class BaseStream extends BaseProjectControl {
 	/**
 	 * Metoda nastavuje novy offset pro nacitani dalsich prispevku uzivatele
 	 */
-	public function setNewOffset() {
-// musí se nastavit i v jQuery pluginu
+	public function setData($offset) {
+		// musí se nastavit i v jQuery pluginu
 		$limit = 4;
-		if (!empty($this->offset)) {
-			$this->template->stream = $this->dataForStream->limit($limit, $this->offset);
+		if (!empty($offset)) {
+			$this->template->stream = $this->dataForStream->limit($limit, $offset);
 		} else {
 			$this->template->stream = $this->dataForStream->limit($limit);
 		}
