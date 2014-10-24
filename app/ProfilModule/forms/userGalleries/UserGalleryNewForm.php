@@ -27,8 +27,8 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 	 */
 	const NUMBER_OF_IMAGE = 4;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $isPaying, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $isPaying, $parent, $name);
 
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
@@ -90,6 +90,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 		$valuesGallery['women'] = $values->women;
 		$valuesGallery['couple'] = $values->couple;
 		$valuesGallery['more'] = $values->more;
+		$valuesGallery['private'] = $values->private;
 
 		$gallery = $this->userGalleryDao->insert($valuesGallery);
 		return $gallery->id;

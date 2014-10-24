@@ -75,4 +75,22 @@ class FriendDao extends AbstractDao {
 		return $sel;
 	}
 
+	/**
+	 * Testuje, zda jsou dva uživatelé kamarádi
+	 * @param int $userID ID prvního uživatele
+	 * @param int $friendID ID druhého uživatele
+	 * @return boolean
+	 */
+	public function isFriend($userID, $friendID) {
+		if ($userID == $friendID) {
+			return true;
+		}
+		$sel = $this->getTable();
+		$sel->where(array(self::COLUMN_USER_ID_1 => $userID, self::COLUMN_USER_ID_2 => $friendID));
+		if ($sel->fetch()) {
+			return true;
+		}
+		return false;
+	}
+
 }

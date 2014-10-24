@@ -11,12 +11,12 @@
  * @author Mario
  */
 
-namespace POSComponent\Galleries\UserGalleries;
+namespace POSComponent\Galleries\UserGalleriesThumbnails;
 
 use \Nette\Security\User,
 	Nette\Utils\Strings;
 
-class UserGalleries extends BaseUserGalleries {
+class UserGalleriesThumbnails extends BaseUserGalleriesThumbnails {
 
 	/**
 	 * @param type $mode rozhoduje, zda se mají vygenerovat všechny obrázky v galerii nebo jen pár obrázků
@@ -26,7 +26,7 @@ class UserGalleries extends BaseUserGalleries {
 		//vememe pouze galerie, tkeré nejsou verifikační
 		$galleries = $this->userGalleryDao->getInUserWithoutVerif($userID);
 
-		$templateName = "../UserGalleries/userGalleries.latte";
+		$templateName = "../UserGalleriesThumbnails/userGalleriesThumbnails.latte";
 
 		$this->renderBase($mode, $galleries, $userID, $templateName);
 	}

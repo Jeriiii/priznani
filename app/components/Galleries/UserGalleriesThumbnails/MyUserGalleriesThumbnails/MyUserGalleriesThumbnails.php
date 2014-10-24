@@ -11,26 +11,26 @@
  * @author Mario
  */
 
-namespace POSComponent\Galleries\UserGalleries;
+namespace POSComponent\Galleries\UserGalleriesThumbnails;
 
 use \Nette\Security\User,
 	Nette\Utils\Strings;
 
-class MyUserGalleries extends BaseUserGalleries {
+class MyUserGalleriesThumbnails extends BaseUserGalleriesThumbnails {
 
 	/**
 	 * vyrendrování
 	 * @param type $mode
+	 * @param boolean $paying
 	 */
-	public function render($mode) {
+	public function render($mode, $paying) {
 		$userID = $this->getUser()->id;
 		$galleries = $this->userGalleryDao->getInUser($userID);
+		$this->template->paying = $paying;
 
-		$templateName = "../MyUserGalleries/myUserGalleries.latte";
+		$templateName = "../MyUserGalleriesThumbnails/myUserGalleriesThumbnails.latte";
 
 		$this->renderBase($mode, $galleries, $userID, $templateName);
 	}
 
 }
-
-?>

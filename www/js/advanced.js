@@ -1,39 +1,59 @@
 $(document).ready(function() {
-	//Získá vyplněnou hodnotu z políčka pohlaví
-	var sex = $('#frm-advancedSearch-advancedSearchForm-sex option:selected').text();
 	
-	$('fieldset:nth-child(2)').children('.form-group').eq(1).hide();
-	$('fieldset:nth-child(2)').children('.form-group').eq(2).hide();
-	$('fieldset:nth-child(2)').children('.form-group').eq(3).hide();
-	$('fieldset:nth-child(2)').children('.form-group').eq(4).hide();
+	//políčko s výběrem pohlaví
+	var sexColumn = '#frm-advancedSearch-advancedSearchForm-sex';
+	
+	//políčko s výběrem pohlaví pro vybranou hodnotu
+	var sexColumnSelected = '#frm-advancedSearch-advancedSearchForm-sex option:selected';
+	
+	//délka penisu od
+	var penisLengthFrom = $('fieldset:nth-child(2)').children('.form-group').eq(1);
+	
+	//délka penisu do
+	var penisLengthTo = $('fieldset:nth-child(2)').children('.form-group').eq(2);
+	
+	//šířka penisu
+	var penisWidth = $('fieldset:nth-child(2)').children('.form-group').eq(3);
+	
+	//velikost prsou
+	var breastSize = $('fieldset:nth-child(2)').children('.form-group').eq(4);
+	
+	//Získá vyplněnou hodnotu z políčka pohlaví
+	var sex = $(sexColumnSelected).text();
+	
+	//defaultně je všechno schované (krom výběru pohlaví)
+	penisLengthFrom.hide();
+	penisLengthTo.hide();
+	penisWidth.hide();
+	breastSize.hide();
 	
 	/**
 	 * Při změně hodnoty ukáže potřebná pole(w - pole s velikostí podprsenky, m - pole s délkou a šířkou penisu)
 	 */
-    $('#frm-advancedSearch-advancedSearchForm-sex').change(function() {
-        var sex = $('#frm-advancedSearch-advancedSearchForm-sex option:selected').text();	
+    $(sexColumn).change(function() {
+        sex = $(sexColumnSelected).text();	
 		
-		if(sex === '---') {
-			$('fieldset:nth-child(2)').children('.form-group').eq(1).hide();
-			$('fieldset:nth-child(2)').children('.form-group').eq(2).hide();
-			$('fieldset:nth-child(2)').children('.form-group').eq(3).hide();
-			$('fieldset:nth-child(2)').children('.form-group').eq(4).hide();
+		if(sex === '--------') {
+			penisLengthFrom.hide();
+			penisLengthTo.hide();
+			penisWidth.hide();
+			breastSize.hide();
 		} else if(sex === 'muž' || sex === 'pár mužů') {
-			$('fieldset:nth-child(2)').children('.form-group').eq(1).show();
-			$('fieldset:nth-child(2)').children('.form-group').eq(2).show();
-			$('fieldset:nth-child(2)').children('.form-group').eq(3).show();
-			$('fieldset:nth-child(2)').children('.form-group').eq(4).hide();
+			penisLengthFrom.show();
+			penisLengthTo.show();
+			penisWidth.show();
+			breastSize.hide();
 			
 		} else if(sex === 'žena' || sex === 'pár žen') {
-			$('fieldset:nth-child(2)').children('.form-group').eq(1).hide();
-			$('fieldset:nth-child(2)').children('.form-group').eq(2).hide();
-			$('fieldset:nth-child(2)').children('.form-group').eq(3).hide();
-			$('fieldset:nth-child(2)').children('.form-group').eq(4).show();
+			penisLengthFrom.hide();
+			penisLengthTo.hide();
+			penisWidth.hide();
+			breastSize.show();
 		} else {
-			$('fieldset:nth-child(2)').children('.form-group').eq(1).show();
-			$('fieldset:nth-child(2)').children('.form-group').eq(2).show();
-			$('fieldset:nth-child(2)').children('.form-group').eq(3).show();
-			$('fieldset:nth-child(2)').children('.form-group').eq(4).show();
+			penisLengthFrom.show();
+			penisLengthTo.show();
+			penisWidth.show();
+			breastSize.show();
 		}
 	});
 });

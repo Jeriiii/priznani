@@ -6,6 +6,17 @@ use Nette\Application\UI\Form,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer;
 use POS\Model\CityDao;
+use POS\Model\EnumBraSizeDao;
+use POS\Model\EnumDrinkDao;
+use POS\Model\EnumGraduationDao;
+use POS\Model\EnumHairColourDao;
+use POS\Model\EnumMaritalStateDao;
+use POS\Model\EnumOrientationDao;
+use POS\Model\EnumPenisWidthDao;
+use POS\Model\EnumPropertyDao;
+use POS\Model\EnumShapeDao;
+use POS\Model\EnumSmokeDao;
+use POS\Model\EnumTallnessDao;
 
 /**
  * Formulář pro podrobné vyhledávání
@@ -17,261 +28,92 @@ class AdvancedForm extends BaseForm {
 	 */
 	public $cityDao;
 
-	public function __construct(CityDao $cityDao, IContainer $parent = NULL, $name = NULL) {
+	/**
+	 * @var \POS\Model\EnumBraSizeDao
+	 */
+	public $enumBraSizeDao;
+
+	/**
+	 * @var \POS\Model\EnumGraduationDao
+	 */
+	public $enumGraduationDao;
+
+	/**
+	 * @var \POS\Model\EnumHairColourDao
+	 */
+	public $enumHairColourDao;
+
+	/**
+	 * @var \POS\Model\EnumMaritalStateDao
+	 */
+	public $enumMaritalStateDao;
+
+	/**
+	 * @var \POS\Model\EnumOrientationDao
+	 */
+	public $enumOrientationDao;
+
+	/**
+	 * @var \POS\Model\EnumPenisWidthDao
+	 */
+	public $enumPenisWidthDao;
+
+	/**
+	 * @var \POS\Model\EnumPropertyDao
+	 */
+	public $enumPropertyDao;
+
+	/**
+	 * @var \POS\Model\EnumShapeDao
+	 */
+	public $enumShapeDao;
+
+	/**
+	 * @var \POS\Model\EnumSmokeDao
+	 */
+	public $enumSmokeDao;
+
+	/**
+	 * @var \POS\Model\EnumTallnessDao
+	 */
+	public $enumTallnessDao;
+
+	public function __construct(EnumBraSizeDao $enumBraSizeDao, EnumGraduationDao $enumGraduationDao, EnumHairColourDao $enumHairColourDao, EnumMaritalStateDao $enumMaritalStateDao, EnumOrientationDao $enumOrientationDao, EnumPenisWidthDao $enumPenisWidthDao, EnumPropertyDao $enumPropertyDao, EnumShapeDao $enumShapeDao, EnumSmokeDao $enumSmokeDao, EnumTallnessDao $enumTallnessDao, CityDao $cityDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->cityDao = $cityDao;
+		$this->enumBraSizeDao = $enumBraSizeDao;
+		$this->enumGraduationDao = $enumGraduationDao;
+		$this->enumHairColourDao = $enumHairColourDao;
+		$this->enumMaritalStateDao = $enumMaritalStateDao;
+		$this->enumOrientationDao = $enumOrientationDao;
+		$this->enumPenisWidthDao = $enumPenisWidthDao;
+		$this->enumPropertyDao = $enumPropertyDao;
+		$this->enumShapeDao = $enumShapeDao;
+		$this->enumSmokeDao = $enumSmokeDao;
+		$this->enumTallnessDao = $enumTallnessDao;
 
-		//skupina pro políčka s věkem
-		$age = $this->addGroup('Věk');
+//políčka s věkem
+		$this->addAgeFields();
 
-		$ageFrom = $this->addText('age_from', 'od:')
-			->setAttribute('class', 'smallColumn')
-			->setAttribute('placeholder', 18);
-		$ageTo = $this->addText('age_to', 'do:')
-			->setAttribute('class', 'smallColumn');
+//políčka o pohlaví
+		$this->addSexFields();
 
-		//přidání políček do skupiny
-		$age->add($ageFrom);
-		$age->add($ageTo);
+//políčka o údajích o tělu
+		$this->addBodyFields();
 
+//políčka s návyky
+		$this->addHabitsFields();
 
-		//skupina pro políčka s pohlavím a orientací
-		$sex = $this->addGroup('Pohlaví a orientace');
+//obecná políčka
+		$this->addGeneralFields();
 
-		$sexType = array(
-			'' => '--------',
-			'1' => 'muž',
-			'2' => 'žena',
-			'3' => 'pár',
-			'4' => 'pár mužů',
-			'5' => 'pár žen',
-			'6' => 'skupina'
-		);
+//políčka o zájmu
+		$this->addIntrestedInFields();
 
-		$sexChoices = $this->addSelect('sex', 'pohlaví:', $sexType)
-			->setAttribute('class', 'columnSelectWidth');
+//políčka se sexuálníma praktikama
+		$this->addPracticsFields();
 
-		$penisLengthFrom = $this->addText('penis_length_from', 'délka penisu:')
-			->setAttribute('placeholder', 'od(cm)')
-			->setAttribute('class', 'middleColumn');
-
-		$penisLengthTo = $this->addText('penis_length_to', '')
-			->setAttribute('placeholder', 'do(cm)')
-			->setAttribute('class', 'middleColumn');
-
-		$penisWidthType = array(
-			'' => '--------',
-			'1' => 'hubený',
-			'2' => 'střední',
-			'3' => 'tlustý',
-		);
-
-		$penisWidth = $this->addSelect('penis_width', 'šířka penisu: ', $penisWidthType)
-			->setAttribute('class', 'columnSelectWidth');
-
-		$braSize = array(
-			'' => '--------',
-			'1' => 'A',
-			'2' => 'B',
-			'3' => 'C',
-			'4' => 'D',
-			'5' => 'E',
-			'6' => 'F',
-		);
-
-		$bra = $this->addSelect('bra_size', 'velikost prsou:', $braSize)
-			->setAttribute('class', 'columnSelectWidth');
-
-		$orientationType = array(
-			'' => '--------',
-			'1' => 'hetero',
-			'2' => 'homo',
-			'3' => 'bi',
-			'4' => 'bi - chtěl bych zkusit',
-		);
-		$orientation = $this->addSelect('orientation', 'Sexuální orientace:', $orientationType)
-			->setAttribute('class', 'columnSelectWidth');
-
-		//přidání políček do skupiny
-		$sex->add($sexChoices);
-		$sex->add($penisLengthFrom);
-		$sex->add($penisLengthTo);
-		$sex->add($penisWidth);
-		$sex->add($bra);
-		$sex->add($orientation);
-
-		//skupina pro políčka s tělem
-		$body = $this->addGroup('Tělo');
-
-		$shapeTypes = array(
-			'' => '--------',
-			'1' => 'hubená',
-			'2' => 'štíhlá',
-			'3' => 'normální',
-			'4' => 'atletická',
-			'5' => 'plnoštíhlá',
-			'6' => 'při těle',
-		);
-
-		$hairColor = array(
-			'' => '--------',
-			'1' => 'blond',
-			'2' => 'hnědá',
-			'3' => 'zrzavá',
-			'4' => 'černá',
-			'5' => 'jiná',
-		);
-
-		$tallness_from = array(
-			'' => 'od(cm)',
-			'1' => 160,
-			'2' => 170,
-			'3' => 180,
-			'4' => 190,
-			'5' => 200
-		);
-
-		$tallness_to = array(
-			'' => 'do(cm)',
-			'1' => 160,
-			'2' => 170,
-			'3' => 180,
-			'4' => 190,
-			'5' => 200
-		);
-
-		$shape = $this->addSelect('shape', 'postava:', $shapeTypes)
-			->setAttribute('class', 'columnSelectWidth');
-		$hair = $this->addSelect('hair_color', 'barva vlasů:', $hairColor)
-			->setAttribute('class', 'columnWidth');
-		$heightFrom = $this->addSelect('tallness_from', 'výška:', $tallness_from)
-			->setAttribute('class', 'columnTallness');
-		$heightTo = $this->addSelect('tallness_to', '', $tallness_to)
-			->setAttribute('class', 'columnTallness');
-
-		//přidání do skupiny
-		$body->add($shape);
-		$body->add($hair);
-		$body->add($heightFrom);
-		$body->add($heightTo);
-
-		//skupina pro políčka s návyky
-		$habits = $this->addGroup('Návyky');
-
-		$drink = array(
-			'' => '--------',
-			'1' => 'často',
-			'2' => 'ne',
-			'3' => 'příležitostně',
-		);
-
-		$drinking = $this->addSelect('drink', 'pití:', $drink)
-			->setAttribute('class', 'columnSelectWidth');
-		$smoking = $this->addSelect('smoke', 'kouření:', $drink)
-			->setAttribute('class', 'columnSelectWidth');
-
-		//přidání do skupiny
-		$habits->add($drinking);
-		$habits->add($smoking);
-
-		$gra = array(
-			'' => '--------',
-			'1' => 'základní',
-			'2' => 'vyučen/a',
-			'3' => 'střední',
-			'4' => 'vyšší odborné',
-			'5' => 'vysoké',
-		);
-
-		//skupina pro obecná políčka(vzdělání a bydliště)
-		$general = $this->addGroup('Obecné');
-
-		$state = array(
-			'' => '--------',
-			'1' => 'volný',
-			'2' => 'ženatý/vdaná',
-			'3' => 'rozvedený/á',
-			'4' => 'oddělený/á',
-			'5' => 'vdovec/vdova',
-			'6' => 'zadaný/á',
-		);
-
-		$maritalState = $this->addSelect('marital_state', 'stav:', $state)
-			->setAttribute('class', 'columnSelectWidth');
-
-		$graduation = $this->addSelect('graduation', 'vzdělání:', $gra)
-			->setAttribute('class', 'columnSelectWidth');
-
-		$dataRaw = $this->cityDao->getCitiesData();
-		$cityData = $this->getCityData($dataRaw);
-		$districtData = $this->getDistrictData($dataRaw);
-		$regionData = $this->getRegiontData($dataRaw);
-
-		$city = $this->addSelect('city', 'bydliště:', $cityData)
-			->setAttribute('class', 'columnSelectWidth');
-
-		$district = $this->addSelect('district', '', $districtData)
-			->setAttribute('class', 'columnSelectWidth');
-
-		$region = $this->addSelect('region', '', $regionData)
-			->setAttribute('class', 'columnSelectWidth');
-
-		//přidání do skupiny
-		$general->add($maritalState);
-		$general->add($graduation);
-		$general->add($city);
-		$general->add($district);
-		$general->add($region);
-
-		//skupina pro políčka se zájmy koho potkat
-		$intresetdIn = $this->addGroup('Chce potkat');
-
-		$men = $this->addCheckbox('men', 'muži');
-		$women = $this->addCheckbox('women', 'ženy');
-		$couple = $this->addCheckbox('couple', 'pár');
-		$coupleMen = $this->addCheckbox('men_couple', 'pár mužů');
-		$coupleWomen = $this->addCheckbox('women_couple', 'pár žen');
-		$more = $this->addCheckbox('more', 'skupina');
-
-		//přidání do skupiny
-		$intresetdIn->add($men);
-		$intresetdIn->add($women);
-		$intresetdIn->add($couple);
-		$intresetdIn->add($coupleMen);
-		$intresetdIn->add($coupleWomen);
-		$intresetdIn->add($more);
-
-
-		//skupina pro políčka se sexuálními praktikami
-		$practics = $this->addGroup('Sexuální praktiky');
-
-		$threesome = $this->addCheckbox('threesome', 'trojka');
-		$anal = $this->addCheckbox('anal', 'anál');
-		$group = $this->addCheckbox('group', 'skupinový sex');
-		$bdsm = $this->addCheckbox('bdsm', 'BDSM');
-		$swallow = $this->addCheckbox('swallow', 'polykání');
-		$cum = $this->addCheckbox('cum', 'ejakulace');
-		$oral = $this->addCheckbox('oral', 'orál');
-		$piss = $this->addCheckbox('piss', 'pissing');
-		$sexMassage = $this->addCheckbox('sex_massage', 'sexuální masáže');
-		$petting = $this->addCheckbox('petting', 'petting');
-		$fisting = $this->addCheckbox('fisting', 'fisting');
-		$deepthroat = $this->addCheckbox('deepthroat', 'deepthroat');
-
-		//přidání do skupiny
-		$practics->add($threesome);
-		$practics->add($anal);
-		$practics->add($group);
-		$practics->add($bdsm);
-		$practics->add($swallow);
-		$practics->add($cum);
-		$practics->add($oral);
-		$practics->add($piss);
-		$practics->add($sexMassage);
-		$practics->add($petting);
-		$practics->add($fisting);
-		$practics->add($deepthroat);
-
+		$this->manageSubmittedFormValues();
 
 		$this->addSubmit('search', 'Vyhledat');
 
@@ -301,6 +143,7 @@ class AdvancedForm extends BaseForm {
 
 	public function advancedFormSubmitted(AdvancedForm $form) {
 		$values = $form->getValues();
+		$this->values = $values;
 		$presenter = $this->getPresenter();
 
 		$presenter->redirect('Search:advanced', (array) $values);
@@ -354,7 +197,7 @@ class AdvancedForm extends BaseForm {
 	 * @return boolean
 	 */
 	private function testNumeric($text) {
-		//regulární výraz, pro hledání mínusu v číselném řetězci
+//regulární výraz, pro hledání mínusu v číselném řetězci
 		$pattern = "/-/";
 
 		if (!is_numeric($text) && $text != "") {
@@ -364,6 +207,316 @@ class AdvancedForm extends BaseForm {
 			return FALSE;
 		}
 		return TRUE;
+	}
+
+	private function addAgeFields() {
+//skupina pro políčka s věkem
+		$this->addGroup('Věk');
+
+		$this->addText('age_from', 'od:')
+			->setAttribute('class', 'smallColumn')
+			->setAttribute('placeholder', 18);
+		$this->addText('age_to', 'do:')
+			->setAttribute('class', 'smallColumn');
+	}
+
+	/**
+	 * funkce přidá sekci s údaji o pohlaví
+	 */
+	private function addSexFields() {
+//skupina pro políčka s pohlavím a orientací
+		$this->addGroup('Pohlaví a orientace');
+
+		$sexType = $this->getSexTypeChoices();
+
+		$penisWidthType = $this->getPenisWidthChoices();
+
+		$braSize = $this->getBraSizeChoices();
+
+		$orientationType = $this->getOrientationChoices();
+
+		$this->addSelect('sex', 'pohlaví:', $sexType)
+			->setAttribute('class', 'columnSelectWidth');
+
+		$this->addText('penis_length_from', 'délka penisu:')
+			->setAttribute('placeholder', 'od(cm)')
+			->setAttribute('class', 'middleColumn');
+
+		$this->addText('penis_length_to', '')
+			->setAttribute('placeholder', 'do(cm)')
+			->setAttribute('class', 'middleColumn');
+
+		$this->addSelect('penis_width', 'šířka penisu: ', $penisWidthType)
+			->setAttribute('class', 'columnSelectWidth');
+
+		$this->addSelect('bra_size', 'velikost prsou:', $braSize)
+			->setAttribute('class', 'columnSelectWidth');
+
+		$this->addSelect('orientation', 'Sexuální orientace:', $orientationType)
+			->setAttribute('class', 'columnSelectWidth');
+	}
+
+	/**
+	 * funkce přidá sekci s údaji o těle
+	 */
+	private function addBodyFields() {
+//skupina pro políčka s tělem
+		$this->addGroup('Tělo');
+
+		$shapeTypes = $this->getShapeChoices();
+
+		$hairColor = $this->getHairColorChoices();
+
+		$tallness_to = $this->getTallnessChoices("to");
+
+		$tallness_from = $this->getTallnessChoices("from");
+
+		$this->addSelect('shape', 'postava:', $shapeTypes)
+			->setAttribute('class', 'columnSelectWidth');
+		$this->addSelect('hair_color', 'barva vlasů:', $hairColor)
+			->setAttribute('class', 'columnWidth');
+		$this->addSelect('tallness_from', 'výška:', $tallness_from)
+			->setAttribute('class', 'columnTallness');
+		$this->addSelect('tallness_to', '', $tallness_to)
+			->setAttribute('class', 'columnTallness');
+	}
+
+	/**
+	 * funkce přidá sekci s údaji o návycích
+	 */
+	private function addHabitsFields() {
+//skupina pro políčka s návyky
+		$this->addGroup('Návyky');
+
+
+		$habits = $this->getHabitsChoices();
+
+		$this->addSelect('drink', 'pití:', $habits)
+			->setAttribute('class', 'columnSelectWidth');
+		$this->addSelect('smoke', 'kouření:', $habits)
+			->setAttribute('class', 'columnSelectWidth');
+	}
+
+	/**
+	 * funkce přidá sekci s obecnými údaji
+	 */
+	private function addGeneralFields() {
+//skupina pro obecná políčka(vzdělání a bydliště)
+		$this->addGroup('Obecné');
+
+		$gra = $this->getGraduationChoices();
+
+		$state = $this->getStateChoices();
+
+		$this->addSelect('marital_state', 'stav:', $state)
+			->setAttribute('class', 'columnSelectWidth');
+
+		$this->addSelect('graduation', 'vzdělání:', $gra)
+			->setAttribute('class', 'columnSelectWidth');
+
+		$dataRaw = $this->cityDao->getCitiesData();
+		$cityData = $this->getCityData($dataRaw);
+		$districtData = $this->getDistrictData($dataRaw);
+		$regionData = $this->getRegiontData($dataRaw);
+
+		$this->addSelect('city', 'bydliště:', $cityData)
+			->setAttribute('class', 'columnSelectWidth');
+
+		$this->addSelect('district', '', $districtData)
+			->setAttribute('class', 'columnSelectWidth');
+
+		$this->addSelect('region', '', $regionData)
+			->setAttribute('class', 'columnSelectWidth');
+	}
+
+	/**
+	 * funkce přidá sekci s údaji o zájmech
+	 */
+	private function addIntrestedInFields() {
+//skupina pro políčka se zájmy koho potkat
+		$this->addGroup('Chce potkat');
+
+		$this->addCheckbox('men', 'muži');
+		$this->addCheckbox('women', 'ženy');
+		$this->addCheckbox('couple', 'pár');
+		$this->addCheckbox('men_couple', 'pár mužů');
+		$this->addCheckbox('women_couple', 'pár žen');
+		$this->addCheckbox('more', 'skupina');
+	}
+
+	/**
+	 * funkce přidá sekci s údaji o praktikách
+	 */
+	private function addPracticsFields() {
+//skupina pro políčka se sexuálními praktikami
+		$this->addGroup('Sexuální praktiky');
+
+		$this->addCheckbox('threesome', 'trojka');
+		$this->addCheckbox('anal', 'anál');
+		$this->addCheckbox('group', 'skupinový sex');
+		$this->addCheckbox('bdsm', 'BDSM');
+		$this->addCheckbox('swallow', 'polykání');
+		$this->addCheckbox('cum', 'ejakulace');
+		$this->addCheckbox('oral', 'orál');
+		$this->addCheckbox('piss', 'pissing');
+		$this->addCheckbox('sex_massage', 'sexuální masáže');
+		$this->addCheckbox('petting', 'petting');
+		$this->addCheckbox('fisting', 'fisting');
+		$this->addCheckbox('deepthroat', 'deepthroat');
+	}
+
+	/**
+	 * Obstará vyplnění hodnot do formuláře po odeslání
+	 */
+	private function manageSubmittedFormValues() {
+		$parameters = $this->getPresenter()->getParameters();
+
+		$this->setDefaults($parameters);
+	}
+
+	/**
+	 * připraví data z databáze pro možnosti pohlaví
+	 * @return array
+	 */
+	private function getSexTypeChoices() {
+		$choices = array();
+		$data = $this->enumPropertyDao->getAll();
+		$choices[''] = "--------";
+
+		foreach ($data as $item) {
+			$choices['"' . $item->id . '"'] = $item->name;
+		}
+		return $choices;
+	}
+
+	/**
+	 * připraví data z databáze pro možnosti šířky penisu
+	 * @return array
+	 */
+	private function getPenisWidthChoices() {
+		$data = $this->enumPenisWidthDao->getAll();
+		$choices[''] = "--------";
+
+		foreach ($data as $item) {
+			$choices['"' . $item->id . '"'] = $item->penis_width;
+		}
+		return $choices;
+	}
+
+	/**
+	 * připraví data z databáze pro možnosti velikosti prsou
+	 * @return array
+	 */
+	private function getBraSizeChoices() {
+		$data = $this->enumBraSizeDao->getAll();
+		$choices[''] = "--------";
+
+		foreach ($data as $item) {
+			$choices['"' . $item->id . '"'] = $item->bra_size;
+		}
+		return $choices;
+	}
+
+	/**
+	 * připraví data z databáze pro možnosti sexuální orientace
+	 * @return array
+	 */
+	private function getOrientationChoices() {
+		$data = $this->enumOrientationDao->getAll();
+		$choices[''] = "--------";
+
+		foreach ($data as $item) {
+			$choices['"' . $item->id . '"'] = $item->orientation;
+		}
+		return $choices;
+	}
+
+	/**
+	 * připraví data z databáze pro možnosti tvaru těla
+	 * @return array
+	 */
+	private function getShapeChoices() {
+		$data = $this->enumShapeDao->getAll();
+		$choices[''] = "--------";
+
+		foreach ($data as $item) {
+			$choices['"' . $item->id . '"'] = $item->shape;
+		}
+		return $choices;
+	}
+
+	/**
+	 * připraví data z databáze pro možnosti barvy vlasů
+	 * @return array
+	 */
+	private function getHairColorChoices() {
+		$data = $this->enumHairColourDao->getAll();
+		$choices[''] = "--------";
+
+		foreach ($data as $item) {
+			$choices['"' . $item->id . '"'] = $item->hair_colour;
+		}
+		return $choices;
+	}
+
+	/**
+	 * připraví data z databáze pro možnosti výsky
+	 * @return array
+	 */
+	private function getTallnessChoices($type) {
+		$data = $this->enumTallnessDao->getAll();
+		if ($type == "from") {
+			$choices[''] = "od(cm)";
+		} else {
+			$choices[''] = "do(cm)";
+		}
+
+		foreach ($data as $item) {
+			$choices['"' . $item->id . '"'] = $item->tallness;
+		}
+		return $choices;
+	}
+
+	/**
+	 * připraví data z databáze pro možnosti zvyků
+	 * @return array
+	 */
+	private function getHabitsChoices() {
+		$data = $this->enumSmokeDao->getAll();
+		$choices[''] = "--------";
+
+		foreach ($data as $item) {
+			$choices['"' . $item->id . '"'] = $item->smoke;
+		}
+		return $choices;
+	}
+
+	/**
+	 * připraví data z databáze pro možnosti vzdělání
+	 * @return array
+	 */
+	private function getGraduationChoices() {
+		$data = $this->enumGraduationDao->getAll();
+		$choices[''] = "--------";
+
+		foreach ($data as $item) {
+			$choices['"' . $item->id . '"'] = $item->graduation;
+		}
+		return $choices;
+	}
+
+	/**
+	 * připraví data z databáze pro možnosti stavu
+	 * @return array
+	 */
+	private function getStateChoices() {
+		$data = $this->enumMaritalStateDao->getAll();
+		$choices[''] = "--------";
+
+		foreach ($data as $item) {
+			$choices['"' . $item->id . '"'] = $item->marital_state;
+		}
+		return $choices;
 	}
 
 }
