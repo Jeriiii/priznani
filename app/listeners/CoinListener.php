@@ -69,7 +69,8 @@ class CoinListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 
 		return array('POS\Model\YouAreSexyDao::onLike' => 'onIsSexy',
 			'POS\Model\YouAreSexyDao::onDislike' => 'onIsNotSexyAnymore',
-			'Nette\Application\Application::onStartup' => 'addCoinsForMessages');
+//			'Nette\Application\Application::onStartup' => 'addCoinsForMessages'//TODO: napojit na CRON
+		);
 	}
 
 	/**
