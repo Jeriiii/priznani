@@ -12,6 +12,19 @@ $(document).ready(function () {
 	$.convOffset = 0;
 	$.convLimit = 5;
 
+	/**
+	 * Zpracuje číselnou odpověď ajaxObserveru a nastaví ji ke tlačítku
+	 * @param {type} opts nastavení dotyčného okénka
+	 * @param {type} data příchozí data od serveru
+	 */
+	function handleNumberResponse(opts, data) {//zpracování odpovědi od ajaxObserveru, konkrétně čísla s počtem zpráv. Je-li nenulové, zobrazí se vedle tlačítka.
+		if (data) {
+			$(opts.buttonSelector).find('.ajaxbox-button-info').html(data).css('display', 'block');
+		} else {
+			$(opts.buttonSelector).find('.ajaxbox-button-info').css('display', 'none');
+		}
+	}
+
 //inicializace vyskakovacích okének
 	$('#conversations').ajaxBox({
 		buttonSelector: '#messages-btn',
@@ -20,32 +33,16 @@ $(document).ready(function () {
 		theme: "posAjaxBox posConversations", //použijí se implicitní styly, ale budou upraveny
 		headerHtml: "Příchozí zprávy", //header
 		loadUrl: loadConversationsLink, /* link (url) vygenerovaný komponentou StandardConversationsList */
-		dataArrived: function (opts, data) {//zkoumá, jestli snippet poslal nějaká data a pokud ne, schová načítací gif a pomocí globálního přepínače zastaví dotazování
-			if (data.snippets['snippet-chat-conversationList-conversations'].trim() == "") {
-				$.convRunAjax = false;
-				$('#conversations').append('<div class="noConvMessages">Žádné další zprávy.</div>');
-				$('div[data-related="' + opts.buttonSelector + '"] .loadingGif').css('display', 'none');
-			}
-		},
-		reloadPermitted: function (opts) {//zastavení dotazování, pokud je globální přepínač false
-			return $.convRunAjax;
-		},
-		dataToReload: function (opts) {//přidá ke každému požadavku ještě offset a limit. Poté zvětší offset.
-			var offset = $.convOffset;
-			$.convOffset += 5;
-			return {
-				'chat-conversationList-offset': offset,
-				'chat-conversationList-limit': $.convLimit
-			};
+		streamSnippetModule: {
+			snippetName: 'snippet-chat-conversationList-conversations',
+			endMessage: 'Žádné další zprávy.',
+			offsetParameter: 'chat-conversationList-offset',
+			limitParameter: 'chat-conversationList-limit',
+			addLimit: 5,
+			startOffset: 0
 		},
 		ajaxObserverId: 'chatConversationWindow', //je použit ajaxObserver a toto id reprezentuje požadavek této komponenty (pod stejným id se požadavek vyřizuje na serveru)
-		observerResponseHandle: function (opts, data) {//zpracování odpovědi od ajaxObserveru, konkrétně čísla s počtem zpráv. Je-li nenulové, zobrazí se vedle tlačítka.
-			if (data) {
-				$(opts.buttonSelector).find('.ajaxbox-button-info').html(data).css('display', 'block');
-			} else {
-				$(opts.buttonSelector).find('.ajaxbox-button-info').css('display', 'none');
-			}
-		}
+		observerResponseHandle: handleNumberResponse//použití funkce v initu, která vezme výsledek dotazu na observer a zobrazí jej u tlačítka, pokud je nenulový
 	});
 /////////////////////////
 
