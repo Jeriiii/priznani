@@ -107,18 +107,18 @@ class OnePagePresenter extends BasePresenter {
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $userID;
-	protected $user;
+	protected $userData;
 
 	public function actionDefault() {
 		$this->userID = $this->getUser()->getId();
-		$this->user = $this->userDao->find($this->userID);
+		$this->userData = $this->userDao->find($this->userID);
 		$this->fillCorrectDataForStream();
 	}
 
 	public function renderDefault() {
 		$this->template->userID = $this->userID;
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
-		$this->template->userData = $this->user;
+		$this->template->userData = $this->userData;
 		$this->template->countFriendRequests = count($this->friendRequestDao->getAllToUser($this->userID)->fetchAll());
 	}
 
@@ -151,14 +151,14 @@ class OnePagePresenter extends BasePresenter {
 	 */
 	protected function createComponentBestMatchSearch($name) {
 		$session = $this->getSession();
-		return new \POSComponent\Search\BestMatchSearch($this->user, $this->userDao, $this->userCategoryDao, $session, $this, $name);
+		return new \POSComponent\Search\BestMatchSearch($this->userData, $this->userDao, $this->userCategoryDao, $session, $this, $name);
 	}
 
 	/**
 	 * Uloží preferované příspěvky uživatele do streamu.
 	 */
 	private function fillCorrectDataForStream() {
-		if ($this->getUser()->isLoggedIn()) {
+		if ($this->getUser()->isLoggedIn() && isset($this->userData->property)) {
 			$this->initializeStreamUserPreferences();
 			$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
 		} else {
@@ -171,7 +171,7 @@ class OnePagePresenter extends BasePresenter {
 	 */
 	private function initializeStreamUserPreferences() {
 		$session = $this->getSession();
-		$this->streamUserPreferences = new StreamUserPreferences($this->user, $this->userDao, $this->streamDao, $this->userCategoryDao, $session);
+		$this->streamUserPreferences = new StreamUserPreferences($this->userData, $this->userDao, $this->streamDao, $this->userCategoryDao, $session);
 		//$this->streamUserPreferences->calculate();
 	}
 

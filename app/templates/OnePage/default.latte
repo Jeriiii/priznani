@@ -5,7 +5,7 @@
 {block content}
 <section id="onepage">
 	<nav id="stream-menu">
-		{if $user->isLoggedIn()}	
+		{if $user->isLoggedIn() && $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
 			{$userData|showProfMin}
 			<b><a n:href=":Profil:Show:default">{$userData->user_name}</a></b>
 			<a n:href=":Profil:Edit:default" title="Editovat profil">Editovat profil</a>
@@ -15,23 +15,29 @@
 		<a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>
 	    <a n:href=":Profil:Galleries:userGalleryNew" class="btn-main btn-small" title="Profil">Vytvořit galerii</a>
 		{if $user->isLoggedIn()}
-			<a n:href=":Profil:Edit:friendRequests" class="btn-main btn-small" title="Pratelstvi">{$countFriendRequests} Žádosti o přátelství</a>
-		{/if}
-		{if $user->isLoggedIn()}
-			<a n:href=":Profil:Edit:default" class="btn-main btn-small" title="Změna statusu">
-			{if !empty($userData->property->statusID)}
-				Chci {$userData->property->status->name}
+			{if $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
+				<a n:href=":Profil:Edit:friendRequests" class="btn-main btn-small" title="Pratelstvi">{$countFriendRequests} Žádosti o přátelství</a>
+				<a n:href=":Profil:Edit:default" class="btn-main btn-small" title="Změna statusu">
+				{if !empty($userData->property->statusID)}
+					Chci {$userData->property->status->name}
+				{else}
+					Nastavit status
+				{/if}
+				</a>
 			{else}
-				Nastavit status
+				<a n:href="DatingRegistration:" class="btn-main btn-small">Doplnit info o sobě</a>
 			{/if}
-			</a>
 		{/if}
 		{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
 	    <div class="clear"></div>
 	</nav>
 		<div id="best-match">
 			{if $user->isLoggedIn()}
-				{control bestMatchSearch 'listFew'}
+				{if $userData->property}
+					{control bestMatchSearch 'listFew'}
+				{else} {* vyzve uživatele k dokončení registrace *}
+					Pokud se chcete seznámit, vyplňte o sobě <a n:href="DatingRegistration:" class="btn-main btn-small">další informace</a>.
+				{/if}
 			{/if}
 		</div>
 	{control userStream}

@@ -44,3 +44,15 @@ services:
 	enumPlaceDao:	POS\Model\EnumPlaceDao
 	userPlaceDao:	POS\Model\UserPlaceDao
 	userBlokedDao:	POS\Model\UserBlokedDao
+	userAllowedDao:	POS\Model\UserAllowedDao
+	enumBraSizeDao:	POS\Model\EnumBraSizeDao
+	enumDrinkDao:	POS\Model\EnumDrinkDao
+	enumGraduationDao:	POS\Model\EnumGraduationDao
+	enumHairColourDao:	POS\Model\EnumHairColourDao
+	enumMaritalStateDao:	POS\Model\EnumMaritalStateDao
+	enumOrientationDao:	POS\Model\EnumOrientationDao
+	enumPenisWidthDao:	POS\Model\EnumPenisWidthDao
+	enumPropertyDao:	POS\Model\EnumPropertyDao
+	enumShapeDao:	POS\Model\EnumShapeDao
+	enumSmokeDao:	POS\Model\EnumSmokeDao
+	enumTallnessDao:	POS\Model\EnumTallnessDao

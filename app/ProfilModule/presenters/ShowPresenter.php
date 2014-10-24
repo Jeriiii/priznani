@@ -7,8 +7,8 @@
 namespace ProfilModule;
 
 use Nette\Application\UI\Form as Frm;
-use POSComponent\Galleries\UserGalleries\UserGalleries;
-use POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery;
+use POSComponent\Galleries\UserGalleriesThumbnails\UserGalleriesThumbnails;
+use POSComponent\Galleries\UserImagesGalleryThumbnails\UserGalleryImagesThumbnails;
 use POSComponent\Stream\ProfilStream;
 use POSComponent\UserInfo\UserInfo;
 use POSComponent\AddToList\SendFriendRequest;
@@ -112,6 +112,12 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $enumPlaceDao;
+
+	/**
+	 * @var \POS\Model\UserAllowedDao
+	 * @inject
+	 */
+	public $userAllowedDao;
 	public $dataForStream;
 
 	/**
@@ -123,6 +129,15 @@ class ShowPresenter extends ProfilBasePresenter {
 
 		if (empty($id)) {
 			$id = $this->getUser()->getId();
+			if (!$this->userDao->find($id)->property) {
+				$this->flashMessage("Nejdříve si vyplňte informace o sobě.");
+				$this->redirect(":DatingRegistration:");
+			}
+		} else {
+			if (!$this->userDao->find($id)->property) {
+				$this->flashMessage("Tento profil neexistuje, nebo uživatel nemá dokončený profil.");
+				$this->redirect(":OnePage:");
+			}
 		}
 
 		$this->userID = $id;
@@ -210,7 +225,10 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \POSComponent\Galleries\UserGalleries\UserGalleries
 	 */
 	public function createComponentUserGalleries() {
-		return new UserGalleries($this->userDao, $this->userGalleryDao);
+		$session = $this->getSession();
+		$section = $session->getSection('galleriesAccess');
+
+		return new UserGalleriesThumbnails($this->userDao, $this->userGalleryDao, $this->userAllowedDao, $this->friendDao, $section);
 	}
 
 	/**
@@ -219,7 +237,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	protected function createComponentUserImagesAll() {
 		$images = $this->userImageDao->getAllFromUser($this->userID);
 
-		return new UserImagesInGallery($images, $this->userDao);
+		return new UserGalleryImagesThumbnails($images, $this->userDao);
 	}
 
 	/**

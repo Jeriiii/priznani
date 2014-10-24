@@ -411,6 +411,28 @@ class UserDao extends UserBaseDao {
 		return $this->getTable()->count();
 	}
 
+	/**
+	 * Získá id a username lidí v tabulce
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getUsernameAndId() {
+		$sel = $this->getTable();
+		$sel->select(self::COLUMN_ID . ", " . self::COLUMN_USER_NAME);
+		return $sel;
+	}
+
+	/**
+	 * Získá lidi pro autocomplete, vynechá ty, kteří jsou již přidaní
+	 * @param array $alreadyAllowed seznam přidaných uživatelů
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function getUsernameAndIdForAllowGallery($alreadyAllowed) {
+		$sel = $this->getTable();
+		$sel->select(self::COLUMN_ID . ", " . self::COLUMN_USER_NAME);
+		$sel->where(self::COLUMN_ID . ' NOT', $alreadyAllowed);
+		return $sel;
+	}
+
 	/*	 * ************************** UPDATE *************************** */
 
 	public function setUserRoleByConfirm($confirmCode) {

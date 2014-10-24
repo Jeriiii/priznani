@@ -1,0 +1,5 @@
+{layout '../BaseUserGalleryImagesThumbnails/baseUserGalleryImagesThumbnails.latte'}
+
+{define imageLink}
+	<a class="view" href="{plink UsersCompetitions: imageID => $image->id}">{$image->name}</a>
+{/}
