@@ -127,8 +127,12 @@ class UserPropertyDao extends UserBaseDao {
 	 * @param int $amount množství zlatek
 	 */
 	public function incraseCoinsBy($userID, $amount) {
-		$sel = $this->getTable();
-		$sel->where(self::COLUMN_ID, $userID)
+		$sel = $this->createSelection(UserDao::TABLE_NAME);
+		$propId = $sel->wherePrimary($userID)
+			->fetch()
+			->offsetGet(UserDao::COLUMN_ID);
+		$sel2 = $this->getTable();
+		$sel2->where(self::COLUMN_ID, $propId)
 			->update(array(self::COLUMN_COINS => new SqlLiteral(self::COLUMN_COINS . ' + ' . $amount)));
 	}
 
@@ -138,9 +142,14 @@ class UserPropertyDao extends UserBaseDao {
 	 * @param int $amount množství zlatek
 	 */
 	public function decraseCoinsBy($userID, $amount) {
+		$selu = $this->createSelection(UserDao::TABLE_NAME); //ziskani id uzivatele
+		$propId = $selu->wherePrimary($userID)
+			->fetch()
+			->offsetGet(UserDao::COLUMN_ID);
 		$sel = $this->getTable();
+
 		$sel2 = $this->getTable();
-		$current = $sel->wherePrimary($userID)
+		$current = $sel->wherePrimary($propId)
 			->fetch()
 			->offsetGet(self::COLUMN_COINS);
 		$updated = max(array(0, $current - $amount));

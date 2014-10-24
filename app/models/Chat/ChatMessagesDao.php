@@ -271,23 +271,41 @@ class ChatMessagesDao extends AbstractDao {
 	}
 
 	/**
-	 * Vrátí všechny zprávy, které ještě nebyly označeny jako zkontrolované CRONem
+	 * Vrátí všechny zprávy, které shlukne dohromady podle odesílatele, příjemce a toho, jestli již byly označeny
+	 * spolu s jejich počtem.
 	 * @return \Nette\Database\Table\Selection zprávy
 	 */
-	public function getAllCronUncheckedMessages() {
+	public function getAllCronGroupedMessages() {
 		$sel = $this->getTable();
-		$sel->where(self::COLUMN_CHECKED_BY_CRON, 0);
+		$sel->select('*, count(id) AS cnt');
+		$sel->group(self::COLUMN_ID_SENDER . ',' . self::COLUMN_ID_RECIPIENT . ',' . self::COLUMN_CHECKED_BY_CRON);
 		return $sel;
 	}
 
 	/**
-	 * Označí zprávy 
+	 * Označí zprávy jako prošlé cronem
 	 * @param array $ids
 	 * @return type
 	 */
-	public function markAsChecked(array $ids) {
+	public function markTheseAsChecked(array $ids) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_ID, $ids);
+		$sel->update(array(
+			self::COLUMN_CHECKED_BY_CRON => 1
+		));
+		return $sel;
+	}
+
+	/**
+	 * Označí zprávy jako prošlé cronem
+	 * @param int $senderID id odesílatele
+	 * @param int $recipientID id příjemce
+	 * @return \Nette\Database\Table\Selection updatnuté řádky
+	 */
+	public function markAsChecked($senderID, $recipientID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID_SENDER, $senderID);
+		$sel->where(self::COLUMN_ID_RECIPIENT, $recipientID);
 		$sel->update(array(
 			self::COLUMN_CHECKED_BY_CRON => 1
 		));
