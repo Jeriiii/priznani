@@ -6,6 +6,10 @@
 
 namespace POS\Listeners;
 
+use POS\Model\UserDao,
+	POS\Model\UserPropertyDao,
+	POS\Model\ChatMessagesDao;
+
 /**
  * Description of FooListener
  *
@@ -16,7 +20,12 @@ class CoinListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 	/**
 	 * Množství zlatek přidaných v případě, že je uživatel označen jako sexy
 	 */
-	const COIN_ADDED_IS_SEXY = 5;
+	const COIN_ADDED_IS_SEXY = 1;
+
+	/**
+	 * Množství zlatek pro toho, kdo označí někoho jako že je sexy
+	 */
+	const COIN_ADDED_FOR_LIKING = 0.2;
 
 	/**
 	 * @var \POS\Model\UserPropertyDao
@@ -25,14 +34,21 @@ class CoinListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 	public $userPropertyDao;
 
 	/**
+	 * @var \POS\Model\ChatMessagesDao
+	 * @inject
+	 */
+	public $chatMessagesDao;
+
+	/**
 	 * @var POS\Model\UserDao
 	 * @inject
 	 */
 	public $userDao;
 
-	public function __construct(\POS\Model\UserPropertyDao $propertyDao, \POS\Model\UserDao $userDao) {
+	public function __construct(UserPropertyDao $propertyDao, UserDao $userDao, ChatMessagesDao $chatMessagesDao) {
 		$this->userDao = $userDao;
 		$this->userPropertyDao = $propertyDao;
+		$this->chatMessagesDao = $chatMessagesDao;
 	}
 
 	/**
@@ -41,7 +57,8 @@ class CoinListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 	 */
 	public function getSubscribedEvents() {
 
-		return array('Nette\Application\Application::onStartup' => 'onIsSexy');
+		return array('POS\Model\YouAreSexyDao::onLike' => 'onIsSexy',
+			'POS\Model\YouAreSexyDao::onDislike' => 'onIsNotSexyAnymore');
 	}
 
 	/**
@@ -49,8 +66,9 @@ class CoinListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 	 * @param int $userID1 id uživatele, co like dal
 	 * @param int $userID2 id uživatele, který like dostal
 	 */
-	public function onIsSexy($userID1) {
-//		$this->userPropertyDao->decraseCoinsBy(4, self::COIN_ADDED_IS_SEXY);
+	public function onIsSexy($userID1, $userID2) {
+		$this->userPropertyDao->incraseCoinsBy($userID2, self::COIN_ADDED_IS_SEXY);
+		$this->userPropertyDao->incraseCoinsBy($userID1, self::COIN_ADDED_FOR_LIKING);
 	}
 
 	/**
@@ -59,7 +77,12 @@ class CoinListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 	 * @param int $userID2 id uživatele, který like ztratil
 	 */
 	public function onIsNotSexyAnymore($userID1, $userID2) {
-		$this->userPropertyDao->incraseCoinsBy($userID2, self::COIN_ADDED_IS_SEXY);
+		$this->userPropertyDao->decraseCoinsBy($userID2, self::COIN_ADDED_IS_SEXY);
+		$this->userPropertyDao->decraseCoinsBy($userID1, self::COIN_ADDED_FOR_LIKING);
+	}
+
+	public function addCoinsForMessages() {
+		
 	}
 
 }

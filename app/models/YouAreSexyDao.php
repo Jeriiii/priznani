@@ -13,6 +13,12 @@ namespace POS\Model;
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
 class YouAreSexyDao extends AbstractDao {
+	/*
+	 * Metody pro listener
+	 */
+
+	public $onLike = array();
+	public $onDislike = array();
 
 	const TABLE_NAME = "you_are_sexy";
 
@@ -78,6 +84,7 @@ class YouAreSexyDao extends AbstractDao {
 			self::COLUMN_USER_FROM_ID => $userFromID,
 			self::COLUMN_USER_TO_ID => $userToID
 		));
+		$this->onLike($userFromID, $userToID);
 		return $sexy;
 	}
 
