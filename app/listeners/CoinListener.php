@@ -50,7 +50,7 @@ class CoinListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 	 * @param int $userID2 id uživatele, který like dostal
 	 */
 	public function onIsSexy($userID1) {
-		$this->userPropertyDao->decraseCoinsBy(4, self::COIN_ADDED_IS_SEXY);
+//		$this->userPropertyDao->decraseCoinsBy(4, self::COIN_ADDED_IS_SEXY);
 	}
 
 	/**
