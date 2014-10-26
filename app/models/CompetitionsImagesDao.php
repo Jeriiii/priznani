@@ -128,7 +128,29 @@ class CompetitionsImagesDao extends AbstractDao {
 		$comImage = $sel->fetch();
 		$gallImage = $comImage->image;
 		$gallImage->update(array(
-			UserImageDao::COLUMN_ALLOW => 1
+			UserImageDao::COLUMN_APPROVED => 1
+		));
+
+		return $comImage;
+	}
+
+	/**
+	 * Schválí soutěžní obrázek i obrázek v galerii jako intimní
+	 * @param int $imageID ID obrázku ke schválení
+	 */
+	public function acceptImageIntim($imageID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($imageID);
+		$sel->update(array(
+			self::COLUMN_ALLOWED => 1
+		));
+
+		//schválení fotky i v user_images
+		$comImage = $sel->fetch();
+		$gallImage = $comImage->image;
+		$gallImage->update(array(
+			UserImageDao::COLUMN_APPROVED => 1,
+			UserImageDao::COLUMN_INTIM => 1
 		));
 
 		return $comImage;

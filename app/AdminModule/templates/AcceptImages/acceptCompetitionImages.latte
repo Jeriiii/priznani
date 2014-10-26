@@ -19,6 +19,7 @@
 		</ul>
 		<div class="clear"></div>
 		<a n:href="acceptCompetitionImage! $data->id" class="btn btn-success ajax">Schválit</a>
+		<a n:href="acceptIntimImage! imgId => $data->id, type => 1" class="btn btn-success ajax">Schválit - intimní</a>
 		<a n:href="deleteCompetitionImage! $data->id" class="btn btn-danger ajax">Smazat</a>
 		<br>
 		{var $lastImage = $data}

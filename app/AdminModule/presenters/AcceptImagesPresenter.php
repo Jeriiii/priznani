@@ -152,7 +152,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		$this->streamDao->aliveGallery($comImage->image->galleryID, $comImage->image->gallery->userID);
 		$this->invalidateMenuData();
 
-		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $comImage->gallery->userID, $imageID, "approve");
+		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $comImage->image->gallery->userID, $comImage->imageID, "approve");
 
 		if ($this->isAjax()) {
 			$this->redrawControl('imageAcceptance');
@@ -174,6 +174,43 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 
 		$image->delete();
 		$this->invalidateMenuData();
+
+		if ($this->isAjax("imageAcceptance")) {
+			$this->redrawControl('imageAcceptance');
+		} else {
+			$this->redirect("this");
+		}
+	}
+
+	/**
+	 * schválí fotku jako intimní
+	 * @param type $imgId ID obrázku
+	 * @param type $galleryId ID galerie
+	 * @param type $userID ID uživatele, kterému patří obrázek
+	 * @param type $type označení zda jde o uživatelskou(0) nebo soutěžní(1) fotku
+	 */
+	public function handleAcceptIntimImage($imgId, $galleryId, $userID, $type) {
+
+		switch ($type) {
+			case "0":
+				$image = $this->userImageDao->approveIntim($imgId);
+				$this->streamDao->aliveGallery($galleryId, $userID);
+				if ($image->gallery->verification_gallery) {
+					$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "verification");
+				} else {
+					$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "approve");
+				}
+				break;
+			case "1":
+				$comImage = $this->competitionsImagesDao->acceptImageIntim($imgId);
+				$this->streamDao->aliveGallery($comImage->image->galleryID, $comImage->image->gallery->userID);
+				$this->invalidateMenuData();
+
+				$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $comImage->image->gallery->userID, $comImage->imageID, "approve");
+				break;
+			default:
+				break;
+		}
 
 		if ($this->isAjax("imageAcceptance")) {
 			$this->redrawControl('imageAcceptance');
