@@ -20,7 +20,7 @@
 
 
 		return this.each(function () {
-			boxopts = applyModules(boxopts);
+			boxopts = applyModulesStarts(boxopts);
 			//obalení okénkem a potřebnými elementy
 			addHtml($(this), boxopts);
 			///////////////
@@ -32,6 +32,7 @@
 					boxopts.observerResponseHandle(boxopts, data);
 				});
 			}
+			applyModulesEnds(boxopts);
 		});
 
 	};
@@ -207,11 +208,21 @@
 	 * @param {Object} opts nastavení daného (tohoto) okénka
 	 * @return upravené (nové) nastavení okénka
 	 */
-	function applyModules(opts) {
+	function applyModulesStarts(opts) {
 		if (opts.streamSnippetModule) {
-			opts = applyStreamSnippetModule(opts);
+			opts = applyStreamSnippetModuleStart(opts);
 		}
 		return opts;
+	}
+
+	/**
+	 * Udělá změny zvolených modulů, které musí být aplikovány až po inicializaci
+	 * @param {Object} opts nastavení daného (tohoto) okénka
+	 */
+	function applyModulesEnds(opts) {
+		if (opts.streamSnippetModule) {
+			opts = applyStreamSnippetModuleEnd(opts);
+		}
 	}
 
 	/**
@@ -266,15 +277,16 @@
 	/**
 	 * Nastaví funkce v nastavení tak, aby okénko fungovalo jako ajaxový dropdown
 	 * @param {type} options původní nastavení
+	 * @return {array} nové nastavení
 	 */
-	function applyStreamSnippetModule(options) {
+	function applyStreamSnippetModuleStart(options) {
 		var params = options.streamSnippetModule;
 		$.fn.ajaxBox.runStates[params.snippetName] = true; //počáteční nastavení
 		$.fn.ajaxBox.currentOffsets[params.snippetName] = params.startOffset;
 		options.dataArrived = function (opts, data) {//zkoumá, jestli snippet poslal nějaká data a pokud ne, schová načítací gif a pomocí globálního přepínače zastaví dotazování
 			if (data.snippets[params.snippetName].trim() == "") {
 				$.fn.ajaxBox.runStates[params.snippetName] = false;
-				$('#conversations').append('<div class="noConvMessages">' + params.endMessage + '</div>');
+				$('div[data-related="' + opts.buttonSelector + '"] .ajaxBoxData').append('<div class="noConvMessages">' + params.endMessage + '</div>');
 				$('div[data-related="' + opts.buttonSelector + '"] .loadingGif').css('display', 'none');
 			}
 		};
@@ -283,13 +295,21 @@
 		};
 		options.dataToReload = function (opts) {//přidá ke každému požadavku ještě offset a limit. Poté zvětší offset.
 			var offset = $.fn.ajaxBox.currentOffsets[params.snippetName];
-			$.fn.ajaxBox.currentOffsets[params.snippetName] += 5;
+			$.fn.ajaxBox.currentOffsets[params.snippetName] += params.addLimit;
 			var returnObject = {};
 			returnObject[params.offsetParameter] = offset;
 			returnObject[params.limitParameter] = params.addLimit;
 			return returnObject;
 		};
 		return options;
+	}
+
+	/**
+	 * Finální úpravy modulu pro ajaxový dropdown
+	 * @param {type} options nastavení okénka
+	 */
+	function applyStreamSnippetModuleEnd(options) {
+		$('div[data-related="' + options.buttonSelector + '"] .loadingGif').css('display', 'block');
 	}
 
 
