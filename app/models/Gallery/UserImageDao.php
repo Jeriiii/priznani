@@ -30,6 +30,7 @@ class UserImageDao extends AbstractDao {
 	const COLUMN_APPROVED = "approved";
 	const COLUMN_LIKES = "likes";
 	const COLUMN_COMMENTS = "comments";
+	const COLUMN_INTIM = "intim";
 
 	/**
 	 * @var \POS\Model\UserGalleryDao
@@ -212,6 +213,21 @@ class UserImageDao extends AbstractDao {
 		$sel->wherePrimary($id);
 		$sel->update(array(
 			self::COLUMN_APPROVED => 1
+		));
+
+		return $sel->fetch();
+	}
+
+	/**
+	 * Schválí intim fotku.
+	 * @param int $id Image ID.
+	 */
+	public function approveIntim($id) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($id);
+		$sel->update(array(
+			self::COLUMN_APPROVED => 1,
+			self::COLUMN_INTIM => 1
 		));
 
 		return $sel->fetch();
