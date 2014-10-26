@@ -34,34 +34,24 @@
 		{* záložky u okének na vkládání obsahu/fotek *}
 		$( ".stream-form" ).tabs();
 		{* stream *}
-//		$("body").stream({
-//			addoffset: 4
-//		});
+		$("body").stream({
+			addoffset: 4
+		});
 		{* vyskakovací okénko u žádostí o přátelství *}
-		$('#friendRequests').ajaxBox({
+		$('#friendRequests').ajaxBox({ //inicializuje se nad daty, která mají být v okénku
 			buttonSelector: '#friendRequestsBtn',
-			theme: "posPopUp",
+			theme: "posPopUp", //použijí se implicitní styly, ale budou upraveny
 			autoPosition: 'center',
 			hideOthers: true,
-			headerHtml: 'Žádosti o přátelství',
-			loadUrl: loadConversationsLink, /* link (url) vygenerovaný komponentou StandardConversationsList */
-			dataArrived: function (opts, data) { //zkoumá, jestli snippet poslal nějaká data a pokud ne, schová načítací gif a pomocí globálního přepínače zastaví dotazování
-				if (data.snippets['snippet-chat-conversationList-conversations'].trim() == "") {
-					$.convRunAjax = false;
-					//$('#conversations').append('<div class="noConvMessages">Žádné další zprávy.</div>');
-					$('div[data-related="' + opts.buttonSelector + '"] .loadingGif').css('display', 'none');
-				}
-			},
-			reloadPermitted: function (opts) { //zastavení dotazování, pokud je globální přepínač false
-				return $.convRunAjax;
-			},
-			dataToReload: function (opts) { //přidá ke každému požadavku ještě offset a limit. Poté zvětší offset.
-				var offset = $.convOffset;
-				$.convOffset += 4;
-				return {
-					'chat-conversationList-offset': offset,
-					'chat-conversationList-limit': $.convLimit
-				};
+			headerHtml: "Příchozí zprávy", //header
+			loadUrl: loadFriendRequestsLink, /* link (url) vygenerovaný komponentou StandardConversationsList */
+			streamSnippetModule: {
+				snippetName: 'snippet-friendRequest-requests',
+				endMessage: 'Žádné další zprávy.',
+				offsetParameter: 'friendRequest-offset',
+				limitParameter: 'friendRequest-limit',
+				addLimit: 1,
+				startOffset: 0
 			}
 		});
 	});
