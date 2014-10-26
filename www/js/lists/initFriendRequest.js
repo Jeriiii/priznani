@@ -15,7 +15,7 @@ $('#friendRequests').ajaxBox({ //inicializuje se nad daty, která mají být v o
 		endMessage: 'Žádné další žádosti.',
 		offsetParameter: 'friendRequest-offset',
 		limitParameter: 'friendRequest-limit',
-		addLimit: 1,
+		addLimit: 5,
 		startOffset: 0
 	}
 });
