@@ -11,6 +11,7 @@ use Nette\Application\UI,
 	Nette\Application\UI\Form as Frm;
 use POS\UserPreferences\StreamUserPreferences;
 use POS\Chat\ChatManager;
+use POS\Listeners\Services\ActivityReporter;
 
 class SignPresenter extends BasePresenter {
 
@@ -99,6 +100,7 @@ class SignPresenter extends BasePresenter {
 		$this->getSession(self::USER_INFO_SESSION_NAME)->remove();
 		$this->getSession(StreamUserPreferences::NAME_SESSION_STREAM_ITEMS)->remove();
 		$this->getSession(ChatManager::CHAT_MINUTE_SESSION_NAME)->remove();
+		$this->getSession(ActivityReporter::SECTION_NAME)->remove();
 		$this->flashMessage("Byl jste úspěšně odhlášen");
 		$this->redirect('Sign:in');
 	}

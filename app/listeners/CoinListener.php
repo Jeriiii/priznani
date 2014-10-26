@@ -38,6 +38,19 @@ class CoinListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 	const MINIMUM_AMOUNT_OF_MESSAGES = 5;
 
 	/**
+	 * Kolik mincí bude přidáno xtý den, kdy jsem aktivní. Který den je klíč, kolik mincí je hodnota,
+	 * tedy například 7 => 7 znamená, že za sedmý den aktivity (když jsem ji vyvíjel i těch šest dní předtím)
+	 * dostanu 7 mincí
+	 * @var array
+	 */
+	private $COIN_ADDED_FOR_SIGN_IN = array(
+		0 => 3,
+		3 => 5,
+		7 => 7,
+		30 => 9
+	);
+
+	/**
 	 * @var \POS\Model\UserPropertyDao
 	 * @inject
 	 */
@@ -70,6 +83,7 @@ class CoinListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 		return array('POS\Model\YouAreSexyDao::onLike' => 'onIsSexy',
 			'POS\Model\YouAreSexyDao::onDislike' => 'onIsNotSexyAnymore',
 //			'Nette\Application\Application::onStartup' => 'addCoinsForMessages'//TODO: napojit na CRON
+			'POS\Listeners\Services\ActivityReporter::onUserFirstTodayActivity' => 'rewardForSignIn'
 		);
 	}
 
@@ -107,6 +121,21 @@ class CoinListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 				$this->chatMessagesDao->markAsChecked($pair[0], $pair[1]);
 			}
 		}
+	}
+
+	/**
+	 * Odmění uživatele za určitý počet přihlášení
+	 * @param int $userID id uživatele
+	 * @param int $days kolikátý den nepřetržitého přihlášení uživatel začal
+	 */
+	public function rewardForSignIn($userID, $days) {
+		$coinsToAdd = 0;
+		foreach ($this->COIN_ADDED_FOR_SIGN_IN as $day => $reward) {
+			if ($days >= $day) {
+				$coinsToAdd = $reward;
+			}
+		}
+		$this->userPropertyDao->incraseCoinsBy($userID, $coinsToAdd);
 	}
 
 	/**

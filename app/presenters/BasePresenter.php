@@ -53,9 +53,18 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public $ajaxObserver;
 
+	/**
+	 * @var \POS\Listeners\Services\ActivityReporter
+	 * @inject
+	 */
+	public $activityReporter;
+
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
+		if ($this->getUser()->isLoggedIn()) {
+			$this->activityReporter->handleUsersActivity($this->getUser());
+		}
 	}
 
 	public function beforeRender() {
