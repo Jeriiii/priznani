@@ -3,6 +3,3 @@ ALTER TABLE `users`
 	
 ALTER TABLE `users`
 	CHANGE COLUMN `last_signed_in` `first_signed_day_streak` DATE NULL DEFAULT NULL COMMENT 'den kdy se přihlásil a od té doby se každý den stavil' AFTER `last_active`;
-	
-ALTER TABLE `users`
-	ADD COLUMN `last_rewarded_day` DATE NULL DEFAULT NULL COMMENT 'poslední den, kdy uživatel dostal odměnu za přihlášení' AFTER `first_signed_day_streak`;
