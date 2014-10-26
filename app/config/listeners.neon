@@ -3,6 +3,3 @@ services:
 	coinListener:
 		class: POS\Listeners\CoinListener
 		tags: [kdyby.subscriber]
-	SignRewardListener:
-		class: POS\Listeners\SignRewardListener
-		tags: [kdyby.subscriber]
