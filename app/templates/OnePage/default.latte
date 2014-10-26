@@ -37,23 +37,6 @@
 		$("body").stream({
 			addoffset: 4
 		});
-		{* vyskakovací okénko u žádostí o přátelství *}
-		$('#friendRequests').ajaxBox({ //inicializuje se nad daty, která mají být v okénku
-			buttonSelector: '#friendRequestsBtn',
-			theme: "posPopUp", //použijí se implicitní styly, ale budou upraveny
-			autoPosition: 'center',
-			hideOthers: true,
-			headerHtml: "Příchozí zprávy", //header
-			loadUrl: loadFriendRequestsLink, /* link (url) vygenerovaný komponentou StandardConversationsList */
-			streamSnippetModule: {
-				snippetName: 'snippet-friendRequest-requests',
-				endMessage: 'Žádné další zprávy.',
-				offsetParameter: 'friendRequest-offset',
-				limitParameter: 'friendRequest-limit',
-				addLimit: 1,
-				startOffset: 0
-			}
-		});
 	});
 	$("#frm-userStream-addConfessionForm-note").click(function() {
 		$("#frm-userStream-addConfessionForm-note").animate({ height: "200px"}, 500);
