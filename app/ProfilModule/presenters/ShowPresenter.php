@@ -128,15 +128,27 @@ class ShowPresenter extends ProfilBasePresenter {
 	public function actionDefault($id) {
 
 		if (empty($id)) {
+			/* kontrola, zda se nesnaží nepřihlášený uživatel zobrazit svůj profil */
+			if (!$this->getUser()->isLoggedIn()) {
+				$this->flashMessage("Pro zobrazení vašeho profilu se nejdříve přihlašte");
+				$this->redirect(":Sign:in");
+			}
 			$id = $this->getUser()->getId();
 			if (!$this->userDao->find($id)->property) {
 				$this->flashMessage("Nejdříve si vyplňte informace o sobě.");
 				$this->redirect(":DatingRegistration:");
 			}
 		} else {
-			if (!$this->userDao->find($id)->property) {
+			$user = $this->userDao->find($id);
+			if (!$user->property) {
 				$this->flashMessage("Tento profil neexistuje, nebo uživatel nemá dokončený profil.");
 				$this->redirect(":OnePage:");
+			}
+			/* kontrola, zda se nesnaží nepřihlášený uživatel zobrazit něčí profil,
+			 * časem by se dala zobrazit ještě foto uživatele, kterého chtěl zobrazit */
+			if (!$this->getUser()->isLoggedIn()) {
+				$this->flashMessage("Pro zobrazení profilu $user->user_name se nejdříve přihlašte");
+				$this->redirect(":Sign:in");
 			}
 		}
 
