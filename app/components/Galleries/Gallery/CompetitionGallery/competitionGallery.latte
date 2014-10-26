@@ -39,6 +39,13 @@
 {/if}
 {/}
 
+{define fbLike}
+<p>hlasujte zde</p>
+<div class="fb-like" data-href="http://www.{if $partymode}priznanizparby{else}priznaniosexu{/if}.cz{$imageLink}"
+	 data-layout="box_count" data-width="74" data-show-faces="true">
+</div>
+{/}
+
 {define menuButtons}
 <a href="{plink Competition:listImages galleryID => $gallery->id}"  class="btn-main btn-small">
 	všechny fotky
@@ -74,6 +81,16 @@
 		{if $setWidth} width="700" {else} height="525" {/if} />
 {/if}
 {/}
+
+{define #fbComment}
+	<a href="#" name="scroll-fb-comments"></a>
+	<div id="fb" class="fb-components">
+		<div class="fb-comments-container">
+			<div class="fb-comments" data-href="http://www.{if $partymode}priznanizparby{else}priznaniosexu{/if}.cz{$imageLink}" data-width="600" data-num-posts="10"></div>
+		</div>
+	</div>
+{/}
+
 
 {define isApprovedText}
 {if (($user->isInRole("superadmin") || $user->isInRole("admin")) && $image->approved == 0)}(zatím neschváleno){/if}

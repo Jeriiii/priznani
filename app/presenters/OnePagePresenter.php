@@ -104,6 +104,48 @@ class OnePagePresenter extends BasePresenter {
 	 */
 	public $enumPlaceDao;
 
+	/**
+	 * @var \POS\Model\LikeCommentDao
+	 * @inject
+	 */
+	public $likeCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentImagesDao
+	 * @inject
+	 */
+	public $commentImagesDao;
+
+	/**
+	 * @var \POS\Model\LikeStatusCommentDao
+	 * @inject
+	 */
+	public $likeStatusCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentStatusesDao
+	 * @inject
+	 */
+	public $commentStatusesDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionCommentDao
+	 * @inject
+	 */
+	public $likeCOnfessionCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentConfessionsDao
+	 * @inject
+	 */
+	public $commentConfessionsDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionDao
+	 * @inject
+	 */
+	public $likeConfessionDao;
+
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $userID;
@@ -123,7 +165,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao);
+		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeCOnfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao);
 	}
 
 	public function createComponentJs() {

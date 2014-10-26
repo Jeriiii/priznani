@@ -118,6 +118,30 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $userAllowedDao;
+
+	/**
+	 * @var \POS\Model\LikeCommentDao
+	 * @inject
+	 */
+	public $likeCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentImagesDao
+	 * @inject
+	 */
+	public $commentImagesDao;
+
+	/**
+	 * @var \POS\Model\LikeStatusCommentDao
+	 * @inject
+	 */
+	public $likeStatusCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentStatusesDao
+	 * @inject
+	 */
+	public $commentStatusesDao;
 	public $dataForStream;
 
 	/**
@@ -217,7 +241,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \ProfilStream
 	 */
 	protected function createComponentProfilStream() {
-		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao);
+		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao);
 	}
 
 	/**
