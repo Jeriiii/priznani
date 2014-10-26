@@ -14,7 +14,7 @@ use POSComponent\UserInfo\UserInfo;
 use POSComponent\AddToList\SendFriendRequest;
 use POSComponent\AddToList\YouAreSexy;
 use POSComponent\UsersList\FriendsList;
-use POSComponent\UsersList\SexyList\IMarked;
+use POSComponent\UsersList\SexyList\MarkedFromOther;
 
 class ShowPresenter extends ProfilBasePresenter {
 
@@ -297,8 +297,8 @@ class ShowPresenter extends ProfilBasePresenter {
 	}
 
 	protected function createComponentYouAreSexy($name) {
-		$userIDFrom = $this->userID;
-		$userIDTo = $this->getUser()->id;
+		$userIDFrom = $this->getUser()->id;
+		$userIDTo = $this->userID;
 
 		return new YouAreSexy($this->youAreSexyDao, $userIDFrom, $userIDTo, $this, $name);
 	}
@@ -307,8 +307,8 @@ class ShowPresenter extends ProfilBasePresenter {
 		return new FriendsList($this->friendDao, $this->userID, $this, $name);
 	}
 
-	protected function createComponentSexyListIMarked($name) {
-		return new IMarked($this->youAreSexyDao, $this->userID, $this, $name);
+	protected function createComponentSexyListMarkedFromOther($name) {
+		return new MarkedFromOther($this->youAreSexyDao, $this->userID, $this, $name);
 	}
 
 }
