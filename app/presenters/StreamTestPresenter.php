@@ -126,6 +126,24 @@ class StreamTestPresenter extends BasePresenter {
 	 */
 	public $commentStatusesDao;
 
+	/**
+	 * @var \POS\Model\LikeConfessionCommentDao
+	 * @inject
+	 */
+	public $likeConfessionCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentConfessionsDao
+	 * @inject
+	 */
+	public $commentConfessionsDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionDao
+	 * @inject
+	 */
+	public $likeConfessionDao;
+
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $userID;
@@ -167,7 +185,7 @@ class StreamTestPresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao);
+		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeConfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao);
 	}
 
 	public function createComponentJs() {

@@ -16,8 +16,8 @@ use POS\Model\CommentConfessionsDao;
  */
 class ConfessionComments extends BaseComments {
 
-	public function __construct(LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentCOnfessionsDao, $status) {
-		parent::__construct($likeConfessionCommentDao, $commentCOnfessionsDao, $status);
+	public function __construct(LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, $confession) {
+		parent::__construct($likeConfessionCommentDao, $commentConfessionsDao, $confession);
 	}
 
 }

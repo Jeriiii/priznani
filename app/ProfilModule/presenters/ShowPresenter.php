@@ -142,6 +142,24 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $commentStatusesDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionCommentDao
+	 * @inject
+	 */
+	public $likeConfessionCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentConfessionsDao
+	 * @inject
+	 */
+	public $commentConfessionsDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionDao
+	 * @inject
+	 */
+	public $likeConfessionDao;
 	public $dataForStream;
 
 	/**
@@ -241,7 +259,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \ProfilStream
 	 */
 	protected function createComponentProfilStream() {
-		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao);
+		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeConfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao);
 	}
 
 	/**
