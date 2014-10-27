@@ -106,10 +106,10 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	 */
 	public function handleAcceptImage($imgId, $galleryId, $userID) {
 		$image = $this->userImageDao->approve($imgId);
-		$this->streamDao->aliveGallery($galleryId, $userID);
 		if ($image->gallery->verification_gallery) {
 			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "verification");
 		} else {
+			$this->streamDao->aliveGallery($galleryId, $userID);
 			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "approve");
 		}
 
@@ -194,10 +194,10 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		switch ($type) {
 			case "0":
 				$image = $this->userImageDao->approveIntim($imgId);
-				$this->streamDao->aliveGallery($galleryId, $userID);
 				if ($image->gallery->verification_gallery) {
 					$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "verification");
 				} else {
+					$this->streamDao->aliveGallery($galleryId, $userID);
 					$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "approve");
 				}
 				break;
