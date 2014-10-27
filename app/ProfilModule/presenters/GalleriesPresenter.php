@@ -470,7 +470,7 @@ class GalleriesPresenter extends \BasePresenter {
 	private function checkPaying() {
 		if (!$this->isPaying) {
 			$this->flashMessage("Tato akce je zablokována.");
-			$this->redirect("this");
+			$this->redirect("Galleries:");
 		}
 	}
 
