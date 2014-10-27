@@ -21,6 +21,8 @@ class ConfessionDao extends BaseConfessionDao {
 	const COLUMN_IN_STREAM = "inStream";
 	const COLUMN_MARK = "mark";
 	const COLUMN_RELEASE_DATE = "release_date";
+	const COLUMN_COMMENTS = "comments";
+	const COLUMN_LIKES = "likes";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);

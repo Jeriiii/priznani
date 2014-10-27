@@ -49,6 +49,9 @@ class VerificationGallery extends BaseGallery {
 		$imageFileName = $image->id . "." . $image->suffix;
 
 		parent::removeImage($image, $folderPath, $imageFileName);
+
+		$this->flashMessage("Ověřovací fotka smazána");
+		$this->redirect("Show:");
 	}
 
 	/**

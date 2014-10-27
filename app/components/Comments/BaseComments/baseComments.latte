@@ -10,7 +10,7 @@
 	{foreach $comments as $comment}
 		<div class="comment">
 			{if $user->id == $comment->userID}
-				<a n:href="deleteComment! $comment->id" class="ajax">Smazat</a>
+				<a n:href="deleteComment! $comment->id" class="ajax delete-comment">Smazat</a>
 			{/if}
 			{$comment->comment}
 			{control likeComment-$comment->id}
