@@ -211,11 +211,13 @@ class GalleriesPresenter extends \BasePresenter {
 
 	public function actionVerification($galleryID) {
 		$galleryData = $this->userGaleryDao->find($galleryID);
-
+		$allowed = $this->userAllowedDao->getByUserID($this->getUser()->getId(), $galleryID);
 		// kontrola, jestli se na galerii chce podívat vlastník
 		if ($galleryData->userID != $this->getUser()->getId()) {
-			$this->flashMessage("Tato galerie je nepřístupná.");
-			$this->redirect("Show:default", array('id' => $galleryData->userID));
+			if (!$allowed) {
+				$this->flashMessage("Tato galerie je nepřístupná.");
+				$this->redirect("Show:default", array('id' => $galleryData->userID));
+			}
 		}
 
 		if (!empty($galleryID)) {
@@ -235,6 +237,12 @@ class GalleriesPresenter extends \BasePresenter {
 		$this->template->friends = $this->friendDao->getUsersContactList($this->user->id);
 		$this->template->allowedUsers = $this->userAllowedDao->getAllowedByGallery($galleryID);
 		$this->template->galleryID = $galleryID;
+		$gallery = $this->userGaleryDao->find($galleryID);
+
+		if ($this->user->id != $gallery->userID) {
+			$this->flashMessage("Tato sekce je nepřístupná.");
+			$this->redirect("Show:default", array('id' => $gallery->userID));
+		}
 	}
 
 	public function renderUserGalleryChange($galleryID) {
@@ -336,7 +344,7 @@ class GalleriesPresenter extends \BasePresenter {
 	public function createComponentUserGalleries() {
 		$session = $this->getSession();
 		$section = $session->getSection('galleriesAccess');
-		return new UserGalleries($this->userDao, $this->userGaleryDao, $this->userAllowedDao, $this->friendDao, $section);
+		return new UserGalleriesThumbnails($this->userDao, $this->userGaleryDao, $this->userAllowedDao, $this->friendDao, $section);
 	}
 
 	public function createComponentMyUserGalleries() {
@@ -387,7 +395,7 @@ class GalleriesPresenter extends \BasePresenter {
 			$gallery = $this->userGaleryDao->find($this->galleryID);
 			$httpRequest = $this->context->httpRequest;
 			$domain = $httpRequest->getUrl()->host;
-			return new VerificationGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this);
+			return new VerificationGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this->isPaying, $this);
 		}
 	}
 

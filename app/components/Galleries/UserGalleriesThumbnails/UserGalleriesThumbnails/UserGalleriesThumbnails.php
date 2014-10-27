@@ -24,7 +24,7 @@ class UserGalleriesThumbnails extends BaseUserGalleriesThumbnails {
 	 */
 	public function render($mode, $userID) {
 		//vememe pouze galerie, tkeré nejsou verifikační
-		$galleries = $this->userGalleryDao->getInUserWithoutVerif($userID);
+		$galleries = $this->userGalleryDao->getInUserWithoutVerif($userID, $this->presenter->user->id);
 
 		$templateName = "../UserGalleriesThumbnails/userGalleriesThumbnails.latte";
 

@@ -1,0 +1,17 @@
+{block content}
+<h2>Žádosti o ověřovací fotku</h2>
+
+{if !$verificationGallery}
+	Nemáte ještě ověřovací fotku, nahrajte si prosím ověřovací fotku <a n:href="Galleries:verificationImageNew">zde</a>
+{else}
+		{snippet requests}
+		{if count($requests) == 0}
+			Nemáte žádné žádosti
+		{else}
+		{foreach $requests as $item}
+			{$item->user2->user_name} - <a class="ajax" n:href="acceptUser! $item->user2ID">Schválit/</a><a class="ajax" n:href="rejectUser! $item->user2ID">Zamítnout</a><br />
+		{/foreach}
+		{/if}
+		{/snippet}
+	{/if}
+{/block}
