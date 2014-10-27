@@ -31,6 +31,7 @@ class UserImageDao extends AbstractDao {
 	const COLUMN_LIKES = "likes";
 	const COLUMN_COMMENTS = "comments";
 	const COLUMN_INTIM = "intim";
+	const COLUMN_REJECTED = "rejected";
 
 	/**
 	 * @var \POS\Model\UserGalleryDao
@@ -84,10 +85,13 @@ class UserImageDao extends AbstractDao {
 	 * Vrátí všechny neschválené obrázky.
 	 * @return Nette\Database\Table\Selection
 	 */
-	public function getUnapproved($indexes) {
+	public function getUnapproved($indexes, $rejected = FALSE) {
 		$sel = $this->getTable();
 		$sel->where('id NOT', $indexes);
 		$sel->where(self::COLUMN_APPROVED, 0);
+		if ($rejected) {
+			$sel->where(self::COLUMN_REJECTED, 0);
+		}
 		return $sel;
 	}
 
@@ -100,6 +104,7 @@ class UserImageDao extends AbstractDao {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_GALLERY_ID, $galleryID);
 		$sel->where(self::COLUMN_APPROVED, 0);
+		$sel->where(self::COLUMN_REJECTED, 0);
 		return $sel;
 	}
 
@@ -212,7 +217,22 @@ class UserImageDao extends AbstractDao {
 		$sel = $this->getTable();
 		$sel->wherePrimary($id);
 		$sel->update(array(
-			self::COLUMN_APPROVED => 1
+			self::COLUMN_APPROVED => 1,
+			self::COLUMN_REJECTED => 0
+		));
+
+		return $sel->fetch();
+	}
+
+	/**
+	 * zamítne fotku.
+	 * @param int $id Image ID.
+	 */
+	public function reject($id) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($id);
+		$sel->update(array(
+			self::COLUMN_REJECTED => 1,
 		));
 
 		return $sel->fetch();

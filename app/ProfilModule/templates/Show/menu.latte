@@ -9,5 +9,12 @@
 		<span><a n:href="default $userID">Zeď</a></span>
 		<span><a n:href="userImages $userID">Fotky</a></span>
 		<span><a n:href="userInfo $userID">Informace</a></span>
-</nav>
+		{if $userData->verified}
+			{if $asked}
+				<span>Žádost o ověřovací fotku podána</span>
+			{else}
+				<span><a n:href="requestConfirmPhoto! $userID, $user->id">Zádost o ověřovací fotku</a></span>
+			{/if}
+		{/if}
+		</nav>
 {/block}

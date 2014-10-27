@@ -4,7 +4,7 @@
 		{if empty($gallery->verification_gallery)}
 			<h2 id="image_name">{$image->name|firstUpper}{ifset #isApprovedText}{include #isApprovedText}{/ifset}</h2>
 		{else}
-			<h2 id="image_name">{$image->name|firstUpper}{if $image->approved}<br /> - schváleno{else}<br /> - neschváleno{/if}</h2>
+			<h2 id="image_name">{$image->name|firstUpper}{if $image->approved}<br /> - schváleno{else}<br />{if $image->rejected} - vráceno{else} - neschváleno{/if}{/if}</h2>
 		{/if}
 	    {ifset #uploadImage}
 			{include #uploadImage}

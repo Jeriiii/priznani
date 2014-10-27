@@ -147,6 +147,12 @@ class OnePagePresenter extends BasePresenter {
 	 */
 	public $likeConfessionDao;
 
+	/**
+	 * @var \POS\Model\VerificationPhotoRequestsDao
+	 * @inject
+	 */
+	public $verificationPhotoDao;
+
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $userID;
@@ -163,6 +169,7 @@ class OnePagePresenter extends BasePresenter {
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
 		$this->template->userData = $this->userData;
 		$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->userID)->count();
+		$this->template->countVerificationRequests = $this->verificationPhotoDao->findByUserID($this->user->id)->count();
 	}
 
 	protected function createComponentUserStream() {

@@ -50,6 +50,12 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	 */
 	public $competitionsImagesDao;
 
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
 	public function renderDefault() {
 		$compImages = $this->competitionsImagesDao->getUnapproved();
 		$compIndexes = $this->getImagesIndexes($compImages);
@@ -90,7 +96,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 
 		$indexes = array_merge($verificationData[0], $compIndexes);
 
-		$usrImages = $this->userImageDao->getUnapproved($indexes);
+		$usrImages = $this->userImageDao->getUnapproved($indexes, TRUE);
 		$this->template->images = $verificationData[1];
 
 		$this->template->compCount = $images->count("id");
@@ -107,6 +113,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	public function handleAcceptImage($imgId, $galleryId, $userID) {
 		$image = $this->userImageDao->approve($imgId);
 		if ($image->gallery->verification_gallery) {
+			$this->userDao->verify($userID);
 			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "verification");
 		} else {
 			$this->streamDao->aliveGallery($galleryId, $userID);
@@ -117,6 +124,21 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 
 		if ($this->isAjax("imageAcceptance")) {
 			$this->invalidateControl('imageAcceptance');
+		} else {
+			$this->redirect("this");
+		}
+	}
+
+	/**
+	 * Odmítne oběřovací foto
+	 * @param type $imgID ID obrázku
+	 */
+	public function handleRejectImage($imgID) {
+		$image = $this->userImageDao->reject($imgID);
+		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $image->gallery->userID, $imgID, "reject");
+
+		if ($this->isAjax("imageAcceptance")) {
+			$this->redrawControl('imageAcceptance');
 		} else {
 			$this->redirect("this");
 		}

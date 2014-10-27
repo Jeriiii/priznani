@@ -160,6 +160,12 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $likeConfessionDao;
+
+	/**
+	 * @var \POS\Model\VerificationPhotoRequestsDao
+	 * @inject
+	 */
+	public $verificationPhotoRequestDao;
 	public $dataForStream;
 
 	/**
@@ -191,6 +197,14 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @param type $id
 	 */
 	public function renderDefault($id) {
+
+		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->user->id);
+
+		if ($verificationAsked->fetch()) {
+			$this->template->asked = TRUE;
+		} else {
+			$this->template->asked = FALSE;
+		}
 
 		$user = $this->userDao->find($this->userID);
 
@@ -250,8 +264,38 @@ class ShowPresenter extends ProfilBasePresenter {
 		$this->template->mode = "listAll";
 	}
 
+	public function renderVerification() {
+		$this->template->verificationGallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
+		$this->template->requests = $this->verificationPhotoRequestDao->findByUserID($this->user->id);
+	}
+
 	protected function createComponentUserInfo($name) {
 		return new UserInfo($this->userDao, $this, $name);
+	}
+
+	public function handleAcceptUser($userID) {
+		$gallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
+		$this->userAllowedDao->insertData($userID, $gallery->id);
+		$this->verificationPhotoRequestDao->acceptRequest($userID);
+		$this->activitiesDao->createImageActivity($this->user->id, $userID, $gallery->lastImage, "verificationPhotoAccepted");
+		if ($this->isAjax()) {
+			$this->redrawControl('requests');
+		} else {
+
+			$this->redirect("this");
+		}
+	}
+
+	public function handleRejectUser($userID) {
+		$gallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
+		$this->verificationPhotoRequestDao->rejectRequest($userID);
+		$this->activitiesDao->createImageActivity($this->user->id, $userID, $gallery->lastImage, "verificationPhotoRejected");
+		if ($this->isAjax()) {
+			$this->redrawControl('requests');
+		} else {
+
+			$this->redirect("this");
+		}
 	}
 
 	/**
@@ -339,6 +383,12 @@ class ShowPresenter extends ProfilBasePresenter {
 
 	protected function createComponentSexyListIMarked($name) {
 		return new IMarked($this->youAreSexyDao, $this->userID, $this, $name);
+	}
+
+	public function handleRequestConfirmPhoto($id, $viewerID) {
+		$this->verificationPhotoRequestDao->createRequest($id, $viewerID);
+		$this->flashMessage("žádost o ověřovací fotku podána.");
+		$this->redirect("this");
 	}
 
 }

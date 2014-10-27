@@ -61,3 +61,4 @@ services:
 	commentCofessionsDao:	POS\Model\CommentConfessionsDao
 	likeConfessionCommentDao:	POS\Model\LikeConfessionCommentDao
 	likeConfessionDao:	POS\Model\LikeConfessionDao
+	verificationPhotoRequestsDao: POS\Model\VerificationPhotoRequestsDao
