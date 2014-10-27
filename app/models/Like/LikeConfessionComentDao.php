@@ -36,8 +36,8 @@ class LikeConfessionCommentDao extends AbstractDao implements ILikeDao {
 			self::COLUMN_USER_ID => $userID,
 		));
 
-		/* zvýší like u statusu o jedna */
-		$sel = $this->createSelection(CommentStatusesDao::TABLE_NAME);
+		/* zvýší like u komentáře přiznání o jedna */
+		$sel = $this->createSelection(CommentConfessionsDao::TABLE_NAME);
 		$sel->where(array(
 			CommentConfessionsDao::COLUMN_ID => $commentID
 		));
