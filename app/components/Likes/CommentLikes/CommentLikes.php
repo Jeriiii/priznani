@@ -6,7 +6,7 @@
 
 namespace POSComponent\BaseLikes;
 
-use POS\Model\LikeCommentDao;
+use POS\Model\AbstractDao;
 
 /**
  * Komponenta pro lajkování commentů, obstarává připočítávání lajků;
@@ -24,11 +24,11 @@ class CommentLikes extends BaseLikes implements IBaseLikes {
 
 	/**
 	 * Kontruktor komponenty, předáváme potřebné proměnné
-	 * @param \POS\Model\LikeStatusDao $likeCommentDao DAO pro práci s lajky commentů
+	 * @param \POS\Model\LikeCommentDao $likeCommentDao DAO pro práci s lajky commentů
 	 * @param Nette\Database\Table\ActiveRow $comment comment, který se bude lajkovat
 	 * @param int $userID ID uživatele, který lajkuje comment
 	 */
-	public function __construct(LikeCommentDao $likeCommentDao, $comment, $userID) {
+	public function __construct(AbstractDao $likeCommentDao, $comment, $userID) {
 		parent::__construct($likeCommentDao, $comment, $userID, self::COMMENT_LABEL, self::COMMON_LIKE_BUTTON);
 	}
 

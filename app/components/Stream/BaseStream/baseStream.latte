@@ -22,6 +22,7 @@
 								<p>{$dataItem->userGallery->lastImage->description}</p>
 							</a>
 							{control likeImages-$dataItem->id}
+							{control commentImages-$dataItem->id}
 						{else}
 							<strong>Obrázky se zobrazují pouze registrovaným uživatelům. <a href="{plink :Sign:registration}">Registrujte se</a>.</strong>
 						{/if}
@@ -40,7 +41,8 @@
 					{ifset $dataItem->confessionID}
 						<a href="{plink Page:confession id => $dataItem->confessionID}" title="Přiznání o sexu"><h3>Přiznání</h3></a>
 						<p>{$dataItem->confession->note}</p>
-
+						{control likeConfession-$dataItem->id}
+						{control commentConfession-$dataItem->id}
 					{/ifset}
 
 					{ifset $dataItem->adviceID}
@@ -52,13 +54,11 @@
 						{$status->user|showProf}
 						<p>{$status->message}</p>
 						{control likeStatus-$dataItem->id}
+						{control commentStatus-$dataItem->id}
 					{/ifset}
 					{*<div class="votes">
 						{control pollsControl-$dataItem->id}
 					</div>*}
-					<div class="fb-components">
-						{control fbControl-$dataItem->id}
-					</div>
 				</div>
 			{/foreach}
 		</div>

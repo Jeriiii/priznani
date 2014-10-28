@@ -50,6 +50,12 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	 */
 	public $competitionsImagesDao;
 
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
 	public function renderDefault() {
 		$compImages = $this->competitionsImagesDao->getUnapproved();
 		$compIndexes = $this->getImagesIndexes($compImages);
@@ -90,7 +96,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 
 		$indexes = array_merge($verificationData[0], $compIndexes);
 
-		$usrImages = $this->userImageDao->getUnapproved($indexes);
+		$usrImages = $this->userImageDao->getUnapproved($indexes, TRUE);
 		$this->template->images = $verificationData[1];
 
 		$this->template->compCount = $images->count("id");
@@ -106,10 +112,11 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	 */
 	public function handleAcceptImage($imgId, $galleryId, $userID) {
 		$image = $this->userImageDao->approve($imgId);
-		$this->streamDao->aliveGallery($galleryId, $userID);
 		if ($image->gallery->verification_gallery) {
+			$this->userDao->verify($userID);
 			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "verification");
 		} else {
+			$this->streamDao->aliveGallery($galleryId, $userID);
 			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "approve");
 		}
 
@@ -117,6 +124,21 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 
 		if ($this->isAjax("imageAcceptance")) {
 			$this->invalidateControl('imageAcceptance');
+		} else {
+			$this->redirect("this");
+		}
+	}
+
+	/**
+	 * Odmítne oběřovací foto
+	 * @param type $imgID ID obrázku
+	 */
+	public function handleRejectImage($imgID) {
+		$image = $this->userImageDao->reject($imgID);
+		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $image->gallery->userID, $imgID, "reject");
+
+		if ($this->isAjax("imageAcceptance")) {
+			$this->redrawControl('imageAcceptance');
 		} else {
 			$this->redirect("this");
 		}
@@ -152,7 +174,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		$this->streamDao->aliveGallery($comImage->image->galleryID, $comImage->image->gallery->userID);
 		$this->invalidateMenuData();
 
-		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $comImage->gallery->userID, $imageID, "approve");
+		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $comImage->image->gallery->userID, $comImage->imageID, "approve");
 
 		if ($this->isAjax()) {
 			$this->redrawControl('imageAcceptance');
@@ -174,6 +196,43 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 
 		$image->delete();
 		$this->invalidateMenuData();
+
+		if ($this->isAjax("imageAcceptance")) {
+			$this->redrawControl('imageAcceptance');
+		} else {
+			$this->redirect("this");
+		}
+	}
+
+	/**
+	 * schválí fotku jako intimní
+	 * @param type $imgId ID obrázku
+	 * @param type $galleryId ID galerie
+	 * @param type $userID ID uživatele, kterému patří obrázek
+	 * @param type $type označení zda jde o uživatelskou(0) nebo soutěžní(1) fotku
+	 */
+	public function handleAcceptIntimImage($imgId, $galleryId, $userID, $type) {
+
+		switch ($type) {
+			case "0":
+				$image = $this->userImageDao->approveIntim($imgId);
+				if ($image->gallery->verification_gallery) {
+					$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "verification");
+				} else {
+					$this->streamDao->aliveGallery($galleryId, $userID);
+					$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "approve");
+				}
+				break;
+			case "1":
+				$comImage = $this->competitionsImagesDao->acceptImageIntim($imgId);
+				$this->streamDao->aliveGallery($comImage->image->galleryID, $comImage->image->gallery->userID);
+				$this->invalidateMenuData();
+
+				$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $comImage->image->gallery->userID, $comImage->imageID, "approve");
+				break;
+			default:
+				break;
+		}
 
 		if ($this->isAjax("imageAcceptance")) {
 			$this->redrawControl('imageAcceptance');

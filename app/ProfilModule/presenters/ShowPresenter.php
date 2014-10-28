@@ -118,6 +118,54 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $userAllowedDao;
+
+	/**
+	 * @var \POS\Model\LikeCommentDao
+	 * @inject
+	 */
+	public $likeCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentImagesDao
+	 * @inject
+	 */
+	public $commentImagesDao;
+
+	/**
+	 * @var \POS\Model\LikeStatusCommentDao
+	 * @inject
+	 */
+	public $likeStatusCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentStatusesDao
+	 * @inject
+	 */
+	public $commentStatusesDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionCommentDao
+	 * @inject
+	 */
+	public $likeConfessionCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentConfessionsDao
+	 * @inject
+	 */
+	public $commentConfessionsDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionDao
+	 * @inject
+	 */
+	public $likeConfessionDao;
+
+	/**
+	 * @var \POS\Model\VerificationPhotoRequestsDao
+	 * @inject
+	 */
+	public $verificationPhotoRequestDao;
 	public $dataForStream;
 
 	/**
@@ -161,6 +209,14 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @param type $id
 	 */
 	public function renderDefault($id) {
+
+		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->user->id);
+
+		if ($verificationAsked->fetch()) {
+			$this->template->asked = TRUE;
+		} else {
+			$this->template->asked = FALSE;
+		}
 
 		$user = $this->userDao->find($this->userID);
 
@@ -220,8 +276,38 @@ class ShowPresenter extends ProfilBasePresenter {
 		$this->template->mode = "listAll";
 	}
 
+	public function renderVerification() {
+		$this->template->verificationGallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
+		$this->template->requests = $this->verificationPhotoRequestDao->findByUserID($this->user->id);
+	}
+
 	protected function createComponentUserInfo($name) {
 		return new UserInfo($this->userDao, $this, $name);
+	}
+
+	public function handleAcceptUser($userID) {
+		$gallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
+		$this->userAllowedDao->insertData($userID, $gallery->id);
+		$this->verificationPhotoRequestDao->acceptRequest($userID);
+		$this->activitiesDao->createImageActivity($this->user->id, $userID, $gallery->lastImage, "verificationPhotoAccepted");
+		if ($this->isAjax()) {
+			$this->redrawControl('requests');
+		} else {
+
+			$this->redirect("this");
+		}
+	}
+
+	public function handleRejectUser($userID) {
+		$gallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
+		$this->verificationPhotoRequestDao->rejectRequest($userID);
+		$this->activitiesDao->createImageActivity($this->user->id, $userID, $gallery->lastImage, "verificationPhotoRejected");
+		if ($this->isAjax()) {
+			$this->redrawControl('requests');
+		} else {
+
+			$this->redirect("this");
+		}
 	}
 
 	/**
@@ -229,7 +315,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \ProfilStream
 	 */
 	protected function createComponentProfilStream() {
-		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao);
+		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeConfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao);
 	}
 
 	/**
@@ -309,6 +395,12 @@ class ShowPresenter extends ProfilBasePresenter {
 
 	protected function createComponentSexyListMarkedFromOther($name) {
 		return new MarkedFromOther($this->youAreSexyDao, $this->userID, $this, $name);
+	}
+
+	public function handleRequestConfirmPhoto($id, $viewerID) {
+		$this->verificationPhotoRequestDao->createRequest($id, $viewerID);
+		$this->flashMessage("žádost o ověřovací fotku podána.");
+		$this->redirect("this");
 	}
 
 }

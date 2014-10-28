@@ -3,7 +3,14 @@
 {* competition bloky *}
 
 {define menuButtons}
+{if $paying}
+	{if $userID == $gallery->userID}
+		<a href="{plink Galleries:userList $gallery->id}" class="btn-main btn-meidum right">
+			přístup
+		</a>
 <a href="{plink deleteImage! id_image => $image->id, id_gallery => $gallery->id}" class="btn-main medium right">Smazat obrázek</a>
+	{/if}
+{/if}
 {/}
 
 {define imageComment}
@@ -11,7 +18,9 @@
 {/}
 
 {define uploadImage}
-<a href="{plink Galleries:verificationImageNew}" id="add-photo-button" class="btn-main medium right">Nahrát ověřovací fotku</a>
+	{if $userID == $gallery->userID}
+		<a href="{plink Galleries:verificationImageNew}" id="add-photo-button" class="btn-main medium right">Nahrát ověřovací fotku</a>
+	{/if}
 {/}
  
 {define imageMainScreen}

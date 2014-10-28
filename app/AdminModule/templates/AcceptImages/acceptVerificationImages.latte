@@ -18,7 +18,9 @@
 			<div class="clear"></div>
 		</ul>
 		<div class="clear"></div>
-		<a n:href="acceptImage! $data->id, $data->galleryID, $data->gallery->userID, $data->gallery->verification_gallery" class="btn btn-success ajax">Schválit</a>
+		<a n:href="acceptImage! $data->id, $data->galleryID, $data->gallery->userID" class="btn btn-success ajax">Schválit</a>
+		<a n:href="acceptIntimImage! imgId => $data->id, galleryId => $data->galleryID, userID => $data->gallery->userID, type => 0" class="btn btn-success ajax">Schválit - intimní</a>
+		<a n:href="rejectImage! $data->id" class="btn btn-warning ajax">Zamítnout</a>
 		<a n:href="deleteImage! $data->id" class="btn btn-danger ajax">Smazat</a>
 		<br>
 		{var $lastImage = $data}

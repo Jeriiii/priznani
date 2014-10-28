@@ -32,6 +32,7 @@ class UserDao extends UserBaseDao {
 	const COLUMN_ADMIN_SCORE = "admin_score";
 	const COLUMN_CONFIRMED = "confirmed";
 	const COLUMN_PASSWORD = "password";
+	const COLUMN_VERIFIED = "verified";
 
 	/**
 	 * w - women
@@ -532,6 +533,16 @@ class UserDao extends UserBaseDao {
 		$sel = $this->createSelection(UserBlokedDao::TABLE_NAME);
 		$sel->where(UserBlokedDao::COLUMN_OWNER_ID, $ownerID);
 		return $sel;
+	}
+
+	/**
+	 * označí ověřeného uživatele
+	 * @param type $userID ID uživatele
+	 */
+	public function verify($userID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($userID);
+		$sel->update(array(self::COLUMN_VERIFIED => 1));
 	}
 
 }

@@ -13,6 +13,7 @@ use Nette\ArrayHash;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
+use NetteExt\Watermarks;
 
 /**
  * Základní formulář pro nahrávání a ukládání obrázků
@@ -63,15 +64,22 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	 * @param int $max_width Maximální šířka screenu.
 	 * @param int $max_minheight Maximální výška miniatury.
 	 * @param int $max_minwidth Maximální šířka miniatury.
+	 * @param bool $addWatermark přidání/nepřidání watermarku
 	 */
-	private function upload($image, $id, $suffix, $galleryID, $userID, $max_height, $max_width, $max_minheight, $max_minwidth) {
+	private function upload($image, $id, $suffix, $galleryID, $userID, $max_height, $max_width, $max_minheight, $max_minwidth, $addWatermarks = TRUE) {
 		if ($image->isOK() & $image->isImage()) {
 			/* uložení souboru a renačtení */
 			$galleryPath = GalleryPathCreator::getUserGalleryPath($galleryID, $userID);
 			File::createDir($galleryPath);
 
 			$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryID, $userID);
-			UploadImage::upload($image, $id, $suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
+
+			$path = UploadImage::upload($image, $id, $suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
+
+			if ($addWatermarks) {
+				Watermarks::addFullWatermark($path, WWW_DIR . '/images/watermarks/mark_pos.png');
+				Watermarks::addBottomRightWatermark($path, WWW_DIR . '/images/watermarks/domain_pos.png', 10, 10);
+			}
 		} else {
 			$this->addError('Chyba při nahrávání souboru. Zkuste to prosím znovu.');
 		}

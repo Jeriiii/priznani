@@ -10,6 +10,8 @@ namespace POSComponent\Galleries\Images;
 
 use POS\Model\UserImageDao;
 use POS\Model\ImageLikesDao;
+use POS\Model\LikeCommentDao;
+use POS\Model\CommentImagesDao;
 
 class UsersGallery extends BaseGallery {
 
@@ -18,10 +20,23 @@ class UsersGallery extends BaseGallery {
 	 */
 	public $imageLikesDao;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao) {
+	/**
+	 * @var \POS\Model\LikeCommentDao
+	 */
+	public $likeCommentDao;
+
+	/**
+	 *
+	 * @var \POS\Model\CommentImagesDao
+	 */
+	public $commentImagesDao;
+
+	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao, LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao) {
 		parent::__construct($images, $image, $gallery, $domain, $partymode);
 		parent::setUserImageDao($userImageDao);
 		$this->imageLikesDao = $imageLikesDao;
+		$this->likeCommentDao = $likeCommentDao;
+		$this->commentImagesDao = $commentImagesDao;
 	}
 
 	public function render() {
@@ -57,6 +72,14 @@ class UsersGallery extends BaseGallery {
 			$likes = new \POSComponent\BaseLikes\ImageLikes();
 		}
 		return $likes;
+	}
+
+	/**
+	 * Komponenta pro komentování obrázků
+	 * @return \POSComponent\Comments\ImageComments
+	 */
+	public function createComponentComments() {
+		return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image);
 	}
 
 	/**

@@ -62,6 +62,12 @@ class Activity {
 			$result["divText"] = 'Uživatel ' . $creator . ' zamítl váš ověřovací obrázek "' . $image->name . '"';
 		} else if ($type == "disapprove") {
 			$result["divText"] = 'Uživatel ' . $creator . ' zamítl váš obrázek "' . $image->name . '"';
+		} else if ($type == "reject") {
+			$result["divText"] = 'Uživatel ' . $creator . ' zamítl váš  ověřovací obrázek "' . $image->name . '"';
+		} else if ($type == "verificationPhotoAccepted") {
+			$result["divText"] = 'Uživatel ' . $creator . ' schválil váši žádost o ověřovací obrázek "' . $image->name . '"';
+		} else if ($type == "verificationPhotoRejected") {
+			$result["divText"] = 'Uživatel ' . $creator . ' zamítl váši žádost o ověřovací obrázek';
 		} else {
 			$result["divText"] = 'Uživatel ' . $creator . ' lajknul váš obrázek ' . $image->name;
 		}

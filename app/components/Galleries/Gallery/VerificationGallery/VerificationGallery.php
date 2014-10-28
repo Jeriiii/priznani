@@ -17,15 +17,20 @@ class VerificationGallery extends BaseGallery {
 	 * @var \POS\Model\ImageLikesDao
 	 */
 	public $imageLikesDao;
+	//platící uživatel
+	protected $paying;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao) {
+	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao, $paying) {
 		parent::__construct($images, $image, $gallery, $domain, $partymode);
 		parent::setUserImageDao($userImageDao);
 
 		$this->imageLikesDao = $imageLikesDao;
+		$this->paying = $paying;
 	}
 
 	public function render() {
+		$this->template->paying = $this->paying;
+		$this->template->userID = $this->presenter->user->id;
 		parent::renderBaseGallery("../VerificationGallery/VerificationGallery.latte");
 	}
 
@@ -49,6 +54,9 @@ class VerificationGallery extends BaseGallery {
 		$imageFileName = $image->id . "." . $image->suffix;
 
 		parent::removeImage($image, $folderPath, $imageFileName);
+
+		$this->flashMessage("Ověřovací fotka smazána");
+		$this->redirect("Show:");
 	}
 
 	/**
