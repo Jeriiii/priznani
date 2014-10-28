@@ -50,7 +50,7 @@ class InstallPresenter extends BasePresenter {
 			$this->redirect("OnePage:");
 		}
 
-		$this->insertEnumCatProp();
+		//$this->insertEnumCatProp();
 //		$this->insertUserCategories();
 
 		$this->setLayout("layoutInstall");
@@ -196,9 +196,6 @@ class InstallPresenter extends BasePresenter {
 			$row["want_to_meet_group"] ++;
 		}
 		//}
-
-		dump($insert);
-		die();
 
 		$this->catPropertyWantToMeetDao->begginTransaction();
 		$this->catPropertyWantToMeetDao->deleteAllTable();
