@@ -45,7 +45,7 @@
 			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">
 			<link rel="shortcut icon" href="{$basePath}/partyicon.ico" type="image/x-icon">
 		{else}
-		    {var $pagename = 'přiznání<b>o</b>sexu<span>.cz</span>'}
+		    {var $pagename = '<b>SEXY</b>PLAY<span>.cz</span>'}
 			{ifset #meta}
 				{* inportujou se specialni meta tagy *}
 				{include #meta}
@@ -70,7 +70,7 @@
 
 		{/if}
 		{block head}{/block}
-        <link href='http://fonts.googleapis.com/css?family=Exo:200,600,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		{includeblock 'layoutBloks/googleAnalytics.latte'}
 	</head>
 
@@ -129,6 +129,7 @@
 		{if $user->isLoggedIn()}
 			{control activities}
 			<a href="#" title="Poslední zprávy" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
+			<a href="#" title="" id="coins-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
 		{/if}
 		{if $partymode}
 		    {cache}
@@ -137,7 +138,6 @@
 			{/cache}
 		{else}
 			{cache}
-				<a n:href=":OnePage:" title="Přiznání o sexu" id="kiss"></a>
 				<a n:href=":OnePage:"><h1 id="pagename">{!$pagename}</h1></a>
 			{/cache}
 		{/if}

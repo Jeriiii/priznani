@@ -71,35 +71,37 @@ header {
 header h1 {
     display: block;
     font-size: 36px;
-    font-family: 'Exo', sans-serif;
+    font-family: 'Source Sans Pro', sans-serif;
     padding: 5px 0;
     text-shadow: 0 0 1px white;
     color: #fff;
+	font-weight: 100;
+	
+	b {
+    font-weight: 800;
+}
+	span {
+		font-size: 24px;
+	}
 }
 h2 {
-    font-family: Exo,Arial;
+    font-family: Source Sans Pro,Arial;
 	color: #a70304;
 	font-size: 30px;
 }
 #left_confession h2 {
-    font-family: 'Exo', 'Arial';
+    font-family: 'Source Sans Pro', 'Arial';
     color: #a70304;
     font-size: 32px;
     padding: 10px 0 0 5px;
 }
-header h1 b {
-    color: #dfbfc2;
-    font-weight: 600;
-}
-header h1 span {
-    font-size: 24px;
-}
+
 #left-panel {
     position: fixed;
     z-index: 8;
     height: 100%;
     width: 80px;
-    background: #383838;
+    background: @main-dark;
 }
 #left-panel-label {
     position: fixed;
@@ -107,7 +109,7 @@ header h1 span {
     left: -60px;
     z-index: 6;
     height: 100%;
-    background: #383838;
+    background: @main-dark;
 }
 #title-container {
     margin-top: 170px;
@@ -168,15 +170,7 @@ header h1 span {
     cursor: default;
 }
 #topmenu a:hover {
-    background-position: 0 60%}
-#kiss {
-    display: block;
-    float: left;
-    position: relative;
-    left: -50px;
-    width: 207px;
-    height: 178px;
-    background: url(../../images/layout/kiss.png) no-repeat transparent;
+    background-position: 0 60%;
 }
 #next_admission {
     position: absolute;
@@ -250,7 +244,7 @@ header h1 span {
     letter-spacing: 1px;
     color: #fff;
     cursor: pointer;
-    font: 600 22px 'Exo', 'Arial Black', Arial;
+    font: 600 22px 'Source Sans Pro', 'Arial Black', Arial;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;

@@ -76,7 +76,7 @@
 	letter-spacing: 1px;
 	color: #fff;
 	cursor: pointer;
-	font: 600 22px 'Exo','Arial Black',Arial;
+	font: 600 22px 'Source Sans Pro','Arial Black',Arial;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
@@ -125,7 +125,7 @@
 }
 
 h2{
-	font-family: 'Exo','Arial';
+	font-family: 'Source Sans Pro','Arial';
 	color: #a70304;
 /*	color: #518b35;*/
 	font-size: 30px;
