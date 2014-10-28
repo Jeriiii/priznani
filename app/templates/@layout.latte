@@ -107,7 +107,7 @@
 			{/cache}
 	    {/if}
         </div>
-	    <div id="header" class="partygradient"></div>
+	    <div id="header" class="partygradient">
 	    <header class="inner">
 		{*mobilni menu*}
 		<div id="mobile-menu">
@@ -146,7 +146,8 @@
 		<div class="clear"></div>
 
 	    </header>
-	    <div class="clear"></div>
+		</div>
+	    <div class="clear" id="header-placeholder"></div>
 	    {block beforeContent}{/block}
 	    <section class="inner">
 		<div n:foreach="$flashes as $flash" class='flash {$flash->type}'>

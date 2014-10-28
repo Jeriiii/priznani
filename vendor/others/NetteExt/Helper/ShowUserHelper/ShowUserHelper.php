@@ -81,7 +81,7 @@ class ShowProfHelper {
 	 * @return \Nette\Utils\Html
 	 */
 	private function createPhoto($el, $user) {
-		$elPhoto = Html::el($el);
+		$elPhoto = Html::el($el, array('class' => 'generatedProfile'));
 		$img = Html::el("img");
 
 		if (isset($user->profilFotoID)) {

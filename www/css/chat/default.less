@@ -5,35 +5,30 @@
     Created on : 30.7.2014, 9:36:40
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
-@import "../variables.less";
 @unreaded-color: #fff3f5;
 
-#chat-interface{
+#chat-container{
+	#chat-header{
+		width: 100%;
+		height: 53px;
+	}
 	position: fixed;
 		top: 0;
 		right: 0;
 		width: 250px;
 		height: 100%;
 		overflow: hidden;
-		background: @main-dark;
-		z-index: 15000;
-		border-left: 1px solid #fafafa;
 		
+		z-index: 6;
 		ul{
 			margin: 0;
 		}
 		
-	#contacts{
-
-			li{
-				cursor: pointer;
-				width: 90%;
-				padding: 8px 4%;
-				
-			}
-
-
-	}
+		#chat-interface{
+			background: #2c2c2d;
+			height: 100%;
+		}
+		
 	#contacts{
 		height: 100%;
 		overflow: auto;
@@ -41,20 +36,29 @@
 
 		li{
 				cursor: pointer;
-				width: 90%;
+				width: 100%;
+				height: 50px;
 				padding: 8px 4%;
 				margin: 2px 1%;
-				border: 1px solid #8F8F8F;
-				color: #FFF;
-				font: 500 16px Arial;
-				-webkit-border-radius: 4px;
-				-moz-border-radius: 4px;
-				border-radius: 4px;
-				height: 20px;
-				line-height: 20px;
+				color: #aeaeae;
 				text-shadow: 0 0 1px #FFF;
-				.posgradient();
-				border-radius: 12px;
+				
+				.generatedProfile{
+					
+					img{
+						display: inline-block;
+						height: 50px;
+						width: 50px;
+					}
+				}
+				.chat-username{
+						display: inline-block;
+						padding: 0 6px;
+						line-height: 50px;
+						vertical-align: top;
+						font-family: 'Source Sans Pro';
+				}
+				
 			}
 	}
 }
