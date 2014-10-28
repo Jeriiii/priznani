@@ -6,8 +6,7 @@
 		"behat/mink-extension": "~1.2.0",
 		"behat/mink-goutte-driver": "*",
 		"behat/mink-selenium2-driver": "*",
-		"kdyby/events": "~2.1.1",
-		"kdyby/doctrine": "~2.0.4"
+		"kdyby/events": "~2.1.1"
 	},
 	"minimum-stability": "dev",
 	"config": {

@@ -8,7 +8,7 @@ use Nette\Application\Routers\RouteList,
 	Nette\Forms\Container;
 
 // Load Nette Framework
-require __DIR__ . '/../vendor/Nette/loader.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 
 $configurator = new Nette\Configurator;
