@@ -129,6 +129,8 @@
 		{if $user->isLoggedIn()}
 			{control activities}
 			<a href="#" title="Poslední zprávy" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
+			<a href="#" title="Platby" id="payment-btn"></a>
+			{control payment}
 		{/if}
 		{if $partymode}
 		    {cache}
@@ -192,7 +194,7 @@
 					});
 
 				</script>
-				<script type="text/javascript" src="{$basePath}/js/ajaxbox-init.js"></script>
+				<script type="text/javascript" src="{$basePath}/js/layout/ajaxbox-init.js"></script>
 			{/if}
 
 

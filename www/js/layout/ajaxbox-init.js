@@ -25,7 +25,7 @@ $(document).ready(function () {
 		}
 	}
 
-//inicializace vyskakovacích okének
+	/*inicializace vyskakovacích okének*/
 	$('#conversations').ajaxBox({
 		buttonSelector: '#messages-btn',
 		topMargin: -10, //korekce y
@@ -44,6 +44,32 @@ $(document).ready(function () {
 		ajaxObserverId: 'chatConversationWindow', //je použit ajaxObserver a toto id reprezentuje požadavek této komponenty (pod stejným id se požadavek vyřizuje na serveru)
 		observerResponseHandle: handleNumberResponse//použití funkce v initu, která vezme výsledek dotazu na observer a zobrazí jej u tlačítka, pokud je nenulový
 	});
-/////////////////////////
-
+	
+	/*inicializace vyskakovacích okének
+	$('#conversations').ajaxBox({
+		buttonSelector: '#messages-btn',
+		topMargin: -10, //korekce y
+		arrowOrientation: 'right', //šipka bude vpravo
+		theme: "posAjaxBox posConversations", //použijí se implicitní styly, ale budou upraveny
+		headerHtml: "Příchozí zprávy", //header
+		loadUrl: loadConversationsLink, /* link (url) vygenerovaný komponentou StandardConversationsList 
+		streamSnippetModule: {
+			snippetName: 'snippet-chat-conversationList-conversations',
+			endMessage: 'Žádné další zprávy.',
+			offsetParameter: 'chat-conversationList-offset',
+			limitParameter: 'chat-conversationList-limit',
+			addLimit: 5,
+			startOffset: 0
+		},
+		ajaxObserverId: 'chatConversationWindow', //je použit ajaxObserver a toto id reprezentuje požadavek této komponenty (pod stejným id se požadavek vyřizuje na serveru)
+		observerResponseHandle: handleNumberResponse//použití funkce v initu, která vezme výsledek dotazu na observer a zobrazí jej u tlačítka, pokud je nenulový
+	});
+*/
+	$('#snippet-payment-payment').ajaxBox({
+			buttonSelector: '#payment-btn',
+			theme: "posPopUp",
+			autoPosition: 'center',
+			hideOthers: true,
+			headerHtml: 'Výběr účtu'
+	});
 });

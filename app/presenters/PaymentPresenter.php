@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Homepage presenter.
+ *
  *
  * Přístup uživatele k platební bráně
  *
