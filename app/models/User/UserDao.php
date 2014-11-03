@@ -545,4 +545,14 @@ class UserDao extends UserBaseDao {
 		$sel->update(array(self::COLUMN_VERIFIED => 1));
 	}
 
+	/**
+	 * Vrátí pole id - uživatelské jméno
+	 * @param array Pole id-jmeno uživatele řazený podle jména
+	 */
+	public function getUserNames() {
+		$sel = $this->getTable();
+		$sel->order(self::COLUMN_USER_NAME);
+		return $sel->fetchPairs(self::COLUMN_ID, self::COLUMN_USER_NAME);
+	}
+
 }

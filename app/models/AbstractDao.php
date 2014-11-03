@@ -8,6 +8,7 @@ namespace POS\Model;
 
 use Nette\Database;
 use Nette\Object;
+use Nette\Http\Session;
 
 /**
  * Abstraktní DAO AbstractDao
@@ -19,10 +20,16 @@ abstract class AbstractDao extends Object {
 	/** @var Database\Context */
 	protected $database;
 
+	/** @var Session */
+	protected $session;
+
 	/** @var boolean */
 	protected $inTransaction;
 
-	public function __construct(Database\Context $database) {
+	const SECTION_DB_PREFFIX = "db";
+
+	public function __construct(Database\Context $database, Session $session) {
+		$this->session = $session;
 		$this->database = $database;
 	}
 
