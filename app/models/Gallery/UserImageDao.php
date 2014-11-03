@@ -10,6 +10,7 @@ use Nette\Database\Context;
 use POS\Model\UserGalleryDao;
 use POS\Model\StreamDao;
 use NetteExt\Arrays;
+use Nette\Http\Session;
 
 /**
  * NAME DAO NAMEDao
@@ -47,8 +48,8 @@ class UserImageDao extends AbstractDao {
 		return $this->createSelection(self::TABLE_NAME);
 	}
 
-	public function __construct(Context $database, UserGalleryDao $userGalleryDao, StreamDao $streamDao) {
-		parent::__construct($database);
+	public function __construct(Context $database, Session $session, UserGalleryDao $userGalleryDao, StreamDao $streamDao) {
+		parent::__construct($database, $session);
 		$this->userGalleryDao = $userGalleryDao;
 		$this->streamDao = $streamDao;
 	}

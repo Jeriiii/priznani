@@ -12,7 +12,7 @@
 
 /*jslint evil: true, white: false, undef: false, nomen: false */
 
-(function($) {
+;(function($) {
 
 	/*
 	* Lets not redefine timepicker, Prevent "Uncaught RangeError: Maximum call stack size exceeded"
