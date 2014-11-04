@@ -12,28 +12,28 @@
 
 namespace POSComponent\UsersList;
 
-use POS\Model\FriendDao;
+use POS\Model\UserBlokedDao;
 
-class FriendsList extends UsersList {
+class BlokedUsersList extends UsersList {
 
-	/** @var \POS\Model\FriendDao */
-	public $friendDao;
+	/** @var \POS\Model\UserBlokedDao */
+	public $userBlokedDao;
 
-	/** @var int ID uživatele - zobrazují se jeho přátelé */
+	/** @var int ID uživatele - zobrazují se jeho blokovaní uživatelé */
 	private $userID;
 
-	public function __construct(FriendDao $friendDao, $userID, $parent, $name) {
+	public function __construct(UserBlokedDao $userBlokedDao, $userID, $parent, $name) {
 		parent::__construct($parent, $name);
 
 		$this->userID = $userID;
-		$this->friendDao = $friendDao;
+		$this->userBlokedDao = $userBlokedDao;
 	}
 
 	/**
 	 * Vykresli šablonu.
 	 */
 	public function render() {
-		$this->renderTemplate(dirname(__FILE__) . '/' . 'friendsList.latte');
+		$this->renderTemplate(dirname(__FILE__) . '/' . 'blokedUsersList.latte');
 	}
 
 	/**
@@ -41,12 +41,12 @@ class FriendsList extends UsersList {
 	 * @param int $offset O kolik příspěvků se mám při načítání dalších příspěvků z DB posunout.
 	 */
 	public function setData($offset) {
-		$friends = $this->friendDao->getList($this->userID, $this->limit, $offset);
-		$this->template->friends = $friends;
+		$blokedUsers = $this->userBlokedDao->getBlokedUsers($this->userID, $this->limit, $offset);
+		$this->template->blokedUsers = $blokedUsers;
 	}
 
 	public function getSnippetName() {
-		return "friends";
+		return "blokedUsersList";
 	}
 
 }

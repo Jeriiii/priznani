@@ -12,6 +12,9 @@ use Nette\Application\UI\Form as Frm;
 use POSComponent\Stream\UserStream\UserStream;
 use POS\UserPreferences\StreamUserPreferences;
 use POSComponent\UsersList\FriendRequestList;
+use POSComponent\UsersList\FriendsList;
+use POSComponent\UsersList\BlokedUsersList;
+use POSComponent\UsersList\SexyList\MarkedFromOther;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -26,6 +29,12 @@ class OnePagePresenter extends BasePresenter {
 	 * @inject
 	 */
 	public $streamDao;
+
+	/**
+	 * @var \POS\Model\UserBlokedDao
+	 * @inject
+	 */
+	public $userBlokedDao;
 
 	/**
 	 * @var \POS\Model\UserDao
@@ -74,6 +83,12 @@ class OnePagePresenter extends BasePresenter {
 	 * @inject
 	 */
 	public $friendRequestDao;
+
+	/**
+	 * @var \POS\Model\FriendDao
+	 * @inject
+	 */
+	public $friendDao;
 
 	/**
 	 * @var \POS\Model\UserCategoryDao
@@ -153,6 +168,18 @@ class OnePagePresenter extends BasePresenter {
 	 */
 	public $verificationPhotoDao;
 
+	/**
+	 * @var \POS\Model\YouAreSexyDao
+	 * @inject
+	 */
+	public $youAreSexyDao;
+
+	/**
+	 * @var \POS\Model\PaymentDao
+	 * @inject
+	 */
+	public $paymentDao;
+
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $userID;
@@ -169,6 +196,8 @@ class OnePagePresenter extends BasePresenter {
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
 		$this->template->userData = $this->userData;
 		$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->userID)->count();
+		$this->template->countSexy = $this->youAreSexyDao->countToUser($this->userID);
+		$this->template->isUserPaying = $this->paymentDao->isUserPaying($this->userID);
 		$this->template->countVerificationRequests = $this->verificationPhotoDao->findByUserID($this->user->id)->count();
 	}
 
@@ -180,7 +209,10 @@ class OnePagePresenter extends BasePresenter {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
 			'stream.js',
-			'lists/initFriendRequest.js'
+			'lists/initFriendRequest.js',
+			'lists/initFriends.js',
+			'lists/initBlokedUsers.js',
+			'lists/initMarkedFromOther.js'
 		));
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {
@@ -207,6 +239,18 @@ class OnePagePresenter extends BasePresenter {
 
 	protected function createComponentFriendRequest($name) {
 		return new FriendRequestList($this->friendRequestDao, $this->getUser()->id, $this, $name);
+	}
+
+	protected function createComponentFriends($name) {
+		return new FriendsList($this->friendDao, $this->getUser()->id, $this, $name);
+	}
+
+	protected function createComponentBlokedUsers($name) {
+		return new BlokedUsersList($this->userBlokedDao, $this->getUser()->id, $this, $name);
+	}
+
+	protected function createComponentMarkedFromOther($name) {
+		return new MarkedFromOther($this->paymentDao, $this->youAreSexyDao, $this->getUser()->id, $this, $name);
 	}
 
 	/**

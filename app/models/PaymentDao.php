@@ -87,7 +87,7 @@ class PaymentDao extends AbstractDao {
 	}
 
 	/**
-	 * Vrátí platícího uživatele pokud platba existuje a je aktuální a je PREMIUM
+	 * Vrátí platby platícího uživatele pokud platba existuje a je aktuální a je PREMIUM
 	 * @param int $userID id uživatele
 	 * @return Nette\Database\Table\Selection
 	 */
@@ -98,13 +98,27 @@ class PaymentDao extends AbstractDao {
 	}
 
 	/**
-	 * Vrátí platícího uživatele pokud platba existuje a je aktuální a je eXclusive
+	 * Vrátí platby platícího uživatele pokud platba existuje a je aktuální a je eXclusive
 	 * @param int $userID id uživatele
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function getUserExclusive($userID) {
 		$sel = $this->getUserPayments($userID);
 		$sel->where(self::COLUMN_TYPE, self::ACCOUNT_EXCLUSIVE);
+		return $sel;
+	}
+
+	/**
+	 * Vrátí platby platícího uživatele pokud platba existuje a je aktuální
+	 * @param int $userID id uživatele
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getUserPayments($userID) {
+		$sel = $this->getTable($userID);
+		$now = new DateTime();
+		$sel->where(self::COLUMN_USER_ID, $userID);
+		$sel->where(self::COLUMN_FROM . " < ?", $now);
+		$sel->where(self::COLUMN_TO . " > ?", $now);
 		return $sel;
 	}
 

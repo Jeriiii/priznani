@@ -12,21 +12,13 @@
 
 namespace POSComponent\UsersList;
 
-use IAjaxBox;
-
-class FriendRequestList extends UsersList implements \IAjaxBox {
+class FriendRequestList extends UsersList {
 
 	/** @var \POS\Model\FriendRequestDao */
 	private $friendRequestDao;
 
 	/** @var int ID přihlášeného uživatele */
 	private $loggedUserID;
-
-	/** @var int Posun příspěvků při rolování */
-	private $offset = 0;
-
-	/** @var int Limit na jedno načtení */
-	private $limit;
 
 	public function __construct($friendRequestDao, $loggedUserID, $parent, $name) {
 		parent::__construct($parent, $name);
@@ -62,30 +54,16 @@ class FriendRequestList extends UsersList implements \IAjaxBox {
 	}
 
 	/**
-	 * Tuto metodu zavolejte ze metody render. Nastavý data, který se mají vrátit v ajaxovém i normálním
-	 * požadavku v závislosti na předaném offsetu (posunu od shora).
-	 * @param int $offset Offset předaný metodou handleGetMoreData. Při vyrendrování komponenty je nula.
-	 * @param int $limit Limit na jedno načtení
-	 */
-	public function handleGetMoreData($offset, $limit) {
-		$this->offset = $offset;
-		$this->limit = $limit;
-		$this->setData($this->offset);
-
-		if ($this->presenter->isAjax()) {
-			$this->invalidateControl("requests");
-		} else {
-			$this->redirect('this');
-		}
-	}
-
-	/**
 	 * Uloží předaný ofsset jako parametr třídy a invaliduje snippet s příspěvky
 	 * @param int $offset O kolik příspěvků se mám při načítání dalších příspěvků z DB posunout.
 	 */
 	public function setData($offset) {
 		$friendRequests = $this->friendRequestDao->getAllToUser($this->loggedUserID, $this->limit, $offset);
 		$this->template->friendRequests = $friendRequests;
+	}
+
+	public function getSnippetName() {
+		return "requests";
 	}
 
 }

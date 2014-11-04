@@ -6,6 +6,8 @@
 
 namespace POS\Model;
 
+use Nette\Http\SessionSection;
+
 /**
  * Sexy = odebírání příspěvků od uživatele bez přátelství, možnost jak
  * nenápadně naznačit že se chce spřátelit
@@ -51,13 +53,33 @@ class YouAreSexyDao extends AbstractDao {
 	/**
 	 * Vrátí seznam uživatelů, kteří uživatele označili jako sexy.
 	 * @param int $userToID
+	 * @param int $limit
+	 * @param int $offset
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function getAllToUser($userToID) {
+	public function getAllToUser($userToID, $limit = 0, $offset = 0) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_USER_TO_ID, $userToID);
-
+		if ($limit != 0) {
+			$sel->limit($limit, $offset);
+		}
 		return $sel;
+	}
+
+	/**
+	 * Spočítá, kolik lidí uživatele označili že je sexy. Cachuje se.
+	 * @param int $userToID
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function countToUser($userToID) {
+		$section = $this->getUnicateSection(self::TABLE_NAME);
+
+		if (empty($section->countToUser)) {
+			$sel = $this->getAllToUser($userToID);
+			$section->countToUser = $sel->count();
+		}
+
+		return $section->countToUser;
 	}
 
 	/**

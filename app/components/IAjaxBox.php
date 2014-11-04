@@ -25,4 +25,10 @@ interface IAjaxBox {
 	 * @param int $offset O kolik příspěvků se mám při načítání dalších příspěvků z DB posunout.
 	 */
 	public function handleGetMoreData($offset, $limit);
+
+	/**
+	 * Vrátí název snippetu, který se má při zavolání ajaxem invalidovat
+	 * @return string Název snippetu, co se má invalidovat třeba "requests"
+	 */
+	public function getSnippetName();
 }
