@@ -23,7 +23,6 @@
 		//obsluha označení aktivity jako přečtené
 		activityRead(settings.baseUrl, settings.viewedUrl);
 	};
-	
 	/**
 	 * Defaultní hodnoty funkce
 	 */
@@ -31,7 +30,7 @@
 		//Url aktuálního okna
 		baseUrl: window.location.origin + window.location.pathname,
 		//Část url pro handle
-		askUrl: "?do=activities-ask",
+		askUrl: "?do=activities-ask&" + (window.location.search).substr(1),
 		// div, který překreje tlačítko při ukázání aktivit, a který pak aktivity zavře
 		loading: '#loadingDiv',
 		// div zvoneček
@@ -39,9 +38,9 @@
 		// div s aktivitami
 		activitiesDrop: '#activities-droplink',
 		//část url s handlerem pro load aktivit
-		requestUrl: "?do=activities-loadActivities",
+		requestUrl: "?do=activities-loadActivities&" + (window.location.search).substr(1),
 		//Část url volání handleru na označení přečtené aktivity
-		viewedUrl: "do=activities-viewed"
+		viewedUrl: "do=activities-viewed&" + (window.location.search).substr(1)
 	};
 	
 
@@ -140,9 +139,11 @@
 	 * Ajax dotaz na nové aktivity a vypsání počtu
 	 */
 	function getNewActivitiesCount() {
+		var url = this.settings.baseUrl + this.settings.askUrl;
+		
 		//odeslání ajaxu
 		$.nette.ajax({
-			url: this.settings.baseUrl + this.settings.askUrl,
+			url: url,
 			dataType: "json",
 			async: true,
 			success: function(response) {

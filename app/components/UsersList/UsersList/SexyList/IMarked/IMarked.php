@@ -12,7 +12,7 @@
 
 namespace POSComponent\UsersList\SexyList;
 
-class IMarked extends BaseSexyList implements IBaseSexyList {
+class IMarked extends BaseSexyList {
 
 	public function getSexyUsers() {
 		return $this->youAreSexyDao->getAllFromUser($this->userID);

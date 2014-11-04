@@ -16,6 +16,7 @@ use Nette\Security\User;
 use POS\Ajax\ExampleHandle,
 	POS\Ajax\AjaxCrate,
 	POS\Ajax\ChatConversationsHandle;
+use POSComponent\Payment;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -337,6 +338,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'../forms/netteForms.js',
 			'../ajaxObserver/core.js',
 			'../ajaxBox/ajaxBox.js',
+			'../features/jquery.slimscroll.js'
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
@@ -451,6 +453,10 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			$handles->addHandle('chatConversationWindow', new ChatConversationsHandle($this->chatManager, $this->getUser()->getId()));
 			$this->ajaxObserver->sendRefreshRequests($this, $handles);
 		}
+	}
+
+	protected function createComponentPayment($name) {
+		return new Payment($this, $name);
 	}
 
 }

@@ -30,9 +30,7 @@ class FriendRequestList extends UsersList {
 	 * Vykresli šablonu.
 	 */
 	public function render() {
-		$this->template->setFile(dirname(__FILE__) . '/friendRequestList.latte');
-		$this->template->friendRequests = $this->friendRequestDao->getAllToUser($this->loggedUserID);
-		$this->template->render();
+		$this->renderTemplate(dirname(__FILE__) . '/' . 'friendRequestList.latte');
 	}
 
 	/**
@@ -41,7 +39,8 @@ class FriendRequestList extends UsersList {
 	 */
 	public function handleAccept($id) {
 		$this->friendRequestDao->accept($id);
-		$this->redirect("Profil:Edit: friendRequests");
+		$this->redrawControl();
+		//$this->getPresenter()->redirect(":Profil:Edit:friendRequests");
 	}
 
 	/**
@@ -50,7 +49,21 @@ class FriendRequestList extends UsersList {
 	 */
 	public function handleReject($id) {
 		$this->friendRequestDao->reject($id);
-		$this->redirect("Profil:Edit: friendRequests");
+		$this->redrawControl();
+		//$this->getPresenter()->redirect("Profil:Edit: friendRequests");
+	}
+
+	/**
+	 * Uloží předaný ofsset jako parametr třídy a invaliduje snippet s příspěvky
+	 * @param int $offset O kolik příspěvků se mám při načítání dalších příspěvků z DB posunout.
+	 */
+	public function setData($offset) {
+		$friendRequests = $this->friendRequestDao->getAllToUser($this->loggedUserID, $this->limit, $offset);
+		$this->template->friendRequests = $friendRequests;
+	}
+
+	public function getSnippetName() {
+		return "requests";
 	}
 
 }

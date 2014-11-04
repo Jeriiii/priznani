@@ -1,7 +1,7 @@
 <?php
 
 use POSComponent\Galleries\Images\UsersCompetitionsGallery;
-use POSComponent\Galleries\UserImagesInGallery\CompetitionsImagesInGallery;
+use POSComponent\Galleries\UserImagesGalleryThumbnails\CompetitionsGalleryIamgesThumbnails;
 use Nette\Application\UI\Form as Frm;
 
 /*
@@ -174,7 +174,7 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		$imagesID = $this->competitionsImagesDao->getApprovedByComp($this->gallery->id);
 		$iID = array_keys($imagesID);
 		$images = $this->userImageDao->getAllById($iID);
-		return new CompetitionsImagesInGallery($images, $this->userDao);
+		return new CompetitionsGalleryIamgesThumbnails($images, $this->userDao);
 	}
 
 	public function createComponentNewImageForm($name) {

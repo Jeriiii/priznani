@@ -43,6 +43,8 @@ class UploadImage extends UploadFile {
 
 		/* přeuloží originální obrázek a smaže starý */
 		self::resaveImgOriginal($image, $path);
+
+		return $path;
 	}
 
 	/*	 * *********************** VYTVOŘENÍ A ULOŽENÍ OBRÁZKU **************** */

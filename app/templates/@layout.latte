@@ -129,6 +129,8 @@
 		{if $user->isLoggedIn()}
 			{control activities}
 			<a href="#" title="Poslední zprávy" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
+			<a href="#" title="Platby" class="payment-btn"></a>
+			{control payment}
 		{/if}
 		{if $partymode}
 		    {cache}
@@ -186,14 +188,13 @@
 					$('body').activities();
 				</script>
 				<script>
-
 					//inicializace ajaxObserveru
 					var observer = $('body').ajaxObserver({
 						requestUrl: {$ajaxObserverLink}
 					});
 
 				</script>
-				<script type="text/javascript" src="{$basePath}/js/ajaxbox-init.js"></script>
+				<script type="text/javascript" src="{$basePath}/js/layout/ajaxbox-init.js"></script>
 			{/if}
 
 

@@ -32,6 +32,7 @@ class UserDao extends UserBaseDao {
 	const COLUMN_ADMIN_SCORE = "admin_score";
 	const COLUMN_CONFIRMED = "confirmed";
 	const COLUMN_PASSWORD = "password";
+	const COLUMN_VERIFIED = "verified";
 
 	/**
 	 * w - women
@@ -411,6 +412,28 @@ class UserDao extends UserBaseDao {
 		return $this->getTable()->count();
 	}
 
+	/**
+	 * Získá id a username lidí v tabulce
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getUsernameAndId() {
+		$sel = $this->getTable();
+		$sel->select(self::COLUMN_ID . ", " . self::COLUMN_USER_NAME);
+		return $sel;
+	}
+
+	/**
+	 * Získá lidi pro autocomplete, vynechá ty, kteří jsou již přidaní
+	 * @param array $alreadyAllowed seznam přidaných uživatelů
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function getUsernameAndIdForAllowGallery($alreadyAllowed) {
+		$sel = $this->getTable();
+		$sel->select(self::COLUMN_ID . ", " . self::COLUMN_USER_NAME);
+		$sel->where(self::COLUMN_ID . ' NOT', $alreadyAllowed);
+		return $sel;
+	}
+
 	/*	 * ************************** UPDATE *************************** */
 
 	public function setUserRoleByConfirm($confirmCode) {
@@ -510,6 +533,26 @@ class UserDao extends UserBaseDao {
 		$sel = $this->createSelection(UserBlokedDao::TABLE_NAME);
 		$sel->where(UserBlokedDao::COLUMN_OWNER_ID, $ownerID);
 		return $sel;
+	}
+
+	/**
+	 * označí ověřeného uživatele
+	 * @param type $userID ID uživatele
+	 */
+	public function verify($userID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($userID);
+		$sel->update(array(self::COLUMN_VERIFIED => 1));
+	}
+
+	/**
+	 * Vrátí pole id - uživatelské jméno
+	 * @param array Pole id-jmeno uživatele řazený podle jména
+	 */
+	public function getUserNames() {
+		$sel = $this->getTable();
+		$sel->order(self::COLUMN_USER_NAME);
+		return $sel->fetchPairs(self::COLUMN_ID, self::COLUMN_USER_NAME);
 	}
 
 }

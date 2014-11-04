@@ -1,32 +1,9 @@
 {block beforeContent}
 <section class="content">
 	<div id="stream">
-		{if !$profilePhoto &&  $user->isLoggedIn()}
-			<div id="profile-photo-upload">
-				Nahrajte si <span class="highlight">profilovou fotku</span>, aby si vás ostatní mohli prohlédnout.
-				{form uploadPhotoForm}
-					{input uploadPhotoFormImageFile0}
-					{input uploadProfilPhoto}
-				{/form}
-			</div>
-		{elseif $profilePhoto && $user->isLoggedIn() &&  $place==0  && $position==0 && $placePosSession->count%5==0}
-			Chcete další téma ke konverzaci? Vyplňte si:
-				{form placesAndPositionsForm}
-					Oblíbená poloha při milování:
-						{input fromBack}
-						{input position69}
-						{input missionary}
-						{input riding}
-						{input side}
-					Oblíbené místo k milování:
-						{input bed}
-						{input car}
-						{input nature}
-						{input unusual}
-						{input public}
-					{input send}
-				{/form}
-		{/if}
+		{ifset #addUserInfo}
+				{include #addUserInfo}
+		{/ifset}
 		{ifset #addNewPost}
 				{include #addNewPost}
 		{/ifset}
@@ -45,6 +22,7 @@
 								<p>{$dataItem->userGallery->lastImage->description}</p>
 							</a>
 							{control likeImages-$dataItem->id}
+							{control commentImages-$dataItem->id}
 						{else}
 							<strong>Obrázky se zobrazují pouze registrovaným uživatelům. <a href="{plink :Sign:registration}">Registrujte se</a>.</strong>
 						{/if}
@@ -63,7 +41,8 @@
 					{ifset $dataItem->confessionID}
 						<a href="{plink Page:confession id => $dataItem->confessionID}" title="Přiznání o sexu"><h3>Přiznání</h3></a>
 						<p>{$dataItem->confession->note}</p>
-
+						{control likeConfession-$dataItem->id}
+						{control commentConfession-$dataItem->id}
 					{/ifset}
 
 					{ifset $dataItem->adviceID}
@@ -75,13 +54,11 @@
 						{$status->user|showProf}
 						<p>{$status->message}</p>
 						{control likeStatus-$dataItem->id}
+						{control commentStatus-$dataItem->id}
 					{/ifset}
 					{*<div class="votes">
 						{control pollsControl-$dataItem->id}
 					</div>*}
-					<div class="fb-components">
-						{control fbControl-$dataItem->id}
-					</div>
 				</div>
 			{/foreach}
 		</div>

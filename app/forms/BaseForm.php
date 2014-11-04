@@ -51,7 +51,7 @@ class BaseForm extends Form {
 	}
 
 	/**
-	 * Smaže všechna data co jsou vyplněná v polých. Používá se zpravidla
+	 * Smaže všechna data co jsou vyplněná v polích. Používá se zpravidla
 	 * po zpracování ajaxem v metodě submited.
 	 */
 	public function clearFields() {

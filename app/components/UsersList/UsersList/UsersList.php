@@ -5,7 +5,7 @@
  */
 
 /**
- * Popis komponenty
+ * Předek všech komponent pro seznamy uživatelů
  *
  * @author Petr Kukrál
  */
@@ -14,10 +14,6 @@ namespace POSComponent\UsersList;
 
 use POSComponent\BaseProjectControl;
 
-class UsersList extends BaseProjectControl {
-
-	public function __construct($parent, $name) {
-		parent::__construct($parent, $name);
-	}
+abstract class UsersList extends AjaxList {
 
 }

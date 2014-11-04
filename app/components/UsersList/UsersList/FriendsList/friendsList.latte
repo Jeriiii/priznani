@@ -1,17 +1,23 @@
-{foreach $friends as $friend}
-	{if $iterator->isFirst()}
-		<h2>Přátelé</h2>
-		<table>
-			<thead>
-			<th></th>
-		</thead>
-		<tbody>
-	{/if}
-	<tr>
-		<td>{$friend->user2|showProf}</td>
-	</tr>
-	{if $iterator->isLast()}
-		</tbody>
-		</table>
-	{/if}
-{/foreach}
+<div n:snippet="friends" data-ajax-append="true">
+{ifset $friends}
+	{foreach $friends as $friend}
+		{if $iterator->isFirst()}
+			<table>
+				<thead>
+				<th></th>
+			</thead>
+			<tbody>
+		{/if}
+		<tr>
+			<td>{$friend->user2|showProf}</td>
+		</tr>
+		{if $iterator->isLast()}
+			</tbody>
+			</table>
+		{/if}
+	{/foreach}
+{/ifset}
+</div>
+<script>
+	var loadFriendLink = {link getMoreData!};
+</script>

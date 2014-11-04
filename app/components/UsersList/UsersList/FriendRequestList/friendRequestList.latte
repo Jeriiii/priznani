@@ -1,22 +1,25 @@
-<h2>Žádost o přátelství</h2>
-{if empty($friendRequests)}
-	<span>Nyní nemáte žádné žádosti o přátelství.</span>
-{/if}
-{foreach $friendRequests as $friendRequest}
-	{if $iterator->isFirst()}
-		<table>
-			<thead>
-			<th></th>
-		</thead>
-		<tbody>
-	{/if}
-	<tr>
-		<td>{$friendRequest->userFrom|showProf}</td>
-		<td><a n:href="accept! id => $friendRequest->id">Přijmout</a></td>
-		<td><a n:href="reject! id => $friendRequest->id">Odmítnout</a></td>
-	</tr>
-	{if $iterator->isLast()}
-		</tbody>
-		</table>
-	{/if}
-{/foreach}
+<div n:snippet="requests" data-ajax-append="true">
+{ifset $friendRequests}
+	{foreach $friendRequests as $friendRequest}
+		{if $iterator->isFirst()}
+			<table>
+				<thead>
+				<th></th>
+			</thead>
+			<tbody>
+		{/if}
+		<tr>
+			<td>{$friendRequest->userFrom|showProf}</td>
+			<td><a n:href="accept! id => $friendRequest->id" class="ajax">Přijmout</a></td>
+			<td><a n:href="reject! id => $friendRequest->id" class="ajax">Odmítnout</a></td>
+		</tr>
+		{if $iterator->isLast()}
+			</tbody>
+			</table>
+		{/if}
+	{/foreach}
+{/ifset}
+</div>
+<script>
+	var loadFriendRequestsLink = {link getMoreData!}
+</script>

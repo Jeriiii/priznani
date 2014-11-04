@@ -1,0 +1,23 @@
+<div n:snippet="blokedUsersList" data-ajax-append="true">
+{ifset $blokedUsers}
+	{foreach $blokedUsers as $blokedUser}
+		{if $iterator->isFirst()}
+			<table>
+				<thead>
+				<th></th>
+			</thead>
+			<tbody>
+		{/if}
+		<tr>
+			<td>{$blokedUser->bloked|showProf}</td>
+		</tr>
+		{if $iterator->isLast()}
+			</tbody>
+			</table>
+		{/if}
+	{/foreach}
+{/ifset}
+</div>
+<script>
+	var loadBlokedUserLink = {link getMoreData!};
+</script>

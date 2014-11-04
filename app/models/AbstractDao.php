@@ -8,6 +8,7 @@ namespace POS\Model;
 
 use Nette\Database;
 use Nette\Object;
+use Nette\Http\Session;
 
 /**
  * Abstraktní DAO AbstractDao
@@ -19,10 +20,16 @@ abstract class AbstractDao extends Object {
 	/** @var Database\Context */
 	protected $database;
 
+	/** @var Session */
+	protected $session;
+
 	/** @var boolean */
 	protected $inTransaction;
 
-	public function __construct(Database\Context $database) {
+	const SECTION_DB_PREFFIX = "db";
+
+	public function __construct(Database\Context $database, Session $session) {
+		$this->session = $session;
 		$this->database = $database;
 	}
 
@@ -98,6 +105,14 @@ abstract class AbstractDao extends Object {
 	}
 
 	/**
+	 * Smaže celou tabulku !!!
+	 */
+	public function deleteAllTable() {
+		$table = $this->getTable();
+		return $table->delete();
+	}
+
+	/**
 	 * Najde prvek podle primárního klíče a aktualizuje mu data
 	 * @param int $id ID prvku.
 	 * @param array $data Data co se mají změnit.
@@ -118,6 +133,19 @@ abstract class AbstractDao extends Object {
 	public function endTransaction() {
 		$this->database->commit();
 		$this->inTransaction = FALSE;
+	}
+
+	/**
+	 * Vrátí sekci pro KONKRÉTNÍ dao. Mezi dvěma dao jsou vždy RŮZNÉ sekce.
+	 * @param string $tableName Název tabulky
+	 * @param string $expiration Doba expirace.
+	 * @return SessionSection
+	 */
+	public function getUnicateSection($tableName, $expiration = "10 minutes") {
+		$name = self::SECTION_DB_PREFFIX . "-" . $tableName;
+		$section = $this->session->getSection($name);
+		$section->setExpiration($expiration);
+		return $section;
 	}
 
 }

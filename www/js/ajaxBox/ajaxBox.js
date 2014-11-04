@@ -12,12 +12,15 @@
 	//zamek pro ajaxove pozadavky
 	var ajaxLock = false;
 
+
+
 	/* konstruktor */
 	$.fn.ajaxBox = function (options) {
 		var boxopts = $.extend({}, $.fn.ajaxBox.defaults, options);
 
 
 		return this.each(function () {
+			boxopts = applyModulesStarts(boxopts);
 			//obalení okénkem a potřebnými elementy
 			addHtml($(this), boxopts);
 			///////////////
@@ -29,9 +32,20 @@
 					boxopts.observerResponseHandle(boxopts, data);
 				});
 			}
+			applyModulesEnds(boxopts);
 		});
 
 	};
+
+	/*
+	 * proměnné pro modul ajaxového dropdownu - zda má ajax běžet
+	 */
+	$.fn.ajaxBox.runStates = {};
+
+	/*
+	 * proměnné pro modul ajaxového dropdownu - aktuální offsety
+	 */
+	$.fn.ajaxBox.currentOffsets = {};
 
 
 
@@ -77,10 +91,14 @@
 		/* orientace šipky - left|right - šipka je vlevo|vpravo. Podle toho se nastaví i pozice okénka. Předpokládá se, že šipka má nastavené
 		 * css left|right (pozor na to pokud děláte vlastní theme!!!). */
 		arrowOrientation: 'right',
+		/* při true vyvolá pozadí zakrývající vše ostatní (dle stylů) - toto pozadí je ve stylech jako .activeBackground */
+		hideOthers: false,
 		/* defaultní zpráva v dolní části okénka*/
 		defaultMessage: '',
 		/* zpráva v headeru okénka */
-		headerHtml: ''
+		headerHtml: '',
+		/* objekt definující zapnutí a nastavení modulu pro obnovování snippetu a kontroly jeho příchozího obsahu */
+		streamSnippetModule: false
 	};
 
 
@@ -105,25 +123,44 @@
 		if (opts.arrowOrientation === 'left') {//orientace okénka
 			box.find('.arrow-up').addClass('on-left');//přidání třídy k šipečce (aby byla vlevo)
 		}
+		setBoxPosition(opts, box, button);
+		data.css('display', 'block');//zobrazení dat, pokud byla skrytá
+	}
+	/**
+	 * Nastaví pozici okénka dle nastavení
+	 * @param {type} opts parametry
+	 * @param {type} box okénko
+	 * @param {type} button tlačítko okénka
+	 */
+	function setBoxPosition(opts, box, button) {
 		//nastavení správné pozice
 		if (opts.autoPosition) {//nastavení pozice okénka
-			var arrow = box.find('.arrow-up');
-			box.css('top', button.outerHeight() + arrow.outerHeight() + opts.topMargin);//nastavení xové souřadnice
-			if (opts.arrowOrientation === 'left') {//rozdělení podle orientace
-				var arrowCorrection = parseInt(arrow.css('left')) + arrow.outerWidth() / 2;//vzdálenost zleva ke středu šipky
-				box.css('left', button.offset().left + (button.outerWidth() / 2) - arrowCorrection + opts.leftMargin);//nastavení odsazení zleva
-			} else {
-				var arrowCorrection = parseInt(arrow.css('right')) + arrow.outerWidth() / 2;//vzdálenost zprava ke středu šipky
-				var offsetRight = $(window).width() - button.offset().left - button.outerWidth();//offset tlačítka zprava
-				box.css('right', offsetRight + (button.outerWidth() / 2) - arrowCorrection - opts.leftMargin);//nastavení odsazení zprava
+			switch (opts.autoPosition) {
+				case true:
+					var arrow = box.find('.arrow-up');
+					box.css('top', button.outerHeight() + arrow.outerHeight() + opts.topMargin);//nastavení xové souřadnice
+					if (opts.arrowOrientation === 'left') {//rozdělení podle orientace
+						var arrowCorrection = parseInt(arrow.css('left')) + arrow.outerWidth() / 2;//vzdálenost zleva ke středu šipky
+						box.css('left', button.offset().left + (button.outerWidth() / 2) - arrowCorrection + opts.leftMargin);//nastavení odsazení zleva
+					} else {
+						var arrowCorrection = parseInt(arrow.css('right')) + arrow.outerWidth() / 2;//vzdálenost zprava ke středu šipky
+						var offsetRight = $(window).width() - button.offset().left - button.outerWidth();//offset tlačítka zprava
+						box.css('right', offsetRight + (button.outerWidth() / 2) - arrowCorrection - opts.leftMargin);//nastavení odsazení zprava
+					}
+					break;
+				case 'center':
+					box.css('top', ($(window).height() / 2) - (box.height() / 2));
+					box.css('left', ($(window).width() / 2) - (box.width() / 2));
+					break;
+				default:
+					break;
 			}
-
 		}
-		data.css('display', 'block');//zobrazení dat, pokud byla skrytá
 	}
 
 	/**
 	 * Znovu nebo poprvé načte data zavoláním příslušné url přes nette.ajax
+	 * @param {Object} opts nastavení daného (tohoto) okénka
 	 */
 	function reloadData(opts) {
 		if (opts.loadUrl && opts.reloadPermitted(opts) && !this.ajaxLock) {
@@ -141,6 +178,7 @@
 
 	/**
 	 * Spustí cyklus, který hlídá, zda uživatel nevidí spodní část okénka (mimo data). Pokud nevidí, pošle ajaxový požadavek
+	 * @param {Object} opts nastavení daného (tohoto) okénka
 	 * */
 	function watchForUpdateNeed(opts) {
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"] .ajaxBoxContent';
@@ -165,12 +203,35 @@
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"]';
 		return $(boxSelector).is(':visible');
 	}
+	/**
+	 * Změní nastavení, pokud je zapnutý nějaký z modulů
+	 * @param {Object} opts nastavení daného (tohoto) okénka
+	 * @return upravené (nové) nastavení okénka
+	 */
+	function applyModulesStarts(opts) {
+		if (opts.streamSnippetModule) {
+			opts = applyStreamSnippetModuleStart(opts);
+		}
+		return opts;
+	}
 
 	/**
-	 * Pověsí na okénka eventy, které je zavřou nebo otevřou, když je potřeba
+	 * Udělá změny zvolených modulů, které musí být aplikovány až po inicializaci
+	 * @param {Object} opts nastavení daného (tohoto) okénka
+	 */
+	function applyModulesEnds(opts) {
+		if (opts.streamSnippetModule) {
+			opts = applyStreamSnippetModuleEnd(opts);
+		}
+	}
+
+	/**
+	 * Pověsí na okénko (pouze toto jedno!) eventy, které ho zavřou nebo otevřou, když je potřeba
+	 * @param {Object} opts nastavení daného (tohoto) okénka
 	 */
 	function addBinds(opts) {
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"]';
+		var content = $(boxSelector).find('.ajaxBoxContent');
 
 		$(opts.buttonSelector).click(function (e) {//zavření při otevření jiného okénka
 			if ($(e.target).is('.ajaxBox *, .ajaxBox')) {
@@ -179,8 +240,19 @@
 			e.preventDefault();
 			var close = isThisWindowVisible(opts);
 			$('.ajaxBox').css('display', 'none');
+			$('.activeBackground').remove();
 			if (!close) {
 				$(boxSelector).css('display', 'block');//otevření jediného okénka
+				if (opts.hideOthers) {//vyvolani pozadi
+					$('body').prepend('<div class="activeBackground" data-related="' + opts.buttonSelector + '"></div>');
+					$(boxSelector).css('z-index', '10001');
+					$('.activeBackground').css('position', 'fixed');
+					$('.activeBackground').css('top', 0);
+					$('.activeBackground').css('left', 0);
+					$('.activeBackground').css('z-index', '10000');
+					$('.activeBackground').css('width', $(document).width());
+					$('.activeBackground').css('height', $(document).height());
+				}
 			}
 		});
 
@@ -188,12 +260,60 @@
 			if (!$(event.target).is(opts.buttonSelector, '.ajaxBox')) {
 				if (!$(event.target).is('.ajaxBox *, .ajaxBox')) {
 					$(boxSelector).css('display', 'none');
+					$('.activeBackground[data-related=' + opts.buttonSelector + ']').remove();
 				}
 			}
 		});
-
+		//pridani vlastniho posuvniku
+		content.slimScroll({
+			height: content.height() + 'px'
+		});
 
 	}
+
+
+
+	/************MODULES**************/
+	/**
+	 * Nastaví funkce v nastavení tak, aby okénko fungovalo jako ajaxový dropdown
+	 * @param {type} options původní nastavení
+	 * @return {array} nové nastavení
+	 */
+	function applyStreamSnippetModuleStart(options) {
+		var params = options.streamSnippetModule;
+		$.fn.ajaxBox.runStates[params.snippetName] = true; //počáteční nastavení
+		$.fn.ajaxBox.currentOffsets[params.snippetName] = params.startOffset;
+		options.dataArrived = function (opts, data) {//zkoumá, jestli snippet poslal nějaká data a pokud ne, schová načítací gif a pomocí globálního přepínače zastaví dotazování
+			if (data.snippets[params.snippetName].trim() == "") {
+				$.fn.ajaxBox.runStates[params.snippetName] = false;
+				$('div[data-related="' + opts.buttonSelector + '"] .ajaxBoxData').append('<div class="noConvMessages">' + params.endMessage + '</div>');
+				$('div[data-related="' + opts.buttonSelector + '"] .loadingGif').css('display', 'none');
+			}
+		};
+		options.reloadPermitted = function (opts) {//zastavení dotazování, pokud je globální přepínač false
+			return $.fn.ajaxBox.runStates[params.snippetName];
+		};
+		options.dataToReload = function (opts) {//přidá ke každému požadavku ještě offset a limit. Poté zvětší offset.
+			var offset = $.fn.ajaxBox.currentOffsets[params.snippetName];
+			$.fn.ajaxBox.currentOffsets[params.snippetName] += params.addLimit;
+			var returnObject = {};
+			returnObject[params.offsetParameter] = offset;
+			returnObject[params.limitParameter] = params.addLimit;
+			return returnObject;
+		};
+		return options;
+	}
+
+	/**
+	 * Finální úpravy modulu pro ajaxový dropdown
+	 * @param {type} options nastavení okénka
+	 */
+	function applyStreamSnippetModuleEnd(options) {
+		$('div[data-related="' + options.buttonSelector + '"] .loadingGif').css('display', 'block');
+	}
+
+
+	/*********************************/
 
 
 })(jQuery);

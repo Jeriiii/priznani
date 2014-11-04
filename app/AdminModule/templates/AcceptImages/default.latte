@@ -18,8 +18,9 @@
 			<div class="clear"></div>
 		</ul>
 		<div class="clear"></div>
-		<a n:href="acceptImage! imgId => $image->id, galleryId => $image->galleryID, userId => $image->gallery->userId" class="btn btn-success ajax">Schválit</a>
-		<a n:href="deleteImage! imgId => $image->id, galleryId => $image->galleryID" class="btn btn-danger ajax">Smazat</a>
+		<a n:href="acceptImage! imgId => $image->id, galleryId => $image->galleryID, userID => $image->gallery->userID" class="btn btn-success ajax">Schválit</a>
+		<a n:href="acceptIntimImage! imgId => $image->id, galleryId => $image->galleryID, userID => $image->gallery->userID, type => 0" class="btn btn-success ajax">Schválit - intimní</a>
+		<a n:href="deleteImage! imgId => $image->id" class="btn btn-danger ajax">Smazat</a>
 		<br>
 		{var $lastImage = $image}
 	{/foreach}

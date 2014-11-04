@@ -26,6 +26,13 @@ use POSComponent\BaseProjectControl;
 use Nette\Database\Table\Selection;
 use Nette\Application\UI\Form as Frm;
 use POS\Model\StreamDao;
+use POS\Model\LikeCommentDao;
+use POS\Model\CommentImagesDao;
+use POS\Model\LikeStatusCommentDao;
+use POS\Model\CommentStatusesDao;
+use POS\Model\LikeConfessionCommentDao;
+use POS\Model\CommentConfessionsDao;
+use POS\Model\LikeConfessionDao;
 
 class BaseStream extends BaseProjectControl {
 
@@ -90,7 +97,42 @@ class BaseStream extends BaseProjectControl {
 	 */
 	public $userDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao) {
+	/**
+	 * @var \POS\Model\LikeCommentDao
+	 */
+	public $likeCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentImagesDao
+	 */
+	public $commentImagesDao;
+
+	/**
+	 * @var \POS\Model\LikeStatusCommentDao
+	 */
+	public $likeStatusCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentStatusesDao
+	 */
+	public $commentStatusesDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionCommentDao
+	 */
+	public $likeConfessionCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentConfessionsDao
+	 */
+	public $commentConfessionsDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionDao
+	 */
+	public $likeConfessionDao;
+
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, LikeConfessionDao $likeConfessionDao) {
 		parent::__construct();
 		$this->dataForStream = $data;
 		$this->userGalleryDao = $userGalleryDao;
@@ -104,6 +146,13 @@ class BaseStream extends BaseProjectControl {
 		$this->enumPositionDao = $enumPositionDao;
 		$this->userPlaceDao = $userPlaceDao;
 		$this->enumPlaceDao = $enumPlaceDao;
+		$this->likeCommentDao = $likeCommentDao;
+		$this->commentImagesDao = $commentImagesDao;
+		$this->likeStatusCommentDao = $likeStatusCommentDao;
+		$this->commentStatusesDao = $commentStatusesDao;
+		$this->commentConfessionsDao = $commentConfessionsDao;
+		$this->likeConfessionCommentDao = $likeConfessionCommentDao;
+		$this->likeConfessionDao = $likeConfessionDao;
 	}
 
 	/**
@@ -120,25 +169,6 @@ class BaseStream extends BaseProjectControl {
 		if ($mode == "profilStream") {
 			$this->renderProfileStream($templateName);
 		}
-		/* zda-li zobrazit dotaz na blíbenou polohu nebo pozici */
-
-		if ($this->presenter->user->isLoggedIn()) {
-			$placePosSession = $this->presenter->getSession('placePosSession');
-			$placePosSession->count++;
-			$this->template->placePosSession = $placePosSession;
-			$placePosSession->setExpiration(0, 'password');
-
-			$userProperty = $this->userDao->findProperties($this->presenter->user->id);
-			$place = $this->userPlaceDao->isFilled($userProperty->id);
-			$position = $this->userPositionDao->isFilled($userProperty->id);
-
-			$this->template->place = $place;
-			$this->template->position = $position;
-		}
-
-// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
-		$profileGalleryID = $this->userGalleryDao->findProfileGallery($this->presenter->user->id);
-		$this->template->profilePhoto = $this->userImageDao->getInGallery($profileGalleryID)->fetch();
 
 		$this->template->render();
 	}
@@ -191,18 +221,6 @@ class BaseStream extends BaseProjectControl {
 	}
 
 	/**
-	 * vypsani vice fb komentaru
-	 * @return \Nette\Application\UI\Multiplier
-	 */
-	protected function createComponentFbControl() {
-		$streamItems = $this->dataForStream;
-
-		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			return new \FbLikeAndCom($streamItems->offsetGet($streamItem));
-		});
-	}
-
-	/**
 	 * formulář pro nahrávání profilových fotografií
 	 * @param type $name
 	 * @return \Nette\Application\UI\Form\ProfilePhotoUploadForm
@@ -223,6 +241,14 @@ class BaseStream extends BaseProjectControl {
 		});
 	}
 
+	protected function createComponentCommentImages() {
+		$streamItems = $this->dataForStream;
+
+		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
+			return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $streamItems->offsetGet($streamItem)->userGallery->lastImage);
+		});
+	}
+
 	/**
 	 * možnost lajknutí uživatelského statusu na streamu
 	 * @return \Nette\Application\UI\Multiplier multiplier pro dynamické vykreslení více komponent
@@ -237,6 +263,30 @@ class BaseStream extends BaseProjectControl {
 
 	protected function createComponentPlacesAndPositionsForm($name) {
 		return new Frm\PlacesAndPositionsForm($this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->userDao, $this, $name);
+	}
+
+	protected function createComponentCommentStatus() {
+		$streamItems = $this->dataForStream;
+
+		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
+			return new \POSComponent\Comments\StatusComments($this->likeStatusCommentDao, $this->commentStatusesDao, $streamItems->offsetGet($streamItem)->status);
+		});
+	}
+
+	protected function createComponentCommentConfession() {
+		$streamItems = $this->dataForStream;
+
+		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
+			return new \POSComponent\Comments\ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $streamItems->offsetGet($streamItem)->confession);
+		});
+	}
+
+	protected function createComponentLikeConfession() {
+		$streamItems = $this->dataForStream;
+
+		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
+			return new \POSComponent\BaseLikes\ConfessionLikes($this->likeConfessionDao, $streamItems->offsetGet($streamItem)->confession, $this->presenter->user->id);
+		});
 	}
 
 }

@@ -22,6 +22,13 @@ use POS\Model\UserPositionDao;
 use POS\Model\EnumPositionDao;
 use POS\Model\UserPlaceDao;
 use POS\Model\EnumPlaceDao;
+use POS\Model\LikeCommentDao;
+use POS\Model\CommentImagesDao;
+use POS\Model\LikeStatusCommentDao;
+use POS\Model\CommentStatusesDao;
+use POS\Model\LikeConfessionCommentDao;
+use POS\Model\CommentConfessionsDao;
+use POS\Model\LikeConfessionDao;
 
 class UserStream extends BaseStream {
 
@@ -33,8 +40,8 @@ class UserStream extends BaseStream {
 	 */
 	public $statusDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao) {
-		parent::__construct($data, $likeStatusDao, $imageLikesDao, $userDao, $userGalleryDao, $userImageDao, $confDao, $streamDao, $userPositionDao, $enumPositionDao, $userPlaceDao, $enumPlaceDao);
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, LikeConfessionDao $likeConfessionDao) {
+		parent::__construct($data, $likeStatusDao, $imageLikesDao, $userDao, $userGalleryDao, $userImageDao, $confDao, $streamDao, $userPositionDao, $enumPositionDao, $userPlaceDao, $enumPlaceDao, $likeCommentDao, $commentImagesDao, $likeStatusCommentDao, $commentStatusesDao, $likeConfessionCommentDao, $commentConfessionsDao, $likeConfessionDao);
 		$this->streamDao = $streamDao;
 		$this->statusDao = $statusDao;
 	}
@@ -42,6 +49,28 @@ class UserStream extends BaseStream {
 	public function render() {
 		$mode = 'mainStream';
 		$templateName = "../UserStream/userStream.latte";
+		$user = $this->presenter->user;
+
+		/* zda-li zobrazit dotaz na blíbenou polohu nebo pozici */
+		if ($user->isLoggedIn()) {
+			$userProperty = $this->userDao->findProperties($user->id);
+			if ($userProperty) { // ochrana proti uživatelům, co nemají vyplněné user property
+				$placePosSession = $this->presenter->getSession('placePosSession');
+				$placePosSession->count++;
+				$this->template->placePosSession = $placePosSession;
+				$placePosSession->setExpiration(0, 'password');
+
+				$place = $this->userPlaceDao->isFilled($userProperty->id);
+				$position = $this->userPositionDao->isFilled($userProperty->id);
+
+				$this->template->place = $place;
+				$this->template->position = $position;
+			}
+		}
+
+// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
+		$profileGalleryID = $this->userGalleryDao->findProfileGallery($user->id);
+		$this->template->profilePhoto = $this->userImageDao->getInGallery($profileGalleryID)->fetch();
 
 		$this->renderBase($mode, $templateName);
 	}

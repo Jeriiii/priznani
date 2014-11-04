@@ -7,14 +7,14 @@
 namespace ProfilModule;
 
 use Nette\Application\UI\Form as Frm;
-use POSComponent\Galleries\UserGalleries\UserGalleries;
-use POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery;
+use POSComponent\Galleries\UserGalleriesThumbnails\UserGalleriesThumbnails;
+use POSComponent\Galleries\UserImagesGalleryThumbnails\UserGalleryImagesThumbnails;
 use POSComponent\Stream\ProfilStream;
 use POSComponent\UserInfo\UserInfo;
 use POSComponent\AddToList\SendFriendRequest;
 use POSComponent\AddToList\YouAreSexy;
 use POSComponent\UsersList\FriendsList;
-use POSComponent\UsersList\SexyList\IMarked;
+use POSComponent\UsersList\SexyList\MarkedFromOther;
 
 class ShowPresenter extends ProfilBasePresenter {
 
@@ -112,6 +112,60 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $enumPlaceDao;
+
+	/**
+	 * @var \POS\Model\UserAllowedDao
+	 * @inject
+	 */
+	public $userAllowedDao;
+
+	/**
+	 * @var \POS\Model\LikeCommentDao
+	 * @inject
+	 */
+	public $likeCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentImagesDao
+	 * @inject
+	 */
+	public $commentImagesDao;
+
+	/**
+	 * @var \POS\Model\LikeStatusCommentDao
+	 * @inject
+	 */
+	public $likeStatusCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentStatusesDao
+	 * @inject
+	 */
+	public $commentStatusesDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionCommentDao
+	 * @inject
+	 */
+	public $likeConfessionCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentConfessionsDao
+	 * @inject
+	 */
+	public $commentConfessionsDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionDao
+	 * @inject
+	 */
+	public $likeConfessionDao;
+
+	/**
+	 * @var \POS\Model\VerificationPhotoRequestsDao
+	 * @inject
+	 */
+	public $verificationPhotoRequestDao;
 	public $dataForStream;
 
 	/**
@@ -122,7 +176,28 @@ class ShowPresenter extends ProfilBasePresenter {
 	public function actionDefault($id) {
 
 		if (empty($id)) {
+			/* kontrola, zda se nesnaží nepřihlášený uživatel zobrazit svůj profil */
+			if (!$this->getUser()->isLoggedIn()) {
+				$this->flashMessage("Pro zobrazení vašeho profilu se nejdříve přihlašte");
+				$this->redirect(":Sign:in");
+			}
 			$id = $this->getUser()->getId();
+			if (!$this->userDao->find($id)->property) {
+				$this->flashMessage("Nejdříve si vyplňte informace o sobě.");
+				$this->redirect(":DatingRegistration:");
+			}
+		} else {
+			$user = $this->userDao->find($id);
+			if (!$user->property) {
+				$this->flashMessage("Tento profil neexistuje, nebo uživatel nemá dokončený profil.");
+				$this->redirect(":OnePage:");
+			}
+			/* kontrola, zda se nesnaží nepřihlášený uživatel zobrazit něčí profil,
+			 * časem by se dala zobrazit ještě foto uživatele, kterého chtěl zobrazit */
+			if (!$this->getUser()->isLoggedIn()) {
+				$this->flashMessage("Pro zobrazení profilu $user->user_name se nejdříve přihlašte");
+				$this->redirect(":Sign:in");
+			}
 		}
 
 		$this->userID = $id;
@@ -134,6 +209,14 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @param type $id
 	 */
 	public function renderDefault($id) {
+
+		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->user->id);
+
+		if ($verificationAsked->fetch()) {
+			$this->template->asked = TRUE;
+		} else {
+			$this->template->asked = FALSE;
+		}
 
 		$user = $this->userDao->find($this->userID);
 
@@ -193,8 +276,38 @@ class ShowPresenter extends ProfilBasePresenter {
 		$this->template->mode = "listAll";
 	}
 
+	public function renderVerification() {
+		$this->template->verificationGallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
+		$this->template->requests = $this->verificationPhotoRequestDao->findByUserID($this->user->id);
+	}
+
 	protected function createComponentUserInfo($name) {
 		return new UserInfo($this->userDao, $this, $name);
+	}
+
+	public function handleAcceptUser($userID) {
+		$gallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
+		$this->userAllowedDao->insertData($userID, $gallery->id);
+		$this->verificationPhotoRequestDao->acceptRequest($userID);
+		$this->activitiesDao->createImageActivity($this->user->id, $userID, $gallery->lastImage, "verificationPhotoAccepted");
+		if ($this->isAjax()) {
+			$this->redrawControl('requests');
+		} else {
+
+			$this->redirect("this");
+		}
+	}
+
+	public function handleRejectUser($userID) {
+		$gallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
+		$this->verificationPhotoRequestDao->rejectRequest($userID);
+		$this->activitiesDao->createImageActivity($this->user->id, $userID, $gallery->lastImage, "verificationPhotoRejected");
+		if ($this->isAjax()) {
+			$this->redrawControl('requests');
+		} else {
+
+			$this->redirect("this");
+		}
 	}
 
 	/**
@@ -202,7 +315,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \ProfilStream
 	 */
 	protected function createComponentProfilStream() {
-		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao);
+		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeConfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao);
 	}
 
 	/**
@@ -210,7 +323,10 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \POSComponent\Galleries\UserGalleries\UserGalleries
 	 */
 	public function createComponentUserGalleries() {
-		return new UserGalleries($this->userDao, $this->userGalleryDao);
+		$session = $this->getSession();
+		$section = $session->getSection('galleriesAccess');
+
+		return new UserGalleriesThumbnails($this->userDao, $this->userGalleryDao, $this->userAllowedDao, $this->friendDao, $section);
 	}
 
 	/**
@@ -219,7 +335,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	protected function createComponentUserImagesAll() {
 		$images = $this->userImageDao->getAllFromUser($this->userID);
 
-		return new UserImagesInGallery($images, $this->userDao);
+		return new UserGalleryImagesThumbnails($images, $this->userDao);
 	}
 
 	/**
@@ -267,8 +383,8 @@ class ShowPresenter extends ProfilBasePresenter {
 	}
 
 	protected function createComponentYouAreSexy($name) {
-		$userIDFrom = $this->userID;
-		$userIDTo = $this->getUser()->id;
+		$userIDFrom = $this->getUser()->id;
+		$userIDTo = $this->userID;
 
 		return new YouAreSexy($this->youAreSexyDao, $userIDFrom, $userIDTo, $this, $name);
 	}
@@ -277,8 +393,14 @@ class ShowPresenter extends ProfilBasePresenter {
 		return new FriendsList($this->friendDao, $this->userID, $this, $name);
 	}
 
-	protected function createComponentSexyListIMarked($name) {
-		return new IMarked($this->youAreSexyDao, $this->userID, $this, $name);
+	protected function createComponentSexyListMarkedFromOther($name) {
+		return new MarkedFromOther($this->youAreSexyDao, $this->userID, $this, $name);
+	}
+
+	public function handleRequestConfirmPhoto($id, $viewerID) {
+		$this->verificationPhotoRequestDao->createRequest($id, $viewerID);
+		$this->flashMessage("žádost o ověřovací fotku podána.");
+		$this->redirect("this");
 	}
 
 }

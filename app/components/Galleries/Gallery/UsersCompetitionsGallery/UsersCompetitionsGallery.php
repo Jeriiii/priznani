@@ -16,11 +16,6 @@ use POS\Model\LikeCommentDao;
 class UsersCompetitionsGallery extends BaseGallery {
 
 	/**
-	 * @var \POS\Model\UsersCompetitionsDao
-	 */
-	public $userImageDao;
-
-	/**
 	 * @var \POS\Model\ImageLikesDao
 	 */
 	public $imageLikesDao;
@@ -39,7 +34,6 @@ class UsersCompetitionsGallery extends BaseGallery {
 		parent::__construct($images, $image, $gallery, $domain, $partymode);
 		parent::setUserImageDao($userImageDao);
 		$this->image = $image;
-		$this->userImageDao = $userImageDao;
 		$this->imageLikesDao = $imageLikesDao;
 		$this->commentImagesDao = $commentImagesDao;
 		$this->likeCommentDao = $likeCommentDao;

@@ -33,9 +33,20 @@ class FriendsList extends UsersList {
 	 * Vykresli šablonu.
 	 */
 	public function render() {
-		$this->template->setFile(dirname(__FILE__) . '/friendsList.latte');
-		$this->template->friends = $this->friendDao->getList($this->userID);
-		$this->template->render();
+		$this->renderTemplate(dirname(__FILE__) . '/' . 'friendsList.latte');
+	}
+
+	/**
+	 * Uloží předaný ofsset jako parametr třídy a invaliduje snippet s příspěvky
+	 * @param int $offset O kolik příspěvků se mám při načítání dalších příspěvků z DB posunout.
+	 */
+	public function setData($offset) {
+		$friends = $this->friendDao->getList($this->userID, $this->limit, $offset);
+		$this->template->friends = $friends;
+	}
+
+	public function getSnippetName() {
+		return "friends";
 	}
 
 }
