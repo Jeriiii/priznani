@@ -1,6 +1,6 @@
-<div n:snippet="friends" data-ajax-append="true">
-{ifset $friends}
-	{foreach $friends as $friend}
+<div n:snippet="blokedUsersList" data-ajax-append="true">
+{ifset $blokedUsers}
+	{foreach $blokedUsers as $blokedUser}
 		{if $iterator->isFirst()}
 			<table>
 				<thead>
@@ -9,7 +9,7 @@
 			<tbody>
 		{/if}
 		<tr>
-			<td>{$friend->user2|showProf}</td>
+			<td>{$blokedUser->bloked|showProf}</td>
 		</tr>
 		{if $iterator->isLast()}
 			</tbody>
@@ -19,5 +19,5 @@
 {/ifset}
 </div>
 <script>
-	var loadFriendLink = {link getMoreData!};
+	var loadBlokedUserLink = {link getMoreData!};
 </script>

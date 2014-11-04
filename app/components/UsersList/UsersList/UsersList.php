@@ -14,6 +14,6 @@ namespace POSComponent\UsersList;
 
 use POSComponent\BaseProjectControl;
 
-class UsersList extends BaseProjectControl {
+abstract class UsersList extends AjaxList {
 
 }

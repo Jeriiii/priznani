@@ -7,6 +7,9 @@
 	{if $user->isLoggedIn()}
 		{if $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
 			{include #friendRequest}
+			{include #friends}
+			{include #blokedUsers}
+			{include #markedFromOther}
 			<a n:href=":Profil:Edit:default" class="btn-main btn-small" title="Změna statusu">
 			{if !empty($userData->property->statusID)}
 				Chci {$userData->property->status->name}
@@ -36,8 +39,34 @@
 
 {* žádosti o přátelství *}
 {define friendRequest}
-<a class="btn-main btn-small" title="Pratelstvi" id="friendRequestsBtn">{$countFriendRequests} Žádosti o přátelství</a>
+<a class="btn-main btn-small" title="Žádosti o přátelství" id="friendRequestsBtn">{$countFriendRequests} Žádosti o přátelství</a>
 <div id="friendRequests">
 {control friendRequest}
 </div>
+{/}
+
+{* přátelé *}
+{define friends}
+<a class="btn-main btn-small" title="Seznam přátel" id="friendsBtn">Seznam přátel</a>
+<div id="friends">
+{control friends}
+</div>
+{/}
+
+{* blokovaní uživatelé *}
+{define blokedUsers}
+<a class="btn-main btn-small" title="Blokovaní uživatelé" id="blokedUsersBtn">Blokovaní uživatelé</a>
+<div id="blokedUsers">
+{control blokedUsers}
+</div>
+{/}
+
+{* označili mě jako sexi *}
+{define markedFromOther}
+{if $countSexy != 0}
+	<a class="btn-main btn-small" title="Jsem pro ně sexi" id="markedFromOtherBtn">{$countSexy} Jsem pro ně sexi</a>
+	<div id="markedFromOther">
+	{control markedFromOther}
+	</div>
+{/if}
 {/}

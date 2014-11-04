@@ -135,4 +135,17 @@ abstract class AbstractDao extends Object {
 		$this->inTransaction = FALSE;
 	}
 
+	/**
+	 * Vrátí sekci pro KONKRÉTNÍ dao. Mezi dvěma dao jsou vždy RŮZNÉ sekce.
+	 * @param string $tableName Název tabulky
+	 * @param string $expiration Doba expirace.
+	 * @return SessionSection
+	 */
+	public function getUnicateSection($tableName, $expiration = "10 minutes") {
+		$name = self::SECTION_DB_PREFFIX . "-" . $tableName;
+		$section = $this->session->getSection($name);
+		$section->setExpiration($expiration);
+		return $section;
+	}
+
 }
