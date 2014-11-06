@@ -30,6 +30,12 @@ class ShowPresenter extends ProfilBasePresenter {
 	public $userDao;
 
 	/**
+	 * @var \POS\Model\PaymentDao
+	 * @inject
+	 */
+	public $paymentDao;
+
+	/**
 	 * @var \POS\Model\CoupleDao
 	 * @inject
 	 */
@@ -394,7 +400,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	}
 
 	protected function createComponentSexyListMarkedFromOther($name) {
-		return new MarkedFromOther($this->youAreSexyDao, $this->userID, $this, $name);
+		return new MarkedFromOther($this->paymentDao, $this->youAreSexyDao, $this->userID, $this, $name);
 	}
 
 	public function handleRequestConfirmPhoto($id, $viewerID) {
