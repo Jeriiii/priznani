@@ -49,8 +49,4 @@ class DatingRegistrationBaseSomebodyForm extends DatingRegistrationBaseForm {
 			->addRule(Form::FILLED, "Vyberte Vaše vzdělání");
 	}
 
-	public function submitted($form) {
-		$this->presenter = $this->getPresenter();
-	}
-
 }

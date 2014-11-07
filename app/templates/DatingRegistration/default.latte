@@ -2,7 +2,9 @@
 <h4>Zaregistrujte se.</h4><br />
 
 {form firstRegForm}
-
+	<ul class="error" n:if="$form->hasErrors()">
+			<li n:foreach="$form->errors as $error">{$error}</li>
+	</ul>
 	<table>
 		<tr>
 			<td>

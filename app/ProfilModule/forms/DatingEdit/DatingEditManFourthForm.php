@@ -2,9 +2,7 @@
 
 namespace Nette\Application\UI\Form;
 
-use Nette\Application\UI\Form,
-	Nette\Security as NS,
-	Nette\ComponentModel\IContainer,
+use Nette\ComponentModel\IContainer,
 	POS\Model\UserDao,
 	POS\Model\CoupleDao;
 
@@ -65,7 +63,7 @@ class DatingEditManFourthForm extends DatingRegistrationManFourthForm {
 		$values->age = $this->getAge($values);
 		$values->vigor = $this->getVigor($values->age);
 
-		$this->coupleDao->update($this->user->coupleID, array($values));
+		$this->coupleDao->update($this->user->coupleID, $values);
 		$presenter->flashMessage('Změna osobních údajů vašeho partnera byla úspěšná');
 		$presenter->redirect("this");
 	}

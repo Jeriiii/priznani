@@ -288,7 +288,8 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'mobile/responsive-menu.less',
 			'chat/jquery.ui.chatbox.css',
 			'chat/default.less',
-			'chat/jquery-ui.less'
+			'chat/jquery-ui.less',
+			'form.css'
 		));
 
 		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
@@ -338,7 +339,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'../forms/netteForms.js',
 			'../ajaxObserver/core.js',
 			'../ajaxBox/ajaxBox.js',
-			'../features/jquery.slimscroll.js'
+			'../features/jquery.slimscroll.js',
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
