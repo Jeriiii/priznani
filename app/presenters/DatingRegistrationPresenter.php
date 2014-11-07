@@ -104,20 +104,23 @@ class DatingRegistrationPresenter extends BasePresenter {
 		$registrationDataUser = $this->getRegSession();
 		$registrationDataCouple = $this->getRegSessionForCouple();
 
-		if ($registrationDataUser->type == 1) {
+		if ($registrationDataUser->type == UserDao::PROPERTY_MAN) {
 			$this->setView("thirdRegManForm");
-		} else if ($registrationDataUser->type == 2) {
+		} else if ($registrationDataUser->type == UserDao::PROPERTY_WOMAN) {
 			$this->setView("thirdRegWomanForm");
-		} else if ($registrationDataUser->type == 6) {
+		} else if ($registrationDataUser->type == UserDao::PROPERTY_GROUP) {
 			$this->redirect("DatingRegistration:register");
-		} else if ($registrationDataUser->type == 5) {
-			$registrationDataCouple->type = 2;
+		} else if ($registrationDataUser->type == UserDao::PROPERTY_COUPLE_WOMAN) {
+			$registrationDataCouple->type = UserDao::PROPERTY_WOMAN;
 			$this->setView("thirdRegWomanForm");
-		} else if ($registrationDataUser->type == 3) {
-			$registrationDataCouple->type = 1;
+			$this->template->partnerLabel = "Partnerka";
+		} else if ($registrationDataUser->type == UserDao::PROPERTY_COUPLE) {
+			$registrationDataCouple->type = UserDao::PROPERTY_MAN;
 			$this->setView("thirdRegWomanForm");
-		} else if ($registrationDataUser->type == 4) {
-			$registrationDataCouple->type = 1;
+			$this->template->partnerLabel = "Partnerka";
+		} else if ($registrationDataUser->type == UserDao::PROPERTY_COUPLE_MAN) {
+			$registrationDataCouple->type = UserDao::PROPERTY_MAN;
+			$this->template->partnerLabel = "Partner";
 			$this->setView("thirdRegManForm");
 		}
 	}

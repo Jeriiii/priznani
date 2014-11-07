@@ -29,6 +29,7 @@ abstract class UserBaseDao extends AbstractDao {
 	const COLUMN_GRADUATION = "graduation";
 	const COLUMN_BRA_SIZE = "bra_size";
 	const COLUMN_HAIR_COLOUR = "hair_colour";
+	const COLUMN_VIGOR = "vigor";
 
 	/* Druh uživatele */
 	const PROPERTY_MAN = 1;
@@ -37,6 +38,20 @@ abstract class UserBaseDao extends AbstractDao {
 	const PROPERTY_COUPLE_MAN = 4;
 	const PROPERTY_COUPLE_WOMAN = 5;
 	const PROPERTY_GROUP = 6;
+
+	/* Znamení uživatele */
+	const VIGOR_VODNAR = 1;
+	const VIGOR_RYBY = 2;
+	const VIGOR_BERNA = 3;
+	const VIGOR_BYK = 4;
+	const VIGOR_BLIZENEC = 5;
+	const VIGOR_RAK = 6;
+	const VIGOR_LEV = 7;
+	const VIGOR_PANNA = 8;
+	const VIGOR_VAHY = 9;
+	const VIGOR_STIR = 10;
+	const VIGOR_STRELEC = 11;
+	const VIGOR_KOZOROH = 12;
 
 	/**
 	 * vrátí specifické věci pro pohlaví
@@ -167,6 +182,7 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	protected function getBaseUserProperty($data) {
 		$property[UserPropertyDao::COLUMN_AGE] = $data->age;
+		$property[UserPropertyDao::COLUMN_VIGOR] = $data->vigor;
 		$property[UserPropertyDao::COLUMN_MARITAL_STATE] = $data->marital_state;
 		$property[UserPropertyDao::COLUMN_TYPE] = $data->type;
 		$property[UserPropertyDao::COLUMN_ORIENTATION] = $data->orientation;

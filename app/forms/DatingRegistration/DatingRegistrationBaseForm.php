@@ -4,6 +4,7 @@ namespace Nette\Application\UI\Form;
 
 use Nette\DateTime;
 use Nette\Application\UI\Form;
+use POS\Model\UserDao;
 
 /**
  * Základní formulář pro celou registraci.
@@ -58,6 +59,36 @@ class DatingRegistrationBaseForm extends BaseForm {
 		unset($values["month"]);
 		unset($values["day"]);
 		return $age;
+	}
+
+	/**
+	 * Vrátí ve kterém se uživatel narodil znamení.
+	 * @param DateTime $age
+	 */
+	protected function getVigor($age) {
+		$age = new DateTime($age);
+		$bornMonth = intval($age->format("m"));
+		$bornDay = intval($age->format("d"));
+
+		$vigors[] = array("dayFrom" => 21, "dayTo" => 20, "monthFrom" => 1, "monthTo" => 2, "name" => UserDao::VIGOR_VODNAR);
+		$vigors[] = array("dayFrom" => 21, "dayTo" => 20, "monthFrom" => 2, "monthTo" => 3, "name" => UserDao::VIGOR_RYBY);
+		$vigors[] = array("dayFrom" => 21, "dayTo" => 20, "monthFrom" => 3, "monthTo" => 4, "name" => UserDao::VIGOR_BERNA);
+		$vigors[] = array("dayFrom" => 21, "dayTo" => 21, "monthFrom" => 4, "monthTo" => 5, "name" => UserDao::VIGOR_BYK);
+		$vigors[] = array("dayFrom" => 22, "dayTo" => 21, "monthFrom" => 5, "monthTo" => 6, "name" => UserDao::VIGOR_BLIZENEC);
+		$vigors[] = array("dayFrom" => 22, "dayTo" => 22, "monthFrom" => 6, "monthTo" => 7, "name" => UserDao::VIGOR_RAK);
+		$vigors[] = array("dayFrom" => 23, "dayTo" => 22, "monthFrom" => 7, "monthTo" => 8, "name" => UserDao::VIGOR_LEV);
+		$vigors[] = array("dayFrom" => 23, "dayTo" => 22, "monthFrom" => 8, "monthTo" => 9, "name" => UserDao::VIGOR_PANNA);
+		$vigors[] = array("dayFrom" => 23, "dayTo" => 23, "monthFrom" => 9, "monthTo" => 10, "name" => UserDao::VIGOR_VAHY);
+		$vigors[] = array("dayFrom" => 24, "dayTo" => 22, "monthFrom" => 10, "monthTo" => 11, "name" => UserDao::VIGOR_STIR);
+		$vigors[] = array("dayFrom" => 23, "dayTo" => 21, "monthFrom" => 11, "monthTo" => 12, "name" => UserDao::VIGOR_STRELEC);
+		$vigors[] = array("dayFrom" => 22, "dayTo" => 20, "monthFrom" => 12, "monthTo" => 1, "name" => UserDao::VIGOR_KOZOROH);
+
+		foreach ($vigors as $vigor) {
+			if (($bornDay >= $vigor["dayFrom"] && $bornMonth >= $vigor["monthFrom"] ) ||
+				($bornDay <= $vigor["dayTo"] && $bornMonth <= $vigor["monthTo"])) {
+				return $vigor["name"];
+			}
+		}
 	}
 
 }

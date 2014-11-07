@@ -5,8 +5,8 @@ namespace Nette\Application\UI\Form;
 use Nette\Application\UI\Form,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer,
-        POS\Model\UserDao,
-        POS\Model\UserPropertyDao;
+	POS\Model\UserDao,
+	POS\Model\UserPropertyDao;
 
 class DatingEditManThirdForm extends DatingRegistrationBaseManForm {
 
@@ -14,7 +14,8 @@ class DatingEditManThirdForm extends DatingRegistrationBaseManForm {
 	 * @var \POS\Model\UserDao
 	 */
 	public $userDao;
-        /**
+
+	/**
 	 * @var \POS\Model\UserPropertyDao
 	 */
 	public $userPropertyDao;
@@ -26,8 +27,8 @@ class DatingEditManThirdForm extends DatingRegistrationBaseManForm {
 		parent::__construct($userDao, $parent, $name);
 
 		$presenter = $this->getPresenter();
-                $this->userDao = $userDao;
-                $this->userPropertyDao = $userPropertyDao;
+		$this->userDao = $userDao;
+		$this->userPropertyDao = $userPropertyDao;
 		$this->id_user = $presenter->getUser()->getId();
 		$userInfo = $userDao->find($this->id_user);
 
@@ -56,14 +57,14 @@ class DatingEditManThirdForm extends DatingRegistrationBaseManForm {
 
 		$presenter = $this->getPresenter();
 		$this->id_user = $presenter->getUser()->getId();
-                
-                $this->record = $this->userDao->find($this->id_user);
+
+		$this->record = $this->userDao->find($this->id_user);
 
 		if (!$this->record) {
 			throw new BadRequestException;
 		}
 
-                $this->userPropertyDao->update($this->record->propertyID, array('marital_state' => $values->marital_state, 'orientation' => $values->orientation, 'tallness' => $values->tallness, 'shape' => $values->shape, 'smoke' => $values->smoke, 'drink' => $values->drink, 'graduation' => $values->graduation, 'penis_length' => $values->penis_length, 'penis_width' => $values->penis_width));
+		$this->userPropertyDao->update($this->record->propertyID, array('marital_state' => $values->marital_state, 'orientation' => $values->orientation, 'tallness' => $values->tallness, 'shape' => $values->shape, 'smoke' => $values->smoke, 'drink' => $values->drink, 'graduation' => $values->graduation, 'penis_length' => $values->penis_length, 'penis_width' => $values->penis_width));
 		$presenter->flashMessage('Změna osobních údajů byla úspěšná');
 		$presenter->redirect("this");
 	}

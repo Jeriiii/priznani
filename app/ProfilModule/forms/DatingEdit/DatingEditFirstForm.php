@@ -49,6 +49,7 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 			throw new BadRequestException;
 		}
 		$values->age = $this->getAge($values);
+		$values->vigor = $this->getVigor($values->age);
 
 		$this->userPropertyDao->update($user->propertyID, $values);
 		$presenter->redirect('this');

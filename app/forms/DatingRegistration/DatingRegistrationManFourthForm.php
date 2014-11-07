@@ -18,7 +18,7 @@ class DatingRegistrationManFourthForm extends DatingRegistrationBaseManForm {
 	/** @var \Nette\Http\SessionSection */
 	private $regSession;
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, SessionSection $regSession = NULL) {
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, $regSession = NULL) {
 		parent::__construct($userDao, $parent, $name);
 
 		$this->regSession = $regSession;
@@ -27,6 +27,8 @@ class DatingRegistrationManFourthForm extends DatingRegistrationBaseManForm {
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->addSubmit('send', 'Dokončit registraci')
 			->setAttribute("class", "btn btn-success");
+
+
 
 		return $this;
 	}
@@ -37,6 +39,7 @@ class DatingRegistrationManFourthForm extends DatingRegistrationBaseManForm {
 		$values = $form->values;
 
 		$this->regSession->age = $this->getAge($values);
+		$this->regSession->vigor = $this->getVigor($this->regSession->age);
 		$this->regSession->marital_state = $values->marital_state;
 		$this->regSession->orientation = $values->orientation;
 		$this->regSession->tallness = $values->tallness;

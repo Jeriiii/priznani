@@ -60,6 +60,7 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 
 		$this->regSession->role = 'unconfirmed_user';
 		$this->regSession->age = $this->getAge($values);
+		$this->regSession->vigor = $this->getVigor($this->regSession->age);
 		$this->regSession->type = $values->type;
 
 		foreach ($this->userDao->getArrWantToMeet() as $key => $want) {

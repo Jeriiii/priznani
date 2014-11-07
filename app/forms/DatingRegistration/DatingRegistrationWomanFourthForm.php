@@ -18,7 +18,7 @@ class DatingRegistrationWomanFourthForm extends DatingRegistrationBaseWomanForm 
 	/** @var \Nette\Http\SessionSection */
 	private $regSession;
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, SessionSection $regSession = NULL) {
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, $regSession = NULL) {
 		parent::__construct($userDao, $parent, $name);
 
 		$this->regSession = $regSession;
@@ -36,6 +36,7 @@ class DatingRegistrationWomanFourthForm extends DatingRegistrationBaseWomanForm 
 		$values = $form->values;
 
 		$this->regSession->age = $this->getAge($values);
+		$this->regSession->vigor = $this->getVigor($this->regSession->age);
 		$this->regSession->marital_state = $values->marital_state;
 		$this->regSession->orientation = $values->orientation;
 		$this->regSession->tallness = $values->tallness;
