@@ -31,8 +31,4 @@ class DatingRegistrationBaseManForm extends DatingRegistrationBaseSomebodyForm {
 		$this->addSelect('penis_width', 'Šířka penisu:', $users->getUserPenisWidthOption());
 	}
 
-	public function submitted($form) {
-		parent::submitted($form);
-	}
-
 }

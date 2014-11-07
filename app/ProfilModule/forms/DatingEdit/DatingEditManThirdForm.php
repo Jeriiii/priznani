@@ -2,11 +2,10 @@
 
 namespace Nette\Application\UI\Form;
 
-use Nette\Application\UI\Form,
-	Nette\Security as NS,
-	Nette\ComponentModel\IContainer,
+use Nette\ComponentModel\IContainer,
 	POS\Model\UserDao,
 	POS\Model\UserPropertyDao;
+use Nette\Database\Table\ActiveRow;
 
 class DatingEditManThirdForm extends DatingRegistrationBaseManForm {
 
@@ -20,7 +19,9 @@ class DatingEditManThirdForm extends DatingRegistrationBaseManForm {
 	 */
 	public $userPropertyDao;
 	private $id_user;
-	private $record;
+
+	/** @var ActiveRow */
+	private $user;
 
 	public function __construct(UserPropertyDao $userPropertyDao, UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
 		$this->addGroup('Osobní údaje');
@@ -30,18 +31,19 @@ class DatingEditManThirdForm extends DatingRegistrationBaseManForm {
 		$this->userDao = $userDao;
 		$this->userPropertyDao = $userPropertyDao;
 		$this->id_user = $presenter->getUser()->getId();
-		$userInfo = $userDao->find($this->id_user);
+		$this->user = $userDao->find($this->id_user);
+		$property = $property;
 
 		$this->setDefaults(array(
-			'marital_state' => $userInfo->property->marital_state,
-			'orientation' => $userInfo->property->orientation,
-			'tallness' => $userInfo->property->tallness,
-			'shape' => $userInfo->property->shape,
-			'smoke' => $userInfo->property->smoke,
-			'drink' => $userInfo->property->drink,
-			'graduation' => $userInfo->property->graduation,
-			'penis_length' => $userInfo->property->penis_length,
-			'penis_width' => $userInfo->property->penis_width,
+			'marital_state' => $property->marital_state,
+			'orientation' => $property->orientation,
+			'tallness' => $property->tallness,
+			'shape' => $property->shape,
+			'smoke' => $property->smoke,
+			'drink' => $property->drink,
+			'graduation' => $property->graduation,
+			'penis_length' => $property->penis_length,
+			'penis_width' => $property->penis_width,
 		));
 
 		$this->onSuccess[] = callback($this, 'submitted');
@@ -52,19 +54,10 @@ class DatingEditManThirdForm extends DatingRegistrationBaseManForm {
 	}
 
 	public function submitted($form) {
-		parent::submitted($form);
 		$values = $form->values;
-
 		$presenter = $this->getPresenter();
-		$this->id_user = $presenter->getUser()->getId();
 
-		$this->record = $this->userDao->find($this->id_user);
-
-		if (!$this->record) {
-			throw new BadRequestException;
-		}
-
-		$this->userPropertyDao->update($this->record->propertyID, array('marital_state' => $values->marital_state, 'orientation' => $values->orientation, 'tallness' => $values->tallness, 'shape' => $values->shape, 'smoke' => $values->smoke, 'drink' => $values->drink, 'graduation' => $values->graduation, 'penis_length' => $values->penis_length, 'penis_width' => $values->penis_width));
+		$this->userPropertyDao->update($this->user->propertyID, $values);
 		$presenter->flashMessage('Změna osobních údajů byla úspěšná');
 		$presenter->redirect("this");
 	}

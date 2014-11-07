@@ -32,22 +32,15 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 
 		$gallery = $this->userGalleryDao->find($galleryID);
 
-		$this->genderCheckboxes();
-
 		$this->setDefaults(array(
 			"name" => $gallery->name,
 			"description" => $gallery->description,
-			"man" => $gallery->man,
-			"women" => $gallery->women,
-			"couple" => $gallery->couple,
-			"more" => $gallery->more,
-			"private" => $gallery->private,
+			"private" => $gallery->private
 		));
 
 		$this->addSubmit('send', 'Změnit')->setAttribute('class', 'btn-main medium');
 
 		$this->setBootstrapRender();
-		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

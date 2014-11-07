@@ -3,7 +3,6 @@
 namespace Nette\Application\UI\Form;
 
 use Nette\Application\UI\Form,
-	Nette\Security as NS,
 	Nette\ComponentModel\IContainer,
 	POS\Model\UserDao,
 	POS\Model\UserPropertyDao;
@@ -65,7 +64,9 @@ class DatingEditSecondForm extends BaseForm {
 		$values = $form->values;
 		$presenter = $this->getPresenter();
 
-		$this->userPropertyDao->update($this->user->propertyID, array('first_sentence' => $values->first_sentence, 'about_me' => $values->about_me));
+		unset($values["email"]);
+		unset($values["user_name"]);
+		$this->userPropertyDao->update($this->user->propertyID, $values);
 		$presenter->flashMessage('Změna identifikačních údajů byla úspěšná');
 		$presenter->redirect("this");
 	}
