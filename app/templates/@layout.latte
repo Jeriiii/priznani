@@ -119,7 +119,7 @@
 		</div>
 		<div id="usermenu">
 			{ifset $identity}
-				<strong n:ifset="$identity->user_name" id="droplink">{$identity->user_name}</strong>
+				<strong n:ifset="$identity->user_name" id="droplink"></strong>
 			{else}
 				<a href="#" id="droplink">registrace/přihlášení</a>
 			{/ifset}

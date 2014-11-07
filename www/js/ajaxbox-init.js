@@ -45,5 +45,9 @@ $(document).ready(function () {
 		observerResponseHandle: handleNumberResponse//použití funkce v initu, která vezme výsledek dotazu na observer a zobrazí jej u tlačítka, pokud je nenulový
 	});
 /////////////////////////
+	$('#dropmenu').ajaxBox({
+		buttonSelector: '#droplink',
+		theme: "posAjaxBox ajaxBoxMenu"
+	});
 
 });

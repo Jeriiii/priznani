@@ -113,7 +113,10 @@
 		data.wrap('<div class="ajaxBoxContent"></div>');//zabalení obsahu
 		data.wrap('<div class="ajaxBoxData"></div>');//zabalení obsahu
 		var box = data.parent().parent().parent();//současný selektor okénka
-		box.find('.ajaxBoxContent').append('<span class="loadingGif clear loadIfVisible"></span>');//gif na konci
+		box.find('.ajaxBoxContent').append('<span class="loadingGif clear"></span>');//gif na konci
+		if (!opts.loadUrl) {
+			box.find('.loadingGif').css('display', 'none');
+		}
 		box.prepend('<div class="ajaxBoxHeader">' + opts.headerHtml + '</div>');//přidání šipečky
 		box.prepend('<div class="arrow-up"></div>');//přidání šipečky
 		box.append('<div class="window-info">' + opts.defaultMessage + '</div>');//informační boxík okénka (dole)

@@ -53,7 +53,8 @@ class UserStream extends BaseStream {
 
 		/* zda-li zobrazit dotaz na blíbenou polohu nebo pozici */
 		if ($user->isLoggedIn()) {
-			$userProperty = $this->userDao->findProperties($user->id);
+			$userData = $this->userDao->find($user->id);
+			$userProperty = $userData->property;
 			if ($userProperty) { // ochrana proti uživatelům, co nemají vyplněné user property
 				$placePosSession = $this->presenter->getSession('placePosSession');
 				$placePosSession->count++;
@@ -66,6 +67,7 @@ class UserStream extends BaseStream {
 				$this->template->place = $place;
 				$this->template->position = $position;
 			}
+			$this->template->userData = $userData;
 		}
 
 // Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář

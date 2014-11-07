@@ -21,6 +21,7 @@ class ShowProfHelper {
 	const NAME = "showProf";
 	const NAME_MIN = "showProfMin";
 	const NAME_MIN_DIV = "showProfMinDiv";
+	const NAME_DIV = "showProfDiv";
 
 	/* typy nastavení */
 	const TYPE_EL_SPAN = "span";
@@ -68,13 +69,15 @@ class ShowProfHelper {
 
 		/* přidá jméno */
 		if (!$min) {
-			$elName = Html::el($el, $user->user_name);
+			$elName = Html::el($el, strtoupper($user->user_name));
+			$elName->addAttributes(array('class' => 'generatedTitle'));
 			$elLink->add($elName);
 		}
 
-
-
-		return $elLink;
+		/* element, co obalí profil */
+		$elContainer = Html::el($el, array('class' => 'generatedProfile'));
+		$elContainer->add($elLink);
+		return $elContainer;
 	}
 
 	/**
@@ -84,7 +87,7 @@ class ShowProfHelper {
 	 * @return \Nette\Utils\Html
 	 */
 	private function createPhoto($el, $user) {
-		$elPhoto = Html::el($el, array('class' => 'generatedProfile'));
+		$elPhoto = Html::el($el);
 		$img = Html::el("img");
 
 		if (isset($user->profilFotoID)) {

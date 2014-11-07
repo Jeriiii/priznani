@@ -53,6 +53,9 @@ class HelperRegistrator {
 		$template->registerHelper(ShowProfHelper::NAME_MIN_DIV, function($user, $href = null) use ($showProfHelper) {
 			return $showProfHelper->showProf($user, $href, TRUE, "div");
 		});
+		$template->registerHelper(ShowProfHelper::NAME_DIV, function($user, $href = null) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, FALSE, "div");
+		});
 	}
 
 	/**

@@ -32,6 +32,9 @@ class BaseForm extends Form {
 	/** @var string Třída inputu */
 	private $inputClass = "controls";
 
+	/** @var string Element do kterého bude vložen input */
+	private $inputContainer = "div";
+
 	/** @var boolean TRUE = Ajaxové zpracování formuláře */
 	private $ajax = FALSE;
 
@@ -67,7 +70,7 @@ class BaseForm extends Form {
 		$renderer->wrappers['controls']['container'] = NULL;
 		$renderer->wrappers['pair']['container'] = 'div class=form-group';
 		$renderer->wrappers['pair']['.error'] = 'has-error';
-		$renderer->wrappers['control']['container'] = 'div class="' . $this->inputClass . '"';
+		$renderer->wrappers['control']['container'] = $this->getControlContainer();
 		$renderer->wrappers['label']['class'] = '';
 
 		// make form and controls compatible with Twitter Bootstrap
@@ -97,6 +100,10 @@ class BaseForm extends Form {
 		$this->formClass = "form-inline";
 	}
 
+	public function setInputClass($name) {
+		$this->inputClass = $name;
+	}
+
 	public function setBFormToHorizontal($lableCCols = "col-sm-2", $inputCCols = "col-sm-5") {
 		$this->lableClass = $this->lableClass . $lableCCols . " " . "control-label";
 		$this->inputClass = $this->inputClass . $inputCCols;
@@ -109,6 +116,16 @@ class BaseForm extends Form {
 	 */
 	protected function getPrimaryBtwClass() {
 		return $this->primaryBtnClass;
+	}
+
+	protected function setInputContainer($inputContainer) {
+		$this->inputContainer = $inputContainer;
+	}
+
+	private function getControlContainer() {
+		$class = empty($this->inputClass) ? "" : 'class="' . $this->inputClass . '"';
+		$inputContainer = empty($this->inputContainer) ? "" : $this->inputContainer . ' ' . $class;
+		return $inputContainer;
 	}
 
 }

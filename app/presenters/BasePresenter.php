@@ -330,7 +330,6 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'order.js',
 			'fbBase.js',
 			'leftMenu.js',
-			'user-layout-menu.js',
 			'../nette.ajax.js',
 			'initAjax.js',
 			'../mobile/responsive-menu.js',
