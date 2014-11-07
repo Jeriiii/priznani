@@ -108,6 +108,34 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Hledá uživatele v blízkosti bydliště
+	 * @param \Nette\Database\Table\ActiveRow $me Uživatel
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getNearMe(ActiveRow $me) {
+		$sel = $this->getTable();
+
+		$sel->where(self::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_CITY_ID, $me->property->cityID);
+
+		/* pokud je jich málo ve městě */
+		if ($sel->count() < 30) {
+			$sel = $this->getTable();
+			$sel->where(self::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_DISTRICT_ID, $me->property->districtID);
+		}
+
+		/* pokud je jich málo v okrese */
+		if ($sel->count() < 30) {
+			$sel = $this->getTable();
+			$sel->where(self::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_REGION_ID, $me->property->regionID);
+		}
+
+		/* vyřadím uživatele který hledá z výsledků */
+		$sel->where(self::TABLE_NAME . "." . self::COLUMN_ID . " != ?", $me->id);
+
+		return $sel;
+	}
+
+	/**
 	 * Vyhledá užigvatele podle zadaných kriterií
 	 * @param array $data pole dat, podle kterých se provede hledání
 	 * @return Nette\Database\Table\Selection
@@ -120,20 +148,28 @@ class UserDao extends UserBaseDao {
 		if (empty($data)) {
 			return $sel;
 		}
+		if (!empty($data['penis_length_from'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length >= ?", $data['penis_length_from']);
+		}
+		if (!empty($data['penis_length_to'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length <= ?", $data['penis_length_to']);
+		}
 		if (!empty($data['age_from'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".age <= ?", $timeOne->modify('-' . $data['age_from'] . 'years')->format('Y-12-31'));
 		}
 		if (!empty($data['age_to'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".age >= ?", $timeTwo->modify('-' . $data['age_to'] . 'years')->format('Y-1-1'));
 		}
+		if (!empty($data['tallness_from'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".tallness >= ?", $data['tallness_from']);
+		}
+		if (!empty($data['tallness_to'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".tallness <= ?", $data['tallness_to']);
+		}
+
+
 		if (!empty($data['sex'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".type", $data['sex']);
-		}
-		if (!empty($data['penis_length_from'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length >= ?", $data['penis_length_from']);
-		}
-		if (!empty($data['penis_length_to'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length <= ?", $data['penis_length_to']);
 		}
 		if (!empty($data['penis_width'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_width", $data['penis_width']);
@@ -149,12 +185,6 @@ class UserDao extends UserBaseDao {
 		}
 		if (!empty($data['hair_color'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".hair_colour", $data['hair_color']);
-		}
-		if (!empty($data['tallness_from'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".tallness >= ?", $data['tallness_from']);
-		}
-		if (!empty($data['tallness_to'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".tallness <= ?", $data['tallness_to']);
 		}
 		if (!empty($data['drink'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".drink", $data['drink']);

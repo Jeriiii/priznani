@@ -92,25 +92,25 @@ class AdvancedForm extends BaseForm {
 		$this->enumSmokeDao = $enumSmokeDao;
 		$this->enumTallnessDao = $enumTallnessDao;
 
-//políčka s věkem
+		/* políčka s věkem */
 		$this->addAgeFields();
 
-//políčka o pohlaví
+		/* políčka o pohlaví */
 		$this->addSexFields();
 
-//políčka o údajích o tělu
+		/* políčka o údajích o tělu */
 		$this->addBodyFields();
 
-//políčka s návyky
+		/* políčka s návyky */
 		$this->addHabitsFields();
 
-//obecná políčka
+		/* obecná políčka */
 		$this->addGeneralFields();
 
-//políčka o zájmu
+		/* políčka o zájmu */
 		$this->addIntrestedInFields();
 
-//políčka se sexuálníma praktikama
+		/* políčka se sexuálníma praktikama */
 		$this->addPracticsFields();
 
 		$this->manageSubmittedFormValues();
