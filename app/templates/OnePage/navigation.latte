@@ -2,22 +2,25 @@
 {block navigation}
 <nav id="stream-menu">
 	{include #profile}
-	<a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>
-	<a n:href=":Profil:Galleries:userGalleryNew" class="btn-main btn-small" title="Profil">Vytvořit galerii</a>
+	<div class="usermenu">
+	<a n:href=":Profil:Galleries:default" title="Editovat profil">MOJE GALERIE</a>
+	<a n:href=":Profil:Galleries:userGalleryNew" class="add-gallery" title="Profil">VYTVOŘIT GALERII</a>
+
 	{if $user->isLoggedIn()}
 		{if $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
 			{include #friendRequest}
-			<a n:href=":Profil:Edit:default" class="btn-main btn-small" title="Změna statusu">
+			<a n:href=":Profil:Edit:default" title="Změna statusu">
 			{if !empty($userData->property->statusID)}
 				Chci {$userData->property->status->name}
 			{else}
-				Nastavit status
+				NASTAVIT STATUS
 			{/if}
 			</a>
 		{else}
 			<a n:href="DatingRegistration:" class="btn-main btn-small">Doplnit info o sobě</a>
 		{/if}
 	{/if}
+	</div>
 	{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
 	<div class="clear"></div>
 </nav>
@@ -26,18 +29,28 @@
 {* profilový obrázek, jméno uživatele a tlačítko editovat *}
 {define profile}
 {if $user->isLoggedIn() && $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
-	{$userData|showProfMin}
-	<b><a n:href=":Profil:Show:default">{$userData->user_name}</a></b>
-	<a n:href=":Profil:Edit:default" title="Editovat profil">Editovat profil</a>
-	<a n:href=":Profil:Show:default" class="btn-main btn-small" title="Muj profil">Můj profil</a>
-	<a n:href=":Profil:Show:verification" class="btn-main btn-small" title="Editovat profil">{$countVerificationRequests} Žádostí o ověření</a>
+	<div class="user-profile-picture">
+	{$userData|showProfMinDiv}
+	</div>
+	<b><a n:href=":Profil:Show:default" class="big-user-name">{$userData->user_name|upper}</a></b>
+	<span class="first-sentence">{$userData->property->first_sentence}</span>
+
+	<div class="delimiter top"></div>
+	<div class="usermenu">
+	<a n:href=":Profil:Edit:default" class="edit" title="Editovat profil">EDITOVAT PROFIL</a>
+	<a n:href=":Profil:Show:default" class="profile" title="Muj profil">MŮJ PROFIL</a>
+	<a n:href=":Profil:Show:verification" title="Editovat profil">{$countVerificationRequests} ŽÁDOSTÍ O OVĚŘENÍ</a>
+	</div>
 {/if}
 {/}
 
 {* žádosti o přátelství *}
+
 {define friendRequest}
-<a class="btn-main btn-small" title="Pratelstvi" id="friendRequestsBtn">{$countFriendRequests} Žádosti o přátelství</a>
-<div id="friendRequests">
-{control friendRequest}
+<div class="usermenu red">
+	<a title="Pratelstvi" id="friendRequestsBtn">{$countFriendRequests} ŽÁDOSTI O PŘÁTELSTVÍ</a>
+	<div id="friendRequests">
+	{control friendRequest}
+	</div>
 </div>
 {/}
