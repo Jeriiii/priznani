@@ -6,6 +6,15 @@
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
 @unreaded-color: #fff3f5;
+@contact-item-height: 40px;/* výška položky kontaktů */
+@contact-item-vertical-padding: 4px;
+@online-indicator-size: 12px;
+/* interface */
+@chat-color: #2c2c2d;
+@text-color: #aeaeae;
+/**/
+
+
 
 #chat-container{
 	#chat-header{
@@ -25,8 +34,49 @@
 		}
 		
 		#chat-interface{
-			background: #2c2c2d;
+			background: @chat-color;
 			height: 100%;
+		}
+		
+		#chat-search{
+			
+			height: 30px;
+			
+			.chat-message-icon{
+				display: block;
+				float: left;
+				padding: 0;
+				margin: 0;
+				width: 16%;
+				height: 30px;
+				background: url(../../images/icons/chat/chat-messages.png) center center transparent no-repeat;
+			}
+			
+			.chat-search-icon{
+				display: block;
+				float: left;
+				padding: 0;
+				margin: 0;
+				width: 16%;
+				height: 30px;
+				background: url(../../images/icons/chat/chat-search.png) center center transparent no-repeat;
+				border: 0;
+				border-bottom: 1px solid #737373;
+			}
+			
+			#chat-search-input{
+				width: 64%;
+				display: block;
+				float: left;
+				height: 24px;
+				padding: 3px 2%;
+				background: @chat-color;
+				color: @text-color;
+				border: 0;
+				border-bottom: 1px solid #737373;
+				
+			}
+			
 		}
 		
 	#contacts{
@@ -36,27 +86,43 @@
 
 		li{
 				cursor: pointer;
-				width: 100%;
-				height: 50px;
-				padding: 8px 4%;
+				position: relative;
+				height: @contact-item-height;
+				padding: @contact-item-vertical-padding 4%;
 				margin: 2px 1%;
-				color: #aeaeae;
-				text-shadow: 0 0 1px #FFF;
+				color: @text-color;
+				
+				&:hover{
+					background: lighten(@chat-color, 10%);
+				}
 				
 				.generatedProfile{
 					
 					img{
 						display: inline-block;
-						height: 50px;
-						width: 50px;
+						height: @contact-item-height;
+						width: @contact-item-height;
 					}
 				}
 				.chat-username{
 						display: inline-block;
 						padding: 0 6px;
-						line-height: 50px;
+						margin-right: 6px + @online-indicator-size;
+						line-height: @contact-item-height;
 						vertical-align: top;
 						font-family: 'Source Sans Pro';
+				}
+				
+				
+				.online-indicator{
+					width: @online-indicator-size;
+					height: @online-indicator-size;
+					display: block;
+					border-radius: 50%;
+					.posgradient();
+					position: absolute;
+					top: (@contact-item-height - @online-indicator-size) / 2 + @contact-item-vertical-padding;
+					right: 3px + @online-indicator-size;
 				}
 				
 			}
