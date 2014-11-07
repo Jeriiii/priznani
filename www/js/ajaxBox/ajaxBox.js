@@ -18,7 +18,6 @@
 	$.fn.ajaxBox = function (options) {
 		var boxopts = $.extend({}, $.fn.ajaxBox.defaults, options);
 
-
 		return this.each(function () {
 			boxopts = applyModulesStarts(boxopts);
 			//obalení okénkem a potřebnými elementy
@@ -35,6 +34,38 @@
 			applyModulesEnds(boxopts);
 		});
 
+	};
+	
+	/**
+	 * Nastaví pozici okénka dle nastavení
+	 * @param {type} opts parametry
+	 * @param {type} box okénko
+	 * @param {type} button tlačítko okénka
+	 */
+	$.fn.ajaxBox.setBoxPosition = function(opts, box, button) {
+		//nastavení správné pozice
+		if (opts.autoPosition) {//nastavení pozice okénka
+			switch (opts.autoPosition) {
+				case true:
+					var arrow = box.find('.arrow-up');
+					box.css('top', button.outerHeight() + arrow.outerHeight() + opts.topMargin);//nastavení xové souřadnice
+					if (opts.arrowOrientation === 'left') {//rozdělení podle orientace
+						var arrowCorrection = parseInt(arrow.css('left')) + arrow.outerWidth() / 2;//vzdálenost zleva ke středu šipky
+						box.css('left', button.offset().left + (button.outerWidth() / 2) - arrowCorrection + opts.leftMargin);//nastavení odsazení zleva
+					} else {
+						var arrowCorrection = parseInt(arrow.css('right')) + arrow.outerWidth() / 2;//vzdálenost zprava ke středu šipky
+						var offsetRight = $(window).width() - button.offset().left - button.outerWidth();//offset tlačítka zprava
+						box.css('right', offsetRight + (button.outerWidth() / 2) - arrowCorrection - opts.leftMargin);//nastavení odsazení zprava
+					}
+					break;
+				case 'center':
+					box.css('top', ($(window).height() / 2) - (box.height() / 2));
+					box.css('left', ($(window).width() / 2) - (box.width() / 2));
+					break;
+				default:
+					break;
+			}
+		}
 	};
 
 	/*
@@ -123,39 +154,12 @@
 		if (opts.arrowOrientation === 'left') {//orientace okénka
 			box.find('.arrow-up').addClass('on-left');//přidání třídy k šipečce (aby byla vlevo)
 		}
-		setBoxPosition(opts, box, button);
+		$.fn.ajaxBox.setBoxPosition(opts, box, button);
+		/* nabindování přepočítání polohy na změnu vel. okna */
+		$( window ).resize(function() {
+			$.fn.ajaxBox.setBoxPosition(opts, box, button);
+		});
 		data.css('display', 'block');//zobrazení dat, pokud byla skrytá
-	}
-	/**
-	 * Nastaví pozici okénka dle nastavení
-	 * @param {type} opts parametry
-	 * @param {type} box okénko
-	 * @param {type} button tlačítko okénka
-	 */
-	function setBoxPosition(opts, box, button) {
-		//nastavení správné pozice
-		if (opts.autoPosition) {//nastavení pozice okénka
-			switch (opts.autoPosition) {
-				case true:
-					var arrow = box.find('.arrow-up');
-					box.css('top', button.outerHeight() + arrow.outerHeight() + opts.topMargin);//nastavení xové souřadnice
-					if (opts.arrowOrientation === 'left') {//rozdělení podle orientace
-						var arrowCorrection = parseInt(arrow.css('left')) + arrow.outerWidth() / 2;//vzdálenost zleva ke středu šipky
-						box.css('left', button.offset().left + (button.outerWidth() / 2) - arrowCorrection + opts.leftMargin);//nastavení odsazení zleva
-					} else {
-						var arrowCorrection = parseInt(arrow.css('right')) + arrow.outerWidth() / 2;//vzdálenost zprava ke středu šipky
-						var offsetRight = $(window).width() - button.offset().left - button.outerWidth();//offset tlačítka zprava
-						box.css('right', offsetRight + (button.outerWidth() / 2) - arrowCorrection - opts.leftMargin);//nastavení odsazení zprava
-					}
-					break;
-				case 'center':
-					box.css('top', ($(window).height() / 2) - (box.height() / 2));
-					box.css('left', ($(window).width() / 2) - (box.width() / 2));
-					break;
-				default:
-					break;
-			}
-		}
 	}
 
 	/**
