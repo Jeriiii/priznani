@@ -85,6 +85,17 @@
 			}
 		}
 		
+		a.with-counter{
+			display: inline-block;
+			padding: 2px 4px 2px 4px;
+			
+			span{
+				display: inline-block;
+				width: 28px;
+			}
+		}
+		@icon-size: 30px;
+		@icon-margin: 12px;
 		a{
 			display: block;
 			color: black;
@@ -92,28 +103,31 @@
 			font-size: 16px;
 			line-height: 30px;
 			letter-spacing: -1px;
-			background-size: 17px;
+			background-size: 30px;
+			overflow: hidden;
 			background-position: left center;
 			background-color: transparent;
 			background-repeat: no-repeat;
+			background-image: url(../../images/icons/menu/basic.png);
+			background-position: 200px 200px;
 			
 			&.add-friend{
-				background-image: url(../../images/icons/menu/add-friend.png) ;
+				background-position: 0 (-4*@icon-size + @icon-margin);
 			}
 			&.add-gallery{
-				background-image: url(../../images/icons/menu/add-gallery.png) ;
+				background-position: 0 (-3*@icon-size + @icon-margin);
 			}
 			&.cross{
-				background-image: url(../../images/icons/menu/cross.png) ;
+				background-position: 0 (-2*@icon-size + @icon-margin);
 			}
 			&.edit{
-				background-image: url(../../images/icons/menu/edit.png) ;
+				background-position: 0 (-1*@icon-size + @icon-margin);
 			}
 			&.friends{
-				background-image: url(../../images/icons/menu/friends.png) ;
+				background-position: 0 (0*@icon-size + @icon-margin);
 			}
 			&.profile{
-				background-image: url(../../images/icons/menu/profile.png) ;
+				background-position: 0 (-5*@icon-size + @icon-margin);
 			}
 			
 		}

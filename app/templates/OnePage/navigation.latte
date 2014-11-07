@@ -39,7 +39,7 @@
 	<div class="usermenu">
 	<a n:href=":Profil:Edit:default" class="edit" title="Editovat profil">EDITOVAT PROFIL</a>
 	<a n:href=":Profil:Show:default" class="profile" title="Muj profil">MŮJ PROFIL</a>
-	<a n:href=":Profil:Show:verification" title="Editovat profil">{$countVerificationRequests} ŽÁDOSTÍ O OVĚŘENÍ</a>
+	<a n:href=":Profil:Show:verification" class="with-counter" title="Editovat profil"><span>{$countVerificationRequests}</span> ŽÁDOSTÍ O OVĚŘENÍ</a>
 	</div>
 {/if}
 {/}
@@ -48,7 +48,7 @@
 
 {define friendRequest}
 <div class="usermenu red">
-	<a title="Pratelstvi" id="friendRequestsBtn">{$countFriendRequests} ŽÁDOSTI O PŘÁTELSTVÍ</a>
+	<a title="Pratelstvi" class="with-counter" id="friendRequestsBtn"><span>{$countFriendRequests}</span> ŽÁDOSTI O PŘÁTELSTVÍ</a>
 	<div id="friendRequests">
 	{control friendRequest}
 	</div>
