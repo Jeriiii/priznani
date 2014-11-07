@@ -81,12 +81,13 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * @return StreamUserPreferences tento iterovatelný objekt schopný nahradit Selection
 	 */
 	public function getBestStreamItems() {
-		$this->data = $this->streamSection->cachedStreamItems;
+		//$this->data = $this->streamSection->cachedStreamItems;
 		if ($this->data === NULL) {
 			$this->initializeStreamItems(); //pokud uživatel přišel prvně
 		} else {//není třeba ptát se dvakrát při prvním příchodu
 			$this->addNewData(); //dopočítání příspěvk;, které mezitím přibyly
 		}
+
 		return $this;
 	}
 
@@ -221,11 +222,12 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		$confessionsRel = new Relation('confession');
 //		$videoRel = new Relation('video');
 		$galleryRel = new Relation('gallery');
-		$statusRel = new Relation('status');
 		$userGalleryRel = new Relation('userGallery');
 		$userGalleryLastImageRel = new Relation('lastImage');
 		$adviceRel = new Relation('advice');
 		$userRel = new Relation('user');
+		$statusRel = new Relation('status');
+		$statusRel->addRel(new Relation('user'));
 
 //		$serializer->addRel($videoRel);
 		$galleryRel->addRel($userGalleryLastImageRel);
