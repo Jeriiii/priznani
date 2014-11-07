@@ -19,6 +19,7 @@
 				contacts.show();
 			}
 		});
+		/* reakce na zvětšení - zmenšení šířky okna */
 		window.onresize = function() {
 			if($( window ).width() > 1000) {
 				contacts.show();
