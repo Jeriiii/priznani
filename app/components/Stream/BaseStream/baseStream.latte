@@ -50,7 +50,7 @@
 						<p>{$dataItem->advice->note}</p>
 					{/ifset}
 					{ifset $dataItem->statusID}
-						{var $status = $dataItem->ref('status', 'statusID')}
+						{var $status = $dataItem->status}
 						{$status->user|showProf}
 						<p>{$status->message}</p>
 						{control likeStatus-$dataItem->id}
