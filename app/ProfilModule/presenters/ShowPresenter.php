@@ -15,6 +15,7 @@ use POSComponent\AddToList\SendFriendRequest;
 use POSComponent\AddToList\YouAreSexy;
 use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
+use Nette\DateTime;
 
 class ShowPresenter extends ProfilBasePresenter {
 
@@ -238,6 +239,7 @@ class ShowPresenter extends ProfilBasePresenter {
 		} else {
 			$this->template->hasProfilePhoto = false;
 		}
+		$this->template->vigor = $this->getVigor($user->age);
 	}
 
 	public function actionUserImages($id) {
