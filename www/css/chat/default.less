@@ -38,7 +38,6 @@
 		height: 100%;
 		overflow: auto;
 		border-bottom: 1px solid #aaa;
-
 		li{
 				cursor: pointer;
 				width: 90%;
@@ -56,6 +55,25 @@
 				.posgradient();
 				border-radius: 12px;
 			}
+	}
+	#contact-toogle-btn {
+		display: none;
+	}
+
+}
+
+@media screen and (max-width: 1000px){
+	#chat-interface{
+		top: auto;
+		right: 15px;
+		bottom: 0;
+		height: auto;
+		
+		#contact-toogle-btn {
+			cursor: pointer;
+			display: block;
+			height: 30px;
+		}
 	}
 }
 

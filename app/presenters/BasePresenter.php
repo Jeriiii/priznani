@@ -358,7 +358,8 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'chat/core.js',
 			'chat/init.js',
 			'chat/jquery.ui.chatbox/jquery.ui.chatbox.js',
-			'chat/jquery.ui.chatbox/chatboxManager.js'
+			'chat/jquery.ui.chatbox/chatboxManager.js',
+			'chat/toogleContacts.js'
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
