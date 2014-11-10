@@ -13,10 +13,10 @@ INSERT INTO `enum_orientation` (`orientation`) VALUES ('bi');
 INSERT INTO `enum_orientation` (`orientation`) VALUES ('bi - chtěl bych zkusit');
 
 /* enum SHAPE */
+INSERT INTO `enum_shape` (`shape`) VALUES ('atletická');
 INSERT INTO `enum_shape` (`shape`) VALUES ('hubená');
 INSERT INTO `enum_shape` (`shape`) VALUES ('štíhlá');
 INSERT INTO `enum_shape` (`shape`) VALUES ('normální');
-INSERT INTO `enum_shape` (`shape`) VALUES ('atletická');
 INSERT INTO `enum_shape` (`shape`) VALUES ('plnoštíhlá');
 INSERT INTO `enum_shape` (`shape`) VALUES ('při těle');
 
