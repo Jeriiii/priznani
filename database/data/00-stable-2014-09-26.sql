@@ -1233,10 +1233,10 @@ INSERT INTO `enum_property` (`id`, `name`) VALUES
 -- Exportování dat pro tabulku pos.enum_shape: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `enum_shape` DISABLE KEYS */;
 INSERT INTO `enum_shape` (`id`, `shape`) VALUES
-	(1, 'hubená'),
-	(2, 'štíhlá'),
-	(3, 'normální'),
-	(4, 'atletická'),
+	(1, 'atletická'),
+	(2, 'hubená'),
+	(3, 'štíhlá'),
+	(4, 'normální'),
 	(5, 'plnoštíhlá'),
 	(6, 'při těle');
 /*!40000 ALTER TABLE `enum_shape` ENABLE KEYS */;

@@ -356,10 +356,10 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserShapeOption() {
 		return array(
-			1 => 'hubená',
-			2 => 'štíhlá',
-			3 => 'normální',
-			4 => 'atletická',
+			1 => 'atletická',
+			2 => 'hubená',
+			3 => 'štíhlá',
+			4 => 'normální',
 			5 => 'plnoštíhlá',
 			6 => 'při těle',
 		);
