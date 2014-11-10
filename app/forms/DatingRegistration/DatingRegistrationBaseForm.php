@@ -48,6 +48,23 @@ class DatingRegistrationBaseForm extends BaseForm {
 	}
 
 	/**
+	 * Zkontroluje, zda je uživateli 18 let
+	 * @param Nette\Application\UI\Form $form
+	 */
+	public function validateAge($form) {
+		$values = $form->getValues();
+
+		$age = new DateTime();
+		$age->setDate($values->year, $values->month, $values->day);
+
+		$now = new DateTime();
+		$diff = $now->diff($age);
+		if ($diff->y < 18) {
+			$this->addError("Musí vám být alespoň 18 let.");
+		}
+	}
+
+	/**
 	 * Vytvoří datum narození ze zadaných hodnot do formuláře.
 	 * @param Nette\ArrayHash $values Hodnoty formuláře.
 	 * @return Nette\DateTime Datum narození uživatele.
@@ -55,6 +72,7 @@ class DatingRegistrationBaseForm extends BaseForm {
 	public function getAge($values) {
 		$age = new DateTime();
 		$age->setDate($values->year, $values->month, $values->day);
+
 		unset($values["year"]);
 		unset($values["month"]);
 		unset($values["day"]);
@@ -81,7 +99,7 @@ class DatingRegistrationBaseForm extends BaseForm {
 		$vigors[] = array("dayFrom" => 23, "dayTo" => 23, "monthFrom" => 9, "monthTo" => 10, "name" => UserDao::VIGOR_VAHY);
 		$vigors[] = array("dayFrom" => 24, "dayTo" => 22, "monthFrom" => 10, "monthTo" => 11, "name" => UserDao::VIGOR_STIR);
 		$vigors[] = array("dayFrom" => 23, "dayTo" => 21, "monthFrom" => 11, "monthTo" => 12, "name" => UserDao::VIGOR_STRELEC);
-		$vigors[] = array("dayFrom" => 22, "dayTo" => 20, "monthFrom" => 12, "monthTo" => 1, "name" => UserDao::VIGOR_KOZOROH);
+		$vigors [] = array("dayFrom" => 22, "dayTo" => 20, "monthFrom" => 12, "monthTo" => 1, "name" => UserDao::VIGOR_KOZOROH);
 
 		foreach ($vigors as $vigor) {
 			if (($bornDay >= $vigor["dayFrom"] && $bornMonth >= $vigor["monthFrom"] ) ||

@@ -48,6 +48,7 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->onValidate[] = callback($this, 'validateWantToMeet');
+		$this->onValidate[] = callback($this, 'validateAge');
 		$this->addSubmit('send', 'Do druhé části registrace')
 			->setAttribute("class", "btn btn-success");
 

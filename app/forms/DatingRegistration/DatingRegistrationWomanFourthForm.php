@@ -25,6 +25,7 @@ class DatingRegistrationWomanFourthForm extends DatingRegistrationBaseWomanForm 
 		$this->addAge($regSession->age);
 
 		$this->onSuccess[] = callback($this, 'submitted');
+		$this->onValidate[] = callback($this, 'validateAge');
 		$this->addSubmit('send', 'Dokončit registraci')
 			->setAttribute("class", "btn btn-success");
 
