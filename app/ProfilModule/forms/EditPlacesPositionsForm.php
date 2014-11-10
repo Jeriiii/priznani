@@ -113,7 +113,7 @@ class EditPlacesPositionsForm extends PlacesAndPositionsForm {
 		}
 
 		$presenter = $this->getPresenter();
-		$presenter->flashMessage('message');
+		$presenter->flashMessage('Údaje byly změněny.');
 		$presenter->redirect('this');
 	}
 
