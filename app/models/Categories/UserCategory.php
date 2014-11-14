@@ -34,7 +34,10 @@ class UserCategory {
 	/** Název sekce pro vrácení kategorií */
 	const SECTION_NAME = "userCategories";
 
-	public function __construct(ActiveRow $logedUserProperty, UserCategoryDao $userCategoryDao, Session $session) {
+	public function __construct($logedUserProperty, UserCategoryDao $userCategoryDao, Session $session) {
+		if (!($logedUserProperty instanceof ActiveRow) && !($logedUserProperty instanceof \Nette\ArrayHash)) {
+			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
+		}
 		$this->userCategoryDao = $userCategoryDao;
 		$this->userProperty = $logedUserProperty;
 		$this->section = $session->getSection(self::SECTION_NAME);

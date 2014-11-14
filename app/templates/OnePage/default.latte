@@ -7,7 +7,7 @@
 	{includeblock 'navigation.latte'}
 	<div id="best-match">
 		{if $user->isLoggedIn()}
-			{if $userData->property}
+			{if $userData->propertyID}
 				{control bestMatchSearch 'listFew'}
 			{else} {* vyzve uživatele k dokončení registrace *}
 				Pokud se chcete seznámit, vyplňte o sobě <a n:href="DatingRegistration:" class="btn-main btn-small">další informace</a>.
@@ -19,6 +19,7 @@
 	    {*reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama *}
 	</div>
 	<div class="clear"></div>
+
 </section>
 {/block}
 
@@ -26,11 +27,11 @@
 {control js}
 <script>
 	$(document).ready(function () {
-		
+
 		$.convRunAjax = true;
 		$.convOffset = 0;
 		$.convLimit = 5;
-		
+
 		{* záložky u okének na vkládání obsahu/fotek *}
 		$( ".stream-form" ).tabs();
 		{* stream *}

@@ -22,6 +22,10 @@
 		height: @header-height;
 	}
 	
+	&.interface{/*aby okenko neujizdelo se strankou */
+		position: fixed !important;
+	}
+	
 	.ajaxBoxContent{
 		height: @height - @header-height - 6px; /* 6 px za padding headeru*/
 	}

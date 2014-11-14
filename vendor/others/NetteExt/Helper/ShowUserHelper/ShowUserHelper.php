@@ -20,6 +20,8 @@ class ShowProfHelper {
 
 	const NAME = "showProf";
 	const NAME_MIN = "showProfMin";
+	const NAME_MIN_DIV = "showProfMinDiv";
+	const NAME_DIV = "showProfDiv";
 
 	/* typy nastavení */
 	const TYPE_EL_SPAN = "span";
@@ -42,10 +44,11 @@ class ShowProfHelper {
 	 * @param \Nette\Database\Table\ActiveRow|Nette\ArrayHash $user
 	 * @param array|null $href Vlasní odkaz. První prvek pole je odkaz, druhý prvek je pole parametrů.
 	 * @param boolen $min TRUE = Zobrazení bez jména vedle fotky.
+	 * @param string $el název elementu, kterým bude profil obalen
 	 * @return \Nette\Utils\Html
 	 */
-	public function showProf($user, $href = null, $min = FALSE) {
-		return $this->createShowProf($user, $href, $min);
+	public function showProf($user, $href = null, $min = FALSE, $el = 'span') {
+		return $this->createShowProf($user, $href, $min, $el);
 	}
 
 	/**
@@ -53,25 +56,28 @@ class ShowProfHelper {
 	 * @param \Nette\Database\Table\ActiveRow|Nette\ArrayHash $user Zádnam o uživateli.
 	 * @param array $href Vlasní odkaz. První prvek pole je odkaz, druhý prvek je pole parametrů.
 	 * @param boolean $min TRUE = Zobrazení bez jména vedle fotky.
+	 * @param string $el název elementu, kterým bude profil obalen
 	 * @return \Nette\Utils\Html
 	 */
-	private function createShowProf($user, $href, $min) {
+	private function createShowProf($user, $href, $min, $el) {
 		/* Výsledek je celý v odkazu */
 		$elLink = $this->createLink($href, $user);
 
 		/* profilová fotka */
-		$elPhoto = $this->createPhoto("span", $user);
+		$elPhoto = $this->createPhoto($el, $user);
 		$elLink->add($elPhoto);
 
 		/* přidá jméno */
 		if (!$min) {
-			$elName = Html::el("span", $user->user_name);
+			$elName = Html::el($el, strtoupper($user->user_name));
+			$elName->addAttributes(array('class' => 'generatedTitle'));
 			$elLink->add($elName);
 		}
 
-
-
-		return $elLink;
+		/* element, co obalí profil */
+		$elContainer = Html::el($el, array('class' => 'generatedProfile'));
+		$elContainer->add($elLink);
+		return $elContainer;
 	}
 
 	/**
@@ -93,7 +99,6 @@ class ShowProfHelper {
 
 		$img->src($src);
 		$img->alt($user->user_name);
-		$img->width("80px");
 		$elPhoto->add($img);
 		return $elPhoto;
 	}

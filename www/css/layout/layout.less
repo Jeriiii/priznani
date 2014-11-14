@@ -9,6 +9,8 @@
 @import "../ajaxBox/default.less";
 @import "../ajaxBox/themes/posConversations.less";
 @import "../ajaxBox/themes/posPopUp.less";
+@import "../ajaxBox/themes/ajaxBoxMenu.less";
+@import "../generatedProfile.less";
 
 body {
     font-family: Tahoma, Geneva, Verdana, sans, sans-serif, Arial;
@@ -16,7 +18,10 @@ body {
 }
 a {
     color: #000;
-    text-decoration: none; 
+    text-decoration: none;
+}
+.content{
+	margin-top: 24px;
 }
 nav a{
     cursor: pointer;
@@ -25,7 +30,7 @@ nav a{
     display: none;
 }
 .inner {
-    width: 840px;
+    width: 960px;
     margin: 0 auto;
 }
 
@@ -49,7 +54,7 @@ nav a{
 }
 
 #header {
-    position: absolute;
+    position: fixed;
     width: 100%;
     z-index: 10;
     overflow: visible;
@@ -62,43 +67,53 @@ nav a{
     background: -ms-linear-gradient(top, #cf0707 0, #890302 100%);
     background: linear-gradient(to bottom, #cf0707 0, #890302 100%);
     filter: progid:dximagetransform.Microsoft.gradient(startcolorstr='#cf0707', endcolorstr='#890302', gradienttype=0);
-}
-header {
+	
+	header {
     position: relative;
     z-index: 20;
 }
-header h1 {
-    display: block;
-    font-size: 36px;
-    font-family: 'Exo', sans-serif;
-    padding: 5px 0;
-    text-shadow: 0 0 1px white;
-    color: #fff;
+	h1 {
+		display: block;
+		font-size: 36px;
+		font-family: @special-font;
+		padding: 5px 0;
+		text-shadow: 0 0 1px white;
+		color: #fff;
+		font-weight: 100;
+
+		b {
+		font-weight: 800;
+	}
+		span {
+			font-size: 24px;
+		}
+	}
 }
+
+#header-placeholder{
+	height: 53px;
+	width: 100%;
+}
+
+
 h2 {
-    font-family: Exo,Arial;
+    font-family: @special-font;
 	color: #a70304;
 	font-size: 30px;
 }
 #left_confession h2 {
-    font-family: 'Exo', 'Arial';
+    font-family: @special-font;
     color: #a70304;
     font-size: 32px;
     padding: 10px 0 0 5px;
 }
-header h1 b {
-    color: #dfbfc2;
-    font-weight: 600;
-}
-header h1 span {
-    font-size: 24px;
-}
+
 #left-panel {
     position: fixed;
     z-index: 8;
     height: 100%;
     width: 80px;
-    background: #383838;
+    background: @main-dark;
 }
 #left-panel-label {
     position: fixed;
@@ -106,7 +121,7 @@ header h1 span {
     left: -60px;
     z-index: 6;
     height: 100%;
-    background: #383838;
+    background: @main-dark;
 }
 #title-container {
     margin-top: 170px;
@@ -167,15 +182,7 @@ header h1 span {
     cursor: default;
 }
 #topmenu a:hover {
-    background-position: 0 60%}
-#kiss {
-    display: block;
-    float: left;
-    position: relative;
-    left: -50px;
-    width: 207px;
-    height: 178px;
-    background: url(../../images/layout/kiss.png) no-repeat transparent;
+    background-position: 0 60%;
 }
 #next_admission {
     position: absolute;
@@ -249,7 +256,7 @@ header h1 span {
     letter-spacing: 1px;
     color: #fff;
     cursor: pointer;
-    font: 600 22px 'Exo', 'Arial Black', Arial;
+    font: 600 22px @special-font;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -337,20 +344,6 @@ footer .right {
 .commentspinner {
     text-align:  center;
     padding:  20px;
-}
-
-#messages-btn,.payment-btn{
-	position: relative;
-	float: right;
-	height: 52px !important;
-	width: 82px;
-	margin-right: 16px;
-	display: block;
-	height: 100%;
-	background: url('../../images/layout/speech.png') center center;
-	background-repeat: no-repeat;
-	cursor: pointer;
-	margin: 0 15px;
 }
 
 @media screen and (max-width: 900px){

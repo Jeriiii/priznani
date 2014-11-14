@@ -144,7 +144,10 @@
 		data.wrap('<div class="ajaxBoxContent"></div>');//zabalení obsahu
 		data.wrap('<div class="ajaxBoxData"></div>');//zabalení obsahu
 		var box = data.parent().parent().parent();//současný selektor okénka
-		box.find('.ajaxBoxContent').append('<span class="loadingGif clear loadIfVisible"></span>');//gif na konci
+		box.find('.ajaxBoxContent').append('<span class="loadingGif clear"></span>');//gif na konci
+		if (!opts.loadUrl) {
+			box.find('.loadingGif').css('display', 'none');
+		}
 		box.prepend('<div class="ajaxBoxHeader">' + opts.headerHtml + '</div>');//přidání šipečky
 		box.prepend('<div class="arrow-up"></div>');//přidání šipečky
 		box.append('<div class="window-info">' + opts.defaultMessage + '</div>');//informační boxík okénka (dole)
@@ -244,9 +247,11 @@
 			e.preventDefault();
 			var close = isThisWindowVisible(opts);
 			$('.ajaxBox').css('display', 'none');
+			$(this).removeClass('active');
 			$('.activeBackground').remove();
 			if (!close) {
 				$(boxSelector).css('display', 'block');//otevření jediného okénka
+				$(this).addClass('active');
 				if (opts.hideOthers) {//vyvolani pozadi
 					$('body').prepend('<div class="activeBackground" data-related="' + opts.buttonSelector + '"></div>');
 					$(boxSelector).css('z-index', '10001');
@@ -264,6 +269,7 @@
 			if (!$(event.target).is(opts.buttonSelector, '.ajaxBox')) {
 				if (!$(event.target).is('.ajaxBox *, .ajaxBox')) {
 					$(boxSelector).css('display', 'none');
+					$(opts.buttonSelector).removeClass('active');
 					$('.activeBackground[data-related=' + opts.buttonSelector + ']').remove();
 				}
 			}

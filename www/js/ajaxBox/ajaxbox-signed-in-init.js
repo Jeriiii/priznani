@@ -25,12 +25,12 @@ $(document).ready(function () {
 		}
 	}
 
-	/*inicializace vyskakovacích okének*/
+//inicializace vyskakovacích okének
 	$('#conversations').ajaxBox({
 		buttonSelector: '#messages-btn',
 		topMargin: -10, //korekce y
 		arrowOrientation: 'right', //šipka bude vpravo
-		theme: "posAjaxBox posConversations", //použijí se implicitní styly, ale budou upraveny
+		theme: "posAjaxBox posConversations interface", //použijí se implicitní styly, ale budou upraveny
 		headerHtml: "Příchozí zprávy", //header
 		loadUrl: loadConversationsLink, /* link (url) vygenerovaný komponentou StandardConversationsList */
 		streamSnippetModule: {
@@ -44,12 +44,12 @@ $(document).ready(function () {
 		ajaxObserverId: 'chatConversationWindow', //je použit ajaxObserver a toto id reprezentuje požadavek této komponenty (pod stejným id se požadavek vyřizuje na serveru)
 		observerResponseHandle: handleNumberResponse//použití funkce v initu, která vezme výsledek dotazu na observer a zobrazí jej u tlačítka, pokud je nenulový
 	});
-
+/////////////////////////
 	$('#snippet-payment-payment').ajaxBox({
-			buttonSelector: '.payment-btn',
-			theme: "posPopUp",
-			autoPosition: 'center',
-			hideOthers: true,
-			headerHtml: 'Výběr účtu'
+		buttonSelector: '.payment-btn',
+		theme: "posPopUp",
+		autoPosition: 'center',
+		hideOthers: true,
+		headerHtml: 'Výběr účtu'
 	});
 });

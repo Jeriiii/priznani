@@ -45,7 +45,7 @@
 			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">
 			<link rel="shortcut icon" href="{$basePath}/partyicon.ico" type="image/x-icon">
 		{else}
-		    {var $pagename = 'přiznání<b>o</b>sexu<span>.cz</span>'}
+		    {var $pagename = '<b>SEXY</b>PLAY<span>.cz</span>'}
 			{ifset #meta}
 				{* inportujou se specialni meta tagy *}
 				{include #meta}
@@ -70,7 +70,7 @@
 
 		{/if}
 		{block head}{/block}
-        <link href='http://fonts.googleapis.com/css?family=Exo:200,600,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		{includeblock 'layoutBloks/googleAnalytics.latte'}
 	</head>
 
@@ -107,7 +107,7 @@
 			{/cache}
 	    {/if}
         </div>
-	    <div id="header" class="partygradient"></div>
+	    <div id="header" class="partygradient">
 	    <header class="inner">
 		{*mobilni menu*}
 		<div id="mobile-menu">
@@ -119,19 +119,19 @@
 		</div>
 		<div id="usermenu">
 			{ifset $identity}
-				<strong n:ifset="$identity->user_name" id="droplink">{$identity->user_name}</strong>
+				<span n:ifset="$identity->user_name" id="droplink" class="user-btn"></span>
 			{else}
-				<a href="#" id="droplink">registrace/přihlášení</a>
+				<a href="#" id="droplink" class="user-btn with-text">registrace/přihlášení</a>
 			{/ifset}
 			{control userMenu}
-			<div class="clear"></div>
-		 </div>
 		{if $user->isLoggedIn()}
-			{control activities}
-			<a href="#" title="Poslední zprávy" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
-			<a href="#" title="Platby" class="payment-btn"></a>
+			<a href="#" title="Platby" class="payment-btn user-btn" id="coins-btn"></a>
 			{control payment}
+			{control activities}
+			<a href="#" title="Poslední zprávy" class="user-btn" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
 		{/if}
+			<div class="clear"></div>
+		</div>
 		{if $partymode}
 		    {cache}
 				<a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
@@ -139,7 +139,6 @@
 			{/cache}
 		{else}
 			{cache}
-				<a n:href=":OnePage:" title="Přiznání o sexu" id="kiss"></a>
 				<a n:href=":OnePage:"><h1 id="pagename">{!$pagename}</h1></a>
 			{/cache}
 		{/if}
@@ -148,7 +147,8 @@
 		<div class="clear"></div>
 
 	    </header>
-	    <div class="clear"></div>
+		</div>
+	    <div class="clear" id="header-placeholder"></div>
 	    {block beforeContent}{/block}
 	    <section class="inner">
 		<div n:foreach="$flashes as $flash" class='flash {$flash->type}'>
@@ -194,7 +194,6 @@
 					});
 
 				</script>
-				<script type="text/javascript" src="{$basePath}/js/layout/ajaxbox-init.js"></script>
 			{/if}
 
 
