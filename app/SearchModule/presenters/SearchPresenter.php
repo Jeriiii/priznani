@@ -7,6 +7,7 @@ use POSComponent\Search\BestMatchSearch;
 use POSComponent\Search\NewlyRegistredSearch;
 use POSComponent\Search\NearMeSearch;
 use POSComponent\Search\AdvancedSearch;
+use POSComponent\Search\VigorSearch;
 
 class SearchPresenter extends SearchBasePresenter {
 
@@ -103,6 +104,15 @@ class SearchPresenter extends SearchBasePresenter {
 	 */
 	public $enumTallnessDao;
 
+	/**
+	 * @var \POS\Model\EnumVigorDao
+	 * @inject
+	 */
+	public $enumVigorDao;
+
+	/** @var int|boolean Znamení co se vyhledává. Když není zadáno = FALSE. */
+	private $vigor;
+
 	public function beforeRender() {
 		parent::beforeRender();
 		$this->setSexMode();
@@ -133,6 +143,10 @@ class SearchPresenter extends SearchBasePresenter {
 		$this->searchData = $httpRequest->getQuery();
 	}
 
+	public function actionVigor($vigor = NULL) {
+		$this->vigor = $vigor;
+	}
+
 	protected function createComponentAdvancedSearchForm($name) {
 		$form = new Frm\AdvancedSearchForm($this, $name);
 		return $form;
@@ -145,6 +159,14 @@ class SearchPresenter extends SearchBasePresenter {
 
 	protected function createComponentNewlyRegistredSearch($name) {
 		return new NewlyRegistredSearch($this->userDao, $this, $name);
+	}
+
+	protected function createComponentVigorSearch($name) {
+		return new VigorSearch($this->userDao, $this->vigor, $this, $name);
+	}
+
+	protected function createComponentVigorSearchForm($name) {
+		return new Frm \ SelectVigorForm($this->enumVigorDao, $this, $name);
 	}
 
 	protected function createComponentBestMatchSearch($name) {

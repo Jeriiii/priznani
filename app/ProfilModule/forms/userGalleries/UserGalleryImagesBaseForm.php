@@ -184,15 +184,10 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	public function saveVerificationImage($values, $userID, $galleryID) {
 		$image = $values->verificationFormImageFile0;
 		if ($image->isOK()) {
-			//název obrázku zadaný uživatelem
-			$name = $values->verificationFormImageName0;
 			//koncovka souboru
 			$suffix = $this->suffix($image->getName());
-			//popis obrázku zadaný uživatelem
-			$description = $values->verificationFormImageDescription0;
-
 			//Uloží obrázek do databáze
-			$imageDB = $this->saveImageToDB($galleryID, $name, $description, $suffix, 0);
+			$imageDB = $this->saveImageToDB($galleryID, "Ověřovací fotka", "", $suffix, 0);
 
 			//nahraje soubor
 			$this->upload($image, $imageDB->id, $suffix, $galleryID, $userID, 500, 700, 100, 130);
