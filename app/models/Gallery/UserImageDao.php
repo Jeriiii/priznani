@@ -33,6 +33,8 @@ class UserImageDao extends AbstractDao {
 	const COLUMN_COMMENTS = "comments";
 	const COLUMN_INTIM = "intim";
 	const COLUMN_REJECTED = "rejected";
+	const COLUMN_GAL_SCRN_WIDTH = "widthGalScrn";
+	const COLUMN_GAL_SCRN_HEIGHT = "heightGalScrn";
 
 	/**
 	 * @var \POS\Model\UserGalleryDao

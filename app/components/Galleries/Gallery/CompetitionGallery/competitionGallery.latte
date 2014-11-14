@@ -75,10 +75,8 @@
 	<object width="700" height="500" data="http://www.youtube.com/v/{$image->video->code}" type="application/x-shockwave-flash"><param name="src" value="http://www.youtube.com/v/{$image->video->code}" /></object>
 	{else}	{*padding: {$padding}*}
 	<img src="{$image|getImgPath:'g'}" alt="{$image->name}" 
-		{ifset $imgPaddingTopBottom}
-			style = "padding: {!$imgPaddingTopBottom}px 0;"
-		{/ifset}
-		{if $setWidth} width="700" {else} height="525" {/if} />
+		style = "padding: {!$imgPaddingTopBottom}px {!$imgPaddingLeftRight}px;"
+		width="{$image->widthGalScrn}" height="{$image->heightGalScrn}" />
 {/if}
 {/}
 
