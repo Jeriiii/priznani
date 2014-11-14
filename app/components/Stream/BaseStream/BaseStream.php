@@ -128,11 +128,16 @@ class BaseStream extends BaseProjectControl {
 	public $commentConfessionsDao;
 
 	/**
+	 * @var ArrayHash|ActiveRow
+	 */
+	public $userData;
+
+	/**
 	 * @var \POS\Model\LikeConfessionDao
 	 */
 	public $likeConfessionDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, LikeConfessionDao $likeConfessionDao) {
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, LikeConfessionDao $likeConfessionDao, $userData) {
 		parent::__construct();
 		$this->dataForStream = $data;
 		$this->userGalleryDao = $userGalleryDao;
@@ -153,6 +158,7 @@ class BaseStream extends BaseProjectControl {
 		$this->commentConfessionsDao = $commentConfessionsDao;
 		$this->likeConfessionCommentDao = $likeConfessionCommentDao;
 		$this->likeConfessionDao = $likeConfessionDao;
+		$this->userData = $userData;
 	}
 
 	/**
@@ -245,7 +251,7 @@ class BaseStream extends BaseProjectControl {
 		$streamItems = $this->dataForStream;
 
 		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $streamItems->offsetGet($streamItem)->userGallery->lastImage);
+			return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $streamItems->offsetGet($streamItem)->userGallery->lastImage, $this->userData);
 		});
 	}
 
@@ -257,7 +263,7 @@ class BaseStream extends BaseProjectControl {
 		$streamItems = $this->dataForStream;
 
 		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			return new \POSComponent\BaseLikes\StatusLikes($this->likeStatusDao, $streamItems->offsetGet($streamItem)->status, $this->presenter->user->id);
+			return new \POSComponent\BaseLikes\StatusLikes($this->likeStatusDao, $streamItems->offsetGet($streamItem)->status, $this->user->id);
 		});
 	}
 
@@ -277,7 +283,7 @@ class BaseStream extends BaseProjectControl {
 		$streamItems = $this->dataForStream;
 
 		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			return new \POSComponent\Comments\ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $streamItems->offsetGet($streamItem)->confession);
+			return new \POSComponent\Comments\ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $streamItems->offsetGet($streamItem)->confession, $this->userData);
 		});
 	}
 

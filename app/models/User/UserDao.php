@@ -316,6 +316,17 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Vrátí Selection uživatele podle ID
+	 * @param int $userID ID uživatele
+	 * @return Selection uživatelova data
+	 */
+	public function getUser($userID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($userID);
+		return $sel;
+	}
+
+	/**
 	 * Vrátí část uživatelů s rolí user podle požadavků paginatoru
 	 * @param type int $limit Počet uživatelů
 	 * @param type int $offset Velikost množiny pro výběr

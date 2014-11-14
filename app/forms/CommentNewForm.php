@@ -47,7 +47,7 @@ class CommentNewForm extends BaseForm {
 
 		$this->addTextArea("comment", "", 30, 600)
 			->addRule(Form::FILLED, "Musíte zadat text do komentáře.");
-		$this->addSubmit("submit", "Vložit");
+		$this->addSubmit("submit", "PŘIDAT KOMENTÁŘ");
 		$this->setBootstrapRender();
 
 		$this->onSuccess[] = callback($this, 'submitted');

@@ -186,7 +186,7 @@ form{
 }
 
 #news h2{
-    font-family: 'Exo', 'Arial';
+    font-family: 'Source Sans Pro', 'Arial';
     color: #a70304;
     font-size: 30px;
 }
@@ -210,7 +210,7 @@ form{
 	background: url(../images/layout/menu.png) no-repeat transparent; 
 }
 #link_to_homepage h2 { 
-	font-family: 'Exo','Arial'; 
+	font-family: 'Source Sans Pro','Arial'; 
 	color: #a70304; 
 	font-size: 30px; 
 }

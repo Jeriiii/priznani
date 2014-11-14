@@ -54,18 +54,28 @@ class BaseComments extends BaseProjectControl {
 	 */
 	const MIN_OF_SHOWED_COMMENTS = 2;
 
+	/**
+	 * Uživatelská data.
+	 * @var ArrayHash|ActiveRow
+	 */
+	public $userData;
+
 	/** @var boolean TRUE = zobrazí všechny komentáře */
 	private $showAllComments = FALSE;
 
-	public function __construct(ILikeDao $likeCommentDao, ICommentDao $commentDao, $item) {
+	public function __construct(ILikeDao $likeCommentDao, ICommentDao $commentDao, $item, $userData) {
 		parent::__construct();
-		if (!($item instanceof ActiveRow) && !($item instanceof ArrayHash)) {
-			throw new Exception('Variable $item must be instance of ActiveRow or ArrayHash');
+		if (!($item instanceof ActiveRow) && !($item instanceof \Nette\ArrayHash)) {
+			throw new Exception("variable $item must be instance of ActiveRow or ArrayHash");
+		}
+		if (!($userData instanceof ActiveRow) && !($userData instanceof \Nette\ArrayHash)) {
+			throw new Exception("variable $userData must be instance of ActiveRow or ArrayHash");
 		}
 		$this->commentDao = $commentDao;
 		$this->item = $item;
 		$this->likeCommentDao = $likeCommentDao;
 		$this->countComments = $this->item->comments;
+		$this->userData = $userData;
 	}
 
 	/**
@@ -78,6 +88,7 @@ class BaseComments extends BaseProjectControl {
 		$template->countComments = $this->countComments;
 		$template->minShowComments = self::MIN_OF_SHOWED_COMMENTS;
 		$template->showAllComments = $this->showAllComments;
+		$template->userData = $this->userData;
 		$template->render();
 	}
 

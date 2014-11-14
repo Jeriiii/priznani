@@ -183,11 +183,9 @@ class OnePagePresenter extends BasePresenter {
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $userID;
-	protected $userData;
 
 	public function actionDefault() {
 		$this->userID = $this->getUser()->getId();
-		$this->userData = $this->userDao->find($this->userID);
 		$this->fillCorrectDataForStream();
 	}
 
@@ -195,6 +193,7 @@ class OnePagePresenter extends BasePresenter {
 		$this->template->userID = $this->userID;
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
 		$this->template->userData = $this->userData;
+
 		$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->userID)->count();
 		$this->template->countSexy = $this->youAreSexyDao->countToUser($this->userID);
 		$this->template->isUserPaying = $this->paymentDao->isUserPaying($this->userID);
@@ -202,7 +201,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeCOnfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao);
+		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeCOnfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao, $this->userData);
 	}
 
 	public function createComponentJs() {

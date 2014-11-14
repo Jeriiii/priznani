@@ -2,6 +2,19 @@
 @import "../bootstrap/help/mixins.less";
 
 
+//nefunguje import mixinů TODO: spravit mixiny a smazat tuto definici
+// Vertical gradient, from top to bottom
+  //
+  // Creates two color stops, start and end, by specifying a color and position for each color stop.
+  // Color stops are not available in IE9 and below.
+  .vertical(@start-color: #555; @end-color: #333; @start-percent: 0%; @end-percent: 100%) {
+    background-image: -webkit-linear-gradient(top, @start-color @start-percent, @end-color @end-percent);  // Safari 5.1-6, Chrome 10+
+    background-image: linear-gradient(to bottom, @start-color @start-percent, @end-color @end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    background-repeat: repeat-x;
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@start-color),argb(@end-color))); // IE9 and down
+  }
+
+
 #stream{
     width: 520px;
     float: left;
@@ -22,7 +35,7 @@ body{
 
 .stream-item-layout {
     border-color: @stream-weak-bordercolor;
-    font-family: 'Exo', Arial, sans-serif;
+    font-family: 'Source Sans Pro', Arial, sans-serif;
     background: white;
     margin: 0;
     padding: 15px 5px;
@@ -30,26 +43,66 @@ body{
 }
 
 .stream-form {
-	.stream-item-layout;
-	padding: 5px;
+	width: 520px;
 	#stream-form-tabs li{
-		float: left;
-		margin: 5px;
+		display: inline-block;
+		padding: 0;
+		margin: 0;
+		margin-bottom: 10px;
+		width: 32%;
+		height: 40px;
+		line-height: 40px;
+		
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+		text-align: center;
+		font-size: 14px;
+		font-weight: 900;
+		
+		
+		.vertical(lighten(@main-dark, 20%), @main-dark);
+		
+		&.ui-tabs-active{
+			.vertical(@main-red-light, @main-red-dark);
+		}
+		margin-right: 1%;
+		&.last{
+			margin-right: 0;
+		}
+		
+		a{
+			color: white;
+			display: block;
+			
+		}
 	}
-	#stream-form-tabs li.separator {
-		width: 1px;
-		height: 18px;
-		background-color: #bebebe;
-		margin-top: 7px;
+	
+	.ui-tabs-panel{
+		.stream-item-layout;
+		position: relative;
+		
+		.tab-arrow{
+			position: absolute;
+			top: -9px;
+			width: 0;
+			height: 0;
+			left: 0;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-bottom: 10px solid white;
+			
+			&.first{
+				left: 14%;
+			}
+			&.second{
+				left: 48%;
+			}
+			&.third{
+				left: 82%;
+			}
+		}
+		
 	}
-	.ui-tabs-active{
-		border-bottom: 1px solid #aeaeae;
-	}
-	#stream-form-tabs:after{
-		content:'';
-		display:block;
-		clear: both;
-	}
+		
 	.stream-add-images{
 		font-family: Arial, sans-serif;
 		margin: 5px;
@@ -111,7 +164,23 @@ body{
 		font-family: 'Helvetica Neue', Helvetica, Arial,tahoma,verdana,arial,sans-serif;
     }
 	p {
+		padding: 5px 15px;
 		margin-bottom: 15px;
+	}
+	
+	.react-menu{
+		text-align: right;		
+		padding: 2px 25px;
+		
+		a{
+			color: @main-red;			
+		}
+	}
+	
+	.comments{
+		background: #f7f7f7;
+		margin: 5px 15px;
+		padding: 5px 5px;
 	}
 }
 .loadingbutton{

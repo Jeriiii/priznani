@@ -5,55 +5,114 @@
     Created on : 30.7.2014, 9:36:40
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
-
 @unreaded-color: #fff3f5;
+@contact-item-height: 40px;/* výška položky kontaktů */
+@contact-item-vertical-padding: 4px;
+@online-indicator-size: 12px;
+/* interface */
+@chat-color: #2c2c2d;
+@text-color: #aeaeae;
+/**/
 
-#chat-interface{
+
+
+#chat-container{
+	#chat-header{
+		width: 100%;
+		height: 53px;
+	}
 	position: fixed;
 		top: 0;
 		right: 0;
 		width: 250px;
 		height: 100%;
 		overflow: hidden;
-		background: #F4F5F8;
-		z-index: 15000;
-		border-left: 1px solid #fafafa;
 		
+		z-index: 6;
 		ul{
 			margin: 0;
 		}
 		
-	#contacts{
-
-			li{
-				cursor: pointer;
-				width: 90%;
-				padding: 8px 4%;
+		#chat-interface{
+			background: @chat-color;
+			height: 100%;
+		}
+		
+		#chat-search{
+			
+			height: 30px;
+			
+			.chat-message-icon{
+				display: block;
+				float: left;
+				padding: 0;
+				margin: 0;
+				width: 16%;
+				height: 30px;
+				background: url(../../images/icons/chat/chat-messages.png) center center transparent no-repeat;
+			}
+			
+			.chat-search-icon{
+				display: block;
+				float: left;
+				padding: 0;
+				margin: 0;
+				width: 16%;
+				height: 30px;
+				background: url(../../images/icons/chat/chat-search.png) center center transparent no-repeat;
+				border: 0;
+				border-bottom: 1px solid #737373;
+			}
+			
+			#chat-search-input{
+				width: 64%;
+				display: block;
+				float: left;
+				height: 24px;
+				padding: 3px 2%;
+				background: @chat-color;
+				color: @text-color;
+				border: 0;
+				border-bottom: 1px solid #737373;
 				
 			}
-
-
-	}
+			
+		}
+		
 	#contacts{
 		height: 100%;
 		overflow: auto;
 		border-bottom: 1px solid #aaa;
 		li{
 				cursor: pointer;
-				width: 90%;
-				padding: 8px 4%;
+				position: relative;
+				height: @contact-item-height;
+				padding: @contact-item-vertical-padding 4%;
 				margin: 2px 1%;
-				border: 1px solid #8F8F8F;
-				color: #FFF;
-				font: 500 16px Arial;
-				-webkit-border-radius: 4px;
-				-moz-border-radius: 4px;
-				border-radius: 4px;
-				height: 20px;
-				line-height: 20px;
-				text-shadow: 0 0 1px #FFF;
-				.posgradient();
-				border-radius: 12px;
+				color: @text-color;
+				
+				&:hover{
+					background: lighten(@chat-color, 10%);
+				}
+				
+				.generatedProfile{
+					
+					img{
+						display: inline-block;
+						height: @contact-item-height;
+						width: @contact-item-height;
+					}
+				}
+				.chat-username{
+						display: inline-block;
+						padding: 0 6px;
+						margin-right: 6px + @online-indicator-size;
+						line-height: @contact-item-height;
+						vertical-align: top;
+						font-family: 'Source Sans Pro';
+				}
+				
+				
 			}
 	}
 	#contact-toogle-btn {
@@ -75,6 +134,17 @@
 			height: 30px;
 		}
 	}
+}
+
+.online-indicator{
+	width: @online-indicator-size;
+	height: @online-indicator-size;
+	display: block;
+	border-radius: 50%;
+	.posgradient();
+	position: absolute;
+	top: (@contact-item-height - @online-indicator-size) / 2 + @contact-item-vertical-padding;
+	right: 3px + @online-indicator-size;
 }
 
 #conversations {
@@ -126,47 +196,93 @@
 			
 		}
 	}
-.ui-chat{//chatbox okénka
+.ui-chat{//chatbox - okénka
 	
-		 
-		 .ui-chatbox-input-box{
-			resize: none;
-			color: #333 !important;
-			 font-size: 16px !important;
-			 padding: 8px 5%;
-			 width: 85% !important;			
+		 .ui-chatbox{
+			 background: @chat-color !important;
+			 border-bottom: 0 !important;
+			 border-radius: 0 !important;
 		 }
 		 
+		 
 		 .ui-widget-header{
-			background: #CF0707 !important;
-			background: -moz-linear-gradient(top,#cf0707 0,#890302 100%) !important;
-			background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#CF0707),color-stop(100%,#890302)) !important;
-			background: -webkit-linear-gradient(top,#CF0707 0,#890302 100%) !important;
-			background: -o-linear-gradient(top,#cf0707 0,#890302 100%) !important;
-			background: -ms-linear-gradient(top,#cf0707 0,#890302 100%) !important;
-			background: linear-gradient(to bottom,#CF0707 0,#890302 100%) !important;
+			background: @chat-color !important;
+			position: relative;
+			height: 30px !important;
+			border-radius: 0 !important;
+			border: 0 !important;
+			margin: 0 !important;
+			padding: 5px 0px !important;
+			
+			
+			.online-indicator{
+				right: 0;
+				left: 3px + @online-indicator-size !important;
+				top: (30px - @online-indicator-size) / 2 + 5px !important;/* 30px - vyska, 10px - vertikalni padding */
+			}
+			
+			.chatbox-username{
+				font-weight: normal !important;
+				line-height: 30px;
+				font-family: 'Source Sans Pro', Arial, sans-serif !important;
+				display: inline-block;
+				padding-left: 20px + @online-indicator-size !important;
+				
+			}
+			
+		 }
+		 
+		  .ui-chatbox-log{
+			 .ui-chatbox-msg {
+				font-size: 14px;
+				padding: 1px 6px;
+				color: #222;
+				b{
+					color: #333;
+				}
+
+				&.ui-chatbox-nopeer{
+					font-size: 14px;
+				   padding: 0px 15px 6px 50px;
+				   margin-top: 4px;
+				   color: #666;
+				}			 
+			}			 
+		 }
+		 
+		 .ui-chatbox-input{
+			 border-top: 2px solid @chat-color !important;
+			 max-width: 1000px !important;
+			 padding: 0 !important;
+			 
+			 textarea{
+				 
+				 margin: 0 !important;
+				 resize: none;
+				color: #333 !important;
+				 font-size: 16px !important;
+				 padding: 8px 5%;
+			 }
+		 }
+		 
+		 .ui-widget-content{
+			 border: 0 !important;			
+		 }
+		 
+		 
+		 
+		 .chatbox-delimiter{
+			 width: auto;
+			 height: 5px;
+			 background: @chat-color; 
 		 }
 		 
 		 .ui-state-focus{
 			 color: white !important;
 		 }
 		 
-		 .ui-chatbox-msg {
-			 font-size: 16px;
-			 color: #222;
-			 b{
-				 color: #333;
-			 }
-			 
-			 &.ui-chatbox-nopeer{
-				 font-size: 14px;
-				padding: 0px 15px 6px 50px;
-				margin-top: 4px;
-				color: #666;
-			 }
-			 
-			 
-		 }
+		 
+		 
 	
 }
 

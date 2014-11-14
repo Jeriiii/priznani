@@ -1,0 +1,51 @@
+/*
+* @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
+*//* 
+    Created on : 7.11.2014, 15:46:44
+    Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
+*/
+
+.ajaxBox.ajaxBoxMenu{
+	
+	height: 100px;
+	width: 150px;
+	
+	.ajaxBoxContent{
+		height: 90px !important;
+		padding: 0;
+	}
+	
+	.ajaxBoxHeader{
+		height: 6px;
+	}
+	
+	&.interface{/*aby okenko neujizdelo se strankou */
+		position: fixed !important;
+	}
+	
+	li{
+		list-style: none;
+		
+		.delimiter{
+			width: 80%;
+			margin: 0 10%;
+			height: 1px;
+			background: #ccc;
+			border-bottom: 1px solid #eee;
+		}
+	}
+	
+	a{
+		display: block;
+		padding: 4px 12px;
+		color: #222;
+		text-align: left;
+		
+		
+		&:hover{
+			text-decoration: underline;
+		}
+    }
+	
+	
+}

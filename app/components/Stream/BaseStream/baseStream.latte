@@ -21,7 +21,9 @@
 								<img src="{$dataItem|getStrmImgPath}" alt="{$dataItem->userGallery->name}" />
 								<p>{$dataItem->userGallery->lastImage->description}</p>
 							</a>
-							{control likeImages-$dataItem->id}
+							<div class="react-menu">
+								{control likeImages-$dataItem->id}
+							</div>
 							{control commentImages-$dataItem->id}
 						{else}
 							<strong>Obrázky se zobrazují pouze registrovaným uživatelům. <a href="{plink :Sign:registration}">Registrujte se</a>.</strong>
@@ -41,7 +43,9 @@
 					{ifset $dataItem->confessionID}
 						<a href="{plink Page:confession id => $dataItem->confessionID}" title="Přiznání o sexu"><h3>Přiznání</h3></a>
 						<p>{$dataItem->confession->note}</p>
-						{control likeConfession-$dataItem->id}
+						<div class="react-menu">
+							{control likeConfession-$dataItem->id}
+						</div>
 						{control commentConfession-$dataItem->id}
 					{/ifset}
 
@@ -51,9 +55,11 @@
 					{/ifset}
 					{ifset $dataItem->statusID}
 						{var $status = $dataItem->status}
-						{$status->user|showProf}
+						{$status->user|showProfDiv}
 						<p>{$status->message}</p>
-						{control likeStatus-$dataItem->id}
+						<div class="react-menu">
+							{control likeStatus-$dataItem->id}
+						</div>
 						{control commentStatus-$dataItem->id}
 					{/ifset}
 					{*<div class="votes">
