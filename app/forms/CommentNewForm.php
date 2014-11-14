@@ -45,7 +45,7 @@ class CommentNewForm extends BaseForm {
 		//$this->getElementPrototype()->addAttributes(array('class' => 'ma-pekna-trida'));
 		/* formulář */
 
-		$this->addTextArea("comment", "", 30, 600)
+		$this->addTextArea("comment", "", 60, 4)
 			->addRule(Form::FILLED, "Musíte zadat text do komentáře.");
 		$this->addSubmit("submit", "Vložit");
 		$this->setBootstrapRender();

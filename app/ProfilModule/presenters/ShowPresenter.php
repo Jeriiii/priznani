@@ -176,6 +176,12 @@ class ShowPresenter extends ProfilBasePresenter {
 	public $dataForStream;
 
 	/**
+	 * @var \POS\Model\EnumVigorDao
+	 * @inject
+	 */
+	public $enumVigorDao;
+
+	/**
 	 * metoda nastavuje hodnoty predavanych parametru predtim, nez se sablona s uzivatelskym streamem vykresli.
 	 * Tyto hodnoty pak predava komponente Stream
 	 * @param type $id
@@ -239,7 +245,11 @@ class ShowPresenter extends ProfilBasePresenter {
 		} else {
 			$this->template->hasProfilePhoto = false;
 		}
-		$this->template->vigor = $this->getVigor($user->age);
+		$this->template->vigor = $this->getVigor($user->property->age);
+	}
+
+	private function getVigor($age) {
+		Frm\DatingRegistrationBaseForm::getVigor($age);
 	}
 
 	public function actionUserImages($id) {
