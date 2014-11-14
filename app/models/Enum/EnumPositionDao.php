@@ -32,9 +32,9 @@ class EnumPositionDao extends AbstractDao {
 	 * @param string $position zvolená poloha
 	 * @return Nette\Database\Table\ActiveRow
 	 */
-	public function selPosition($position) {
+	public function findByName($position) {
 		$sel = $this->getTable();
-		$sel->select('*')->where(array(
+		$sel->where(array(
 			self::COLUMN_POSITION => $position
 		));
 		return $sel->fetch();

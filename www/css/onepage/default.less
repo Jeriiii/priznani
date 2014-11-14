@@ -36,7 +36,7 @@
 #best-match{
 	width: 520px;
 	float: left;
-	margin: 0 15px;
+	margin: 0 15px 15px 15px;
 	
 	ul.best-search{
 		list-style: none;
@@ -79,6 +79,66 @@
 			}
 		}
 	}
+}
+
+.questionnaire-form{
+	
+	padding: 0;
+	width: 520px;
+	margin: 10px 0px;
+	background: #f7f7f7;
+	border-color: #E5E6E9 #DFE0E4 #D0D1D5;
+	
+	.question-title{
+		text-align: center;
+		color: @red-color;
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+	}
+	
+	.form-group{
+		width: 40%;
+		display: block;
+		float: left;
+		padding: 10px 5%;
+		
+		label{
+			text-align: left;
+			font-family: 'Source Sans Pro', Arial, sans-serif;
+			font-weight: 400;
+			
+		}
+		
+		.checkbox{
+			
+			margin-top: 6px;			
+			label{
+				font-weight: 400;
+				display: inline-block;
+				line-height: 18px;
+			}
+			
+			input[type="checkbox"]{
+				display: inline-block;
+				width: 18px;
+				height: 18px;
+				line-height: 18px;
+				margin-right: 25px;
+				position: relative;
+				top: 4px;
+			}
+		}
+		
+		input[type="submit"]{
+			width: 470px;
+			margin: 5px 0;
+		}
+		
+	}
+		
+}
+input[type="submit"]{
+	text-transform: uppercase;
+	font-weight: normal;
 }
 
 #stream-menu{

@@ -65,21 +65,10 @@
 			{/form}
 		</div>
 	{elseif !empty($profilePhoto) && $user->isLoggedIn() &&  $place==0  && $position==0 && $placePosSession->count%5==0}
-		Chcete další téma ke konverzaci? Vyplňte si:
-			{form placesAndPositionsForm}
-				Oblíbená poloha při milování:
-					{input fromBack}
-					{input position69}
-					{input missionary}
-					{input riding}
-					{input side}
-				Oblíbené místo k milování:
-					{input bed}
-					{input car}
-					{input nature}
-					{input unusual}
-					{input public}
-				{input send}
-			{/form}
+		<div class="questionnaire-form">
+			<h4 class="question-title">Chcete další téma ke konverzaci? Vyplňte si:</h4>
+			{control placesAndPositionsForm}
+			<div class="clear"></div>
+			</div>
 	{/if}
 {/}
