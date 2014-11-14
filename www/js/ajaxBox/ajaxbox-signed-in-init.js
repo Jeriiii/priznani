@@ -30,7 +30,7 @@ $(document).ready(function () {
 		buttonSelector: '#messages-btn',
 		topMargin: -10, //korekce y
 		arrowOrientation: 'right', //šipka bude vpravo
-		theme: "posAjaxBox posConversations", //použijí se implicitní styly, ale budou upraveny
+		theme: "posAjaxBox posConversations interface", //použijí se implicitní styly, ale budou upraveny
 		headerHtml: "Příchozí zprávy", //header
 		loadUrl: loadConversationsLink, /* link (url) vygenerovaný komponentou StandardConversationsList */
 		streamSnippetModule: {

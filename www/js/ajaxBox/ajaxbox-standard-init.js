@@ -5,6 +5,6 @@
 $(document).ready(function () {
 	$('#dropmenu').ajaxBox({
 		buttonSelector: '#droplink',
-		theme: "posAjaxBox ajaxBoxMenu"
+		theme: "posAjaxBox ajaxBoxMenu interface"
 	});
 });
