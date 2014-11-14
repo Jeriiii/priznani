@@ -176,6 +176,12 @@ class ShowPresenter extends ProfilBasePresenter {
 	public $dataForStream;
 
 	/**
+	 * @var \POS\Model\EnumVigorDao
+	 * @inject
+	 */
+	public $enumVigorDao;
+
+	/**
 	 * metoda nastavuje hodnoty predavanych parametru predtim, nez se sablona s uzivatelskym streamem vykresli.
 	 * Tyto hodnoty pak predava komponente Stream
 	 * @param type $id
@@ -240,6 +246,10 @@ class ShowPresenter extends ProfilBasePresenter {
 			$this->template->hasProfilePhoto = false;
 		}
 		$this->template->vigor = $this->getVigor($user->property->age);
+	}
+
+	private function getVigor($age) {
+		Frm\DatingRegistrationBaseForm::getVigor($age);
 	}
 
 	public function actionUserImages($id) {
@@ -323,7 +333,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \ProfilStream
 	 */
 	protected function createComponentProfilStream() {
-		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeConfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao);
+		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeConfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao, $this->userData);
 	}
 
 	/**

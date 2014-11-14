@@ -136,6 +136,17 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Vrátí uživatele podle znamení
+	 * @param int $vigor Znamení uživatele.
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getByVigor($vigor) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_VIGOR, $vigor);
+		return $sel;
+	}
+
+	/**
 	 * Vyhledá užigvatele podle zadaných kriterií
 	 * @param array $data pole dat, podle kterých se provede hledání
 	 * @return Nette\Database\Table\Selection

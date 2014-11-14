@@ -50,7 +50,7 @@ class VerificationImageNewForm extends UserGalleryImagesBaseForm {
 
 		$this->addGroup("Obrázek");
 
-		$this->addImageFields(self::NUMBER_OF_IMAGE, TRUE, TRUE);
+		$this->addImageFields(self::NUMBER_OF_IMAGE, FALSE, FALSE);
 
 		if (count($this->images) != 0) {
 			$this->addCheckbox('erasePrevious', "Při nahrání ověřovacího obrázku budou předchozí neschválené ověřovací obrázky smazány.")

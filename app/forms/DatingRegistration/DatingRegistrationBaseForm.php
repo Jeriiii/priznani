@@ -83,7 +83,7 @@ class DatingRegistrationBaseForm extends BaseForm {
 	 * Vrátí ve kterém se uživatel narodil znamení.
 	 * @param DateTime $age
 	 */
-	protected function getVigor($age) {
+	public static function getVigor($age) {
 		$age = new DateTime($age);
 		$bornMonth = intval($age->format("m"));
 		$bornDay = intval($age->format("d"));
