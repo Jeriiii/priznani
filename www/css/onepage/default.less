@@ -33,6 +33,54 @@
 	}
 }
 
+#best-match{
+	width: 520px;
+	float: left;
+	margin: 0 15px;
+	
+	ul.best-search{
+		list-style: none;
+		
+		li{
+			display: block;
+			float: left;
+			width: 62px;
+			height:62px;
+			padding: 0;
+			margin: 0;
+			margin-right: 3px + 3/7px;
+			
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			
+			.generatedProfile img{
+				border-radius: 0;
+				width: 62px;
+				height: 62px;
+				cursor: pointer;
+			}
+			
+			&.last{
+				margin: 0 !important;
+			}
+			
+			.more-btn{
+				cursor: pointer;
+				width: 62px;
+				height:62px;
+				display: block;
+				background-image: url(../../images/userSearch/search-arrow.png);
+				background-size: 62px 62px;
+				background-position: 0 0;
+				background-color: transparent;
+				background-repeat: no-repeat;
+			}
+		}
+	}
+}
+
 #stream-menu{
     width: 200px;
     float: left;
