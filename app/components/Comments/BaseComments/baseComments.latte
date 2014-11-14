@@ -1,26 +1,37 @@
 <div class="comments">
-{if $user->isLoggedIn()}
-	{snippet commentForm}
-		{control commentNewForm}
-	{/snippet}
-{else}
-	K přidání komentáře se nejdříve musíte <a href="{plink :Sign:in}">přihlásit</a>.
-{/if}
-
 {snippet list}
-		{$userData|showProfMinDiv}
+
 		{foreach $comments as $comment}
 			<div class="comment">
 				{$comment->user|showProfMin}
 				{if $user->id == $comment->userID}
-					<a n:href="deleteComment! $comment->id" class="ajax delete-comment">×</a>
+					<a n:href="deleteComment! $comment->id" class="ajax delete-comment" title="Smazat komentář">×</a>
 				{/if}
+				<p>
 				{$comment->comment}
+				</p>
+				<div class="react-menu">
 				{control likeComment-$comment->id}
+				</div>
+				<div class="clear dotline bright"></div>
 			</div>
 		{/foreach}
 		{if !$showAllComments && $minShowComments < $countComments}
-		<a n:href="showAllComment!" class="ajax">Zobrazit další komentáře ({$countComments - $minShowComments})</a>
+		<a n:href="showAllComment!" class="ajax red-link underline next-link">Zobrazit další komentáře ({$countComments - $minShowComments})</a>
+		<div class="clear"></div>
 		{/if}
+		<div class="clear"></div>
 {/snippet}
+	<div class="add-comment">
+	{if $user->isLoggedIn()}
+		<a href="{plink :Profil:Show: id => $userData->id}" class="red-link">{$userData->user_name|upper}</a>
+		{$userData|showProfMinDiv}
+		<div n:snippet="commentForm" class="comment-form">
+			{control commentNewForm}
+		</div>
+	{else}
+		K přidání komentáře se nejdříve musíte <a href="{plink :Sign:in}">přihlásit</a>.
+	{/if}
+	<div class="clear"></div>
+	</div>
 </div>

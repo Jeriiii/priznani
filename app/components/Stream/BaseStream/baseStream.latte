@@ -24,6 +24,7 @@
 							<div class="react-menu">
 								{control likeImages-$dataItem->id}
 							</div>
+							<div class="dotline"></div>
 							{control commentImages-$dataItem->id}
 						{else}
 							<strong>Obrázky se zobrazují pouze registrovaným uživatelům. <a href="{plink :Sign:registration}">Registrujte se</a>.</strong>
@@ -46,6 +47,7 @@
 						<div class="react-menu">
 							{control likeConfession-$dataItem->id}
 						</div>
+						<div class="dotline"></div>
 						{control commentConfession-$dataItem->id}
 					{/ifset}
 
@@ -60,6 +62,7 @@
 						<div class="react-menu">
 							{control likeStatus-$dataItem->id}
 						</div>
+						<div class="dotline"></div>
 						{control commentStatus-$dataItem->id}
 					{/ifset}
 					{*<div class="votes">
