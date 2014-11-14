@@ -375,6 +375,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'../ajaxObserver/core.js',
 			'../ajaxBox/ajaxBox.js',
 			'../ajaxBox/ajaxbox-standard-init.js',
+			'../ajaxBox/ajaxBox.otherFnc.js',
 			'../features/jquery.slimscroll.js'
 		));
 
