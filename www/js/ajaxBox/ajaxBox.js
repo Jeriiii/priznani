@@ -243,9 +243,11 @@
 			e.preventDefault();
 			var close = isThisWindowVisible(opts);
 			$('.ajaxBox').css('display', 'none');
+			$(this).removeClass('active');
 			$('.activeBackground').remove();
 			if (!close) {
 				$(boxSelector).css('display', 'block');//otevření jediného okénka
+				$(this).addClass('active');
 				if (opts.hideOthers) {//vyvolani pozadi
 					$('body').prepend('<div class="activeBackground" data-related="' + opts.buttonSelector + '"></div>');
 					$(boxSelector).css('z-index', '10001');
@@ -263,6 +265,7 @@
 			if (!$(event.target).is(opts.buttonSelector, '.ajaxBox')) {
 				if (!$(event.target).is('.ajaxBox *, .ajaxBox')) {
 					$(boxSelector).css('display', 'none');
+					$(opts.buttonSelector).removeClass('active');
 					$('.activeBackground[data-related=' + opts.buttonSelector + ']').remove();
 				}
 			}
