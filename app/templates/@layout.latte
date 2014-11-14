@@ -119,18 +119,19 @@
 		</div>
 		<div id="usermenu">
 			{ifset $identity}
-				<strong n:ifset="$identity->user_name" id="droplink"></strong>
+				<span n:ifset="$identity->user_name" id="droplink" class="user-btn"></span>
 			{else}
-				<a href="#" id="droplink">registrace/přihlášení</a>
+				<a href="#" id="droplink" class="user-btn with-text">registrace/přihlášení</a>
 			{/ifset}
 			{control userMenu}
-			<div class="clear"></div>
-		 </div>
 		{if $user->isLoggedIn()}
+			<a href="#" title="" class="user-btn" id="coins-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
 			{control activities}
-			<a href="#" title="Poslední zprávy" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
-			<a href="#" title="" id="coins-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
+			<a href="#" title="Poslední zprávy" class="user-btn" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
+
 		{/if}
+			<div class="clear"></div>
+		</div>
 		{if $partymode}
 		    {cache}
 				<a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>

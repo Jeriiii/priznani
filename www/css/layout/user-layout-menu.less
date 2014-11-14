@@ -5,18 +5,61 @@
     display: block;
     color: white;
     position: relative;
+	width: 50%;
+	
+	.user-btn{
+		display: block;
+		position: relative;
+		float: right;
+		height: 52px !important;
+		min-width: 52px;
+		background-image: url(../../images/layout/user-icons.png);
+		background-repeat: no-repeat;
+		background-color: transparent;
+		cursor: pointer;
+				
+		&.with-text{
+			line-height: 52px;
+			color: white;
+			padding-left: 40px;
+		}
+	}
 
     #droplink {
-		display: block;
-		height: 53px;
-		min-width: 10px;
-		line-height: 53px;
-		padding-left: 20px;
-		background: url('../../images/layout/arrow_white.png') no-repeat 2px center transparent;
-		color: white;
-		cursor: pointer;
+		background-position: -153px -64px;
+		
+		&.active{
+			background-position: -153px 15px;
+			font-weight: normal !important;
+			color: #ddd;
+		}
     }
-   
+	
+	#messages-btn{
+		background-position: 15px -64px;
+		
+		&.active{
+			background-position: 15px 15px;
+		}
+	}
+	
+	.activities-btn{
+		background-position: -42px -64px;
+		
+		&.active{
+			background-position: -42px 15px;
+		}
+	}
+	
+	#coins-btn{
+		background-position: -100px -64px;
+		
+		&.active{
+			background-position: -100px 15px;
+		}
+	}
+	
+	
 }
 
 #dropmenu{
