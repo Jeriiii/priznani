@@ -41,9 +41,9 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	const IMAGE_DESCRIPTION = "ImageDescription";
 
 	/**
-	 * @var int Pokud má uživatel alespoň 3 schválené fotky, schvaluj další automaticky
+	 * @var int Pokud má uživatel alespoň 1 schválené fotky, schvaluj další automaticky
 	 */
-	const AllowLimitForImages = 3;
+	const AllowLimitForImages = 1;
 
 	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
@@ -130,7 +130,7 @@ class UserGalleryImagesBaseForm extends BaseForm {
 		//získání počtu user obrázků, které mají allow 1
 		$allowedImagesCount = $this->userImageDao->countAllowedImages($userID);
 
-		//pokud je 3 a více schválených, schválí i nově přidávanou
+		//pokud je 1 a více schválených, schválí i nově přidávanou
 		$allow = $allowedImagesCount >= self::AllowLimitForImages ? TRUE : FALSE;
 
 		foreach ($images as $image) {
@@ -206,7 +206,8 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	 */
 	private function saveImageToDB($galleryID, $name, $description, $suffix, $allow) {
 		$approved = $allow == TRUE ? 1 : 0;
-		$image = $this->userImageDao->insertImage($name, $suffix, $description, $galleryID, $approved);
+		$checkApproved = $approved;
+		$image = $this->userImageDao->insertImage($name, $suffix, $description, $galleryID, $approved, $checkApproved);
 		$this->userGalleryDao->updateBestAndLastImage($galleryID, $image->id, $image->id);
 
 		//aktualizace streamu - vyhodí galerii ve streamu nahoru

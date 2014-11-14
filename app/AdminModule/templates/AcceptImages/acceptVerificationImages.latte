@@ -4,7 +4,7 @@
 {block content}
 {snippet imageAcceptance}
 	<h2>Ověřovací obrázky</h2>
-	{includeblock 'acceptMenu.latte'}
+	{includeblock 'menu/acceptMenu.latte'}
 	{foreach $images as $data}
 		{if isset($lastImage) && $lastImage->galleryID != $data->galleryID}
 			<hr>
