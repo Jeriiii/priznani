@@ -6,7 +6,100 @@
     Author     : Daniel Holubář
 */
 
-.comment {
+
+.comments{
+		
+	.comment{
+		position: relative;
+
+		.generatedProfile{
+			float: left;
+			width: 40px;
+
+			img{
+				width: 40px;
+				height: 40px;
+			}
+		}
+
+		p{
+			display: block;
+			padding: 6px 18px;
+			font-size: 12px;
+		}
+
+		.delete-comment{
+			display: block;
+			position: absolute;
+			top: 0;
+			right: 0;
+			font-size: 20px;
+			font-weight: 900;
+		}
+
+		.react-menu{
+			position: relative;
+			top: -12px;
+		}
+		
+		.red-link{
+			padding-top: 15px;
+			display: block;
+			font-size: 16px;
+		}
+	}
+
+	.red-link.next-link{
+		line-height: 20px;
+		font-size: 16px;
+		text-align: center;
+		display: block;
+		padding: 2px 15px;
+	}	
+
+	.add-comment{
+
+		background: #f7f7f7;
+		margin: 5px 15px;
+		padding: 5px 5px;
+
+		.generatedProfile{
+			float: left;
+			width: 20%;
+			padding: 0;
+			margin: 0 !important;
+		}
+
+		.red-link{
+			line-height: 30px;
+			font-size: 20px;
+		}
+
+
+
+		input[type="submit"]{
+			width: 100%;
+			margin: 5px 0;
+			font-weight: normal;
+			border-radius: 0;
+		}
+
+		.comment-form{
+			float: left;
+			width: 80%;
+			margin: 0;
+			padding: 0;
+		}
+
+		textarea{
+			width: 98%;
+			height: 50px;
+			padding: 2px 1%;
+			overflow: auto;
+		}
+
+	}
+
 	a.delete-comment {
 		color:#a70304 !important;
 	}
