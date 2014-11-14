@@ -6,7 +6,6 @@ use Nette\Application\UI\Form;
 use Nette\ComponentModel\IContainer;
 use NetteExt\Image;
 use NetteExt\Form\Upload\UploadImage;
-use NetteExt\Path\GalleryPathCreator;
 use NetteExt\Arrays;
 use NetteExt\File;
 use Nette\ArrayHash;
@@ -14,6 +13,8 @@ use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
 use NetteExt\Watermarks;
+use NetteExt\Path\ImagePathCreator;
+use NetteExt\Path\GalleryPathCreator;
 
 /**
  * Základní formulář pro nahrávání a ukládání obrázků
@@ -145,12 +146,33 @@ class UserGalleryImagesBaseForm extends BaseForm {
 				$imageDB = $this->saveImageToDB($galleryID, $name, $description, $suffix, $allow);
 
 				//nahraje soubor
-				$this->upload($image[self::IMAGE_FILE], $imageDB->id, $suffix, $galleryID, $userID, 500, 700, 100, 130);
+				$this->upload($image[self::IMAGE_FILE], $imageDB->id, $suffix, $galleryID, $userID, 525, 700, 100, 130);
+
+				//zaznamenání velikosti screnu do proměných width/heightGalScrn
+				$this->changeSizeGalScrnDB($galleryID, $userID, $imageDB->id, $suffix);
+
 				unset($image);
 			}
 		}
 
 		return $allow;
+	}
+
+	/**
+	 * Zaznamenání velikosti gal. screenu do DB po resizu obrázku.
+	 * @param int $galleryID ID galerie.
+	 * @param int $userID ID uživatele.
+	 * @param int $imageID ID obrázku.
+	 * @param string $suffix Přípona obrázku.
+	 */
+	private function changeSizeGalScrnDB($galleryID, $userID, $imageID, $suffix) {
+		$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryID, $userID);
+		$imagePath = ImagePathCreator::getImgScrnPath($imageID, $suffix, $galleryFolder);
+		$imageFile = Image::fromFile($imagePath);
+		$this->userImageDao->update($imageID, array(
+			UserImageDao::COLUMN_GAL_SCRN_HEIGHT => $imageFile->height,
+			UserImageDao::COLUMN_GAL_SCRN_WIDTH => $imageFile->width,
+		));
 	}
 
 	/**

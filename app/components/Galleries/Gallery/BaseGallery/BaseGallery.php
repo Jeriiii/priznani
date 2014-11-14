@@ -60,14 +60,9 @@ class BaseGallery extends BaseProjectControl {
 
 		$this->template->imageLink = $this->getPresenter()->link("this", array("imageID" => $this->image->id, "galleryID" => null));
 
-		// rozhoduje, zda je obrázek vyšší nebo širší
-		if ($this->image->widthGalScrn == 700) {
-			$setWidth = TRUE;
-			$this->template->imgPaddingTopBottom = (525 - $this->image->heightGalScrn) / 2;
-		} else {
-			$setWidth = FALSE;
-		}
-		$this->template->setWidth = $setWidth;
+		/* pomocí paddingů zarovná obrázek do prostřed obrazovky */
+		$this->template->imgPaddingTopBottom = (525 - $this->image->heightGalScrn) / 2;
+		$this->template->imgPaddingLeftRight = (700 - $this->image->widthGalScrn) / 2;
 
 		$this->template->setFile(dirname(__FILE__) . '/' . $templateName);
 		$this->template->render();

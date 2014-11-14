@@ -26,10 +26,8 @@
  
 {define imageMainScreen}
 	<img src="{$image|getImgPath}" alt="{$image->name}"
-		{ifset $imgPaddingTopBottom}
-			style = "padding: {!$imgPaddingTopBottom}px 0;"
-		{/ifset}
-		{if $setWidth} width="700" {else} height="525" {/if} />
+		style = "padding: {!$imgPaddingTopBottom}px {!$imgPaddingLeftRight}px;"
+		width="{$image->widthGalScrn}" height="{$image->heightGalScrn}" />
 {/}
 
 {define likes}
