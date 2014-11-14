@@ -35,14 +35,14 @@
 		});
 
 	};
-	
+
 	/**
 	 * Nastaví pozici okénka dle nastavení
 	 * @param {type} opts parametry
 	 * @param {type} box okénko
 	 * @param {type} button tlačítko okénka
 	 */
-	$.fn.ajaxBox.setBoxPosition = function(opts, box, button) {
+	$.fn.ajaxBox.setBoxPosition = function (opts, box, button) {
 		//nastavení správné pozice
 		if (opts.autoPosition) {//nastavení pozice okénka
 			switch (opts.autoPosition) {
@@ -148,7 +148,11 @@
 		if (!opts.loadUrl) {
 			box.find('.loadingGif').css('display', 'none');
 		}
+
 		box.prepend('<div class="ajaxBoxHeader">' + opts.headerHtml + '</div>');//přidání šipečky
+		if (box.hasClass('posPopUp')) {//přidání zavíracího křížku
+			box.find('.ajaxBoxHeader').append('<span class="close-cross">×</span>');
+		}
 		box.prepend('<div class="arrow-up"></div>');//přidání šipečky
 		box.append('<div class="window-info">' + opts.defaultMessage + '</div>');//informační boxík okénka (dole)
 		button.append('<div class="ajaxbox-button-info"></div>');
@@ -159,7 +163,7 @@
 		}
 		$.fn.ajaxBox.setBoxPosition(opts, box, button);
 		/* nabindování přepočítání polohy na změnu vel. okna */
-		$( window ).resize(function() {
+		$(window).resize(function () {
 			$.fn.ajaxBox.setBoxPosition(opts, box, button);
 		});
 		data.css('display', 'block');//zobrazení dat, pokud byla skrytá
@@ -263,6 +267,12 @@
 					$('.activeBackground').css('height', $(document).height());
 				}
 			}
+		});
+
+		$(boxSelector + ' .close-cross').click(function () {
+			$(boxSelector).css('display', 'none');
+			$(opts.buttonSelector).removeClass('active');
+			$('.activeBackground[data-related=' + opts.buttonSelector + ']').remove();
 		});
 
 		$('*').click(function (event) {//zavření při kliknutí mimo okénka

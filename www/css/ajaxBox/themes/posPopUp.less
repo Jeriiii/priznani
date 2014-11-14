@@ -5,6 +5,18 @@
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
 
+//nefunguje import mixinů TODO: spravit mixiny a smazat tuto definici
+// Vertical gradient, from top to bottom
+  //
+  // Creates two color stops, start and end, by specifying a color and position for each color stop.
+  // Color stops are not available in IE9 and below.
+  .vertical(@start-color: #555; @end-color: #333; @start-percent: 0%; @end-percent: 100%) {
+    background-image: -webkit-linear-gradient(top, @start-color @start-percent, @end-color @end-percent);  // Safari 5.1-6, Chrome 10+
+    background-image: linear-gradient(to bottom, @start-color @start-percent, @end-color @end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    background-repeat: repeat-x;
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@start-color),argb(@end-color))); // IE9 and down
+  }
+
 
 /*********** vyskakovaci okenko, viz aktivity, nové zprávy apod. Součást ajaxBoxu ***********/
 /* defaults */
@@ -21,7 +33,7 @@
 	width:@window-width;
 	height:@window-height;
 	z-index:10000;
-	.box-shadow(0px 2px 13px 0px rgba(50, 50, 50, 0.8));
+	.box-shadow(0px 0px 40px 0px rgba(0, 0, 0, 0.8));
 	background-color: #fff;
 	border: 1px solid @border-color;
 	.activity-item {
@@ -33,8 +45,9 @@
 	
 	
 	.ajaxBoxContent{
-		height: @window-height - @window-info-height - @window-header-height - 20px;/* ty 20px je za padding headeru a sebe sama*/
+		height: @window-height - @window-info-height - @window-header-height - 30px;/* ty 40px je za padding headeru a sebe sama*/
 		overflow: auto;
+		padding: 10px;
 		
 	}
 	
@@ -72,9 +85,39 @@
 		background: white;
 		padding: 10px;
 		font-size: 20px;
+		height: auto;
+		min-height: 20px;
 		color: black;
 		font-family: 'Source Sans Pro', Arial;
 		font-weight: 600;
+		.vertical(lighten(@main-dark, 20%), @main-dark);
+		color: white;
+		text-shadow: -1px -1px 0 #777;
+		position: relative;
+		text-transform: uppercase;
+		text-align: center;
+		
+		.close-cross{
+			position: absolute;
+			display: block;
+			padding: 4px;
+			width: 15px;
+			height: 15px;
+			line-height: 15px;
+			text-align: right;
+			cursor: pointer;
+			right: 10px;
+			top: 10px;
+			font-size: 24px;
+			background: white;
+			color: black;
+			border-radius: 50%;
+			
+			&:active{
+				top: 9px;
+			}
+			
+		}
 	}
 	
 	.loadingGif{

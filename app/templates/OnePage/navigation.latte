@@ -61,17 +61,21 @@
 
 {* přátelé *}
 {define friends}
-<a class="btn-main btn-small" title="Seznam přátel" id="friendsBtn">Seznam přátel</a>
-<div id="friends">
-{control friends}
+<div class="usermenu">
+	<a title="Seznam přátel" id="friendsBtn">SEZNAM PŘÁTEL</a>
+	<div id="friends">
+	{control friends}
+	</div>
 </div>
 {/}
 
 {* blokovaní uživatelé *}
 {define blokedUsers}
-<a class="btn-main btn-small" title="Blokovaní uživatelé" id="blokedUsersBtn">Blokovaní uživatelé</a>
-<div id="blokedUsers">
-{control blokedUsers}
+<div class="usermenu">
+	<a title="Blokovaní uživatelé" id="blokedUsersBtn">BLOKOVANÍ UŽIVATELÉ</a>
+	<div id="blokedUsers">
+	{control blokedUsers}
+	</div>
 </div>
 {/}
 
