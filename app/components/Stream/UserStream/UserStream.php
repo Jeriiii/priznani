@@ -40,8 +40,8 @@ class UserStream extends BaseStream {
 	 */
 	public $statusDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, LikeConfessionDao $likeConfessionDao) {
-		parent::__construct($data, $likeStatusDao, $imageLikesDao, $userDao, $userGalleryDao, $userImageDao, $confDao, $streamDao, $userPositionDao, $enumPositionDao, $userPlaceDao, $enumPlaceDao, $likeCommentDao, $commentImagesDao, $likeStatusCommentDao, $commentStatusesDao, $likeConfessionCommentDao, $commentConfessionsDao, $likeConfessionDao);
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, LikeConfessionDao $likeConfessionDao, $userData) {
+		parent::__construct($data, $likeStatusDao, $imageLikesDao, $userDao, $userGalleryDao, $userImageDao, $confDao, $streamDao, $userPositionDao, $enumPositionDao, $userPlaceDao, $enumPlaceDao, $likeCommentDao, $commentImagesDao, $likeStatusCommentDao, $commentStatusesDao, $likeConfessionCommentDao, $commentConfessionsDao, $likeConfessionDao, $userData);
 		$this->streamDao = $streamDao;
 		$this->statusDao = $statusDao;
 	}

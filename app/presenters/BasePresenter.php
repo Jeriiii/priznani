@@ -26,8 +26,8 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	public $partystyle;
 
 	/**
-	 * Co to je a co se do ni taha za relace
-	 * @var type
+	 * Proměnná s uživatelskými daty (cachovaný řádek z tabulky users). Obsahuje relace na profilFoto, gallery, property
+	 * @var ArrayHash|ActiveRow řádek z tabulky users
 	 */
 	protected $userData;
 

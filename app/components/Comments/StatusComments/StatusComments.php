@@ -16,8 +16,8 @@ use POS\Model\CommentStatusesDao;
  */
 class StatusComments extends BaseComments {
 
-	public function __construct(LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, $status) {
-		parent::__construct($likeStatusCommentDao, $commentStatusesDao, $status);
+	public function __construct(LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, $status, $userData) {
+		parent::__construct($likeStatusCommentDao, $commentStatusesDao, $status, $userData);
 	}
 
 }

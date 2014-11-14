@@ -47,7 +47,7 @@ class CommentNewForm extends BaseForm {
 
 		$this->addText("comment", "", 30, 35)
 			->addRule(Form::FILLED, "Musíte zadat text do komentáře.");
-		$this->addSubmit("submit", "Vložit");
+		$this->addSubmit("submit", "PŘIDAT KOMENTÁŘ");
 		$this->setBootstrapRender();
 
 		$this->onSuccess[] = callback($this, 'submitted');
