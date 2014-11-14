@@ -18,8 +18,8 @@
 			<div class="clear"></div>
 		</ul>
 		<div class="clear"></div>
-		<a n:href="acceptImage! imgId => $image->id, galleryId => $image->galleryID, userID => $image->gallery->userID" class="btn btn-success ajax">Schválit</a>
-		<a n:href="acceptIntimImage! imgId => $image->id, galleryId => $image->galleryID, userID => $image->gallery->userID" class="btn btn-success ajax">Schválit - intimní</a>
+		<a n:href="acceptImage! imgId => $image->id, galleryId => $image->galleryID, userID => $image->gallery->userID" class="btn btn-success ajax">Potvrdit</a>
+		<a n:href="acceptIntimImage! imgId => $image->id, galleryId => $image->galleryID, userID => $image->gallery->userID" class="btn btn-success ajax">Potvrdit - intimní</a>
 		<a n:href="deleteImage! imgId => $image->id" class="btn btn-danger ajax">Smazat</a>
 		<br>
 		{var $lastImage = $image}
