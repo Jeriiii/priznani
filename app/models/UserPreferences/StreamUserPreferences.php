@@ -47,7 +47,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	/** @var \POS\Model\StreamDao */
 	protected $streamDao;
 
-	public function __construct(ActiveRow $userProperty, UserDao $userDao, StreamDao $streamDao, UserCategoryDao $userCategoryDao, Session $session) {
+	public function __construct($userProperty, UserDao $userDao, StreamDao $streamDao, UserCategoryDao $userCategoryDao, Session $session) {
 		parent::__construct($userProperty, $userDao, $userCategoryDao, $session);
 		$this->streamDao = $streamDao;
 

@@ -87,7 +87,7 @@ class EditPresenter extends ProfilBasePresenter {
 	public $enumPlaceDao;
 
 	/** @var ActiveRow User kterému se mají editovat data */
-	private $userData;
+	protected $userData;
 	private $redirect;
 
 	public function startup() {

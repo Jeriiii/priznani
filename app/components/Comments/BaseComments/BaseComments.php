@@ -56,8 +56,11 @@ class BaseComments extends BaseProjectControl {
 	/** @var boolean TRUE = zobrazí všechny komentáře */
 	private $showAllComments = FALSE;
 
-	public function __construct(ILikeDao $likeCommentDao, ICommentDao $commentDao, ActiveRow $item) {
+	public function __construct(ILikeDao $likeCommentDao, ICommentDao $commentDao, $item) {
 		parent::__construct();
+		if (!($item instanceof ActiveRow) && !($item instanceof \Nette\ArrayHash)) {
+			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
+		}
 		$this->commentDao = $commentDao;
 		$this->item = $item;
 		$this->likeCommentDao = $likeCommentDao;

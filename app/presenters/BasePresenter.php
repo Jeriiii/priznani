@@ -16,12 +16,20 @@ use Nette\Security\User;
 use POS\Ajax\ExampleHandle,
 	POS\Ajax\AjaxCrate,
 	POS\Ajax\ChatConversationsHandle;
+use NetteExt\Serialize\Serializer;
+use NetteExt\Serialize\Relation;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
 	public $parameters;
 	public $domain;
 	public $partystyle;
+
+	/**
+	 * Co to je a co se do ni taha za relace
+	 * @var type
+	 */
+	protected $userData;
 
 	/* modes */
 	public $partymode = FALSE;
@@ -42,6 +50,12 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	public $activitiesDao;
 
 	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
+	/**
 	 * @var \POS\Chat\ChatManager
 	 * @inject
 	 */
@@ -56,6 +70,28 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
+		if (TRUE) {//($this->getUser()->isLoggedIn()) {
+			$section = $this->getSession('loggedUser');
+			$section->setExpiration('20 minutes');
+			if (TRUE) {
+				$user = $this->userDao->getUser($this->getUser()->getId());
+
+				$relProfilPhoto = new Relation("profilFoto");
+				$relGallery = new Relation("gallery");
+				$relProperty = new Relation("property");
+				$relProfilPhoto->addRel($relGallery);
+
+				$ser = new Serializer($user);
+				$ser->addRel($relProfilPhoto);
+				$ser->addRel($relProperty);
+
+				$sel = (array) $ser->toArrayHash();
+				/* vytazeni jen jednoho radku */
+				$userRow = array_shift($sel);
+				$section->userData = $userRow;
+			}
+			$this->userData = $section->userData;
+		}
 	}
 
 	public function beforeRender() {

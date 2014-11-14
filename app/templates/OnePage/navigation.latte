@@ -5,9 +5,8 @@
 	<div class="usermenu">
 	<a n:href=":Profil:Galleries:default" title="Editovat profil">MOJE GALERIE</a>
 	<a n:href=":Profil:Galleries:userGalleryNew" class="add-gallery" title="Profil">VYTVOŘIT GALERII</a>
-
 	{if $user->isLoggedIn()}
-		{if $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
+		{if $userData->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
 			{include #friendRequest}
 			<a n:href=":Profil:Edit:default" title="Změna statusu">
 			{if !empty($userData->property->statusID)}
@@ -28,7 +27,7 @@
 
 {* profilový obrázek, jméno uživatele a tlačítko editovat *}
 {define profile}
-{if $user->isLoggedIn() && $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
+{if $user->isLoggedIn() && $userData->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
 	<div class="user-profile-picture">
 	{$userData|showProfMinDiv}
 	</div>

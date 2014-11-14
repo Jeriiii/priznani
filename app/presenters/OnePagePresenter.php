@@ -156,11 +156,9 @@ class OnePagePresenter extends BasePresenter {
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $userID;
-	protected $userData;
 
 	public function actionDefault() {
 		$this->userID = $this->getUser()->getId();
-		$this->userData = $this->userDao->find($this->userID);
 		$this->fillCorrectDataForStream();
 	}
 
@@ -168,6 +166,7 @@ class OnePagePresenter extends BasePresenter {
 		$this->template->userID = $this->userID;
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
 		$this->template->userData = $this->userData;
+
 		$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->userID)->count();
 		$this->template->countVerificationRequests = $this->verificationPhotoDao->findByUserID($this->user->id)->count();
 	}

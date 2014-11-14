@@ -21,12 +21,15 @@ use POS\Model\UserCategoryDao;
 
 class BestMatchSearch extends BaseSearch {
 
-	public function __construct(ActiveRow $loggedInUser, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session, $parent = NULL, $name = NULL) {
+	public function __construct($loggedInUser, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session, $parent = NULL, $name = NULL) {
+		if (!($loggedInUser instanceof ActiveRow) && !($loggedInUser instanceof \Nette\ArrayHash)) {
+			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
+		}
 		$users = $this->getBestUsers($loggedInUser, $userDao, $userCategoryDao, $session);
 		parent::__construct($users, $parent, $name);
 	}
 
-	private function getBestUsers(ActiveRow $loggedInUser, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session) {
+	private function getBestUsers($loggedInUser, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session) {
 		$searchUser = new SearchUserPreferences($loggedInUser, $userDao, $userCategoryDao, $session);
 		$users = $searchUser->getBestUsers();
 		return $users;
