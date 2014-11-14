@@ -18,6 +18,8 @@ use Nette\Database\Table\Selection;
 
 class BaseSearch extends BaseProjectControl {
 
+	const LIMIT_LIST_FEW = 7;
+
 	protected $users;
 
 	public function __construct($users, $parent = NULL, $name = NULL) {
@@ -29,7 +31,7 @@ class BaseSearch extends BaseProjectControl {
 		$this->template->setFile(dirname(__FILE__) . '/baseSearch.latte');
 
 		if ($mode == 'listFew') {
-			$this->users = array_slice((array) $this->users, 0, 6);
+			$this->users = array_slice((array) $this->users, 0, self::LIMIT_LIST_FEW - 1);
 		}
 
 		$this->template->items = $this->users;

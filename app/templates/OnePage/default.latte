@@ -7,7 +7,7 @@
 	{includeblock 'navigation.latte'}
 	<div id="best-match">
 		{if $user->isLoggedIn()}
-			{if $userData->property}
+			{if $userData->propertyID}
 				{control bestMatchSearch 'listFew'}
 			{else} {* vyzve uživatele k dokončení registrace *}
 				Pokud se chcete seznámit, vyplňte o sobě <a n:href="DatingRegistration:" class="btn-main btn-small">další informace</a>.

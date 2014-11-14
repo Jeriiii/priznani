@@ -225,7 +225,7 @@ class ShowPresenter extends ProfilBasePresenter {
 			$this->template->asked = FALSE;
 		}
 
-		$user = $this->userDao->find($this->userID);
+		$user = $this->userData;
 
 		$this->template->userData = $user;
 		$this->template->userID = $this->userID;
@@ -239,7 +239,7 @@ class ShowPresenter extends ProfilBasePresenter {
 		} else {
 			$this->template->hasProfilePhoto = false;
 		}
-		$this->template->vigor = $this->getVigor($user->age);
+		$this->template->vigor = $this->getVigor($user->property->age);
 	}
 
 	public function actionUserImages($id) {
