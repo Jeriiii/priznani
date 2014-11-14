@@ -336,6 +336,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'../forms/netteForms.js',
 			'../ajaxObserver/core.js',
 			'../ajaxBox/ajaxBox.js',
+			'../ajaxBox/ajaxbox-standard-init.js',
 			'../features/jquery.slimscroll.js'
 		));
 
@@ -356,7 +357,8 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'chat/core.js',
 			'chat/init.js',
 			'chat/jquery.ui.chatbox/jquery.ui.chatbox.js',
-			'chat/jquery.ui.chatbox/chatboxManager.js'
+			'chat/jquery.ui.chatbox/chatboxManager.js',
+			'ajaxBox/ajaxbox-signed-in-init.js'
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
