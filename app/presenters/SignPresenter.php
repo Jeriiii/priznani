@@ -104,14 +104,6 @@ class SignPresenter extends BasePresenter {
 		$this->redirect('Sign:in');
 	}
 
-	/**
-	 * Sign in form component factory.
-	 * @return Nette\Application\UI\Form
-	 */
-	protected function createComponentSignInForm($name) {
-		return new Frm\signInForm($this->backlink, $this, $name);
-	}
-
 	protected function createComponentRegistrationForm($name) {
 		return new Frm\registrationForm($this->userDao, $this->mailer, $this, $name);
 	}

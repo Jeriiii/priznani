@@ -289,7 +289,7 @@ class StreamDao extends AbstractDao {
 		$markMeSexy->where(YouAreSexyDao::COLUMN_USER_FROM_ID, $meUserID);
 		$markMeSexyIDs = array();
 		foreach ($markMeSexy as $m) {
-			$markMeSexyIDs[] = $m->offsetGet(FriendDao::COLUMN_USER_TO_ID);
+			$markMeSexyIDs[] = $m->offsetGet(YouAreSexyDao::COLUMN_USER_TO_ID);
 		}
 
 		return $markMeSexyIDs;

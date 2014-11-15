@@ -122,6 +122,7 @@
 				<span n:ifset="$identity->user_name" id="droplink" class="user-btn"></span>
 			{else}
 				<a href="#" id="droplink" class="user-btn with-text">registrace/přihlášení</a>
+				{control signInForm}
 			{/ifset}
 			{control userMenu}
 		{if $user->isLoggedIn()}
