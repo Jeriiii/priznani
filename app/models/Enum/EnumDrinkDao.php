@@ -11,7 +11,7 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class EnumDrinkDao extends AbstractDao {
+class EnumDrinkDao extends BaseEnumDao {
 
 	const TABLE_NAME = "enum_drink";
 
@@ -21,6 +21,10 @@ class EnumDrinkDao extends AbstractDao {
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_DRINK;
 	}
 
 }

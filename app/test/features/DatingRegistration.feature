@@ -18,7 +18,8 @@ Feature: Dating registration
 		And I fill in "<about_me>" for "about_me"
 		And I fill in "<city>" for "city"
 		And I press "send"
-		Then I should be on "/dating-registration/pre-third-reg-form"
+		Then I should see "Partnerka"
+		And I should be on "/dating-registration/pre-third-reg-form"
 		When I select "ženatý / vdaná" from "marital_state"
 		And I select "bi" from "orientation"
 		And I select "160 - 170 cm" from "tallness"
@@ -29,7 +30,7 @@ Feature: Dating registration
 		And I select "A" from "bra_size"
 		And I select "<hair_colour>" from "hair_colour"
 		And I press "send"
-		Then I should see "Zaregistrujte partnera"
+		Then I should see "Partner"
 		When I select "ženatý / vdaná" from "marital_state"
 		And I select "bi" from "orientation"
 		And I select "160 - 170 cm" from "tallness"
@@ -43,6 +44,7 @@ Feature: Dating registration
 		And I select "<month>" from "month"
 		And I select "<year>" from "year"
 		And I press "send"
+		And I look on the page
 		Then I should see "Byli jste úspěšně zaregistrováni. Prosím potvrďte svůj email."
 		And I should receive an email
 		And I should see "byl jste úspěšně zaregistrován. Vaše přihlašovací údaje jsou" in last email

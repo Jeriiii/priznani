@@ -11,7 +11,7 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class EnumGraduationDao extends AbstractDao {
+class EnumGraduationDao extends BaseEnumDao {
 
 	const TABLE_NAME = "enum_graduation";
 
@@ -21,6 +21,10 @@ class EnumGraduationDao extends AbstractDao {
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_GRADUATION;
 	}
 
 }

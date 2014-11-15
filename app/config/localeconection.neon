@@ -2,6 +2,6 @@ parameters:
 	database:
 		driver: mysql
 		host: localhost
-		dbname: pos
+		dbname: postest
 		user: root
 		password: root

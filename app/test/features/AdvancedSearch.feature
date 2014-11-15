@@ -1,6 +1,7 @@
 Feature: Advanced search
 
 Scenario Outline: Searching for test users
+	Given I am signed in as "user@test.cz"
 	Given I am on "/search.search/advanced"
 	And I fill in "<age_from>" for "age_from" 
 	And I fill in "<age_to>" for "age_to"
@@ -25,22 +26,20 @@ Scenario Outline: Searching for test users
 	And I check "deepthroat"
 	And I press "search"
 	Then I should see "<found>"
-	And I should not see "<not_found>"
-	And I should not see "<not_found2>"
-	And I should not see "<not_found3>"
 	When I follow "<found>"
 	Then I should see "Profil uživatele <found>"
 
 
 Examples:	
-| age_from	| age_to	| sex	| orientation	| shape			| hair_color	| tall_from	| tall_to	| drink | smoke			| marital	| grad		| found			| not_found		| not_found2	| not_found3	|
-| 28		| 28		| žena	| hetero		| plnoštíhlá	| blond			| 160		| 170		| ne	| často			| volný		| střední	| Test Admin		| Test User		| Jerry			| Štěpán			|
-| 26		| 26		| muž	| hetero		| plnoštíhlá	| hnědá			| 180		| 190		| často	| příležitostně | volný		| vysoké	| Test User		| Test Admin		| Jancatest		| Jana			|
+| age_from	| age_to	| sex	| orientation	| shape			| hair_color	| tall_from	| tall_to	| drink | smoke			| marital	| grad		| found			|
+| 28		| 28		| žena	| hetero		| plnoštíhlá	| blond			| 160		| 170		| ne	| často			| volný		| střední	| TEST ADMIN	|
+| 26		| 26		| muž	| hetero		| plnoštíhlá	| hnědá			| 180		| 190		| často	| příležitostně | volný		| vysoké	| TEST USER		|
 
 
 #test, zda se uživatel (ne)vyhledá při drobné změně praktik
 
 Scenario Outline: Testing practics
+	Given I am signed in as "user@test.cz"
 	Given I am on "/search.search/advanced"
 	And I check "group"
 	And I check "bdsm"
@@ -50,15 +49,15 @@ Scenario Outline: Testing practics
 	And I check "<choice1>"
 	And I press "search"
 	Then I should see "<found>"
-	And I should not see "<not_found>"
+# 	And I should not see "<not_found>"
 	When I follow "<found>"
 	Then I should see "Profil uživatele <found>"
 	
  
 Examples:
-| choice1		| found			| not_found |
+| choice1		| found			| 
 # Test User se vyhledá
-| petting		| Test User		| Jancatest |
+| petting		| Test User		| 
 # Test User se již nesmí objevit
-| piss			| Test Admin		| Test User |
+| piss			| Test Admin	| 
 

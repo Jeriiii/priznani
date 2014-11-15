@@ -11,7 +11,7 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class EnumOrientationDao extends AbstractDao {
+class EnumOrientationDao extends BaseEnumDao {
 
 	const TABLE_NAME = "enum_orientation";
 
@@ -21,6 +21,10 @@ class EnumOrientationDao extends AbstractDao {
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_ORIENTATION;
 	}
 
 }

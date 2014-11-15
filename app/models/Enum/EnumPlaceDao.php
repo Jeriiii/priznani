@@ -12,7 +12,7 @@ namespace POS\Model;
  *
  * @author Christine Baierová
  */
-class EnumPlaceDao extends AbstractDao {
+class EnumPlaceDao extends BaseEnumDao {
 
 	/** @var Nette\Database */
 	protected $database;
@@ -25,6 +25,10 @@ class EnumPlaceDao extends AbstractDao {
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_PLACE;
 	}
 
 	/**

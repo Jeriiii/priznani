@@ -33,7 +33,6 @@ class DatingRegistrationWomanFourthForm extends DatingRegistrationBaseWomanForm 
 	}
 
 	public function submitted($form) {
-		parent::submitted($form);
 		$values = $form->values;
 
 		$this->regSession->age = $this->getAge($values);
@@ -50,7 +49,7 @@ class DatingRegistrationWomanFourthForm extends DatingRegistrationBaseWomanForm 
 		$this->regSession->penis_length = "";
 		$this->regSession->penis_width = "";
 
-		$this->presenter->redirect('Datingregistration:registerCouple');
+		$this->getPresenter()->redirect('Datingregistration:registerCouple');
 	}
 
 }

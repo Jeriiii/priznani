@@ -11,7 +11,7 @@ namespace POS\Model;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class EnumVigorDao extends AbstractDao {
+class EnumVigorDao extends BaseEnumDao {
 
 	const TABLE_NAME = "enum_vigors";
 	const COLUMN_ID = "id";
@@ -19,6 +19,10 @@ class EnumVigorDao extends AbstractDao {
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_NAME;
 	}
 
 }

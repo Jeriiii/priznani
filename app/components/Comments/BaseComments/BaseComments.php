@@ -66,10 +66,10 @@ class BaseComments extends BaseProjectControl {
 	public function __construct(ILikeDao $likeCommentDao, ICommentDao $commentDao, $item, $userData) {
 		parent::__construct();
 		if (!($item instanceof ActiveRow) && !($item instanceof \Nette\ArrayHash)) {
-			throw new Exception("variable $item must be instance of ActiveRow or ArrayHash");
+			throw new \Exception("variable $item must be instance of ActiveRow or ArrayHash");
 		}
 		if (!($userData instanceof ActiveRow) && !($userData instanceof \Nette\ArrayHash)) {
-			throw new Exception("variable $userData must be instance of ActiveRow or ArrayHash");
+			throw new \Exception("variable $userData must be instance of ActiveRow or ArrayHash");
 		}
 		$this->commentDao = $commentDao;
 		$this->item = $item;
