@@ -230,8 +230,11 @@ class ShowPresenter extends ProfilBasePresenter {
 		} else {
 			$this->template->asked = FALSE;
 		}
-
-		$user = $this->userData;
+		if (!empty($id)) {
+			$user = $this->userDao->find($id);
+		} else {
+			$user = $this->userData;
+		}
 
 		$this->template->userData = $user;
 		$this->template->userID = $this->userID;
