@@ -1,0 +1,89 @@
+/*
+* @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
+*//* 
+    Created on : 15.11.2014, 13:05:09
+    Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
+*/
+
+@import '../onepage/default.less';
+@import "../bootstrap/help/mixins.less";
+
+.vertical(@start-color: #ef3737; @end-color: #890302; @start-percent: 0%; @end-percent: 100%) {
+    background-image: -webkit-linear-gradient(top, @start-color @start-percent, @end-color @end-percent);  // Safari 5.1-6, Chrome 10+
+    background-image: linear-gradient(to bottom, @start-color @start-percent, @end-color @end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    background-repeat: repeat-x;
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@start-color),argb(@end-color))); // IE9 and down
+  }
+
+  
+#stream-menu{
+	
+	.like-action-panel{
+		
+		margin: 10px 0;
+		color: white !important;
+		line-height: 35px;
+		height: 35px;
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+		
+		.sexybutton{
+			color: white;
+			display: block;
+			float: left;
+			height: 100%;
+			text-align: center;
+			width: 160px;
+			margin-right: 5px;
+			font-weight: 900;
+			.vertical();
+			
+			span{
+				font-weight: 200;
+			}
+			a{
+				color: white;
+				display: block;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+		}
+		
+		.send-message-btn{
+			display: block;
+			float: left;
+			height: 100%;
+			width: 35px;
+			text-align: center;
+			.vertical();
+			border-radius: 0;
+			
+			img{
+				display: block;
+				width: 25px;
+				margin: 5px 0 0 5px;
+			}
+			
+		}
+	
+	}
+	
+	.friend-request-btn{
+		width: 100%;
+		a{
+			width: 100%;
+			display: block;
+			font-family: 'Source Sans Pro', Arial, sans-serif;
+			height: 35px;
+			.vertical();
+			color: white;
+			text-align: center;
+			line-height: 35px;
+			font-weight: 400;
+			font-size: 18px;
+			text-transform: uppercase;
+			
+		}
+	}
+}
