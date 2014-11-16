@@ -118,6 +118,7 @@
 		    </nav>
 		</div>
 		<div id="usermenu">
+			{block usermenu}{/block}
 			{if !$user->isLoggedIn()}
 			<a n:href="DatingRegistration:" class="btn-main registration-btn" title="Registruj se!">REGISTRACE</a>
 			{/if}
