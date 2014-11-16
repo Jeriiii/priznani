@@ -83,7 +83,77 @@
 			font-weight: 400;
 			font-size: 18px;
 			text-transform: uppercase;
+			margin-bottom: 20px;
+		}
+	}
+	
+	table.user-data{
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+		tr{
+			th{
+				width: 50%;
+			}
+			td{
+				width: 50%;
+			}
+		}
+	}
+	
+	.square-list{
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+		h4{
+			text-align: left;
+			font-size: 16px;
+			text-transform: uppercase;
+			font-weight: 600;
+			padding: 3px 0;
+			margin: 0;
 			
+		}
+		width: 100%;
+		
+		.back-button{
+			display: none;
+		}
+		
+		.friend-item-container{
+			width: 64px;
+			height: 64px;
+			margin: 2px 4px 2px 0px;
+			.generatedProfile, img{
+				width: 64px;
+				height: 64px;
+				margin: 0;
+				padding: 0;
+			}
+			&.third-multiple{
+				margin-right: 0;
+			}
+		}
+		
+		.imgs-container{/* galerie */
+			h2.small{
+				display: none;
+			}
+			padding: 0;
+			&.inner{
+				width: 100% !important;
+			}
+			.img-container{
+				width: 64px;
+				height: 64px;
+				margin: 2px 4px 2px 0px;
+				
+				&.third-multiple{
+					margin-right: 0;
+				}
+				a{
+					height: 54px;
+					width: 54px;
+					padding: 5px;
+					font-size: 10px;
+				}
+			}
 		}
 	}
 }

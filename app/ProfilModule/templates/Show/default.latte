@@ -33,6 +33,7 @@
 {block content}
 
 <section id="onepage">
+	{include 'menu.latte' $userID => 'id'}
 <div id="content">
 	<div id="stream-menu">
 
@@ -58,32 +59,43 @@
 	</div>
 	{/if}
 
-	<div class="delimiter top"></div>
 
 	<div class="friend-request-btn">
 		{control sendFriendRequest}
 	</div>
 
-	{control friendsList}
+	<div class="delimiter red"></div>
+	<span class="red-title">O MNĚ</span>
+	<div class="delimiter red"></div>
 
-	{control sexyListMarkedFromOther}
-
-
-	{control userGalleries 'listFew', $userID}
-
-
-
-	<h2>Informace o uživateli</h2>
 	{control userInfo "listFew", $userID}
 
+	<div class="delimiter red"></div>
+	<span class="red-title">GALERIE</span>
+	<div class="delimiter red"></div>
+	<div class="square-list">
+		{control userGalleries 'listFew', $userID}
+	</div>
+
+
+	<div class="delimiter red"></div>
+	<span class="red-title">PŘÁTELÉ</span>
+	<div class="delimiter red"></div>
+	<div class="square-list">
+		{control friendsList}
+	</div>
+
+	{*control sexyListMarkedFromOther*}{* importovana a nastavena komponenta, prozatim nevykreslena *}
 
 	</div>
 
-	{include 'menu.latte' $userID => 'id'}
 
 	{control profilStream}
 	</div>
 	<div class="clear"></div>
+
+
+
 
 
 

@@ -1,20 +1,9 @@
 <div n:snippet="friends" data-ajax-append="true">
 {ifset $friends}
 	{foreach $friends as $friend}
-		{if $iterator->isFirst()}
-			<table>
-				<thead>
-				<th></th>
-			</thead>
-			<tbody>
-		{/if}
-		<tr>
-			<td>{$friend->user2|showProf}</td>
-		</tr>
-		{if $iterator->isLast()}
-			</tbody>
-			</table>
-		{/if}
+		<div class="friend-item-container{if $iterator->getCounter() % 3 == 0} third-multiple{/if}">
+		{$friend->user2|showProfDiv}
+		</div>
 	{/foreach}
 {/ifset}
 </div>

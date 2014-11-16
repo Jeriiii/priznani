@@ -1,7 +1,7 @@
 {* Latte template *}
 
 {block menu}
-<nav>
+<nav class="profile-menu">
 	{if $user->loggedIn && $user->id == $userID}
 		<span><a n:href=":Profil:Edit:default">Editovat</a></span>
 		<span><a n:href="Galleries:verificationImageNew">Ověřovací fotka</a></span>
