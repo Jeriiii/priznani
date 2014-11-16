@@ -246,7 +246,7 @@ class AdvancedForm extends BaseForm {
 			->setAttribute('placeholder', 'do(cm)')
 			->setAttribute('class', 'middleColumn');
 
-		$this->addSelect('penis_width', 'šířka penisu: ', $penisWidthType)
+		$this->addSelect('penis_width', 'obvod penisu: ', $penisWidthType)
 			->setAttribute('class', 'columnSelectWidth');
 
 		$this->addSelect('bra_size', 'velikost prsou:', $braSize)
