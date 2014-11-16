@@ -8,6 +8,10 @@
 @import '../onepage/default.less';
 @import "../bootstrap/help/mixins.less";
 
+@main-dark: #2c2c2d;
+@main-red-dark: #890302;
+@main-red-light: #ef3737;
+
 .vertical(@start-color: #ef3737; @end-color: #890302; @start-percent: 0%; @end-percent: 100%) {
     background-image: -webkit-linear-gradient(top, @start-color @start-percent, @end-color @end-percent);  // Safari 5.1-6, Chrome 10+
     background-image: linear-gradient(to bottom, @start-color @start-percent, @end-color @end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
@@ -83,7 +87,116 @@
 			font-weight: 400;
 			font-size: 18px;
 			text-transform: uppercase;
+			margin-bottom: 20px;
+		}
+	}
+	
+	table.user-data{
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+		tr{
+			th{
+				width: 50%;
+			}
+			td{
+				width: 50%;
+			}
+		}
+	}
+	
+	.square-list{
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+		h4{
+			text-align: left;
+			font-size: 16px;
+			text-transform: uppercase;
+			font-weight: 600;
+			padding: 3px 0;
+			margin: 0;
 			
 		}
+		width: 100%;
+		
+		.back-button{
+			display: none;
+		}
+		
+		.friend-item-container{
+			width: 64px;
+			height: 64px;
+			margin: 2px 4px 2px 0px;
+			.generatedProfile, img{
+				width: 64px;
+				height: 64px;
+				margin: 0;
+				padding: 0;
+			}
+			&.third-multiple{
+				margin-right: 0;
+			}
+		}
+		
+		.imgs-container{/* galerie */
+			h2.small{
+				display: none;
+			}
+			padding: 0;
+			&.inner{
+				width: 100% !important;
+			}
+			.img-container{
+				width: 64px;
+				height: 64px;
+				margin: 2px 4px 2px 0px;
+				
+				&.third-multiple{
+					margin-right: 0;
+				}
+				a{
+					height: 54px;
+					width: 54px;
+					padding: 5px;
+					font-size: 10px;
+				}
+			}
+		}
+	}
+}
+
+.profile-menu{
+	float: left;
+	width: 520px;
+	margin: 0 15px;
+	text-align: center;
+	
+	a{
+		display: inline-block;
+		padding: 0;
+		margin: 0 0 10px 0;
+		width: 100px;
+		height: 35px;
+		line-height: 35px;
+		
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+		text-align: center;
+		font-size: 14px;
+		font-weight: 900;
+		color: white;
+		overflow: hidden;
+		
+		&.long-text{
+			line-height: 16px;
+			font-size: 14px;
+		}
+		
+		
+		.vertical(lighten(@main-dark, 20%), @main-dark);
+		
+		&:hover{
+			.vertical(@main-red-light, @main-red-dark);
+		}
+		&.last{
+			
+		}
+		
 	}
 }

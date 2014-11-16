@@ -52,4 +52,10 @@ $(document).ready(function () {
 		hideOthers: true,
 		headerHtml: 'Výběr účtu'
 	});
+
+	/* okénko s přihlašovacím/odhlašovacím menu */
+	$('#dropmenu').ajaxBox({
+		buttonSelector: '#droplink',
+		theme: "posAjaxBox ajaxBoxMenu interface"
+	});
 });

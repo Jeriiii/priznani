@@ -1,14 +1,14 @@
 {* Latte template *}
 
 {block menu}
-<nav>
+<nav class="profile-menu">
 	{if $user->loggedIn && $user->id == $userID}
-		<span><a n:href=":Profil:Edit:default">Editovat</a></span>
-		<span><a n:href="Galleries:verificationImageNew">Ověřovací fotka</a></span>
+		<a n:href=":Profil:Edit:default">Editovat</a>
+		<a n:href="Galleries:verificationImageNew" class="long-text">Ověřovací fotka</a>
 	{/if}
-		<span><a n:href="default $userID">Zeď</a></span>
-		<span><a n:href="userImages $userID">Fotky</a></span>
-		<span><a n:href="userInfo $userID">Informace</a></span>
+		<a n:href="default $userID">Zeď</a>
+		<a n:href="userImages $userID">Fotky</a>
+		<a n:href="userInfo $userID">Informace</a>
 		{if $userData->verified}
 			{if $asked}
 				<span>Žádost o ověřovací fotku podána</span>

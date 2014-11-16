@@ -58,16 +58,19 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 			->addRule(Form::FILLED, 'Heslo není vyplněno.')
 			->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaky', 4)
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Heslo\" je 100 znaků.', 100);
-		$this->addPassword('passwordVerify', 'Heslo pro kontrolu:')
+		$this->addPassword('passwordVerify', 'Heslo znovu')
 			->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu')
-			->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password']);
-		$this->addText('first_sentence', 'Úvodní věta (max 100 znaků)')
+			->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password'])
+			->setAttribute('placeholder', 'pro kontrolu...');
+		$this->addText('first_sentence', 'Úvodní věta')
 			->addRule(Form::FILLED, 'Úvodní věta není vyplněna.')
-			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Úvodní věta\" je 100 znaků.', 100);
-		$this->addTextArea('about_me', 'O mě (max 300 znaků)', 40, 10)
-			->addRule(Form::FILLED, 'O mě není vyplněno.')
-			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300);
-		$this->addText('city', 'Bydlím v:')
+			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Úvodní věta\" je 100 znaků.', 100)
+			->setAttribute('placeholder', 'max 100 znaků');
+		$this->addTextArea('about_me', 'O mně', 40, 10)
+			->addRule(Form::FILLED, 'O mně není vyplněno.')
+			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300)
+			->setAttribute('placeholder', 'max 300 znaků');
+		$this->addText('city', 'Bydlím v')
 			->addRule(Form::FILLED, 'Město není vyplněno.');
 
 		if (isset($regSession)) {
@@ -85,7 +88,7 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 		$this->onValidate[] = callback($this, "uniqueEmail");
 		$this->onValidate[] = callback($this, "existingCity");
 		$this->addSubmit('send', 'Do třetí části registrace')
-			->setAttribute("class", "btn btn-success");
+			->setAttribute("class", "btn btn-main");
 
 		return $this;
 	}

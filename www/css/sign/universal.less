@@ -1,0 +1,118 @@
+/*
+* @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
+*//* 
+    Created on : 16.11.2014, 13:18:56
+    Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
+*/
+
+
+.vertical(@start-color: #555; @end-color: #333; @start-percent: 0%; @end-percent: 100%) {
+	background-image: -webkit-linear-gradient(top, @start-color @start-percent, @end-color @end-percent);  // Safari 5.1-6, Chrome 10+
+	background-image: linear-gradient(to bottom, @start-color @start-percent, @end-color @end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+	background-repeat: repeat-x;
+	filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@start-color),argb(@end-color))); // IE9 and down
+}
+
+
+#left-side, footer, .registration-btn{
+	display:none;
+}
+
+html, body{
+	height: 100%;
+}
+
+body{
+	background-image: url(../../images/sign/test.jpg);
+	background-color: white;
+	background-repeat: no-repeat;
+	background-position: left bottom;
+	background-size: 100%;
+}
+
+.content-section{
+	position: relative;
+}
+
+.form-window{
+	width: 400px;
+	background: white;
+	position: absolute;
+	right: 7px;
+	top: 50px;
+	overflow: hidden;
+	
+	
+	.window-title{
+		width: 90%;
+		display: block;
+		padding: 15px 5%;
+		margin: 0;
+		text-transform: uppercase;
+		font-weight: 600;
+		font-size: 32px;
+		.vertical(#ef3737, #890302);
+		color: white;
+	}
+	
+	.window-content{
+		width: 90%;
+		padding: 15px 5%;
+		
+		form{
+			width: 100%;
+			padding: 0;
+			margin: 0;
+			
+			.form-control{
+				width: 90%;
+				padding: 6px 5%;
+			}
+			
+			input, select, textarea{
+				max-width: 100% !important;
+				border-radius: 0;
+			}
+			
+			textarea{
+				resize: none;
+			}
+		}
+	}
+	
+	.radio-table{
+		overflow: hidden;
+		width: 100%;
+		
+		th{
+			text-align: left;
+		}
+		.options-legend-item{
+			text-align: center;
+			display: inline-block;
+			width: 29%;
+		}
+		.option-label{
+			
+		}
+		.options{
+			padding: 4px 8px;
+			text-indent: -1000px;
+			
+			label{
+				display: inline-block;
+				width: 21%;
+				padding-left: 9%;
+				margin-right: 3%;
+			}
+			
+			input{
+				width: 20px;
+				height: 20px;
+				position: relative;
+				left: 2000px;
+			}
+		}
+	}
+	
+}

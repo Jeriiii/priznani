@@ -1,7 +1,7 @@
 {block head}
 {*<link rel="stylesheet" href="{$basePath}/css/bonuses.css" type="text/css">*}
 {*<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">*}
-<script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>  
+<script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>
 {control css "competition/listImages.less", "bootstrap/modals.less"}
 {/}
 
@@ -15,10 +15,10 @@
 
 
 {block beforeContent}
-<section class="inner imgs-container">	
+<section class="inner imgs-container">
 	<div class="top-container">
 		<h2 class="small">Galerie uživatele {$userData->user_name}</h2>
-		<a href="{plink :OnePage:}" id="add-photo-button" class="btn-main btn-small right">
+		<a href="{plink :OnePage:}" id="add-photo-button" class="btn-main btn-small right back-button">
 			zpět na stream
 		</a>
 	</div>
@@ -27,7 +27,7 @@
 		{include #addNewGallery}
 	{/ifset}
 	{foreach $galleries as $gallery}
-		<div class="img-container">
+		<div class="img-container {if $iterator->getCounter() % 3 == 0}third-multiple{/if}">
 			{ifset #galleryEditButtons}
 				{include #galleryEditButtons "gallery" => $gallery, "iterator" => $iterator}
 			{/ifset}
@@ -44,7 +44,7 @@
 		{ifset #modalDeleteGallery}
 			{include #modalDeleteGallery "gallery" => $gallery, "iterator" => $iterator}
 		{/ifset}
-		
+
     {/foreach}
 	<div class="clear"></div>
 </section>

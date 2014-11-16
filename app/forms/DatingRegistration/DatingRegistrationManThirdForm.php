@@ -23,8 +23,8 @@ class DatingRegistrationManThirdForm extends DatingRegistrationBaseManForm {
 
 		$this->regSession = $regSession;
 		$this->onSuccess[] = callback($this, 'submitted');
-		$this->addSubmit('send', 'Do třetí části registrace')
-			->setAttribute("class", "btn btn-success");
+		$this->addSubmit('send', 'Do čtvrté části registrace')
+			->setAttribute("class", "btn btn-main");
 
 		return $this;
 	}
