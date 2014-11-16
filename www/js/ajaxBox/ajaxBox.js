@@ -162,10 +162,6 @@
 			box.find('.arrow-up').addClass('on-left');//přidání třídy k šipečce (aby byla vlevo)
 		}
 		$.fn.ajaxBox.setBoxPosition(opts, box, button);
-		/* nabindování přepočítání polohy na změnu vel. okna */
-		$(window).resize(function () {
-			$.fn.ajaxBox.setBoxPosition(opts, box, button);
-		});
 		data.css('display', 'block');//zobrazení dat, pokud byla skrytá
 	}
 
@@ -287,6 +283,11 @@
 		//pridani vlastniho posuvniku
 		content.slimScroll({
 			height: content.height() + 'px'
+		});
+
+		/* nabindování přepočítání polohy na změnu vel. okna */
+		$(window).resize(function () {
+			$.fn.ajaxBox.setBoxPosition(opts, $(boxSelector), $(opts.buttonSelector));
 		});
 
 	}
