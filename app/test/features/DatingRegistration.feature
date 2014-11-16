@@ -50,8 +50,8 @@ Feature: Dating registration
 		And I follow the link from last email
 		And I should be on "/sign/in"
 		And I should see "Potvrzení bylo úspěšné, nyní se můžete přihlásit."
-		When I fill in "<email>" for "email"
-		And I fill in "<password>" for "password"
+		When I fill in "<email>" for "signEmail"
+		And I fill in "<password>" for "signPassword"
 		And I press "login"
 		Then I should see "Byl jste úspěšně přihlášen"
 		And I should see "Novákovi"
