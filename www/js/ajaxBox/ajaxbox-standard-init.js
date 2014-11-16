@@ -3,8 +3,5 @@
  */
 ;
 $(document).ready(function () {
-	$('#dropmenu').ajaxBox({
-		buttonSelector: '#droplink',
-		theme: "posAjaxBox ajaxBoxMenu interface"
-	});
+
 });
