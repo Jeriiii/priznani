@@ -325,7 +325,8 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'chat/jquery.ui.chatbox.css',
 			'chat/default.less',
 			'chat/jquery-ui.less',
-			'form.css'
+			'form.css',
+			'variables.less'
 		));
 
 // nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu

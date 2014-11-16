@@ -33,64 +33,64 @@
 {block content}
 
 <section id="onepage">
-	{include 'menu.latte' $userID => 'id'}
-<div id="content">
-	<div id="stream-menu">
+	<div id="content">
+		<div id="stream-menu">
 
-		<div class="user-profile-picture">
-			{$userData|showProfMinDiv}
+				<div class="user-profile-picture">
+					{$userData|showProfMinDiv}
+
+				</div>
+				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
+				<span class="first-sentence">{$userData->property->first_sentence}</span>
+
+			{if $user->isLoggedIn()}
+			<div class="like-action-panel">
+				<div class="sexybutton">
+					{control youAreSexy}
+				</div>
+				<a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right send-message-btn">
+					<img src="{$basePath}/images/icons/bubble-white.png" alt="Zpráva chatu" />
+				</a>
+				<div id="sendmessage-dialog">
+					{control sendMessageForm}
+				</div>
+				<div class="clear"></div>
+			</div>
+			{/if}
+
+
+			<div class="friend-request-btn">
+				{control sendFriendRequest}
+			</div>
+
+			<div class="delimiter red"></div>
+			<span class="red-title">O MNĚ</span>
+			<div class="delimiter red"></div>
+
+			{control userInfo "listFew", $userID}
+
+			<div class="delimiter red"></div>
+			<span class="red-title">GALERIE</span>
+			<div class="delimiter red"></div>
+			<div class="square-list">
+				{control userGalleries 'listFew', $userID}
+			</div>
+
+
+			<div class="delimiter red"></div>
+			<span class="red-title">PŘÁTELÉ</span>
+			<div class="delimiter red"></div>
+			<div class="square-list">
+				{control friendsList}
+			</div>
+
+			{*control sexyListMarkedFromOther*}{* importovana a nastavena komponenta, prozatim nevykreslena *}
 
 		</div>
-		<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
-		<span class="first-sentence">{$userData->property->first_sentence}</span>
 
-	{if $user->isLoggedIn()}
-	<div class="like-action-panel">
-		<div class="sexybutton">
-			{control youAreSexy}
-		</div>
-		<a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right send-message-btn">
-			<img src="{$basePath}/images/icons/bubble-white.png" alt="Zpráva chatu" />
-		</a>
-		<div id="sendmessage-dialog">
-			{control sendMessageForm}
-		</div>
-		<div class="clear"></div>
-	</div>
-	{/if}
-
-
-	<div class="friend-request-btn">
-		{control sendFriendRequest}
-	</div>
-
-	<div class="delimiter red"></div>
-	<span class="red-title">O MNĚ</span>
-	<div class="delimiter red"></div>
-
-	{control userInfo "listFew", $userID}
-
-	<div class="delimiter red"></div>
-	<span class="red-title">GALERIE</span>
-	<div class="delimiter red"></div>
-	<div class="square-list">
-		{control userGalleries 'listFew', $userID}
-	</div>
-
-
-	<div class="delimiter red"></div>
-	<span class="red-title">PŘÁTELÉ</span>
-	<div class="delimiter red"></div>
-	<div class="square-list">
-		{control friendsList}
-	</div>
-
-	{*control sexyListMarkedFromOther*}{* importovana a nastavena komponenta, prozatim nevykreslena *}
-
-	</div>
-
-
-	{control profilStream}
+		{include 'menu.latte' $userID => 'id'}
+		
+		{control profilStream}
 	</div>
 	<div class="clear"></div>
 

@@ -8,6 +8,10 @@
 @import '../onepage/default.less';
 @import "../bootstrap/help/mixins.less";
 
+@main-dark: #2c2c2d;
+@main-red-dark: #890302;
+@main-red-light: #ef3737;
+
 .vertical(@start-color: #ef3737; @end-color: #890302; @start-percent: 0%; @end-percent: 100%) {
     background-image: -webkit-linear-gradient(top, @start-color @start-percent, @end-color @end-percent);  // Safari 5.1-6, Chrome 10+
     background-image: linear-gradient(to bottom, @start-color @start-percent, @end-color @end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
@@ -155,5 +159,44 @@
 				}
 			}
 		}
+	}
+}
+
+.profile-menu{
+	float: left;
+	width: 520px;
+	margin: 0 15px;
+	text-align: center;
+	
+	a{
+		display: inline-block;
+		padding: 0;
+		margin: 0 0 10px 0;
+		width: 100px;
+		height: 35px;
+		line-height: 35px;
+		
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+		text-align: center;
+		font-size: 14px;
+		font-weight: 900;
+		color: white;
+		overflow: hidden;
+		
+		&.long-text{
+			line-height: 16px;
+			font-size: 14px;
+		}
+		
+		
+		.vertical(lighten(@main-dark, 20%), @main-dark);
+		
+		&:hover{
+			.vertical(@main-red-light, @main-red-dark);
+		}
+		&.last{
+			
+		}
+		
 	}
 }
