@@ -31,12 +31,18 @@ class UsersGallery extends BaseGallery {
 	 */
 	public $commentImagesDao;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao, LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao) {
+	/**
+	 * @var ActiveRow|ArrayHash $loggedUser
+	 */
+	public $loggedUser;
+
+	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao, LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, $loggedUser) {
 		parent::__construct($images, $image, $gallery, $domain, $partymode);
 		parent::setUserImageDao($userImageDao);
 		$this->imageLikesDao = $imageLikesDao;
 		$this->likeCommentDao = $likeCommentDao;
 		$this->commentImagesDao = $commentImagesDao;
+		$this->loggedUser = $loggedUser;
 	}
 
 	public function render() {
@@ -79,7 +85,7 @@ class UsersGallery extends BaseGallery {
 	 * @return \POSComponent\Comments\ImageComments
 	 */
 	public function createComponentComments() {
-		return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image);
+		return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image, $this->loggedUser);
 	}
 
 	/**
