@@ -23,10 +23,12 @@ class SignInForm extends BaseForm {
 		$this->backlink = $banklink;
 
 		$this->addText('email', 'E-mail:', 30, 200)
-			->addRule(Form::FILLED, "Zadejte svůj email");
+			->addRule(Form::FILLED, "Zadejte svůj email")
+			->setAttribute('placeholder', 'Email...');
 
 		$this->addPassword('password', 'Heslo:', 30, 200)
-			->addRule(Form::FILLED, "Zadejte heslo");
+			->addRule(Form::FILLED, "Zadejte heslo")
+			->setAttribute('placeholder', 'Heslo...');
 
 		$this->addCheckbox('persistent', 'Pamatovat si mě na tomto počítači', 30, 200)
 			->setDefaultValue(TRUE);

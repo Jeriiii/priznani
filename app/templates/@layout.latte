@@ -1,4 +1,4 @@
-﻿{**
+{**
  * My Application layout template.
  *
  * @copyright  Copyright (c) 2010 John Doe
@@ -119,10 +119,11 @@
 		</div>
 		<div id="usermenu">
 			{ifset $identity}
-				<span n:ifset="$identity->user_name" id="droplink" class="user-btn"></span>
+				<span n:ifset="$identity->user_name" id="droplink" class="user-btn {*with-text - odkomentovat pokud budeme chtit dovnitr text*}"></span>
 			{else}
-				<a href="#" id="droplink" class="user-btn with-text">registrace/přihlášení</a>
-				{control signInForm}
+				<div id="line-sign-in-form">
+					{control signInForm}
+				</div>
 			{/ifset}
 			{control userMenu}
 		{if $user->isLoggedIn()}
