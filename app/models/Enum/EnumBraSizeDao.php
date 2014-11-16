@@ -11,7 +11,7 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class EnumBraSizeDao extends AbstractDao {
+class EnumBraSizeDao extends BaseEnumDao {
 
 	const TABLE_NAME = "enum_bra_size";
 
@@ -21,6 +21,10 @@ class EnumBraSizeDao extends AbstractDao {
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_BRA_SIZE;
 	}
 
 }

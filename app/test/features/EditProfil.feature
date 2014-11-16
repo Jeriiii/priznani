@@ -25,7 +25,8 @@ Feature: Edit user profile
 		And I select "1" from "frm-firstEditForm-day"
 		And I select "leden" from "month"
 		And I select "1990" from "year"
-		And I press "frm-firstEditForm-send"
+		And I press "frm-firstEditForm-send" 
+		Then I should see "Informace byla změněny"
 
 	Scenario Outline: User can change Identity info
 		Given I am signed in as "user@test.cz"
@@ -33,7 +34,8 @@ Feature: Edit user profile
 		And I should see "Identifikační údaje"
 		And I fill in "<first>" for "first_sentence"
 		And I fill in "<about>" for "about_me"
-		And I press "frm-secondEditForm-send"
+		And I press "frm-secondEditForm-send" 
+		Then I should see "Změna identifikačních údajů byla úspěšná"
 
 		Examples:
 		| first			| about				|
@@ -46,6 +48,7 @@ Feature: Edit user profile
 		And I should see "Zajímám se o"
 		And I select "ano" from "<form_element>"
 		And I press "frm-interestedInForm-send"
+		Then I should see "Změna doplňujících údajů byla úspěšná"
  
 		 Examples:
          | form_element		|
@@ -61,35 +64,22 @@ Feature: Edit user profile
 		 | fisting			|
 		 | deepthrought		|
 
-	Scenario Outline: User can change favourite positions
+	Scenario: User can change favourite positions
 	    Given I am signed in as "user@test.cz"
 		And I am on "/profil.edit/"		
 		And I should see "Oblíbené polohy při milování"
-		And I check "<checkbox>"
-		And I press "frm-interestedInForm-send"
- 
-		 Examples:
-         | checkbox		|
-		 | fromBack		|
-		 | position69	|
-		 | missionary	|
-		 | riding		|
-		 | side			|
+		And I check "positions[]"
+		And I press "frm-editPlacesPositionsForm-send"
+		Then I should see "Údaje byly změněny"
 
-	Scenario Outline: User can change favourite places
+
+	Scenario: User can change favourite places
 	    Given I am signed in as "user@test.cz"
 		And I am on "/profil.edit/"		
 		And I should see "Oblíbená místa při milování"
-		And I check "<checkbox>"
-		And I press "frm-interestedInForm-send"
- 
-		 Examples:
-         | checkbox	|
-         | bed		|
-		 | car		|
-		 | nature	|
-		 | unusual	|
-		 | public	|
+		And I check "positions[]"
+		And I press "frm-editPlacesPositionsForm-send"
+		Then I should see "Údaje byly změněny"
 
 
 

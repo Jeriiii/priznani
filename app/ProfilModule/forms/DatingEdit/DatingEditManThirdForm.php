@@ -32,7 +32,7 @@ class DatingEditManThirdForm extends DatingRegistrationBaseManForm {
 		$this->userPropertyDao = $userPropertyDao;
 		$this->id_user = $presenter->getUser()->getId();
 		$this->user = $userDao->find($this->id_user);
-		$property = $property;
+		$property = $this->user->property;
 
 		$this->setDefaults(array(
 			'marital_state' => $property->marital_state,

@@ -35,6 +35,7 @@ Feature: SignIn, SignUp
 		And I check "adult"
 		And I check "agreement"
 		And I press "send"
+		And I look on the page
 		Then I should see "<message>"
 		
 

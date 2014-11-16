@@ -89,21 +89,15 @@ class UserPositionDao extends AbstractDao {
 	}
 
 	/**
-	 * Smaže záznam, pokud uživatel odškrtne svou oblíbenou pozici
+	 * Smaže všechny záznamy podle property uživatele
 	 * @param string $userPropertyID id user_properties
-	 * @param int $positionID id oblíbené polohy
 	 */
-	public function deleteSelPosition($userPropertyID, $positionID) {
-		$rowExist = $this->findPosItem($userPropertyID, $positionID);
-		if (empty($rowExist)) {
-			return;
-		} else {
-			$sel = $this->getTable();
-			$sel->select('*')->where(array(
-				self::COLUMN_USER_PROPERTIES_ID => $userPropertyID,
-				self::COLUMN_USER_ENUM_POSITION_ID => $positionID,
-			))->delete();
-		}
+	public function deleteByProperty($userPropertyID) {
+		$sel = $this->getTable();
+		$sel->where(array(
+			self::COLUMN_USER_PROPERTIES_ID => $userPropertyID,
+		));
+		$sel->delete();
 	}
 
 }

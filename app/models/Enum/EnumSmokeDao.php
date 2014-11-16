@@ -11,7 +11,7 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class EnumSmokeDao extends AbstractDao {
+class EnumSmokeDao extends BaseEnumDao {
 
 	const TABLE_NAME = "enum_smoke";
 
@@ -21,6 +21,10 @@ class EnumSmokeDao extends AbstractDao {
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_SMOKE;
 	}
 
 }
