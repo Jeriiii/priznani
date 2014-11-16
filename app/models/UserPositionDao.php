@@ -85,7 +85,8 @@ class UserPositionDao extends AbstractDao {
 	 */
 	public function getFilled($userPropertyID) {
 		$sel = $this->getTable();
-		return $sel->select('*')->where(self::COLUMN_USER_PROPERTIES_ID, $userPropertyID)->fetchAll();
+		$sel->where(self::COLUMN_USER_PROPERTIES_ID, $userPropertyID);
+		return $sel;
 	}
 
 	/**

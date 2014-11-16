@@ -75,7 +75,7 @@ Feature: Edit user profile
 
 	Scenario: User can change favourite places
 	    Given I am signed in as "user@test.cz"
-		And I am on "/profil.edit/"		
+		And I am on "/profil.edit/"	
 		And I should see "Oblíbená místa při milování"
 		And I check "positions[]"
 		And I press "frm-editPlacesPositionsForm-send"

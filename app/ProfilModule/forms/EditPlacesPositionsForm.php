@@ -49,12 +49,17 @@ class EditPlacesPositionsForm extends PlacesAndPositionsForm {
 		parent::__construct($userPositionDao, $enumPositionDao, $userPlaceDao, $enumPlaceDao, $userDao, $parent, $name);
 
 		$userProperty = $this->userDao->findProperties($this->presenter->user->id);
-		$places = $this->userPlaceDao->getFilled($userProperty->id);
+		$places = $this->userPlaceDao->getFilled($userProperty->id)->fetchPairs(
+			UserPlaceDao::COLUMN_ENUM_PLACE_ID, UserPlaceDao::COLUMN_ENUM_PLACE_ID
+		);
 
-		$this->setDefaults(array("positions" => $places));
+		$this->setDefaults(array("places" => $places));
 
-		$positions = $this->userPositionDao->getFilled($userProperty->id);
-		$this->setDefaults(array("places" => $positions));
+		$positions = $this->userPositionDao->getFilled($userProperty->id)->fetchPairs(
+			UserPositionDao::COLUMN_USER_ENUM_POSITION_ID, UserPositionDao::COLUMN_USER_ENUM_POSITION_ID
+		);
+
+		$this->setDefaults(array("positions" => $positions));
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
@@ -67,15 +72,15 @@ class EditPlacesPositionsForm extends PlacesAndPositionsForm {
 
 		$this->userPositionDao->begginTransaction();
 
-		/* pozice */
-		$this->userPositionDao->deleteByProperty($userProperty->id);
-		foreach ($values->positions as $positionID) {
-			$this->userPositionDao->insertNewPosition($userProperty->id, $positionID);
-		}
 		/* místa */
 		$this->userPlaceDao->deleteByProperty($userProperty->id);
 		foreach ($values->places as $placeID) {
 			$this->userPlaceDao->insertNewPlace($userProperty->id, $placeID);
+		}
+		/* pozice */
+		$this->userPositionDao->deleteByProperty($userProperty->id);
+		foreach ($values->positions as $positionID) {
+			$this->userPositionDao->insertNewPosition($userProperty->id, $positionID);
 		}
 
 		$this->userPositionDao->endTransaction();
