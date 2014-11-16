@@ -2,11 +2,11 @@ Feature: Friendship
 
 Scenario Outline: If user has friend, it should be visible on his and his friend's profile
 	Given I am signed in as "<user>"
-	And I am on "/profil.show/"
-	And I should see "Přátelé <friend>"
+	And I am on "/"
+	And I should see "<friend>"
 	When I follow "<friend>"
 	Then I should see "Profil uživatele <friend>"
-	And I should see "Přátelé <user_name>"
+	And I should see "<user_name>"
  
 	Examples:
 		| user			| user_name | friend		|

@@ -30,6 +30,7 @@ class FriendRequestList extends UsersList {
 	 * Vykresli šablonu.
 	 */
 	public function render() {
+		parent::render();
 		$this->renderTemplate(dirname(__FILE__) . '/' . 'friendRequestList.latte');
 	}
 
