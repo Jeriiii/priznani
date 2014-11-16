@@ -69,9 +69,48 @@ body{
 				padding: 6px 5%;
 			}
 			
-			input{
+			input, select, textarea{
 				max-width: 100% !important;
 				border-radius: 0;
+			}
+			
+			textarea{
+				resize: none;
+			}
+		}
+	}
+	
+	.radio-table{
+		overflow: hidden;
+		width: 100%;
+		
+		th{
+			text-align: left;
+		}
+		.options-legend-item{
+			text-align: center;
+			display: inline-block;
+			width: 29%;
+		}
+		.option-label{
+			
+		}
+		.options{
+			padding: 4px 8px;
+			text-indent: -1000px;
+			
+			label{
+				display: inline-block;
+				width: 21%;
+				padding-left: 9%;
+				margin-right: 3%;
+			}
+			
+			input{
+				width: 20px;
+				height: 20px;
+				position: relative;
+				left: 2000px;
 			}
 		}
 	}
