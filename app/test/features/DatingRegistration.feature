@@ -44,7 +44,6 @@ Feature: Dating registration
 		And I select "<month>" from "month"
 		And I select "<year>" from "year"
 		And I press "send"
-		And I look on the page
 		Then I should see "Byli jste úspěšně zaregistrováni. Prosím potvrďte svůj email."
 		And I should receive an email
 		And I should see "byl jste úspěšně zaregistrován. Vaše přihlašovací údaje jsou" in last email

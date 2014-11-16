@@ -16,8 +16,8 @@ use POS\Model\LikeCommentDao;
  */
 class ImageComments extends BaseComments {
 
-	public function __construct(LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, $image, $userData) {
-		parent::__construct($likeCommentDao, $commentImagesDao, $image, $userData);
+	public function __construct(LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, $image, $userData, $isUserLoggedIn) {
+		parent::__construct($likeCommentDao, $commentImagesDao, $image, $userData, $isUserLoggedIn);
 	}
 
 }

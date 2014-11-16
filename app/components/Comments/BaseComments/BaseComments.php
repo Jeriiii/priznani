@@ -68,9 +68,11 @@ class BaseComments extends BaseProjectControl {
 		if (!($item instanceof ActiveRow) && !($item instanceof \Nette\ArrayHash)) {
 			throw new \Exception("variable $item must be instance of ActiveRow or ArrayHash");
 		}
-		if (!($userData instanceof ActiveRow) && !($userData instanceof \Nette\ArrayHash)) {
-			throw new \Exception("variable $userData must be instance of ActiveRow or ArrayHash");
-		}
+		//zakomentováno z důvodu, že zatím neumím při vytváření přes multiper dostat presenter
+//		if (!($userData instanceof ActiveRow) && !($userData instanceof \Nette\ArrayHash) && $this->getPresenter()->getUser()->isLoggedIn()
+		//) {
+//			throw new \Exception("variable $userData must be instance of ActiveRow or ArrayHash");
+//		}
 		$this->commentDao = $commentDao;
 		$this->item = $item;
 		$this->likeCommentDao = $likeCommentDao;
