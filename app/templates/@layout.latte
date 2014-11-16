@@ -118,6 +118,9 @@
 		    </nav>
 		</div>
 		<div id="usermenu">
+			{if !$user->isLoggedIn()}
+			<a n:href="DatingRegistration:" class="btn-main registration-btn" title="Registruj se!">REGISTRACE</a>
+			{/if}
 			{ifset $identity}
 				<span n:ifset="$identity->user_name" id="droplink" class="user-btn {*with-text - odkomentovat pokud budeme chtit dovnitr text*}"></span>
 			{else}
@@ -152,7 +155,7 @@
 		</div>
 	    <div class="clear" id="header-placeholder"></div>
 	    {block beforeContent}{/block}
-	    <section class="inner">
+	    <section class="inner content-section">
 		<div n:foreach="$flashes as $flash" class='flash {$flash->type}'>
 		    {$flash->message}
 		</div>

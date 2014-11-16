@@ -1,3 +1,8 @@
+{block head}
+	{control css 'sign/universal.less', 'sign/registration.less'}
+{/block}
+
+
 {block datingContent}
 <h4>Zaregistrujte se.</h4><br />
 
@@ -11,21 +16,21 @@
 			<legend>Základní údaje: </legend>
 			</td>
 		</tr>
-			
+
 		<tr>
 			<td>
-				<label for="frm-firstRegForm">Daum narození:</label> 
+				<label for="frm-firstRegForm">Daum narození:</label>
 				{input day} {input month} {input year}
 			</td>
 		</tr>
-		
+
 		<tr>
 			<td>{label type /}	{input type}</td>
 		</tr>
-		
+
 		<tr>
 			<td>
-			<legend>Zajímám se o: </legend>	
+			<legend>Zajímám se o: </legend>
 			</td>
 		</tr>
 
@@ -36,14 +41,14 @@
 				{label want_to_meet_couple /}{input want_to_meet_couple}
 				{label want_to_meet_couple_men /}{input want_to_meet_couple_men}
 				{label want_to_meet_couple_women /}{input want_to_meet_couple_women}
-				{label want_to_meet_group /}{input want_to_meet_group}	
+				{label want_to_meet_group /}{input want_to_meet_group}
 			</td>
 		</tr>
-		
+
 		<tr>
 			<td>
 				{input send}
-			
+
 			<td>
 		</tr>
     </table>
