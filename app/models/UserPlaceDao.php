@@ -85,25 +85,20 @@ class UserPlaceDao extends AbstractDao {
 	 */
 	public function getFilled($userPropertyID) {
 		$sel = $this->getTable();
-		return $sel->select('*')->where(self::COLUMN_USER_PROPERTIES_ID, $userPropertyID)->fetchAll();
+		$sel->where(self::COLUMN_USER_PROPERTIES_ID, $userPropertyID);
+		return $sel;
 	}
 
 	/**
-	 * Smaže záznam, pokud uživatel odškrtne svou oblíbenou pozici
+	 * Smaže záznamy od daného uživatele.
 	 * @param string $userPropertyID id user_properties
-	 * @param int $placeID id oblíbeného místa
 	 */
-	public function deleteSelPlace($userPropertyID, $placeID) {
-		$rowExist = $this->findPlaceItem($userPropertyID, $placeID);
-		if (empty($rowExist)) {
-			return;
-		} else {
-			$sel = $this->getTable();
-			$sel->select('*')->where(array(
-				self::COLUMN_USER_PROPERTIES_ID => $userPropertyID,
-				self::COLUMN_ENUM_PLACE_ID => $placeID,
-			))->delete();
-		}
+	public function deleteByProperty($userPropertyID) {
+		$sel = $this->getTable();
+		$sel->where(array(
+			self::COLUMN_USER_PROPERTIES_ID => $userPropertyID
+		));
+		$sel->delete();
 	}
 
 }

@@ -281,8 +281,9 @@ class BaseStream extends BaseProjectControl {
 
 	protected function createComponentCommentConfession() {
 		$streamItems = $this->dataForStream;
+		$isUserLoggedIn = $this->presenter->user->isLoggedIn();
 
-		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
+		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems, $isUserLoggedIn) {
 			return new \POSComponent\Comments\ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $streamItems->offsetGet($streamItem)->confession, $this->userData);
 		});
 	}

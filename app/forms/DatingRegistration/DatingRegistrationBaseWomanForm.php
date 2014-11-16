@@ -30,8 +30,4 @@ class DatingRegistrationBaseWomanForm extends DatingRegistrationBaseSomebodyForm
 			->addRule(Form::FILLED, "Vyberte prosím barvu vlasů");
 	}
 
-	public function submitted($form) {
-		parent::submitted($form);
-	}
-
 }

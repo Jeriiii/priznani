@@ -11,8 +11,8 @@ Feature: SignIn, SignUp
 
 	Scenario Outline: User sign in
 		Given I am on "/sign/in"
-		When I fill in "email" with "<email>"
-		And I fill in "password" with "<pass>"
+		When I fill in "signEmail" with "<email>"
+		And I fill in "signPassword" with "<pass>"
 		And I press "login"
 		Then I should see "<message>"
 		

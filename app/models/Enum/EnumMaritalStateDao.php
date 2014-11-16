@@ -10,7 +10,7 @@ namespace POS\Model;
  * slouží pro práci s enumy pro stav
  * @author Daniel Holubář
  */
-class EnumMaritalStateDao extends AbstractDao {
+class EnumMaritalStateDao extends BaseEnumDao {
 
 	const TABLE_NAME = "enum_marital_state";
 
@@ -20,6 +20,10 @@ class EnumMaritalStateDao extends AbstractDao {
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_MARITAL_STATE;
 	}
 
 }

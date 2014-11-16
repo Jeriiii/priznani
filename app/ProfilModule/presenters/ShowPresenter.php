@@ -199,6 +199,7 @@ class ShowPresenter extends ProfilBasePresenter {
 				$this->flashMessage("Nejdříve si vyplňte informace o sobě.");
 				$this->redirect(":DatingRegistration:");
 			}
+			$this->userData = $this->userDao->find($id);
 		} else {
 			$user = $this->userDao->find($id);
 			if (!$user->property) {
@@ -211,6 +212,7 @@ class ShowPresenter extends ProfilBasePresenter {
 				$this->flashMessage("Pro zobrazení profilu $user->user_name se nejdříve přihlašte");
 				$this->redirect(":Sign:in");
 			}
+			$this->userData = $user;
 		}
 
 		$this->userID = $id;
@@ -222,8 +224,16 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @param type $id
 	 */
 	public function renderDefault($id) {
+		/* kontrola zda jde o muj profil */
+		$isMyProfile = FALSE;
+		if ($this->user->isLoggedIn()) {
+			if ($this->userID == $this->getPresenter()->getUser()->id) {
+				$isMyProfile = TRUE;
+			}
+		}
+		$this->template->isMyProfile = $isMyProfile;
 
-		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->user->id);
+		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->userID);
 
 		if ($verificationAsked->fetch()) {
 			$this->template->asked = TRUE;

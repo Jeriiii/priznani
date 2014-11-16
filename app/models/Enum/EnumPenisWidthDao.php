@@ -11,7 +11,7 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class EnumPenisWidthDao extends AbstractDao {
+class EnumPenisWidthDao extends BaseEnumDao {
 
 	const TABLE_NAME = "enum_penis_width";
 
@@ -21,6 +21,10 @@ class EnumPenisWidthDao extends AbstractDao {
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_PENIS_WIDTH;
 	}
 
 }

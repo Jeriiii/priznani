@@ -12,7 +12,7 @@ namespace POS\Model;
  *
  * @author Christine Baierová
  */
-class EnumPlaceDao extends AbstractDao {
+class EnumPlaceDao extends BaseEnumDao {
 
 	/** @var Nette\Database */
 	protected $database;
@@ -27,12 +27,16 @@ class EnumPlaceDao extends AbstractDao {
 		return $this->createSelection(self::TABLE_NAME);
 	}
 
+	public function getColumnName() {
+		return self::COLUMN_PLACE;
+	}
+
 	/**
 	 * Vybere id oblíbeného místa k milování z tabulky
 	 * @param string $place zvolené místo
 	 * @return Nette\Database\Table\ActiveRow
 	 */
-	public function selPlace($place) {
+	public function findByName($place) {
 		$sel = $this->getTable();
 		$sel->select('*')->where(array(
 			self::COLUMN_PLACE => $place

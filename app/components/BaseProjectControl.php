@@ -10,6 +10,51 @@ use NetteExt\Helper\HelperRegistrator;
  */
 class BaseProjectControl extends Control {
 
+	/** @var boolean|NULL Říká, jestli je aplikace spuštěna testovacím nástrojem Behat. NULL = proměnná nebyla nastavena */
+	private $testMode = NULL;
+
+	/** @var boolean|NULL Říká, jestli je aplikace spuštěna na produkci. NULL = proměnná nebyla nastavena */
+	private $productionMode = NULL;
+
+	/*	 * ******************** Metody pro práci s módy *************************** */
+
+	public function setTestMode() {
+		$this->testMode = TRUE;
+		$this->productionMode = FALSE;
+	}
+
+	public function setProductionMode() {
+		$this->productionMode = TRUE;
+		$this->testMode = FALSE;
+	}
+
+	public function setMode($presenter) {
+		if (!($presenter instanceof \Nette\Application\UI\Presenter)) {
+			throw new Exception("variable $presenter must be instance of presenter");
+		}
+
+		$this->testMode = $this->presenter->context->parameters["testMode"];
+		$this->productionMode = $this->presenter->context->parameters["productionMode"];
+	}
+
+	public function isTestMode() {
+		if ($this->testMode === NULL || $this->productionMode === NULL) {
+			throw new Exception("You must call method setMode first");
+		}
+
+		return $this->testMode;
+	}
+
+	public function isProductionMode() {
+		if ($this->testMode === NULL || $this->productionMode === NULL) {
+			throw new Exception("You must call method setMode first");
+		}
+
+		return $this->productionMode;
+	}
+
+	/*	 * ****************************************************** */
+
 	/**
 	 * Zaregistruje helpery
 	 * @param type $class

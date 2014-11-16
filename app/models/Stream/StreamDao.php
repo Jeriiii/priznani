@@ -233,19 +233,20 @@ class StreamDao extends AbstractDao {
 		$where = $params = array();
 
 		/* přidání přátel */
-		$where[] = self::COLUMN_USER_ID . " IN ?";
+		$where[] = self::COLUMN_USER_ID . " IN (?)";
 		$params[] = $this->getFriendIDs($meUserID);
 		/* přidání lidí co jsem označil jako sexy */
-		$where[] = self::COLUMN_USER_ID . " IN ?";
+		$where[] = self::COLUMN_USER_ID . " IN (?)";
 		$params[] = $this->getUsersIMarkSexy($meUserID);
 		/* přidání příspěvků v kategoriích, které hledám */
-		$where[] = self::COLUMN_CATEGORY_ID . " IN ?";
+		$where[] = self::COLUMN_CATEGORY_ID . " IN (?)";
 		$params[] = $categoryIDs;
 		/* přidání přiznání */
 		$where[] = self::COLUMN_CONFESSION_ID . " IS NOT NULL";
 
 		/* vytřídění příspěvků */
 		$sel->where(implode(" OR ", $where), $params);
+
 		return $sel;
 	}
 

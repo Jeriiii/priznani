@@ -246,7 +246,7 @@ class AdvancedForm extends BaseForm {
 			->setAttribute('placeholder', 'do(cm)')
 			->setAttribute('class', 'middleColumn');
 
-		$this->addSelect('penis_width', 'šířka penisu: ', $penisWidthType)
+		$this->addSelect('penis_width', 'obvod penisu: ', $penisWidthType)
 			->setAttribute('class', 'columnSelectWidth');
 
 		$this->addSelect('bra_size', 'velikost prsou:', $braSize)
@@ -285,15 +285,15 @@ class AdvancedForm extends BaseForm {
 	 * funkce přidá sekci s údaji o návycích
 	 */
 	private function addHabitsFields() {
-//skupina pro políčka s návyky
+		/* skupina pro políčka s návyky */
 		$this->addGroup('Návyky');
 
+		$smokes = $this->getSmokes();
+		$drinks = $this->getDrinks();
 
-		$habits = $this->getHabitsChoices();
-
-		$this->addSelect('drink', 'pití:', $habits)
+		$this->addSelect('drink', 'pití:', $drinks)
 			->setAttribute('class', 'columnSelectWidth');
-		$this->addSelect('smoke', 'kouření:', $habits)
+		$this->addSelect('smoke', 'kouření:', $smokes)
 			->setAttribute('class', 'columnSelectWidth');
 	}
 
@@ -379,14 +379,10 @@ class AdvancedForm extends BaseForm {
 	 * @return array
 	 */
 	private function getSexTypeChoices() {
-		$choices = array();
-		$data = $this->enumPropertyDao->getAll();
-		$choices[''] = "--------";
+		$sex = array("" => "--------");
+		$sex = $sex + $this->enumPropertyDao->getList();
 
-		foreach ($data as $item) {
-			$choices['"' . $item->id . '"'] = $item->name;
-		}
-		return $choices;
+		return $sex;
 	}
 
 	/**
@@ -394,13 +390,10 @@ class AdvancedForm extends BaseForm {
 	 * @return array
 	 */
 	private function getPenisWidthChoices() {
-		$data = $this->enumPenisWidthDao->getAll();
-		$choices[''] = "--------";
+		$widths = array("" => "--------");
+		$widths = $widths + $this->enumPenisWidthDao->getList();
 
-		foreach ($data as $item) {
-			$choices['"' . $item->id . '"'] = $item->penis_width;
-		}
-		return $choices;
+		return $widths;
 	}
 
 	/**
@@ -408,13 +401,10 @@ class AdvancedForm extends BaseForm {
 	 * @return array
 	 */
 	private function getBraSizeChoices() {
-		$data = $this->enumBraSizeDao->getAll();
-		$choices[''] = "--------";
+		$sizes = array("" => "--------");
+		$sizes = $sizes + $this->enumBraSizeDao->getList();
 
-		foreach ($data as $item) {
-			$choices['"' . $item->id . '"'] = $item->bra_size;
-		}
-		return $choices;
+		return $sizes;
 	}
 
 	/**
@@ -422,13 +412,10 @@ class AdvancedForm extends BaseForm {
 	 * @return array
 	 */
 	private function getOrientationChoices() {
-		$data = $this->enumOrientationDao->getAll();
-		$choices[''] = "--------";
+		$orientations = array("" => "--------");
+		$orientations = $orientations + $this->enumOrientationDao->getList();
 
-		foreach ($data as $item) {
-			$choices['"' . $item->id . '"'] = $item->orientation;
-		}
-		return $choices;
+		return $orientations;
 	}
 
 	/**
@@ -436,13 +423,10 @@ class AdvancedForm extends BaseForm {
 	 * @return array
 	 */
 	private function getShapeChoices() {
-		$data = $this->enumShapeDao->getAll();
-		$choices[''] = "--------";
+		$shapes = array("" => "--------");
+		$shapes = $shapes + $this->enumShapeDao->getList();
 
-		foreach ($data as $item) {
-			$choices['"' . $item->id . '"'] = $item->shape;
-		}
-		return $choices;
+		return $shapes;
 	}
 
 	/**
@@ -450,13 +434,10 @@ class AdvancedForm extends BaseForm {
 	 * @return array
 	 */
 	private function getHairColorChoices() {
-		$data = $this->enumHairColourDao->getAll();
-		$choices[''] = "--------";
+		$hairColors = array("" => "--------");
+		$hairColors = $hairColors + $this->enumHairColourDao->getList();
 
-		foreach ($data as $item) {
-			$choices['"' . $item->id . '"'] = $item->hair_colour;
-		}
-		return $choices;
+		return $hairColors;
 	}
 
 	/**
@@ -464,31 +445,32 @@ class AdvancedForm extends BaseForm {
 	 * @return array
 	 */
 	private function getTallnessChoices($type) {
-		$data = $this->enumTallnessDao->getAll();
 		if ($type == "from") {
-			$choices[''] = "od(cm)";
+			$tallness = array("" => "od(cm)");
 		} else {
-			$choices[''] = "do(cm)";
+			$tallness = array("" => "do(cm)");
 		}
 
-		foreach ($data as $item) {
-			$choices['"' . $item->id . '"'] = $item->tallness;
-		}
-		return $choices;
+		$tallness = $tallness + $this->enumTallnessDao->getList();
+		return $tallness;
 	}
 
 	/**
 	 * připraví data z databáze pro možnosti zvyků
 	 * @return array
 	 */
-	private function getHabitsChoices() {
-		$data = $this->enumSmokeDao->getAll();
-		$choices[''] = "--------";
+	private function getSmokes() {
+		$smokes = array("" => "--------");
+		$smokes = $smokes + $this->enumSmokeDao->getList();
 
-		foreach ($data as $item) {
-			$choices['"' . $item->id . '"'] = $item->smoke;
-		}
-		return $choices;
+		return $smokes;
+	}
+
+	public function getDrinks() {
+		$drinks = array("" => "--------");
+		$drinks = $drinks + $this->enumSmokeDao->getList();
+
+		return $drinks;
 	}
 
 	/**
@@ -496,13 +478,10 @@ class AdvancedForm extends BaseForm {
 	 * @return array
 	 */
 	private function getGraduationChoices() {
-		$data = $this->enumGraduationDao->getAll();
-		$choices[''] = "--------";
+		$graduations = array("" => "--------");
+		$graduations = $graduations + $this->enumGraduationDao->getList();
 
-		foreach ($data as $item) {
-			$choices['"' . $item->id . '"'] = $item->graduation;
-		}
-		return $choices;
+		return $graduations;
 	}
 
 	/**
@@ -510,13 +489,10 @@ class AdvancedForm extends BaseForm {
 	 * @return array
 	 */
 	private function getStateChoices() {
-		$data = $this->enumMaritalStateDao->getAll();
-		$choices[''] = "--------";
+		$states = array("" => "--------");
+		$states = $states + $this->enumMaritalStateDao->getList();
 
-		foreach ($data as $item) {
-			$choices['"' . $item->id . '"'] = $item->marital_state;
-		}
-		return $choices;
+		return $states;
 	}
 
 }

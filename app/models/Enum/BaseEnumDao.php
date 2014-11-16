@@ -7,15 +7,13 @@
 namespace POS\Model;
 
 /**
- * Pro zpřístupnění statusu uživatele. Zpřístupňuje Enumy.
+ * Základ pro všechny enumy
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class EnumStatusDao extends BaseEnumDao {
-
-	const TABLE_NAME = "enum_status";
-
+class BaseEnumDao extends AbstractDao {
 	/* Column name */
+
 	const COLUMN_ID = "id";
 	const COLUMN_NAME = "name";
 
@@ -23,8 +21,14 @@ class EnumStatusDao extends BaseEnumDao {
 		return $this->createSelection(self::TABLE_NAME);
 	}
 
-	public function getColumnName() {
-		return self::COLUMN_NAME;
+	/**
+	 * Vrátí seznam položek id => name
+	 * @return array Seznam položek
+	 */
+	public function getList() {
+		$name = $this->getColumnName();
+		$sel = $this->getAll()->fetchPairs(self::COLUMN_ID, $name);
+		return $sel;
 	}
 
 }
