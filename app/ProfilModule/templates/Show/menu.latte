@@ -1,7 +1,12 @@
 {* Latte template *}
 
 {block menu}
-<nav class="profile-menu">
+{var $buttonCount = 3}{*změnit podle počtu tlačítek*}
+{if $user->loggedIn && $user->id == $userID}
+	{var $buttonCount += 2}
+{/if}
+
+<nav class="profile-menu btn-cnt-{$buttonCount}">
 	{if $user->loggedIn && $user->id == $userID}
 		<a n:href=":Profil:Edit:default">Editovat</a>
 		<a n:href="Galleries:verificationImageNew" class="long-text">Ověřovací fotka</a>
