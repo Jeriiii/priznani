@@ -33,6 +33,18 @@ class SearchPresenter extends SearchBasePresenter {
 	public $cityDao;
 
 	/**
+	 * @var \POS\Model\DistrictDao
+	 * @inject
+	 */
+	public $districtDao;
+
+	/**
+	 * @var \POS\Model\RegionDao
+	 * @inject
+	 */
+	public $regionDao;
+
+	/**
 	 * uchovává parametry pro podrobné hledání
 	 * @var array
 	 */
@@ -118,6 +130,10 @@ class SearchPresenter extends SearchBasePresenter {
 		$this->setSexMode();
 	}
 
+	public function renderNearMe() {
+		$this->template->cityData = $this->cityDao->getNamesOfProperties();
+	}
+
 	/*
 	 * vrati novy strankovac
 	 */
@@ -169,10 +185,29 @@ class SearchPresenter extends SearchBasePresenter {
 		return new Frm \ SelectVigorForm($this->enumVigorDao, $this, $name);
 	}
 
+	protected function createComponentEditCityForm($name) {
+		$property = $this->userDao->findProperties($this->getUser()->id);
+		return new Frm \ EditCityForm($this->regionDao, $this->districtDao, $this->cityDao, $this->userPropertyDao, $property, $this, $name);
+	}
+
 	protected function createComponentBestMatchSearch($name) {
 		$user = $this->userDao->find($this->getUser()->id);
 		$session = $this->getSession();
 		return new BestMatchSearch($user, $this->userDao, $this->userCategoryDao, $session, $this, $name);
+	}
+
+	/**
+	 * WebLoader pro minifikace skriptu
+	 * @return \WebLoader\Nette\JavaScriptLoader
+	 */
+	public function createComponentJs() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+		$compiler->addFilter(function ($code) {
+			$packer = new \JavaScriptPacker($code, "None");
+			return $packer->pack();
+		});
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
 	/**

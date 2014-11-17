@@ -1,7 +1,21 @@
 {block head}
+	<link rel="stylesheet" href="{$basePath}/css/jquery-ui-autocomplete/jquery-ui.min.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/css/jquery-ui-autocomplete/jquery-ui.structure.min.css" type="text/css">
 {/block}
 
 {block content}
 	{includeblock 'navigation/searchNavigation.latte'}
+	{control editCityForm}
 	{control nearMeSearch 'listAll'}
+{/block}
+
+{block foot}
+<script type="text/javascript">
+	var data = [
+		{foreach $cityData as $item}
+					{$item->city} + ", " + {$item->district} + ", " + {$item->region},
+		{/foreach}
+	];
+</script>
+{control js 'jquery-ui-autocomplete/jquery-ui.min.js', 'jquery-ui-autocomplete/initCities.js'}
 {/block}
