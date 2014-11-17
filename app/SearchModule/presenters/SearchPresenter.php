@@ -132,6 +132,7 @@ class SearchPresenter extends SearchBasePresenter {
 
 	public function renderNearMe() {
 		$this->template->cityData = $this->cityDao->getNamesOfProperties();
+		$this->template->property = $this->userData->property;
 	}
 
 	/*

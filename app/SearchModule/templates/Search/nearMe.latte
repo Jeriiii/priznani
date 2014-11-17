@@ -5,8 +5,13 @@
 
 {block content}
 	{includeblock 'navigation/searchNavigation.latte'}
-	{control editCityForm}
-	{control nearMeSearch 'listAll'}
+	{ifset $property->cityID}
+		{control editCityForm}
+		{control nearMeSearch 'listAll'}
+	{else}
+		<span>Nejdříve zadejte, kde se nacházíte.</span>
+		{control editCityForm}
+	{/ifset}
 {/block}
 
 {block foot}
