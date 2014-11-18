@@ -233,6 +233,7 @@ class ShowPresenter extends ProfilBasePresenter {
 		}
 		$this->template->isMyProfile = $isMyProfile;
 
+
 		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->userID);
 
 		if ($verificationAsked->fetch()) {
