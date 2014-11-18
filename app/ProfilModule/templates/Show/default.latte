@@ -51,7 +51,9 @@
 			{if $user->isLoggedIn()}
 			<div class="like-action-panel">
 				{if $isMyProfile}
+					<a n:href=":Profil:Edit:default">Editovat</a>
 					<a title="Nahrát profilovku" class="uploadProfilePhoto btn-main btn-small right">Nahrát profilovku</a>
+					<a n:href="Galleries:verificationImageNew">Být ověřený uživatel</a>
 				{else}
 					<div class="sexybutton">
 						{control youAreSexy}

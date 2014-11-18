@@ -142,15 +142,15 @@
 	 * @returns {object} Nastavení pluginu.
 	 */
 	function getAttrData($box, opts) {
-		if(opts.buttonSelector === "") {
+		if(opts.buttonSelector === "" && $box.data("ajaxbox-btn") !== undefined) {
 			opts.buttonSelector = $box.data("ajaxbox-btn");
 		}
 		
-		if(opts.headerHtml === "") {
+		if(opts.headerHtml === "" && $box.data("ajaxbox-header-html") !== undefined) {
 			opts.headerHtml = $box.data("ajaxbox-header-html");
 		}
 		
-		if(opts.loadUrl === "") {
+		if(opts.loadUrl === "" && $box.data("load-url") !== undefined) {
 			opts.loadUrl = $box.data("load-url");
 		}
 		

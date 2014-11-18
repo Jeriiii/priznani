@@ -6,7 +6,7 @@ Feature: User's info
 		And I should see "Profil uživatele <name>"
 		And I should see "Jméno <name>"
 		And I should see "První věta <firstSentence>"
-		And I should see "Druh uživatele <userProperty>"
+		And I should see "Jsem <userProperty>"
 		And I should see "O mně <about>"
 		And I should see "Věk <age>"
 		And I should see "Výška <tallness>"
