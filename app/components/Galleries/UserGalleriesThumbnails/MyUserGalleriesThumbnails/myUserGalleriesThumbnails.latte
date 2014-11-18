@@ -7,7 +7,8 @@
 </div>
 {/}
 
-{define modalDeleteGallery}{dump $gallery}
+{define modalDeleteGallery}
+{control deleteGallery $gallery->id, $gallery->name}
 <div id="MyModal{$gallery->id}" class="modal fade">
 <div class="modal-dialog">
 	<div class="modal-content">

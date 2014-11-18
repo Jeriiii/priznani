@@ -377,7 +377,8 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'../ajaxBox/ajaxBox.js',
 			'../ajaxBox/ajaxbox-standard-init.js',
 			'../ajaxBox/ajaxBox.otherFnc.js',
-			'../features/jquery.slimscroll.js'
+			'../features/jquery.slimscroll.js',
+			'../ajaxBox/confirm/confirm.js'
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
