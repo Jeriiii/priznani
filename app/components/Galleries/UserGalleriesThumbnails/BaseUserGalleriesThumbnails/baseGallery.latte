@@ -17,10 +17,7 @@
 {block beforeContent}
 <section class="inner imgs-container">
 	<div class="top-container">
-		<h2 class="small">Galerie uživatele {$userData->user_name}</h2>
-		<a href="{plink :OnePage:}" id="add-photo-button" class="btn-main btn-small right back-button">
-			zpět na stream
-		</a>
+		<a href="{plink :Profil:Show: $userData->id}">{$userData->user_name}</a>
 	</div>
 	<div class="clear"></div>
 	{ifset #addNewGallery}
@@ -41,9 +38,6 @@
 				<img src="{$basePath}/images/icons/Lock-icon.png" title="{$gallery->name}" width="100%" height="100%"/>
 			{/if}
 		</div>
-		{ifset #modalDeleteGallery}
-			{include #modalDeleteGallery "gallery" => $gallery, "iterator" => $iterator}
-		{/ifset}
 
     {/foreach}
 	<div class="clear"></div>

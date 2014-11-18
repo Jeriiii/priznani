@@ -6,9 +6,6 @@ use Nette\Application\UI\Form,
 	Nette\Security as NS,
 	Nette\ComponentModel\IContainer;
 use POS\Model\UserDao;
-use POS\Model\CityDao;
-use POS\Model\DistrictDao;
-use POS\Model\RegionDao;
 use Nette\Http\SessionSection;
 
 class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
@@ -18,34 +15,13 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 	 */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\CityDao
-	 */
-	public $cityDao;
-
-	/**
-	 * @var \POS\Model\DistrictDao
-	 */
-	public $districtDao;
-
-	/**
-	 * @var \POS\Model\RegionDao
-	 */
-	public $regionDao;
-
 	/** @var \Nette\Http\SessionSection */
 	private $regSession;
-	private $cityID;
-	private $districtID;
-	private $regionID;
 
-	public function __construct(RegionDao $regionDao, DistrictDao $districtDao, CityDao $cityDao, UserDao $userDao, IContainer $parent = NULL, $name = NULL, SessionSection $regSession = NULL) {
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, SessionSection $regSession = NULL) {
 		parent::__construct($parent, $name);
 		$this->userDao = $userDao;
 		$this->regSession = $regSession;
-		$this->cityDao = $cityDao;
-		$this->districtDao = $districtDao;
-		$this->regionDao = $regionDao;
 
 		$this->addText('email', 'Email')
 			->addRule(Form::FILLED, 'Email není vyplněn.')
@@ -70,8 +46,6 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 			->addRule(Form::FILLED, 'O mně není vyplněno.')
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300)
 			->setAttribute('placeholder', 'max 300 znaků');
-		$this->addText('city', 'Bydlím v')
-			->addRule(Form::FILLED, 'Město není vyplněno.');
 
 		if (isset($regSession)) {
 			$this->setDefaults(array(
@@ -79,14 +53,12 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 				'user_name' => $regSession->user_name,
 				'first_sentence' => $regSession->first_sentence,
 				'about_me' => $regSession->about_me,
-				'city' => $regSession->city . ", " . $regSession->district . ", " . $regSession->region,
 			));
 		}
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->onValidate[] = callback($this, "uniqueUserName");
 		$this->onValidate[] = callback($this, "uniqueEmail");
-		$this->onValidate[] = callback($this, "existingCity");
 		$this->addSubmit('send', 'Do třetí části registrace')
 			->setAttribute("class", "btn btn-main");
 
@@ -100,20 +72,12 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 		$authenticator = $presenter->context->authenticator;
 		$pass = $authenticator->calculateHash($values->password);
 
-		$dataAboutCities = $this->getDataAboutCity($values);
-		$city = $dataAboutCities[0];
-		$district = $dataAboutCities[1];
-		$region = $dataAboutCities[2];
-
 		$this->regSession->email = $values->email;
 		$this->regSession->user_name = $values->user_name;
 		$this->regSession->password = $values->password;
 		$this->regSession->passwordHash = $pass;
 		$this->regSession->first_sentence = $values->first_sentence;
 		$this->regSession->about_me = $values->about_me;
-		$this->regSession->city = $city;
-		$this->regSession->district = $district;
-		$this->regSession->region = $region;
 
 		$presenter->redirect('Datingregistration:PreThirdRegForm');
 	}
@@ -142,50 +106,6 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 		if ($email) {
 			$form->addError('Tento mail již někdo používá.');
 		}
-	}
-
-	/**
-	 * Zkontorluje, zda dané město je v databázi
-	 * @param Nette\Application\UI\Form $form
-	 * @return
-	 */
-	public function existingCity($form) {
-		$values = $form->getValues();
-
-		$data = $this->getDataAboutCity($values);
-
-
-		if (sizeof($data) < 3) {
-			$form->addError('Neúplná data o městu(město, okres, kraj)');
-			return;
-		}
-
-		$region = $this->regionDao->findByName($data[2]);
-		if (!$region) {
-			$form->addError('Omlouváme se, toto město není v naší databázi. Prosím, vyberte ze seznamu větší město ve vašem okolí.');
-			return;
-		}
-
-		$district = $this->districtDao->findByNameAndRegionID($data[1], $region->id);
-		if (!$district) {
-			$form->addError('Omlouváme se, toto město není v naší databázi. Prosím, vyberte ze seznamu větší město ve vašem okolí.');
-			return;
-		}
-
-		$city = $this->cityDao->findByNameAndDistrictID($data[0], $district->id);
-		if (!$city) {
-			$form->addError('Omlouváme se, toto město není v naší databázi. Prosím, vyberte ze seznamu větší město ve vašem okolí.');
-			return;
-		}
-	}
-
-	/**
-	 * Uloží data z řetězce do pole
-	 * @param array $values
-	 * @return array Pole s daty o městu: 0 => ID města, 1 => ID okresu, 2 => ID kraje
-	 */
-	private function getDataAboutCity($values) {
-		return explode(", ", $values->city);
 	}
 
 }

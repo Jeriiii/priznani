@@ -15,6 +15,7 @@ use POSComponent\UsersList\FriendRequestList;
 use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\BlokedUsersList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
+use POSComponent\Confirm;
 
 class OnePagePresenter extends BasePresenter {
 

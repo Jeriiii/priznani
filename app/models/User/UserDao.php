@@ -33,6 +33,7 @@ class UserDao extends UserBaseDao {
 	const COLUMN_CONFIRMED = "confirmed";
 	const COLUMN_PASSWORD = "password";
 	const COLUMN_VERIFIED = "verified";
+	const COLUMN_PROFIL_PHOTO_ID = "profilFotoID";
 
 	/**
 	 * w - women

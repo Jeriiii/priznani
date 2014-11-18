@@ -7,35 +7,10 @@
 </div>
 {/}
 
-{define modalDeleteGallery}{dump $gallery}
-<div id="MyModal{$gallery->id}" class="modal fade">
-<div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<h3 id="myModalLabel">Smazat galerie {$gallery->id}?</h3>
-		</div>
-		<div class="modal-body">
-			<p>Opravdu chcete smazat galerie {$gallery->name}?</p>	
-		</div>
-		<div class="modal-footer">
-			<a href="{plink deleteGallery! galleryID => $gallery->id}" class="btn btn-success">
-				Ano
-			</a>
-			<button  class="btn" data-dismiss="modal" aria-hidden="true">Ne</button>
-		</div>
-	</div>
-</div>
-</div>
-{/}
-
-	{define galleryEditButtons}
-	{if $gallery->private}
-		{if $paying}
-			<a href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" class="btn-action btn-edit" title="editovat galerie"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
-			<a data-toggle="modal" href="#MyModal{$gallery->id}" class="btn-action btn-delete" title="smazat galerie"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
-		{/if}
-	{else}
-		<a href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" class="btn-action btn-edit" title="editovat galerie"><img src="{$basePath}/images/icons/gly_edit.png"/></a>
-		<a data-toggle="modal" href="#MyModal{$gallery->id}" class="btn-action btn-delete" title="smazat galerie"><img src="{$basePath}/images/icons/gly_remove.png"/></a>
+{define galleryEditButtons}
+	{if !($gallery->private && !$paying)} {* tlačítka se nezobrazí, pokud je galerie private a už. je neplatící *}
+		<a href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" class="btn-action btn-edit" title="editovat galerie"></a>
+		{var $link = array('deleteGallery!', array(galleryID => $gallery->id) )}
+		{control deleteGallery $gallery->id, $gallery->name, $link}
 	{/if}
-	{/}
+{/}
