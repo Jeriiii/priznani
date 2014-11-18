@@ -436,8 +436,8 @@ class UserDao extends UserBaseDao {
 			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->type),
 			'Stav' => UserBaseDao::getTranslateUserState($userProperty->marital_state),
 			'Věk' => $this->getAge($userProperty->age),
-//			'Chtěl bych potkat' => UserBaseDao::getTranslateUserInterestedIn($userProperty->interested_in),
-			'První věta' => $userProperty->first_sentence,
+			/* 'Chtěl bych potkat' => UserBaseDao::getTranslateUserInterestedIn($userProperty->interested_in), */
+			/* 'První věta' => $userProperty->first_sentence, */
 		);
 		$seek = $this->getWantToMeet($userProperty);
 		return $userShortInfo + $seek;
