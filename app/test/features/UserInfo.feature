@@ -33,5 +33,5 @@ Feature: User's info
 
 		Examples:
 			| user				| name			 | firstSentence	 | userProperty | about						| age | tallness     | bodyType | smoking		| alcohol	| education | status | orientation	| threesome | anal	| group | BDSM	| swallow	| sperm | oral	| piss	| massage	| petting | fisting | deepThroat | penisLenght	| penisWidth | lookFor			|
-			| user@test.cz		| Test User		 | Oh bože, už budu. | Muž          | Hledám zábavu a vzrušení. | 26  | 180 - 190 cm | plnoštíhlá | příležitostně | často		| vysoké	| volný	 | hetero		| ano		| ne	| ano	| ano	| ne		| ne	| ano	| ne	| ano		| ano	  |	ne		| ano		 | 3		| střední	 | ženu, ženský pár	|	
+			| user@test.cz		| Test User		 | Oh bože, už budu. | Muž          | Hledám zábavu a vzrušení. | 26  | 180 - 190 cm | plnoštíhlá | příležitostně | často		| vysoké	| volný	 | hetero		| ano		| ne	| ano	| ano	| ne		| ne	| ano	| ne	| ano		| ano	  |	ne		| ano		 | 3		| 8cm-11cm	 | ženu, ženský pár	|	
 			
