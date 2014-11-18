@@ -39,7 +39,7 @@ Feature: Dating registration
 		And I select "ne" from "drink"
 		And I select "střední" from "graduation"
 		And I fill in "15" for "penis_length"
-		And I select "střední" from "penis_width"
+		And I select "8cm-11cm" from "penis_width"
 		When I select "<day>" from "day"
 		And I select "<month>" from "month"
 		And I select "<year>" from "year"
