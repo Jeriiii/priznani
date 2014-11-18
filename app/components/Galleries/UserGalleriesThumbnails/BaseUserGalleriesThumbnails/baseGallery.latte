@@ -16,9 +16,11 @@
 
 {block beforeContent}
 <section class="inner imgs-container">
+	{if ! $listFew}
 	<div class="top-container">
 		<a href="{plink :Profil:Show: $userData->id}">{$userData->user_name}</a>
 	</div>
+	{/if}
 	<div class="clear"></div>
 	{ifset #addNewGallery}
 		{include #addNewGallery}

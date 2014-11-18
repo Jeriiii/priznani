@@ -2,24 +2,20 @@
 
 {block menu}
 {var $buttonCount = 3}{*změnit podle počtu tlačítek*}
-{if $user->loggedIn && $user->id == $userID}
+{*if $user->loggedIn && $user->id == $userID}
 	{var $buttonCount += 2}
-{/if}
+{/if*}
 
 <nav class="profile-menu btn-cnt-{$buttonCount}">
-	{if $user->loggedIn && $user->id == $userID}
-		<a n:href=":Profil:Edit:default">EDITOVAT</a>
-		<a n:href="Galleries:verificationImageNew" class="long-text">OVĚŘOVACÍ FOTKA</a>
-	{/if}
-		<a n:href="default $userID">ZEĎ</a>
-		<a n:href="userImages $userID">FOTKY</a>
-		<a n:href="userInfo $userID">INFORMACE</a>
-		{if $userData->verified}
-			{if $asked}
-				<span>Žádost o ověřovací fotku podána</span>
-			{else}
-				<span><a n:href="requestConfirmPhoto! $userID, $user->id">Zádost o ověřovací fotku</a></span>
-			{/if}
+	<a n:href="default $userID">ZEĎ</a>
+	<a n:href="userImages $userID">FOTKY</a>
+	<a n:href="userInfo $userID">INFORMACE</a>
+	{if $userData->verified}
+		{if $asked}
+			<span>Žádost o ověřovací fotku podána</span>
+		{else}
+			<span><a n:href="requestConfirmPhoto! $userID, $user->id">Zádost o ověřovací fotku</a></span>
 		{/if}
-		</nav>
+	{/if}
+	</nav>
 {/block}

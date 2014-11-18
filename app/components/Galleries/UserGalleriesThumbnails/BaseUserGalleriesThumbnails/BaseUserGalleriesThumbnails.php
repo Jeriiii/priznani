@@ -69,11 +69,13 @@ class BaseUserGalleriesThumbnails extends BaseProjectControl {
 		/* vrati pouze posledni vsechny nahledy galerie daneho uzivatele */
 		if ($mode == "listAll") {
 			$this->renderListAllImages($galleries, $templateName);
+			$this->template->listFew = FALSE;
 		}
 
 		/* vrati pouze posledni 4 nahledy galerie daneho uzivatele */
 		if ($mode == "listFew") {
 			$this->renderListFewImages($galleries, $templateName);
+			$this->template->listFew = TRUE;
 		}
 
 		$this->template->render();
