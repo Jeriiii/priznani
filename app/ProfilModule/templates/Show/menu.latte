@@ -8,12 +8,12 @@
 
 <nav class="profile-menu btn-cnt-{$buttonCount}">
 	{if $user->loggedIn && $user->id == $userID}
-		<a n:href=":Profil:Edit:default">Editovat</a>
-		<a n:href="Galleries:verificationImageNew" class="long-text">Ověřovací fotka</a>
+		<a n:href=":Profil:Edit:default">EDITOVAT</a>
+		<a n:href="Galleries:verificationImageNew" class="long-text">OVĚŘOVACÍ FOTKA</a>
 	{/if}
-		<a n:href="default $userID">Zeď</a>
-		<a n:href="userImages $userID">Fotky</a>
-		<a n:href="userInfo $userID">Informace</a>
+		<a n:href="default $userID">ZEĎ</a>
+		<a n:href="userImages $userID">FOTKY</a>
+		<a n:href="userInfo $userID">INFORMACE</a>
 		{if $userData->verified}
 			{if $asked}
 				<span>Žádost o ověřovací fotku podána</span>

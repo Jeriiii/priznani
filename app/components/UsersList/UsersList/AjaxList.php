@@ -17,6 +17,18 @@ use POSComponent\BaseProjectControl;
 
 abstract class AjaxList extends BaseProjectControl implements \IAjaxBox {
 
+	/**
+	 * Vykresli šablonu.
+	 */
+	public function render() {
+		$this->setMode($this->getPresenter());
+		if ($this->isTestMode()) {
+			$this->limit = 1000;
+			$offset = 0;
+			$this->setData($offset);
+		}
+	}
+
 	/** @var int Posun příspěvků při rolování */
 	protected $offset = 0;
 

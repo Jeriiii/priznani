@@ -151,7 +151,7 @@ class UserDao extends UserBaseDao {
 	 * @param array $data pole dat, podle kterých se provede hledání
 	 * @return Nette\Database\Table\Selection
 	 */
-	public function findBySearchData($data) {
+	public function getBySearchData($data) {
 		$sel = $this->getTable();
 		$timeOne = new \Nette\DateTime();
 		$timeTwo = new \Nette\DateTime();

@@ -11,7 +11,7 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class EnumTallnessDao extends AbstractDao {
+class EnumTallnessDao extends BaseEnumDao {
 
 	const TABLE_NAME = "enum_tallness";
 
@@ -21,6 +21,10 @@ class EnumTallnessDao extends AbstractDao {
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_TALLNESS;
 	}
 
 }

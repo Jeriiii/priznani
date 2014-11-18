@@ -38,7 +38,9 @@
 
 				<div class="user-profile-picture">
 					{$userData|showProfMinDiv}
-
+					{if $isMyProfile}
+						{control uploadPhotoForm}
+					{/if}
 				</div>
 				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
 				<span class="first-sentence">{$userData->property->first_sentence}</span>
@@ -57,7 +59,6 @@
 				<div class="clear"></div>
 			</div>
 			{/if}
-
 
 			<div class="friend-request-btn">
 				{control sendFriendRequest}

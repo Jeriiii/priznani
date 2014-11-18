@@ -49,70 +49,42 @@ class EditPlacesPositionsForm extends PlacesAndPositionsForm {
 		parent::__construct($userPositionDao, $enumPositionDao, $userPlaceDao, $enumPlaceDao, $userDao, $parent, $name);
 
 		$userProperty = $this->userDao->findProperties($this->presenter->user->id);
-		$placeValues = $this->userPlaceDao->getFilled($userProperty->id);
+		$places = $this->userPlaceDao->getFilled($userProperty->id)->fetchPairs(
+			UserPlaceDao::COLUMN_ENUM_PLACE_ID, UserPlaceDao::COLUMN_ENUM_PLACE_ID
+		);
 
-		foreach ($placeValues as $value) {
-			$sel = $this->enumPlaceDao->getFilledPlaces($value->enum_placeID);
+		$this->setDefaults(array("places" => $places));
 
-			if ($sel->place == $this->bed->caption) {
-				$this->bed->setDefaultValue(true);
-			}
-			if ($sel->place == $this->car->caption) {
-				$this->car->setDefaultValue(true);
-			}
-			if ($sel->place == $this->nature->caption) {
-				$this->nature->setDefaultValue(true);
-			}
-			if ($sel->place == $this->unusual->caption) {
-				$this->unusual->setDefaultValue(true);
-			}
-			if ($sel->place == $this->public->caption) {
-				$this->public->setDefaultValue(true);
-			}
-		}
+		$positions = $this->userPositionDao->getFilled($userProperty->id)->fetchPairs(
+			UserPositionDao::COLUMN_USER_ENUM_POSITION_ID, UserPositionDao::COLUMN_USER_ENUM_POSITION_ID
+		);
 
-		$positionValues = $this->userPositionDao->getFilled($userProperty->id);
+		$this->setDefaults(array("positions" => $positions));
 
-		foreach ($positionValues as $value) {
-			$sel = $this->enumPositionDao->getFilledPositions($value->enum_positionID);
-
-			if ($sel->position == $this->fromBack->caption) {
-				$this->fromBack->setDefaultValue(true);
-			}
-			if ($sel->position == $this->position69->caption) {
-				$this->position69->setDefaultValue(true);
-			}
-			if ($sel->position == $this->riding->caption) {
-				$this->riding->setDefaultValue(true);
-			}
-			if ($sel->position == $this->side->caption) {
-				$this->side->setDefaultValue(true);
-			}
-			if ($sel->position == $this->missionary->caption) {
-				$this->missionary->setDefaultValue(true);
-			}
-		}
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
 
 	public function submitted($form) {
 		$values = $form->getValues();
+		$presenter = $this->getPresenter();
 		$userProperty = $this->userDao->findProperties($this->presenter->user->id);
 
-		$positionsArray = array($this->fromBack, $this->position69, $this->riding, $this->side, $this->missionary);
+		$this->userPositionDao->begginTransaction();
 
-		$placesArray = array($this->bed, $this->car, $this->nature, $this->unusual, $this->public);
-
-		foreach ($positionsArray as $position) {
-			$this->setPositionValues($values, $position->caption, $userProperty, $position);
+		/* místa */
+		$this->userPlaceDao->deleteByProperty($userProperty->id);
+		foreach ($values->places as $placeID) {
+			$this->userPlaceDao->insertNewPlace($userProperty->id, $placeID);
+		}
+		/* pozice */
+		$this->userPositionDao->deleteByProperty($userProperty->id);
+		foreach ($values->positions as $positionID) {
+			$this->userPositionDao->insertNewPosition($userProperty->id, $positionID);
 		}
 
-		foreach ($placesArray as $place) {
-			$this->setPlaceValues($values, $place->caption, $userProperty, $place);
-		}
+		$this->userPositionDao->endTransaction();
 
-		$presenter = $this->getPresenter();
 		$presenter->flashMessage('Údaje byly změněny.');
 		$presenter->redirect('this');
 	}
@@ -121,7 +93,7 @@ class EditPlacesPositionsForm extends PlacesAndPositionsForm {
 
 	public function setPositionValues($values, $posName, $userProperty, $position) {
 
-		$sel = $this->enumPositionDao->selPosition($posName);
+		$sel = $this->enumPositionDao->findByName($posName);
 		$values->position = $position;
 
 		if ($values->position->value == TRUE) {
@@ -135,7 +107,7 @@ class EditPlacesPositionsForm extends PlacesAndPositionsForm {
 
 	public function setPlaceValues($values, $placeName, $userProperty, $place) {
 
-		$sel = $this->enumPlaceDao->selPlace($placeName);
+		$sel = $this->enumPlaceDao->findByName($placeName);
 		$values->place = $place;
 
 		if ($values->place->value == TRUE) {

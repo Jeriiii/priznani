@@ -30,7 +30,6 @@ class DatingRegistrationManThirdForm extends DatingRegistrationBaseManForm {
 	}
 
 	public function submitted($form) {
-		parent::submitted($form);
 		$values = $form->values;
 
 		$this->regSession->marital_state = $values->marital_state;
@@ -45,7 +44,7 @@ class DatingRegistrationManThirdForm extends DatingRegistrationBaseManForm {
 		$this->regSession->penis_length = $values->penis_length;
 		$this->regSession->penis_width = $values->penis_width;
 
-		$this->presenter->redirect('Datingregistration:register');
+		$this->getPresenter()->redirect('Datingregistration:register');
 	}
 
 }
