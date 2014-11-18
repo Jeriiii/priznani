@@ -1,8 +1,10 @@
 <div>
-	<a title="{$tittle}" id="confirm-btn-{$id}">{$tittle}</a>
+	<a href="#" id="confirm-btn-{$id}" class="btn-action btn-delete" title="Smazat galerii">
+		{if $btnSetText}{$tittle}{/if}
+	</a>
 	<div class="confirm-content" data-ajaxbox-btn="#confirm-btn-{$id}" data-ajaxbox-header-html="{$tittle} {$name}">
 		<p>{$message}</p>
-		<a href="{$link}">Ano</a>
+		<a href="{if $plink}{$presenter->link($link[0], $link[1])}{else}{$link}{/if}">Ano</a>
 		<a class="close">Ne</a>
 	</div>
 </div>

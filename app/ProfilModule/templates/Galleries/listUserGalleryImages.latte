@@ -1,13 +1,12 @@
 {block content}
 
 <div class="top-container">
-	{control navigation:breadcrumbs}
-	<a href="{plink :OnePage:}" id="add-photo-button" class="btn-main btn-small right">
-		zpět na stream
-	</a>
+	<div>
+		<a n:href=":Profil:Show: $gallery->userID">{$gallery->user->user_name|firstUpper}</a> <span class="slash">/</span> <span>Galerie {$gallery->name}</span>
+	</div>
 	{if $myGallery && $private && $paying}
 		<a href="{plink Galleries:userList $galleryID}" class="btn-main btn-small right">
-			přístup
+			nastavení soukromých galerií
 		</a>
 	{/if}
 </div>
@@ -21,8 +20,5 @@
 
 {/}
 {block foot}
-{if $myGallery}
-<script type="text/javascript" src="{$basePath}/js/bootstrap-modal.min.js" ></script>
-{/if}
 {/}
 {block pageContent}
