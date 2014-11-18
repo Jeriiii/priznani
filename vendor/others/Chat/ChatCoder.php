@@ -15,7 +15,7 @@ namespace POS\Chat;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class ChatCoder {
+class ChatCoder extends \Nette\Object {
 
 	/**
 	 * Zakoduje vlozena data do stringu kvuli bezpecnosti (prevede je na retezec)

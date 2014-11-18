@@ -55,6 +55,12 @@ class FeatureContext extends MinkContext {
 	private $testDao;
 
 	/**
+	 * @var \POS\Model\PaymentDao
+	 * @inject
+	 */
+	private $paymentDao;
+
+	/**
 	 * Initialization of context
 	 */
 	public function __construct() {
@@ -67,6 +73,7 @@ class FeatureContext extends MinkContext {
 		$this->confessionDao = $this->context->confessionDao;
 		$this->mailer = $this->context->getService('nette.mailer');
 		$this->testDao = $this->context->testDao;
+		$this->paymentDao = $this->context->paymentDao;
 	}
 
 	/*	 * ***********************HOOKS****************************** */
@@ -315,6 +322,40 @@ class FeatureContext extends MinkContext {
 		}
 		$readRequestString = $readRequestString . ']';
 		$this->getSession()->visit($this->locatePath('/?do=chat-communicator-refreshMessages&chat-communicator-lastid=1' . $readRequestString));
+	}
+
+	/**
+	 * Projde, pokud se platícímu uživateli v odpovědi vrátí daný text a neplatícímu ne.
+	 * @Then /^just paying users response should contain "([^"]*)"$/
+	 */
+	public function justPayingResponseContains($text) {
+		$myId = $this->userManager->getMyId();
+		if (empty($myId)) {
+			throw new PendingException('This works only when user is signed in.');
+		}
+		$isPaying = $this->paymentDao->isUserPaying($myId);
+		if ($isPaying) {
+			$this->assertSession()->responseContains($this->fixStepArgument($text));
+		} else {
+			$this->assertSession()->responseNotContains($this->fixStepArgument($text));
+		}
+	}
+
+	/**
+	 * Projde, pokud se platícímu uživateli v odpovědi vrátí daný text a neplatícímu ne.
+	 * @Then /^just paying users should see "([^"]*)"$/
+	 */
+	public function justPayingSee($text) {
+		$myId = $this->userManager->getMyId();
+		if (empty($myId)) {
+			throw new PendingException('This works only when user is signed in.');
+		}
+		$isPaying = $this->paymentDao->isUserPaying($myId);
+		if ($isPaying) {
+			$this->assertSession()->pageTextContains($this->fixStepArgument($text));
+		} else {
+			$this->assertSession()->pageTextNotContains($this->fixStepArgument($text));
+		}
 	}
 
 	/*	 * *********************DATABAZE**************************** */

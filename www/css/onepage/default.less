@@ -1,7 +1,9 @@
-
+@import "../bootstrap/help/mixins.less";
 /*#header{
     position: fixed;
 }*/
+@red-color: #cf0707;
+
 .inner {
     width: 960px;
     
@@ -10,18 +12,276 @@
     position: relative;
 }
 
+#stream{
+	.generatedProfile{
+		margin: 15px;
+	}
+	.half-form{
+		margin: 0 15px 10px 15px;
+		background: #f7f7f7;
+		padding: 30px 10px 15px 10px;
+		
+		*{
+			border-radius: 0 !important;
+		}
+	}
+	
+	.submit-button{
+		margin: 0;
+		width: 100%;
+		padding: 0;
+	}
+}
+
+#best-match{
+	width: 520px;
+	float: left;
+	margin: 0 15px 15px 15px;
+	
+	ul.best-search{
+		list-style: none;
+		
+		li{
+			display: block;
+			float: left;
+			width: 62px;
+			height:62px;
+			padding: 0;
+			margin: 0;
+			margin-right: 3px + 3/7px;
+			
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			
+			.generatedProfile img{
+				border-radius: 0;
+				width: 62px;
+				height: 62px;
+				cursor: pointer;
+			}
+			
+			&.last{
+				margin: 0 !important;
+			}
+			
+			.more-btn{
+				cursor: pointer;
+				width: 62px;
+				height:62px;
+				display: block;
+				background-image: url(../../images/userSearch/search-arrow.png);
+				background-size: 62px 62px;
+				background-position: 0 0;
+				background-color: transparent;
+				background-repeat: no-repeat;
+			}
+		}
+	}
+}
+
+.questionnaire-form{
+	
+	padding: 0;
+	width: 520px;
+	margin: 10px 0px;
+	background: #f7f7f7;
+	border-color: #E5E6E9 #DFE0E4 #D0D1D5;
+	
+	.question-title{
+		text-align: center;
+		color: @red-color;
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+	}
+	
+	.form-group{
+		width: 40%;
+		display: block;
+		float: left;
+		padding: 10px 5%;
+		
+		label{
+			text-align: left;
+			font-family: 'Source Sans Pro', Arial, sans-serif;
+			font-weight: 400;
+			
+		}
+		
+		.checkbox{
+			
+			margin-top: 6px;			
+			label{
+				font-weight: 400;
+				display: inline-block;
+				line-height: 18px;
+			}
+			
+			input[type="checkbox"]{
+				display: inline-block;
+				width: 18px;
+				height: 18px;
+				line-height: 18px;
+				margin-right: 25px;
+				position: relative;
+				top: 4px;
+			}
+		}
+		
+		input[type="submit"]{
+			width: 470px;
+			margin: 5px 0;
+		}
+		
+	}
+		
+}
+input[type="submit"]{
+	text-transform: uppercase;
+	font-weight: normal;
+}
+
 #stream-menu{
     width: 200px;
     float: left;
     height: auto;
 /*    background: white;*/
-    
-    a{
-	width: 100%;
-	margin: 5px 0;
-	float: left;
-	display: block;
-    }
+	font-family: 'Source Sans Pro', Arial, sans-serif;
+	
+	
+	.user-profile-picture{
+		.generatedProfile{
+			text-align: center;
+			height: 200px;
+			width: 200px;
+			border-radius: 50%;
+			background: #f58287; /* Old browsers */
+			background: -moz-radial-gradient(center, ellipse cover,  #f58287 67%, #a24a4e 70%); /* FF3.6+ */
+			background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(67%,#f58287), color-stop(70%,#a24a4e)); /* Chrome,Safari4+ */
+			background: -webkit-radial-gradient(center, ellipse cover,  #f58287 67%,#a24a4e 70%); /* Chrome10+,Safari5.1+ */
+			background: -o-radial-gradient(center, ellipse cover,  #f58287 67%,#a24a4e 70%); /* Opera 12+ */
+			background: -ms-radial-gradient(center, ellipse cover,  #f58287 67%,#a24a4e 70%); /* IE10+ */
+			background: radial-gradient(ellipse at center,  #f58287 67%,#a24a4e 70%); /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f58287', endColorstr='#a24a4e',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+			
+			.box-shadow(0.5px 1px 1px 1px black);
+
+
+			
+			img{
+				margin-top: 6px;
+				width: 188px !important;
+				height: 188px !important;
+			}
+		}
+		
+	}
+	.big-user-name{
+		font-weight: 200;
+		color: @red-color;
+		font-size: 40px;
+		letter-spacing: -3px;
+		display: block;
+	}
+	
+	.first-sentence{
+		font-size: 14px;
+		display: block;
+		padding: 4px 0;
+		color: #222;
+	}
+	
+	.sexy-label{
+		font-size: 20px;
+		display: block;
+		padding: 4px 0;
+		text-transform: uppercase;
+		font-style: italic;
+		color: #222;
+	}
+	
+	.delimiter{
+		background:black;
+		height: 1px;
+		width: auto;
+		margin: 5px 0;
+		
+		&.red{
+			background: @red-color;
+		}
+		&.top{
+			margin-top: 20px;
+		}
+	}
+	
+	.red-title{
+		text-transform: uppercase;
+		font-size: 16px;
+		color: @red-color;
+		display: block;
+		padding: 4px 0px;
+		font-weight: 400;
+	}
+	
+		
+	.usermenu{
+		
+		font-weight: 900;
+		
+		
+		&.red{
+			a{
+				color: @red-color !important;
+			}
+		}
+		
+		a.with-counter{
+			display: inline-block;
+			padding: 2px 4px 2px 4px;
+			
+			span{
+				display: inline-block;
+				width: 28px;
+			}
+		}
+		@icon-size: 30px;
+		@icon-margin: 12px;
+		a{
+			display: block;
+			color: black;
+			padding: 2px 4px 2px 32px;
+			font-size: 16px;
+			line-height: 30px;
+			letter-spacing: -1px;
+			background-size: 30px;
+			overflow: hidden;
+			background-position: left center;
+			background-color: transparent;
+			background-repeat: no-repeat;
+			background-image: url(../../images/icons/menu/basic.png);
+			background-position: 200px 200px;
+			
+			&.add-friend{
+				background-position: 0 (-4*@icon-size + @icon-margin);
+			}
+			&.add-gallery{
+				background-position: 0 (-3*@icon-size + @icon-margin);
+			}
+			&.cross{
+				background-position: 0 (-2*@icon-size + @icon-margin);
+			}
+			&.edit{
+				background-position: 0 (-1*@icon-size + @icon-margin);
+			}
+			&.friends{
+				background-position: 0 (0*@icon-size + @icon-margin);
+			}
+			&.profile{
+				background-position: 0 (-5*@icon-size + @icon-margin);
+			}
+			
+		}
+	}
     
 }
 #right-dock{

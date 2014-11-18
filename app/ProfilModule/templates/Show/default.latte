@@ -1,12 +1,11 @@
 {block head}
 	<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
-	<link rel="stylesheet" href="{$basePath}/css/bootstrap.min.css" type="text/css">
 	<style>
 	h1 {
 		margin-top: 0;
 	}
     </style>
-    {control css 'stream/list.less', 'chat/popup.less'}
+    {control css 'profile/show.less', 'stream/list.less', 'chat/popup.less', 'comments/comments.less'}
 {/block}
 
 {block jqueryUI}
@@ -33,42 +32,95 @@
 {/block}
 {block content}
 
-<h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
-{if $user->isLoggedIn()}
-<a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right">Poslat zprávu uživateli {$userData->user_name}</a>
-<div id="sendmessage-dialog" title="Poslat zprávu uživateli {$userData->user_name}">
-	{control sendMessageForm}
-</div>
-{/if}
+<section id="onepage">
+	<div id="content">
+		<div id="stream-menu">
 
-{if $hasProfilePhoto}
-	<img src="{$profilePhoto|getImgSqrPath}" alt="{$profilePhoto->name}"/>
-{/if}
+				<div class="user-profile-picture">
+					{$userData|showProfMinDiv}
+					{if $isMyProfile}
+						<a title="Nahrát profilovku" class="uploadProfilePhoto">Nahrát profilovku</a>
+						<div class="ajaxbox-popUp" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-header-html="Nahrát profilovku">
+						{control uploadPhotoForm}
+						</div>
+					{/if}
+				</div>
+				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
+				<span class="sexy-label">{$userData|sexyLabel}</span>
+				<span class="first-sentence">{$userData->property->first_sentence}</span>
+				<div class="clear spacer"></div>
+			{if $user->isLoggedIn()}
 
-{include 'menu.latte' $userID => 'id'}
+				{if $isMyProfile}
+					<a n:href=":Profil:Edit:default" class="profile-btn long-btn">Editovat</a>
+					<a title="Nahrát profilovku" class="profile-btn uploadProfilePhoto btn-main btn-small long-btn">Nahrát profilovku</a>
+					<a n:href="Galleries:verificationImageNew" class="profile-btn long-btn">Být ověřený uživatel</a>
+					<div class="clear"></div>
+				{else}
+				<div class="profile-btn like-action-panel">
+					<div class="sexybutton">
+						{control youAreSexy}
+					</div>
+					<a href="#" title="Poslat zprávu" id="sendmessage-button" class="profile-btn btn-main btn-small right send-message-btn">
+						<img src="{$basePath}/images/icons/bubble-white.png" alt="Zpráva chatu" />
+					</a>
+					<div id="sendmessage-dialog">
+						{control sendMessageForm}
+					</div>
+					<div class="clear"></div>
+				</div>
+				{/if}
 
-{control sendFriendRequest}
-{control youAreSexy}
+			{/if}
 
-{control friendsList}
+			{if !$isMyProfile}
+			<div class="profile-btn long-btn">
+				{control sendFriendRequest}
+			</div>
+			{/if}
+			<div class="spacer"></div>
+			<div class="delimiter red"></div>
+			<span class="red-title">O MNĚ {if $isMyProfile}<a n:href="Edit:">edit</a>{/if}</span>
+			<div class="delimiter red"></div>
 
-{control sexyListMarkedFromOther}
+			{control userInfo "listFew", $userID}
 
-<h2>Zeď</h2>
-{control userGalleries 'listFew', $userID}
-
-<h2>Příspěvky uživatele</h2>
-{control profilStream}
-
-<h2>Informace o uživateli</h2>
-{control userInfo "listFew", $userID}
-
-<h2>Nahrání profilovky</h2>
-
-{control uploadPhotoForm}
+			<div class="delimiter red"></div>
+			<span class="red-title">GALERIE</span>
+			<div class="delimiter red"></div>
+			<div class="square-list">
+				{control userGalleries 'listFew', $userID}
+			</div>
 
 
+			<div class="delimiter red"></div>
+			<span class="red-title">PŘÁTELÉ</span>
+			<div class="delimiter red"></div>
+			<div class="square-list">
+				{control friendsList}
+			</div>
 
+			{*control sexyListMarkedFromOther*}{* importovana a nastavena komponenta, prozatim nevykreslena *}
+
+		</div>
+
+		{include 'menu.latte' $userID => 'id'}
+
+		{control profilStream}
+	</div>
+	<div class="clear"></div>
+
+
+
+
+
+
+<div id="right-dock">
+	    {*reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama *}
+	</div>
+	<div class="clear"></div>
+
+</section>
 
 
 {/block}

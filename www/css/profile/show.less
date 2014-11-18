@@ -1,0 +1,248 @@
+/*
+* @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
+*//* 
+    Created on : 15.11.2014, 13:05:09
+    Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
+*/
+
+@import '../onepage/default.less';
+@import "../bootstrap/help/mixins.less";
+
+@main-dark: #2c2c2d;
+@main-red-dark: #890302;
+@main-red-light: #ef3737;
+
+.vertical(@start-color: #ef3737; @end-color: #890302; @start-percent: 0%; @end-percent: 100%) {
+    background-image: -webkit-linear-gradient(top, @start-color @start-percent, @end-color @end-percent);  // Safari 5.1-6, Chrome 10+
+    background-image: linear-gradient(to bottom, @start-color @start-percent, @end-color @end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    background-repeat: repeat-x;
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@start-color),argb(@end-color))); // IE9 and down
+  }
+
+  
+#stream-menu{
+	
+	a.profile-btn, .profile-btn a, span.profile-btn{
+		display: block;
+		text-align: center;
+		.vertical();
+		border-radius: 0;
+		color: white;
+		line-height: 35px;
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+		text-transform: uppercase;
+		height: 35px;
+		margin-bottom: 5px;
+	}
+	.long-btn, .long-btn a{
+		height: 35px;
+		display: block;
+		font-weight: 400;
+		font-size: 18px;
+	}
+	.spacer{
+		display: block;
+		width: 100%;
+		height: 15px;
+	}
+	
+	.like-action-panel{
+				
+		.sexybutton{
+			display: block;
+			float: left;
+			text-align: center;
+			width: 160px;
+			margin-right: 5px;
+			font-weight: 900;
+			
+			.thin{
+				font-weight: 200;
+			}
+			a{
+				display: block;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+		}
+		
+		.send-message-btn{
+			display: block;
+			float: left;
+			width: 35px;
+			
+			
+			img{
+				display: block;
+				width: 25px;
+				margin: 5px 0 0 5px;
+			}
+			
+		}
+	
+	}
+	
+	table.user-data{
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+		tr{
+			th{
+				width: 50%;
+			}
+			td{
+				width: 50%;
+			}
+		}
+	}
+	
+	.square-list{
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+		h4{
+			text-align: left;
+			font-size: 16px;
+			text-transform: uppercase;
+			font-weight: 600;
+			padding: 3px 0;
+			margin: 0;
+			
+		}
+		width: 100%;
+		
+		.back-button{
+			display: none;
+		}
+		
+		.friend-item-container{
+			width: 64px;
+			height: 64px;
+			margin: 2px 4px 2px 0px;
+			.generatedProfile, img{
+				width: 64px;
+				height: 64px;
+				margin: 0;
+				padding: 0;
+			}
+			&.third-multiple{
+				margin-right: 0;
+			}
+		}
+		
+		.imgs-container{/* galerie */
+			h2.small{
+				display: none;
+			}
+			padding: 0;
+			&.inner{
+				width: 100% !important;
+			}
+			.img-container{
+				width: 64px;
+				height: 64px;
+				margin: 2px 4px 2px 0px;
+				
+				&.third-multiple{
+					margin-right: 0;
+				}
+				a{
+					height: 54px;
+					width: 54px;
+					padding: 5px;
+					font-size: 10px;
+				}
+			}
+		}
+	}
+	.more-btn {
+		text-align: center;
+		display: block;
+		margin-top: 5px;
+		color: #cf0707;
+		text-decoration: underline;
+	}
+}
+
+.profile-menu{
+	float: left;
+	width: 520px;
+	margin: 0 15px;
+	text-align: center;
+	
+	@width-for-btns: 500;
+	
+	&.btn-cnt-1 a {
+		width: @width-for-btns / 1px;
+		&.long-text{
+			line-height: 35px;
+		}
+	}
+	
+	&.btn-cnt-2 a {
+		width: @width-for-btns / 2px;
+		&.long-text{
+			line-height: 35px;
+		}
+	}
+	
+	&.btn-cnt-3 a {
+		width: @width-for-btns / 3px;		
+		&.long-text{
+			line-height: 35px;
+		}
+	}
+	
+	&.btn-cnt-4 a {
+		width: @width-for-btns / 4px;
+		&.long-text{
+			line-height: 35px;
+		}
+	}
+	
+	&.btn-cnt-5 a {
+		width: @width-for-btns / 5px;		
+	}
+	
+	&.btn-cnt-6 a {
+		width: @width-for-btns / 6px;		
+	}
+	&.btn-cnt-7 a {
+		width: @width-for-btns / 7px;		
+	}
+	&.btn-cnt-8 a {
+		width: @width-for-btns / 8px;		
+	}
+	&.btn-cnt-9 a {
+		width: @width-for-btns / 9px;		
+	}
+	
+	a{
+		display: inline-block;
+		padding: 0;
+		margin: 0 0 10px 0;
+		height: 35px;
+		line-height: 35px;
+		
+		font-family: 'Source Sans Pro', Arial, sans-serif;
+		text-align: center;
+		font-size: 14px;
+		font-weight: 900;
+		color: white;
+		overflow: hidden;
+		
+		&.long-text{
+			line-height: 16px;
+			font-size: 14px;
+		}
+		
+		
+		.vertical(lighten(@main-dark, 20%), @main-dark);
+		
+		&:hover{
+			.vertical(@main-red-light, @main-red-dark);
+		}
+		&.last{
+			
+		}
+		
+	}
+}

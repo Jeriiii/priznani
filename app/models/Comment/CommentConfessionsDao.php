@@ -10,7 +10,7 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class CommentConfessionsDao extends AbstractDao implements ICommentDao {
+class CommentConfessionsDao extends BaseCommentDao {
 
 	const TABLE_NAME = "comment_confessions";
 
@@ -52,9 +52,10 @@ class CommentConfessionsDao extends AbstractDao implements ICommentDao {
 	 * @param int $confessionID ID přiznání, který komentujeme
 	 * @param int $userID ID uživatele co komentář napsal.
 	 * @param string $comment komentář přiznání
+	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
 	 * @return Nette\Database\Table\ActiveRow
 	 */
-	public function insertNewComment($confessionID, $userID, $comment) {
+	public function insertNewComment($confessionID, $userID, $comment, $ownerID) {
 		$sel = $this->getTable();
 		$sel->insert(array(
 			self::COLUMN_CONFESSION_ID => $confessionID,
@@ -105,6 +106,14 @@ class CommentConfessionsDao extends AbstractDao implements ICommentDao {
 		$confession->update(array(
 			ConfessionDao::COLUMN_COMMENTS => $confession->comments - 1
 		));
+	}
+
+	public function addActivity($ownderID, $creatorID, $itemID) {
+		//confession by nemělo mít komentáře
+	}
+
+	public function removeActivity($ownderID, $creatorID, $itemID) {
+		//confession by nemělo mít komentáře
 	}
 
 }

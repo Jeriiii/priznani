@@ -8,7 +8,7 @@ use Nette\Application\Routers\RouteList,
 	Nette\Forms\Container;
 
 // Load Nette Framework
-require __DIR__ . '/../vendor/Nette/loader.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 
 $configurator = new Nette\Configurator;
@@ -86,7 +86,7 @@ Container::extensionMethod('addDateTimePicker', function (Container $_this, $nam
 	return $_this[$name] = new Nette\Extras\DateTimePicker($label, $cols, $maxLength);
 });
 Kdyby\BootstrapFormRenderer\DI\RendererExtension::register($configurator);
-
+Kdyby\Events\DI\EventsExtension::register($configurator);
 // Na PRODUKCI se nastaví odchytávání vyjímek
 if (!$configurator->isDebugMode()) {
 	$container->application->catchExceptions = TRUE;

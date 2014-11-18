@@ -11,7 +11,7 @@ namespace POS\Ajax;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class ChatConversationsHandle implements IObserverHandle {
+class ChatConversationsHandle extends \Nette\Object implements IObserverHandle {
 
 	/**
 	 *

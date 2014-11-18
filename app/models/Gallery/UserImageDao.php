@@ -33,6 +33,9 @@ class UserImageDao extends AbstractDao {
 	const COLUMN_COMMENTS = "comments";
 	const COLUMN_INTIM = "intim";
 	const COLUMN_REJECTED = "rejected";
+	const COLUMN_GAL_SCRN_WIDTH = "widthGalScrn";
+	const COLUMN_GAL_SCRN_HEIGHT = "heightGalScrn";
+	const COLUMN_CHECK_APPROVED = "checkApproved";
 
 	/**
 	 * @var \POS\Model\UserGalleryDao
@@ -83,16 +86,30 @@ class UserImageDao extends AbstractDao {
 	}
 
 	/**
-	 * Vrátí všechny neschválené obrázky.
+	 * Vrátí všechny neschválené obrázky, které nejsou ověřovací.
+	 * @param boolean $rejected TRUE = Chci jen nevrácené fotky
 	 * @return Nette\Database\Table\Selection
 	 */
-	public function getUnapproved($indexes, $rejected = FALSE) {
+	public function getUnapproved($rejected = FALSE) {
 		$sel = $this->getTable();
-		$sel->where('id NOT', $indexes);
+
+		$sel->where(":" . UserGalleryDao::TABLE_NAME . "." . UserGalleryDao::COLUMN_VERIFICATION, 0);
 		$sel->where(self::COLUMN_APPROVED, 0);
 		if ($rejected) {
 			$sel->where(self::COLUMN_REJECTED, 0);
 		}
+		return $sel;
+	}
+
+	/**
+	 * Vrátí všechny nezkontrolované obrázky, které nejsou ověřovací.
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getNotCheck() {
+		$sel = $this->getTable();
+
+		$sel->where(":" . UserGalleryDao::TABLE_NAME . "." . UserGalleryDao::COLUMN_VERIFICATION, 0);
+		$sel->where(self::COLUMN_CHECK_APPROVED, 1);
 		return $sel;
 	}
 
@@ -106,6 +123,18 @@ class UserImageDao extends AbstractDao {
 		$sel->where(self::COLUMN_GALLERY_ID, $galleryID);
 		$sel->where(self::COLUMN_APPROVED, 0);
 		$sel->where(self::COLUMN_REJECTED, 0);
+		return $sel;
+	}
+
+	/**
+	 * Vrátí neověřené obrázky z verifikačních galerií
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getVerifUnapprovedImages() {
+		$sel = $this->getTable();
+		$sel->where(":" . UserGalleryDao::TABLE_NAME . "." . UserGalleryDao::COLUMN_VERIFICATION, 1);
+		$sel->where(self::TABLE_NAME . "." . self::COLUMN_APPROVED, 0);
+		$sel->where(self::TABLE_NAME . "." . self::COLUMN_REJECTED, 0);
 		return $sel;
 	}
 
@@ -168,15 +197,17 @@ class UserImageDao extends AbstractDao {
 	 * @param string $description Popisek obrázku.
 	 * @param int $galleryID ID galerie.
 	 * @param int $allow Fotka je schválená 1, není 0
+	 * @param int $checkApproved Fotka se má zkontrolovat 1, nemá 0
 	 * @return Database\Table\IRow Nový řádek s obrázekm
 	 */
-	public function insertImage($name, $suffix, $description, $galleryID, $allow) {
+	public function insertImage($name, $suffix, $description, $galleryID, $allow, $checkApproved) {
 		$image = $this->insert(array(
 			self::COLUMN_NAME => $name,
 			self::COLUMN_SUFFIX => $suffix,
 			self::COLUMN_DESCRIPTION => $description,
 			self::COLUMN_GALLERY_ID => $galleryID,
-			self::COLUMN_APPROVED => $allow
+			self::COLUMN_APPROVED => $allow,
+			self::COLUMN_CHECK_APPROVED => $checkApproved
 		));
 
 		return $image;
@@ -219,6 +250,7 @@ class UserImageDao extends AbstractDao {
 		$sel->wherePrimary($id);
 		$sel->update(array(
 			self::COLUMN_APPROVED => 1,
+			self::COLUMN_CHECK_APPROVED => 0,
 			self::COLUMN_REJECTED => 0
 		));
 

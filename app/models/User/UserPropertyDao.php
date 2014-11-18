@@ -8,6 +8,7 @@ namespace POS\Model;
 
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
+use Nette\Database\SqlLiteral;
 
 /**
  * NAME DAO NAMEDao
@@ -44,6 +45,8 @@ class UserPropertyDao extends UserBaseDao {
 	const COLUMN_DISTRICT_ID = "districtID";
 	const COLUMN_REGION_ID = "regionID";
 	const COLUMN_PREFERENCES_ID = "preferencesID";
+	const COLUMN_COINS = "coins";
+	const COLUMN_SCORE = "score";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -83,19 +86,6 @@ class UserPropertyDao extends UserBaseDao {
 	}
 
 	/**
-	 * Všechny prázdné řetězce změní na null (kvůli databázi)
-	 * @param Nette\Http\Session|\Nette\ArrayHash $data Data co se mají uložit do DB
-	 * @return Nette\Http\Session|\Nette\ArrayHash
-	 */
-	public function nullEmptyData($data) {
-		foreach ($data as $key => $record) {
-			$record = empty($record) && !is_numeric($record) ? null : $record;
-			$data->offsetSet($key, $record);
-		}
-		return $data;
-	}
-
-	/**
 	 * Přijme názvy města/okresu/kraje a vrátí jejich id.
 	 * @param Nette\Http\Session|\Nette\ArrayHash $data Pole původních dat.
 	 * @return Nette\Http\Session|\Nette\ArrayHash Pole dat s ID
@@ -117,6 +107,80 @@ class UserPropertyDao extends UserBaseDao {
 		$data->regionID = $region->id;
 
 		return $data;
+	}
+
+	/**
+	 * Přidá uživateli určité množství zlaťáků
+	 * @param int $userID id uživatele, kterého se to týká
+	 * @param int|float $amount množství zlatek
+	 */
+	public function incraseCoinsBy($userID, $amount) {
+		$this->incrasePropertyBy($userID, $amount, self::COLUMN_COINS);
+	}
+
+	/**
+	 * Odebere uživateli určité množství zlaťáků. Nemůže mít méně než 0
+	 * @param int $userID id uživatele, kterého se to týká
+	 * @param int|float $amount množství zlatek
+	 */
+	public function decraseCoinsBy($userID, $amount) {
+		$this->decrasePropertyBy($userID, $amount, self::COLUMN_COINS);
+	}
+
+	/**
+	 * Přidá uživateli určité množství bodů
+	 * @param int $userID id uživatele, kterého se to týká
+	 * @param int $amount množství bodů
+	 */
+	public function incraseScoreBy($userID, $amount) {
+		$this->incrasePropertyBy($userID, $amount, self::COLUMN_SCORE);
+	}
+
+	/**
+	 * Odebere uživateli určité množství bodů. Nemůže mít méně než 0
+	 * @param int $userID id uživatele, kterého se to týká
+	 * @param int $amount množství bodů
+	 */
+	public function decraseScoreBy($userID, $amount) {
+		$this->decrasePropertyBy($userID, $amount, self::COLUMN_SCORE);
+	}
+
+	/**
+	 * Přidá uživateli určité množství dané vlastnosti
+	 * @param int $userID id uživatele, kterého se to týká
+	 * @param int|float $amount množství
+	 * @param $column_name jméno sloupce v user_property
+	 */
+	public function incrasePropertyBy($userID, $amount, $column_name) {
+		$sel = $this->createSelection(UserDao::TABLE_NAME);
+		$propId = $sel->wherePrimary($userID)
+			->fetch()
+			->offsetGet(UserDao::COLUMN_ID);
+		$sel2 = $this->getTable();
+		$sel2->where(self::COLUMN_ID, $propId)
+			->update(array($column_name => new SqlLiteral($column_name . ' + ' . $amount)));
+	}
+
+	/**
+	 * Odebere uživateli určité číslo z nějaké vlastnosti. Nemůže mít méně než 0
+	 * @param int $userID id uživatele, kterého se to týká
+	 * @param int|float $amount množství
+	 * @param $column_name jméno sloupce v user_property
+	 */
+	public function decrasePropertyBy($userID, $amount, $column_name) {
+		$selu = $this->createSelection(UserDao::TABLE_NAME); //ziskani id uzivatele
+		$propId = $selu->wherePrimary($userID)
+			->fetch()
+			->offsetGet(UserDao::COLUMN_ID);
+		$sel = $this->getTable();
+
+		$sel2 = $this->getTable();
+		$current = $sel->wherePrimary($propId)
+			->fetch()
+			->offsetGet($column_name);
+		$updated = max(array(0, $current - $amount));
+		return $sel2->where(self::COLUMN_ID, $userID)
+				->update(array($column_name => $updated));
 	}
 
 	/**

@@ -4,19 +4,21 @@
 
 {block content}
 
-
-    <table class="table table-condensed">
+    <table class="table table-condensed user-data">
             <tbody>
             {foreach $userProperties as $label => $data}
-                    {if !empty($data)}	
-                    <tr>	
+                    {if !empty($data)}
+                    <tr>
                             <th>{$label}</th>
                             <td>{$data}</td>
-                    </tr>	
+                    </tr>
                     {/if}
             {/foreach}
             </tbody>
-    </table>       
+    </table>
+	{if $listFew}
+		<a class="more-btn" href="{plink :Profil:Show:userInfo $userID}">více</a>
+	{/if}
 
 {/block}
 

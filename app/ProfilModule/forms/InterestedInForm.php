@@ -83,7 +83,7 @@ class InterestedInForm extends EditBaseForm {
 
 		$user = $this->userDao->find($this->id_user);
 
-		$this->userPropertyDao->update($user->propertyID, array('threesome' => $values->threesome, 'anal' => $values->anal, 'group' => $values->group, 'bdsm' => $values->bdsm, 'swallow' => $values->swallow, 'cum' => $values->cum, 'oral' => $values->oral, 'piss' => $values->piss, 'sex_massage' => $values->sex_massage, 'petting' => $values->petting, 'fisting' => $values->fisting, 'deepthrought' => $values->deepthrought,));
+		$this->userPropertyDao->update($user->propertyID, $values);
 		$presenter->flashMessage('Změna doplňujících údajů byla úspěšná');
 		$presenter->redirect("this");
 	}

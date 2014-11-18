@@ -26,9 +26,10 @@ class ConfessionLikes extends BaseLikes implements IBaseLikes {
 	 * @param \POS\Model\LikeStatusDao $likeConfessionDao DAO pro práci s lajky přiznání
 	 * @param Nette\Database\Table\ActiveRow $confession přiznání, které se bude lajkovat
 	 * @param int $userID ID uživatele, který lajkuje
+	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
 	 */
 	public function __construct(LikeConfessionDao $likeConfessionDao, $confession, $userID) {
-		parent::__construct($likeConfessionDao, $confession, $userID, self::STATUS_LABEL);
+		parent::__construct($likeConfessionDao, $confession, $userID, 0, self::STATUS_LABEL);
 	}
 
 	/**
@@ -40,7 +41,7 @@ class ConfessionLikes extends BaseLikes implements IBaseLikes {
 		if ($this->liked == FALSE) {
 			$this->justLike = TRUE;
 			$this->liked = TRUE;
-			$this->likeDao->addLiked($confessionID, $userID);
+			$this->likeDao->addLiked($confessionID, $userID, $this->ownerID);
 		}
 
 		$this->redrawControl();

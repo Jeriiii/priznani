@@ -17,12 +17,21 @@ use POS\Ajax\ExampleHandle,
 	POS\Ajax\AjaxCrate,
 	POS\Ajax\ChatConversationsHandle;
 use POSComponent\Payment;
+use NetteExt\Serialize\Serializer;
+use NetteExt\Serialize\Relation;
+use POS\Model\PaymentDao;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
 	public $parameters;
 	public $domain;
 	public $partystyle;
+
+	/**
+	 * Proměnná s uživatelskými daty (cachovaný řádek z tabulky users). Obsahuje relace na profilFoto, gallery, property
+	 * @var ArrayHash|ActiveRow řádek z tabulky users
+	 */
+	protected $loggedUser;
 
 	/* modes */
 	public $partymode = FALSE;
@@ -43,6 +52,12 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	public $activitiesDao;
 
 	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
+	/**
 	 * @var \POS\Chat\ChatManager
 	 * @inject
 	 */
@@ -54,9 +69,44 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public $ajaxObserver;
 
+	/**
+	 * @var \POS\Listeners\Services\ActivityReporter
+	 * @inject
+	 */
+	public $activityReporter;
+
+	/**
+	 * @var \POS\Model\PaymentDao
+	 * @inject
+	 */
+	public $paymentDao;
+
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
+		if ($this->getUser()->isLoggedIn()) {
+			$this->activityReporter->handleUsersActivity($this->getUser());
+			$section = $this->getSession('loggedUser');
+			$section->setExpiration('20 minutes');
+			if (empty($section->loggedUser)) {
+				$user = $this->userDao->getUser($this->getUser()->getId());
+
+				$relProfilPhoto = new Relation("profilFoto");
+				$relGallery = new Relation("gallery");
+				$relProperty = new Relation("property");
+				$relProfilPhoto->addRel($relGallery);
+
+				$ser = new Serializer($user);
+				$ser->addRel($relProfilPhoto);
+				$ser->addRel($relProperty);
+
+				$sel = (array) $ser->toArrayHash();
+				/* vytazeni jen jednoho radku */
+				$userRow = array_shift($sel);
+				$section->loggedUser = $userRow;
+			}
+			$this->loggedUser = $section->loggedUser;
+		}
 	}
 
 	public function beforeRender() {
@@ -169,7 +219,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 
 		if ($this->getUser()->isLoggedIn()) {
-			//prihlaseny uzivatel
+//prihlaseny uzivatel
 			if ($user->isInRole('admin') || $user->isInRole('superadmin')) {
 				$navigation["Administrace"] = $this->link(":Admin:Admin:default");
 			}
@@ -177,7 +227,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			$navigation["Moje galerie"] = $this->link(":Profil:Galleries:");
 			$navigation["Odhlásit se"] = $this->link(":Sign:out");
 		} else {
-			//neprihlaseny uzivatel
+//neprihlaseny uzivatel
 			$navigation["Přihlášení"] = $this->link(":Sign:in");
 			$navigation["Registrace"] = $this->link(":Sign:registration");
 		}
@@ -196,7 +246,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 * @return \Activities Komponenta aktivit
 	 */
 	protected function createComponentActivities() {
-		$activities = new Activities($this->getUser()->id, $this->activitiesDao);
+		$activities = new Activities($this->activitiesDao, $this->loggedUser, $this->paymentDao);
 		return $activities;
 	}
 
@@ -264,7 +314,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			return cssmin::minify($code);
 		});
 
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
@@ -288,10 +338,12 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'mobile/responsive-menu.less',
 			'chat/jquery.ui.chatbox.css',
 			'chat/default.less',
-			'chat/jquery-ui.less'
+			'chat/jquery-ui.less',
+			'form.css',
+			'variables.less'
 		));
 
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
@@ -306,7 +358,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 		$files->addFiles(array('bootstrap/helpNew/bootstrap.less'));
 
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
@@ -319,7 +371,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			return $packer->pack();
 		});
 
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
@@ -331,14 +383,17 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'order.js',
 			'fbBase.js',
 			'leftMenu.js',
-			'user-layout-menu.js',
 			'../nette.ajax.js',
 			'initAjax.js',
 			'../mobile/responsive-menu.js',
 			'../forms/netteForms.js',
 			'../ajaxObserver/core.js',
 			'../ajaxBox/ajaxBox.js',
-			'../features/jquery.slimscroll.js'
+			'../ajaxBox/ajaxbox-standard-init.js',
+			'../ajaxBox/ajaxBox.otherFnc.js',
+			'../features/jquery.slimscroll.js',
+			'../ajaxBox/confirm/confirm.js',
+			'../ajaxBox/popUp/init-simple-popUp.js'
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
@@ -347,18 +402,20 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			return $packer->pack();
 		});
 
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		/* nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu */
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
 	public function createComponentJsLayoutLoggedIn() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
-			'activities.js',
 			'chat/core.js',
 			'chat/init.js',
 			'chat/jquery.ui.chatbox/jquery.ui.chatbox.js',
-			'chat/jquery.ui.chatbox/chatboxManager.js'
+			'chat/jquery.ui.chatbox/chatboxManager.js',
+			'chat/toogleContacts.js',
+			'ajaxBox/ajaxbox-signed-in-init.js',
+			'ajaxBox/activities/activities.js',
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
@@ -453,6 +510,14 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			$handles->addHandle('chatConversationWindow', new ChatConversationsHandle($this->chatManager, $this->getUser()->getId()));
 			$this->ajaxObserver->sendRefreshRequests($this, $handles);
 		}
+	}
+
+	/**
+	 * Sign in form component factory.
+	 * @return Nette\Application\UI\Form
+	 */
+	protected function createComponentSignInForm($name) {
+		return new Frm\signInForm($this->backlink, $this, $name);
 	}
 
 	protected function createComponentPayment($name) {

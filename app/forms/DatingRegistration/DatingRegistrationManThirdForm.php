@@ -23,14 +23,13 @@ class DatingRegistrationManThirdForm extends DatingRegistrationBaseManForm {
 
 		$this->regSession = $regSession;
 		$this->onSuccess[] = callback($this, 'submitted');
-		$this->addSubmit('send', 'Do třetí části registrace')
-			->setAttribute("class", "btn btn-success");
+		$this->addSubmit('send', 'Do čtvrté části registrace')
+			->setAttribute("class", "btn btn-main");
 
 		return $this;
 	}
 
 	public function submitted($form) {
-		parent::submitted($form);
 		$values = $form->values;
 
 		$this->regSession->marital_state = $values->marital_state;
@@ -45,7 +44,7 @@ class DatingRegistrationManThirdForm extends DatingRegistrationBaseManForm {
 		$this->regSession->penis_length = $values->penis_length;
 		$this->regSession->penis_width = $values->penis_width;
 
-		$this->presenter->redirect('Datingregistration:register');
+		$this->getPresenter()->redirect('Datingregistration:register');
 	}
 
 }

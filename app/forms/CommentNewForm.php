@@ -33,10 +33,16 @@ class CommentNewForm extends BaseForm {
 	 */
 	private $baseCommentComp;
 
-	public function __construct($dao, $ID, BaseComments $baseCommentComp = NULL, $name = NULL) {
+	/**
+	 * @var int $ownerID ID uživatele, kterýmu obrázek patří.
+	 */
+	private $ownerID;
+
+	public function __construct($dao, $ID, $ownerID, BaseComments $baseCommentComp = NULL, $name = NULL) {
 		parent::__construct($baseCommentComp, $name);
 
 		$this->ajax();
+		$this->ownerID = $ownerID;
 		$this->baseCommentComp = $baseCommentComp;
 		$this->dao = $dao;
 		$this->ID = $ID;
@@ -45,9 +51,9 @@ class CommentNewForm extends BaseForm {
 		//$this->getElementPrototype()->addAttributes(array('class' => 'ma-pekna-trida'));
 		/* formulář */
 
-		$this->addText("comment", "", 30, 35)
+		$this->addTextArea("comment", "", 60, 4)
 			->addRule(Form::FILLED, "Musíte zadat text do komentáře.");
-		$this->addSubmit("submit", "Vložit");
+		$this->addSubmit("submit", "PŘIDAT KOMENTÁŘ");
 		$this->setBootstrapRender();
 
 		$this->onSuccess[] = callback($this, 'submitted');
@@ -58,7 +64,7 @@ class CommentNewForm extends BaseForm {
 		$values = $form->getValues();
 
 		$userID = $this->presenter->user->id;
-		$this->dao->insertNewComment($this->ID, $userID, $values->comment);
+		$this->dao->insertNewComment($this->ID, $userID, $values->comment, $this->ownerID);
 
 		if ($this->presenter->isAjax()) {
 			$form->clearFields();

@@ -7,15 +7,14 @@ Feature: Create new gallery
 		And I fill in "<descript>" for "description"
 		And I attach the file "<image0>" to "userGalleryNewImageFile0"
 		And I attach the file "<image1>" to "userGalleryNewImageFile1"
-		And I check "<option>"
 		When I press "_submit"
 		Then I should see "<message>"
-		And I should see "Galerie uživatele <userName>"
+		And I should see "<userName>"
 		And I should see "<galleryName>"
 		
 		Examples:
-			| user			| userName	| galleryName	| descript		 | image0	| image1	| option | message			|
-			| user@test.cz	| Test User	| Moje obrázky	| nějaký popisek | afro.jpg	| man.png	| couple | Galerie byla vytvořena. Fotky budou nejdříve schváleny adminem. |
+			| user			| userName	| galleryName	| descript		 | image0	| image1	| message			|
+			| user@test.cz	| Test User	| Moje obrázky	| nějaký popisek | afro.jpg	| man.png	| Galerie byla vytvořena. Fotky budou nejdříve schváleny adminem. |
 
 
 	Scenario Outline: Edit gallery
@@ -25,8 +24,6 @@ Feature: Create new gallery
 		Then I should see "Editace galerie"
 		And I fill in "<galleryName>" for "name"
 		And I fill in "<descript>" for "description"
-		And I uncheck "<option1>"
-		And I check "<option2>"
 		And I press "send"
 		Then I should see "<message>"
 		Then I go to "/profil.galleries/"
@@ -35,8 +32,8 @@ Feature: Create new gallery
 		And I should see "Popis galerie: <descript>"
 
 		Examples:
-			| user			| userName	| galleryName		 | descript				| option1	| option2	| message |
-			| user@test.cz	| Test User	| Moje super obrázky | nějaký nový popisek	| couple	| more		| Galerie byla úspěšně změněna |
+			| user			| userName	| galleryName		 | descript				| message |
+			| user@test.cz	| Test User	| Moje super obrázky | nějaký nový popisek	| Galerie byla úspěšně změněna |
 
 	Scenario Outline: Adding new photos
 		Given I am signed in as "<user>"

@@ -13,6 +13,7 @@ use Nette\Application\Responses\JsonResponse;
 use POS\Model\AbstractDao;
 use Nette\Database\Table\ActiveRow;
 use POS\Model\ILikeDao;
+use Nette\ArrayHash;
 
 /**
  * Komponenta pro vykreslení tlačítek na lajkování.
@@ -57,6 +58,11 @@ class BaseLikes extends BaseProjectControl {
 	protected $likeItem;
 
 	/**
+	 * @var int ID uživatele, kterýmu obrázek patří.
+	 */
+	public $ownerID;
+
+	/**
 	 * @var bool TRUE pokud právě lajknul příspěvek. Používá se k tomu
 	 * že $item, třeba obrázek se pošle v konstruktoru a má konečné
 	 * hodnoty třeba poč. like 5. Pak se teprve spustí signál na like,
@@ -96,15 +102,20 @@ class BaseLikes extends BaseProjectControl {
 	 * Konstruktor komponenty, pokud používáme k tvorbě lajkování obrázků, vkládáme dao spojené s obrázky, pokud
 	 * používáme k tvorbě komponenty pro lajk statusů, vkládáme dao spojené se statusy, pokud chceme lajkovat commenty obrázků,
 	 * vkládáme příslušné dao atd.
-	 * @param \POS\Model\ImageLikesDao|\POS\Model\LikeStatusDao|\POS\Model\LikeCommentDao $likeDao dao, které se vkládá podle potřeby
+	 * @param \POS\Model\ImageLikesDao|\POS\Model\LikeStatusDao|\POS\Model\LikeImageCommentDao $likeDao dao, které se vkládá podle potřeby
 	 * lajknutí obrázku/statusu/commentu obrázku
-	 * @param Nette\Database\Table\ActiveRow $likeItem Příspěvek u kterého se má zobrazit počet like nebo se lajknout
+	 * @param Nette\Database\Table\ActiveRow | Nette\ArrayHash $likeItem Příspěvek u kterého se má zobrazit počet like nebo se lajknout
 	 * @param int $userID ID lajkující uživatele
+	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
 	 * @param string $nameLabel viz. kom. třídy
 	 * @param string $nameLikeButton viz. kom. třídy
 	 */
-	public function __construct(ILikeDao $likeDao, ActiveRow $likeItem, $userID, $nameLabel, $nameLikeButton = self::DEFAULT_NAME_LIKE_BUTTON) {
+	public function __construct(ILikeDao $likeDao, $likeItem, $userID, $ownerID, $nameLabel, $nameLikeButton = self::DEFAULT_NAME_LIKE_BUTTON) {
 		parent::__construct();
+		if (!($likeItem instanceof ActiveRow) && !($likeItem instanceof ArrayHash)) {
+			throw new Exception('Variable $likeItem must be instance of ActiveRow or ArrayHash');
+		}
+		$this->ownerID = $ownerID;
 		$this->likeDao = $likeDao;
 		$this->liked = $this->getLikedByUser($userID, $likeItem->id);
 		$this->userID = $userID;

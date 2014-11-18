@@ -33,6 +33,7 @@ class BlokedUsersList extends UsersList {
 	 * Vykresli šablonu.
 	 */
 	public function render() {
+		parent::render();
 		$this->renderTemplate(dirname(__FILE__) . '/' . 'blokedUsersList.latte');
 	}
 

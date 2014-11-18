@@ -131,7 +131,7 @@ class AdvancedSearch extends BaseSearch {
 	 * @return Nette\Database\Table\Selection
 	 */
 	private function getusers($searchData) {
-		$users = $this->userDao->findBySearchData($searchData);
+		$users = $this->userDao->getBySearchData($searchData);
 		return $users;
 	}
 

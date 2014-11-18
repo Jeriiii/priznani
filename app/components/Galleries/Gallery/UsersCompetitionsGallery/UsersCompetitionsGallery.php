@@ -11,7 +11,9 @@ namespace POSComponent\Galleries\Images;
 use POS\Model\UserImageDao;
 use POS\Model\ImageLikesDao;
 use POS\Model\CommentImagesDao;
-use POS\Model\LikeCommentDao;
+use POS\Model\LikeImageCommentDao;
+use POSComponent\Comments\ImageComments;
+use POS\Model\ImageLikesDao;
 
 class UsersCompetitionsGallery extends BaseGallery {
 
@@ -26,17 +28,29 @@ class UsersCompetitionsGallery extends BaseGallery {
 	public $commentImagesDao;
 
 	/**
-	 * @var \POS\Model\LikeCommentDao
+	 * @var \POS\Model\LikeImageCommentDao
 	 */
-	public $likeCommentDao;
+	public $likeImageCommentDao;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, LikeCommentDao $likeCommentDao, UserImageDao $userImageDao, CommentImagesDao $commentImagesDao, ImageLikesDao $imageLikesDao) {
+	/**
+	 * @var ActiveRow|ArrayHash $loggedUser
+	 */
+	public $loggedUser;
+
+	/**
+	 * @var int ID uživatele, kterému patří obrázek.
+	 */
+	private $ownerID;
+
+	public function __construct($images, $image, $gallery, $domain, $partymode, LikeImageCommentDao $likeImageCommentDao, UserImageDao $userImageDao, CommentImagesDao $commentImagesDao, ImageLikesDao $imageLikesDao, $loggedUser) {
 		parent::__construct($images, $image, $gallery, $domain, $partymode);
 		parent::setUserImageDao($userImageDao);
 		$this->image = $image;
 		$this->imageLikesDao = $imageLikesDao;
 		$this->commentImagesDao = $commentImagesDao;
-		$this->likeCommentDao = $likeCommentDao;
+		$this->likeImageCommentDao = $likeImageCommentDao;
+		$this->loggedUser = $loggedUser;
+		$this->ownerID = $gallery->userID;
 	}
 
 	public function render() {
@@ -44,7 +58,7 @@ class UsersCompetitionsGallery extends BaseGallery {
 	}
 
 	public function createComponentLikes() {
-		return new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->image, $this->presenter->user->id);
+		return new ImageLikes($this->imageLikesDao, $this->image, $this->loggedUser->id, $this->ownerID);
 	}
 
 	/**
@@ -52,7 +66,9 @@ class UsersCompetitionsGallery extends BaseGallery {
 	 * @return \POSComponent\Comments\ImageComments
 	 */
 	public function createComponentComments() {
-		return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image);
+		$imageComments = new ImageComments($this->likeImageCommentDao, $this->commentImagesDao, $this->image, $this->loggedUser, $this->ownerID);
+		$imageComments->setPresenter($this->getPresenter());
+		return $imageComments;
 	}
 
 }

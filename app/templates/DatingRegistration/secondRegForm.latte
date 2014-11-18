@@ -1,29 +1,8 @@
 
-{block content}
+{block datingContent}
+<h2 class="window-title">REGISTRACE</h2>
+<div class="window-content second-form">
 {control secondRegForm}
-{define #datingFoot}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            var data = [
-				{foreach $cityData as $item}
-							{$item->city} + ", " + {$item->district} + ", " + {$item->region},
-				{/foreach}
-			];
-            $("#frm-secondRegForm-city").autocomplete({
-				source: data,
-				minLength: 2
-			});
-			$.ui.autocomplete.filter = function (array, term) {
-				var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(term), "i");
-				return $.grep(array, function (value) {
-					return matcher.test(value.label || value.value || value);
-				});
-			};
-		});
-    </script>
-{/define}
-{/block}
-{block jqueryUI}
-<script src="{$basePath}/js/jquery-ui-autocomplete/jquery-ui.js"></script>
+</div>
 {/block}
 

@@ -15,6 +15,7 @@ use POSComponent\UsersList\FriendRequestList;
 use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\BlokedUsersList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
+use POSComponent\Confirm;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -121,10 +122,10 @@ class OnePagePresenter extends BasePresenter {
 	public $enumPlaceDao;
 
 	/**
-	 * @var \POS\Model\LikeCommentDao
+	 * @var \POS\Model\LikeImageCommentDao
 	 * @inject
 	 */
-	public $likeCommentDao;
+	public $likeImageCommentDao;
 
 	/**
 	 * @var \POS\Model\CommentImagesDao
@@ -183,18 +184,17 @@ class OnePagePresenter extends BasePresenter {
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
 	private $userID;
-	protected $userData;
 
 	public function actionDefault() {
 		$this->userID = $this->getUser()->getId();
-		$this->userData = $this->userDao->find($this->userID);
 		$this->fillCorrectDataForStream();
 	}
 
 	public function renderDefault() {
 		$this->template->userID = $this->userID;
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
-		$this->template->userData = $this->userData;
+		$this->template->loggedUser = $this->loggedUser;
+
 		$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->userID)->count();
 		$this->template->countSexy = $this->youAreSexyDao->countToUser($this->userID);
 		$this->template->isUserPaying = $this->paymentDao->isUserPaying($this->userID);
@@ -202,7 +202,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeCOnfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao);
+		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeCOnfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao, $this->loggedUser);
 	}
 
 	public function createComponentJs() {
@@ -234,7 +234,7 @@ class OnePagePresenter extends BasePresenter {
 	 */
 	protected function createComponentBestMatchSearch($name) {
 		$session = $this->getSession();
-		return new \POSComponent\Search\BestMatchSearch($this->userData, $this->userDao, $this->userCategoryDao, $session, $this, $name);
+		return new \POSComponent\Search\BestMatchSearch($this->loggedUser, $this->userDao, $this->userCategoryDao, $session, $this, $name);
 	}
 
 	protected function createComponentFriendRequest($name) {
@@ -259,9 +259,10 @@ class OnePagePresenter extends BasePresenter {
 	private function fillCorrectDataForStream() {
 		if ($this->getUser()->isLoggedIn() && isset($this->userData->property)) {
 			$this->initializeStreamUserPreferences();
+			$this->streamUserPreferences->calculate();
 			$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
 		} else {
-			$this->dataForStream = $this->streamDao->getAll("DESC");
+			$this->dataForStream = $this->streamDao->getForUnloggedUser("DESC");
 		}
 	}
 
@@ -270,7 +271,7 @@ class OnePagePresenter extends BasePresenter {
 	 */
 	private function initializeStreamUserPreferences() {
 		$session = $this->getSession();
-		$this->streamUserPreferences = new StreamUserPreferences($this->userData, $this->userDao, $this->streamDao, $this->userCategoryDao, $session);
+		$this->streamUserPreferences = new StreamUserPreferences($this->loggedUser, $this->userDao, $this->streamDao, $this->userCategoryDao, $session);
 		//$this->streamUserPreferences->calculate();
 	}
 

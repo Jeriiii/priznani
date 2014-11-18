@@ -33,11 +33,15 @@ class UserInfo extends BaseProjectControl {
 		/* zobrazí všechny informace o uživateli */
 		if ($mode == "listAll") {
 			$this->template->userProperties = $this->userDao->getUserData($userId);
+			$this->template->listFew = FALSE;
+			$this->template->userID = $userId;
 		}
 
 		/* zobrazí pouze zkrácené info o uživateli */
 		if ($mode == "listFew") {
 			$this->template->userProperties = $this->userDao->getUserShortInfo($userId);
+			$this->template->listFew = TRUE;
+			$this->template->userID = $userId;
 		}
 
 		$this->template->setFile(dirname(__FILE__) . '/' . $templateName);

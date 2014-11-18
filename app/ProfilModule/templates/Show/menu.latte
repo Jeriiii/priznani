@@ -1,20 +1,21 @@
 {* Latte template *}
 
 {block menu}
-<nav>
-	{if $user->loggedIn && $user->id == $userID}
-		<span><a n:href=":Profil:Edit:default">Editovat</a></span>
-		<span><a n:href="Galleries:verificationImageNew">Ověřovací fotka</a></span>
-	{/if}
-		<span><a n:href="default $userID">Zeď</a></span>
-		<span><a n:href="userImages $userID">Fotky</a></span>
-		<span><a n:href="userInfo $userID">Informace</a></span>
-		{if $userData->verified}
-			{if $asked}
-				<span>Žádost o ověřovací fotku podána</span>
-			{else}
-				<span><a n:href="requestConfirmPhoto! $userID, $user->id">Zádost o ověřovací fotku</a></span>
-			{/if}
+{var $buttonCount = 3}{*změnit podle počtu tlačítek*}
+{*if $user->loggedIn && $user->id == $userID}
+	{var $buttonCount += 2}
+{/if*}
+
+<nav class="profile-menu btn-cnt-{$buttonCount}">
+	<a n:href="default $userID">ZEĎ</a>
+	<a n:href="userImages $userID">FOTKY</a>
+	<a n:href="userInfo $userID">INFORMACE</a>
+	{if $userData->verified}
+		{if $asked}
+			<span>Žádost o ověřovací fotku podána</span>
+		{else}
+			<span><a n:href="requestConfirmPhoto! $userID, $user->id">Zádost o ověřovací fotku</a></span>
 		{/if}
-		</nav>
+	{/if}
+	</nav>
 {/block}

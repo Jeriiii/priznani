@@ -1,8 +1,14 @@
-
+<a id="contact-toogle-btn">Chat</a>
 <ul id="contacts">
+	{if empty($contacts)}
+		Přidejte si nové přátele
+	{/if}
 	{foreach $contacts as $contact}
-		{var $id = $coder->encodeData($contact->id)}
-		<li id="contact-{$id}" data-id="{$id}" data-title="{$contact->user_name}" class="contact-link">{$contact->user_name}</li>
+		{var $id = $coder->encodeData($contact->user2->id)}
+		<li id="contact->user2-{$id}" data-id="{$id}" data-title="{$contact->user2->user_name}" class="contact-link">
+			{$contact->user2|showProfMin}<span class="chat-username">{$contact->user2->user_name}</span>
+			<span class="online-indicator"></span>
+		</li>
 	{/foreach}
 </ul>
 <script>

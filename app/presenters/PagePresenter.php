@@ -10,6 +10,7 @@
  */
 use Nette\Application\UI\Form as Frm,
 	Nette\Caching\Cache;
+use POSComponent\Comments\ConfessionCommentsment;
 
 class PagePresenter extends BasePresenter {
 
@@ -400,7 +401,9 @@ class PagePresenter extends BasePresenter {
 		$id = $this->getParameter("id");
 		$confession = $this->confessionDao->find($id);
 
-		return new \POSComponent\Comments\ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $confession);
+		$confessionComment = ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $confession);
+		$confessionComment->setPresenter($this);
+		return $confessionComment;
 	}
 
 }

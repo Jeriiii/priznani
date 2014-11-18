@@ -95,10 +95,10 @@ class GalleriesPresenter extends \BasePresenter {
 	public $commentImagesDao;
 
 	/**
-	 * @var \POS\Model\LikeCommentDao
+	 * @var \POS\Model\LikeImageCommentDao
 	 * @inject
 	 */
-	public $likeCommentDao;
+	public $likeImageCommentDao;
 
 	public function startup() {
 		parent::startup();
@@ -191,6 +191,7 @@ class GalleriesPresenter extends \BasePresenter {
 		$this->template->galleryID = $galleryID;
 		$this->template->galleryOwner = $gallery->userID;
 		$this->template->private = $gallery->private;
+		$this->template->gallery = $gallery;
 		$this->template->myGallery = $myGallery;
 	}
 
@@ -382,7 +383,7 @@ class GalleriesPresenter extends \BasePresenter {
 		$domain = $httpRequest->getUrl()->host;
 		//$domain = "http://priznaniosexu.cz";
 
-		return new UsersGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this->likeCommentDao, $this->commentImagesDao);
+		return new UsersGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->loggedUser);
 	}
 
 	/**
@@ -406,33 +407,6 @@ class GalleriesPresenter extends \BasePresenter {
 	 */
 	public function createComponentVerificationForm($name) {
 		return new Frm\VerificationImageNewForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this, $name);
-	}
-
-	protected function createComponentNavigation($name) {
-//Získání potřebných dat(user id, galerie daného usera)
-		$userID = $this->getUser()->id;
-		$user = $this->userDao->find($userID);
-
-//vytvoření navigace a naplnění daty
-		$nav = new Navigation($this, $name);
-		$navigation = $nav->setupHomepage($user->user_name, $this->link("Galleries:default"));
-//označí aktuální stránku jako aktivní v navigaci
-		if ($this->isLinkCurrent("Galleries:default")) {
-			$nav->setCurrentNode($navigation);
-		}
-
-//získání dat pro přípravu galerii do breadcrumbs
-		$galleries = $this->userGaleryDao->getInUser($userID);
-
-//příprava všech galerií pro možnost použití drobečkové navigace
-		foreach ($galleries as $gallery) {
-			$link = $this->link("Galleries:listUserGalleryImage", array("galleryID" => $gallery->id));
-			$sec = $navigation->add($gallery->name, $link);
-
-			if ($this->galleryID == $gallery->id) {
-				$nav->setCurrentNode($sec);
-			}
-		}
 	}
 
 	protected function createComponentAllowUserForm($name) {

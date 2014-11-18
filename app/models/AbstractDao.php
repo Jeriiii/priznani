@@ -148,4 +148,17 @@ abstract class AbstractDao extends Object {
 		return $section;
 	}
 
+	/**
+	 * Všechny prázdné řetězce změní na null (kvůli databázi)
+	 * @param Nette\Http\Session|\Nette\ArrayHash $data Data co se mají uložit do DB
+	 * @return Nette\Http\Session|\Nette\ArrayHash
+	 */
+	public function nullEmptyData($data) {
+		foreach ($data as $key => $record) {
+			$record = empty($record) && !is_numeric($record) ? null : $record;
+			$data->offsetSet($key, $record);
+		}
+		return $data;
+	}
+
 }

@@ -74,10 +74,10 @@ class UsersCompetitionsPresenter extends BasePresenter {
 	public $commentImagesDao;
 
 	/**
-	 * @var POS\Model\LikeCommentDao
+	 * @var POS\Model\LikeImageCommentDao
 	 * @inject
 	 */
-	public $likeCommentDao;
+	public $likeImageCommentDao;
 
 	public function actionDefault($imageID, $galleryID) {
 		//určitá galerie
@@ -163,7 +163,7 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		$images = $this->userImageDao->getAllById($iID);
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
-		return new UsersCompetitionsGallery($images, $this->compImage->image, $this->gallery, $domain, $this->partymode, $this->likeCommentDao, $this->userImageDao, $this->commentImagesDao, $this->imageLikesDao);
+		return new UsersCompetitionsGallery($images, $this->compImage->image, $this->gallery, $domain, $this->partymode, $this->likeCommentDao, $this->userImageDao, $this->commentImagesDao, $this->imageLikesDao, $this->loggedUser);
 	}
 
 	/**

@@ -6,7 +6,6 @@ use Nette\Application\UI\Form;
 use Nette\ComponentModel\IContainer;
 use NetteExt\Image;
 use NetteExt\Form\Upload\UploadImage;
-use NetteExt\Path\GalleryPathCreator;
 use NetteExt\Arrays;
 use NetteExt\File;
 use Nette\ArrayHash;
@@ -14,6 +13,8 @@ use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
 use NetteExt\Watermarks;
+use NetteExt\Path\ImagePathCreator;
+use NetteExt\Path\GalleryPathCreator;
 
 /**
  * Základní formulář pro nahrávání a ukládání obrázků
@@ -40,9 +41,9 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	const IMAGE_DESCRIPTION = "ImageDescription";
 
 	/**
-	 * @var int Pokud má uživatel alespoň 3 schválené fotky, schvaluj další automaticky
+	 * @var int Pokud má uživatel alespoň 1 schválené fotky, schvaluj další automaticky
 	 */
-	const AllowLimitForImages = 3;
+	const AllowLimitForImages = 1;
 
 	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
@@ -74,11 +75,13 @@ class UserGalleryImagesBaseForm extends BaseForm {
 
 			$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryID, $userID);
 
-			$path = UploadImage::upload($image, $id, $suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
+			$paths = UploadImage::upload($image, $id, $suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
 
 			if ($addWatermarks) {
-				Watermarks::addFullWatermark($path, WWW_DIR . '/images/watermarks/mark_pos.png');
-				Watermarks::addBottomRightWatermark($path, WWW_DIR . '/images/watermarks/domain_pos.png', 10, 10);
+				foreach ($paths as $path) {
+					Watermarks::addFullWatermark($path, WWW_DIR . '/images/watermarks/mark_pos.png');
+					Watermarks::addBottomRightWatermark($path, WWW_DIR . '/images/watermarks/domain_pos.png', 10, 10, 100, 3);
+				}
 			}
 		} else {
 			$this->addError('Chyba při nahrávání souboru. Zkuste to prosím znovu.');
@@ -123,14 +126,19 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	 * @param \Nette\ArrayHash $values Všechny hodnoty z formuláře.
 	 * @param int $userID ID uživatele.
 	 * @param int $galleryID ID galerie.
+	 * @param boolean $profilePhoto TRUE = jde o profilovou fotku jinak FALSE
 	 * @return boolean TRUE pokud byly fotky automaticky schválené, jinak FALSE
 	 */
-	public function saveImages(array $images, $userID, $galleryID) {
+	public function saveImages(array $images, $userID, $galleryID, $profilePhoto = FALSE) {
 		//získání počtu user obrázků, které mají allow 1
 		$allowedImagesCount = $this->userImageDao->countAllowedImages($userID);
 
-		//pokud je 3 a více schválených, schválí i nově přidávanou
-		$allow = $allowedImagesCount >= self::AllowLimitForImages ? TRUE : FALSE;
+		if ($profilePhoto == TRUE) {
+			$allow = TRUE;
+		} else {
+			//pokud je 1 a více schválených, schválí i nově přidávanou
+			$allow = $allowedImagesCount >= self::AllowLimitForImages ? TRUE : FALSE;
+		}
 
 		foreach ($images as $image) {
 			if ($image[self::IMAGE_FILE]->isOK()) {
@@ -142,15 +150,36 @@ class UserGalleryImagesBaseForm extends BaseForm {
 				$description = !empty($image[self::IMAGE_DESCRIPTION]) ? $image[self::IMAGE_DESCRIPTION] : "";
 
 				//Uloží obrázek do databáze
-				$imageDB = $this->saveImageToDB($galleryID, $name, $description, $suffix, $allow);
+				$imageDB = $this->saveImageToDB($galleryID, $name, $description, $suffix, $allow, $profilePhoto);
 
 				//nahraje soubor
-				$this->upload($image[self::IMAGE_FILE], $imageDB->id, $suffix, $galleryID, $userID, 500, 700, 100, 130);
+				$this->upload($image[self::IMAGE_FILE], $imageDB->id, $suffix, $galleryID, $userID, 525, 700, 100, 130);
+
+				//zaznamenání velikosti screnu do proměných width/heightGalScrn
+				$this->changeSizeGalScrnDB($galleryID, $userID, $imageDB->id, $suffix);
+
 				unset($image);
 			}
 		}
 
 		return $allow;
+	}
+
+	/**
+	 * Zaznamenání velikosti gal. screenu do DB po resizu obrázku.
+	 * @param int $galleryID ID galerie.
+	 * @param int $userID ID uživatele.
+	 * @param int $imageID ID obrázku.
+	 * @param string $suffix Přípona obrázku.
+	 */
+	private function changeSizeGalScrnDB($galleryID, $userID, $imageID, $suffix) {
+		$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryID, $userID);
+		$imagePath = ImagePathCreator::getImgScrnPath($imageID, $suffix, $galleryFolder);
+		$imageFile = Image::fromFile($imagePath);
+		$this->userImageDao->update($imageID, array(
+			UserImageDao::COLUMN_GAL_SCRN_HEIGHT => $imageFile->height,
+			UserImageDao::COLUMN_GAL_SCRN_WIDTH => $imageFile->width,
+		));
 	}
 
 	/**
@@ -162,15 +191,10 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	public function saveVerificationImage($values, $userID, $galleryID) {
 		$image = $values->verificationFormImageFile0;
 		if ($image->isOK()) {
-			//název obrázku zadaný uživatelem
-			$name = $values->verificationFormImageName0;
 			//koncovka souboru
 			$suffix = $this->suffix($image->getName());
-			//popis obrázku zadaný uživatelem
-			$description = $values->verificationFormImageDescription0;
-
 			//Uloží obrázek do databáze
-			$imageDB = $this->saveImageToDB($galleryID, $name, $description, $suffix, 0);
+			$imageDB = $this->saveImageToDB($galleryID, "Ověřovací fotka", "", $suffix, 0);
 
 			//nahraje soubor
 			$this->upload($image, $imageDB->id, $suffix, $galleryID, $userID, 500, 700, 100, 130);
@@ -185,18 +209,25 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	 * @param string $description Popis obrázku zadaný uživatelem.
 	 * @param string $suffix Koncovka obrázku.
 	 * @param boolean $allow Automatické schvalování obrázků.
+	 * @param boolean $profilePhoto TRUE = jde o profilovou fotku jinak FALSE
 	 * @return Database\Table\IRow
 	 */
-	private function saveImageToDB($galleryID, $name, $description, $suffix, $allow) {
+	private function saveImageToDB($galleryID, $name, $description, $suffix, $allow, $profilePhoto = FALSE) {
 		$approved = $allow == TRUE ? 1 : 0;
-		$image = $this->userImageDao->insertImage($name, $suffix, $description, $galleryID, $approved);
+		$checkApproved = $approved;
+		$image = $this->userImageDao->insertImage($name, $suffix, $description, $galleryID, $approved, $checkApproved);
 		$this->userGalleryDao->updateBestAndLastImage($galleryID, $image->id, $image->id);
 
 		//aktualizace streamu - vyhodí galerii ve streamu nahoru
 		if ($allow) {
 			$this->streamDao->aliveGallery($image->galleryID, $image->gallery->userID);
 		}
-
+		/* nastavení fotky jako profilové */
+		if ($profilePhoto) {
+			$image->gallery->user->update(array(
+				\POS\Model\UserDao::COLUMN_PROFIL_PHOTO_ID => $image->id
+			));
+		}
 		return $image;
 	}
 
@@ -240,26 +271,6 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	 */
 	private function getImgNamePrefix() {
 		return $this->name;
-	}
-
-	public function genderCheckboxValidation($form) {
-		$values = $form->getValues();
-
-		if (empty($values['man']) && empty($values['women']) && empty($values['couple']) && empty($values['more'])) {
-			$form->addError("Musíte vybrat jednu z kategorií");
-		}
-	}
-
-	public function genderCheckboxes() {
-		$this->addGroup('Na fotce jsou (zaškrtněte):');
-
-		$this->addCheckbox('man', 'jen muži');
-
-		$this->addCheckbox('women', 'jen ženy');
-
-		$this->addCheckbox('couple', 'pár');
-
-		$this->addCheckbox('more', '3 a více');
 	}
 
 }
