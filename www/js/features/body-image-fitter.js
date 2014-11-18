@@ -28,10 +28,10 @@ $(document).ready(function () {
 		}
 	};
 
-	fitBgToElement('body', 1500, 1000);
+	fitBgToElement('body', 1735, 1155);
 
 	$(window).resize(function () {
-		fitBgToElement('body', 1500, 1000);
+		fitBgToElement('body', 1732, 1155);
 	});
 
 
