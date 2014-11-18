@@ -63,8 +63,8 @@ class RegionDao extends AbstractDao {
 	}
 
 	/**
-	 * Vyhledá kraj podle jména
-	 * @param string $name Jméno kraje, který hledáme
+	 * Vyhledá okres podle jména
+	 * @param string $name Jméno okresu, který hledáme
 	 * @return Nette\Database\Table\ActiveRow
 	 */
 	public function findByName($name) {

@@ -36,7 +36,7 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 
 		$this->addGroup('Nahrát profilové foto');
 		$this->addImageFields(1, false, false); //foto bez popisu a nazvu
-		$this->addSubmit('uploadProfilPhoto', 'Odeslat');
+		$this->addSubmit('uploadProfilPhoto', 'Nahrát');
 
 		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
@@ -46,8 +46,8 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 	public function submitted($form) {
 		$values = $form->getValues();
 
-		$image = $this->getArrayWithImages($values, 1);
-		$isFilled = $this->isFillImage($image);
+		$images = $this->getArrayWithImages($values, 1);
+		$isFilled = $this->isFillImage($images);
 
 
 
@@ -58,12 +58,9 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 			if (!$gallery) {
 				$gallery = $this->userGalleryDao->createProfileGallery($uID);
 			}
-			$allow = $this->saveImages($image, $uID, $gallery->id);
-			if ($allow) {
-				$presenter->flashMessage('Profilové foto bylo uloženo.');
-			} else {
-				$presenter->flashMessage('Profilové foto bylo uloženo. Nyní je ve frontě na schválení.');
-			}
+			$allow = $this->saveImages($images, $uID, $gallery->id, TRUE);
+
+			$presenter->flashMessage('Profilové foto bylo uloženo.');
 
 			$presenter->redirect('this');
 		} else {

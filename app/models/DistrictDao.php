@@ -31,6 +31,17 @@ class DistrictDao extends AbstractDao {
 	}
 
 	/**
+	 * Hledání kraje podle názvu
+	 * @param string $name Název kraje
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function findByName($name) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_NAME, $name);
+		return $sel->fetch();
+	}
+
+	/**
 	 * Vloží do DB nový okres, kontroluje duplikáty
 	 * @param string $name Jméno okresu, které chceme vložit
 	 * @param int $regionID ID kraje, vněmž se okres nachází
