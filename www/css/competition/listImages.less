@@ -15,7 +15,11 @@
 	float: left;
 	margin: 2px;
 	overflow: hidden;
-	background-color: black;
+	background-color: transparent;
+	
+	.confirm-content{
+		display: none;
+	}
 }
 .img-container img {
 	position: relative;
@@ -67,13 +71,13 @@
 	font-family: 'Verdana', Arial;
 	text-align: center;
 }
-h2 {
+h2, .top-container a {
 	font-family: Source Sans Pro,Arial;
 	color: #a70304;
 	font-size: 30px;
 	margin: 10px 0 15px 0;
 }
-h2.small{
+h2.small, .top-container a.small{
 	font-size: 27px;
 }
 
@@ -100,14 +104,19 @@ h2.small{
 		float: left;
 	}
 	a {
-		margin: 17px 5px;
-		width: 150px;
+		display: block;
+		margin: 10px 5px;
+		
+		&:hover{
+			text-decoration: underline;
+		}
 	}
+	
 }
 
 .btn-action {
 	position: absolute;
-	background: white !important;
+	background-color: white !important;
 	z-index: 11 !important;
 	height: 26px !important;
 	width: 26px !important;
@@ -115,6 +124,7 @@ h2.small{
 	opacity: 1 !important;
 /*	padding-top: 0px !important;*/
 	padding: 7px !important;
+	background-position: center center !important;
 }
 .btn-delete, .btn-edit {
 	background-repeat:no-repeat !important; 
