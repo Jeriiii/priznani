@@ -86,10 +86,7 @@ Container::extensionMethod('addDateTimePicker', function (Container $_this, $nam
 	return $_this[$name] = new Nette\Extras\DateTimePicker($label, $cols, $maxLength);
 });
 Kdyby\BootstrapFormRenderer\DI\RendererExtension::register($configurator);
-Kdyby\Events\DI\EventsExtension::register($configurator);
-
-
-
+//Kdyby\Events\DI\EventsExtension::register($configurator);
 // Na PRODUKCI se nastaví odchytávání vyjímek
 if (!$configurator->isDebugMode()) {
 	$container->application->catchExceptions = TRUE;
