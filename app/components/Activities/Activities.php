@@ -13,7 +13,7 @@ use Nette\Application\Responses\JsonResponse;
  *
  * @author Daniel Holubář
  */
-class Activities extends BaseProjectControl {
+class Activities extends \POSComponent\UsersList\AjaxList {
 
 	/**
 	 * @var \POS\Model\ActivitiesDao
@@ -25,6 +25,11 @@ class Activities extends BaseProjectControl {
 	 * ID vlastníka aktivit
 	 */
 	protected $userID;
+
+	/**
+	 * @var Selection Aktivity uřivatele.
+	 */
+	private $activities;
 
 	/**
 	 *
@@ -47,16 +52,6 @@ class Activities extends BaseProjectControl {
 	}
 
 	/**
-	 * Získání aktivit uživatele
-	 * @param int $userID Id uživatele, jehož aktivity chceme získat
-	 * @return Nette\Database\Table\Selection
-	 */
-	protected function getUserActivities($userID) {
-		$userActivities = $this->activitiesDao->getActivitiesByUserId($userID);
-		return $userActivities;
-	}
-
-	/**
 	 * 	Získání počtu nepřečtených aktivit
 	 * @param int $userID ID vlastníka aktivity
 	 * @return int
@@ -70,26 +65,7 @@ class Activities extends BaseProjectControl {
 	 * Obsluha pro načtení aktivit, posílá JSON s polem textů
 	 */
 	public function handleLoadActivities() {
-		$activities = $this->getUserActivities($this->userID);
-		$activityObj = new Activity();
 
-		foreach ($activities as $item) {
-			if ($item->statusID != NULL) {
-				$data[] = $activityObj->getUserStatusAction($item->event_creator->user_name, $item->event_type, $item->status->text, $item->id, $item->viewed);
-			} elseif ($item->imageID != NULL) {
-				$data[] = $activityObj->getUserImageAction($item->event_creator->user_name, $item->event_type, $item->image, $item->id, $item->viewed);
-			} else {
-				$data[] = $activityObj->getUserAction($item->event_creator->user_name, $item->event_type, $item->id, $item->viewed);
-			}
-		}
-
-		//pokud nejsou žádné aktivity pošleme 0
-		if (!isset($data)) {
-			$this->presenter->sendResponse(new JsonResponse(array("activities" => 0)));
-		} else {
-			$this->presenter->sendResponse(new JsonResponse(array("activities" => $data)));
-		}
-		$this->redrawControl();
 	}
 
 	/**
@@ -115,6 +91,33 @@ class Activities extends BaseProjectControl {
 	 */
 	public function handleAllViewed() {
 		$this->activitiesDao->markAllViewed($this->userID);
+		$this->redrawControl();
+	}
+
+	public function getSnippetName() {
+
+	}
+
+	public function setData($offset) {
+		$activities = $this->activitiesDao->getActivitiesByUserId($this->userID);
+		$this->activities = $activities;
+
+		foreach ($activities as $item) {
+			if ($item->statusID != NULL) {
+				$data[] = $activityObj->getUserStatusAction($item->event_creator->user_name, $item->event_type, $item->status->text, $item->id, $item->viewed);
+			} elseif ($item->imageID != NULL) {
+				$data[] = $activityObj->getUserImageAction($item->event_creator->user_name, $item->event_type, $item->image, $item->id, $item->viewed);
+			} else {
+				$data[] = $activityObj->getUserAction($item->event_creator->user_name, $item->event_type, $item->id, $item->viewed);
+			}
+		}
+
+		//pokud nejsou žádné aktivity pošleme 0
+		if (!isset($data)) {
+			$this->presenter->sendResponse(new JsonResponse(array("activities" => 0)));
+		} else {
+			$this->presenter->sendResponse(new JsonResponse(array("activities" => $data)));
+		}
 		$this->redrawControl();
 	}
 

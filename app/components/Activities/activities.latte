@@ -1,3 +1,20 @@
+<div n:snippet="activities" data-ajax-append="true">
+{ifset $activities}
+	<table>
+			<thead>
+			<th></th>
+		</thead>
+		<tbody>
+		{foreach $activities as $activity}
+			<div class="friend-item-container{if $iterator->getCounter() % 3 == 0} third-multiple{/if}">
+			{$friend->user2|showProfDiv}
+			</div>
+		{/foreach}
+		</tbody>
+	</table>
+{/ifset}
+</div>
+{*snippet activities}
 	<div id="activities">
 			<a class="activities-btn user-btn"></a>
 		<div id="activities-droplink">
@@ -10,3 +27,4 @@
 			</div>
 		</div>
 	</div>
+{/snippet*}
