@@ -37,7 +37,7 @@ $configurator->addConfig(__DIR__ . '/config/config.neon');
 if ($testing) {
 	$configurator->addConfig(__DIR__ . '/config/test.config.neon', FALSE);
 }
-
+Kdyby\Events\DI\EventsExtension::register($configurator);
 $container = $configurator->createContainer();
 
 // Setup router
@@ -86,7 +86,7 @@ Container::extensionMethod('addDateTimePicker', function (Container $_this, $nam
 	return $_this[$name] = new Nette\Extras\DateTimePicker($label, $cols, $maxLength);
 });
 Kdyby\BootstrapFormRenderer\DI\RendererExtension::register($configurator);
-Kdyby\Events\DI\EventsExtension::register($configurator);
+
 
 
 // Na PRODUKCI se nastaví odchytávání vyjímek
