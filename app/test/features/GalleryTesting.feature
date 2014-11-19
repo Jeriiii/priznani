@@ -9,7 +9,7 @@ Feature: Create new gallery
 		And I attach the file "<image1>" to "userGalleryNewImageFile1"
 		When I press "_submit"
 		Then I should see "<message>"
-		And I should see "Galerie uživatele <userName>"
+		And I should see "<userName>"
 		And I should see "<galleryName>"
 		
 		Examples:
