@@ -49,7 +49,10 @@ class BaseUserPreferences {
 
 	const NAME_SESSION_BEST_U = "bestUsers";
 
-	public function __construct(ActiveRow $user, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session) {
+	public function __construct($user, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session) {
+		if (!($user instanceof ActiveRow) && !($user instanceof \Nette\ArrayHash)) {
+			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
+		}
 		$this->userProperty = $user->property;
 		$this->user = $user;
 		$this->userDao = $userDao;

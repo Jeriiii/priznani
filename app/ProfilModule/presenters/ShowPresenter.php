@@ -14,7 +14,8 @@ use POSComponent\UserInfo\UserInfo;
 use POSComponent\AddToList\SendFriendRequest;
 use POSComponent\AddToList\YouAreSexy;
 use POSComponent\UsersList\FriendsList;
-use POSComponent\UsersList\SexyList\IMarked;
+use POSComponent\UsersList\SexyList\MarkedFromOther;
+use Nette\DateTime;
 
 class ShowPresenter extends ProfilBasePresenter {
 
@@ -28,6 +29,12 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $userDao;
+
+	/**
+	 * @var \POS\Model\PaymentDao
+	 * @inject
+	 */
+	public $paymentDao;
 
 	/**
 	 * @var \POS\Model\CoupleDao
@@ -118,7 +125,66 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @inject
 	 */
 	public $userAllowedDao;
+
+	/**
+	 * @var \POS\Model\LikeCommentDao
+	 * @inject
+	 */
+	public $likeCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentImagesDao
+	 * @inject
+	 */
+	public $commentImagesDao;
+
+	/**
+	 * @var \POS\Model\LikeStatusCommentDao
+	 * @inject
+	 */
+	public $likeStatusCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentStatusesDao
+	 * @inject
+	 */
+	public $commentStatusesDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionCommentDao
+	 * @inject
+	 */
+	public $likeConfessionCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentConfessionsDao
+	 * @inject
+	 */
+	public $commentConfessionsDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionDao
+	 * @inject
+	 */
+	public $likeConfessionDao;
+
+	/**
+	 * @var \POS\Model\VerificationPhotoRequestsDao
+	 * @inject
+	 */
+	public $verificationPhotoRequestDao;
 	public $dataForStream;
+
+	/**
+	 * @var \POS\Model\EnumVigorDao
+	 * @inject
+	 */
+	public $enumVigorDao;
+
+	/**
+	 * @var \Nette\Database\Table\ActiveRow|\Nette\ArrayHash
+	 */
+	private $userData;
 
 	/**
 	 * metoda nastavuje hodnoty predavanych parametru predtim, nez se sablona s uzivatelskym streamem vykresli.
@@ -128,16 +194,30 @@ class ShowPresenter extends ProfilBasePresenter {
 	public function actionDefault($id) {
 
 		if (empty($id)) {
+			/* kontrola, zda se nesnaží nepřihlášený uživatel zobrazit svůj profil */
+			if (!$this->getUser()->isLoggedIn()) {
+				$this->flashMessage("Pro zobrazení vašeho profilu se nejdříve přihlašte");
+				$this->redirect(":Sign:in");
+			}
 			$id = $this->getUser()->getId();
 			if (!$this->userDao->find($id)->property) {
 				$this->flashMessage("Nejdříve si vyplňte informace o sobě.");
 				$this->redirect(":DatingRegistration:");
 			}
+			$this->userData = $this->userDao->find($id);
 		} else {
-			if (!$this->userDao->find($id)->property) {
+			$user = $this->userDao->find($id);
+			if (!$user->property) {
 				$this->flashMessage("Tento profil neexistuje, nebo uživatel nemá dokončený profil.");
 				$this->redirect(":OnePage:");
 			}
+			/* kontrola, zda se nesnaží nepřihlášený uživatel zobrazit něčí profil,
+			 * časem by se dala zobrazit ještě foto uživatele, kterého chtěl zobrazit */
+			if (!$this->getUser()->isLoggedIn()) {
+				$this->flashMessage("Pro zobrazení profilu $user->user_name se nejdříve přihlašte");
+				$this->redirect(":Sign:in");
+			}
+			$this->userData = $user;
 		}
 
 		$this->userID = $id;
@@ -149,8 +229,28 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @param type $id
 	 */
 	public function renderDefault($id) {
+		/* kontrola zda jde o muj profil */
+		$isMyProfile = FALSE;
+		if ($this->user->isLoggedIn()) {
+			if ($this->userID == $this->getPresenter()->getUser()->id) {
+				$isMyProfile = TRUE;
+			}
+		}
+		$this->template->isMyProfile = $isMyProfile;
 
-		$user = $this->userDao->find($this->userID);
+
+		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->userID);
+
+		if ($verificationAsked->fetch()) {
+			$this->template->asked = TRUE;
+		} else {
+			$this->template->asked = FALSE;
+		}
+		if (!empty($id)) {
+			$user = $this->userDao->find($id);
+		} else {
+			$user = $this->userData;
+		}
 
 		$this->template->userData = $user;
 		$this->template->userID = $this->userID;
@@ -164,6 +264,11 @@ class ShowPresenter extends ProfilBasePresenter {
 		} else {
 			$this->template->hasProfilePhoto = false;
 		}
+		$this->template->vigor = $this->getVigor($user->property->age);
+	}
+
+	private function getVigor($age) {
+		Frm\DatingRegistrationBaseForm::getVigor($age);
 	}
 
 	public function actionUserImages($id) {
@@ -208,8 +313,38 @@ class ShowPresenter extends ProfilBasePresenter {
 		$this->template->mode = "listAll";
 	}
 
+	public function renderVerification() {
+		$this->template->verificationGallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
+		$this->template->requests = $this->verificationPhotoRequestDao->findByUserID($this->user->id);
+	}
+
 	protected function createComponentUserInfo($name) {
 		return new UserInfo($this->userDao, $this, $name);
+	}
+
+	public function handleAcceptUser($userID) {
+		$gallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
+		$this->userAllowedDao->insertData($userID, $gallery->id);
+		$this->verificationPhotoRequestDao->acceptRequest($userID);
+		$this->activitiesDao->createImageActivity($this->user->id, $userID, $gallery->lastImage, "verificationPhotoAccepted");
+		if ($this->isAjax()) {
+			$this->redrawControl('requests');
+		} else {
+
+			$this->redirect("this");
+		}
+	}
+
+	public function handleRejectUser($userID) {
+		$gallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
+		$this->verificationPhotoRequestDao->rejectRequest($userID);
+		$this->activitiesDao->createImageActivity($this->user->id, $userID, $gallery->lastImage, "verificationPhotoRejected");
+		if ($this->isAjax()) {
+			$this->redrawControl('requests');
+		} else {
+
+			$this->redirect("this");
+		}
 	}
 
 	/**
@@ -217,7 +352,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \ProfilStream
 	 */
 	protected function createComponentProfilStream() {
-		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao);
+		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeConfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao, $this->loggedUser);
 	}
 
 	/**
@@ -285,8 +420,8 @@ class ShowPresenter extends ProfilBasePresenter {
 	}
 
 	protected function createComponentYouAreSexy($name) {
-		$userIDFrom = $this->userID;
-		$userIDTo = $this->getUser()->id;
+		$userIDFrom = $this->getUser()->id;
+		$userIDTo = $this->userID;
 
 		return new YouAreSexy($this->youAreSexyDao, $userIDFrom, $userIDTo, $this, $name);
 	}
@@ -295,8 +430,14 @@ class ShowPresenter extends ProfilBasePresenter {
 		return new FriendsList($this->friendDao, $this->userID, $this, $name);
 	}
 
-	protected function createComponentSexyListIMarked($name) {
-		return new IMarked($this->youAreSexyDao, $this->userID, $this, $name);
+	protected function createComponentSexyListMarkedFromOther($name) {
+		return new MarkedFromOther($this->paymentDao, $this->youAreSexyDao, $this->userID, $this, $name);
+	}
+
+	public function handleRequestConfirmPhoto($id, $viewerID) {
+		$this->verificationPhotoRequestDao->createRequest($id, $viewerID);
+		$this->flashMessage("žádost o ověřovací fotku podána.");
+		$this->redirect("this");
 	}
 
 }

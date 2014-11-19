@@ -106,7 +106,7 @@ class StreamDao extends AbstractDao {
 	 * @param int $galleryID ID galerie
 	 */
 	public function aliveCompGallery($galleryID) {
-		// smazání starého řádku
+// smazání starého řádku
 		$sel = $this->getTable();
 		$sel->where("galleryID", $galleryID);
 		$sel->delete();
@@ -135,7 +135,7 @@ class StreamDao extends AbstractDao {
 	 * @param int $userID ID uživatele
 	 */
 	public function aliveGallery($userGalleryID, $userID) {
-		//smazání starého řádku
+//smazání starého řádku
 		$sel = $this->getTable();
 		$sel->where("userGalleryID", $userGalleryID);
 		$sel->delete();
@@ -179,12 +179,11 @@ class StreamDao extends AbstractDao {
 	 */
 	public function getAllItemsWhatFits(array $categoryIDs, $meUserID, $limit = 0, $offset = 0) {
 		$sel = $this->getTable();
-		$sel = $this->sortOutByCategories($sel, $categoryIDs);
-		$sel = $this->sortOutUsers($sel, $meUserID);
+		$this->sortOutItems($categoryIDs, $meUserID, $sel);
 
-		//die();
+//die();
+		$sel->order('id DESC');
 		if ($limit != 0) {
-			$sel->order('id DESC');
 			$sel->limit($limit, $offset);
 		}
 		return $sel;
@@ -202,29 +201,99 @@ class StreamDao extends AbstractDao {
 	public function getAllItemsWhatFitsSince(array $categoryIDs, $meUserID, $lastId) {
 		$sel = $this->getTable();
 		$sel->where('id > ?', $lastId);
-		$sel = $this->sortOutByCategories($sel, $categoryIDs);
-		$sel = $this->sortOutUsers($sel, $meUserID);
+		$this->sortOutItems($categoryIDs, $meUserID, $sel);
 		$sel->order('id DESC');
-		return $sel;
-	}
 
-	private function sortOutByCategories($sel, array $categoryIDs) {
-		$sel->where(self::COLUMN_CATEGORY_ID . " IN ? OR " . self::COLUMN_CONFESSION_ID . " IS NOT NULL", $categoryIDs);
 		return $sel;
 	}
 
 	/**
-	 * Vytřídí sebe a blokované uživatele.
+	 * Vytřídí/přidá příspěvky
+	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
+	 * @param int $meUserID Moje ID uživatele.
+	 * @param \Nette\Database\Table\Selection $sel Nevytříděné příspěvky.
+	 * @return \Nette\Database\Table\Selection Vytříděné příspěvky.
+	 */
+	private function sortOutItems(array $categoryIDs, $meUserID, $sel) {
+		/* musí to jít v tomto pořadí */
+		$sel = $this->sortOut($sel, $categoryIDs, $meUserID);
+		$sel = $this->sortOutUsers($sel, $meUserID);
+
+		return $sel;
+	}
+
+	/**
+	 * Vytřídění příspvěků podle preferencí
+	 * @param \Nette\Database\Table\Selection $sel Nevytříděné příspěvky.
+	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
+	 * @param int $meUserID Moje ID uživatele.
+	 * @return \Nette\Database\Table\Selection Vytříděné příspěvky.
+	 */
+	private function sortOut($sel, array $categoryIDs, $meUserID) {
+		$where = $params = array();
+
+		/* přidání přátel */
+		$where[] = self::COLUMN_USER_ID . " IN (?)";
+		$params[] = $this->getFriendIDs($meUserID);
+		/* přidání lidí co jsem označil jako sexy */
+		$where[] = self::COLUMN_USER_ID . " IN (?)";
+		$params[] = $this->getUsersIMarkSexy($meUserID);
+		/* přidání příspěvků v kategoriích, které hledám */
+		$where[] = self::COLUMN_CATEGORY_ID . " IN (?)";
+		$params[] = $categoryIDs;
+		/* přidání přiznání */
+		$where[] = self::COLUMN_CONFESSION_ID . " IS NOT NULL";
+
+		/* vytřídění příspěvků */
+		$sel->where(implode(" OR ", $where), $params);
+
+		return $sel;
+	}
+
+	/**
+	 * Vytřídí sebe a blokované uživatele. Vždy v tomto pořadí!
 	 * @param \Nette\Database\Table\Selection $sel Nevytříděné příspěvky.
 	 * @param int $meUserID Moje ID uživatele.
 	 * @return \Nette\Database\Table\Selection Vytříděné příspěvky.
 	 */
 	private function sortOutUsers($sel, $meUserID) {
-
+		/* vytřídění uživatelů */
 		$sel = $this->sortOutMe($sel, $meUserID);
 		$sel = $this->sortOutBlokedUsers($sel, $meUserID);
 
 		return $sel;
+	}
+
+	/**
+	 * Vrátí id přátel
+	 * @param int $meUserID Moje ID uživatele.
+	 * @return array ID přátel.
+	 */
+	private function getFriendIDs($meUserID) {
+		$friends = $this->createSelection(FriendDao::TABLE_NAME);
+		$friends->where(FriendDao::COLUMN_USER_ID_1, $meUserID);
+		$friendIDs = array();
+		foreach ($friends as $friend) {
+			$friendIDs[] = $friend->offsetGet(FriendDao::COLUMN_USER_ID_2);
+		}
+
+		return $friendIDs;
+	}
+
+	/**
+	 * Vrátí id uživatelů, co mě označili jako sexy
+	 * @param int $meUserID Moje ID uživatele.
+	 * @return array ID uživatelů, co mě označili jako sexy.
+	 */
+	private function getUsersIMarkSexy($meUserID) {
+		$markMeSexy = $this->createSelection(YouAreSexyDao::TABLE_NAME);
+		$markMeSexy->where(YouAreSexyDao::COLUMN_USER_FROM_ID, $meUserID);
+		$markMeSexyIDs = array();
+		foreach ($markMeSexy as $m) {
+			$markMeSexyIDs[] = $m->offsetGet(YouAreSexyDao::COLUMN_USER_TO_ID);
+		}
+
+		return $markMeSexyIDs;
 	}
 
 	/**

@@ -55,11 +55,16 @@ class FriendDao extends AbstractDao {
 	/**
 	 * Vrátí seznam přátel daného uživatele
 	 * @param int $userID
+	 * @param int $limit
+	 * @param int $offset
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function getList($userID) {
+	public function getList($userID, $limit = 0, $offset = 0) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_USER_ID_1, $userID);
+		if ($limit != 0) {
+			$sel->limit($limit, $offset);
+		}
 		return $sel;
 	}
 

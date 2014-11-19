@@ -1,17 +1,21 @@
-{foreach $sexyUsers as $sexyUser}
-	{if $iterator->isFirst()}
-		<h2>{include heading}</h2>
-		<table>
-			<thead>
-			<th></th>
-		</thead>
-		<tbody>
-	{/if}
-	<tr>
-		{include #showUser sexyUser => $sexyUser}
-	</tr>
-	{if $iterator->isLast()}
-		</tbody>
-		</table>
-	{/if}
-{/foreach}
+<div n:snippet="sexyList" data-ajax-append="true">
+{ifset $sexyUsers}
+	{foreach $sexyUsers as $sexyUser}
+		{if $iterator->isFirst()}
+			<h2>{include heading}</h2>
+			<table>
+				<thead>
+				<th></th>
+			</thead>
+			<tbody>
+		{/if}
+		<tr>
+			{include #showUser sexyUser => $sexyUser}
+		</tr>
+		{if $iterator->isLast()}
+			</tbody>
+			</table>
+		{/if}
+	{/foreach}
+{/ifset}
+</div>

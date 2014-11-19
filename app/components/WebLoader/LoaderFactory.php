@@ -3,18 +3,17 @@
 namespace WebLoader;
 
 use Nette\DI\Container;
-use Nette\Http\IRequest;
+use Nette\Http\Request;
 use WebLoader\Nette\CssLoader;
 use WebLoader\Nette\Extension;
 use WebLoader\Nette\JavaScriptLoader;
 
 class LoaderFactory
 {
-
-	/** @var IRequest */
+	/** @var \Nette\Http\Request */
 	private $httpRequest;
 
-	/** @var Container */
+	/** @var \Nette\DI\Container */
 	private $serviceLocator;
 
 	/** @var array */
@@ -22,10 +21,10 @@ class LoaderFactory
 
 	/**
 	 * @param array $tempPaths
-	 * @param IRequest $httpRequest
-	 * @param Container $serviceLocator
+	 * @param Request $httpRequest
+	 * @param \Nette\DI\Container $serviceLocator
 	 */
-	public function __construct(array $tempPaths, IRequest $httpRequest, Container $serviceLocator)
+	public function __construct(array $tempPaths, Request $httpRequest, Container $serviceLocator)
 	{
 		$this->httpRequest = $httpRequest;
 		$this->serviceLocator = $serviceLocator;

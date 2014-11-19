@@ -1,4 +1,5 @@
 
+@import "../variables.less";
 /* cerveny kontejner, viz napr. prihlasovani nebo trideni
     EDITOVAT S VELKOU OPATRNOSTI, JE TO VSUDE NA RUZNYCH MISTECH STRANEK!!!
 */
@@ -45,6 +46,20 @@
 	padding:5px;
 	color: #fff;
 	margin-left: 100px;
+}
+
+a.red-link{
+	color: @main-red;
+	font-size: 18px;
+	text-decoration: none;
+	
+	&:hover{
+		text-decoration: underline;
+	}
+	
+	&.underline{
+		text-decoration: underline;
+	}
 }
 
 

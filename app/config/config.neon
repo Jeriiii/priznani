@@ -42,7 +42,8 @@ common:
 #	testMode: %testMode%
 
 	services:
-		database: @POS\Model\UserDao
+		database: @nette.database.default
+		session: Nette\Http\Session
 
 		#facebook: Facebook( {appId: %facebook.appId%, secret: %facebook.secret%} )
 

@@ -12,6 +12,9 @@ use POS\Model\LikeCommentDao;
 use POS\Model\ICommentDao;
 use POS\Model\ILikeDao;
 use Nette\Database\Table\ActiveRow;
+use Nette\ArrayHash;
+use Exception;
+use POSComponent\Confirm;
 
 /**
  * Komponenta pro vykreslení tlačítek na lajkování.
@@ -53,15 +56,35 @@ class BaseComments extends BaseProjectControl {
 	 */
 	const MIN_OF_SHOWED_COMMENTS = 2;
 
+	/**
+	 * Uživatelská data.
+	 * @var ArrayHash|ActiveRow
+	 */
+	public $userData;
+
 	/** @var boolean TRUE = zobrazí všechny komentáře */
 	private $showAllComments = FALSE;
 
-	public function __construct(ILikeDao $likeCommentDao, ICommentDao $commentDao, ActiveRow $item) {
+	/**
+	 * @var booblean Mají se vykreslit js scripty, který převytvoří confirm okénka
+	 */
+	private $redrawConfirm = FALSE;
+
+	public function __construct(ILikeDao $likeCommentDao, ICommentDao $commentDao, $item, $userData) {
 		parent::__construct();
+		if (!($item instanceof ActiveRow) && !($item instanceof \Nette\ArrayHash)) {
+			throw new \Exception("variable $item must be instance of ActiveRow or ArrayHash");
+		}
+		//zakomentováno z důvodu, že zatím neumím při vytváření přes multiper dostat presenter
+//		if (!($userData instanceof ActiveRow) && !($userData instanceof \Nette\ArrayHash) && $this->getPresenter()->getUser()->isLoggedIn()
+		//) {
+//			throw new \Exception("variable $userData must be instance of ActiveRow or ArrayHash");
+//		}
 		$this->commentDao = $commentDao;
 		$this->item = $item;
 		$this->likeCommentDao = $likeCommentDao;
 		$this->countComments = $this->item->comments;
+		$this->userData = $userData;
 	}
 
 	/**
@@ -74,6 +97,8 @@ class BaseComments extends BaseProjectControl {
 		$template->countComments = $this->countComments;
 		$template->minShowComments = self::MIN_OF_SHOWED_COMMENTS;
 		$template->showAllComments = $this->showAllComments;
+		$template->userData = $this->userData;
+		$template->redrawConfirm = $this->redrawConfirm;
 		$template->render();
 	}
 
@@ -128,6 +153,21 @@ class BaseComments extends BaseProjectControl {
 		$this->commentDao->delete($commentID);
 
 		$this->redrawControl();
+	}
+
+	protected function createComponentDeleteComment($name) {
+		$deleteComment = new Confirm($this, $name, TRUE, FALSE);
+		$deleteComment->setTittle("Smazat komentář");
+		$deleteComment->setMessage("Opravdu chcete smazat komentář?");
+		$deleteComment->setBtnText("×");
+		$deleteComment->setBtnClass("delete-comment");
+		$deleteComment->setConfirmBtnClass("ajax");
+		return $deleteComment;
+	}
+
+	public function redrawControl($snippet = NULL, $redraw = TRUE) {
+		parent::redrawControl($snippet, $redraw);
+		$this->redrawConfirm = TRUE;
 	}
 
 }

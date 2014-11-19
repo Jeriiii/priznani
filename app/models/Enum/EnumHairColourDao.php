@@ -11,7 +11,7 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class EnumHairColourDao extends AbstractDao {
+class EnumHairColourDao extends BaseEnumDao {
 
 	const TABLE_NAME = "enum_hair_colour";
 
@@ -21,6 +21,10 @@ class EnumHairColourDao extends AbstractDao {
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_HAIR_COLOUR;
 	}
 
 }

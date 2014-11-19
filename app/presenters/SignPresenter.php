@@ -100,17 +100,10 @@ class SignPresenter extends BasePresenter {
 		$this->getSession(self::USER_INFO_SESSION_NAME)->remove();
 		$this->getSession(StreamUserPreferences::NAME_SESSION_STREAM_ITEMS)->remove();
 		$this->getSession(ChatManager::CHAT_MINUTE_SESSION_NAME)->remove();
+		$this->getSession('loggedUser')->remove();
 		$this->getSession(ActivityReporter::SECTION_NAME)->remove();
 		$this->flashMessage("Byl jste úspěšně odhlášen");
 		$this->redirect('Sign:in');
-	}
-
-	/**
-	 * Sign in form component factory.
-	 * @return Nette\Application\UI\Form
-	 */
-	protected function createComponentSignInForm($name) {
-		return new Frm\signInForm($this->backlink, $this, $name);
 	}
 
 	protected function createComponentRegistrationForm($name) {

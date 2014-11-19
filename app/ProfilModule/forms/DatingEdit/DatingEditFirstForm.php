@@ -2,9 +2,7 @@
 
 namespace Nette\Application\UI\Form;
 
-use Nette\Application\UI\Form,
-	Nette\Security as NS,
-	Nette\ComponentModel\IContainer,
+use Nette\ComponentModel\IContainer,
 	POS\Model\UserDao,
 	POS\Model\UserPropertyDao;
 use Nette\Database\Table\ActiveRow;
@@ -23,7 +21,6 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 	private $id_user;
 
 	public function __construct(UserPropertyDao $userPropertyDao, UserDao $userDao, ActiveRow $user, IContainer $parent = NULL, $name = NULL) {
-
 		$this->userPropertyDao = $userPropertyDao;
 		$userProperty = $this->userPropertyDao->find($user->propertyID);
 
@@ -45,12 +42,12 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 		$this->id_user = $presenter->getUser()->getId();
 
 		$user = $this->userDao->find($this->id_user);
-		if (!$user) {
-			throw new BadRequestException;
-		}
+
 		$values->age = $this->getAge($values);
+		$values->vigor = $this->getVigor($values->age);
 
 		$this->userPropertyDao->update($user->propertyID, $values);
+		$presenter->flashMessage("Informace byla změněny");
 		$presenter->redirect('this');
 	}
 

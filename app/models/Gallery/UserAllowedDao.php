@@ -48,4 +48,17 @@ class UserAllowedDao extends AbstractDao {
 		return $sel->fetch();
 	}
 
+	/**
+	 * vloží povoleného uživatele
+	 * @param type $userID id uživatele
+	 * @param type $galleryID id galerie
+	 */
+	public function insertData($userID, $galleryID) {
+		$sel = $this->getTable();
+		$sel->insert(array(
+			self::COLUMN_USER_ID => $userID,
+			self::COLUMN_GALLERY_ID => $galleryID
+		));
+	}
+
 }

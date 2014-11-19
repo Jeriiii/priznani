@@ -48,8 +48,9 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->onValidate[] = callback($this, 'validateWantToMeet');
+		$this->onValidate[] = callback($this, 'validateAge');
 		$this->addSubmit('send', 'Do druhé části registrace')
-			->setAttribute("class", "btn btn-success");
+			->setAttribute("class", "btn btn-main");
 
 		return $this;
 	}
@@ -60,6 +61,7 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 
 		$this->regSession->role = 'unconfirmed_user';
 		$this->regSession->age = $this->getAge($values);
+		$this->regSession->vigor = $this->getVigor($this->regSession->age);
 		$this->regSession->type = $values->type;
 
 		foreach ($this->userDao->getArrWantToMeet() as $key => $want) {

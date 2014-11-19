@@ -12,13 +12,9 @@ use POS\Model\UserImageDao;
 use POS\Model\ImageLikesDao;
 use POS\Model\CommentImagesDao;
 use POS\Model\LikeCommentDao;
+use POSComponent\Comments\ImageComments;
 
 class UsersCompetitionsGallery extends BaseGallery {
-
-	/**
-	 * @var \POS\Model\UsersCompetitionsDao
-	 */
-	public $userImageDao;
 
 	/**
 	 * @var \POS\Model\ImageLikesDao
@@ -35,14 +31,19 @@ class UsersCompetitionsGallery extends BaseGallery {
 	 */
 	public $likeCommentDao;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, LikeCommentDao $likeCommentDao, UserImageDao $userImageDao, CommentImagesDao $commentImagesDao, ImageLikesDao $imageLikesDao) {
+	/**
+	 * @var ActiveRow|ArrayHash $loggedUser
+	 */
+	public $loggedUser;
+
+	public function __construct($images, $image, $gallery, $domain, $partymode, LikeCommentDao $likeCommentDao, UserImageDao $userImageDao, CommentImagesDao $commentImagesDao, ImageLikesDao $imageLikesDao, $loggedUser) {
 		parent::__construct($images, $image, $gallery, $domain, $partymode);
 		parent::setUserImageDao($userImageDao);
 		$this->image = $image;
-		$this->userImageDao = $userImageDao;
 		$this->imageLikesDao = $imageLikesDao;
 		$this->commentImagesDao = $commentImagesDao;
 		$this->likeCommentDao = $likeCommentDao;
+		$this->loggedUser = $loggedUser;
 	}
 
 	public function render() {
@@ -50,7 +51,7 @@ class UsersCompetitionsGallery extends BaseGallery {
 	}
 
 	public function createComponentLikes() {
-		return new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->image, $this->presenter->user->id);
+		return new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->image, $this->presenter->user->id, $this->loggedUser);
 	}
 
 	/**
@@ -58,7 +59,9 @@ class UsersCompetitionsGallery extends BaseGallery {
 	 * @return \POSComponent\Comments\ImageComments
 	 */
 	public function createComponentComments() {
-		return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image);
+		$imageComments = new ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image, $this->loggedUser);
+		$imageComments->setPresenter($this->getPresenter());
+		return $imageComments;
 	}
 
 }

@@ -15,6 +15,7 @@ namespace POSComponent\Galleries\UserGalleriesThumbnails;
 
 use \Nette\Security\User,
 	Nette\Utils\Strings;
+use POSComponent\Confirm;
 
 class MyUserGalleriesThumbnails extends BaseUserGalleriesThumbnails {
 
@@ -31,6 +32,14 @@ class MyUserGalleriesThumbnails extends BaseUserGalleriesThumbnails {
 		$templateName = "../MyUserGalleriesThumbnails/myUserGalleriesThumbnails.latte";
 
 		$this->renderBase($mode, $galleries, $userID, $templateName);
+	}
+
+	protected function createComponentDeleteGallery($name) {
+		$deleteGallery = new Confirm($this, $name, FALSE);
+		$deleteGallery->setBtnClass("btn-action btn-delete");
+		$deleteGallery->setTittle("Smazat galerii");
+		$deleteGallery->setMessage("Opravdu chcete smazat galerii?");
+		return $deleteGallery;
 	}
 
 }

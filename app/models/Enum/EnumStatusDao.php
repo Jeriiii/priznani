@@ -11,15 +11,20 @@ namespace POS\Model;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class EnumStatusDao extends AbstractDao {
+class EnumStatusDao extends BaseEnumDao {
 
 	const TABLE_NAME = "enum_status";
 
 	/* Column name */
 	const COLUMN_ID = "id";
+	const COLUMN_NAME = "name";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_NAME;
 	}
 
 }

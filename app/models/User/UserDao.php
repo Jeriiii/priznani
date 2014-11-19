@@ -32,6 +32,8 @@ class UserDao extends UserBaseDao {
 	const COLUMN_ADMIN_SCORE = "admin_score";
 	const COLUMN_CONFIRMED = "confirmed";
 	const COLUMN_PASSWORD = "password";
+	const COLUMN_VERIFIED = "verified";
+	const COLUMN_PROFIL_PHOTO_ID = "profilFotoID";
 	const COLUMN_LAST_SIGNED_DAY = "last_signed_in";
 	const COLUMN_FIRST_SIGNED_DAY_STREAK = "first_signed_day_streak";
 
@@ -109,11 +111,50 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Hledá uživatele v blízkosti bydliště
+	 * @param \Nette\Database\Table\ActiveRow $me Uživatel
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getNearMe(ActiveRow $me) {
+		$sel = $this->getTable();
+
+		$sel->where(self::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_CITY_ID, $me->property->cityID);
+
+		/* pokud je jich málo ve městě */
+		if ($sel->count() < 30) {
+			$sel = $this->getTable();
+			$sel->where(self::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_DISTRICT_ID, $me->property->districtID);
+		}
+
+		/* pokud je jich málo v okrese */
+		if ($sel->count() < 30) {
+			$sel = $this->getTable();
+			$sel->where(self::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_REGION_ID, $me->property->regionID);
+		}
+
+		/* vyřadím uživatele který hledá z výsledků */
+		$sel->where(self::TABLE_NAME . "." . self::COLUMN_ID . " != ?", $me->id);
+
+		return $sel;
+	}
+
+	/**
+	 * Vrátí uživatele podle znamení
+	 * @param int $vigor Znamení uživatele.
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getByVigor($vigor) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_VIGOR, $vigor);
+		return $sel;
+	}
+
+	/**
 	 * Vyhledá užigvatele podle zadaných kriterií
 	 * @param array $data pole dat, podle kterých se provede hledání
 	 * @return Nette\Database\Table\Selection
 	 */
-	public function findBySearchData($data) {
+	public function getBySearchData($data) {
 		$sel = $this->getTable();
 		$timeOne = new \Nette\DateTime();
 		$timeTwo = new \Nette\DateTime();
@@ -121,20 +162,28 @@ class UserDao extends UserBaseDao {
 		if (empty($data)) {
 			return $sel;
 		}
+		if (!empty($data['penis_length_from'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length >= ?", $data['penis_length_from']);
+		}
+		if (!empty($data['penis_length_to'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length <= ?", $data['penis_length_to']);
+		}
 		if (!empty($data['age_from'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".age <= ?", $timeOne->modify('-' . $data['age_from'] . 'years')->format('Y-12-31'));
 		}
 		if (!empty($data['age_to'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".age >= ?", $timeTwo->modify('-' . $data['age_to'] . 'years')->format('Y-1-1'));
 		}
+		if (!empty($data['tallness_from'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".tallness >= ?", $data['tallness_from']);
+		}
+		if (!empty($data['tallness_to'])) {
+			$sel->where(self::COLUMN_PROPERTY_ID . ".tallness <= ?", $data['tallness_to']);
+		}
+
+
 		if (!empty($data['sex'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".type", $data['sex']);
-		}
-		if (!empty($data['penis_length_from'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length >= ?", $data['penis_length_from']);
-		}
-		if (!empty($data['penis_length_to'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length <= ?", $data['penis_length_to']);
 		}
 		if (!empty($data['penis_width'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_width", $data['penis_width']);
@@ -150,12 +199,6 @@ class UserDao extends UserBaseDao {
 		}
 		if (!empty($data['hair_color'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".hair_colour", $data['hair_color']);
-		}
-		if (!empty($data['tallness_from'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".tallness >= ?", $data['tallness_from']);
-		}
-		if (!empty($data['tallness_to'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".tallness <= ?", $data['tallness_to']);
 		}
 		if (!empty($data['drink'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".drink", $data['drink']);
@@ -287,6 +330,17 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Vrátí Selection uživatele podle ID
+	 * @param int $userID ID uživatele
+	 * @return Selection uživatelova data
+	 */
+	public function getUser($userID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($userID);
+		return $sel;
+	}
+
+	/**
 	 * Vrátí část uživatelů s rolí user podle požadavků paginatoru
 	 * @param type int $limit Počet uživatelů
 	 * @param type int $offset Velikost množiny pro výběr
@@ -362,7 +416,7 @@ class UserDao extends UserBaseDao {
 			'Jméno' => $user->user_name,
 			'První věta' => $userProperty->first_sentence,
 			/* 'Naposledy online' => $user->last_active, */
-			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->type),
+			'Jsem' => UserBaseDao::getTranslateUserProperty($userProperty->type),
 			/* 'Vytvoření profilu' => $user->created, */
 			/* 'Email' => $user->email, */
 			'O mně' => $userProperty->about_me,
@@ -382,11 +436,11 @@ class UserDao extends UserBaseDao {
 	public function getUserShortInfo($userID) {
 		$userProperty = $this->findProperties($userID);
 		$userShortInfo = array(
-			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->type),
+			'Jsem' => UserBaseDao::getTranslateUserProperty($userProperty->type),
 			'Stav' => UserBaseDao::getTranslateUserState($userProperty->marital_state),
 			'Věk' => $this->getAge($userProperty->age),
-//			'Chtěl bych potkat' => UserBaseDao::getTranslateUserInterestedIn($userProperty->interested_in),
-			'První věta' => $userProperty->first_sentence,
+			/* 'Chtěl bych potkat' => UserBaseDao::getTranslateUserInterestedIn($userProperty->interested_in), */
+			/* 'První věta' => $userProperty->first_sentence, */
 		);
 		$seek = $this->getWantToMeet($userProperty);
 		return $userShortInfo + $seek;
@@ -534,6 +588,26 @@ class UserDao extends UserBaseDao {
 		$sel = $this->createSelection(UserBlokedDao::TABLE_NAME);
 		$sel->where(UserBlokedDao::COLUMN_OWNER_ID, $ownerID);
 		return $sel;
+	}
+
+	/**
+	 * označí ověřeného uživatele
+	 * @param type $userID ID uživatele
+	 */
+	public function verify($userID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($userID);
+		$sel->update(array(self::COLUMN_VERIFIED => 1));
+	}
+
+	/**
+	 * Vrátí pole id - uživatelské jméno
+	 * @param array Pole id-jmeno uživatele řazený podle jména
+	 */
+	public function getUserNames() {
+		$sel = $this->getTable();
+		$sel->order(self::COLUMN_USER_NAME);
+		return $sel->fetchPairs(self::COLUMN_ID, self::COLUMN_USER_NAME);
 	}
 
 }

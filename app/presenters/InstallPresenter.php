@@ -51,7 +51,7 @@ class InstallPresenter extends BasePresenter {
 		}
 
 		//$this->insertEnumCatProp();
-		//$this->insertUserCategories();
+//		$this->insertUserCategories();
 
 		$this->setLayout("layoutInstall");
 	}
@@ -187,16 +187,18 @@ class InstallPresenter extends BasePresenter {
 			}
 
 			//$row["type"] = $property;
-			$insert[] = $row;
-			$row["want_to_meet_group"] ++;
 
-			if ($row["want_to_meet_group"] == 1 && $row["want_to_meet_couple_women"] == 1 && $row["want_to_meet_couple_men"] == 1 && $row["want_to_meet_couple"] == 1 && $row["want_to_meet_women"] == 1 && $row["want_to_meet_men"] == 1) {
+			if ($row["want_to_meet_group"] == 2 && $row["want_to_meet_couple_women"] == 2 && $row["want_to_meet_couple_men"] == 2 && $row["want_to_meet_couple"] == 2 && $row["want_to_meet_women"] == 2 && $row["want_to_meet_men"] == 2) {
 				break;
 			}
+
+			$insert[] = $row;
+			$row["want_to_meet_group"] ++;
 		}
 		//}
 
 		$this->catPropertyWantToMeetDao->begginTransaction();
+		$this->catPropertyWantToMeetDao->deleteAllTable();
 		foreach ($properties as $property) {
 			foreach ($insert as $row) {
 				$row["type"] = $property;
@@ -211,6 +213,7 @@ class InstallPresenter extends BasePresenter {
 		$ids = $catsWTMP->fetchPairs("id", "id");
 
 		$this->userCategoryDao->begginTransaction();
+		$this->userCategoryDao->deleteAllTable();
 		foreach ($ids as $id) {
 			$this->userCategoryDao->insert(array("property_want_to_meet" => $id));
 		}

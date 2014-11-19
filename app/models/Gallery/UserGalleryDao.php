@@ -52,10 +52,28 @@ class UserGalleryDao extends BaseGalleryDao {
 	 * @param type $userID ID uživatele, jehož galerie hledáme
 	 * @return Nette\Database\Table\Selection
 	 */
-	public function getInUserWithoutVerif($userID) {
+	public function getInUserWithoutVerif($userID, $viewerID) {
+
+		$selAllow = $this->createSelection(UserAllowedDao::TABLE_NAME);
+		$allowedGalleries = $selAllow->where(UserAllowedDao::COLUMN_USER_ID, $viewerID);
+		$allowed = array();
+
+		if (count($allowedGalleries) != 0) {
+			foreach ($allowedGalleries as $item) {
+				if ($item->gallery->userID == $userID) {
+					$allowed[] = $item->galleryID;
+				}
+			}
+		}
 		$sel = $this->getTable();
-		$sel->where(self::COLUMN_USER_ID, $userID)->where(self::COLUMN_VERIFICATION, 0);
+		if (!empty($allowed)) {
+			$sel->where(self::COLUMN_USER_ID, $userID)->where(self::COLUMN_VERIFICATION . " = ? OR id IN ?", 0, $allowed);
+		} else {
+			$sel->where(self::COLUMN_USER_ID, $userID)->where(self::COLUMN_VERIFICATION, 0);
+		}
+
 		$sel->order(self::COLUMN_ID . " DESC");
+
 		return $sel;
 	}
 
@@ -246,60 +264,64 @@ class UserGalleryDao extends BaseGalleryDao {
 		$isOwner = $this->checkOwner($userID, $ownerID);
 		$section->setExpiration('2 hours');
 
-		//nahraju galerie uživatele, kterého prohlížím
+//nahraju galerie uživatele, kterého prohlížím
 		$galleries = $selGallery->where(UserGalleryDao::COLUMN_USER_ID, $ownerID);
 
 		$galleriesAccess = $this->getSectionData($section);
 
 		foreach ($galleries as $item) {
-			//pokud je uživatel vlastníkem automaticky má přístup (občas se tam objeví id uživatelovo galerie ikdyž ji neprochazim)
+//pokud je uživatel vlastníkem automaticky má přístup (občas se tam objeví id uživatelovo galerie ikdyž ji neprochazim)
 			if ($isOwner) {
 				$galleriesAccess[$item->id] = TRUE;
 			}
 
-			//pokud záznam ještě není v session
+//pokud záznam ještě není v session
 			if (empty($galleriesAccess[$item->id])) {
-
-				//pokud je nastavena privátní galerie, zkoumáme podmínky pro přístup
+//pokud je nastavena privátní galerie, zkoumáme podmínky pro přístup
 				if ($item->private) {
-
-					//pokud je kamarád a galerie je kamarádům přístupná
+//pokud je kamarád a galerie je kamarádům přístupná
 					if ($isFriend && $item->allow_friends) {
 						$galleriesAccess[$item->id] = TRUE;
 
-						//pokudje kamarád a galerie je kamarádům nepřístupná
-					} elseif ($isFriend && !$item->allow_friends) {
+//pokudje kamarád a galerie je kamarádům nepřístupná
+					} elseif ($isFriend && !$item->allow_friends && !$item->verification_gallery) {
 
-						//pokud je mu povoleno vstoupit
+//pokud je mu povoleno vstoupit
 						if ($this->checkAllowed($item->id, $userID)) {
 							$galleriesAccess[$item->id] = TRUE;
 						} else {
 							$galleriesAccess[$item->id] = FALSE;
 						}
 
-						//pokud není kamarád
+//pokud není kamarád
 					} elseif (!$isFriend) {
 
-						//pokud přestože není kamarád může vstoupit
+//pokud přestože není kamarád může vstoupit
 						if ($this->checkAllowed($item->id, $userID)) {
 							$galleriesAccess[$item->id] = TRUE;
 						} else {
 							$galleriesAccess[$item->id] = FALSE;
 						}
 
-						//možnost nastávající při nesplnění předchozích podmínek
+//možnost nastávající při nesplnění předchozích podmínek
 					} else {
 						$galleriesAccess[$item->id] = FALSE;
 					}
-
-					//galerie je veřejná, proto má vstup garantován
+					//verifikační galerie
+				} else if ($item->verification_gallery) {
+					if ($this->checkAllowed($item->id, $userID)) {
+						$galleriesAccess[$item->id] = TRUE;
+					} else {
+						$galleriesAccess[$item->id] = FALSE;
+					}
+//galerie je veřejná, proto má vstup garantován
 				} else {
 					$galleriesAccess[$item->id] = TRUE;
 				}
 			}
 		}
 
-		//update session
+//update session
 		$section->galleriesAccess = $galleriesAccess;
 
 		return $galleriesAccess;
@@ -335,7 +357,7 @@ class UserGalleryDao extends BaseGalleryDao {
 			return TRUE;
 		}
 		$selFriend = $this->createSelection(FriendDao::TABLE_NAME);
-		//zjistím, jestli se jedná o kamaráda
+//zjistím, jestli se jedná o kamaráda
 		$selFriend->where(FriendDao::COLUMN_USER_ID_1, $userID);
 		$selFriend->where(FriendDao::COLUMN_USER_ID_2, $ownerID);
 		$isFriend = $selFriend->fetch();

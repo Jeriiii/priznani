@@ -1,17 +1,9 @@
 {block head}
-{*<link rel="stylesheet" href="{$basePath}/css/bonuses.css" type="text/css">*}
-{*<link rel="stylesheet" href="{$basePath}/css/bootstrap.css" type="text/css">*}
-{*<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">*}
 <script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>  
-{control css "competition/listImages.less", "bootstrap/modals.less"}
-{*control css "bootstrap/bootstrap.less"*}
+{control css "competition/listImages.less"}
 {/block}
 
 {block foot}
-{*<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>*}
-{*ifset #scripts}
-	{include #scripts}
-{/ifset*}
 {/block}
 
 {block beforeContent}
@@ -29,9 +21,6 @@
 				{include #imageEditButtons "image" => $image}
 			{/ifset}
 		</div>
-		{ifset #modalDeleteImage}
-			{include #modalDeleteImage "image" => $image, "iterator" => $iterator}
-		{/ifset}
 	{/foreach}
 	{if $images->count() == 0}
 		Uživatel nemá žádné fotky. Požádejte ho o vložení fotek.

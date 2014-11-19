@@ -22,13 +22,15 @@ class SignInForm extends BaseForm {
 		parent::__construct($parent, $name);
 		$this->backlink = $banklink;
 
-		$this->addText('email', 'E-mail:', 30, 200)
-			->addRule(Form::FILLED, "Zadejte svůj email");
+		$this->addText('signEmail', 'E-mail:', 30, 200)
+			->addRule(Form::FILLED, "Zadejte svůj email")
+			->setAttribute('placeholder', 'Email...');
 
-		$this->addPassword('password', 'Heslo:', 30, 200)
-			->addRule(Form::FILLED, "Zadejte heslo");
+		$this->addPassword('signPassword', 'Heslo:', 30, 200)
+			->addRule(Form::FILLED, "Zadejte heslo")
+			->setAttribute('placeholder', 'Heslo...');
 
-		$this->addCheckbox('persistent', 'Pamatovat si mě na tomto počítači', 30, 200)
+		$this->addCheckbox('signPersistent', 'Pamatovat si mě na tomto počítači', 30, 200)
 			->setDefaultValue(TRUE);
 
 		$this->addSubmit('login', 'PŘIHLÁSIT SE')
@@ -44,12 +46,12 @@ class SignInForm extends BaseForm {
 		try {
 			$user = $presenter->getUser();
 			$values = $form->getValues();
-			if ($values->persistent) {
+			if ($values->signPersistent) {
 				$presenter->getUser()->setExpiration('30 days', FALSE);
 			} else {
 				$presenter->getUser()->setExpiration('30 minutes', TRUE);
 			}
-			$user->login($values->email, $values->password);
+			$user->login($values->signEmail, $values->signPassword);
 			//toto se provede při úspěšném zpracování přihlašovacího formuláře
 			//if (!empty($presenter->backlink)) {
 			$presenter->flashMessage("Byl jste úspěšně přihlášen");

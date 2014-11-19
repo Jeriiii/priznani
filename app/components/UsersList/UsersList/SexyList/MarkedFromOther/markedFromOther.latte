@@ -1,7 +1,31 @@
-{layout '../BaseSexyList/sexyList.latte'}
-
-{define showUser}
-	<td>{$sexyUser->userFrom|showProf}</td>
-{/define}
-
-{define heading}Jsem pro ně sexy{/define}
+<div n:snippet="sexyList" data-ajax-append="true">
+{if $isUserPaying}
+	{ifset $sexyUsers}
+		{foreach $sexyUsers as $sexyUser}
+			{if $iterator->isFirst()}
+				<table>
+					<thead>
+					<th></th>
+				</thead>
+				<tbody>
+			{/if}
+			<tr>
+				<td>{!$sexyUser->userFrom|showProf}</td>
+			</tr>
+			{if $iterator->isLast()}
+				</tbody>
+				</table>
+			{/if}
+		{/foreach}
+	{/ifset}
+{else}
+	<p>
+		{$countSexy} lidí Vás označilo jako sexy. Aby jste mohli vidět, kdo Vás označil
+		jako sexy, pořiďte si <a class='payment-btn'>premium</a> nebo <a class='payment-btn'>eXclusive</a> účet.
+	</p>
+{/if}
+</div>
+<script>
+	var loadMarkedFromOtherLink = {link getMoreData!};
+	var isUserPaying = {$isUserPaying};
+</script>

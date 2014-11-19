@@ -11,16 +11,21 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class EnumPropertyDao extends AbstractDao {
+class EnumPropertyDao extends BaseEnumDao {
 
 	const TABLE_NAME = "enum_property";
 
 	/* Column name */
 	const COLUMN_ID = "id";
 	const COLUMN_NAME = "name";
+	const COLUMN_CZ_NAME = "czname";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	public function getColumnName() {
+		return self::COLUMN_CZ_NAME;
 	}
 
 }

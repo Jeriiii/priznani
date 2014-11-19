@@ -9,30 +9,25 @@ namespace Nette\Application\UI;
 
 use Nette;
 
-
 /**
  * Component multiplier.
  *
  * @author     David Grudl
  */
-class Multiplier extends PresenterComponent
-{
+class Multiplier extends PresenterComponent {
+
 	/** @var callable */
 	private $factory;
-
 
 	/**
 	 * @param callable
 	 */
-	public function __construct($factory)
-	{
+	public function __construct($factory) {
 		parent::__construct();
 		$this->factory = Nette\Utils\Callback::check($factory);
 	}
 
-
-	protected function createComponent($name)
-	{
+	protected function createComponent($name) {
 		return call_user_func($this->factory, $name, $this);
 	}
 

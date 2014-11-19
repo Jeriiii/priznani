@@ -13,6 +13,7 @@ use Nette\Application\Responses\JsonResponse;
 use POS\Model\AbstractDao;
 use Nette\Database\Table\ActiveRow;
 use POS\Model\ILikeDao;
+use Nette\ArrayHash;
 
 /**
  * Komponenta pro vykreslení tlačítek na lajkování.
@@ -98,13 +99,16 @@ class BaseLikes extends BaseProjectControl {
 	 * vkládáme příslušné dao atd.
 	 * @param \POS\Model\ImageLikesDao|\POS\Model\LikeStatusDao|\POS\Model\LikeCommentDao $likeDao dao, které se vkládá podle potřeby
 	 * lajknutí obrázku/statusu/commentu obrázku
-	 * @param Nette\Database\Table\ActiveRow $likeItem Příspěvek u kterého se má zobrazit počet like nebo se lajknout
+	 * @param Nette\Database\Table\ActiveRow | Nette\ArrayHash $likeItem Příspěvek u kterého se má zobrazit počet like nebo se lajknout
 	 * @param int $userID ID lajkující uživatele
 	 * @param string $nameLabel viz. kom. třídy
 	 * @param string $nameLikeButton viz. kom. třídy
 	 */
-	public function __construct(ILikeDao $likeDao, ActiveRow $likeItem, $userID, $nameLabel, $nameLikeButton = self::DEFAULT_NAME_LIKE_BUTTON) {
+	public function __construct(ILikeDao $likeDao, $likeItem, $userID, $nameLabel, $nameLikeButton = self::DEFAULT_NAME_LIKE_BUTTON) {
 		parent::__construct();
+		if (!($likeItem instanceof ActiveRow) && !($likeItem instanceof ArrayHash)) {
+			throw new Exception('Variable $likeItem must be instance of ActiveRow or ArrayHash');
+		}
 		$this->likeDao = $likeDao;
 		$this->liked = $this->getLikedByUser($userID, $likeItem->id);
 		$this->userID = $userID;

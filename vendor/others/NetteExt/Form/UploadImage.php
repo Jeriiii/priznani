@@ -43,6 +43,8 @@ class UploadImage extends UploadFile {
 
 		/* přeuloží originální obrázek a smaže starý */
 		self::resaveImgOriginal($image, $path);
+
+		return $path;
 	}
 
 	/*	 * *********************** VYTVOŘENÍ A ULOŽENÍ OBRÁZKU **************** */
@@ -77,7 +79,10 @@ class UploadImage extends UploadFile {
 		$pathGalleryScreen = ImagePathCreator::getImgScrnPath($imageID, $imageSuffix, $folder);
 
 		$image = Image::fromFile($path);
-		$image->resize($maxWidth, $maxHeight);
+		/* strany se změní jen v momentě, kdy přesáhnou max width, max height */
+		if ($maxHeight < $image->height || $maxWidth < $image->width) {
+			$image->resize($maxWidth, $maxHeight);
+		}
 		$image->save($pathGalleryScreen);
 	}
 

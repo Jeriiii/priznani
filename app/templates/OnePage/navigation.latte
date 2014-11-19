@@ -1,0 +1,90 @@
+{* celá levá navigace - ne ta v layoutu, ale ty tlačítka nalevo od streamu *}
+{block navigation}
+<nav id="stream-menu">
+	{include #profile}
+	<div class="usermenu">
+	<a n:href=":Profil:Galleries:default" title="Editovat profil">MOJE GALERIE</a>
+	<a n:href=":Profil:Galleries:userGalleryNew" class="add-gallery" title="Profil">VYTVOŘIT GALERII</a>
+	{if $user->isLoggedIn()}
+		{if $loggedUser->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
+			{include #friendRequest}
+
+			{include #friends}
+			{include #blokedUsers}
+			{include #markedFromOther}
+			<a n:href=":Profil:Edit:default" title="Změna statusu">
+			{if !empty($loggedUser->property->statusID)}
+				Chci {$loggedUser->property->status->name}
+			{else}
+				NASTAVIT STATUS
+			{/if}
+			</a>
+		{else}
+			<a n:href="DatingRegistration:" class="btn-main btn-small">Doplnit info o sobě</a>
+		{/if}
+	{/if}
+	</div>
+	{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
+	<div class="clear"></div>
+</nav>
+{/block}
+
+{* profilový obrázek, jméno uživatele a tlačítko editovat *}
+{define profile}
+{if $user->isLoggedIn() && $loggedUser->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
+	<div class="user-profile-picture">
+	{$loggedUser|showProfMinDiv}
+	</div>
+	<b><a n:href=":Profil:Show:default" class="big-user-name">{$loggedUser->user_name|upper}</a></b>
+	<span class="first-sentence">{$loggedUser->property->first_sentence}</span>
+
+	<div class="delimiter top"></div>
+	<div class="usermenu">
+	<a n:href=":Profil:Edit:default" class="edit" title="Editovat profil">EDITOVAT PROFIL</a>
+	<a n:href=":Profil:Show:default" class="profile" title="Muj profil">MŮJ PROFIL</a>
+	<a n:href=":Profil:Show:verification" class="with-counter" title="Editovat profil"><span>{$countVerificationRequests}</span> ŽÁDOSTÍ O OVĚŘENÍ</a>
+	</div>
+{/if}
+{/}
+
+{* žádosti o přátelství *}
+
+{define friendRequest}
+
+<div class="usermenu red">
+	<a title="Žádosti o přátelství" class="with-counter" id="friendRequestsBtn"><span>{$countFriendRequests}</span> ŽÁDOSTI O PŘÁTELSTVÍ</a>
+	<div id="friendRequests">
+	{control friendRequest}
+	</div>
+</div>
+{/}
+
+{* přátelé *}
+{define friends}
+<div class="usermenu">
+	<a title="Seznam přátel" id="friendsBtn">SEZNAM PŘÁTEL</a>
+	<div id="friends">
+	{control friends}
+	</div>
+</div>
+{/}
+
+{* blokovaní uživatelé *}
+{define blokedUsers}
+<div class="usermenu">
+	<a title="Blokovaní uživatelé" id="blokedUsersBtn">BLOKOVANÍ UŽIVATELÉ</a>
+	<div id="blokedUsers">
+	{control blokedUsers}
+	</div>
+</div>
+{/}
+
+{* označili mě jako sexi *}
+{define markedFromOther}
+{if $countSexy != 0}
+	<a class="btn-main btn-small" title="Jsem pro ně sexi" id="markedFromOtherBtn">{$countSexy} Jsem pro ně sexi</a>
+	<div id="markedFromOther">
+	{control markedFromOther}
+	</div>
+{/if}
+{/}

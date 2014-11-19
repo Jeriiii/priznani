@@ -10,6 +10,7 @@
  */
 use Nette\Application\UI\Form as Frm,
 	Nette\Caching\Cache;
+use POSComponent\Comments\ConfessionCommentsment;
 
 class PagePresenter extends BasePresenter {
 
@@ -52,6 +53,24 @@ class PagePresenter extends BasePresenter {
 	 * @inject
 	 */
 	public $galleryDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionDao
+	 * @inject
+	 */
+	public $likeConfessionDao;
+
+	/**
+	 * @var \POS\Model\LikeConfessionCommentDao
+	 * @inject
+	 */
+	public $likeConfessionCommentDao;
+
+	/**
+	 * @var \POS\Model\CommentConfessionsDao
+	 * @inject
+	 */
+	public $commentConfessionsDao;
 
 	public function startup() {
 		parent::startup();
@@ -365,6 +384,26 @@ class PagePresenter extends BasePresenter {
 
 	protected function createComponentPartyConfessionForm($name) {
 		return new Frm\PartyConfessionForm($this, $name);
+	}
+
+	protected function createComponentLikes() {
+		$id = $this->getParameter("id");
+		$confession = $this->confessionDao->find($id);
+
+		return new \POSComponent\BaseLikes\ConfessionLikes($this->likeConfessionDao, $confession, $this->presenter->user->id);
+	}
+
+	/**
+	 * Komponenta pro komentování obrázků
+	 * @return \POSComponent\Comments\ImageComments
+	 */
+	protected function createComponentComments() {
+		$id = $this->getParameter("id");
+		$confession = $this->confessionDao->find($id);
+
+		$confessionComment = ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $confession);
+		$confessionComment->setPresenter($this);
+		return $confessionComment;
 	}
 
 }

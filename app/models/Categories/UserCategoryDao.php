@@ -32,8 +32,12 @@ class UserCategoryDao extends AbstractDao {
 	 * Hlavní metoda vracící všechny kategorie.
 	 * @param \Nette\Database\Table\ActiveRow $userProperty Vlastnosti uživatele co hledá.
 	 */
-	public function getMine(ActiveRow $userProperty) {
+	public function getMine($userProperty) {
 		$sel = $this->getTable();
+
+		if (!($userProperty instanceof ActiveRow) && !($userProperty instanceof \Nette\ArrayHash)) {
+			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
+		}
 
 		$catsWTMProperty = $this->getPropertyWantToMeetCats($userProperty);
 		$sel->where(self::COLUMN_PROPERTY_WANT_TO_MEET, $catsWTMProperty);
@@ -43,7 +47,7 @@ class UserCategoryDao extends AbstractDao {
 		return $sel;
 	}
 
-	private function getPropertyWantToMeetCats(ActiveRow $userProperty) {
+	private function getPropertyWantToMeetCats($userProperty) {
 		$sel = $this->createSelection(CatPropertyWantToMeetDao::TABLE_NAME);
 		$sel = $this->getPeopertyCats($userProperty, $sel);
 		$sel = $this->getWantToMeetCats($userProperty, $sel);
@@ -56,7 +60,7 @@ class UserCategoryDao extends AbstractDao {
 	 * @param \Nette\Database\Table\Selection $sel Celkové selection.
 	 * @return \Nette\Database\Table\Selection Výsledné selection.
 	 */
-	private function getPeopertyCats(ActiveRow $userProperty, Selection $sel) {
+	private function getPeopertyCats($userProperty, Selection $sel) {
 		$property = array();
 		if ($userProperty->want_to_meet_men != 0) {
 			$property[] = 1;
@@ -97,7 +101,7 @@ class UserCategoryDao extends AbstractDao {
 	 * @param \Nette\Database\Table\Selection $sel Celkové selection.
 	 * @return \Nette\Database\Table\Selection Výsledné selection.
 	 */
-	private function getWantToMeetCats(ActiveRow $userProperty, Selection $sel) {
+	private function getWantToMeetCats($userProperty, Selection $sel) {
 		$selKeys = array(1, 2);
 		if ($userProperty->type == UserBaseDao::PROPERTY_MAN) {
 			$sel->where(

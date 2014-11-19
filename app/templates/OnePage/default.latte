@@ -1,50 +1,25 @@
 {block head}
-    {control css 'onepage/default.less', 'stream/list.less'}
+    {control css 'onepage/default.less', 'stream/list.less', 'comments/comments.less'}
 {/block}
 
 {block content}
 <section id="onepage">
-	<nav id="stream-menu">
-		{if $user->isLoggedIn() && $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
-			{$userData|showProfMin}
-			<b><a n:href=":Profil:Show:default">{$userData->user_name}</a></b>
-			<a n:href=":Profil:Edit:default" title="Editovat profil">Editovat profil</a>
-			<a n:href=":Profil:Show:default" class="btn-main btn-small" title="Muj profil">Můj profil</a>
-		{/if}
-
-		<a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>
-	    <a n:href=":Profil:Galleries:userGalleryNew" class="btn-main btn-small" title="Profil">Vytvořit galerii</a>
+	{includeblock 'navigation.latte'}
+	<div id="best-match">
 		{if $user->isLoggedIn()}
-			{if $userData->property} {* ochránit odkazy, které by spadly bez user properties *}
-				<a n:href=":Profil:Edit:friendRequests" class="btn-main btn-small" title="Pratelstvi">{$countFriendRequests} Žádosti o přátelství</a>
-				<a n:href=":Profil:Edit:default" class="btn-main btn-small" title="Změna statusu">
-				{if !empty($userData->property->statusID)}
-					Chci {$userData->property->status->name}
-				{else}
-					Nastavit status
-				{/if}
-				</a>
-			{else}
-				<a n:href="DatingRegistration:" class="btn-main btn-small">Doplnit info o sobě</a>
+			{if $loggedUser->propertyID}
+				{control bestMatchSearch 'listFew'}
+			{else} {* vyzve uživatele k dokončení registrace *}
+				Pokud se chcete seznámit, vyplňte o sobě <a n:href="DatingRegistration:" class="btn-main btn-small">další informace</a>.
 			{/if}
 		{/if}
-		{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
-	    <div class="clear"></div>
-	</nav>
-		<div id="best-match">
-			{if $user->isLoggedIn()}
-				{if $userData->property}
-					{control bestMatchSearch 'listFew'}
-				{else} {* vyzve uživatele k dokončení registrace *}
-					Pokud se chcete seznámit, vyplňte o sobě <a n:href="DatingRegistration:" class="btn-main btn-small">další informace</a>.
-				{/if}
-			{/if}
-		</div>
+	</div>
 	{control userStream}
 	<div id="right-dock">
 	    {*reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama *}
 	</div>
 	<div class="clear"></div>
+
 </section>
 {/block}
 
@@ -52,7 +27,14 @@
 {control js}
 <script>
 	$(document).ready(function () {
+
+		$.convRunAjax = true;
+		$.convOffset = 0;
+		$.convLimit = 5;
+
+		{* záložky u okének na vkládání obsahu/fotek *}
 		$( ".stream-form" ).tabs();
+		{* stream *}
 		$("body").stream({
 			addoffset: 4
 		});

@@ -56,3 +56,10 @@ services:
 	enumShapeDao:	POS\Model\EnumShapeDao
 	enumSmokeDao:	POS\Model\EnumSmokeDao
 	enumTallnessDao:	POS\Model\EnumTallnessDao
+	enumVigorDao:	POS\Model\EnumVigorDao
+	commentStatusesDao:	POS\Model\CommentStatusesDao
+	likeStatusCommentDao:	POS\Model\LikeStatusCommentDao
+	commentCofessionsDao:	POS\Model\CommentConfessionsDao
+	likeConfessionCommentDao:	POS\Model\LikeConfessionCommentDao
+	likeConfessionDao:	POS\Model\LikeConfessionDao
+	verificationPhotoRequestsDao: POS\Model\VerificationPhotoRequestsDao

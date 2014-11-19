@@ -18,6 +18,7 @@ use \Nette\Security\User,
 	Nette\Application\Responses\JsonResponse;
 use POS\Model\UserDao,
 	POS\Model\UserAllowedDao;
+use POSComponent\Confirm;
 
 class MyUserGalleryImagesThumbnails extends BaseUserGalleryImagesThumbnails {
 
@@ -84,6 +85,14 @@ class MyUserGalleryImagesThumbnails extends BaseUserGalleryImagesThumbnails {
 		$indexes[] = $this->presenter->user->id;
 
 		return $indexes;
+	}
+
+	protected function createComponentDeleteImage($name) {
+		$deleteGallery = new Confirm($this, $name, FALSE);
+		$deleteGallery->setBtnClass("btn-action btn-delete");
+		$deleteGallery->setTittle("Smazat obrázek");
+		$deleteGallery->setMessage("Opravdu chcete smazat obrázek?");
+		return $deleteGallery;
 	}
 
 }

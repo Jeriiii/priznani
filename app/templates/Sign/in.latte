@@ -1,17 +1,27 @@
 {block head}
-	{control css 'bootstrap/forms-medium.less', 'user/authentication.less'}
+	{control css 'sign/universal.less', 'sign/in.less','bootstrap/forms-medium.less', 'user/authentication.less'}
 {/block}
+
+{block usermenu}
+	<a n:href="DatingRegistration:" class="header-btn" title="Registruj se!">REGISTRACE</a>
+{/}
 
 
 {block content}
-<div class="form fullsize">
-	<h2>Přihlášení</h2>
+<div class="form-window">
+	<h2 class="window-title">PŘIHLÁŠENÍ</h2>
+	<div class="window-content">
 	{control signInForm}
 	<p class="registration">
-		Nejste ještě zaregistrováni? <a n:href="Sign:registration" title="registrace">Zaregistrujte se zde</a>.
+		Nejste ještě zaregistrováni? <a n:href="DatingRegistration:" title="Registrace">Zaregistrujte se zde</a>.
 	</p>
 	<p class="forgotten-pass">
 		Zapoměli jste heslo? <a n:href="Sign:forgottenPass" title="zapomenuté heslo">Obnovte si heslo zde</a>.
 	</p>
+	</div>
 </div>
+{/block}
+
+{block foot}
+	{control js 'features/body-image-fitter.js'}
 {/block}
