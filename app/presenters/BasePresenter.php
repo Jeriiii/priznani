@@ -78,7 +78,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		AntispamControl::register();
 		parent::startup();
 		if ($this->getUser()->isLoggedIn()) {
-		    $this->activityReporter->handleUsersActivity($this->getUser());
+			$this->activityReporter->handleUsersActivity($this->getUser());
 			$section = $this->getSession('loggedUser');
 			$section->setExpiration('20 minutes');
 			if (empty($section->loggedUser)) {
@@ -99,7 +99,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 				$section->loggedUser = $userRow;
 			}
 			$this->loggedUser = $section->loggedUser;
-			
+		}
 	}
 
 	public function beforeRender() {
