@@ -81,4 +81,8 @@ class BaseProjectControl extends Control {
 		$template->render();
 	}
 
+	public function setPresenter($presenter) {
+		$this->presenter = $presenter;
+	}
+
 }

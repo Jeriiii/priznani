@@ -14,6 +14,7 @@ use POS\Model\ILikeDao;
 use Nette\Database\Table\ActiveRow;
 use Nette\ArrayHash;
 use Exception;
+use POSComponent\Confirm;
 
 /**
  * Komponenta pro vykreslení tlačítek na lajkování.
@@ -64,6 +65,11 @@ class BaseComments extends BaseProjectControl {
 	/** @var boolean TRUE = zobrazí všechny komentáře */
 	private $showAllComments = FALSE;
 
+	/**
+	 * @var booblean Mají se vykreslit js scripty, který převytvoří confirm okénka
+	 */
+	private $redrawConfirm = FALSE;
+
 	public function __construct(ILikeDao $likeCommentDao, ICommentDao $commentDao, $item, $userData) {
 		parent::__construct();
 		if (!($item instanceof ActiveRow) && !($item instanceof \Nette\ArrayHash)) {
@@ -92,6 +98,7 @@ class BaseComments extends BaseProjectControl {
 		$template->minShowComments = self::MIN_OF_SHOWED_COMMENTS;
 		$template->showAllComments = $this->showAllComments;
 		$template->userData = $this->userData;
+		$template->redrawConfirm = $this->redrawConfirm;
 		$template->render();
 	}
 
@@ -146,6 +153,21 @@ class BaseComments extends BaseProjectControl {
 		$this->commentDao->delete($commentID);
 
 		$this->redrawControl();
+	}
+
+	protected function createComponentDeleteComment($name) {
+		$deleteComment = new Confirm($this, $name, TRUE, FALSE);
+		$deleteComment->setTittle("Smazat komentář");
+		$deleteComment->setMessage("Opravdu chcete smazat komentář?");
+		$deleteComment->setBtnText("×");
+		$deleteComment->setBtnClass("delete-comment");
+		$deleteComment->setConfirmBtnClass("ajax");
+		return $deleteComment;
+	}
+
+	public function redrawControl($snippet = NULL, $redraw = TRUE) {
+		parent::redrawControl($snippet, $redraw);
+		$this->redrawConfirm = TRUE;
 	}
 
 }

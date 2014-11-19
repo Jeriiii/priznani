@@ -36,6 +36,7 @@ class MyUserGalleriesThumbnails extends BaseUserGalleriesThumbnails {
 
 	protected function createComponentDeleteGallery($name) {
 		$deleteGallery = new Confirm($this, $name, FALSE);
+		$deleteGallery->setBtnClass("btn-action btn-delete");
 		$deleteGallery->setTittle("Smazat galerii");
 		$deleteGallery->setMessage("Opravdu chcete smazat galerii?");
 		return $deleteGallery;
