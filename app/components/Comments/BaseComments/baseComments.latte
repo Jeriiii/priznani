@@ -5,7 +5,8 @@
 			<div class="comment">
 				{$comment->user|showProfMin}
 				{if $user->id == $comment->userID}
-					<a n:href="deleteComment! $comment->id" class="ajax delete-comment" title="Smazat komentář">×</a>
+					{var $link = $_control->link('deleteComment!', $comment->id )}
+					{control deleteComment $comment->id, '', $link}
 				{/if}
 				<a href="{plink :Profil:Show: id => $comment->userID}" class="red-link">{$comment->user->user_name}</a>
 

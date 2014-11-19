@@ -19,21 +19,13 @@
 		var boxopts = $.extend({}, $.fn.ajaxBox.defaults, options);
 
 		return this.each(function () {
-			/* zkontroluje, zda není tlačítko předané přes data elementu */
-			boxopts = getAttrData($(this), boxopts);
-			boxopts = applyModulesStarts(boxopts);
-			//obalení okénkem a potřebnými elementy
-			addHtml($(this), boxopts);
-			///////////////
-
-			addBinds(boxopts);
-			watchForUpdateNeed(boxopts);
-			if (boxopts.ajaxObserverId) {
-				observer.register(boxopts.ajaxObserverId, function (data) {
-					boxopts.observerResponseHandle(boxopts, data);
-				});
+			var $this = $(this);
+			
+			var isLoaded = $this.data("ajaxbox-is-loaded");
+			if(isLoaded == undefined) { //ochrana proti spuštění pluginu dvakrát na ten samý element - děje se při ajaxu
+				init($this, boxopts);
+				$this.data("ajaxbox-is-loaded", true);
 			}
-			applyModulesEnds(boxopts);
 		});
 
 	};
@@ -133,6 +125,30 @@
 		/* objekt definující zapnutí a nastavení modulu pro obnovování snippetu a kontroly jeho příchozího obsahu */
 		streamSnippetModule: false
 	};
+
+	/**
+	 * Nainicializuje okénko
+	 * @param {Object} $this JQuery element okénka
+	 * @param {Object} boxopts Nastavení
+	 * @returns {undefined}
+	 */
+	function init($this, boxopts) {
+		/* zkontroluje, zda není tlačítko předané přes data elementu */
+		boxopts = getAttrData($this, boxopts);
+		boxopts = applyModulesStarts(boxopts);
+		//obalení okénkem a potřebnými elementy
+		addHtml($this, boxopts);
+		///////////////
+
+		addBinds(boxopts);
+		watchForUpdateNeed(boxopts);
+		if (boxopts.ajaxObserverId) {
+			observer.register(boxopts.ajaxObserverId, function (data) {
+				boxopts.observerResponseHandle(boxopts, data);
+			});
+		}
+		applyModulesEnds(boxopts);
+	}
 	
 	/**
 	 * Zkontroluje a nastavi nektera nastaveni. Pokud jsou prazdna, pokusi se je

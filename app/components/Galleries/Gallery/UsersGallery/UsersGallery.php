@@ -12,6 +12,7 @@ use POS\Model\UserImageDao;
 use POS\Model\ImageLikesDao;
 use POS\Model\LikeCommentDao;
 use POS\Model\CommentImagesDao;
+use POSComponent\Comments\ImageComments;
 
 class UsersGallery extends BaseGallery {
 
@@ -85,7 +86,9 @@ class UsersGallery extends BaseGallery {
 	 * @return \POSComponent\Comments\ImageComments
 	 */
 	public function createComponentComments() {
-		return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image, $this->loggedUser);
+		$imageComments = new ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image, $this->loggedUser);
+		$imageComments->setPresenter($this->getPresenter());
+		return $imageComments;
 	}
 
 	/**

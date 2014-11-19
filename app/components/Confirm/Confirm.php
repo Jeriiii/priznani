@@ -38,6 +38,21 @@ class Confirm extends BaseProjectControl {
 	 */
 	private $link;
 
+	/**
+	 * @var string Text tlačítka, když má být jiný než $tittle
+	 */
+	private $btnText = "";
+
+	/**
+	 * @var string Třída tlačítka, pokud ho chcete třeba nastylovat
+	 */
+	private $btnClass = "";
+
+	/**
+	 * @var string Třída potvryovac9ho tlačítka, pokud ho chcete třeba nastylovat
+	 */
+	private $confirmBtnClass = "";
+
 	public function __construct($parent, $name, $btnSetText = TRUE, $plink = TRUE) {
 		parent::__construct($parent, $name);
 		$this->plink = $plink;
@@ -60,6 +75,9 @@ class Confirm extends BaseProjectControl {
 		$this->template->tittle = $this->tittle;
 		$this->template->message = $this->message;
 		$this->template->plink = $this->plink;
+		$this->template->btnText = $this->btnText;
+		$this->template->btnClass = $this->btnClass;
+		$this->template->confirmBtnClass = $this->confirmBtnClass;
 		$this->template->btnSetText = $this->btnSetText;
 		$this->renderTemplate(dirname(__FILE__) . '/confirm.latte');
 	}
@@ -70,6 +88,21 @@ class Confirm extends BaseProjectControl {
 
 	public function setMessage($message) {
 		$this->message = $message;
+	}
+
+	/**
+	 * Pokud chcete, aby se text tlačítka lišil od tittle
+	 */
+	public function setBtnText($btnText) {
+		$this->btnText = $btnText;
+	}
+
+	public function setConfirmBtnClass($confirmBtnClass) {
+		$this->confirmBtnClass = $confirmBtnClass;
+	}
+
+	public function setBtnClass($btnClass) {
+		$this->btnClass = $btnClass;
 	}
 
 }

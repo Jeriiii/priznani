@@ -33,6 +33,9 @@ use POS\Model\CommentStatusesDao;
 use POS\Model\LikeConfessionCommentDao;
 use POS\Model\CommentConfessionsDao;
 use POS\Model\LikeConfessionDao;
+use POSComponent\Comments\ConfessionComments;
+use POSComponent\Comments\ImageComments;
+use POSComponent\Comments\StatusComments;
 
 class BaseStream extends BaseProjectControl {
 
@@ -251,7 +254,9 @@ class BaseStream extends BaseProjectControl {
 		$streamItems = $this->dataForStream;
 
 		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			return new \POSComponent\Comments\ImageComments($this->likeCommentDao, $this->commentImagesDao, $streamItems->offsetGet($streamItem)->userGallery->lastImage, $this->userData);
+			$imageComments = new ImageComments($this->likeCommentDao, $this->commentImagesDao, $streamItems->offsetGet($streamItem)->userGallery->lastImage, $this->userData);
+			$imageComments->setPresenter($this->getPresenter());
+			return $imageComments;
 		});
 	}
 
@@ -275,7 +280,9 @@ class BaseStream extends BaseProjectControl {
 		$streamItems = $this->dataForStream;
 
 		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			return new \POSComponent\Comments\StatusComments($this->likeStatusCommentDao, $this->commentStatusesDao, $streamItems->offsetGet($streamItem)->status);
+			$statusComments = new StatusComments($this->likeStatusCommentDao, $this->commentStatusesDao, $streamItems->offsetGet($streamItem)->status);
+			$statusComments->setPresenter($this->getPresenter());
+			return $statusComments;
 		});
 	}
 
@@ -284,7 +291,9 @@ class BaseStream extends BaseProjectControl {
 		$isUserLoggedIn = $this->presenter->user->isLoggedIn();
 
 		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems, $isUserLoggedIn) {
-			return new \POSComponent\Comments\ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $streamItems->offsetGet($streamItem)->confession, $this->userData);
+			$confessionComment = new ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $streamItems->offsetGet($streamItem)->confession, $this->userData);
+			$confessionComment->setPresenter($this->getPresenter());
+			return $confessionComment;
 		});
 	}
 
