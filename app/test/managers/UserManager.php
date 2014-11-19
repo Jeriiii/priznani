@@ -34,6 +34,12 @@ class UserManager {
 	private $sessionId;
 
 	/**
+	 * id uživatele
+	 * @var int|NULL
+	 */
+	public $userID = NULL;
+
+	/**
 	 * Creates the session manager.
 	 * @param \POS\Model\UserDao $userDao
 	 */
@@ -66,6 +72,7 @@ class UserManager {
 	 * @return string id of created session
 	 */
 	public function saveUserIntoSession($user, $roles) {
+		$this->userID = $user->id;
 		$identity = new \Nette\Security\Identity($user->id, $roles, $user->toArray());
 		$this->session->start();
 		$userStorage = new UserStorage($this->session);
@@ -73,6 +80,15 @@ class UserManager {
 		$userStorage->setAuthenticated(TRUE);
 		$this->sessionId = $this->session->getId();
 		$this->session->close();
+	}
+
+	/**
+	 * Vrátí ID uživatele posledně přihlášeného pomocí I am signed in as.
+	 * Pokud se to nestalo, vrátí NULL
+	 * @return int|NULL
+	 */
+	public function getMyId() {
+		return $this->userID;
 	}
 
 	/**

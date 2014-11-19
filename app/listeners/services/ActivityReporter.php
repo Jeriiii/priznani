@@ -52,7 +52,12 @@ class ActivityReporter extends \Nette\Object {
 	public function __construct(Session $session, UserDao $userDao) {
 		$this->session = $session;
 		$this->userDao = $userDao;
-		$this->session->setExpiration('30 days');
+
+		$testing = (isset($_SERVER['TESTING']) && $_SERVER['TESTING']) ||
+			(isset($_SERVER['HTTP_X_TESTING']) && $_SERVER['HTTP_X_TESTING']);
+		if (!$testing) {
+			$this->session->setExpiration('30 days');
+		}
 	}
 
 	/**

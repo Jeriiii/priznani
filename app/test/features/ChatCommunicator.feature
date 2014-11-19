@@ -38,7 +38,7 @@ Feature: Testing chat messaging with ajax requests and responses
 		Then I am signed in as <sender>
 		And I am on "/?do=chat-communicator-loadMessages&chat-communicator-fromId=<receiverCodedId>"
 		And I am on "/?do=chat-communicator-refreshMessages&chat-communicator-lastid=1000000000"
-		Then the response should contain "Doručeno." 
+		Then just paying users response should contain "Doručeno." 
 		
 		Examples:
 		|	sender					|	receiver		|	receiverCodedId	|
@@ -60,11 +60,11 @@ Feature: Testing chat messaging with ajax requests and responses
 		Then I am signed in as <sender>
 		And I am on "/?do=chat-communicator-loadMessages&chat-communicator-fromId=<receiverCodedId>"
 		And I am on "/?do=chat-communicator-refreshMessages&chat-communicator-lastid=1000000000"
-		Then the response should contain "Doručeno." 
+		Then just paying users response should contain "Doručeno." 
 		Then I am signed in as <sender2>
 		And I am on "/?do=chat-communicator-loadMessages&chat-communicator-fromId=<receiverCodedId>"
 		And I am on "/?do=chat-communicator-refreshMessages&chat-communicator-lastid=1000000000"
-		Then the response should contain "Doručeno." 
+		Then just paying users response should contain "Doručeno." 
 		
 		Examples:
 		|	sender					|	sender2					|	receiver		|	receiverCodedId	|
