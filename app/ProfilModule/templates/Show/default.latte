@@ -47,34 +47,37 @@
 				</div>
 				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
 				<span class="first-sentence">{$userData->property->first_sentence}</span>
-
+				<div class="clear spacer"></div>
 			{if $user->isLoggedIn()}
-			<div class="like-action-panel">
+
 				{if $isMyProfile}
-					<a n:href=":Profil:Edit:default">Editovat</a>
-					<a title="Nahrát profilovku" class="uploadProfilePhoto btn-main btn-small right">Nahrát profilovku</a>
-					<a n:href="Galleries:verificationImageNew">Být ověřený uživatel</a>
+					<a n:href=":Profil:Edit:default" class="profile-btn long-btn">Editovat</a>
+					<a title="Nahrát profilovku" class="profile-btn uploadProfilePhoto btn-main btn-small long-btn">Nahrát profilovku</a>
+					<a n:href="Galleries:verificationImageNew" class="profile-btn long-btn">Být ověřený uživatel</a>
+					<div class="clear"></div>
 				{else}
+				<div class="profile-btn like-action-panel">
 					<div class="sexybutton">
 						{control youAreSexy}
 					</div>
-					<a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right send-message-btn">
+					<a href="#" title="Poslat zprávu" id="sendmessage-button" class="profile-btn btn-main btn-small right send-message-btn">
 						<img src="{$basePath}/images/icons/bubble-white.png" alt="Zpráva chatu" />
 					</a>
 					<div id="sendmessage-dialog">
 						{control sendMessageForm}
 					</div>
 					<div class="clear"></div>
+				</div>
 				{/if}
-			</div>
+
 			{/if}
 
 			{if !$isMyProfile}
-			<div class="friend-request-btn">
+			<div class="profile-btn long-btn">
 				{control sendFriendRequest}
 			</div>
 			{/if}
-
+			<div class="spacer"></div>
 			<div class="delimiter red"></div>
 			<span class="red-title">O MNĚ {if $isMyProfile}<a n:href="Edit:">edit</a>{/if}</span>
 			<div class="delimiter red"></div>
@@ -101,7 +104,7 @@
 		</div>
 
 		{include 'menu.latte' $userID => 'id'}
-		
+
 		{control profilStream}
 	</div>
 	<div class="clear"></div>

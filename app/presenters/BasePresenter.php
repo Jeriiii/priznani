@@ -30,7 +30,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 * Proměnná s uživatelskými daty (cachovaný řádek z tabulky users). Obsahuje relace na profilFoto, gallery, property
 	 * @var ArrayHash|ActiveRow řádek z tabulky users
 	 */
-	protected $userData;
+	protected $loggedUser;
 
 	/* modes */
 	public $partymode = FALSE;
@@ -68,13 +68,20 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public $ajaxObserver;
 
+	/**
+	 * @var \POS\Listeners\Services\ActivityReporter
+	 * @inject
+	 */
+	public $activityReporter;
+
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
-		if (TRUE) {//($this->getUser()->isLoggedIn()) {
+		if ($this->getUser()->isLoggedIn()) {
+			$this->activityReporter->handleUsersActivity($this->getUser());
 			$section = $this->getSession('loggedUser');
 			$section->setExpiration('20 minutes');
-			if (TRUE) {
+			if (empty($section->loggedUser)) {
 				$user = $this->userDao->getUser($this->getUser()->getId());
 
 				$relProfilPhoto = new Relation("profilFoto");
@@ -89,9 +96,9 @@ abstract class BasePresenter extends BaseProjectPresenter {
 				$sel = (array) $ser->toArrayHash();
 				/* vytazeni jen jednoho radku */
 				$userRow = array_shift($sel);
-				$section->userData = $userRow;
+				$section->loggedUser = $userRow;
 			}
-			$this->userData = $section->userData;
+			$this->loggedUser = $section->loggedUser;
 		}
 	}
 
