@@ -1,6 +1,8 @@
 {block head}
 	<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
 	<link rel="stylesheet" href="{$basePath}/css/bootstrap.min.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/css/jquery-ui-autocomplete/jquery-ui.min.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/css/jquery-ui-autocomplete/jquery-ui.structure.min.css" type="text/css">
 	<style>
 	h1 {
 		margin-top: 0;
@@ -10,7 +12,14 @@
 
 {block foot}
 	<script type="text/javascript" src="{$basePath}/js/bootstrap-modal.min.js" ></script>
-	{control js}
+    <script type="text/javascript">
+		var data = [
+			{foreach $cityData as $item}
+						{$item->city} + ", " + {$item->district} + ", " + {$item->region},
+			{/foreach}
+		];
+    </script>
+	{control js 'jquery-ui-autocomplete/jquery-ui.min.js', 'jquery-ui-autocomplete/initCities.js'}
 {/block}
 
 {block content}
@@ -29,7 +38,8 @@
 	<h2 id="changeStatus">Změna statusu</h2>
 	{control statusChangeForm}
 	{control firstEditForm}
-        {control secondEditForm}
+    {control secondEditForm}
+	{control editCityForm}
 	
 	{if $userData->property->type == 2 || $userData->property->type == 5 || $userData->property->type == 3}
 		{control thirdEditWomanForm}

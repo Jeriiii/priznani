@@ -30,7 +30,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 * Proměnná s uživatelskými daty (cachovaný řádek z tabulky users). Obsahuje relace na profilFoto, gallery, property
 	 * @var ArrayHash|ActiveRow řádek z tabulky users
 	 */
-	protected $userData;
+	protected $loggedUser;
 
 	/* modes */
 	public $partymode = FALSE;
@@ -89,9 +89,9 @@ abstract class BasePresenter extends BaseProjectPresenter {
 				$sel = (array) $ser->toArrayHash();
 				/* vytazeni jen jednoho radku */
 				$userRow = array_shift($sel);
-				$section->userData = $userRow;
+				$section->loggedUser = $userRow;
 			}
-			$this->userData = $section->userData;
+			$this->loggedUser = $section->loggedUser;
 		}
 	}
 
@@ -377,7 +377,9 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'../ajaxBox/ajaxBox.js',
 			'../ajaxBox/ajaxbox-standard-init.js',
 			'../ajaxBox/ajaxBox.otherFnc.js',
-			'../features/jquery.slimscroll.js'
+			'../features/jquery.slimscroll.js',
+			'../ajaxBox/confirm/confirm.js',
+			'../ajaxBox/popUp/init-simple-popUp.js'
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');

@@ -31,6 +31,17 @@ class CityDao extends AbstractDao {
 	}
 
 	/**
+	 * Hledání města podle názvu
+	 * @param string $name Název města
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function findByName($name) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_NAME, $name);
+		return $sel->fetch();
+	}
+
+	/**
 	 * Vloží do DB nové město, kontroluje duplikáty
 	 * @param string $name Jméno města, které chceme vložit
 	 * @param int $districtID ID okresu, vněmž se město nachází

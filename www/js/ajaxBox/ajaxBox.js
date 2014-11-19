@@ -19,6 +19,8 @@
 		var boxopts = $.extend({}, $.fn.ajaxBox.defaults, options);
 
 		return this.each(function () {
+			/* zkontroluje, zda není tlačítko předané přes data elementu */
+			boxopts = getAttrData($(this), boxopts);
 			boxopts = applyModulesStarts(boxopts);
 			//obalení okénkem a potřebnými elementy
 			addHtml($(this), boxopts);
@@ -87,7 +89,7 @@
 		/* Selektor tlačítka, které má otevírat/zavírat okno */
 		buttonSelector: "",
 		/* URL co se zavolá, když je potřeba načíst obsah. Prázdné nebo NULL, pokud se nemá volat vůbec */
-		loadUrl: '',
+		loadUrl: "",
 		/* data, která se přibalí k požadavku o první nebo další data. Může to být i funkce.
 		 * @param opts - nastavení dotyčné komponenty (lze ji podle toho najít) */
 		dataToReload: function (opts) {
@@ -127,10 +129,33 @@
 		/* defaultní zpráva v dolní části okénka*/
 		defaultMessage: '',
 		/* zpráva v headeru okénka */
-		headerHtml: '',
+		headerHtml: "",
 		/* objekt definující zapnutí a nastavení modulu pro obnovování snippetu a kontroly jeho příchozího obsahu */
 		streamSnippetModule: false
 	};
+	
+	/**
+	 * Zkontroluje a nastavi nektera nastaveni. Pokud jsou prazdna, pokusi se je
+	 * nastavit z atributu data.
+	 * @param {object} $box Okénko co se má zobrazit.
+	 * @param {object} opts Nastavení pluginu.
+	 * @returns {object} Nastavení pluginu.
+	 */
+	function getAttrData($box, opts) {
+		if(opts.buttonSelector === "" && $box.data("ajaxbox-btn") !== undefined) {
+			opts.buttonSelector = $box.data("ajaxbox-btn");
+		}
+		
+		if(opts.headerHtml === "" && $box.data("ajaxbox-header-html") !== undefined) {
+			opts.headerHtml = $box.data("ajaxbox-header-html");
+		}
+		
+		if(opts.loadUrl === "" && $box.data("load-url") !== undefined) {
+			opts.loadUrl = $box.data("load-url");
+		}
+		
+		return opts;
+	}
 
 
 	/** obalí data okénkem a nastaví jeho pozici vzhledem k tlačítku
@@ -265,11 +290,13 @@
 			}
 		});
 
-		$(boxSelector + ' .close-cross').click(function () {
+		var closeFn = function () {
 			$(boxSelector).css('display', 'none');
 			$(opts.buttonSelector).removeClass('active');
 			$('.activeBackground[data-related=' + opts.buttonSelector + ']').remove();
-		});
+		};
+		$(boxSelector + ' .close-cross').click(closeFn);
+		$(boxSelector + ' .close').click(closeFn);
 
 		$('*').click(function (event) {//zavření při kliknutí mimo okénka
 			if (!$(event.target).is(opts.buttonSelector, '.ajaxBox')) {

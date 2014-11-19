@@ -124,14 +124,19 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	 * @param \Nette\ArrayHash $values Všechny hodnoty z formuláře.
 	 * @param int $userID ID uživatele.
 	 * @param int $galleryID ID galerie.
+	 * @param boolean $profilePhoto TRUE = jde o profilovou fotku jinak FALSE
 	 * @return boolean TRUE pokud byly fotky automaticky schválené, jinak FALSE
 	 */
-	public function saveImages(array $images, $userID, $galleryID) {
+	public function saveImages(array $images, $userID, $galleryID, $profilePhoto = FALSE) {
 		//získání počtu user obrázků, které mají allow 1
 		$allowedImagesCount = $this->userImageDao->countAllowedImages($userID);
 
-		//pokud je 1 a více schválených, schválí i nově přidávanou
-		$allow = $allowedImagesCount >= self::AllowLimitForImages ? TRUE : FALSE;
+		if ($profilePhoto == TRUE) {
+			$allow = TRUE;
+		} else {
+			//pokud je 1 a více schválených, schválí i nově přidávanou
+			$allow = $allowedImagesCount >= self::AllowLimitForImages ? TRUE : FALSE;
+		}
 
 		foreach ($images as $image) {
 			if ($image[self::IMAGE_FILE]->isOK()) {
@@ -143,7 +148,7 @@ class UserGalleryImagesBaseForm extends BaseForm {
 				$description = !empty($image[self::IMAGE_DESCRIPTION]) ? $image[self::IMAGE_DESCRIPTION] : "";
 
 				//Uloží obrázek do databáze
-				$imageDB = $this->saveImageToDB($galleryID, $name, $description, $suffix, $allow);
+				$imageDB = $this->saveImageToDB($galleryID, $name, $description, $suffix, $allow, $profilePhoto);
 
 				//nahraje soubor
 				$this->upload($image[self::IMAGE_FILE], $imageDB->id, $suffix, $galleryID, $userID, 525, 700, 100, 130);
@@ -202,9 +207,10 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	 * @param string $description Popis obrázku zadaný uživatelem.
 	 * @param string $suffix Koncovka obrázku.
 	 * @param boolean $allow Automatické schvalování obrázků.
+	 * @param boolean $profilePhoto TRUE = jde o profilovou fotku jinak FALSE
 	 * @return Database\Table\IRow
 	 */
-	private function saveImageToDB($galleryID, $name, $description, $suffix, $allow) {
+	private function saveImageToDB($galleryID, $name, $description, $suffix, $allow, $profilePhoto = FALSE) {
 		$approved = $allow == TRUE ? 1 : 0;
 		$checkApproved = $approved;
 		$image = $this->userImageDao->insertImage($name, $suffix, $description, $galleryID, $approved, $checkApproved);
@@ -214,7 +220,12 @@ class UserGalleryImagesBaseForm extends BaseForm {
 		if ($allow) {
 			$this->streamDao->aliveGallery($image->galleryID, $image->gallery->userID);
 		}
-
+		/* nastavení fotky jako profilové */
+		if ($profilePhoto) {
+			$image->gallery->user->update(array(
+				\POS\Model\UserDao::COLUMN_PROFIL_PHOTO_ID => $image->id
+			));
+		}
 		return $image;
 	}
 

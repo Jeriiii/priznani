@@ -6,15 +6,15 @@
 	<a n:href=":Profil:Galleries:default" title="Editovat profil">MOJE GALERIE</a>
 	<a n:href=":Profil:Galleries:userGalleryNew" class="add-gallery" title="Profil">VYTVOŘIT GALERII</a>
 	{if $user->isLoggedIn()}
-		{if $userData->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
+		{if $loggedUser->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
 			{include #friendRequest}
 
 			{include #friends}
 			{include #blokedUsers}
 			{include #markedFromOther}
 			<a n:href=":Profil:Edit:default" title="Změna statusu">
-			{if !empty($userData->property->statusID)}
-				Chci {$userData->property->status->name}
+			{if !empty($loggedUser->property->statusID)}
+				Chci {$loggedUser->property->status->name}
 			{else}
 				NASTAVIT STATUS
 			{/if}
@@ -31,12 +31,12 @@
 
 {* profilový obrázek, jméno uživatele a tlačítko editovat *}
 {define profile}
-{if $user->isLoggedIn() && $userData->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
+{if $user->isLoggedIn() && $loggedUser->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
 	<div class="user-profile-picture">
-	{$userData|showProfMinDiv}
+	{$loggedUser|showProfMinDiv}
 	</div>
-	<b><a n:href=":Profil:Show:default" class="big-user-name">{$userData->user_name|upper}</a></b>
-	<span class="first-sentence">{$userData->property->first_sentence}</span>
+	<b><a n:href=":Profil:Show:default" class="big-user-name">{$loggedUser->user_name|upper}</a></b>
+	<span class="first-sentence">{$loggedUser->property->first_sentence}</span>
 
 	<div class="delimiter top"></div>
 	<div class="usermenu">

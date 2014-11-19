@@ -39,7 +39,10 @@
 				<div class="user-profile-picture">
 					{$userData|showProfMinDiv}
 					{if $isMyProfile}
+						<a title="Nahrát profilovku" class="uploadProfilePhoto">Nahrát profilovku</a>
+						<div class="ajaxbox-popUp" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-header-html="Nahrát profilovku">
 						{control uploadPhotoForm}
+						</div>
 					{/if}
 				</div>
 				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
@@ -47,25 +50,33 @@
 
 			{if $user->isLoggedIn()}
 			<div class="profile-btn like-action-panel">
-				<div class="profile-btn sexybutton">
-					{control youAreSexy}
-				</div>
-				<a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right profile-btn send-message-btn">
-					<img src="{$basePath}/images/icons/bubble-white.png" alt="Zpráva chatu" />
-				</a>
-				<div id="sendmessage-dialog">
-					{control sendMessageForm}
-				</div>
-				<div class="clear"></div>
+				{if $isMyProfile}
+					<a n:href=":Profil:Edit:default">Editovat</a>
+					<a title="Nahrát profilovku" class="uploadProfilePhoto btn-main btn-small right">Nahrát profilovku</a>
+					<a n:href="Galleries:verificationImageNew">Být ověřený uživatel</a>
+				{else}
+					<div class="sexybutton">
+						{control youAreSexy}
+					</div>
+					<a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right send-message-btn">
+						<img src="{$basePath}/images/icons/bubble-white.png" alt="Zpráva chatu" />
+					</a>
+					<div id="sendmessage-dialog">
+						{control sendMessageForm}
+					</div>
+					<div class="clear"></div>
+				{/if}
 			</div>
 			{/if}
 
+			{if !$isMyProfile}
 			<div class="profile-btn friend-request-btn">
 				{control sendFriendRequest}
 			</div>
+			{/if}
 
 			<div class="delimiter red"></div>
-			<span class="red-title">O MNĚ</span>
+			<span class="red-title">O MNĚ {if $isMyProfile}<a n:href="Edit:">edit</a>{/if}</span>
 			<div class="delimiter red"></div>
 
 			{control userInfo "listFew", $userID}

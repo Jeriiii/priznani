@@ -33,6 +33,7 @@ class UserDao extends UserBaseDao {
 	const COLUMN_CONFIRMED = "confirmed";
 	const COLUMN_PASSWORD = "password";
 	const COLUMN_VERIFIED = "verified";
+	const COLUMN_PROFIL_PHOTO_ID = "profilFotoID";
 
 	/**
 	 * w - women
@@ -413,7 +414,7 @@ class UserDao extends UserBaseDao {
 			'Jméno' => $user->user_name,
 			'První věta' => $userProperty->first_sentence,
 			/* 'Naposledy online' => $user->last_active, */
-			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->type),
+			'Jsem' => UserBaseDao::getTranslateUserProperty($userProperty->type),
 			/* 'Vytvoření profilu' => $user->created, */
 			/* 'Email' => $user->email, */
 			'O mně' => $userProperty->about_me,
@@ -433,11 +434,11 @@ class UserDao extends UserBaseDao {
 	public function getUserShortInfo($userID) {
 		$userProperty = $this->findProperties($userID);
 		$userShortInfo = array(
-			'Druh uživatele' => UserBaseDao::getTranslateUserProperty($userProperty->type),
+			'Jsem' => UserBaseDao::getTranslateUserProperty($userProperty->type),
 			'Stav' => UserBaseDao::getTranslateUserState($userProperty->marital_state),
 			'Věk' => $this->getAge($userProperty->age),
-//			'Chtěl bych potkat' => UserBaseDao::getTranslateUserInterestedIn($userProperty->interested_in),
-			'První věta' => $userProperty->first_sentence,
+			/* 'Chtěl bych potkat' => UserBaseDao::getTranslateUserInterestedIn($userProperty->interested_in), */
+			/* 'První věta' => $userProperty->first_sentence, */
 		);
 		$seek = $this->getWantToMeet($userProperty);
 		return $userShortInfo + $seek;

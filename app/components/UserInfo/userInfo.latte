@@ -16,6 +16,9 @@
             {/foreach}
             </tbody>
     </table>
+	{if $listFew}
+		<a class="more-btn" href="{plink :Profil:Show:userInfo $userID}">více</a>
+	{/if}
 
 {/block}
 
