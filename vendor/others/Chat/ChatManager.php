@@ -18,7 +18,7 @@ use Nette\Http\Session;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class ChatManager {
+class ChatManager extends \Nette\Object {
 
 	/**
 	 * DAO pro kontakty

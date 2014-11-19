@@ -8,7 +8,7 @@ use Nette\Application\Routers\RouteList,
 	Nette\Forms\Container;
 
 // Load Nette Framework
-require __DIR__ . '/../vendor/Nette/loader.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 
 $configurator = new Nette\Configurator;
@@ -37,7 +37,7 @@ $configurator->addConfig(__DIR__ . '/config/config.neon');
 if ($testing) {
 	$configurator->addConfig(__DIR__ . '/config/test.config.neon', FALSE);
 }
-
+Kdyby\Events\DI\EventsExtension::register($configurator);
 $container = $configurator->createContainer();
 
 // Setup router
@@ -86,6 +86,8 @@ Container::extensionMethod('addDateTimePicker', function (Container $_this, $nam
 	return $_this[$name] = new Nette\Extras\DateTimePicker($label, $cols, $maxLength);
 });
 Kdyby\BootstrapFormRenderer\DI\RendererExtension::register($configurator);
+
+
 
 // Na PRODUKCI se nastaví odchytávání vyjímek
 if (!$configurator->isDebugMode()) {

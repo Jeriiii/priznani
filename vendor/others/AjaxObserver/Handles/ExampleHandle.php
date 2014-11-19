@@ -11,7 +11,7 @@ namespace POS\Ajax;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class ExampleHandle implements IObserverHandle {
+class ExampleHandle extends \Nette\Object implements IObserverHandle {
 
 	public function getData() {
 		return "data";

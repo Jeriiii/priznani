@@ -14,7 +14,7 @@ use \Nette\Application\UI\Presenter;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class AjaxObserver {
+class AjaxObserver extends \Nette\Object {
 
 	/**
 	 * Handle vyřizující požadavek od klienta (javascriptového Observeru)

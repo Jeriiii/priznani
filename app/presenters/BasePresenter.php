@@ -68,13 +68,20 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public $ajaxObserver;
 
+	/**
+	 * @var \POS\Listeners\Services\ActivityReporter
+	 * @inject
+	 */
+	public $activityReporter;
+
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
-		if (TRUE) {//($this->getUser()->isLoggedIn()) {
+		if ($this->getUser()->isLoggedIn()) {
+		    $this->activityReporter->handleUsersActivity($this->getUser());
 			$section = $this->getSession('loggedUser');
 			$section->setExpiration('20 minutes');
-			if (TRUE) {
+			if (empty($section->loggedUser)) {
 				$user = $this->userDao->getUser($this->getUser()->getId());
 
 				$relProfilPhoto = new Relation("profilFoto");
@@ -92,7 +99,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 				$section->loggedUser = $userRow;
 			}
 			$this->loggedUser = $section->loggedUser;
-		}
+			
 	}
 
 	public function beforeRender() {
