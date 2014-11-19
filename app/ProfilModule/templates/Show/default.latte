@@ -46,11 +46,11 @@
 				<span class="first-sentence">{$userData->property->first_sentence}</span>
 
 			{if $user->isLoggedIn()}
-			<div class="like-action-panel">
-				<div class="sexybutton">
+			<div class="profile-btn like-action-panel">
+				<div class="profile-btn sexybutton">
 					{control youAreSexy}
 				</div>
-				<a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right send-message-btn">
+				<a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right profile-btn send-message-btn">
 					<img src="{$basePath}/images/icons/bubble-white.png" alt="Zpráva chatu" />
 				</a>
 				<div id="sendmessage-dialog">
@@ -60,7 +60,7 @@
 			</div>
 			{/if}
 
-			<div class="friend-request-btn">
+			<div class="profile-btn friend-request-btn">
 				{control sendFriendRequest}
 			</div>
 
@@ -90,7 +90,7 @@
 		</div>
 
 		{include 'menu.latte' $userID => 'id'}
-		
+
 		{control profilStream}
 	</div>
 	<div class="clear"></div>
