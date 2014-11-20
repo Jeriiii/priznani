@@ -10,9 +10,10 @@ namespace POSComponent\Galleries\Images;
 
 use POS\Model\UserImageDao;
 use POS\Model\ImageLikesDao;
-use POS\Model\LikeCommentDao;
+use POS\Model\LikeImageCommentDao;
 use POS\Model\CommentImagesDao;
 use POSComponent\Comments\ImageComments;
+use POSComponent\BaseLikes\ImageLikes;
 
 class UsersGallery extends BaseGallery {
 
@@ -22,9 +23,9 @@ class UsersGallery extends BaseGallery {
 	public $imageLikesDao;
 
 	/**
-	 * @var \POS\Model\LikeCommentDao
+	 * @var \POS\Model\LikeImageCommentDao
 	 */
-	public $likeCommentDao;
+	public $likeImageCommentDao;
 
 	/**
 	 *
@@ -37,11 +38,11 @@ class UsersGallery extends BaseGallery {
 	 */
 	public $loggedUser;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao, LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, $loggedUser) {
+	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao, LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, $loggedUser) {
 		parent::__construct($images, $image, $gallery, $domain, $partymode);
 		parent::setUserImageDao($userImageDao);
 		$this->imageLikesDao = $imageLikesDao;
-		$this->likeCommentDao = $likeCommentDao;
+		$this->likeImageCommentDao = $likeImageCommentDao;
 		$this->commentImagesDao = $commentImagesDao;
 		$this->loggedUser = $loggedUser;
 	}
@@ -73,11 +74,8 @@ class UsersGallery extends BaseGallery {
 	}
 
 	public function createComponentLikes() {
-		if ($this->presenter->user->isLoggedIn()) {
-			$likes = new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->image, $this->presenter->user->id);
-		} else {
-			$likes = new \POSComponent\BaseLikes\ImageLikes();
-		}
+		$likes = new ImageLikes($this->imageLikesDao, $this->image, $this->loggedUser->id, $this->image->gallery->userID);
+
 		return $likes;
 	}
 
@@ -86,7 +84,7 @@ class UsersGallery extends BaseGallery {
 	 * @return \POSComponent\Comments\ImageComments
 	 */
 	public function createComponentComments() {
-		$imageComments = new ImageComments($this->likeCommentDao, $this->commentImagesDao, $this->image, $this->loggedUser);
+		$imageComments = new ImageComments($this->likeImageCommentDao, $this->commentImagesDao, $this->image, $this->loggedUser);
 		$imageComments->setPresenter($this->getPresenter());
 		return $imageComments;
 	}

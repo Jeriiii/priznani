@@ -35,4 +35,20 @@ interface ICommentDao {
 	 * @return Nette\Database\Table\ActiveRow
 	 */
 	public function insertNewComment($itemID, $userID, $comment);
+
+	/**
+	 * Přidá aktivitu komentování o položce Item (např. obrázku) vlastníkovi
+	 * @param int $ownderID ID uživatele, kterému item patří
+	 * @param int $creatorID ID uživatele, co lajkoval
+	 * @param int $itemID ID položky, co se má lajknout
+	 */
+	public function addActivity($ownderID, $creatorID, $itemID);
+
+	/**
+	 * Odstraní aktivitu komentování o položce Item (např. obrázku) vlastníkovi
+	 * @param int $ownderID ID uživatele, kterému item patří
+	 * @param int $creatorID ID uživatele, co lajkoval
+	 * @param int $itemID ID položky, co se má lajknout
+	 */
+	public function removeActivity($ownderID, $creatorID, $itemID);
 }

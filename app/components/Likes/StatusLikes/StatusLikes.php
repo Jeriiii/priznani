@@ -40,7 +40,7 @@ class StatusLikes extends BaseLikes implements IBaseLikes {
 		if ($this->liked == FALSE) {
 			$this->justLike = TRUE;
 			$this->liked = TRUE;
-			$this->likeDao->addLiked($statusID, $userID);
+			$this->likeDao->addLiked($statusID, $userID, $this->ownerID);
 		}
 
 		$this->redrawControl();

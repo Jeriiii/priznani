@@ -7,11 +7,15 @@
 use POSComponent\BaseProjectControl;
 use POS\Model\ActivitiesDao;
 use Nette\Application\Responses\JsonResponse;
+use Nette\Database\Table\ActiveRow;
+use Nette\ArrayHash;
+use POS\Model\PaymentDao;
 
 /**
  * Komponenta pro vykreslení aktivit uživatele.
  *
  * @author Daniel Holubář
+ * @author Petr Kukrál <p.kukral@kukral.eu>
  */
 class Activities extends \POSComponent\UsersList\AjaxList {
 
@@ -32,14 +36,26 @@ class Activities extends \POSComponent\UsersList\AjaxList {
 	private $activities;
 
 	/**
-	 *
-	 * @param int $userID Id uživatele, který vlastní aktivitu
-	 * @param \POS\Model\ActivitiesDao $activitiesDao
+	 * Proměnná s uživatelskými daty (cachovaný řádek z tabulky users). Obsahuje relace na profilFoto, gallery, property
+	 * @var ArrayHash|ActiveRow řádek z tabulky users
 	 */
-	public function __construct($userID, ActivitiesDao $activitiesDao) {
+	protected $loggedUser;
+
+	/**
+	 * @var \POS\Model\PaymentDao
+	 * @inject
+	 */
+	public $paymentDao;
+
+	public function __construct(ActivitiesDao $activitiesDao, $loggedUser, PaymentDao $paymentDao) {
 		parent::__construct();
-		$this->userID = $userID;
+		if (!($loggedUser instanceof ActiveRow) && !($loggedUser instanceof ArrayHash)) {
+			throw new Exception("variable loggedUser must by instance of ActiveRow or ArrayHash");
+		}
+		$this->userID = $loggedUser->id;
 		$this->activitiesDao = $activitiesDao;
+		$this->loggedUser = $loggedUser;
+		$this->paymentDao = $paymentDao;
 	}
 
 	/**
@@ -47,6 +63,9 @@ class Activities extends \POSComponent\UsersList\AjaxList {
 	 */
 	public function render() {
 		$template = $this->template;
+		$this->template->activities = $this->activities;
+		$this->template->loggedUser = $this->loggedUser;
+		$this->template->userIsPaying = $this->paymentDao->isUserPaying($this->userID);
 		$template->setFile(dirname(__FILE__) . '/activities.latte');
 		$template->render();
 	}
@@ -59,13 +78,6 @@ class Activities extends \POSComponent\UsersList\AjaxList {
 	protected function getUnviewedActivitiesCount($userID) {
 		$count = $this->activitiesDao->getCountOfUnviewed($userID);
 		return $count;
-	}
-
-	/**
-	 * Obsluha pro načtení aktivit, posílá JSON s polem textů
-	 */
-	public function handleLoadActivities() {
-
 	}
 
 	/**
@@ -95,30 +107,12 @@ class Activities extends \POSComponent\UsersList\AjaxList {
 	}
 
 	public function getSnippetName() {
-
+		return "list";
 	}
 
 	public function setData($offset) {
-		$activities = $this->activitiesDao->getActivitiesByUserId($this->userID);
+		$activities = $this->activitiesDao->getByUserId($this->userID, $this->limit, $offset);
 		$this->activities = $activities;
-
-		foreach ($activities as $item) {
-			if ($item->statusID != NULL) {
-				$data[] = $activityObj->getUserStatusAction($item->event_creator->user_name, $item->event_type, $item->status->text, $item->id, $item->viewed);
-			} elseif ($item->imageID != NULL) {
-				$data[] = $activityObj->getUserImageAction($item->event_creator->user_name, $item->event_type, $item->image, $item->id, $item->viewed);
-			} else {
-				$data[] = $activityObj->getUserAction($item->event_creator->user_name, $item->event_type, $item->id, $item->viewed);
-			}
-		}
-
-		//pokud nejsou žádné aktivity pošleme 0
-		if (!isset($data)) {
-			$this->presenter->sendResponse(new JsonResponse(array("activities" => 0)));
-		} else {
-			$this->presenter->sendResponse(new JsonResponse(array("activities" => $data)));
-		}
-		$this->redrawControl();
 	}
 
 }

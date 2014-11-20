@@ -10,7 +10,7 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class LikeConfessionDao extends AbstractDao implements ILikeDao {
+class LikeConfessionDao extends BaseLikeDao implements ILikeDao {
 
 	const TABLE_NAME = "like_confessions";
 
@@ -92,6 +92,14 @@ class LikeConfessionDao extends AbstractDao implements ILikeDao {
 		} else {
 			return FALSE;
 		}
+	}
+
+	public function addActivity($ownderID, $creatorID, $itemID) {
+		//confession by se nemelo lajkovat
+	}
+
+	public function removeActivity($ownderID, $creatorID, $itemID) {
+		//confession comment by se nemel lajkovat
 	}
 
 }
