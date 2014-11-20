@@ -16,6 +16,7 @@ use POSComponent\AddToList\YouAreSexy;
 use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
 use Nette\DateTime;
+use POSComponent\CropImageUpload\CropImageUpload;
 
 class ShowPresenter extends ProfilBasePresenter {
 
@@ -376,12 +377,13 @@ class ShowPresenter extends ProfilBasePresenter {
 	}
 
 	/**
-	 * formulář pro nahrávání profilových fotografií
+	 * cropovací formulář pro nahrávání profilových fotografií
 	 * @param type $name
-	 * @return \Nette\Application\UI\Form\ProfilePhotoUploadForm
+	 * @return CropImageUpload
 	 */
-	protected function createComponentUploadPhotoForm($name) {
-		return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+	protected function createComponentUploadPhoto($name) {
+		//$form = new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+		return new CropImageUpload();
 	}
 
 	/**

@@ -9,6 +9,7 @@ namespace NetteExt\Form\Upload;
 use Nette\Http\FileUpload;
 use NetteExt\Path\ImagePathCreator;
 use NetteExt\Image;
+use Nette\Utils\Strings;
 
 /**
  * Slouží pro nahrávání souborů
@@ -112,6 +113,36 @@ class UploadImage extends UploadFile {
 		$image = Image::fromFile($path);
 		unlink($path);
 		$image->save($path);
+	}
+
+	/**
+	 *
+	 * Uloží obrázek do tempu obrázků. Dá mu náhodný unikátní název a zachová suffix
+	 * @param FileUpload $upload obrázek v formuláře
+	 * @param int $max_width maximální šířka obrázku
+	 * @param int $max_height max výška obrázku
+	 * @return cesta k obrázku
+	 */
+	public static function uploadToTemp(FileUpload $upload, $max_width, $max_height) {
+		$path = ImagePathCreator::getImgPath(Strings::random(8), self::suffix($upload->name), 'temp');
+
+		while (file_exists($path)) {
+			$path = ImagePathCreator::getImgPath(Strings::random(8), self::suffix($upload->name), 'temp');
+		}
+		$upload->move($path);
+		$image = Image::fromFile($path);
+		$image->resize($max_width, $max_height);
+		$image->save($path);
+		return $path;
+	}
+
+	/**
+	 * Vrátí suffix obrázku.
+	 * @param string $filename Celý název souboru i s příponou.
+	 * @return string Přípona souboru.
+	 */
+	public static function suffix($filename) {
+		return pathinfo($filename, PATHINFO_EXTENSION);
 	}
 
 }
