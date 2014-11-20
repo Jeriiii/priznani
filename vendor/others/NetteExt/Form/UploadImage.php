@@ -27,6 +27,7 @@ class UploadImage extends UploadFile {
 	 * @param int $max_width Maximální šířka screenu.
 	 * @param int $max_minheight Maximální výška miniatury.
 	 * @param int $max_minwidth Maximální šířka miniatury.
+	 * @return array pole stringů s cestami k obrázkům, ke kterým se posléze může například přidat watermark
 	 */
 	public static function upload(FileUpload $image, $id, $suffix, $folder, $max_height, $max_width, $max_minheight, $max_minwidth) {
 		$path = ImagePathCreator::getImgPath($id, $suffix, $folder);
@@ -44,7 +45,7 @@ class UploadImage extends UploadFile {
 		/* přeuloží originální obrázek a smaže starý */
 		self::resaveImgOriginal($image, $path);
 
-		return $path;
+		return array(ImagePathCreator::getImgScrnPath($id, $suffix, $folder), $path);
 	}
 
 	/*	 * *********************** VYTVOŘENÍ A ULOŽENÍ OBRÁZKU **************** */
