@@ -56,11 +56,15 @@ class Watermarks extends \Nette\Object {
 	 * @param int $bottom odsazení watermarku zespoda
 	 * @param int $right odsazení watermarku zprava
 	 * @param int $opacity průhlednost v procentech
+	 * @param int $widthRatio kolikrát menší bude šířka watermarku oproti šířce obrázku (tj. např hodnota 8 zajistí, že watermark bude mít osminu obrázku na šířku)
 	 * @return Image upravený obrázek
 	 */
-	public static function addBottomRightWatermark($path, $watermarkURL, $bottom = 0, $right = 0, $opacity = 100) {
+	public static function addBottomRightWatermark($path, $watermarkURL, $bottom = 0, $right = 0, $opacity = 100, $widthRatio = NULL) {
 		$image = Image::fromFile($path);
 		$watermark = Image::fromFile($watermarkURL);
+		if ($widthRatio) {
+			$watermark->resize($image->getWidth() / $widthRatio, NULL);
+		}
 		$left = $image->getWidth() - $watermark->getWidth() - $right;
 		$top = $image->getHeight() - $watermark->getHeight() - $bottom;
 		$image->place($watermark, $left, $top, $opacity); // vložíme na pozici 0px, 0px

@@ -75,11 +75,13 @@ class UserGalleryImagesBaseForm extends BaseForm {
 
 			$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryID, $userID);
 
-			$path = UploadImage::upload($image, $id, $suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
+			$paths = UploadImage::upload($image, $id, $suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
 
 			if ($addWatermarks) {
-				Watermarks::addFullWatermark($path, WWW_DIR . '/images/watermarks/mark_pos.png');
-				Watermarks::addBottomRightWatermark($path, WWW_DIR . '/images/watermarks/domain_pos.png', 10, 10);
+				foreach ($paths as $path) {
+					Watermarks::addFullWatermark($path, WWW_DIR . '/images/watermarks/mark_pos.png');
+					Watermarks::addBottomRightWatermark($path, WWW_DIR . '/images/watermarks/domain_pos.png', 10, 10, 100, 3);
+				}
 			}
 		} else {
 			$this->addError('Chyba při nahrávání souboru. Zkuste to prosím znovu.');
