@@ -63,7 +63,7 @@ class ScoreListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 	 * @param int $userID2 id uživatele, který like dostal
 	 */
 	public function onIsSexy($userID1, $userID2) {
-		$this->userPropertyDao->incraseCoinsBy($userID2, self::SCORE_ADDED_IS_SEXY);
+		$this->userPropertyDao->incraseScoreBy($userID2, self::SCORE_ADDED_IS_SEXY);
 	}
 
 	/**
@@ -72,7 +72,7 @@ class ScoreListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 	 * @param int $userID2 id uživatele, který like ztratil
 	 */
 	public function onIsNotSexyAnymore($userID1, $userID2) {
-		$this->userPropertyDao->decraseCoinsBy($userID2, self::SCORE_ADDED_IS_SEXY);
+		$this->userPropertyDao->decraseScoreBy($userID2, self::SCORE_ADDED_IS_SEXY);
 	}
 
 }
