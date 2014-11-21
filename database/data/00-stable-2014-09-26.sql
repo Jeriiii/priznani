@@ -1847,9 +1847,9 @@ INSERT INTO `images` (`id`, `galleryID`, `videoID`, `name`, `comment`, `user_nam
 	(556, 6, NULL, 'Velikonoce', '', 'Ondra', 'nic', 'nic', 'jpg', 0, 1, NULL, 0, NULL, NULL);
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 
--- Exportování dat pro tabulku pos.like_comments: ~0 rows (přibližně)
-/*!40000 ALTER TABLE `like_comments` DISABLE KEYS */;
-/*!40000 ALTER TABLE `like_comments` ENABLE KEYS */;
+-- Exportování dat pro tabulku pos.like_image_comments: ~0 rows (přibližně)
+/*!40000 ALTER TABLE `like_image_comments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `like_image_comments` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.like_images: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `like_images` DISABLE KEYS */;
