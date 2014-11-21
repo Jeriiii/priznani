@@ -382,8 +382,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return CropImageUpload
 	 */
 	protected function createComponentUploadPhoto($name) {
-		$form = new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao);
-		return new CropImageUpload($form, $this, $name);
+		return new CropImageUpload($this, $name);
 	}
 
 	/**

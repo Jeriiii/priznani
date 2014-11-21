@@ -8,6 +8,7 @@ namespace POSComponent\CropImageUpload;
 
 use Nette\Application\UI\Form\BaseForm;
 use POSComponent\BaseProjectControl;
+use Nette\Application\UI\Form as Frm;
 
 /**
  * Zprostředkovává upload obrázku, který posléze umožňuje oříznout
@@ -24,9 +25,9 @@ class CropImageUpload extends BaseProjectControl {
 	/**
 	 * Standardní konstruktor
 	 */
-	function __construct(BaseForm $formToUpload, $parent = NULL, $name = NULL) {
+	function __construct($parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-		$this->formToUpload = $formToUpload;
+//		$this->formToUpload = $formToUpload;
 	}
 
 	/**
@@ -45,8 +46,7 @@ class CropImageUpload extends BaseProjectControl {
 	 * @return \Nette\Application\UI\Form\BaseForm
 	 */
 	protected function createComponentAfterUploadForm($name) {
-		$this->formToUpload->setParent($this, $name);
-		return $this->formToUpload;
+		//return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao);
 	}
 
 	/**
