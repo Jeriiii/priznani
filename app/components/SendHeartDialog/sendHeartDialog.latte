@@ -1,0 +1,14 @@
+<div class="ajaxbox-popUp" id="sendheart-dialog" >
+{if TRUE}
+
+	<p>Srdíčko stojí {$heartPrice} zlaťáků.</p>
+	<p>Máte {$loggedUser->property->coins}</p>
+	<p>Opravdu chcete poslat srdíčko tomuto uživateli?</p>
+	<div class="buttons">
+	<a n:href="sendHeart!" class="btn-main" title="Poslat srdíčko!">Ano</a>
+	<a n:href="#" class="close red-link" title="Neposílat srdíčko">Ne</a>
+
+{else}
+
+{/if}
+</div>
