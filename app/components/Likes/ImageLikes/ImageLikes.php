@@ -33,9 +33,10 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 	 * @param \POS\Model\UserImageDao $userImageDao DAO pro práci s uživatelskými obrázky(kvůli připočtení lajku)
 	 * @param Nette\Database\Table\ActiveRow $image obrázek, kterému se lajk přičte
 	 * @param int $userID ID uživatele, který lajkuje
+	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
 	 */
-	public function __construct(ImageLikesDao $imageLikesDao, $image, $userID) {
-		parent::__construct($imageLikesDao, $image, $userID, self::IMAGE_LABEL, self::IMAGE_LIKE_BUTTON);
+	public function __construct(ImageLikesDao $imageLikesDao, $image, $userID, $ownerID) {
+		parent::__construct($imageLikesDao, $image, $userID, $ownerID, self::IMAGE_LABEL, self::IMAGE_LIKE_BUTTON);
 	}
 
 	/**
@@ -47,7 +48,7 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 		if ($this->liked == FALSE) {
 			$this->justLike = TRUE;
 			$this->liked = TRUE;
-			$this->likeDao->addLiked($imageID, $userID);
+			$this->likeDao->addLiked($imageID, $userID, $this->ownerID);
 		}
 
 		$this->redrawControl();

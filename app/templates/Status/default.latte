@@ -1,0 +1,39 @@
+{block head}
+<link rel="stylesheet" href="{$basePath}/css/page.css" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Fondamento' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{$basePath}/css/confession.css" type="text/css">
+{control css "gallery/component-gallery.less", 'bootstrap/forms-medium.less', 'comments/comments.less'}
+{* reklama *}
+<style>
+	#confession{ position: relative; }{* rodic *}
+	.btn-small {
+		width: 200px;
+		margin: 10px 0;
+		margin-top: 20px;
+	}
+	.status-dotline{
+		width: 90%;
+		margin: 10px 1% 25px 1%;
+		border-top: 1px dashed #ccc;
+		border-bottom: 1px dashed #eee;
+	}
+</style>
+{/block}
+
+{block content}
+	<div id="confession" class="rounded-more">
+		
+		<p>
+				{$status->message}
+		</p>
+		<div class="status-dotline"></div>
+		{*include #adverb*}
+		<div class="fb-components">
+			{control likes}
+			{control comments}
+		</div>
+	
+	</div>
+	
+	<div style="clear:both"></div>
+{/}

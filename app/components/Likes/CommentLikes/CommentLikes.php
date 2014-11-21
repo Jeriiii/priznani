@@ -24,12 +24,13 @@ class CommentLikes extends BaseLikes implements IBaseLikes {
 
 	/**
 	 * Kontruktor komponenty, předáváme potřebné proměnné
-	 * @param \POS\Model\LikeCommentDao $likeCommentDao DAO pro práci s lajky commentů
+	 * @param \POS\Model\LikeImageCommentDao $likeImageCommentDao DAO pro práci s lajky commentů
 	 * @param Nette\Database\Table\ActiveRow $comment comment, který se bude lajkovat
 	 * @param int $userID ID uživatele, který lajkuje comment
+	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
 	 */
-	public function __construct(AbstractDao $likeCommentDao, $comment, $userID) {
-		parent::__construct($likeCommentDao, $comment, $userID, self::COMMENT_LABEL, self::COMMON_LIKE_BUTTON);
+	public function __construct(AbstractDao $likeImageCommentDao, $comment, $userID, $ownerID) {
+		parent::__construct($likeImageCommentDao, $comment, $userID, $ownerID, self::COMMENT_LABEL, self::COMMON_LIKE_BUTTON);
 	}
 
 	/**
@@ -41,7 +42,7 @@ class CommentLikes extends BaseLikes implements IBaseLikes {
 		if ($this->liked == FALSE) {
 			$this->justLike = TRUE;
 			$this->liked = TRUE;
-			$this->likeDao->addLiked($commentID, $userID);
+			$this->likeDao->addLiked($commentID, $userID, $this->ownerID);
 		}
 		$this->redrawControl();
 	}

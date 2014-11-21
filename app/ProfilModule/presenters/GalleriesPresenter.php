@@ -95,10 +95,10 @@ class GalleriesPresenter extends \BasePresenter {
 	public $commentImagesDao;
 
 	/**
-	 * @var \POS\Model\LikeCommentDao
+	 * @var \POS\Model\LikeImageCommentDao
 	 * @inject
 	 */
-	public $likeCommentDao;
+	public $likeImageCommentDao;
 
 	public function startup() {
 		parent::startup();
@@ -383,7 +383,7 @@ class GalleriesPresenter extends \BasePresenter {
 		$domain = $httpRequest->getUrl()->host;
 		//$domain = "http://priznaniosexu.cz";
 
-		return new UsersGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this->likeCommentDao, $this->commentImagesDao, $this->loggedUser);
+		return new UsersGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->loggedUser);
 	}
 
 	/**

@@ -75,7 +75,6 @@ class FriendDao extends AbstractDao {
 	 */
 	public function getUsersContactList($idUser) {
 		$sel = $this->getTable();
-		$sel->select(self::TABLE_NAME . ".*, " . self::COLUMN_USER_ID_2 . ".*"); //spojeni tabulek
 		$sel->where(self::COLUMN_USER_ID_1, $idUser);
 		return $sel;
 	}

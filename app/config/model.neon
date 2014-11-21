@@ -35,7 +35,7 @@ services:
 	streamCategoriesDao:	POS\Model\StreamCategoriesDao
 	likeStatusDao:	POS\Model\LikeStatusDao
 	commentImagesDao:	POS\Model\CommentImagesDao
-	likeCommentDao:	POS\Model\LikeCommentDao
+	likeImageCommentDao:	POS\Model\LikeImageCommentDao
 	enumStatusDao: POS\Model\EnumStatusDao
 	catPropertyWantToMeetDao: POS\Model\CatPropertyWantToMeetDao
 	userCategoryDao: POS\Model\UserCategoryDao

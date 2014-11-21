@@ -166,8 +166,8 @@
 			opts.headerHtml = $box.data("ajaxbox-header-html");
 		}
 		
-		if(opts.loadUrl === "" && $box.data("load-url") !== undefined) {
-			opts.loadUrl = $box.data("load-url");
+		if(opts.loadUrl === "" && $box.data("ajaxbox-load-url") !== undefined) {
+			opts.loadUrl = $box.data("ajaxbox-load-url");
 		}
 		
 		return opts;
@@ -352,6 +352,9 @@
 				$.fn.ajaxBox.runStates[params.snippetName] = false;
 				$('div[data-related="' + opts.buttonSelector + '"] .ajaxBoxData').append('<div class="noConvMessages">' + params.endMessage + '</div>');
 				$('div[data-related="' + opts.buttonSelector + '"] .loadingGif').css('display', 'none');
+			}
+			if(typeof params.dataArrived !== "undefined") {
+				params.dataArrived(opts, data);
 			}
 		};
 		options.reloadPermitted = function (opts) {//zastavení dotazování, pokud je globální přepínač false

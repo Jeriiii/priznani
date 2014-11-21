@@ -74,10 +74,10 @@ class UsersCompetitionsPresenter extends BasePresenter {
 	public $commentImagesDao;
 
 	/**
-	 * @var POS\Model\LikeCommentDao
+	 * @var POS\Model\LikeImageCommentDao
 	 * @inject
 	 */
-	public $likeCommentDao;
+	public $likeImageCommentDao;
 
 	public function actionDefault($imageID, $galleryID) {
 		//určitá galerie

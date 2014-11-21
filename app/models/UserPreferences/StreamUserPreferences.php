@@ -218,26 +218,77 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * @return \NetteExt\Serialize\Serializer
 	 */
 	public function getSerializer($streamItems) {
-		$serializer = new Serializer($streamItems);
-		$confessionsRel = new Relation('confession');
-//		$videoRel = new Relation('video');
-		$galleryRel = new Relation('gallery');
-		$userGalleryRel = new Relation('userGallery');
 		$userGalleryLastImageRel = new Relation('lastImage');
-		$adviceRel = new Relation('advice');
-		$userRel = new Relation('user');
-		$statusRel = new Relation('status');
-		$statusRel->addRel(new Relation('user'));
 
-//		$serializer->addRel($videoRel);
-		$galleryRel->addRel($userGalleryLastImageRel);
+		$userGalleryRel = $this->getUserGalleryRel($userGalleryLastImageRel);
+		$galleryRel = $this->getGalleryRel($userGalleryLastImageRel);
+		$userRel = $this->getUserRel($galleryRel);
+		$statusRel = $this->getStatusRel($userRel);
+
+		$serializer = $this->createSerializer($streamItems, $galleryRel, $statusRel, $userRel, $userGalleryRel);
+		return $serializer;
+	}
+
+	private function createSerializer($streamItems, Relation $galleryRel, Relation $statusRel, Relation $userRel, Relation $userGalleryRel) {
+		$serializer = new Serializer($streamItems);
+
+		$adviceRel = new Relation('advice');
+		$confessionsRel = new Relation('confession');
+
 		$serializer->addRel($galleryRel);
 		$serializer->addRel($statusRel);
 		$serializer->addRel($userGalleryRel);
 		$serializer->addRel($adviceRel);
 		$serializer->addRel($userRel);
 		$serializer->addRel($confessionsRel);
+
 		return $serializer;
+	}
+
+	/**
+	 * Vytvoří novou rel na user galerii
+	 * @param \NetteExt\Serialize\Relation $galleryLastImageRel Relace na poslední obrázek v galerii
+	 * @return \NetteExt\Serialize\Relation
+	 */
+	private function getUserGalleryRel($galleryLastImageRel) {
+		$galleryRel = new Relation('userGallery');
+		$galleryRel->addRel($galleryLastImageRel);
+		return $galleryRel;
+	}
+
+	/**
+	 * Vytvoří novou rel na galerii
+	 * @param \NetteExt\Serialize\Relation $galleryLastImageRel Relace na poslední obrázek v galerii
+	 * @return \NetteExt\Serialize\Relation
+	 */
+	private function getGalleryRel($galleryLastImageRel) {
+		$galleryRel = new Relation('gallery');
+		$galleryRel->addRel($galleryLastImageRel);
+		return $galleryRel;
+	}
+
+	/**
+	 * Vytvoří novou rel na uživatele
+	 * @param \NetteExt\Serialize\Relation $galleryRel Relace na galerie
+	 * @return \NetteExt\Serialize\Relation
+	 */
+	private function getUserRel($galleryRel) {
+		$userRel = new Relation('user');
+		$profilFoto = new Relation('profilFoto');
+		$profilFoto->addRel($galleryRel);
+		$userRel->addRel($profilFoto);
+		return $userRel;
+	}
+
+	/**
+	 * Vytvoří novou rel na statusy
+	 * @param \NetteExt\Serialize\Relation $userRel Relace na uživatele
+	 * @return \NetteExt\Serialize\Relation
+	 */
+	private function getStatusRel($userRel) {
+		$statusRel = new Relation('status');
+		$statusRel->addRel($userRel);
+		return $statusRel;
 	}
 
 	/**
