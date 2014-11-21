@@ -46,6 +46,7 @@
 					{/if}
 				</div>
 				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
+				<span class="first-sentence">{$userData|sexyLabel}</span>
 				<span class="first-sentence">{$userData->property->first_sentence}</span>
 				<div class="clear spacer"></div>
 			{if $user->isLoggedIn()}
