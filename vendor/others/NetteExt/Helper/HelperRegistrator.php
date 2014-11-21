@@ -20,6 +20,9 @@ class HelperRegistrator {
 	/** @var ShowProfHelper */
 	public $showProfHelper;
 
+	/** @var ShowUserDataHelper */
+	public $showUserDataHelper;
+
 	/** @var array Callback na fci link */
 	private $linkCallback;
 
@@ -31,6 +34,7 @@ class HelperRegistrator {
 		$this->getImgPathHelper = new GetImgPathHelper($url);
 		$this->linkCallback = $linkCallback;
 		$this->showProfHelper = new ShowProfHelper($this->getImgPathHelper, $linkCallback);
+		$this->showUserDataHelper = new ShowUserDataHelper();
 	}
 
 	/**
@@ -40,6 +44,7 @@ class HelperRegistrator {
 	public function registerHelpers($template) {
 		$this->registerGetImgPathHelpers($template);
 		$this->registerShowProfHelpers($template);
+		$this->registerShowUserDataHelpers($template);
 	}
 
 	private function registerShowProfHelpers($template) {
@@ -55,6 +60,17 @@ class HelperRegistrator {
 		});
 		$template->registerHelper(ShowProfHelper::NAME_DIV, function($user, $href = null) use ($showProfHelper) {
 			return $showProfHelper->showProf($user, $href, FALSE, "div");
+		});
+	}
+
+	/**
+	 * Zaregistruje hepery pro získávání dat o profilu
+	 * @param type $template
+	 */
+	private function registerShowUserDataHelpers($template) {
+		$showUserHelper = $this->showUserDataHelper;
+		$template->registerHelper(ShowUserDataHelper::SEXY_LABEL_NAME, function($user) use ($showUserHelper) {
+			return $showUserHelper->showSexyLabel($user);
 		});
 	}
 
