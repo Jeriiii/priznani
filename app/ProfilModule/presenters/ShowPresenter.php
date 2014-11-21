@@ -446,7 +446,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	}
 
 	protected function createComponentSendHeartDialog($name) {
-		return new SendHeartDialog($this->loggedUser, $this->userPropertyDao, $this, $name);
+		return new SendHeartDialog($this->loggedUser, $this->userPropertyDao, $this->activitiesDao, $this, $name);
 	}
 
 	protected function createComponentSexyListMarkedFromOther($name) {
