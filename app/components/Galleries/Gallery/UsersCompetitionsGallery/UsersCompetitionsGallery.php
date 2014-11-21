@@ -66,7 +66,7 @@ class UsersCompetitionsGallery extends BaseGallery {
 	 * @return \POSComponent\Comments\ImageComments
 	 */
 	public function createComponentComments() {
-		$imageComments = new ImageComments($this->likeImageCommentDao, $this->commentImagesDao, $this->image, $this->loggedUser);
+		$imageComments = new ImageComments($this->likeImageCommentDao, $this->commentImagesDao, $this->image, $this->loggedUser, $this->ownerID);
 		$imageComments->setPresenter($this->getPresenter());
 		return $imageComments;
 	}

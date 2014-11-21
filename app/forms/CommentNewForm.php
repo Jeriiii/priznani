@@ -33,10 +33,16 @@ class CommentNewForm extends BaseForm {
 	 */
 	private $baseCommentComp;
 
-	public function __construct($dao, $ID, BaseComments $baseCommentComp = NULL, $name = NULL) {
+	/**
+	 * @var int $ownerID ID uživatele, kterýmu obrázek patří.
+	 */
+	private $ownerID;
+
+	public function __construct($dao, $ID, $ownerID, BaseComments $baseCommentComp = NULL, $name = NULL) {
 		parent::__construct($baseCommentComp, $name);
 
 		$this->ajax();
+		$this->ownerID = $ownerID;
 		$this->baseCommentComp = $baseCommentComp;
 		$this->dao = $dao;
 		$this->ID = $ID;
@@ -58,7 +64,7 @@ class CommentNewForm extends BaseForm {
 		$values = $form->getValues();
 
 		$userID = $this->presenter->user->id;
-		$this->dao->insertNewComment($this->ID, $userID, $values->comment);
+		$this->dao->insertNewComment($this->ID, $userID, $values->comment, $this->ownerID);
 
 		if ($this->presenter->isAjax()) {
 			$form->clearFields();

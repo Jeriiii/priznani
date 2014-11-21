@@ -38,6 +38,7 @@ use POSComponent\Comments\ImageComments;
 use POSComponent\Comments\StatusComments;
 use POSComponent\BaseLikes\ImageLikes;
 use POSComponent\BaseLikes\ConfessionLikes;
+use POSComponent\BaseLikes\StatusLikes;
 
 class BaseStream extends BaseProjectControl {
 
@@ -258,7 +259,7 @@ class BaseStream extends BaseProjectControl {
 
 		return new Multiplier(function ($streamItem) use ($streamItems) {
 			$userGallery = $streamItems->offsetGet($streamItem)->userGallery;
-			$imageComments = new ImageComments($this->likeImageCommentDao, $this->commentImagesDao, $userGallery->lastImage, $this->loggedUser);
+			$imageComments = new ImageComments($this->likeImageCommentDao, $this->commentImagesDao, $userGallery->lastImage, $this->loggedUser, $userGallery->userID);
 			$imageComments->setPresenter($this->getPresenter());
 			return $imageComments;
 		});
@@ -273,7 +274,7 @@ class BaseStream extends BaseProjectControl {
 
 		return new Multiplier(function ($streamItem) use ($streamItems) {
 			$status = $streamItems->offsetGet($streamItem)->status;
-			return new StatusLikes($this->likeStatusDao, $status, $this->user->id, $status->userID);
+			return new StatusLikes($this->likeStatusDao, $status, $this->loggedUser->id, $status->userID);
 		});
 	}
 
@@ -286,7 +287,7 @@ class BaseStream extends BaseProjectControl {
 
 		return new Multiplier(function ($streamItem) use ($streamItems) {
 			$status = $streamItems->offsetGet($streamItem)->status;
-			$statusComments = new StatusComments($this->likeStatusCommentDao, $this->commentStatusesDao, $status);
+			$statusComments = new StatusComments($this->likeStatusCommentDao, $this->commentStatusesDao, $status, $this->loggedUser, $status->userID);
 			$statusComments->setPresenter($this->getPresenter());
 			return $statusComments;
 		});

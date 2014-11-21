@@ -262,7 +262,7 @@ class OnePagePresenter extends BasePresenter {
 			$this->streamUserPreferences->calculate();
 			$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
 		} else {
-			$this->dataForStream = $this->streamDao->getAll("DESC");
+			$this->dataForStream = $this->streamDao->getForUnloggedUser("DESC");
 		}
 	}
 

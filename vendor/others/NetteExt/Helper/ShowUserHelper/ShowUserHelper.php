@@ -90,7 +90,7 @@ class ShowProfHelper {
 		$elPhoto = Html::el($el);
 		$img = Html::el("img");
 
-		if (isset($user->profilFotoID)) {
+		if (!empty($user->profilFotoID)) {
 			$src = $this->getImgPathHelper->getImgMinPath($user->profilFoto, GetImgPathHelper::TYPE_USER_GALLERY);
 		} else {
 			//$femalePhoto = $user->property->user_property == "women" ? TRUE : FALSE;

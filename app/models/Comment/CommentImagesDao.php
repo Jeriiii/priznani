@@ -54,9 +54,10 @@ class CommentImagesDao extends AbstractDao implements ICommentDao {
 	 * @param int $imageID ID obrázku, který komentujeme
 	 * @param int $userID ID uživatele co komentář napsal.
 	 * @param string $comment komentář obrázku
+	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
 	 * @return Nette\Database\Table\ActiveRow
 	 */
-	public function insertNewComment($imageID, $userID, $comment) {
+	public function insertNewComment($imageID, $userID, $comment, $ownerID) {
 		$sel = $this->getTable();
 		$sel->insert(array(
 			self::COLUMN_IMAGE_ID => $imageID,
@@ -65,6 +66,8 @@ class CommentImagesDao extends AbstractDao implements ICommentDao {
 		));
 
 		$this->incrementCountImage($imageID);
+
+		$this->addActivity($ownerID, $userID, $imageID);
 
 		return $sel;
 	}
@@ -78,6 +81,7 @@ class CommentImagesDao extends AbstractDao implements ICommentDao {
 		$sel->wherePrimary($commentID);
 		$comment = $sel->fetch();
 		$this->decrementCountImage($comment->imageID);
+		$this->removeActivity($comment->userID, $comment->image->gallery->userID, $commentID);
 		parent::delete($commentID);
 	}
 
@@ -107,6 +111,32 @@ class CommentImagesDao extends AbstractDao implements ICommentDao {
 		$image->update(array(
 			UserImageDao::COLUMN_COMMENTS => $image->comments - 1
 		));
+	}
+
+	/**
+	 * Odstraní komentář z aktivit
+	 * @param int $ownerID ID uživatele, kterému obrázek patří.
+	 * @param int $creatorID ID uživatele, který obrázek lajknul
+	 * @param int $status ID statusu.
+	 */
+	public function addActivity($ownerID, $creatorID, $status) {
+		$sel = $this->getActivityTable();
+		$type = "comment";
+		$activity = ActivitiesDao::createImageActivityStatic($creatorID, $ownerID, $status, $type, $sel);
+		return $activity;
+	}
+
+	/**
+	 * Odstraní komentář z aktivit
+	 * @param int $ownerID ID uživatele, kterému obrázek patří.
+	 * @param int $creatorID ID uživatele, který obrázek lajknul
+	 * @param int $status ID statusu.
+	 */
+	public function removeActivity($ownerID, $creatorID, $status) {
+		$sel = $this->getActivityTable();
+		$type = "comment";
+		$activity = ActivitiesDao::removeImageActivityStatic($creatorID, $ownerID, $status, $type, $sel);
+		return $activity;
 	}
 
 }

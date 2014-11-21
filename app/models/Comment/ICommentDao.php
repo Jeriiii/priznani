@@ -32,9 +32,10 @@ interface ICommentDao {
 	 * @param int $itemID ID příspěvku, který komentujeme
 	 * @param int $userID ID uživatele co komentář napsal.
 	 * @param string $comment Komentář obrázku
+	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
 	 * @return Nette\Database\Table\ActiveRow
 	 */
-	public function insertNewComment($itemID, $userID, $comment);
+	public function insertNewComment($itemID, $userID, $comment, $ownerID);
 
 	/**
 	 * Přidá aktivitu komentování o položce Item (např. obrázku) vlastníkovi

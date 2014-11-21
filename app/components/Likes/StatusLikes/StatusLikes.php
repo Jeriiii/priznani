@@ -26,9 +26,10 @@ class StatusLikes extends BaseLikes implements IBaseLikes {
 	 * @param \POS\Model\LikeStatusDao $likeStatusDao DAO pro práci s lajky statusů
 	 * @param Nette\Database\Table\ActiveRow $status status, který se bude lajkovat
 	 * @param int $userID ID uživatele, který lajkuje status
+	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
 	 */
-	public function __construct(LikeStatusDao $likeStatusDao, $status, $userID) {
-		parent::__construct($likeStatusDao, $status, $userID, self::STATUS_LABEL);
+	public function __construct(LikeStatusDao $likeStatusDao, $status, $userID, $ownerID) {
+		parent::__construct($likeStatusDao, $status, $userID, $ownerID, self::STATUS_LABEL);
 	}
 
 	/**

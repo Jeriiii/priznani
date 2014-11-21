@@ -72,7 +72,12 @@ class BaseComments extends BaseProjectControl {
 	 */
 	private $redrawConfirm = FALSE;
 
-	public function __construct(ILikeDao $likeImageCommentDao, ICommentDao $commentDao, $item, $userData) {
+	/**
+	 * @var int $ownerID ID uživatele, kterýmu obrázek patří.
+	 */
+	private $ownerID;
+
+	public function __construct(ILikeDao $likeImageCommentDao, ICommentDao $commentDao, $item, $userData, $ownerID) {
 		parent::__construct();
 		if (!($item instanceof ActiveRow) && !($item instanceof \Nette\ArrayHash)) {
 			throw new \Exception("variable $item must be instance of ActiveRow or ArrayHash");
@@ -87,6 +92,7 @@ class BaseComments extends BaseProjectControl {
 		$this->likeImageCommentDao = $likeImageCommentDao;
 		$this->countComments = $this->item->comments;
 		$this->userData = $userData;
+		$this->ownerID = $ownerID;
 	}
 
 	/**
@@ -131,7 +137,7 @@ class BaseComments extends BaseProjectControl {
 	 * @return \Nette\Application\UI\Form\CommentNewForm
 	 */
 	public function createComponentCommentNewForm($name) {
-		return new Frm\CommentNewForm($this->commentDao, $this->item->id, $this, $name);
+		return new Frm\CommentNewForm($this->commentDao, $this->item->id, $this->ownerID, $this, $name);
 	}
 
 	/**

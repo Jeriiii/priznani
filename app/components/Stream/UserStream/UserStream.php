@@ -53,7 +53,7 @@ class UserStream extends BaseStream {
 
 		/* zda-li zobrazit dotaz na blíbenou polohu nebo pozici */
 		if ($user->isLoggedIn()) {
-			$userData = $this->userDao->find($user->id);
+			$userData = $this->loggedUser;
 			$userProperty = $userData->property;
 			if ($userProperty) { // ochrana proti uživatelům, co nemají vyplněné user property
 				$placePosSession = $this->presenter->getSession('placePosSession');

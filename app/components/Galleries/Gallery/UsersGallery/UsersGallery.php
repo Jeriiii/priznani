@@ -38,6 +38,11 @@ class UsersGallery extends BaseGallery {
 	 */
 	public $loggedUser;
 
+	/**
+	 * @var int ID uživatele, kterému patří obrázek.
+	 */
+	private $ownerID;
+
 	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao, LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, $loggedUser) {
 		parent::__construct($images, $image, $gallery, $domain, $partymode);
 		parent::setUserImageDao($userImageDao);
@@ -45,6 +50,7 @@ class UsersGallery extends BaseGallery {
 		$this->likeImageCommentDao = $likeImageCommentDao;
 		$this->commentImagesDao = $commentImagesDao;
 		$this->loggedUser = $loggedUser;
+		$this->ownerID = $gallery->userID;
 	}
 
 	public function render() {
@@ -74,7 +80,7 @@ class UsersGallery extends BaseGallery {
 	}
 
 	public function createComponentLikes() {
-		$likes = new ImageLikes($this->imageLikesDao, $this->image, $this->loggedUser->id, $this->image->gallery->userID);
+		$likes = new ImageLikes($this->imageLikesDao, $this->image, $this->loggedUser->id, $this->ownerID);
 
 		return $likes;
 	}
@@ -84,7 +90,7 @@ class UsersGallery extends BaseGallery {
 	 * @return \POSComponent\Comments\ImageComments
 	 */
 	public function createComponentComments() {
-		$imageComments = new ImageComments($this->likeImageCommentDao, $this->commentImagesDao, $this->image, $this->loggedUser);
+		$imageComments = new ImageComments($this->likeImageCommentDao, $this->commentImagesDao, $this->image, $this->loggedUser, $this->ownerID);
 		$imageComments->setPresenter($this->getPresenter());
 		return $imageComments;
 	}

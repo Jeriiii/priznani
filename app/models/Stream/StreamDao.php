@@ -35,6 +35,16 @@ class StreamDao extends AbstractDao {
 	}
 
 	/**
+	 * Vrátí všechny položky streamu, co se můžou zobrazit nepřihlášenému uživateli.
+	 */
+	public function getForUnloggedUser() {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_CONFESSION_ID . " IS NOT NULL");
+		$sel->order("id DESC");
+		return $sel;
+	}
+
+	/**
 	 * Vrátí všechny řádky z tabulky
 	 * @return Nette\Database\Table\Selection
 	 */
