@@ -280,7 +280,7 @@ class ActivitiesDao extends AbstractDao {
 		if ($limit != 0) {
 			$sel->limit($limit, $offset);
 		}
-		return $sel->order(self::COLUMN_ID . ' ASC');
+		return $sel->order(self::COLUMN_ID . ' DESC');
 	}
 
 	/**

@@ -12,7 +12,7 @@ namespace POS\Model;
  *
  * @author Daniel Holubář
  */
-class CommentImagesDao extends AbstractDao implements ICommentDao {
+class CommentImagesDao extends BaseCommentDao {
 
 	const TABLE_NAME = "comment_images";
 

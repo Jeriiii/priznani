@@ -23,13 +23,14 @@
 </div>
 {define status $activity}
 	{* doplnit odkaz! *}
-	<a href="#" class="{if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-link="{link viewed! activityID => $activity->id}"> 
-		Uživatel <strong>{$activity->event_creator->user_name}</strong> 
+	<a href="{plink :Status: $activity->status->id}" 
+	   class="{if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-link="{link viewed! activityID => $activity->id}"> 
+		Uživatel <strong>{$activity->event_creator->user_name}</strong>
 		{if $activity->type == "comment"}
-			okomentoval váš status {$activity->status->text}
+			okomentoval váš status {$activity->status->message|truncate:8}
 
 		{elseif $activity->type == "like"}
-			lajknul váš status {$activity->status->text}
+			lajknul váš status {$activity->status->message|truncate:8}
 		{/if}
 	</a>
 {/}
