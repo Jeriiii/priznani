@@ -7,6 +7,7 @@
 namespace POSComponent;
 
 use POS\Model\UserPropertyDao;
+use POS\Model\ActivitiesDao;
 
 /**
  * Dialog pro poslání srdíčka
@@ -28,14 +29,21 @@ class SendHeartDialog extends BaseProjectControl {
 	public $propertyDao;
 
 	/**
+	 * @var \POS\Model\ActivitesDao
+	 * @inject
+	 */
+	public $activitesDao;
+
+	/**
 	 * 	 Kolik mincí stojí poslání srdíčka.
 	 */
 	const HEART_PRICE = 5;
 
-	public function __construct($loggedUser, UserPropertyDao $propertyDao, $parent = NULL, $name = NULL) {
+	public function __construct($loggedUser, UserPropertyDao $propertyDao, ActivitiesDao $activitesDao, $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->loggedUser = $loggedUser;
 		$this->propertyDao = $propertyDao;
+		$this->activitesDao = $activitesDao;
 	}
 
 	/**
@@ -61,6 +69,7 @@ class SendHeartDialog extends BaseProjectControl {
 		if ($this->haveEnaughCoins()) {
 
 
+			$presenter->getSession('loggedUser')->remove(); //odstranění cache uživatelských údajů
 			$presenter->flashMessage('Srdíčko úspěšně odesláno', 'success');
 			$presenter->redirect('this');
 		} else {
