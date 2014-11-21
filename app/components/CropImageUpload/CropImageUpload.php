@@ -24,7 +24,7 @@ class CropImageUpload extends BaseProjectControl {
 	/**
 	 * Standardní konstruktor
 	 */
-	function __construct(BaseForm $formToUpload = NULL, $parent = NULL, $name = NULL) {
+	function __construct(BaseForm $formToUpload, $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->formToUpload = $formToUpload;
 	}
@@ -40,11 +40,12 @@ class CropImageUpload extends BaseProjectControl {
 	}
 
 	/**
-	 * komponenta formuláře, který nejdříve nahraje fotku
+	 * * Komponenta formuláře pro prvotní upload
 	 * @param type $name
 	 * @return \Nette\Application\UI\Form\BaseForm
 	 */
-	protected function createComponentUploadForm($name) {
+	protected function createComponentAfterUploadForm($name) {
+		$this->formToUpload->setParent($this, $name);
 		return $this->formToUpload;
 	}
 

@@ -25,6 +25,7 @@ class FirstImageUploadForm extends BaseForm {
 	public function __construct($tempPath, $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
+		$this->ajax();
 		$this->tempPath = $tempPath;
 		$this->parentName = $parent->name;
 
@@ -44,12 +45,15 @@ class FirstImageUploadForm extends BaseForm {
 		$image = $values->imageToUpload;
 		if ($image->isOK() & $image->isImage()) {
 			$imagePath = UploadImage::uploadToTemp($image, 1000, 1000);
-
-			$this->getPresenter()->redirect('this', array(
-				$this->parentName . '-crop-image-path' => $imagePath
-			));
 		} else {
 			$this->addError("Vyberte platný soubor");
+		}
+
+		if ($this->presenter->isAjax()) {
+			$form->clearFields();
+			$this->parent->redrawControl();
+		} else {
+			$this->presenter->redirect('this');
 		}
 	}
 
