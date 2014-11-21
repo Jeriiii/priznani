@@ -15,6 +15,7 @@ use POSComponent\AddToList\SendFriendRequest;
 use POSComponent\AddToList\YouAreSexy;
 use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
+use POSComponent\SendHeartDialog;
 use Nette\DateTime;
 
 class ShowPresenter extends ProfilBasePresenter {
@@ -187,6 +188,12 @@ class ShowPresenter extends ProfilBasePresenter {
 	private $userData;
 
 	/**
+	 * @var \POS\Model\UserPropertyDao
+	 * @inject
+	 */
+	public $userPropertyDao;
+
+	/**
 	 * metoda nastavuje hodnoty predavanych parametru predtim, nez se sablona s uzivatelskym streamem vykresli.
 	 * Tyto hodnoty pak predava komponente Stream
 	 * @param type $id
@@ -276,6 +283,14 @@ class ShowPresenter extends ProfilBasePresenter {
 			$id = $this->getUser()->getId();
 		}
 		$this->userID = $id;
+	}
+
+	/**
+	 * Vrátí ID uživatele, jehož profil je zobrazován.
+	 * @return type
+	 */
+	public function getUserID() {
+		return $this->userID;
 	}
 
 	/**
@@ -428,6 +443,10 @@ class ShowPresenter extends ProfilBasePresenter {
 
 	protected function createComponentFriendsList($name) {
 		return new FriendsList($this->friendDao, $this->userID, $this, $name);
+	}
+
+	protected function createComponentSendHeartDialog($name) {
+		return new SendHeartDialog($this->loggedUser, $this->userPropertyDao, $this, $name);
 	}
 
 	protected function createComponentSexyListMarkedFromOther($name) {
