@@ -6,6 +6,8 @@
 
 namespace POS\Model;
 
+use Nette\Database\SqlLiteral;
+
 /**
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
@@ -27,8 +29,9 @@ class LikeStatusCommentDao extends AbstractDao implements ILikeDao {
 	 * Přidá vazbu mezi commentem a uživatelem, který ho lajkl
 	 * @param int $commentID ID statusu, který je lajkován
 	 * @param int $userID ID uživatele, který lajkuje
+	 * @param int $ownerID ID uživatele, kterému obrázek patří.
 	 */
-	public function addLiked($commentID, $userID) {
+	public function addLiked($commentID, $userID, $ownerID) {
 		/* přidá vazbu mezi commentem a uživatelem */
 		$sel = $this->getTable();
 		$sel->insert(array(
@@ -41,18 +44,21 @@ class LikeStatusCommentDao extends AbstractDao implements ILikeDao {
 		$sel->where(array(
 			CommentStatusesDao::COLUMN_ID => $commentID
 		));
-		$sel->fetch();
 		$sel->update(array(
-			CommentStatusesDao::COLUMN_LIKES => new \Nette\Database\SqlLiteral(CommentStatusesDao::COLUMN_LIKES . ' + 1')
+			CommentStatusesDao::COLUMN_LIKES => new SqlLiteral(CommentStatusesDao::COLUMN_LIKES . ' + 1')
 		));
+		$commentLike = $sel->fetch();
+
+		$this->addActivity($ownerID, $userID, $commentLike->commentID);
 	}
 
 	/**
 	 * ubere vazbu mezi commentum a uživatelem, který ho lajkl
 	 * @param int $commentID ID commentu, který je odlajkován
 	 * @param int $userID ID uživatele, který lajkuje
+	 * @param int $ownerID ID uživatele, kterému obrázek patří.
 	 */
-	public function removeLiked($commentID, $userID) {
+	public function removeLiked($commentID, $userID, $ownerID) {
 		/* přidá vazbu mezi obr. a uživatelem */
 		$sel = $this->getTable();
 		$sel->where(array(
@@ -67,10 +73,12 @@ class LikeStatusCommentDao extends AbstractDao implements ILikeDao {
 		$sel->where(array(
 			StatusDao::COLUMN_ID => $commentID
 		));
-		$sel->fetch();
 		$sel->update(array(
-			CommentStatusesDao::COLUMN_LIKES => new \Nette\Database\SqlLiteral(CommentStatusesDao::COLUMN_LIKES . ' - 1')
+			CommentStatusesDao::COLUMN_LIKES => new SqlLiteral(CommentStatusesDao::COLUMN_LIKES . ' - 1')
 		));
+		$commentLike = $sel->fetch();
+
+		$this->removeActivity($ownerID, $userID, $commentLike->commentID);
 	}
 
 	/**
@@ -92,6 +100,24 @@ class LikeStatusCommentDao extends AbstractDao implements ILikeDao {
 		} else {
 			return FALSE;
 		}
+	}
+
+	/**
+	 * Přidá lajk do aktivit
+	 * @param int $ownerID ID uživatele, kterému obrázek patří.
+	 * @param int $creatorID ID uživatele, který obrázek lajknul
+	 * @param int $commentID ID obrázku.
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function addActivity($ownerID, $creatorID, $commentID) {
+		$sel = $this->getActivityTable();
+		$type = "like";
+		$activity = ActivitiesDao::createImageActivityStatic($creatorID, $ownerID, $commentID, $type, $sel);
+		return $activity;
+	}
+
+	public function removeActivity($ownderID, $creatorID, $itemID) {
+
 	}
 
 }

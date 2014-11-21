@@ -23,10 +23,10 @@ use POS\Model\EnumPositionDao;
 use POS\Model\EnumPlaceDao;
 use POS\Model\UserPlaceDao;
 use POSComponent\BaseProjectControl;
-use Nette\Database\Table\Selection;
+use Nette\Application\UI\Multiplier;
 use Nette\Application\UI\Form as Frm;
 use POS\Model\StreamDao;
-use POS\Model\LikeCommentDao;
+use POS\Model\LikeImageCommentDao;
 use POS\Model\CommentImagesDao;
 use POS\Model\LikeStatusCommentDao;
 use POS\Model\CommentStatusesDao;
@@ -36,6 +36,9 @@ use POS\Model\LikeConfessionDao;
 use POSComponent\Comments\ConfessionComments;
 use POSComponent\Comments\ImageComments;
 use POSComponent\Comments\StatusComments;
+use POSComponent\BaseLikes\ImageLikes;
+use POSComponent\BaseLikes\ConfessionLikes;
+use POSComponent\BaseLikes\StatusLikes;
 
 class BaseStream extends BaseProjectControl {
 
@@ -101,9 +104,9 @@ class BaseStream extends BaseProjectControl {
 	public $userDao;
 
 	/**
-	 * @var \POS\Model\LikeCommentDao
+	 * @var \POS\Model\LikeImageCommentDao
 	 */
-	public $likeCommentDao;
+	public $likeImageCommentDao;
 
 	/**
 	 * @var \POS\Model\CommentImagesDao
@@ -140,7 +143,7 @@ class BaseStream extends BaseProjectControl {
 	 */
 	public $likeConfessionDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, LikeCommentDao $likeCommentDao, CommentImagesDao $commentImagesDao, LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, LikeConfessionDao $likeConfessionDao, $loggedUser) {
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, LikeConfessionDao $likeConfessionDao, $loggedUser) {
 		parent::__construct();
 		$this->dataForStream = $data;
 		$this->userGalleryDao = $userGalleryDao;
@@ -154,7 +157,7 @@ class BaseStream extends BaseProjectControl {
 		$this->enumPositionDao = $enumPositionDao;
 		$this->userPlaceDao = $userPlaceDao;
 		$this->enumPlaceDao = $enumPlaceDao;
-		$this->likeCommentDao = $likeCommentDao;
+		$this->likeImageCommentDao = $likeImageCommentDao;
 		$this->commentImagesDao = $commentImagesDao;
 		$this->likeStatusCommentDao = $likeStatusCommentDao;
 		$this->commentStatusesDao = $commentStatusesDao;
@@ -245,16 +248,18 @@ class BaseStream extends BaseProjectControl {
 	protected function createComponentLikeImages() {
 		$streamItems = $this->dataForStream;
 
-		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			return new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $streamItems->offsetGet($streamItem)->userGallery->lastImage, $this->presenter->user->id);
+		return new Multiplier(function ($streamItem) use ($streamItems) {
+			$userGallery = $streamItems->offsetGet($streamItem)->userGallery;
+			return new ImageLikes($this->imageLikesDao, $userGallery->lastImage, $this->loggedUser->id, $userGallery->userID);
 		});
 	}
 
 	protected function createComponentCommentImages() {
 		$streamItems = $this->dataForStream;
 
-		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			$imageComments = new ImageComments($this->likeCommentDao, $this->commentImagesDao, $streamItems->offsetGet($streamItem)->userGallery->lastImage, $this->loggedUser);
+		return new Multiplier(function ($streamItem) use ($streamItems) {
+			$userGallery = $streamItems->offsetGet($streamItem)->userGallery;
+			$imageComments = new ImageComments($this->likeImageCommentDao, $this->commentImagesDao, $userGallery->lastImage, $this->loggedUser, $userGallery->userID);
 			$imageComments->setPresenter($this->getPresenter());
 			return $imageComments;
 		});
@@ -267,8 +272,9 @@ class BaseStream extends BaseProjectControl {
 	protected function createComponentLikeStatus() {
 		$streamItems = $this->dataForStream;
 
-		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			return new \POSComponent\BaseLikes\StatusLikes($this->likeStatusDao, $streamItems->offsetGet($streamItem)->status, $this->user->id);
+		return new Multiplier(function ($streamItem) use ($streamItems) {
+			$status = $streamItems->offsetGet($streamItem)->status;
+			return new StatusLikes($this->likeStatusDao, $status, $this->loggedUser->id, $status->userID);
 		});
 	}
 
@@ -279,8 +285,9 @@ class BaseStream extends BaseProjectControl {
 	protected function createComponentCommentStatus() {
 		$streamItems = $this->dataForStream;
 
-		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			$statusComments = new StatusComments($this->likeStatusCommentDao, $this->commentStatusesDao, $streamItems->offsetGet($streamItem)->status);
+		return new Multiplier(function ($streamItem) use ($streamItems) {
+			$status = $streamItems->offsetGet($streamItem)->status;
+			$statusComments = new StatusComments($this->likeStatusCommentDao, $this->commentStatusesDao, $status, $this->loggedUser, $status->userID);
 			$statusComments->setPresenter($this->getPresenter());
 			return $statusComments;
 		});
@@ -290,8 +297,9 @@ class BaseStream extends BaseProjectControl {
 		$streamItems = $this->dataForStream;
 		$isUserLoggedIn = $this->presenter->user->isLoggedIn();
 
-		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems, $isUserLoggedIn) {
-			$confessionComment = new ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $streamItems->offsetGet($streamItem)->confession, $this->loggedUser);
+		return new Multiplier(function ($streamItem) use ($streamItems, $isUserLoggedIn) {
+			$confession = $streamItems->offsetGet($streamItem)->confession;
+			$confessionComment = new ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $confession, $this->loggedUser);
 			$confessionComment->setPresenter($this->getPresenter());
 			return $confessionComment;
 		});
@@ -300,8 +308,9 @@ class BaseStream extends BaseProjectControl {
 	protected function createComponentLikeConfession() {
 		$streamItems = $this->dataForStream;
 
-		return new \Nette\Application\UI\Multiplier(function ($streamItem) use ($streamItems) {
-			return new \POSComponent\BaseLikes\ConfessionLikes($this->likeConfessionDao, $streamItems->offsetGet($streamItem)->confession, $this->presenter->user->id);
+		return new Multiplier(function ($streamItem) use ($streamItems) {
+			$confession = $streamItems->offsetGet($streamItem)->confession;
+			return new ConfessionLikes($this->likeConfessionDao, $confession, $this->loggedUser->id);
 		});
 	}
 

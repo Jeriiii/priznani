@@ -87,9 +87,6 @@ Container::extensionMethod('addDateTimePicker', function (Container $_this, $nam
 });
 Kdyby\BootstrapFormRenderer\DI\RendererExtension::register($configurator);
 Kdyby\Events\DI\EventsExtension::register($configurator);
-
-
-
 // Na PRODUKCI se nastaví odchytávání vyjímek
 if (!$configurator->isDebugMode()) {
 	$container->application->catchExceptions = TRUE;
