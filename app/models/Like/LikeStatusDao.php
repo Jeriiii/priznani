@@ -114,10 +114,13 @@ class LikeStatusDao extends AbstractDao implements ILikeDao {
 	 * @return Nette\Database\Table\ActiveRow
 	 */
 	public function addActivity($ownerID, $creatorID, $statusID) {
-		$sel = $this->getActivityTable();
-		$type = "like";
-		$activity = ActivitiesDao::createStatusActivityStatic($creatorID, $ownerID, $statusID, $type, $sel);
-		return $activity;
+		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
+			$sel = $this->getActivityTable();
+			$type = "like";
+			$activity = ActivitiesDao::createStatusActivityStatic($creatorID, $ownerID, $statusID, $type, $sel);
+			return $activity;
+		}
+		return NULL;
 	}
 
 	/**
@@ -128,10 +131,11 @@ class LikeStatusDao extends AbstractDao implements ILikeDao {
 	 * @return Nette\Database\Table\ActiveRow
 	 */
 	public function removeActivity($ownerID, $creatorID, $statusID) {
-		$sel = $this->getActivityTable();
-		$type = "like";
-		$activity = ActivitiesDao::removeCommentActivityStatic($creatorID, $ownerID, $statusID, $type, $sel);
-		return $activity;
+		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
+			$sel = $this->getActivityTable();
+			$type = "like";
+			$activity = ActivitiesDao::removeCommentActivityStatic($creatorID, $ownerID, $statusID, $type, $sel);
+		}
 	}
 
 }

@@ -42,27 +42,29 @@ Feature: Edit user profile
 		| Chcete mě?	| Hledám pobavení	|
 
 
-	Scenario Outline: User can change Interests
-	    Given I am signed in as "user@test.cz"
-		And I am on "/profil.edit/"		
-		And I should see "Zajímám se o"
-		And I select "ano" from "<form_element>"
-		And I press "frm-interestedInForm-send"
-		Then I should see "Změna doplňujících údajů byla úspěšná"
+############################ v první verzi pos neobsahuje toto nastavení
  
-		 Examples:
-         | form_element		|
-		 | threesome		|
-		 | anal				|
-		 | group			|
-		 | bdsm				|
-		 | swallow			|
-		 | oral				| 
-		 | piss				|
-		 | sex_massage		|
-		 | petting			|
-		 | fisting			|
-		 | deepthrought		|
+#	Scenario Outline: User can change Interests
+# 	    Given I am signed in as "user@test.cz"
+# 		And I am on "/profil.edit/"		
+# 		And I should see "Zajímám se o"
+# 		And I select "ano" from "<form_element>"
+# 		And I press "frm-interestedInForm-send"
+# 		Then I should see "Změna doplňujících údajů byla úspěšná"
+#  
+# 		 Examples:
+#          | form_element		|
+# 		 | threesome		|
+# 		 | anal				|
+# 		 | group			|
+# 		 | bdsm				|
+# 		 | swallow			|
+# 		 | oral				| 
+# 		 | piss				|
+# 		 | sex_massage		|
+# 		 | petting			|
+# 		 | fisting			|
+# 		 | deepthrought		|
 
 	Scenario: User can change favourite positions
 	    Given I am signed in as "user@test.cz"

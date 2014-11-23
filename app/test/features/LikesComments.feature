@@ -24,6 +24,7 @@ Scenario Outline: Add, like and delete commentary
 	Then I should see "Líbí (1)"
 	And I should not see "Líbí (O)"
 	When I follow "×"
+	When I follow "Ano"
 	Then I should not see "<comment>"
  
 	Examples:

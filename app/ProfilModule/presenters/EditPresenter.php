@@ -156,10 +156,6 @@ class EditPresenter extends ProfilBasePresenter {
 		return new Frm\DatingEditManFourthForm($this->coupleDao, $this->userDao, $this, $name);
 	}
 
-	protected function createComponentInterestedInForm($name) {
-		return new Frm\InterestedInForm($this->userPropertyDao, $this->userDao, $this, $name);
-	}
-
 	public function createComponentMyUserGalleries() {
 		return new MyUserGalleriesThumbnails($this->userDao, $this->userGalleryDao);
 	}

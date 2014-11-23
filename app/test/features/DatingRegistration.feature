@@ -16,7 +16,6 @@ Feature: Dating registration
 		And I fill in "<passwordVerify>" for "passwordVerify"
 		And I fill in "<first_sentence>" for "first_sentence"
 		And I fill in "<about_me>" for "about_me"
-		And I fill in "<city>" for "city"
 		And I press "send"
 		Then I should see "Partnerka"
 		And I should be on "/dating-registration/pre-third-reg-form"
@@ -57,5 +56,5 @@ Feature: Dating registration
 		And I should see "Novákovi"
 
 		Examples:
-			| day	| month	| year	| want_to_meet_men | type	| email				| user_name		| password		| passwordVerify	| first_sentence	| about_me		| city				| hair_colour |
-			| 1		| leden	| 1985	| 1 | Pár		|novakovi@test.cz	| Novákovi		| heslo123		| heslo123			| Vítej u Nováků	| Jsme Novákovi	| Blatec, Olomouc, Olomoucký kraj | hnědá |
+			| day	| month	| year	| want_to_meet_men | type	| email				| user_name		| password		| passwordVerify	| first_sentence	| about_me		| hair_colour |
+			| 1		| leden	| 1985	| 1 | Pár		|novakovi@test.cz	| Novákovi		| heslo123		| heslo123			| Vítej u Nováků	| Jsme Novákovi	| hnědá |
