@@ -54,7 +54,8 @@
 				{if $isMyProfile}
 					<a n:href=":Profil:Edit:default" class="profile-btn long-btn">Editovat</a>
 					<a title="Nahrát profilovku" class="profile-btn uploadProfilePhoto btn-main btn-small long-btn">Nahrát profilovku</a>
-					<a n:href="Galleries:verificationImageNew" class="profile-btn long-btn">Být ověřený uživatel</a>
+					{* skrytí žádostí o ověření pro první verzi přiznání *}
+					{*<a n:href="Galleries:verificationImageNew" class="profile-btn long-btn">Být ověřený uživatel</a>*}
 					<div class="clear"></div>
 				{else}
 				<div class="profile-btn like-action-panel">
