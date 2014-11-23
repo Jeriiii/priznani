@@ -78,14 +78,11 @@ class UserPropertyDao extends UserBaseDao {
 		$property[UserPropertyDao::COLUMN_WANT_TO_MEET_COUPLE_MEN] = $data->want_to_meet_couple_men;
 		$property[UserPropertyDao::COLUMN_WANT_TO_MEET_COUPLE_WOMEN] = $data->want_to_meet_couple_women;
 		$property[UserPropertyDao::COLUMN_WANT_TO_MEET_GROUP] = $data->want_to_meet_group;
-		$data = $this->getCityIDs($data);
-		$property[UserPropertyDao::COLUMN_CITY_ID] = $data->cityID;
-		$property[UserPropertyDao::COLUMN_DISTRICT_ID] = $data->districtID;
-		$property[UserPropertyDao::COLUMN_REGION_ID] = $data->regionID;
 		return $sel->insert($property);
 	}
 
 	/**
+	 * @deprecated
 	 * Přijme názvy města/okresu/kraje a vrátí jejich id.
 	 * @param Nette\Http\Session|\Nette\ArrayHash $data Pole původních dat.
 	 * @return Nette\Http\Session|\Nette\ArrayHash Pole dat s ID

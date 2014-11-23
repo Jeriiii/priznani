@@ -113,10 +113,13 @@ class LikeImageCommentDao extends BaseLikeDao implements ILikeDao {
 	 * @return Nette\Database\Table\ActiveRow
 	 */
 	public function addActivity($ownerID, $creatorID, $commentID) {
-		$sel = $this->getActivityTable();
-		$type = "like";
-		$activity = ActivitiesDao::createCommentActivityStatic($creatorID, $ownerID, $commentID, $type, $sel);
-		return $activity;
+		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
+			$sel = $this->getActivityTable();
+			$type = "like";
+			$activity = ActivitiesDao::createCommentActivityStatic($creatorID, $ownerID, $commentID, $type, $sel);
+			return $activity;
+		}
+		return NULL;
 	}
 
 	/**
@@ -126,9 +129,11 @@ class LikeImageCommentDao extends BaseLikeDao implements ILikeDao {
 	 * @param int $commentID ID komentáře obrázku.
 	 */
 	public function removeActivity($ownerID, $creatorID, $commentID) {
-		$sel = $this->getActivityTable();
-		$type = "like";
-		ActivitiesDao::removeCommentActivityStatic($creatorID, $ownerID, $commentID, $type, $sel);
+		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
+			$sel = $this->getActivityTable();
+			$type = "like";
+			ActivitiesDao::removeCommentActivityStatic($creatorID, $ownerID, $commentID, $type, $sel);
+		}
 	}
 
 }

@@ -13,7 +13,7 @@ use POS\Model\ImageLikesDao;
 use POS\Model\CommentImagesDao;
 use POS\Model\LikeImageCommentDao;
 use POSComponent\Comments\ImageComments;
-use POS\Model\ImageLikesDao;
+use POSComponent\BaseLikes\ImageLikes;
 
 class UsersCompetitionsGallery extends BaseGallery {
 
@@ -50,7 +50,7 @@ class UsersCompetitionsGallery extends BaseGallery {
 		$this->commentImagesDao = $commentImagesDao;
 		$this->likeImageCommentDao = $likeImageCommentDao;
 		$this->loggedUser = $loggedUser;
-		$this->ownerID = $gallery->userID;
+		$this->ownerID = 0; //neexistuje vlastník
 	}
 
 	public function render() {
