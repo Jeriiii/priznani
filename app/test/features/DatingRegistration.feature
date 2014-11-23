@@ -2,10 +2,13 @@ Feature: Dating registration
 
 	Scenario Outline: Registration of a couple 
 		Given I am on "/dating-registration/"
-		When I select "<day>" from "day"
+		When I select "<type>" from "type"
+		And I select "<day>" from "day"
 		And I select "<month>" from "month"
 		And I select "<year>" from "year"
-		And I select "<type>" from "type"
+		And I select "<day>" from "daySecond"
+		And I select "<month>" from "monthSecond"
+		And I select "<year>" from "yearSecond"
 		And I select "Pár" from "type"
 		And I fill in "<want_to_meet_men>" for "frm-firstRegForm-want_to_meet_men-1"
 		And I press "send"

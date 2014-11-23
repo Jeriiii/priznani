@@ -20,11 +20,17 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 	public $userPropertyDao;
 	private $id_user;
 
-	public function __construct(UserPropertyDao $userPropertyDao, UserDao $userDao, ActiveRow $user, IContainer $parent = NULL, $name = NULL) {
+	/**
+	 * @var ActiveRow
+	 */
+	private $couple;
+
+	public function __construct(UserPropertyDao $userPropertyDao, UserDao $userDao, ActiveRow $user, $couple, IContainer $parent = NULL, $name = NULL) {
 		$this->userPropertyDao = $userPropertyDao;
 		$userProperty = $this->userPropertyDao->find($user->propertyID);
+		$this->couple = $couple;
 
-		parent::__construct($userDao, $parent, $name, $userProperty);
+		parent::__construct($userDao, $parent, $name, $userProperty, $couple);
 
 		if (isset($this["type"])) {
 			unset($this["type"]);
@@ -44,9 +50,17 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 		$user = $this->userDao->find($this->id_user);
 
 		$values->age = $this->getAge($values);
+		$secondAge = $this->getSecondAge($values);
 		$values->vigor = $this->getVigor($values->age);
 
 		$this->userPropertyDao->update($user->propertyID, $values);
+
+		if (!empty($this->couple)) {
+			$this->couple->update(array(
+				"age" => $secondAge
+			));
+		}
+
 		$presenter->flashMessage("Informace byla změněny");
 		$presenter->redirect('this');
 	}

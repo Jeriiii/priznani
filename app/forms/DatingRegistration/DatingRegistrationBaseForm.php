@@ -13,30 +13,25 @@ class DatingRegistrationBaseForm extends BaseForm {
 
 	/**
 	 * Přidá výběr věku uživatele.
-	 * @param date|null $age Věk uživatele
+	 * @param date|null $age věk uživatele
+	 * @param date|null $seccondAge věk partnera
+	 * @param int|null $type Typ uživatele
+	 * @param boolean $isRegistration TRUE = nacházím se na registraci
 	 */
-	public function addAge($age) {
+	public function addAge($age, $seccondAge, $type = NULL, $isRegistration = FALSE) {
 		if (isset($age)) {
 			$date = new DateTime($age);
 			$year = $date->format("Y");
 			$month = intval($date->format("m")); // intval - ochrana proti 01,02 a pod.
 			$day = intval($date->format("d")); // intval - ochrana proti 01,02 a pod.
 		}
+
 		$months = array(1 => 'leden', 'únor', 'březen', 'duben', 'květen', 'červen', 'červenec', 'srpen', 'září', 'říjen', 'listopad', 'prosinec');
 		$days = array_combine(range(1, 31), range(1, 31));
 		$years = array_combine(range(date("Y"), 1910), range(date("Y"), 1910));
 
-		$this->addSelect('day', 'Den narození: ', $days)
-			->setPrompt('Den')
-			->addRule(Form::FILLED, "Prosím vyplňte den Vašeho narození.");
-
-		$this->addSelect('month', 'Měsíc narození:  ', $months)
-			->setPrompt('Měsíc')
-			->addRule(Form::FILLED, "Prosím vyplňte měsíc Vašeho narození.");
-
-		$this->addSelect('year', 'Rok narození: ', $years)
-			->setPrompt('Rok')
-			->addRule(Form::FILLED, "Prosím vyplňte rok Vašeho narození.");
+		$this->addGroupFirstAge($type);
+		$this->addSelectAge($days, $months, $years);
 
 		if (isset($day)) {
 			$this->setDefaults(array(
@@ -44,6 +39,69 @@ class DatingRegistrationBaseForm extends BaseForm {
 				"month" => $month,
 				"year" => $year
 			));
+		}
+
+		if (isset($seccondAge)) {
+			$date = new DateTime($seccondAge);
+			$year = $date->format("Y");
+			$month = intval($date->format("m")); // intval - ochrana proti 01,02 a pod.
+			$day = intval($date->format("d")); // intval - ochrana proti 01,02 a pod.
+		}
+
+		if (isset($seccondAge) || $isRegistration) {
+			$this->addGroupSecondAge($type);
+
+			$this->addSelectAge($days, $months, $years, FALSE, "Second");
+
+			if (isset($day)) {
+				$this->setDefaults(array(
+					"daySecond" => $day,
+					"monthSecond" => $month,
+					"yearSecond" => $year
+				));
+			}
+		}
+	}
+
+	private function addGroupFirstAge($type) {
+		if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_MAN || $type == UserDao::PROPERTY_COUPLE_WOMAN) {
+			if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_WOMAN) {
+				$this->addGroup("Datum narození Partnerky");
+			}
+			if ($type == UserDao::PROPERTY_COUPLE_MAN) {
+				$this->addGroup("Datum narození Partnera");
+			}
+		}
+	}
+
+	private function addGroupSecondAge($type) {
+		if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_MAN || $type == UserDao::PROPERTY_COUPLE_WOMAN) {
+			if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_MAN) {
+				$this->addGroup("Datum narození Partnera");
+			}
+			if ($type == UserDao::PROPERTY_COUPLE_WOMAN) {
+				$this->addGroup("Datum narození Partnerky");
+			}
+		}
+	}
+
+	private function addSelectAge($days, $months, $years, $filled = TRUE, $suffixName = "") {
+		$day = $this->addSelect('day' . $suffixName, 'Den narození: ', $days);
+		$day->setPrompt('Den');
+		if ($filled) {
+			$day->addRule(Form::FILLED, "Prosím vyplňte den Vašeho narození.");
+		}
+
+		$month = $this->addSelect('month' . $suffixName, 'Měsíc narození:  ', $months);
+		$month->setPrompt('Měsíc');
+		if ($filled) {
+			$month->addRule(Form::FILLED, "Prosím vyplňte měsíc Vašeho narození.");
+		}
+
+		$year = $this->addSelect('year' . $suffixName, 'Rok narození: ', $years);
+		$year->setPrompt('Rok');
+		if ($filled) {
+			$year->addRule(Form::FILLED, "Prosím vyplňte rok Vašeho narození.");
 		}
 	}
 
@@ -56,7 +114,22 @@ class DatingRegistrationBaseForm extends BaseForm {
 
 		$age = new DateTime();
 		$age->setDate($values->year, $values->month, $values->day);
+		$this->adult($age);
 
+		/* nejdeli o muže, ženu či skupinu, musí být vyplněn i druhý rok narození */
+		if (isset($values->type) && $values->type != UserDao::PROPERTY_MAN && $values->type != UserDao::PROPERTY_WOMAN && $values->type != UserDao::PROPERTY_GROUP) {
+			/* vyplňěné všechny */
+			if ($values->yearSecond && $values->monthSecond && $values->daySecond) {
+				$age = new DateTime();
+				$age->setDate($values->yearSecond, $values->monthSecond, $values->daySecond);
+				$this->adult($age);
+			} else {
+				$this->addError("Vyplňtě obě data narození. Vaše i partnera.");
+			}
+		}
+	}
+
+	private function adult($age) {
 		$now = new DateTime();
 		$diff = $now->diff($age);
 		if ($diff->y < 18) {
@@ -76,6 +149,21 @@ class DatingRegistrationBaseForm extends BaseForm {
 		unset($values["year"]);
 		unset($values["month"]);
 		unset($values["day"]);
+		return $age;
+	}
+
+	/**
+	 * Vytvoří datum narození ze zadaných hodnot do formuláře.
+	 * @param Nette\ArrayHash $values Hodnoty formuláře.
+	 * @return Nette\DateTime Datum narození uživatele.
+	 */
+	public function getSecondAge($values) {
+		$age = new DateTime();
+		$age->setDate($values->yearSecond, $values->monthSecond, $values->daySecond);
+
+		unset($values["yearSecond"]);
+		unset($values["monthSecond"]);
+		unset($values["daySecond"]);
 		return $age;
 	}
 

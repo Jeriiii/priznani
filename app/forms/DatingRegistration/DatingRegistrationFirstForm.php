@@ -21,18 +21,23 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 	/** @var \Nette\Http\SessionSection */
 	private $regSession;
 
+	/** @var \Nette\Http\SessionSection */
+	private $regCoupleSession;
+
 	/** @var array Možnosti pro zaškrtnutí s kým se chci potkat. */
 	private $wantToMeetOption = array(1 => "ano", 2 => "nezáleží", 0 => "ne");
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, $regSession = NULL) {
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, $regSession = NULL, $regCoupleSession = NULL) {
 		parent::__construct($parent, $name);
 
 		$this->userDao = $userDao;
 		$this->regSession = $regSession;
+		$this->regCoupleSession = $regCoupleSession;
 
 		$this->addGroup('Základní údaje:');
 
-		$this->addAge($regSession->age);
+		$secondAge = !empty($regCoupleSession) ? $regCoupleSession->age : NULL;
+		$this->addAge($regSession->age, $secondAge, $regSession->type, TRUE);
 
 		$this->addSelect('type', 'Jsem:', $this->userDao->getUserPropertyOption());
 
@@ -61,6 +66,7 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 
 		$this->regSession->role = 'unconfirmed_user';
 		$this->regSession->age = $this->getAge($values);
+		$this->regCoupleSession->age = $this->getSecondAge($values);
 		$this->regSession->vigor = $this->getVigor($this->regSession->age);
 		$this->regSession->type = $values->type;
 

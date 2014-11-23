@@ -40,6 +40,10 @@ class DatingRegistrationPresenter extends BasePresenter {
 		$this->setLayout("datingLayout");
 	}
 
+	public function renderDefault() {
+		$this->template->type = $this->getRegSession()->type;
+	}
+
 	public function registred() {
 		$userSession = $this->getRegSession();
 
@@ -146,7 +150,7 @@ class DatingRegistrationPresenter extends BasePresenter {
 	}
 
 	protected function createComponentFirstRegForm($name) {
-		return new Frm\DatingRegistrationFirstForm($this->userDao, $this, $name, $this->getRegSession());
+		return new Frm\DatingRegistrationFirstForm($this->userDao, $this, $name, $this->getRegSession(), $this->getRegSessionForCouple());
 	}
 
 	protected function createComponentSecondRegForm($name) {
