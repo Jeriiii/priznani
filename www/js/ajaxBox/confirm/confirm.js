@@ -20,6 +20,8 @@ var fnInitConfirm = function() {
 	
 };
 
+fnInitConfirm();
+
 /* zavolá se po načtení stránky nebo ajaxovém požadavku */
 $.nette.ext('complete', {
     complete: function() {

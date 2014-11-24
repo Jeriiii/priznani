@@ -16,22 +16,23 @@ Feature: User's info
 		And I should see "Vzdělání <education>"
 		And I should see "Status <status>"
 		And I should see "Sexuální orientace <orientation>"
-		And I should see "Trojka <threesome> " 
-		And I should see "Anální sex <anal>"
-		And I should see "Skupinový sex <group>"
-		And I should see "BDSM <BDSM>"
-		And I should see "Polykání <swallow>"
-		And I should see "Orální sex <oral>"
-		And I should see "Piss <piss>"
-		And I should see "Sex masáž <massage>"
-		And I should see "Petting <petting>"
-		And I should see "Fisting <fisting>"
-		And I should see "Hluboké kouření <deepThroat>"
+############################ v první verzi pos neobsahuje toto nastavení
+# 		And I should see "Trojka <threesome> " 
+# 		And I should see "Anální sex <anal>"
+# 		And I should see "Skupinový sex <group>"
+# 		And I should see "BDSM <BDSM>"
+# 		And I should see "Polykání <swallow>"
+# 		And I should see "Orální sex <oral>"
+# 		And I should see "Piss <piss>"
+# 		And I should see "Sex masáž <massage>"
+# 		And I should see "Petting <petting>"
+# 		And I should see "Fisting <fisting>"
+# 		And I should see "Hluboké kouření <deepThroat>"
 		And I should see "Délka penisu (cm) <penisLenght>"
 		And I should see "Obvod penisu <penisWidth>"
 		And I should see "Hledám <lookFor>"
 
 		Examples:
-			| user				| name			 | firstSentence	 | userProperty | about						| age | tallness     | bodyType | smoking		| alcohol	| education | status | orientation	| threesome | anal	| group | BDSM	| swallow	| sperm | oral	| piss	| massage	| petting | fisting | deepThroat | penisLenght	| penisWidth | lookFor			|
-			| user@test.cz		| Test User		 | Oh bože, už budu. | Muž          | Hledám zábavu a vzrušení. | 26  | 180 - 190 cm | plnoštíhlá | příležitostně | často		| vysoké	| volný	 | hetero		| ano		| ne	| ano	| ano	| ne		| ne	| ano	| ne	| ano		| ano	  |	ne		| ano		 | 3		| 8cm-11cm	 | ženu, ženský pár	|	
+			| user				| name			 | firstSentence	 | userProperty | about						| age | tallness     | bodyType | smoking		| alcohol	| education | status | orientation	|  penisLenght	| penisWidth | lookFor			|
+			| user@test.cz		| Test User		 | Oh bože, už budu. | Muž          | Hledám zábavu a vzrušení. | 26  | 180 - 190 cm | plnoštíhlá | příležitostně | často		| vysoké	| volný	 | hetero	 | 3		| 8cm-11cm	 | ženu, ženský pár	|	
 			

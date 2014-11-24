@@ -38,15 +38,6 @@ class DatingRegistrationBaseSomebodyForm extends DatingRegistrationBaseForm {
 		$this->addSelect('shape', 'Postava:', $users->getUserShapeOption())
 			->setPrompt("- vyberte -")
 			->addRule(Form::FILLED, "Vyberte váší postavu");
-		$this->addSelect('smoke', 'Kouřím:', $users->getUserHabitOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte zda kouříte");
-		$this->addSelect('drink', 'Alkohol:', $users->getUserHabitOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte zda pijete");
-		$this->addSelect('graduation', 'Vzdělání:', $users->getUserGraduationOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte Vaše vzdělání");
 	}
 
 }

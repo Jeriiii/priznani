@@ -133,7 +133,7 @@ class EditPresenter extends ProfilBasePresenter {
 		$userID = $this->getUser()->getId();
 		$user = $this->userDao->find($userID);
 
-		return new Frm\DatingEditFirstForm($this->userPropertyDao, $this->userDao, $user, $this, $name);
+		return new Frm\DatingEditFirstForm($this->userPropertyDao, $this->userDao, $user, $user->couple, $this, $name);
 	}
 
 	protected function createComponentSecondEditForm($name) {
@@ -154,10 +154,6 @@ class EditPresenter extends ProfilBasePresenter {
 
 	protected function createComponentFourthEditManForm($name) {
 		return new Frm\DatingEditManFourthForm($this->coupleDao, $this->userDao, $this, $name);
-	}
-
-	protected function createComponentInterestedInForm($name) {
-		return new Frm\InterestedInForm($this->userPropertyDao, $this->userDao, $this, $name);
 	}
 
 	public function createComponentMyUserGalleries() {
