@@ -11,7 +11,7 @@ use POS\Model\UserDao,
 	POS\Model\ChatMessagesDao;
 
 /**
- * Description of FooListener
+ * Listener starající se o přidělování mincí
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */

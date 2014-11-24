@@ -131,8 +131,9 @@
 			{/ifset}
 			{control userMenu}
 		{if $user->isLoggedIn()}
-			<a href="#" title="Platby" class="payment-btn user-btn" id="coins-btn"></a>
-			{control payment}
+			{* skryto pro první verzi přiznání *}
+			{*<a href="#" title="Platby" class="payment-btn user-btn" id="coins-btn"></a>
+			{control payment} *}
 			{control activities}
 			<a href="#" title="Poslední zprávy" class="user-btn" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
 		{/if}

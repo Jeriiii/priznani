@@ -22,7 +22,6 @@ class DatingRegistrationWomanFourthForm extends DatingRegistrationBaseWomanForm 
 		parent::__construct($userDao, $parent, $name);
 
 		$this->regSession = $regSession;
-		$this->addAge($regSession->age);
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->onValidate[] = callback($this, 'validateAge');
@@ -35,15 +34,11 @@ class DatingRegistrationWomanFourthForm extends DatingRegistrationBaseWomanForm 
 	public function submitted($form) {
 		$values = $form->values;
 
-		$this->regSession->age = $this->getAge($values);
 		$this->regSession->vigor = $this->getVigor($this->regSession->age);
 		$this->regSession->marital_state = $values->marital_state;
 		$this->regSession->orientation = $values->orientation;
 		$this->regSession->tallness = $values->tallness;
 		$this->regSession->shape = $values->shape;
-		$this->regSession->smoke = $values->smoke;
-		$this->regSession->drink = $values->drink;
-		$this->regSession->graduation = $values->graduation;
 		$this->regSession->bra_size = $values->bra_size;
 		$this->regSession->hair_colour = $values->hair_colour;
 		$this->regSession->penis_length = "";

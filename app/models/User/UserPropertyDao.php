@@ -46,6 +46,7 @@ class UserPropertyDao extends UserBaseDao {
 	const COLUMN_REGION_ID = "regionID";
 	const COLUMN_PREFERENCES_ID = "preferencesID";
 	const COLUMN_COINS = "coins";
+	const COLUMN_SCORE = "score";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -77,14 +78,11 @@ class UserPropertyDao extends UserBaseDao {
 		$property[UserPropertyDao::COLUMN_WANT_TO_MEET_COUPLE_MEN] = $data->want_to_meet_couple_men;
 		$property[UserPropertyDao::COLUMN_WANT_TO_MEET_COUPLE_WOMEN] = $data->want_to_meet_couple_women;
 		$property[UserPropertyDao::COLUMN_WANT_TO_MEET_GROUP] = $data->want_to_meet_group;
-		$data = $this->getCityIDs($data);
-		$property[UserPropertyDao::COLUMN_CITY_ID] = $data->cityID;
-		$property[UserPropertyDao::COLUMN_DISTRICT_ID] = $data->districtID;
-		$property[UserPropertyDao::COLUMN_REGION_ID] = $data->regionID;
 		return $sel->insert($property);
 	}
 
 	/**
+	 * @deprecated
 	 * Přijme názvy města/okresu/kraje a vrátí jejich id.
 	 * @param Nette\Http\Session|\Nette\ArrayHash $data Pole původních dat.
 	 * @return Nette\Http\Session|\Nette\ArrayHash Pole dat s ID
@@ -111,24 +109,62 @@ class UserPropertyDao extends UserBaseDao {
 	/**
 	 * Přidá uživateli určité množství zlaťáků
 	 * @param int $userID id uživatele, kterého se to týká
-	 * @param int $amount množství zlatek
+	 * @param int|float $amount množství zlatek
 	 */
 	public function incraseCoinsBy($userID, $amount) {
+		$this->incrasePropertyBy($userID, $amount, self::COLUMN_COINS);
+	}
+
+	/**
+	 * Odebere uživateli určité množství zlaťáků. Nemůže mít méně než 0
+	 * @param int $userID id uživatele, kterého se to týká
+	 * @param int|float $amount množství zlatek
+	 */
+	public function decraseCoinsBy($userID, $amount) {
+		$this->decrasePropertyBy($userID, $amount, self::COLUMN_COINS);
+	}
+
+	/**
+	 * Přidá uživateli určité množství bodů
+	 * @param int $userID id uživatele, kterého se to týká
+	 * @param int $amount množství bodů
+	 */
+	public function incraseScoreBy($userID, $amount) {
+		$this->incrasePropertyBy($userID, $amount, self::COLUMN_SCORE);
+	}
+
+	/**
+	 * Odebere uživateli určité množství bodů. Nemůže mít méně než 0
+	 * @param int $userID id uživatele, kterého se to týká
+	 * @param int $amount množství bodů
+	 */
+	public function decraseScoreBy($userID, $amount) {
+		$this->decrasePropertyBy($userID, $amount, self::COLUMN_SCORE);
+	}
+
+	/**
+	 * Přidá uživateli určité množství dané vlastnosti
+	 * @param int $userID id uživatele, kterého se to týká
+	 * @param int|float $amount množství
+	 * @param $column_name jméno sloupce v user_property
+	 */
+	public function incrasePropertyBy($userID, $amount, $column_name) {
 		$sel = $this->createSelection(UserDao::TABLE_NAME);
 		$propId = $sel->wherePrimary($userID)
 			->fetch()
 			->offsetGet(UserDao::COLUMN_ID);
 		$sel2 = $this->getTable();
 		$sel2->where(self::COLUMN_ID, $propId)
-			->update(array(self::COLUMN_COINS => new SqlLiteral(self::COLUMN_COINS . ' + ' . $amount)));
+			->update(array($column_name => new SqlLiteral($column_name . ' + ' . $amount)));
 	}
 
 	/**
-	 * Odebere uživateli určité množství zlaťáků. Nemůže mít méně než 0
+	 * Odebere uživateli určité číslo z nějaké vlastnosti. Nemůže mít méně než 0
 	 * @param int $userID id uživatele, kterého se to týká
-	 * @param int $amount množství zlatek
+	 * @param int|float $amount množství
+	 * @param $column_name jméno sloupce v user_property
 	 */
-	public function decraseCoinsBy($userID, $amount) {
+	public function decrasePropertyBy($userID, $amount, $column_name) {
 		$selu = $this->createSelection(UserDao::TABLE_NAME); //ziskani id uzivatele
 		$propId = $selu->wherePrimary($userID)
 			->fetch()
@@ -138,10 +174,10 @@ class UserPropertyDao extends UserBaseDao {
 		$sel2 = $this->getTable();
 		$current = $sel->wherePrimary($propId)
 			->fetch()
-			->offsetGet(self::COLUMN_COINS);
+			->offsetGet($column_name);
 		$updated = max(array(0, $current - $amount));
 		return $sel2->where(self::COLUMN_ID, $userID)
-				->update(array(self::COLUMN_COINS => $updated));
+				->update(array($column_name => $updated));
 	}
 
 	/**

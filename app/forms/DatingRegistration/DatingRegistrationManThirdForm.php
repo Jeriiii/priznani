@@ -36,9 +36,6 @@ class DatingRegistrationManThirdForm extends DatingRegistrationBaseManForm {
 		$this->regSession->orientation = $values->orientation;
 		$this->regSession->tallness = $values->tallness;
 		$this->regSession->shape = $values->shape;
-		$this->regSession->smoke = $values->smoke;
-		$this->regSession->drink = $values->drink;
-		$this->regSession->graduation = $values->graduation;
 		$this->regSession->bra_size = "";
 		$this->regSession->hair_colour = "";
 		$this->regSession->penis_length = $values->penis_length;

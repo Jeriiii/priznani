@@ -122,10 +122,10 @@ class OnePagePresenter extends BasePresenter {
 	public $enumPlaceDao;
 
 	/**
-	 * @var \POS\Model\LikeCommentDao
+	 * @var \POS\Model\LikeImageCommentDao
 	 * @inject
 	 */
-	public $likeCommentDao;
+	public $likeImageCommentDao;
 
 	/**
 	 * @var \POS\Model\CommentImagesDao
@@ -202,7 +202,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeCOnfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao, $this->loggedUser);
+		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeCOnfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao, $this->loggedUser);
 	}
 
 	public function createComponentJs() {
@@ -257,12 +257,12 @@ class OnePagePresenter extends BasePresenter {
 	 * Uloží preferované příspěvky uživatele do streamu.
 	 */
 	private function fillCorrectDataForStream() {
-		if ($this->getUser()->isLoggedIn() && !empty($this->loggedUser->propertyID)) {
+		if ($this->getUser()->isLoggedIn() && isset($this->loggedUser->property)) {
 			$this->initializeStreamUserPreferences();
 			$this->streamUserPreferences->calculate();
 			$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
 		} else {
-			$this->dataForStream = $this->streamDao->getAll("DESC");
+			$this->dataForStream = $this->streamDao->getForUnloggedUser("DESC");
 		}
 	}
 

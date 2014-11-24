@@ -6,13 +6,15 @@
 
 namespace POS\Model;
 
+use POS\Model\YouAreSexyDao;
+
 /**
  * ImageLikesDao
  * slouží k práci s lajkama obrázků
  *
  * @author Daniel Holubář
  */
-class ImageLikesDao extends AbstractDao implements ILikeDao {
+class ImageLikesDao extends BaseLikeDao implements ILikeDao {
 
 	/** @var Nette\Database */
 	protected $database;
@@ -32,8 +34,9 @@ class ImageLikesDao extends AbstractDao implements ILikeDao {
 	 * Přidá vazbu mezi obrázkem a uživatelem, který ho lajkl
 	 * @param int $imageID ID obrázku, který je lajkován
 	 * @param int $userID ID uživatele, který lajkuje
+	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
 	 */
-	public function addLiked($imageID, $userID) {
+	public function addLiked($imageID, $userID, $ownerID) {
 		/* přidá vazbu mezi obr. a uživatelem */
 		$sel = $this->getTable();
 		$sel->insert(array(
@@ -49,6 +52,9 @@ class ImageLikesDao extends AbstractDao implements ILikeDao {
 				UserImageDao::COLUMN_LIKES => $image->likes + 1
 			));
 		}
+
+		/* přidá liknutí do aktivit cílovýho uživatele */
+		$this->addActivity($ownerID, $userID, $image->id);
 
 		return $image;
 	}
@@ -71,6 +77,37 @@ class ImageLikesDao extends AbstractDao implements ILikeDao {
 			return TRUE;
 		} else {
 			return FALSE;
+		}
+	}
+
+	/**
+	 * Přidá lajk do aktivit
+	 * @param int $ownerID ID uživatele, kterému obrázek patří.
+	 * @param int $creatorID ID uživatele, který obrázek lajknul
+	 * @param int $imageID ID obrázku.
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function addActivity($ownerID, $creatorID, $imageID) {
+		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
+			$sel = $this->getActivityTable();
+			$type = "like";
+			$activity = ActivitiesDao::createImageActivityStatic($creatorID, $ownerID, $imageID, $type, $sel);
+			return $activity;
+		}
+		return NULL;
+	}
+
+	/**
+	 * Odstraní lajk z aktivit
+	 * @param int $ownerID ID uživatele, kterému obrázek patří.
+	 * @param int $creatorID ID uživatele, který obrázek lajknul
+	 * @param int $imageID ID obrázku.
+	 */
+	public function removeActivity($ownerID, $creatorID, $imageID) {
+		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
+			$sel = $this->getActivityTable();
+			$type = "like";
+			ActivitiesDao::removeImageActivityStatic($creatorID, $ownerID, $imageID, $type, $sel);
 		}
 	}
 

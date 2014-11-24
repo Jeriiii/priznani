@@ -1,0 +1,2 @@
+ALTER TABLE `users_properties`
+	ADD COLUMN `score` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `coins`;

@@ -422,10 +422,11 @@ class UserDao extends UserBaseDao {
 			'O mně' => $userProperty->about_me,
 		);
 		$baseData = $this->getBaseData($userProperty);
-		$other = $this->getOtherData($userProperty);
+		// v první verzi pos nebudou tyto informace
+		//$other = $this->getOtherData($userProperty);
 		$sex = $this->getSex($userProperty);
 		$seek = $this->getWantToMeet($userProperty);
-		return $baseUserData + $baseData + $other + $sex + $seek;
+		return $baseUserData + $baseData /* + $other */ + $sex + $seek;
 	}
 
 	/**

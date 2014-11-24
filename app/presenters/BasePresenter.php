@@ -19,6 +19,7 @@ use POS\Ajax\ExampleHandle,
 use POSComponent\Payment;
 use NetteExt\Serialize\Serializer;
 use NetteExt\Serialize\Relation;
+use POS\Model\PaymentDao;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -74,6 +75,12 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public $activityReporter;
 
+	/**
+	 * @var \POS\Model\PaymentDao
+	 * @inject
+	 */
+	public $paymentDao;
+
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
@@ -88,6 +95,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 				$relGallery = new Relation("gallery");
 				$relProperty = new Relation("property");
 				$relProfilPhoto->addRel($relGallery);
+				$relProfilPhoto->addRel(new Relation("score"));
 
 				$ser = new Serializer($user);
 				$ser->addRel($relProfilPhoto);
@@ -239,7 +247,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 * @return \Activities Komponenta aktivit
 	 */
 	protected function createComponentActivities() {
-		$activities = new Activities($this->getUser()->id, $this->activitiesDao);
+		$activities = new Activities($this->activitiesDao, $this->loggedUser, $this->paymentDao);
 		return $activities;
 	}
 
@@ -402,13 +410,13 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	public function createComponentJsLayoutLoggedIn() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
-			'activities.js',
 			'chat/core.js',
 			'chat/init.js',
 			'chat/jquery.ui.chatbox/jquery.ui.chatbox.js',
 			'chat/jquery.ui.chatbox/chatboxManager.js',
 			'chat/toogleContacts.js',
-			'ajaxBox/ajaxbox-signed-in-init.js'
+			'ajaxBox/ajaxbox-signed-in-init.js',
+			'ajaxBox/activities/activities.js',
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');

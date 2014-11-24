@@ -15,14 +15,21 @@
 			</tr>
 
 			<tr>
+				<td>{label type /}	{input type}</td>
+			</tr>
+			
+			<tr>
 				<td>
-					<label for="frm-firstRegForm">Datum narození:</label>
+					<label for="frm-firstRegForm" id="label-datebirth-first">Datum narození:</label>
 					{input day class => date} {input month class => date} {input year class => date}
 				</td>
 			</tr>
-
-			<tr>
-				<td>{label type /}	{input type}</td>
+			
+			<tr id="second-birdhdate" {if empty($type) || $type == 1 || $type == 2 || $type == 6}style="display: none;"{/if}>
+				<td>
+					<label for="frm-firstRegForm" id="label-datebirth-second">Datum narození - partnera:</label>
+					{input daySecond class => date} {input monthSecond class => date} {input yearSecond class => date}
+				</td>
 			</tr>
 
 			<tr>
@@ -83,3 +90,7 @@
 
 </div>
 {/block}
+
+{block foot}
+{control js 'registration/second-birthdate.js'}
+{/block foot}
