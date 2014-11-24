@@ -20,9 +20,9 @@
 
 		return this.each(function () {
 			var $this = $(this);
-			
+
 			var isLoaded = $this.data("ajaxbox-is-loaded");
-			if(isLoaded == undefined) { //ochrana proti spuštění pluginu dvakrát na ten samý element - děje se při ajaxu
+			if (isLoaded == undefined) { //ochrana proti spuštění pluginu dvakrát na ten samý element - děje se při ajaxu
 				init($this, boxopts);
 				$this.data("ajaxbox-is-loaded", true);
 			}
@@ -105,6 +105,8 @@
 		reloadPermitted: function (opts) {
 			return true;
 		},
+		/* okno se otevře hned po inicializaci */
+		openOnStart: false,
 		/* CSS třída přiřazená rodičovskému elementu - zde lze nastavit rozměry okna apod */
 		theme: 'posAjaxBox',
 		/* automatické nastavení pozice okénka pod tlačítko (false pokud si ji chcete nastavit ve stylech) Při zapnutí bude pozice nastavena podle šipky */
@@ -136,11 +138,11 @@
 		/* zkontroluje, zda není tlačítko předané přes data elementu */
 		boxopts = getAttrData($this, boxopts);
 		boxopts = applyModulesStarts(boxopts);
-		
+
 		//obalení okénkem a potřebnými elementy
 		addHtml($this, boxopts);
 		///////////////
-			
+
 		addBinds(boxopts);
 		watchForUpdateNeed(boxopts);
 		if (boxopts.ajaxObserverId) {
@@ -149,8 +151,11 @@
 			});
 		}
 		applyModulesEnds(boxopts);
+		if (boxopts.openOnStart) {
+			console.log('prase');
+		}
 	}
-	
+
 	/**
 	 * Zkontroluje a nastavi nektera nastaveni. Pokud jsou prazdna, pokusi se je
 	 * nastavit z atributu data.
@@ -159,18 +164,22 @@
 	 * @returns {object} Nastavení pluginu.
 	 */
 	function getAttrData($box, opts) {
-		if(opts.buttonSelector === "" && $box.data("ajaxbox-btn") !== undefined) {
+		if (opts.buttonSelector === "" && $box.data("ajaxbox-btn") !== undefined) {
 			opts.buttonSelector = $box.data("ajaxbox-btn");
 		}
-		
-		if(opts.headerHtml === "" && $box.data("ajaxbox-header-html") !== undefined) {
+
+		if (opts.headerHtml === "" && $box.data("ajaxbox-header-html") !== undefined) {
 			opts.headerHtml = $box.data("ajaxbox-header-html");
 		}
-		
-		if(opts.loadUrl === "" && $box.data("ajaxbox-load-url") !== undefined) {
+
+		if (opts.loadUrl === "" && $box.data("ajaxbox-load-url") !== undefined) {
 			opts.loadUrl = $box.data("ajaxbox-load-url");
 		}
-		
+
+		if (opts.loadUrl === "" && $box.data("ajaxbox-open-on-start") !== undefined) {
+			opts.openOnStart = $box.data("ajaxbox-open-on-start");
+		}
+
 		return opts;
 	}
 
@@ -354,7 +363,7 @@
 				$('div[data-related="' + opts.buttonSelector + '"] .ajaxBoxData').append('<div class="noConvMessages">' + params.endMessage + '</div>');
 				$('div[data-related="' + opts.buttonSelector + '"] .loadingGif').css('display', 'none');
 			}
-			if(typeof params.dataArrived !== "undefined") {
+			if (typeof params.dataArrived !== "undefined") {
 				params.dataArrived(opts, data);
 			}
 		};
