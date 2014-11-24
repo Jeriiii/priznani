@@ -1,22 +1,23 @@
 Feature: Edit user profile
 
-	Scenario Outline: User can edit State
-		Given I am on "/"
-	    And I am signed in as "user@test.cz"
-		When I follow "Změna statusu"
-		Then I should see "Změna statusu"
-		And I select "<option>" from "statusID"
-		And I press "Změnit"
-		Then I should see "Status byl změněn"
-		And the "statusID" field should contain "<value>"
-
-
-	Examples:
-		| option					| value	|
-		| Poznávat nové přátele	| 1		|
-		| Chatovat				| 2		|
-		| Randit					| 3		|
-		| Sexovat				| 4		|
+######################### změna statusu uživatele byla odložena a není v první verzi přiznání 
+# 	Scenario Outline: User can edit State
+# 		Given I am on "/"
+# 	    And I am signed in as "user@test.cz"
+# 		When I follow "Změna statusu"
+# 		Then I should see "Změna statusu"
+# 		And I select "<option>" from "statusID"
+# 		And I press "Změnit"
+# 		Then I should see "Status byl změněn"
+# 		And the "statusID" field should contain "<value>"
+# 
+# 
+# 	Examples:
+# 		| option					| value	|
+# 		| Poznávat nové přátele	| 1		|
+# 		| Chatovat				| 2		|
+# 		| Randit					| 3		|
+# 		| Sexovat				| 4		|
 
 	Scenario: User can change Basic info 
 	    Given I am signed in as "user@test.cz"
