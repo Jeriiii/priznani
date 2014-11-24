@@ -402,7 +402,8 @@ class ShowPresenter extends ProfilBasePresenter {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
 			'stream.js',
-			'slimbox2.js'
+			'slimbox2.js',
+			'imgareaselect/jquery.imgareaselect.js'
 		));
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {

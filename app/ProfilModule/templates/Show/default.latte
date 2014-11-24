@@ -5,13 +5,22 @@
 		margin-top: 0;
 	}
     </style>
-    {control css 'profile/show.less', 'stream/list.less', 'chat/popup.less', 'comments/comments.less'}
+    {control css 'profile/show.less', 'stream/list.less', 'chat/popup.less', 'comments/comments.less', 'imgareaselect/default.less'}
 {/block}
 
 
 {block foot}
 	<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
+
 {control js}
+<script>
+$('.img-to-crop').imgAreaSelect({
+        handles: true,
+        onSelectEnd: function(){
+
+		}
+    });
+</script>
 
 <script>
 	$(document).ready(function () {
@@ -28,7 +37,6 @@
 </script>
 {/block}
 {block content}
-
 <section id="onepage">
 	<div id="content">
 		<div id="stream-menu">
@@ -37,10 +45,7 @@
 					{$userData|showProfMinDiv}
 					{if $isMyProfile}
 						<a id="addProfilePhoto" title="Nahrát profilovku" class="uploadProfilePhoto">Nahrát profilovku</a>
-						<div class="ajaxbox-popUp" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-header-html="Nahrát profilovku" data-ajaxbox-open-on-start="true">
 						{control uploadPhoto}
-						</div>
-
 					{/if}
 				</div>
 
