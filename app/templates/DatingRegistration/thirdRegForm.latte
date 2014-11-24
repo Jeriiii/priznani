@@ -1,0 +1,61 @@
+{block datingContent}
+<h2 class="window-title">3 z 3 REGISTRACE</h2>
+<div class="window-content third-form">
+	{form thirdRegForm}
+		<ul class="error" n:if="$form->hasErrors()">
+				<li n:foreach="$form->errors as $error">{$error}</li>
+		</ul>
+		<table>
+			<thead>
+				<th></th>
+				<th>{$firstManLabel}</th>
+				<th>{$secondManLabel}</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{label marital_state}{/label}</td>
+					<td>{input marital_state}</td>
+					{if $isCouple}<td>{input marital_stateSecond}</td>{/if}
+				</tr>
+				<tr>
+					<td>{label orientation}{/label}</td>
+					<td>{input orientation}</td>
+					{if $isCouple}<td>{input orientationSecond}</td>{/if}
+				</tr>
+				<tr>
+					<td>{label tallness}{/label}</td>
+					<td>{input tallness}</td>
+					{if $isCouple}<td>{input tallnessSecond}</td>{/if}
+				</tr>
+				<tr>
+					<td>{label shape}{/label}</td>
+					<td>{input shape}</td>
+					{if $isCouple}<td>{input shapeSecond}</td>{/if}
+				</tr>
+				<tr>
+					<td>{if $isFirstWoman}{label bra_size}{/label}{/if}{if $isSecondWoman}{label bra_sizeSecond}{/label}{/if}</td>
+					<td>{if $isFirstWoman}{input bra_size}{/if}</td>
+					{if $isCouple}<td>{if $isSecondWoman}{input bra_sizeSecond}{/if}</td>{/if}
+				</tr>
+				<tr>
+					<td>{if $isFirstWoman}{label hair_colour}{/label}{/if}{if $isSecondWoman}{label hair_colourSecond}{/label}{/if}</td>
+					<td>{if $isFirstWoman}{input hair_colour}{/if}</td>
+					{if $isCouple}<td>{if $isSecondWoman}{input hair_colourSecond}{/if}</td>{/if}
+				</tr>
+				<tr>
+					<td>{if $isFirstMan}{label penis_length}{/label}{/if}{if $isSecondMan}{label penis_lengthSecond}{/label}{/if}</td>
+					<td>{if $isFirstMan}{input penis_length}{/if}</td>
+					{if $isCouple}<td>{if $isSecondMan}{input penis_lengthSecond}{/if}</td>{/if}
+				</tr>
+				<tr>
+					<td>{if $isFirstMan}{label penis_width}{/label}{/if}{if $isSecondMan}{label penis_widthSecond}{/label}{/if}</td>
+					<td>{if $isFirstMan}{input penis_width}{/if}</td>
+					{if $isCouple}<td>{if $isSecondMan}{input penis_widthSecond}{/if}</td>{/if}
+				</tr>
+				<tr>
+					<td>{input send}</td>
+				</tr>
+			</tbody>
+		</table>
+	{/form}
+</div>

@@ -14,94 +14,49 @@ use POS\Model\UserPlaceDao;
 
 class EditPresenter extends ProfilBasePresenter {
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\CoupleDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CoupleDao @inject */
 	public $coupleDao;
 
-	/**
-	 * @var \POS\Model\UserPropertyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPropertyDao @inject */
 	public $userPropertyDao;
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserGalleryDao @inject */
 	public $userGalleryDao;
 
-	/**
-	 * @var \POS\Model\FriendRequestDao
-	 * @inject
-	 */
+	/** @var \POS\Model\FriendRequestDao @inject */
 	public $friendRequestDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\UserImageDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\EnumStatusDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumStatusDao @inject */
 	public $enumStatusDao;
 
-	/**
-	 * @var \POS\Model\UserPositionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPositionDao @inject */
 	public $userPositionDao;
 
-	/**
-	 * @var \POS\Model\EnumPositionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumPositionDao @inject */
 	public $enumPositionDao;
 
-	/**
-	 * @var \POS\Model\UserPlaceDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPlaceDao @inject */
 	public $userPlaceDao;
 
-	/**
-	 * @var \POS\Model\EnumPlaceDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumPlaceDao @inject */
 	public $enumPlaceDao;
 
-	/**
-	 * @var \POS\Model\CityDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CityDao @inject */
 	public $cityDao;
 
-	/**
-	 * @var \POS\Model\DistrictDao
-	 * @inject
-	 */
+	/** @var \POS\Model\DistrictDao @inject */
 	public $districtDao;
 
-	/**
-	 * @var \POS\Model\RegionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\RegionDao @inject */
 	public $regionDao;
 
 	/** @var ActiveRow User kterému se mají editovat data */
@@ -140,20 +95,8 @@ class EditPresenter extends ProfilBasePresenter {
 		return new Frm\DatingEditSecondForm($this->userPropertyDao, $this->userDao, $this, $name);
 	}
 
-	protected function createComponentThirdEditManForm($name) {
-		return new Frm\DatingEditManThirdForm($this->userPropertyDao, $this->userDao, $this, $name);
-	}
-
-	protected function createComponentThirdEditWomanForm($name) {
-		return new Frm\DatingEditWomanThirdForm($this->userPropertyDao, $this->userDao, $this, $name);
-	}
-
-	protected function createComponentFourthEditWomanForm($name) {
-		return new Frm\DatingEditWomanFourthForm($this->coupleDao, $this->userDao, $this, $name);
-	}
-
-	protected function createComponentFourthEditManForm($name) {
-		return new Frm\DatingEditManFourthForm($this->coupleDao, $this->userDao, $this, $name);
+	protected function createComponentThirdEditForm($name) {
+		return new Frm\DatingEditThirdForm($this->coupleDao, $this->userDao, $this->loggedUser->property, $this->loggedUser->couple, $this, $name);
 	}
 
 	public function createComponentMyUserGalleries() {

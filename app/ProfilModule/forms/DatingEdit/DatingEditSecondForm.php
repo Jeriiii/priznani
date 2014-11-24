@@ -67,6 +67,8 @@ class DatingEditSecondForm extends BaseForm {
 		unset($values["email"]);
 		unset($values["user_name"]);
 		$this->userPropertyDao->update($this->user->propertyID, $values);
+
+		$presenter->calculateLoggedUser();
 		$presenter->flashMessage('Změna identifikačních údajů byla úspěšná');
 		$presenter->redirect("this");
 	}
