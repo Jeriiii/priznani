@@ -121,19 +121,21 @@ class UploadImage extends UploadFile {
 	 * @param FileUpload $upload obrázek v formuláře
 	 * @param int $max_width maximální šířka obrázku
 	 * @param int $max_height max výška obrázku
-	 * @return cesta k obrázku
+	 * @return název obrázku s příponou
 	 */
 	public static function uploadToTemp(FileUpload $upload, $max_width, $max_height) {
-		$path = ImagePathCreator::getImgPath(Strings::random(8), self::suffix($upload->name), 'temp');
+		$filename = Strings::random(8);
+		$path = ImagePathCreator::getImgPath($filename, self::suffix($upload->name), 'temp');
 
 		while (file_exists($path)) {
-			$path = ImagePathCreator::getImgPath(Strings::random(8), self::suffix($upload->name), 'temp');
+			$filename = Strings::random(8);
+			$path = ImagePathCreator::getImgPath($filename, self::suffix($upload->name), 'temp');
 		}
 		$upload->move($path);
 		$image = Image::fromFile($path);
 		$image->resize($max_width, $max_height);
 		$image->save($path);
-		return $path;
+		return $filename . '.' . self::suffix($upload->name);
 	}
 
 	/**

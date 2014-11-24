@@ -1,7 +1,9 @@
 {snippet 'cropImageUpload'}
-{*ifset $imageUploaded*}
+{ifset $uploadedImagePath}
+		<img src="{$basePath}/images/temp/{$uploadedImagePath}" alt="Prosím nastavte oříznutí obrázku" />
+		{control afterUploadForm}
+		
+	{else}
 		{control firstImageUploadForm}
-		{*control afterUploadForm*}
-	{*else}
-{/ifset*}
+{/ifset}
 {/snippet}

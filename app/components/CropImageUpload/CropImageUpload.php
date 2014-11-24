@@ -9,6 +9,9 @@ namespace POSComponent\CropImageUpload;
 use Nette\Application\UI\Form\BaseForm;
 use POSComponent\BaseProjectControl;
 use Nette\Application\UI\Form as Frm;
+use POS\Model\UserGalleryDao;
+use POS\Model\UserImageDao;
+use POS\Model\StreamDao;
 
 /**
  * Zprostředkovává upload obrázku, který posléze umožňuje oříznout
@@ -18,16 +21,37 @@ use Nette\Application\UI\Form as Frm;
 class CropImageUpload extends BaseProjectControl {
 
 	/**
-	 * @var BaseForm
+	 * @var \POS\Model\UserGalleryDao
+	 * @inject
 	 */
-	public $formToUpload;
+	public $userGalleryDao;
+
+	/**
+	 * @var \POS\Model\UserImageDao
+	 * @inject
+	 */
+	public $userImageDao;
+
+	/**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
+
+	/**
+	 * Cesta k předtím nahranému obrázku
+	 * @var string
+	 */
+	public $cropImagePath = NULL;
 
 	/**
 	 * Standardní konstruktor
 	 */
-	function __construct($parent = NULL, $name = NULL) {
+	function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-//		$this->formToUpload = $formToUpload;
+		$this->userImageDao = $userImageDao;
+		$this->streamDao = $streamDao;
+		$this->userGalleryDao = $userGalleryDao;
 	}
 
 	/**
@@ -37,7 +61,19 @@ class CropImageUpload extends BaseProjectControl {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/cropImageUpload.latte');
 
+		if (!empty($this->cropImagePath)) {
+			$template->uploadedImagePath = $this->cropImagePath;
+		}
+
 		$template->render();
+	}
+
+	/**
+	 * Zpracování signálu, že chceme editovat obrázek, který jsme předtím nahráli
+	 * @param type $path cesta k obrázku
+	 */
+	public function handleCrop($path) {
+		$this->cropImagePath = $path;
 	}
 
 	/**
@@ -46,7 +82,7 @@ class CropImageUpload extends BaseProjectControl {
 	 * @return \Nette\Application\UI\Form\BaseForm
 	 */
 	protected function createComponentAfterUploadForm($name) {
-		//return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao);
+		return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
 	}
 
 	/**
