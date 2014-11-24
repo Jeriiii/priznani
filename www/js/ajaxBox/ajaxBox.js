@@ -136,10 +136,11 @@
 		/* zkontroluje, zda není tlačítko předané přes data elementu */
 		boxopts = getAttrData($this, boxopts);
 		boxopts = applyModulesStarts(boxopts);
+		
 		//obalení okénkem a potřebnými elementy
 		addHtml($this, boxopts);
 		///////////////
-
+			
 		addBinds(boxopts);
 		watchForUpdateNeed(boxopts);
 		if (boxopts.ajaxObserverId) {

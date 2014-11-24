@@ -30,6 +30,7 @@ class RequestMessageForm extends BaseForm {
 		$message->addRule(Form::MAX_LENGTH, "Maximální délka zprávy je %d znaků", 200);
 
 		$this->addSubmit('send', 'Odeslat');
+		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
