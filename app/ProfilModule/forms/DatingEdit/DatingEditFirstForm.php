@@ -57,10 +57,12 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 
 		if (!empty($this->couple)) {
 			$this->couple->update(array(
-				"age" => $secondAge
+				"age" => $secondAge,
+				"vigor" => $this->getVigor($secondAge)
 			));
 		}
 
+		$presenter->calculateLoggedUser();
 		$presenter->flashMessage("Informace byla změněny");
 		$presenter->redirect('this');
 	}
