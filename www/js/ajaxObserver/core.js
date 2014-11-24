@@ -7,18 +7,18 @@
  * AjaxObserver neboli drbna. Registrují se u něj komponenty, za které pak pravidelně posílá na server pouze jediný požadavek
  */
 ;
-(function($) {
+(function ($) {
 
 	var observerOpts;
 
 	/* konstruktor */
-	$.fn.ajaxObserver = function(options) {
+	$.fn.ajaxObserver = function (options) {
 		var obopts = $.extend({}, $.fn.ajaxObserver.defaults, options);
 		setObserverOpts(obopts);
 		refreshRequest();
 
 		return{//vrácení funkce pro registraci, aby se jiné komponenty mohly registrovat u této instance
-			register: function(key, responseFunction) {
+			register: function (key, responseFunction) {
 				if (key in $.fn.ajaxObserver.regComponents) {
 					console.log('Duplicate key "' + key + '" registered to AjaxObserver. Try another key.');
 				} else {
@@ -57,16 +57,16 @@
 	function refreshRequest() {
 		var opts = this.observerOpts;
 
-		$.getJSON(opts.requestUrl, function(jsondata) {
-			$.each(jsondata, function(componentKey, data) {
+		$.getJSON(opts.requestUrl, function (jsondata) {
+			$.each(jsondata, function (componentKey, data) {
 				var refreshFunction = $.fn.ajaxObserver.regComponents[componentKey];
 				if (refreshFunction) {
 					refreshFunction(data);
 				}
 			});
 
-		}).always(function() {
-			setTimeout(function() {
+		}).always(function () {
+			setTimeout(function () {
 				refreshRequest();
 			}, opts.requestTimeout);
 		});

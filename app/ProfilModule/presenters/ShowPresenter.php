@@ -16,6 +16,7 @@ use POSComponent\AddToList\YouAreSexy;
 use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
 use Nette\DateTime;
+use POSComponent\CropImageUpload\CropImageUpload;
 
 class ShowPresenter extends ProfilBasePresenter {
 
@@ -24,166 +25,86 @@ class ShowPresenter extends ProfilBasePresenter {
 	 */
 	private $userID;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\PaymentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\PaymentDao @inject */
 	public $paymentDao;
 
-	/**
-	 * @var \POS\Model\CoupleDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CoupleDao @inject */
 	public $coupleDao;
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserGalleryDao @inject */
 	public $userGalleryDao;
 
-	/**
-	 * @var \POS\Model\UserImageDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\ConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ConfessionDao @inject */
 	public $confessionDao;
 
-	/**
-	 * @var \POS\Model\FriendRequestDao
-	 * @inject
-	 */
+	/** @var \POS\Model\FriendRequestDao @inject */
 	public $friendRequestDao;
 
-	/**
-	 * @var \POS\Model\YouAreSexyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\YouAreSexyDao @inject */
 	public $youAreSexyDao;
 
-	/**
-	 * @var \POS\Model\FriendDao
-	 * @inject
-	 */
+	/** @var \POS\Model\FriendDao @inject */
 	public $friendDao;
 
-	/**
-	 * @var \POS\Model\ImageLikesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ImageLikesDao @inject */
 	public $imageLikesDao;
 
-	/**
-	 * @var \POS\Model\LikeStatusDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeStatusDao @inject */
 	public $likeStatusDao;
 
-	/**
-	 * @var \POS\Model\UserPositionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPositionDao @inject */
 	public $userPositionDao;
 
-	/**
-	 * @var \POS\Model\EnumPositionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumPositionDao @inject */
 	public $enumPositionDao;
 
-	/**
-	 * @var \POS\Model\UserPlaceDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPlaceDao @inject */
 	public $userPlaceDao;
 
-	/**
-	 * @var \POS\Model\EnumPlaceDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumPlaceDao @inject */
 	public $enumPlaceDao;
 
-	/**
-	 * @var \POS\Model\UserAllowedDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserAllowedDao @inject */
 	public $userAllowedDao;
 
-	/**
-	 * @var \POS\Model\LikeImageCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeImageCommentDao @inject */
 	public $likeImageCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentImagesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentImagesDao @inject */
 	public $commentImagesDao;
 
-	/**
-	 * @var \POS\Model\LikeStatusCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeStatusCommentDao @inject */
 	public $likeStatusCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentStatusesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentStatusesDao @inject */
 	public $commentStatusesDao;
 
-	/**
-	 * @var \POS\Model\LikeConfessionCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeConfessionCommentDao @inject */
 	public $likeConfessionCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentConfessionsDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentConfessionsDao @inject */
 	public $commentConfessionsDao;
 
-	/**
-	 * @var \POS\Model\LikeConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeConfessionDao @inject */
 	public $likeConfessionDao;
 
-	/**
-	 * @var \POS\Model\VerificationPhotoRequestsDao
-	 * @inject
-	 */
+	/** @var \POS\Model\VerificationPhotoRequestsDao @inject */
 	public $verificationPhotoRequestDao;
+
+	/** @var \POS\Model\EnumVigorDao @inject */
+	public $enumVigorDao;
 	public $dataForStream;
 
-	/**
-	 * @var \POS\Model\EnumVigorDao
-	 * @inject
-	 */
-	public $enumVigorDao;
-
-	/**
-	 * @var \Nette\Database\Table\ActiveRow|\Nette\ArrayHash
-	 */
+	/** @var \Nette\Database\Table\ActiveRow|\Nette\ArrayHash */
 	private $userData;
 
 	/**
@@ -376,12 +297,12 @@ class ShowPresenter extends ProfilBasePresenter {
 	}
 
 	/**
-	 * formulář pro nahrávání profilových fotografií
+	 * cropovací formulář pro nahrávání profilových fotografií
 	 * @param type $name
-	 * @return \Nette\Application\UI\Form\ProfilePhotoUploadForm
+	 * @return CropImageUpload
 	 */
-	protected function createComponentUploadPhotoForm($name) {
-		return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+	protected function createComponentUploadPhoto($name) {
+		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
 	}
 
 	/**
@@ -401,7 +322,6 @@ class ShowPresenter extends ProfilBasePresenter {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
 			'stream.js',
-			'chat/popup.js',
 			'slimbox2.js'
 		));
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
@@ -413,10 +333,10 @@ class ShowPresenter extends ProfilBasePresenter {
 	}
 
 	protected function createComponentSendFriendRequest($name) {
-		$userIDFrom = $this->userID;
-		$userIDTo = $this->getUser()->id;
+		$userIDFrom = $this->getUser()->id;
+		$userIDTo = $this->userID;
 
-		return new SendFriendRequest($this->friendRequestDao, $userIDFrom, $userIDTo, $this, $name);
+		return new SendFriendRequest($this->activitiesDao, $this->friendRequestDao, $userIDFrom, $userIDTo, $this, $name);
 	}
 
 	protected function createComponentYouAreSexy($name) {

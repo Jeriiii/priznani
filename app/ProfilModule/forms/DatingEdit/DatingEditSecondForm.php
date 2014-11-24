@@ -7,6 +7,7 @@ use Nette\Application\UI\Form,
 	POS\Model\UserDao,
 	POS\Model\UserPropertyDao;
 use Nette\Database\Table\ActiveRow;
+use POS\Model\UserCategoryDao;
 
 class DatingEditSecondForm extends BaseForm {
 
@@ -19,12 +20,18 @@ class DatingEditSecondForm extends BaseForm {
 	/** @var \Nette\Database\Table\ActiveRow */
 	private $user;
 
-	public function __construct(UserPropertyDao $userPropertyDao, UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
+	/**
+	 * @var \POS\Model\UserCategoryDao
+	 */
+	public $userCategoryDao;
+
+	public function __construct(UserCategoryDao $userCategoryDao, UserPropertyDao $userPropertyDao, UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
 		$this->userPropertyDao = $userPropertyDao;
 		$presenter = $this->getPresenter();
 		$userID = $presenter->getUser()->getId();
+		$this->userCategoryDao = $userCategoryDao;
 
 		$this->user = $userDao->find($userID);
 
@@ -55,7 +62,7 @@ class DatingEditSecondForm extends BaseForm {
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->addSubmit('send', 'Uložit')
-			->setAttribute("class", "btn btn-info");
+			->setAttribute("class", "btn-main medium button");
 
 		return $this;
 	}
@@ -67,6 +74,10 @@ class DatingEditSecondForm extends BaseForm {
 		unset($values["email"]);
 		unset($values["user_name"]);
 		$this->userPropertyDao->update($this->user->propertyID, $values);
+
+		$this->userPropertyDao->updatePreferencesID($this->user->property, $this->userCategoryDao);
+
+		$presenter->calculateLoggedUser();
 		$presenter->flashMessage('Změna identifikačních údajů byla úspěšná');
 		$presenter->redirect("this");
 	}

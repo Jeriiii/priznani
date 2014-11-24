@@ -1,18 +1,18 @@
 /*
  * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
- */ 
- 
+ */
+
 /* základní nastavení vyskakovacího okénka */
-var baseSettings = { //inicializuje se nad daty, která mají být v okénku
+var baseSettings = {//inicializuje se nad daty, která mají být v okénku
 	buttonSelector: '#markedFromOtherBtn',
 	theme: "posPopUp", //použijí se implicitní styly, ale budou upraveny
 	autoPosition: 'center',
 	hideOthers: true,
-	headerHtml: "Jsem pro ně sexi" //header
+	headerHtml: "Jsem pro ně sexy" //header
 };
 var ajaxSettings = {};
 
-if(isUserPaying) {
+if (isUserPaying) {
 	/* má li uživatel placený účet, zobrazí se mu seznam uživatelů, kteří ho označili že je sexi */
 	/* vyskakovací okénko pro to, kolik lidí mě označilo jako sexi */
 	var ajaxSettings = {

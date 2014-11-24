@@ -8,7 +8,12 @@
 @unreaded-color: #fff3f5;
 @contact-item-height: 40px;/* výška položky kontaktů */
 @contact-item-vertical-padding: 4px;
-@online-indicator-size: 12px;
+
+
+/*@online-indicator-size: 12px;*//*ODKOMENTOVAT PRO ZAPNUTI ONLINE INDIKATORU*/
+@online-indicator-size: 0px;/* a smazat tohle*/
+
+
 /* interface */
 @chat-color: #2c2c2d;
 @text-color: #aeaeae;
@@ -75,6 +80,24 @@
 				border: 0;
 				border-bottom: 1px solid #737373;
 				
+			}
+			
+			#chat-go-to-search{
+				color: #737373;
+				display: block;
+				height: 30px;
+				
+				.chat-search-icon{
+					border: 0;
+				}
+				&:hover {
+					color: @text-color;
+					background: lighten(@chat-color, 10%);
+				}
+				span.text {
+					display: inline-block;
+					padding-top: 5px;
+				}
 			}
 			
 		}
@@ -170,6 +193,7 @@
 				img{
 					float: left;
 					width: 40px !important;
+					height: 40px !important;
 				}
 			}
 		
@@ -224,10 +248,19 @@
 			.chatbox-username{
 				font-weight: normal !important;
 				line-height: 30px;
+				cursor: pointer;
 				font-family: 'Source Sans Pro', Arial, sans-serif !important;
 				display: inline-block;
 				padding-left: 20px + @online-indicator-size !important;
+				color: white !important;
 				
+				&:hover{
+					text-decoration: underline;
+				}
+				
+				&:active{
+					color: white;
+				}
 			}
 			
 		 }

@@ -5,16 +5,17 @@
 		margin-top: 0;
 	}
     </style>
-    {control css 'profile/show.less', 'stream/list.less', 'chat/popup.less', 'comments/comments.less'}
+    {control css 'profile/show.less', 'stream/list.less', 'chat/popup.less', 'comments/comments.less', 'imgareaselect/default.less', 'imgareaselect/inWindow.less'}
 {/block}
 
-{block jqueryUI}
-	<script type="text/javascript" src="{$basePath}/js/jquery-ui.modals.min.js"></script>
-{/block}
 
 {block foot}
 	<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
+
 {control js}
+{* je to zvlast schvalne, nejak si to nerozumi s tou minimalizaci*}
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/jquery.imgareaselect.min.js"></script>
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/inits/profilePhoto.js"></script>
 
 <script>
 	$(document).ready(function () {
@@ -31,7 +32,6 @@
 </script>
 {/block}
 {block content}
-
 <section id="onepage">
 	<div id="content">
 		<div id="stream-menu">
@@ -39,12 +39,13 @@
 				<div class="user-profile-picture">
 					{$userData|showProfMinDiv}
 					{if $isMyProfile}
-						<a title="Nahrát profilovku" class="uploadProfilePhoto">Nahrát profilovku</a>
-						<div class="ajaxbox-popUp" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-header-html="Nahrát profilovku">
-						{control uploadPhotoForm}
+						<div class="photoLinkContainer">
+							<a class="photoLink uploadProfilePhoto" id="addProfilePhoto" title="Nahrát profilovku">Nahrát profilovku</a>
 						</div>
+						{control uploadPhoto}
 					{/if}
 				</div>
+
 				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
 				<span class="sexy-label">{$userData|sexyLabel}</span>
 				<span class="first-sentence">{$userData->property->first_sentence}</span>
@@ -54,7 +55,8 @@
 				{if $isMyProfile}
 					<a n:href=":Profil:Edit:default" class="profile-btn long-btn">Editovat</a>
 					<a title="Nahrát profilovku" class="profile-btn uploadProfilePhoto btn-main btn-small long-btn">Nahrát profilovku</a>
-					<a n:href="Galleries:verificationImageNew" class="profile-btn long-btn">Být ověřený uživatel</a>
+					{* skrytí žádostí o ověření pro první verzi přiznání *}
+					{*<a n:href="Galleries:verificationImageNew" class="profile-btn long-btn">Být ověřený uživatel</a>*}
 					<div class="clear"></div>
 				{else}
 				<div class="profile-btn like-action-panel">
@@ -62,13 +64,13 @@
 						{control youAreSexy}
 					</div>
 					<a href="#" title="Poslat zprávu" id="sendmessage-button" class="profile-btn btn-main btn-small right send-message-btn">
-						<img src="{$basePath}/images/icons/bubble-white.png" alt="Zpráva chatu" />
 					</a>
-					<div id="sendmessage-dialog">
+					<div class="ajaxbox-popUp" data-ajaxbox-btn="#sendmessage-button" data-ajaxbox-header-html="Poslat zprávu">
 						{control sendMessageForm}
 					</div>
 					<div class="clear"></div>
 				</div>
+
 				{/if}
 
 			{/if}
@@ -80,8 +82,8 @@
 			{/if}
 			<div class="spacer"></div>
 			<div class="delimiter red"></div>
-			<span class="red-title">O MNĚ {if $isMyProfile}<a n:href="Edit:">edit</a>{/if}</span>
-			<div class="delimiter red"></div>
+			<span class="red-title with-button">O MNĚ {if $isMyProfile}<a n:href="Edit:">upravit</a>{/if}</span>
+			<div class="delimiter red clear"></div>
 
 			{control userInfo "listFew", $userID}
 

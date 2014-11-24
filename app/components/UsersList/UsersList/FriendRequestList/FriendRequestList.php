@@ -40,8 +40,11 @@ class FriendRequestList extends UsersList {
 	 */
 	public function handleAccept($id) {
 		$this->friendRequestDao->accept($id);
-		$this->redrawControl();
-		//$this->getPresenter()->redirect(":Profil:Edit:friendRequests");
+		if ($this->presenter->isAjax()) {
+			$this->redrawControl();
+		} else {
+			$this->presenter->redirect("this");
+		}
 	}
 
 	/**

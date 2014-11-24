@@ -1,7 +1,7 @@
 // Need this to make IE happy
 // see http://soledadpenades.com/2007/05/17/arrayindexof-in-internet-explorer/
 if (!Array.indexOf) {
-	Array.prototype.indexOf = function(obj) {
+	Array.prototype.indexOf = function (obj) {
 		for (var i = 0; i < this.length; i++) {
 			if (this[i] == obj) {
 				return i;
@@ -12,7 +12,7 @@ if (!Array.indexOf) {
 }
 
 
-var chatboxManager = function() {
+var chatboxManager = function () {
 
 	// list of all opened boxes
 	var boxList = new Array();
@@ -24,26 +24,26 @@ var chatboxManager = function() {
 		gap: 20,
 		maxBoxes: 8,
 		offset: 300,
-		messageSent: function(dest, msg) {
+		messageSent: function (dest, msg) {
 			// override this
 			$("#" + dest).chatbox("option", "boxManager").addMsg(dest, msg);
 		}
 	};
 
-	var init = function(options) {
+	var init = function (options) {
 		$.extend(config, options)
 	};
 
 
-	var delBox = function(id) {
+	var delBox = function (id) {
 		// TODO
 	};
 
-	var getNextOffset = function() {
+	var getNextOffset = function () {
 		return config.offset + ((config.width + config.gap) * showList.length);
 	};
 
-	var boxClosedCallback = function(id) {
+	var boxClosedCallback = function (id) {
 		// close button in the titlebar is clicked
 		var idx = showList.indexOf(id);
 		if (idx != -1) {
@@ -63,7 +63,7 @@ var chatboxManager = function() {
 
 	// caller should guarantee the uniqueness of id
 	//returns true if box is created
-	var addBox = function(id, data, name) {
+	var addBox = function (id, data, name) {
 		var idx1 = showList.indexOf(id);
 		var idx2 = boxList.indexOf(id);
 		if (idx1 != -1) {
@@ -85,6 +85,7 @@ var chatboxManager = function() {
 				title: data.title,
 				hidden: false,
 				width: config.width,
+				href: data.href,
 				offset: getNextOffset(),
 				messageSent: config.messageSent,
 				boxClosed: boxClosedCallback
@@ -106,7 +107,7 @@ var chatboxManager = function() {
 	 * @param String name popisek zpravy (typicky odesilatel)
 	 * @param String msg text zpravy
 	 */
-	var addMessage = function(id, name, msg) {
+	var addMessage = function (id, name, msg) {
 		$("#" + id).chatbox("option", "boxManager").addMsg(name, msg);
 	};
 

@@ -23,6 +23,13 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 		$this->userDao = $userDao;
 		$this->regSession = $regSession;
 
+		//graphics
+		$renderer = $this->getRenderer();
+		$renderer->wrappers['controls']['container'] = 'div';
+		$renderer->wrappers['pair']['container'] = 'div';
+		$renderer->wrappers['label']['container'] = NULL;
+		$renderer->wrappers['control']['container'] = NULL;
+
 		$this->addText('email', 'Email')
 			->addRule(Form::FILLED, 'Email není vyplněn.')
 			->addRule(Form::EMAIL, 'Vyplněný email není platného formátu.')
@@ -42,7 +49,7 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 			->addRule(Form::FILLED, 'Úvodní věta není vyplněna.')
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Úvodní věta\" je 100 znaků.', 100)
 			->setAttribute('placeholder', 'max 100 znaků');
-		$this->addTextArea('about_me', 'O mně', 40, 10)
+		$this->addTextArea('about_me', 'O mně', 40, 3)
 			->addRule(Form::FILLED, 'O mně není vyplněno.')
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300)
 			->setAttribute('placeholder', 'max 300 znaků');
@@ -79,7 +86,7 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 		$this->regSession->first_sentence = $values->first_sentence;
 		$this->regSession->about_me = $values->about_me;
 
-		$presenter->redirect('Datingregistration:PreThirdRegForm');
+		$presenter->redirect('DatingRegistration:ThirdRegForm');
 	}
 
 	/**

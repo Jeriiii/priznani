@@ -120,10 +120,13 @@ class CommentImagesDao extends BaseCommentDao {
 	 * @param int $status ID statusu.
 	 */
 	public function addActivity($ownerID, $creatorID, $status) {
-		$sel = $this->getActivityTable();
-		$type = "comment";
-		$activity = ActivitiesDao::createImageActivityStatic($creatorID, $ownerID, $status, $type, $sel);
-		return $activity;
+		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
+			$sel = $this->getActivityTable();
+			$type = "comment";
+			$activity = ActivitiesDao::createImageActivityStatic($creatorID, $ownerID, $status, $type, $sel);
+			return $activity;
+		}
+		return NULL;
 	}
 
 	/**
@@ -133,10 +136,11 @@ class CommentImagesDao extends BaseCommentDao {
 	 * @param int $status ID statusu.
 	 */
 	public function removeActivity($ownerID, $creatorID, $status) {
-		$sel = $this->getActivityTable();
-		$type = "comment";
-		$activity = ActivitiesDao::removeImageActivityStatic($creatorID, $ownerID, $status, $type, $sel);
-		return $activity;
+		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
+			$sel = $this->getActivityTable();
+			$type = "comment";
+			$activity = ActivitiesDao::removeImageActivityStatic($creatorID, $ownerID, $status, $type, $sel);
+		}
 	}
 
 }

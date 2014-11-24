@@ -160,7 +160,26 @@
 		color: #cf0707;
 		text-decoration: underline;
 	}
+	
+	.first-sentence{
+		font-size: 14px;
+		display: block;
+		padding: 4px 0;
+		color: #222;
+	}
+	
+	.big-user-name{
+		font-weight: 200;
+		color: @red-color;
+		font-size: 40px;
+		letter-spacing: -3px;
+		display: block;
+	}
 }
+
+
+
+
 
 .profile-menu{
 	float: left;
@@ -245,4 +264,38 @@
 		}
 		
 	}
+}
+
+.userHead{
+	margin: 10px 20px;
+}
+.ajaxbox-popUp{
+	display: none;
+}
+
+.send-friend-request, .ajaxbox-popUp[data-ajaxbox-btn="#sendmessage-button"]{
+	
+	form{
+		label{
+			display: block;
+			text-align: left;
+			margin-left: 15%;
+			font-size: 18px;
+		}
+		textarea{
+			resize: none;
+			width: 60%;
+			padding: 4px 5%;
+			margin: 4px 15%;
+			background: #f4f4f4;
+			border-radius: 2px;
+			border: 1px solid #fafafa;
+			height: 170px;
+		}
+		input[type='submit']{
+			width: 70%;
+			margin: 4px 15%;
+		}
+	}
+	
 }

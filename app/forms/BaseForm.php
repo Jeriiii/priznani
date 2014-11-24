@@ -40,8 +40,8 @@ class BaseForm extends Form {
 
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-		$this->testMode = $this->getPresenter()->testMode;
-		$this->productionMode = $this->getPresenter()->productionMode;
+//		$this->testMode = $this->getPresenter()->testMode;
+//		$this->productionMode = $this->getPresenter()->productionMode;
 	}
 
 	/**

@@ -39,6 +39,7 @@ use POSComponent\Comments\StatusComments;
 use POSComponent\BaseLikes\ImageLikes;
 use POSComponent\BaseLikes\ConfessionLikes;
 use POSComponent\BaseLikes\StatusLikes;
+use POSComponent\CropImageUpload\CropImageUpload;
 
 class BaseStream extends BaseProjectControl {
 
@@ -209,7 +210,7 @@ class BaseStream extends BaseProjectControl {
 	 * Metoda nastavuje novy offset pro nacitani dalsich prispevku uzivatele
 	 */
 	public function setNewOffset() {
-// musí se nastavit i v jQuery pluginu
+		/* musí se nastavit i v jQuery pluginu */
 		$limit = 4;
 		if (!empty($this->offset)) {
 			$this->template->stream = $this->dataForStream->limit($limit, $this->offset);
@@ -237,8 +238,8 @@ class BaseStream extends BaseProjectControl {
 	 * @param type $name
 	 * @return \Nette\Application\UI\Form\ProfilePhotoUploadForm
 	 */
-	protected function createComponentUploadPhotoForm($name) {
-		return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+	protected function createComponentCropImageUpload($name) {
+		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
 	}
 
 	/**

@@ -62,7 +62,7 @@ class UserPropertyDao extends UserBaseDao {
 	 * @param Nette\Http\Session|\Nette\ArrayHash $data Data obsahující nejen informace o páru, musí se
 	 * proto probrat.
 	 */
-	public function registerProperty($data) {
+	public function registerProperty($data, UserCategoryDao $userCategoryDao) {
 		$sel = $this->getTable();
 		$data = $this->nullEmptyData($data);
 
@@ -78,14 +78,28 @@ class UserPropertyDao extends UserBaseDao {
 		$property[UserPropertyDao::COLUMN_WANT_TO_MEET_COUPLE_MEN] = $data->want_to_meet_couple_men;
 		$property[UserPropertyDao::COLUMN_WANT_TO_MEET_COUPLE_WOMEN] = $data->want_to_meet_couple_women;
 		$property[UserPropertyDao::COLUMN_WANT_TO_MEET_GROUP] = $data->want_to_meet_group;
-		$data = $this->getCityIDs($data);
-		$property[UserPropertyDao::COLUMN_CITY_ID] = $data->cityID;
-		$property[UserPropertyDao::COLUMN_DISTRICT_ID] = $data->districtID;
-		$property[UserPropertyDao::COLUMN_REGION_ID] = $data->regionID;
-		return $sel->insert($property);
+
+		$propertyRow = $sel->insert($property);
+
+		$this->updatePreferencesID($propertyRow, $userCategoryDao);
+
+		return $propertyRow;
 	}
 
 	/**
+	 * Správně nastaví nové preference uživatele.
+	 * @param ActiveRow $property
+	 */
+	public function updatePreferencesID(ActiveRow $property, UserCategoryDao $userCategoryDao) {
+		$myNewPreference = $userCategoryDao->getMyCategory($property);
+
+		$this->update($property->id, array(
+			UserPropertyDao::COLUMN_PREFERENCES_ID => $myNewPreference->id
+		));
+	}
+
+	/**
+	 * @deprecated
 	 * Přijme názvy města/okresu/kraje a vrátí jejich id.
 	 * @param Nette\Http\Session|\Nette\ArrayHash $data Pole původních dat.
 	 * @return Nette\Http\Session|\Nette\ArrayHash Pole dat s ID

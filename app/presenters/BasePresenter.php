@@ -16,10 +16,12 @@ use Nette\Security\User;
 use POS\Ajax\ExampleHandle,
 	POS\Ajax\AjaxCrate,
 	POS\Ajax\ChatConversationsHandle;
+use POS\Ajax\ActivitesHandle;
 use POSComponent\Payment;
 use NetteExt\Serialize\Serializer;
 use NetteExt\Serialize\Relation;
 use POS\Model\PaymentDao;
+use Nette\Http\SessionSection;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -86,27 +88,45 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		parent::startup();
 		if ($this->getUser()->isLoggedIn()) {
 			$this->activityReporter->handleUsersActivity($this->getUser());
-			$section = $this->getSession('loggedUser');
+			$section = $this->getSectionLoggedUser();
 			$section->setExpiration('20 minutes');
 			if (empty($section->loggedUser)) {
-				$user = $this->userDao->getUser($this->getUser()->getId());
-
-				$relProfilPhoto = new Relation("profilFoto");
-				$relGallery = new Relation("gallery");
-				$relProperty = new Relation("property");
-				$relProfilPhoto->addRel($relGallery);
-
-				$ser = new Serializer($user);
-				$ser->addRel($relProfilPhoto);
-				$ser->addRel($relProperty);
-
-				$sel = (array) $ser->toArrayHash();
-				/* vytazeni jen jednoho radku */
-				$userRow = array_shift($sel);
-				$section->loggedUser = $userRow;
+				$this->calculateLoggedUser();
 			}
 			$this->loggedUser = $section->loggedUser;
 		}
+	}
+
+	/**
+	 * @return Nette\Http\Session|Nette\Http\SessionSection
+	 */
+	protected function getSectionLoggedUser() {
+		$sectionLoggedUser = $this->getSession('loggedUser');
+		return $sectionLoggedUser;
+	}
+
+	/**
+	 * Uloží do sečny aktuální data o přihlášeném uživateli.
+	 */
+	public function calculateLoggedUser() {
+		$user = $this->userDao->getUser($this->getUser()->getId());
+		$section = $this->getSectionLoggedUser();
+
+		$relProfilPhoto = new Relation("profilFoto");
+		$relGallery = new Relation("gallery");
+		$relProperty = new Relation("property");
+		$relCouple = new Relation("couple");
+		$relProfilPhoto->addRel($relGallery);
+
+		$ser = new Serializer($user);
+		$ser->addRel($relProfilPhoto);
+		$ser->addRel($relProperty);
+		$ser->addRel($relCouple);
+
+		$sel = (array) $ser->toArrayHash();
+		/* vytazeni jen jednoho radku */
+		$userRow = array_shift($sel);
+		$section->loggedUser = $userRow;
 	}
 
 	public function beforeRender() {
@@ -508,6 +528,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 			//$handles->addHandle('chat', new ExampleHandle()); //příklad
 			$handles->addHandle('chatConversationWindow', new ChatConversationsHandle($this->chatManager, $this->getUser()->getId()));
+			$handles->addHandle('activities-observer', new ActivitesHandle($this->activitiesDao, $this->getUser()->getId()));
 			$this->ajaxObserver->sendRefreshRequests($this, $handles);
 		}
 	}

@@ -45,7 +45,7 @@
 			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">
 			<link rel="shortcut icon" href="{$basePath}/partyicon.ico" type="image/x-icon">
 		{else}
-		    {var $pagename = '<b>SEXY</b>PLAY<span>.cz</span>'}
+		    {var $pagename = '<b>DATE</b>NODE<span>.cz</span>'}
 			{ifset #meta}
 				{* inportujou se specialni meta tagy *}
 				{include #meta}
@@ -131,8 +131,9 @@
 			{/ifset}
 			{control userMenu}
 		{if $user->isLoggedIn()}
-			<a href="#" title="Platby" class="payment-btn user-btn" id="coins-btn"></a>
-			{control payment}
+			{* skryto pro první verzi přiznání *}
+			{*<a href="#" title="Platby" class="payment-btn user-btn" id="coins-btn"></a>
+			{control payment} *}
 			{control activities}
 			<a href="#" title="Poslední zprávy" class="user-btn" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
 		{/if}
@@ -188,17 +189,17 @@
 			{control jsLayout}
 
 			{if $user->isLoggedIn()}
-				{control jsLayoutLoggedIn}
-				{control chat}
 				<script>
-					$('body').activities();
-				</script>
-				<script>
-					//inicializace ajaxObserveru
+					//inicializace ajaxObserveru - nechat před ostatními skripty
 					var observer = $('body').ajaxObserver({
 						requestUrl: {$ajaxObserverLink}
 					});
 
+				</script>
+				{control jsLayoutLoggedIn}
+				{control chat}
+				<script>
+					$('body').activities();
 				</script>
 			{/if}
 

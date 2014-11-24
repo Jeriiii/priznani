@@ -15,6 +15,7 @@ use POS\Model\StreamDao;
 use NetteExt\Watermarks;
 use NetteExt\Path\ImagePathCreator;
 use NetteExt\Path\GalleryPathCreator;
+use Nette\Http\FileUpload;
 
 /**
  * Základní formulář pro nahrávání a ukládání obrázků
@@ -55,7 +56,7 @@ class UserGalleryImagesBaseForm extends BaseForm {
 
 	/**
 	 * Uloží obrázek do souboru, pokud je v pořádku.
-	 * @param \Form\Upload\FileUpload $image Instance nahraného obrázku
+	 * @param FileUpload $image Instance nahraného obrázku
 	 * @param int $id ID obrázku v databázi.
 	 * @param string $suffix Koncovka obrázku v databázi.
 	 * @param string $folder Složka galerie.
@@ -68,14 +69,20 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	 * @param bool $addWatermark přidání/nepřidání watermarku
 	 */
 	private function upload($image, $id, $suffix, $galleryID, $userID, $max_height, $max_width, $max_minheight, $max_minwidth, $addWatermarks = TRUE) {
-		if ($image->isOK() & $image->isImage()) {
+		if ($image instanceof Image || ($image->isOK() && $image->isImage())) {
 			/* uložení souboru a renačtení */
 			$galleryPath = GalleryPathCreator::getUserGalleryPath($galleryID, $userID);
 			File::createDir($galleryPath);
 
 			$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryID, $userID);
 
-			$paths = UploadImage::upload($image, $id, $suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
+			if ($image instanceof FileUpload) {
+				$paths = UploadImage::upload($image, $id, $suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
+			} else if ($image instanceof Image) {
+				$paths = UploadImage::moveImage($image, $id, $suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
+			} else {
+				throw new Exception('variable $image must by instance of FileUpload or Image');
+			}
 
 			if ($addWatermarks) {
 				foreach ($paths as $path) {
@@ -108,7 +115,7 @@ class UserGalleryImagesBaseForm extends BaseForm {
 				->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 * 1024)
 				->addCondition(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif');
 			if ($displayName) {
-				$this->addText($prefixImgName . self::IMAGE_NAME . $i, 'Jméno:')
+				$this->addText($prefixImgName . self::IMAGE_NAME . $i, 'Název:')
 					->addConditionOn($this[$prefixImgName . self::IMAGE_FILE . $i], Form::FILLED)
 					->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40);
 			}
@@ -141,11 +148,17 @@ class UserGalleryImagesBaseForm extends BaseForm {
 		}
 
 		foreach ($images as $image) {
-			if ($image[self::IMAGE_FILE]->isOK()) {
+			if ($image[self::IMAGE_FILE] instanceof Image || $image[self::IMAGE_FILE]->isOK()) {
 				//název obrázku zadaný uživatelem
 				$name = !empty($image[self::IMAGE_NAME]) ? $image[self::IMAGE_NAME] : "";
 				//koncovka souboru
-				$suffix = $this->suffix($image[self::IMAGE_FILE]->getName());
+				if ($image[self::IMAGE_FILE] instanceof Image) {
+					$suffix = $this->suffix($image[self::IMAGE_NAME]);
+					$name = '';
+				} else {
+					$suffix = $this->suffix($image[self::IMAGE_FILE]->getName());
+				}
+
 				//popis obrázku zadaný uživatelem
 				$description = !empty($image[self::IMAGE_DESCRIPTION]) ? $image[self::IMAGE_DESCRIPTION] : "";
 

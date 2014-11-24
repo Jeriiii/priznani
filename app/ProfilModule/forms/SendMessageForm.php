@@ -8,7 +8,7 @@ use POS\Chat\ChatManager;
 /**
  * Formulář pro odeslání zprávy do chatu
  */
-class SendMessageForm extends EditBaseForm {
+class SendMessageForm extends BaseForm {
 
 	/**
 	 * @var ChatManager
@@ -30,6 +30,7 @@ class SendMessageForm extends EditBaseForm {
 			->addRule(Form::FILLED, 'Nejprve vyplňte zprávu.')
 			->addRule(Form::MAX_LENGTH, 'Maximální délka zprávy je %d znaků.', 1000);
 
+		$this->setBootstrapRender();
 		$this->addSubmit('send', 'Odeslat')
 			->setAttribute("class", "btn-main medium button");
 		$this->onSuccess[] = callback($this, 'submitted');
