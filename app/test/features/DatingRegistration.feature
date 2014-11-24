@@ -36,9 +36,6 @@ Feature: Dating registration
 		And I select "normální" from "shape"
 		And I fill in "15" for "penis_length"
 		And I select "8cm-11cm" from "penis_width"
-		When I select "<day>" from "day"
-		And I select "<month>" from "month"
-		And I select "<year>" from "year"
 		And I press "send"
 		Then I should see "Byli jste úspěšně zaregistrováni. Prosím potvrďte svůj email."
 		And I should receive an email
