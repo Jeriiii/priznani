@@ -128,6 +128,31 @@
 		streamSnippetModule: false
 	};
 
+
+	/**
+	 * Otevře okénko
+	 * @param {array} opts nastavení okénka
+	 * @param {object} button objekt tlačítka, kterým byla událost vyvolána (nepovinné)
+	 */
+	$.fn.ajaxBox.openWindow = function (opts, button) {
+		if (!button) {
+			button = $(opts.buttonSelector);
+		}
+		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"]';
+		$(boxSelector).css('display', 'block');//otevření jediného okénka
+		$(this).addClass('active');
+		if (opts.hideOthers) {//vyvolani pozadi
+			$('body').prepend('<div class="activeBackground" data-related="' + opts.buttonSelector + '"></div>');
+			$(boxSelector).css('z-index', '10001');
+			$('.activeBackground').css('position', 'fixed');
+			$('.activeBackground').css('top', 0);
+			$('.activeBackground').css('left', 0);
+			$('.activeBackground').css('z-index', '10000');
+			$('.activeBackground').css('width', $(document).width());
+			$('.activeBackground').css('height', $(document).height());
+		}
+	};
+
 	/**
 	 * Nainicializuje okénko
 	 * @param {Object} $this JQuery element okénka
@@ -152,7 +177,10 @@
 		}
 		applyModulesEnds(boxopts);
 		if (boxopts.openOnStart) {
-			console.log('prase');
+			console.log(boxopts.buttonSelector);
+			if (!isThisWindowVisible(boxopts)) {
+				$.fn.ajaxBox.openWindow(boxopts);
+			}
 		}
 	}
 
@@ -191,10 +219,12 @@
 		var button = $(opts.buttonSelector);//tlačítko
 		data.appendTo('body');
 		data.wrap('<div class="ajaxBox ' + opts.theme + '" data-related="' + opts.buttonSelector + '"></div>');//obalení okénkem
-		$('.ajaxBox').css('display', 'none');//okénko není vidět
+		var box = $('div[data-related="' + opts.buttonSelector + '"]');
+
+		box.css('display', 'none');//okénko není vidět
+
 		data.wrap('<div class="ajaxBoxContent"></div>');//zabalení obsahu
 		data.wrap('<div class="ajaxBoxData"></div>');//zabalení obsahu
-		var box = data.parent().parent().parent();//současný selektor okénka
 		box.find('.ajaxBoxContent').append('<span class="loadingGif clear"></span>');//gif na konci
 		if (!opts.loadUrl) {
 			box.find('.loadingGif').css('display', 'none');
@@ -301,18 +331,7 @@
 			$(this).removeClass('active');
 			$('.activeBackground').remove();
 			if (!close) {
-				$(boxSelector).css('display', 'block');//otevření jediného okénka
-				$(this).addClass('active');
-				if (opts.hideOthers) {//vyvolani pozadi
-					$('body').prepend('<div class="activeBackground" data-related="' + opts.buttonSelector + '"></div>');
-					$(boxSelector).css('z-index', '10001');
-					$('.activeBackground').css('position', 'fixed');
-					$('.activeBackground').css('top', 0);
-					$('.activeBackground').css('left', 0);
-					$('.activeBackground').css('z-index', '10000');
-					$('.activeBackground').css('width', $(document).width());
-					$('.activeBackground').css('height', $(document).height());
-				}
+				$.fn.ajaxBox.openWindow(opts, this);
 			}
 		});
 

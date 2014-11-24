@@ -37,13 +37,13 @@
 					{$userData|showProfMinDiv}
 					{if $isMyProfile}
 						<a id="addProfilePhoto" title="Nahrát profilovku" class="uploadProfilePhoto">Nahrát profilovku</a>
-						<div class="ajaxbox-popUp" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-header-html="Nahrát profilovku">
+						<div class="ajaxbox-popUp" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-header-html="Nahrát profilovku" data-ajaxbox-open-on-start="true">
 						{control uploadPhoto}
 						</div>
-						
+
 					{/if}
 				</div>
-				
+
 				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
 				<span class="sexy-label">{$userData|sexyLabel}</span>
 				<span class="first-sentence">{$userData->property->first_sentence}</span>
@@ -67,7 +67,7 @@
 					</div>
 					<div class="clear"></div>
 				</div>
-					
+
 				{/if}
 
 			{/if}
