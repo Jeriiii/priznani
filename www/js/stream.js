@@ -58,6 +58,9 @@
 					if (data.snippets['snippet-userStream-posts'] == "") {//pokud snippet už neobnovuje data
 						$.fn.stream.run = false;//zastaví dotazování
 					}
+					if (data.snippets['snippet-profilStream-posts'] == "") {//pokud snippet už neobnovuje data
+						$.fn.stream.run = false;//zastaví dotazování
+					}
 				},
 				error: function(jqXHR, status, errorThrown) {
 					$.fn.stream.run = false;

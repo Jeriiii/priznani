@@ -209,7 +209,7 @@ class BaseStream extends BaseProjectControl {
 	 * Metoda nastavuje novy offset pro nacitani dalsich prispevku uzivatele
 	 */
 	public function setNewOffset() {
-// musí se nastavit i v jQuery pluginu
+		/* musí se nastavit i v jQuery pluginu */
 		$limit = 4;
 		if (!empty($this->offset)) {
 			$this->template->stream = $this->dataForStream->limit($limit, $this->offset);
