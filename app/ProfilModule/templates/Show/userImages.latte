@@ -18,9 +18,8 @@
 </div>
 
 
-{include 'menu.latte' $userID => 'id'}
+{include 'menu.latte' $userID => 'id', active => "images"}
 <div class="clear"></div>
-<h2 class="photo-title">Fotky</h2>
 
 {control userImagesAll 'listAll', $userID}
 

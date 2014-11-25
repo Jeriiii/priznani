@@ -17,7 +17,7 @@
 {$userData|showProfDiv}
 </div>
 
-{include 'menu.latte' $userID => 'id'}
+{include 'menu.latte' $userID => 'id', active => "info"}
 
 	{control userInfo $mode, $userID}
 

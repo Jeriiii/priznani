@@ -244,6 +244,8 @@ abstract class BasePresenter extends BaseProjectPresenter {
 				$navigation["Administrace"] = $this->link(":Admin:Admin:default");
 			}
 
+			$navigation["Editovat profil"] = $this->link(":Profil:Edit:");
+			$navigation["Hledat uživatele"] = $this->link(":Search:Search:");
 			$navigation["Moje galerie"] = $this->link(":Profil:Galleries:");
 			$navigation["Odhlásit se"] = $this->link(":Sign:out");
 		} else {
@@ -400,9 +402,9 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$files->addFiles(array(
 			'iedebug.js',
 			'baseAjax.js',
-			'order.js',
+			/* 'order.js', */
 			'fbBase.js',
-			'leftMenu.js',
+			/* 'leftMenu.js', */
 			'../nette.ajax.js',
 			'initAjax.js',
 			'../mobile/responsive-menu.js',

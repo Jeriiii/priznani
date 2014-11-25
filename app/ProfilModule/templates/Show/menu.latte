@@ -8,8 +8,8 @@
 
 <nav class="profile-menu btn-cnt-{$buttonCount}">
 	<a n:href="default $userID">ZEĎ</a>
-	<a n:href="userImages $userID">FOTKY</a>
-	<a n:href="userInfo $userID">INFORMACE</a>
+	<a n:href="userImages $userID" class="{if isset($active) && $active == "images"}active{/if}">FOTKY</a>
+	<a n:href="userInfo $userID" class="{if isset($active) && $active == "info"}active{/if}">INFORMACE</a>
 	{if $userData->verified}
 		{if $asked}
 			<span>Žádost o ověřovací fotku podána</span>
