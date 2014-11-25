@@ -1,11 +1,14 @@
 
-<div class="ajaxbox-popUp" id="addProfilePhotoWindow" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-header-html="Nahrát profilovku" {ifset $uploadedImageName}data-ajaxbox-open-on-start="true"{/ifset}>
+
 {ifset $uploadedImageName}
+	<div class="ajaxbox-popUp" id="addProfilePhotoWindow" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-additional-classes="withImage" data-ajaxbox-header-html="Nahrát profilovku" data-ajaxbox-open-on-start="true">
+		<p class="instructions">Zvolte, která část obrázku se nahraje jako vaše profilová fotografie. Poté klepněte na tlačítko Nahrát pod obrázkem.</p>
 		<div class="cropContainer" data-image-name="{$uploadedImageName}"></div>
 		<img src="{$basePath}/images/temp/{$uploadedImageName}" id="profilePhotoToCrop" alt="Prosím nastavte oříznutí obrázku" class="img-to-crop" />
 		{control afterUploadForm}
-
-	{else}
+{else}
+	<div class="ajaxbox-popUp" id="addProfilePhotoWindow" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-header-html="Nahrát profilovku">
+		<p class="instructions">Vyberte prosím fotku ze svého počítače. V dalším kroku ji budete moci oříznout.</p>
 		{control firstImageUploadForm}
 {/ifset}
 </div>
