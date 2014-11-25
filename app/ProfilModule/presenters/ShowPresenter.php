@@ -333,10 +333,10 @@ class ShowPresenter extends ProfilBasePresenter {
 	}
 
 	protected function createComponentSendFriendRequest($name) {
-		$userIDFrom = $this->userID;
-		$userIDTo = $this->getUser()->id;
+		$userIDFrom = $this->getUser()->id;
+		$userIDTo = $this->userID;
 
-		return new SendFriendRequest($this->friendRequestDao, $userIDFrom, $userIDTo, $this, $name);
+		return new SendFriendRequest($this->activitiesDao, $this->friendRequestDao, $userIDFrom, $userIDTo, $this, $name);
 	}
 
 	protected function createComponentYouAreSexy($name) {

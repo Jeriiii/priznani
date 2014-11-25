@@ -27,6 +27,7 @@ class ActivitiesDao extends AbstractDao {
 	const COLUMN_EVENT_OWNER_ID = "event_ownerID";
 	const COLUMN_EVENT_CREATOR_ID = "event_creatorID";
 	const COLUMN_COMMENT_IMAGE_ID = "commentImageID";
+	const COLUMN_FRIEND_REQUEST_ID = "friendRequestID";
 	const COLUMN_VIEWED = "viewed";
 
 	private function getTable() {
@@ -108,6 +109,25 @@ class ActivitiesDao extends AbstractDao {
 			self::COLUMN_EVENT_CREATOR_ID => $creatorID
 		));
 		$activity->delete();
+	}
+
+	/**
+	 * Přidá aktivitu o žádosti o přátelství.
+	 * @param int $creatorID ID uživatele, který aktivitu provádí
+	 * @param int $ownerID ID uživatele vlastnícího status
+	 * @param int $friendRequestID ID žádosti o přátelství
+	 * @param string $type Typ aktivity (like, comment, ...)
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function createFriendRequestActivity($creatorID, $ownerID, $friendRequestID, $type = "new-request") {
+		$sel = $this->getTable();
+		$activity = $sel->insert(array(
+			self::COLUMN_EVENT_TYPE => $type,
+			self::COLUMN_FRIEND_REQUEST_ID => $friendRequestID,
+			self::COLUMN_EVENT_OWNER_ID => $ownerID,
+			self::COLUMN_EVENT_CREATOR_ID => $creatorID
+		));
+		return $activity;
 	}
 
 	/**

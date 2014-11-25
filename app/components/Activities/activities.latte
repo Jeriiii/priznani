@@ -11,6 +11,8 @@
 						{include status activity => $activity}
 					{elseif ($activity->imageID != NULL)}
 						{include image activity => $activity}
+					{elseif ($activity->friendRequestID != NULL)}
+						{include friendsRequest activity => $activity}
 					{else}
 						{include user activity => $activity}
 					{/if}
@@ -39,25 +41,34 @@
 	   class="{if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-link="{link viewed! activityID => $activity->id}">
 		Uživatel <strong>{$activity->event_creator->user_name}</strong> 
 		{if ($activity->type == "comment")}
-			okomentoval váš obrázek {$activity->image->name};
+			okomentoval váš obrázek {$activity->image->name}
 		{elseif ($activity->type == "approve")}
-			 schválil váš obrázek {$activity->image->name};
+			 schválil váš obrázek {$activity->image->name}
 		{elseif ($activity->type == "verification")}
-			 schválil váš ověřovací obrázek {$activity->image->name};
+			 schválil váš ověřovací obrázek {$activity->image->name}
 		{elseif ($activity->type == "invalidate")}
-			 zamítl váš ověřovací obrázek {$activity->image->name};
+			 zamítl váš ověřovací obrázek {$activity->image->name}
 		{elseif ($activity->type == "disapprove")}
-			 zamítl váš obrázek {$activity->image->name};
+			 zamítl váš obrázek {$activity->image->name}
 		{elseif ($activity->type == "reject")}
-			 zamítl váš  ověřovací obrázek {$activity->image->name};
+			 zamítl váš  ověřovací obrázek {$activity->image->name}
 		{elseif ($activity->type == "verificationPhotoAccepted")}
-			 schválil váši žádost o ověřovací obrázek {$activity->image->name};
+			 schválil váši žádost o ověřovací obrázek {$activity->image->name}
 		{elseif ($activity->type == "verificationPhotoRejected")}
-			 zamítl váši žádost o ověřovací obrázek';
+			 zamítl váši žádost o ověřovací obrázek'
 		{elseif ($activity->type == "like")}
-			 lajknul váš obrázek {$activity->image->name};
+			 lajknul váš obrázek {$activity->image->name}
 		{/if}
 	</a>
+{/}
+{define friendsRequest $activity}
+	<span
+	   class="{if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-link="{link viewed! activityID => $activity->id}">
+		Uživatel <strong>{$activity->event_creator->user_name}</strong> 
+		{if ($activity->type == "new-request")}
+			vás žádá o přátelství <a href="{$basePath}/?friendRequest-id={$activity->friendRequestID}&do=friendRequest-accept">Přijmout</a>
+		{/if}
+	</span>
 {/}
 {define user $activity}
 	{* doplnit odkaz! *}
