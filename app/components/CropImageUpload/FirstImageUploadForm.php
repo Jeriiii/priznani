@@ -29,7 +29,6 @@ class FirstImageUploadForm extends BaseForm {
 		$this->tempPath = $tempPath;
 		$this->parentName = $parent->name;
 
-		$this->addGroup('Nahrát profilové foto');
 		$this->addUpload('imageToUpload', 'Přidat fotku:')
 			->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 * 1024)
 			->addCondition(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif');
