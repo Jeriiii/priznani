@@ -5,13 +5,15 @@
 		margin-top: 0;
 	}
     </style>
-    {control css 'profile/show.less', 'stream/list.less', 'chat/popup.less', 'comments/comments.less'}
+    {control css 'profile/show.less', 'stream/list.less', 'chat/popup.less', 'comments/comments.less', 'imgareaselect/default.less', 'imgareaselect/inWindow.less'}
 {/block}
 
 
 {block foot}
 	<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
-{control js}
+
+{control js 'imgareaselect/jquery.imgareaselect.js', 'imgareaselect/inits/profilePhoto.js'}
+
 
 <script>
 	$(document).ready(function () {
@@ -28,7 +30,6 @@
 </script>
 {/block}
 {block content}
-
 <section id="onepage">
 	<div id="content">
 		<div id="stream-menu">
@@ -36,14 +37,11 @@
 				<div class="user-profile-picture">
 					{$userData|showProfMinDiv}
 					{if $isMyProfile}
-						<a title="Nahrát profilovku" class="uploadProfilePhoto">Nahrát profilovku</a>
-						<div class="ajaxbox-popUp" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-header-html="Nahrát profilovku">
-						{control uploadPhotoForm}
-						</div>
-						
+						<a id="addProfilePhoto" title="Nahrát profilovku" class="uploadProfilePhoto">Nahrát profilovku</a>
+						{control uploadPhoto}
 					{/if}
 				</div>
-				
+
 				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
 				<span class="sexy-label">{$userData|sexyLabel}</span>
 				<span class="first-sentence">{$userData->property->first_sentence}</span>
@@ -67,7 +65,7 @@
 					</div>
 					<div class="clear"></div>
 				</div>
-					
+
 				{/if}
 
 			{/if}

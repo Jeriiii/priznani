@@ -116,7 +116,6 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$relProperty = new Relation("property");
 		$relCouple = new Relation("couple");
 		$relProfilPhoto->addRel($relGallery);
-		$relProfilPhoto->addRel(new Relation("score"));
 
 		$ser = new Serializer($user);
 		$ser->addRel($relProfilPhoto);

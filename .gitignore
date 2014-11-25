@@ -18,6 +18,8 @@ temp/test/screenshots/*
 /www/cache/css/
 /www/cache/js/
 /www/images/galleries/
+www/images/temp/*
+!www/images/temp/.gitkeep
 /test.php
 /Base2Presenter.php
 README.md
