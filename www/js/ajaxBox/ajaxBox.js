@@ -140,7 +140,7 @@
 		}
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"]';
 		$(boxSelector).css('display', 'block');//otevření jediného okénka
-		$(this).addClass('active');
+		$(button).addClass('active');
 		if (opts.hideOthers) {//vyvolani pozadi
 			$('body').prepend('<div class="activeBackground" data-related="' + opts.buttonSelector + '"></div>');
 			$(boxSelector).css('z-index', '10001');
@@ -177,7 +177,6 @@
 		}
 		applyModulesEnds(boxopts);
 		if (boxopts.openOnStart) {
-			console.log(boxopts.buttonSelector);
 			if (!isThisWindowVisible(boxopts)) {
 				$.fn.ajaxBox.openWindow(boxopts);
 			}
