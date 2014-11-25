@@ -1,42 +1,17 @@
-Feature: Filling eshop form
+Feature: Search users
 
-	Scenario Outline: User fills out the form
-		Given I am on "/eshop/game"
-		When I fill in "name" with "<name>"
-		And I fill in "surname" with "<surname>"
-		And I fill in "email" with "<email>"
-		And I fill in "phone" with "<phone>"
-		And I check "<checkbox>"
-		Then I press "frm-eshopGamesOrdersForm-submit"
-		And I should see "<message>"
-
-		Examples:
-			| name			| surname		| email				| phone		| checkbox			| message	|
-			# projde
-			| Test			| User			| user@test.cz		| 123456789 | vasnivefantazie	| Aplikace objednávku NEODESLALA! Pokud potíže přetrvávají, prosím kontaktujte nás. |
-			# chybí name
-			|				| User			| user@test.cz		| 123456789 | vasnivefantazie	| Prosím, vyplňte Vaše jméno |
-			# chybí surname
-			| Test			|				| user@test.cz		| 123456789 | vasnivefantazie	| Prosím, vyplňte Vaše příjimení |
-			# chybí email
-			| Test			| User			|					| 123456789 | vasnivefantazie	| Prosím, vyplňte Váš email |	
-			# chybný tvar emailu
-			| Test			| User			| spatnyemail.cz	| 123456789 | vasnivefantazie	| Zadejte email ve správném tvaru např. vasemail@seznam.cz |
-			# chybí phone
-			| Test			| User			| user@test.cz		|			| vasnivefantazie	| Prosím, vyplňte Váš telefon |
-			# chybí adresa
-			| Test			| User			| user@test.cz		| 123456789	| print				| Prosím vyplňte Vaší adresu, kam Vám máme hru zaslat |
-
-	Scenario Outline: Unchecked game
-		Given I am on "/eshop/game"
-		When I fill in "name" with "<name>"
-		And I fill in "surname" with "<surname>"
-		And I fill in "email" with "<email>"
-		And I fill in "phone" with "<phone>"
-		Then I press "frm-eshopGamesOrdersForm-submit"
-		And I should see "<message>"
+	Scenario Outline: Best search users
+		Given I am signed in as "<my_email>"
+		And I am on "/search.search/"
+		Then I should not see "<me>"
+		And I should see "<user1>"
+		And I should see "<user2>"
+		And I should see "<user3>"
+		And I should not see "<user4>"
+		And I should not see "<user5>"
+		And I should not see "<user6>"
 
 		Examples:
-			| name			| surname		| email			| phone		| message							|
-			# nezaškrtnutá hra
-			| Test			| User			| user@test.cz	| 123456789	| Musíte vybrat alespoň jednu hru	|
+		| my_email		  | me          | user1 | user2 | user3 | user4 | user5 | user6 |
+		| <admin@test.cz> | Test Admin  | | | | | | |
+		| <user@test.cz>  | Test User	| | | | | | |
