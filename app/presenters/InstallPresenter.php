@@ -50,10 +50,21 @@ class InstallPresenter extends BasePresenter {
 			$this->redirect("OnePage:");
 		}
 
-		//$this->insertEnumCatProp();
-//		$this->insertUserCategories();
-
 		$this->setLayout("layoutInstall");
+	}
+
+	/**
+	 * Vloží všechny kombinace kategorií
+	 */
+	public function actionAllCategories() {
+		$messages = new Messages;
+
+		$this->insertEnumCatProp();
+		$this->insertUserCategories();
+
+		$messages->addMessage("Kategorie byly úspěšně vloženy.");
+		$messages->flash($this);
+		$this->redirect("Install:");
 	}
 
 	public function actionAll() {
@@ -188,11 +199,12 @@ class InstallPresenter extends BasePresenter {
 
 			//$row["type"] = $property;
 
+			$insert[] = $row;
+
 			if ($row["want_to_meet_group"] == 2 && $row["want_to_meet_couple_women"] == 2 && $row["want_to_meet_couple_men"] == 2 && $row["want_to_meet_couple"] == 2 && $row["want_to_meet_women"] == 2 && $row["want_to_meet_men"] == 2) {
 				break;
 			}
 
-			$insert[] = $row;
 			$row["want_to_meet_group"] ++;
 		}
 		//}
@@ -208,6 +220,9 @@ class InstallPresenter extends BasePresenter {
 		$this->catPropertyWantToMeetDao->endTransaction();
 	}
 
+	/**
+	 * Speciální metoda vkládá všechny kombinace kategorií
+	 */
 	private function insertUserCategories() {
 		$catsWTMP = $this->catPropertyWantToMeetDao->getAll();
 		$ids = $catsWTMP->fetchPairs("id", "id");

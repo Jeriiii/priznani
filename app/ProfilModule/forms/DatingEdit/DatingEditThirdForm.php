@@ -7,6 +7,8 @@ use Nette\ComponentModel\IContainer,
 	POS\Model\UserDao;
 use Nette\Database\Table\ActiveRow;
 use Nette\ObjectMixin;
+use POS\Model\UserCategoryDao;
+use POS\Model\UserPropertyDao;
 
 /**
  * Editace dalších nastavení pro muže, ženu a pár.
@@ -25,13 +27,21 @@ class DatingEditThirdForm extends DatingRegistrationThirdForm {
 	/** @var ActiveRow|\Nette\ArrayHash" */
 	private $couple;
 
-	public function __construct(CoupleDao $coupleDao, UserDao $userDao, $userProperty, $couple, IContainer $parent = NULL, $name = NULL) {
+	/** @var \POS\Model\UserPropertyDao */
+	public $userPropertyDao;
+
+	/**
+	 * @var \POS\Model\UserCategoryDao
+	 */
+	public $userCategoryDao;
+
+	public function __construct(UserCategoryDao $userCategoryDao, UserPropertyDao $userPropertyDao, CoupleDao $coupleDao, UserDao $userDao, $userProperty, $couple, IContainer $parent = NULL, $name = NULL) {
 		$this->userDao = $userDao;
 		$this->coupleDao = $coupleDao;
 		$this->userProperty = $userProperty;
 		$this->couple = $couple;
-
-
+		$this->userCategoryDao = $userCategoryDao;
+		$this->userPropertyDao = $userPropertyDao;
 
 		parent::__construct($userDao, $userProperty, $couple, $parent, $name);
 
@@ -59,6 +69,8 @@ class DatingEditThirdForm extends DatingRegistrationThirdForm {
 			$this->setSecondPersonData($this->type, $coupleData, $values);
 			$this->coupleDao->update($this->user->coupleID, $coupleData);
 		}
+
+		$this->userPropertyDao->updatePreferencesID($userData->property, $this->userCategoryDao);
 
 		$presenter->calculateLoggedUser();
 		$presenter->flashMessage('Změna osobních údajů byla úspěšná');

@@ -29,7 +29,7 @@ class UserCategoryDao extends AbstractDao {
 	}
 
 	/**
-	 * Hlavní metoda vracící všechny kategorie.
+	 * Hlavní metoda vracící všechny kategorie které mě zajímají.
 	 * @param \Nette\Database\Table\ActiveRow $userProperty Vlastnosti uživatele co hledá.
 	 */
 	public function getMine($userProperty) {
@@ -47,6 +47,38 @@ class UserCategoryDao extends AbstractDao {
 		return $sel;
 	}
 
+	/**
+	 * Vrátí kategorii, do které spadám já. Ta bude vždy jedna.
+	 * @param \Nette\Database\Table\ActiveRow $userProperty Vlastnosti uživatele co hledá.
+	 * @return ActiveRow Kategorie do které spadám.
+	 */
+	public function getMyCategory($userProperty) {
+		if (!($userProperty instanceof ActiveRow) && !($userProperty instanceof \Nette\ArrayHash)) {
+			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
+		}
+
+		/* wantToMeet */
+		$selWTM = $this->createSelection(CatPropertyWantToMeetDao::TABLE_NAME);
+		$selWTM->where(CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_MEN, $userProperty->want_to_meet_men);
+		$selWTM->where(CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_WOMEN, $userProperty->want_to_meet_women);
+		$selWTM->where(CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_COUPLE, $userProperty->want_to_meet_couple);
+		$selWTM->where(CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_COUPLE_MEN, $userProperty->want_to_meet_couple_men);
+		$selWTM->where(CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_COUPLE_WOMEN, $userProperty->want_to_meet_couple_women);
+		$selWTM->where(CatPropertyWantToMeetDao::COLUMN_WANT_TO_MEET_GROUP, $userProperty->want_to_meet_group);
+
+		$selWTM->where(CatPropertyWantToMeetDao::COLUMN_TYPE, $userProperty->type);
+		/*		 * ********** */
+
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_PROPERTY_WANT_TO_MEET, $selWTM->fetch()->id);
+
+		return $sel->fetch();
+	}
+
+	/**
+	 * Vrátí kategorie z wantToMeet, které by mě mohli zajímat a zajímají se i oni o mě.
+	 * @param \Nette\Database\Table\ActiveRow $userProperty Vlastnosti uživatele co hledá.
+	 */
 	private function getPropertyWantToMeetCats($userProperty) {
 		$sel = $this->createSelection(CatPropertyWantToMeetDao::TABLE_NAME);
 		$sel = $this->getPeopertyCats($userProperty, $sel);

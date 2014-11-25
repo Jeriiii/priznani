@@ -31,6 +31,12 @@ class DatingRegistrationPresenter extends BasePresenter {
 	 */
 	public $mailer;
 
+	/**
+	 * @var \POS\Model\UserCategoryDao
+	 * @inject
+	 */
+	public $userCategoryDao;
+
 	public function startup() {
 		parent::startup();
 
@@ -126,7 +132,7 @@ class DatingRegistrationPresenter extends BasePresenter {
 		$registrationDataUser = $this->getRegSession();
 		$registrationDataUser[UserDao::COLUMN_CONFIRMED] = Strings::random(29);
 
-		$userProperty = $this->userPropertyDao->registerProperty($registrationDataUser);
+		$userProperty = $this->userPropertyDao->registerProperty($registrationDataUser, $this->userCategoryDao);
 		$user = $this->userDao->register($registrationDataUser, $userProperty->id);
 		/* aktualizace kódu s jeho id */
 		$registrationDataUser[UserDao::COLUMN_CONFIRMED] = $user[UserDao::COLUMN_CONFIRMED];

@@ -6,6 +6,7 @@ use Nette\ComponentModel\IContainer,
 	POS\Model\UserDao,
 	POS\Model\UserPropertyDao;
 use Nette\Database\Table\ActiveRow;
+use POS\Model\UserCategoryDao;
 
 class DatingEditFirstForm extends DatingRegistrationFirstForm {
 
@@ -25,12 +26,18 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 	 */
 	private $couple;
 
-	public function __construct(UserPropertyDao $userPropertyDao, UserDao $userDao, ActiveRow $user, $couple, IContainer $parent = NULL, $name = NULL) {
+	/**
+	 * @var \POS\Model\UserCategoryDao
+	 */
+	public $userCategoryDao;
+
+	public function __construct(UserCategoryDao $userCategoryDao, UserPropertyDao $userPropertyDao, UserDao $userDao, ActiveRow $user, $couple, IContainer $parent = NULL, $name = NULL) {
 		$this->userPropertyDao = $userPropertyDao;
 		$userProperty = $this->userPropertyDao->find($user->propertyID);
 		$this->couple = $couple;
+		$this->userCategoryDao = $userCategoryDao;
 
-		parent::__construct($userDao, $parent, $name, $userProperty, $couple);
+		parent::__construct($userDao, $parent, $name, $userProperty, $couple, FALSE);
 
 		if (isset($this["type"])) {
 			unset($this["type"]);
@@ -50,7 +57,9 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 		$user = $this->userDao->find($this->id_user);
 
 		$values->age = $this->getAge($values);
-		$secondAge = $this->getSecondAge($values);
+		if (!empty($this->couple)) {
+			$secondAge = $this->getSecondAge($values);
+		}
 		$values->vigor = $this->getVigor($values->age);
 
 		$this->userPropertyDao->update($user->propertyID, $values);
@@ -61,6 +70,9 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 				"vigor" => $this->getVigor($secondAge)
 			));
 		}
+
+		$property = $this->userPropertyDao->find($user->propertyID);
+		$this->userPropertyDao->updatePreferencesID($property, $this->userCategoryDao);
 
 		$presenter->calculateLoggedUser();
 		$presenter->flashMessage("Informace byla změněny");
