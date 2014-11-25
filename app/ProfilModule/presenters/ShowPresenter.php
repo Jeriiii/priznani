@@ -24,166 +24,86 @@ class ShowPresenter extends ProfilBasePresenter {
 	 */
 	private $userID;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\PaymentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\PaymentDao @inject */
 	public $paymentDao;
 
-	/**
-	 * @var \POS\Model\CoupleDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CoupleDao @inject */
 	public $coupleDao;
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserGalleryDao @inject */
 	public $userGalleryDao;
 
-	/**
-	 * @var \POS\Model\UserImageDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\ConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ConfessionDao @inject */
 	public $confessionDao;
 
-	/**
-	 * @var \POS\Model\FriendRequestDao
-	 * @inject
-	 */
+	/** @var \POS\Model\FriendRequestDao @inject */
 	public $friendRequestDao;
 
-	/**
-	 * @var \POS\Model\YouAreSexyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\YouAreSexyDao @inject */
 	public $youAreSexyDao;
 
-	/**
-	 * @var \POS\Model\FriendDao
-	 * @inject
-	 */
+	/** @var \POS\Model\FriendDao @inject */
 	public $friendDao;
 
-	/**
-	 * @var \POS\Model\ImageLikesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ImageLikesDao @inject */
 	public $imageLikesDao;
 
-	/**
-	 * @var \POS\Model\LikeStatusDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeStatusDao @inject */
 	public $likeStatusDao;
 
-	/**
-	 * @var \POS\Model\UserPositionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPositionDao @inject */
 	public $userPositionDao;
 
-	/**
-	 * @var \POS\Model\EnumPositionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumPositionDao @inject */
 	public $enumPositionDao;
 
-	/**
-	 * @var \POS\Model\UserPlaceDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPlaceDao @inject */
 	public $userPlaceDao;
 
-	/**
-	 * @var \POS\Model\EnumPlaceDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumPlaceDao @inject */
 	public $enumPlaceDao;
 
-	/**
-	 * @var \POS\Model\UserAllowedDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserAllowedDao @inject */
 	public $userAllowedDao;
 
-	/**
-	 * @var \POS\Model\LikeImageCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeImageCommentDao @inject */
 	public $likeImageCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentImagesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentImagesDao @inject */
 	public $commentImagesDao;
 
-	/**
-	 * @var \POS\Model\LikeStatusCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeStatusCommentDao @inject */
 	public $likeStatusCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentStatusesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentStatusesDao @inject */
 	public $commentStatusesDao;
 
-	/**
-	 * @var \POS\Model\LikeConfessionCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeConfessionCommentDao @inject */
 	public $likeConfessionCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentConfessionsDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentConfessionsDao @inject */
 	public $commentConfessionsDao;
 
-	/**
-	 * @var \POS\Model\LikeConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeConfessionDao @inject */
 	public $likeConfessionDao;
 
-	/**
-	 * @var \POS\Model\VerificationPhotoRequestsDao
-	 * @inject
-	 */
+	/** @var \POS\Model\VerificationPhotoRequestsDao @inject */
 	public $verificationPhotoRequestDao;
+
+	/** @var \POS\Model\EnumVigorDao @inject */
+	public $enumVigorDao;
 	public $dataForStream;
 
-	/**
-	 * @var \POS\Model\EnumVigorDao
-	 * @inject
-	 */
-	public $enumVigorDao;
-
-	/**
-	 * @var \Nette\Database\Table\ActiveRow|\Nette\ArrayHash
-	 */
+	/** @var \Nette\Database\Table\ActiveRow|\Nette\ArrayHash */
 	private $userData;
 
 	/**
