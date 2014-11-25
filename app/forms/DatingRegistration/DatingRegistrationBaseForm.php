@@ -43,9 +43,9 @@ class DatingRegistrationBaseForm extends BaseForm {
 
 		if (isset($seccondAge)) {
 			$date = new DateTime($seccondAge);
-			$year = $date->format("Y");
-			$month = intval($date->format("m")); // intval - ochrana proti 01,02 a pod.
-			$day = intval($date->format("d")); // intval - ochrana proti 01,02 a pod.
+			$yearSecond = $date->format("Y");
+			$monthSecond = intval($date->format("m")); // intval - ochrana proti 01,02 a pod.
+			$daySecond = intval($date->format("d")); // intval - ochrana proti 01,02 a pod.
 		}
 
 		if (isset($seccondAge) || $isRegistration) {
@@ -53,11 +53,11 @@ class DatingRegistrationBaseForm extends BaseForm {
 
 			$this->addSelectAge($days, $months, $years, FALSE, "Second");
 
-			if (isset($day)) {
+			if (isset($daySecond) && $yearSecond > 0) {
 				$this->setDefaults(array(
-					"daySecond" => $day,
-					"monthSecond" => $month,
-					"yearSecond" => $year
+					"daySecond" => $daySecond,
+					"monthSecond" => $monthSecond,
+					"yearSecond" => $yearSecond
 				));
 			}
 		}

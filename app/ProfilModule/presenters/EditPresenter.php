@@ -59,6 +59,9 @@ class EditPresenter extends ProfilBasePresenter {
 	/** @var \POS\Model\RegionDao @inject */
 	public $regionDao;
 
+	/** @var \POS\Model\UserCategoryDao @inject */
+	public $userCategoryDao;
+
 	/** @var ActiveRow User kterému se mají editovat data */
 	protected $userData;
 	private $redirect;
@@ -88,15 +91,15 @@ class EditPresenter extends ProfilBasePresenter {
 		$userID = $this->getUser()->getId();
 		$user = $this->userDao->find($userID);
 
-		return new Frm\DatingEditFirstForm($this->userPropertyDao, $this->userDao, $user, $user->couple, $this, $name);
+		return new Frm\DatingEditFirstForm($this->userCategoryDao, $this->userPropertyDao, $this->userDao, $user, $user->couple, $this, $name);
 	}
 
 	protected function createComponentSecondEditForm($name) {
-		return new Frm\DatingEditSecondForm($this->userPropertyDao, $this->userDao, $this, $name);
+		return new Frm\DatingEditSecondForm($this->userCategoryDao, $this->userPropertyDao, $this->userDao, $this, $name);
 	}
 
 	protected function createComponentThirdEditForm($name) {
-		return new Frm\DatingEditThirdForm($this->coupleDao, $this->userDao, $this->loggedUser->property, $this->loggedUser->couple, $this, $name);
+		return new Frm\DatingEditThirdForm($this->userCategoryDao, $this->userPropertyDao, $this->coupleDao, $this->userDao, $this->loggedUser->property, $this->loggedUser->couple, $this, $name);
 	}
 
 	public function createComponentMyUserGalleries() {

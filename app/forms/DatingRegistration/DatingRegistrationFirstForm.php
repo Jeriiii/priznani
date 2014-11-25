@@ -27,7 +27,7 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 	/** @var array Možnosti pro zaškrtnutí s kým se chci potkat. */
 	private $wantToMeetOption = array(1 => "ano", 2 => "nezáleží", 0 => "ne");
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, $regSession = NULL, $regCoupleSession = NULL) {
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, $regSession = NULL, $regCoupleSession = NULL, $isRegistration = TRUE) {
 		parent::__construct($parent, $name);
 
 		$this->userDao = $userDao;
@@ -37,7 +37,7 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 		$this->addGroup('Základní údaje:');
 
 		$secondAge = !empty($regCoupleSession) ? $regCoupleSession->age : NULL;
-		$this->addAge($regSession->age, $secondAge, $regSession->type, TRUE);
+		$this->addAge($regSession->age, $secondAge, $regSession->type, $isRegistration);
 
 		$this->addSelect('type', 'Jsem:', $this->userDao->getUserPropertyOption());
 
@@ -84,7 +84,8 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 		foreach ($this->userDao->getArrWantToMeet() as $key => $want) {
 			$radioList = $this->addRadioList($key, $want, $this->wantToMeetOption);
 			$radioList->getSeparatorPrototype()->setName(NULL);
-			if (!empty($this->regSession[$key])) {
+
+			if (!empty($this->regSession[$key]) || $this->regSession[$key] == 0) { //0 = ne, ale empty by neprošla
 				$radioList->setDefaultValue($this->regSession[$key]);
 			} else {
 				$radioList->setDefaultValue(2);
