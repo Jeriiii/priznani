@@ -5,22 +5,15 @@
 		margin-top: 0;
 	}
     </style>
-    {control css 'profile/show.less', 'stream/list.less', 'chat/popup.less', 'comments/comments.less', 'imgareaselect/default.less'}
+    {control css 'profile/show.less', 'stream/list.less', 'chat/popup.less', 'comments/comments.less', 'imgareaselect/default.less', 'imgareaselect/inWindow.less'}
 {/block}
 
 
 {block foot}
 	<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
 
-{control js}
-<script>
-$('.img-to-crop').imgAreaSelect({
-        handles: true,
-        onSelectEnd: function(){
+{control js 'imgareaselect/jquery.imgareaselect.js', 'imgareaselect/inits/profilePhoto.js'}
 
-		}
-    });
-</script>
 
 <script>
 	$(document).ready(function () {

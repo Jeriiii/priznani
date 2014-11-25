@@ -1,8 +1,10 @@
 
-<div class="ajaxbox-popUp" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-header-html="Nahrát profilovku" {ifset $uploadedImagePath}data-ajaxbox-open-on-start="true"{/ifset}>
-{ifset $uploadedImagePath}
-		<img src="{$basePath}/images/temp/{$uploadedImagePath}" alt="Prosím nastavte oříznutí obrázku" class="img-to-crop" />
+<div class="ajaxbox-popUp" id="addProfilePhotoWindow" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-header-html="Nahrát profilovku" {ifset $uploadedImageName}data-ajaxbox-open-on-start="true"{/ifset}>
+{ifset $uploadedImageName}
+		<div class="cropContainer" data-image-name="{$uploadedImageName}"></div>
+		<img src="{$basePath}/images/temp/{$uploadedImageName}" id="profilePhotoToCrop" alt="Prosím nastavte oříznutí obrázku" class="img-to-crop" />
 		{control afterUploadForm}
+
 	{else}
 		{control firstImageUploadForm}
 {/ifset}

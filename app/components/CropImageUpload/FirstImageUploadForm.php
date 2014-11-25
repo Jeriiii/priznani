@@ -44,7 +44,7 @@ class FirstImageUploadForm extends BaseForm {
 		$values = $form->getValues();
 		$image = $values->imageToUpload;
 		if ($image->isOK()) {
-			$imagePath = UploadImage::uploadToTemp($image, 1000, 1000);
+			$imagePath = UploadImage::uploadToTemp($image, 50, 50, 1000, 1000);
 		} else {
 			$this->addError("Vyberte platný soubor");
 		}

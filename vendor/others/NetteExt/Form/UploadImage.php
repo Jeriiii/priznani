@@ -49,6 +49,37 @@ class UploadImage extends UploadFile {
 		return array(ImagePathCreator::getImgScrnPath($id, $suffix, $folder), $path);
 	}
 
+	/**
+	 * Přesune obrázek třeba z tempu do galerie
+	 * @param Image $image Obrázek, který je potřeba přesunout.
+	 * @param int $id ID obrázku v databázi.
+	 * @param string $suffix Koncovka obrázku v databázi.
+	 * @param string $folder Složka galerie.
+	 * @param int $max_height Maximální výška screenu.
+	 * @param int $max_width Maximální šířka screenu.
+	 * @param int $max_minheight Maximální výška miniatury.
+	 * @param int $max_minwidth Maximální šířka miniatury.
+	 * @return array pole stringů s cestami k obrázkům, ke kterým se posléze může například přidat watermark
+	 */
+	public static function moveImage(Image $image, $id, $suffix, $folder, $max_height, $max_width, $max_minheight, $max_minwidth) {
+		$path = ImagePathCreator::getImgPath($id, $suffix, $folder);
+		$image->save($path);
+
+		/* kontrola velikosti obrázku, proporcionální zmenšení a uložení */
+		self::saveImgGalScrn($id, $suffix, $folder, $max_width, $max_height);
+
+		/* vytvoření ořezu 200x200px */
+		self::saveImgMinSqr($id, $suffix, $folder);
+
+		/* vytvoří a uloží miniaturu */
+		self::saveImgMin($id, $suffix, $folder, $max_minwidth, $max_minheight);
+
+		/* přeuloží originální obrázek a smaže starý */
+		self::saveImgOriginal($image, $path);
+
+		return array(ImagePathCreator::getImgScrnPath($id, $suffix, $folder), $path);
+	}
+
 	/*	 * *********************** VYTVOŘENÍ A ULOŽENÍ OBRÁZKU **************** */
 
 	/**
@@ -106,6 +137,15 @@ class UploadImage extends UploadFile {
 
 	/**
 	 * Uložení originálního obrázku.
+	 * @param Image Uploadovaný obrázek.
+	 * @param string $path Cesta k uploadovanému obrázku.
+	 */
+	private static function saveImgOriginal(Image $image, $path) {
+		$image->save($path);
+	}
+
+	/**
+	 * Uložení originálního obrázku.
 	 * @param Nette\Http\FileUpload Uploadovaný obrázek.
 	 * @param string $path Cesta k uploadovanému obrázku.
 	 */
@@ -119,11 +159,13 @@ class UploadImage extends UploadFile {
 	 *
 	 * Uloží obrázek do tempu obrázků. Dá mu náhodný unikátní název a zachová suffix
 	 * @param FileUpload $upload obrázek v formuláře
+	 * @param int $min_width minimální šířka obrázku
+	 * @param int $min_height max výška obrázku
 	 * @param int $max_width maximální šířka obrázku
 	 * @param int $max_height max výška obrázku
 	 * @return název obrázku s příponou
 	 */
-	public static function uploadToTemp(FileUpload $upload, $max_width, $max_height) {
+	public static function uploadToTemp(FileUpload $upload, $min_width, $min_height, $max_width, $max_height) {
 		$filename = Strings::random(8);
 		$path = ImagePathCreator::getImgPath($filename, self::suffix($upload->name), 'temp');
 
@@ -133,9 +175,34 @@ class UploadImage extends UploadFile {
 		}
 		$upload->move($path);
 		$image = Image::fromFile($path);
-		$image->resize($max_width, $max_height);
+		if ($image->getWidth() > $max_width) {
+			$image->resize($max_width, NULL);
+		}
+		if ($image->getHeight() > $max_height) {
+			$image->resize(NULL, $max_height);
+		}
+		if ($image->getWidth() < $min_width) {
+			$image->resize($min_width, NULL);
+		}
+		if ($image->getHeight() < $min_height) {
+			$image->resize(NULL, $min_height);
+		}
+
 		$image->save($path);
 		return $filename . '.' . self::suffix($upload->name);
+	}
+
+	/**
+	 * Vrátí požadovaný obrázek z tempu
+	 * @param string $filename název obrázku včetně přípony
+	 * @return Image|NULL objekt obrázku nebo NULL pokud neexistuje
+	 */
+	public static function getImageFromTemp($filename) {
+		$path = ImagePathCreator::getBasePath('temp') . $filename;
+		if (!file_exists($path)) {
+			return NULL;
+		}
+		return Image::fromFile($path);
 	}
 
 	/**

@@ -42,7 +42,7 @@ class CropImageUpload extends BaseProjectControl {
 	 * Cesta k předtím nahranému obrázku
 	 * @var string
 	 */
-	public $cropImagePath = NULL;
+	public $cropImageName = NULL;
 
 	/**
 	 * Standardní konstruktor
@@ -61,8 +61,8 @@ class CropImageUpload extends BaseProjectControl {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/cropImageUpload.latte');
 
-		if (!empty($this->cropImagePath)) {
-			$template->uploadedImagePath = $this->cropImagePath;
+		if (!empty($this->cropImageName)) {
+			$template->uploadedImageName = $this->cropImageName;
 		}
 
 		$template->render();
@@ -73,7 +73,7 @@ class CropImageUpload extends BaseProjectControl {
 	 * @param type $path cesta k obrázku
 	 */
 	public function handleCrop($path) {
-		$this->cropImagePath = $path;
+		$this->cropImageName = $path;
 	}
 
 	/**
