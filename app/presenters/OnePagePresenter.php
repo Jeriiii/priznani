@@ -259,7 +259,6 @@ class OnePagePresenter extends BasePresenter {
 	private function fillCorrectDataForStream() {
 		if ($this->getUser()->isLoggedIn() && isset($this->loggedUser->property)) {
 			$this->initializeStreamUserPreferences();
-			$this->streamUserPreferences->calculate();
 			$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
 		} else {
 			$this->dataForStream = $this->streamDao->getForUnloggedUser("DESC");

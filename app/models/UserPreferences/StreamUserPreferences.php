@@ -81,7 +81,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * @return StreamUserPreferences tento iterovatelný objekt schopný nahradit Selection
 	 */
 	public function getBestStreamItems() {
-		//$this->data = $this->streamSection->cachedStreamItems;
+		$this->data = $this->streamSection->cachedStreamItems;
 		if ($this->data === NULL) {
 			$this->initializeStreamItems(); //pokud uživatel přišel prvně
 		} else {//není třeba ptát se dvakrát při prvním příchodu
