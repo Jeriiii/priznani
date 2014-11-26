@@ -234,9 +234,10 @@
 		reloadWindowUnload();//odblokovani prevence proti predcasnemu opusteni stranky
 		$.each(json, function (iduser, values) {//projde vsechny uzivatele, od kterych neco prislo
 			var name = values.name;
+			var href = values.href;
 			var messages = values.messages;
 			$.each(messages, function (messageKey, message) {//vsechny zpravy od kazdeho uzivatele
-				addMessage(iduser, name, message.name, message.id, message.text, message.type);
+				addMessage(iduser, name, href, message.name, message.id, message.text, message.type);
 				if (message.type == 0) {//textové zprávy se aktualizují v seznamu konverzací
 					actualizeMessageInConversationList(iduser, name, message.text);
 				}
@@ -269,7 +270,7 @@
 		$(this.chatopts.contactListItems).click(function (event) {//click event na polozkach seznamu
 			event.preventDefault();
 			var id = $(this).attr(chatopts.idAttribute);
-			addBox(id, $(this).attr(chatopts.titleAttribute));
+			addBox(id, $(this).attr(chatopts.titleAttribute), $(this).find('.generatedProfile a').attr('href'));
 		});
 
 
@@ -283,7 +284,7 @@
 		$('body').on('click', this.chatopts.conversationListItems, function (event) {//click event na polozkach seznamu
 			event.preventDefault();
 			var id = $(this).attr(chatopts.idAttribute);
-			addBox(id, $(this).attr(chatopts.titleAttribute));
+			addBox(id, $(this).attr(chatopts.titleAttribute), $(this).find('.generatedProfile a').attr('href'));
 		});
 	}
 
@@ -330,12 +331,14 @@
 	 * Vytvoří nové okno, nebo otevře stávající.
 	 * @param {int|String} id id okna
 	 * @param {String} title titulek okna
+	 * @param {String} href odkaz titulku (je to link)
 	 * @return {bool} byl vytvoren nove a naplnen poslednimi zpravami
 	 */
-	function addBox(id, title) {
+	function addBox(id, title, href) {
 		var wascreated = chatboxManager.addBox(id,
 				{
-					title: title
+					title: title,
+					href: href
 				});
 		if (wascreated) {//pokud je box novy
 			loadMessagesIntoBox(id);
@@ -349,13 +352,14 @@
 	 * Přidá zprávu do okna s daným id a okno otevře
 	 * @param {int|String} id id okna
 	 * @param {String} boxname s kym si pisu (titulek okna)
+	 * @param {String} href odkaz v titulku
 	 * @param {String} name od koho zprava je
 	 * @param {int} messid id zpravy
 	 * @param {String} text text zpravy
 	 * @param {int} type typ zpravy
 	 */
-	function addMessage(id, boxname, name, messid, text, type) {
-		var newbox = addBox(id, boxname);//vytvori/zobrazi dotycne okno
+	function addMessage(id, boxname, href, name, messid, text, type) {
+		var newbox = addBox(id, boxname, href);//vytvori/zobrazi dotycne okno
 		clearInfoMessages(id);
 		if (type == 0) {//textova zprava
 			if (!newbox) {//pokud je vytvoren box nove, bude zpravami naplnen automaticky vcetne teto posledni
