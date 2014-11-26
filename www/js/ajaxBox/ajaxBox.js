@@ -203,8 +203,8 @@
 			opts.loadUrl = $box.data("ajaxbox-load-url");
 		}
 
-		if (opts.theme === "" && $box.data("ajaxbox-additional-classes") !== undefined) {
-			opts.theme = opts.theme + ' ' + $box.data("ajaxbox-additionalClasses");
+		if ($box.data("ajaxbox-additional-classes") !== undefined) {
+			opts.theme = opts.theme + ' ' + $box.data("ajaxbox-additional-classes");
 		}
 
 		if (opts.openOnStart === "" && $box.data("ajaxbox-open-on-start") !== undefined) {
