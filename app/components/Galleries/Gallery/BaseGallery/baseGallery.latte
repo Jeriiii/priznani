@@ -12,7 +12,7 @@
 	    {ifset $username}<span class="username">{$username}</span>{/ifset}
 	    <div class="clear"></div>
 	</div>
-	
+
 	<div id="image_container">
 		<div id="image_content">
 			<div id="image">
@@ -48,7 +48,8 @@
 					{/ifset}
 					{include #menuButtons}
 				</div>
-				<div>
+				<div class="clear"></div>
+				<div class="big-comments">
 					{ifset #comments}
 						{include #comments}
 					{/ifset}
@@ -62,8 +63,8 @@
 		{*<div class="image-links">
 			{include #othersImages}{* baseBlocks.latte */}
 		</div>*}
-	</div>	
-	
+	</div>
+
 	<div id="link-and-fb">
 		{* udaje pro adminy *}
 		{if $user->isInRole("superadmin")}

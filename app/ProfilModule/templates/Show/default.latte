@@ -37,7 +37,9 @@
 				<div class="user-profile-picture">
 					{$userData|showProfMinDiv}
 					{if $isMyProfile}
-						<a id="addProfilePhoto" title="Nahrát profilovku" class="uploadProfilePhoto">Nahrát profilovku</a>
+						<div class="photoLinkContainer">
+							<a class="photoLink uploadProfilePhoto" id="addProfilePhoto" title="Nahrát profilovku">Nahrát profilovku</a>
+						</div>
 						{control uploadPhoto}
 					{/if}
 				</div>
@@ -59,7 +61,9 @@
 					<div class="sexybutton">
 						{control youAreSexy}
 					</div>
-					<a href="#" title="Poslat zprávu" id="sendmessage-button" class="profile-btn btn-main btn-small right send-message-btn"></a>
+					<a href="#" title="Poslat zprávu" id="sendmessage-button" class="profile-btn btn-main btn-small right send-message-btn">
+						<span></span>
+					</a>
 					<div class="ajaxbox-popUp" data-ajaxbox-btn="#sendmessage-button" data-ajaxbox-header-html="Poslat zprávu">
 						{control sendMessageForm}
 					</div>

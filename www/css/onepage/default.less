@@ -150,6 +150,8 @@ input[type="submit"]{
 	
 	
 	.user-profile-picture{
+		position: relative;
+		
 		.generatedProfile{
 			text-align: center;
 			height: 200px;
@@ -173,6 +175,40 @@ input[type="submit"]{
 				width: 188px !important;
 				height: 188px !important;
 			}
+		}
+		
+		.photoLinkContainer{
+			position: absolute;
+			top: 5px;
+			left: 5px;
+			display: block;
+			width: 190px;
+			height: 190px;
+			overflow: hidden;
+			border-radius: 50%;
+			
+			
+			.photoLink{
+				position: absolute;
+				width: 100%;
+				cursor: pointer;
+				bottom: 0;
+				text-align: center;
+				padding: 15px 0 30px 0;
+				background: rgba(0,0,0,0.5);
+				color: white;
+				text-decoration: none;
+				font-size: 16px;
+				font-family: 'Source Sans Pro', Arial, sans-serif;
+				font-weight: 400;
+				display: none;
+				
+			}
+			
+			&:hover .photoLink{
+				display: block;
+			}
+			
 		}
 		
 	}
