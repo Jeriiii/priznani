@@ -18,16 +18,16 @@ class FirstImageUploadForm extends BaseForm {
 	public $tempPath;
 
 	/**
-	 * @var String
+	 * @var \Nette\ComponentModel\IComponent
 	 */
-	public $parentName;
+	public $parent;
 
 	public function __construct($tempPath, $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
 
 		$this->tempPath = $tempPath;
-		$this->parentName = $parent->name;
+		$this->parent = $parent;
 
 		$this->addUpload('imageToUpload', 'Přidat fotku:')
 			->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 * 1024)
@@ -48,10 +48,11 @@ class FirstImageUploadForm extends BaseForm {
 			$this->addError("Vyberte platný soubor");
 		}
 
-		$this->presenter->redirect('this', array(
-			$this->parentName . '-path' => $imagePath, //cesta
-			'do' => $this->parentName . '-crop'//signál
+		$link = $this->parent->link('crop!', array(
+			'path' => $imagePath, //cesta
 		));
+
+		$this->presenter->redirectUrl($link);
 	}
 
 }
