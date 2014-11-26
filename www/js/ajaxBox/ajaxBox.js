@@ -207,7 +207,7 @@
 			opts.theme = opts.theme + ' ' + $box.data("ajaxbox-additional-classes");
 		}
 
-		if (opts.openOnStart === "" && $box.data("ajaxbox-open-on-start") !== undefined) {
+		if ($box.data("ajaxbox-open-on-start") !== undefined) {
 			opts.openOnStart = $box.data("ajaxbox-open-on-start");
 		}
 
