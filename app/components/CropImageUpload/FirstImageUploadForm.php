@@ -46,6 +46,7 @@ class FirstImageUploadForm extends BaseForm {
 			$imagePath = UploadImage::uploadToTemp($image, 50, 50, 1000, 1000);
 		} else {
 			$this->addError("Vyberte platný soubor");
+			$this->presenter->redirect('this');
 		}
 
 		$link = $this->parent->link('crop!', array(
