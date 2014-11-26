@@ -8,6 +8,7 @@
 		margin-top: 0;
 	}
     </style>
+	{control css 'profile/edit.less', 'imgareaselect/default.less', 'imgareaselect/inWindow.less'}
 {/block}
 
 {block foot}
@@ -20,6 +21,10 @@
 		];
     </script>
 	{control js 'jquery-ui-autocomplete/jquery-ui.min.js', 'jquery-ui-autocomplete/initCities.js'}
+
+{* je to zvlast schvalne, nejak si to nerozumi s tou minimalizaci*}
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/jquery.imgareaselect.min.js"></script>
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/inits/profilePhoto.js"></script>
 {/block}
 
 {block content}
@@ -29,23 +34,25 @@
 	<h1 n:block="title">Profil uživatele {$userData->user_name}</h1>
 
 	<br />
-	
+
 	<h2>Editace údajů</h2>
 	<br />
- 
-	{$userData|showProfMin}
-	{control profilePhotoForm}
+	<div class="photo-change">
+		{$userData|showProfMin}
+		<a title="Nahrát profilovku" class="uploadProfilePhoto red-link">Upravit profilovku</a>
+		{control cropProfilePhoto}
+	</div>
 	{* v první verzi se změna statusu skrývá *}
 	{*<h2 id="changeStatus">Změna statusu</h2>*}
 	{*control statusChangeForm*}
 	{control firstEditForm}
     {control secondEditForm}
 	{control editCityForm}
-	
+
 	{if $userData->property->type != 6}
 		{control thirdEditForm}
 	{/if}
-	
+
 	{control editPlacesPositionsForm}
-	
+
 {/block}
