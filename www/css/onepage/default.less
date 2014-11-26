@@ -177,6 +177,24 @@ input[type="submit"]{
 			}
 		}
 		
+		&.one-page-profile-picture{
+			display: inline-block;
+			
+			.generatedProfile{
+				height: 50px;
+				width: 50px;
+				background: none;
+				box-shadow: none;
+				border: none;
+			}
+			
+			img{
+				margin-top: 6px;
+				width: 47px !important;
+				height: 47px !important;
+			}
+		}
+		
 		.photoLinkContainer{
 			position: absolute;
 			top: 5px;
@@ -212,28 +230,28 @@ input[type="submit"]{
 		}
 		
 	}
-	.big-user-name{
-		font-weight: 200;
+	
+	.user-name{
+		font-weight: 400;
 		color: @red-color;
-		font-size: 40px;
-		letter-spacing: -3px;
 		display: block;
+		font-size: 18px;
+		display: inline-block;
+		font-family: 'Source Sans Pro', Arial, sans-serif;
 	}
 	
-	.first-sentence{
-		font-size: 14px;
-		display: block;
-		padding: 4px 0;
-		color: #222;
-	}
 	
 	.sexy-label{
-		font-size: 20px;
+		font-size: 16px;
 		display: block;
-		padding: 4px 0;
+		padding: 0;
 		text-transform: uppercase;
 		font-style: italic;
 		color: #222;
+	}
+	
+	.name-container{
+		display: inline-block;
 	}
 	
 	.delimiter{
@@ -246,7 +264,7 @@ input[type="submit"]{
 			background: @red-color;
 		}
 		&.top{
-			margin-top: 20px;
+			margin-top: 10px;
 		}
 	}
 	
