@@ -3,6 +3,7 @@
 <nav id="stream-menu">
 	{include #profile}
 	<div class="usermenu">
+	<a n:href=":Search:Search:" class="add-friend" title="Hledat přátele">HLEDAT PŘÁTELE</a>
 	<a n:href=":Profil:Edit:default" class="edit" title="Editovat profil">EDITOVAT PROFIL</a>
 	<a n:href=":Profil:Show:default" class="profile" title="Muj profil">MŮJ PROFIL</a>
 	{* skrytí žádostí o ověření pro první verzi přiznání *}
@@ -64,7 +65,7 @@
 {* přátelé *}
 {define friends}
 <div class="usermenu">
-	<a title="Seznam přátel" id="friendsBtn">SEZNAM PŘÁTEL</a>
+	<a title="Seznam přátel" class="friends" id="friendsBtn">SEZNAM PŘÁTEL</a>
 	<div id="friends">
 	{control friends}
 	</div>

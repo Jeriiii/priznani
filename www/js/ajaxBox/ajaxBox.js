@@ -121,7 +121,7 @@
 		/* při true vyvolá pozadí zakrývající vše ostatní (dle stylů) - toto pozadí je ve stylech jako .activeBackground */
 		hideOthers: false,
 		/* defaultní zpráva v dolní části okénka*/
-		defaultMessage: '',
+		infoMessage: "",
 		/* zpráva v headeru okénka */
 		headerHtml: "",
 		/* objekt definující zapnutí a nastavení modulu pro obnovování snippetu a kontroly jeho příchozího obsahu */
@@ -203,12 +203,16 @@
 			opts.loadUrl = $box.data("ajaxbox-load-url");
 		}
 
-		if (opts.loadUrl === "" && $box.data("ajaxbox-additional-classes") !== undefined) {
+		if (opts.theme === "" && $box.data("ajaxbox-additional-classes") !== undefined) {
 			opts.theme = opts.theme + ' ' + $box.data("ajaxbox-additionalClasses");
 		}
 
-		if (opts.loadUrl === "" && $box.data("ajaxbox-open-on-start") !== undefined) {
+		if (opts.openOnStart === "" && $box.data("ajaxbox-open-on-start") !== undefined) {
 			opts.openOnStart = $box.data("ajaxbox-open-on-start");
+		}
+
+		if ($box.data("ajaxbox-info-message") !== undefined) {
+			opts.infoMessage = $box.data("ajaxbox-info-message");
 		}
 
 		return opts;
@@ -238,7 +242,7 @@
 			box.find('.ajaxBoxHeader').append('<span class="close-cross">×</span>');
 		}
 		box.prepend('<div class="arrow-up"></div>');//přidání šipečky
-		box.append('<div class="window-info">' + opts.defaultMessage + '</div>');//informační boxík okénka (dole)
+		box.append('<div class="window-info">' + opts.infoMessage + '</div>');//informační boxík okénka (dole)
 		button.append('<div class="ajaxbox-button-info"></div>');
 		button.find('.ajaxbox-button-info').css('display', 'none');
 

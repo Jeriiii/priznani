@@ -248,10 +248,19 @@
 			.chatbox-username{
 				font-weight: normal !important;
 				line-height: 30px;
+				cursor: pointer;
 				font-family: 'Source Sans Pro', Arial, sans-serif !important;
 				display: inline-block;
 				padding-left: 20px + @online-indicator-size !important;
+				color: white !important;
 				
+				&:hover{
+					text-decoration: underline;
+				}
+				
+				&:active{
+					color: white;
+				}
 			}
 			
 		 }

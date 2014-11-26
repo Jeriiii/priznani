@@ -39,7 +39,7 @@ $('#activities').ajaxBox({
 	buttonSelector: '#activities-btn',
 	topMargin: -10, //korekce y
 	arrowOrientation: 'right', //šipka bude vpravo
-	theme: "posAjaxBox interface", //použijí se implicitní styly, ale budou upraveny
+	theme: "posAjaxBox interface activitiesBox", //použijí se implicitní styly, ale budou upraveny
 	headerHtml: "Aktivity", //header
 	ajaxObserverId: 'activities-observer',
 	streamSnippetModule: {

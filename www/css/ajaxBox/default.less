@@ -8,11 +8,11 @@
 
 /*********** vyskakovaci okenko, viz aktivity, nové zprávy apod. Součást ajaxBoxu ***********/
 /* defaults */
-@window-width:250px;//sirka okna
-@window-height:200px;//vyska okna
-@window-info-height: 30px; /* sedy ramecek dole ve vyskakovacim okenku - vyska */
-@window-header-height: 20px; /* sedy ramecek dole ve vyskakovacim okenku - vyska */
-@border-color: #eee;
+@default-window-width:400px;//sirka okna
+@default-window-height:350px;//vyska okna
+@default-window-info-height: 30px; /* sedy ramecek dole ve vyskakovacim okenku - vyska */
+@default-window-header-height: 20px; /* sedy ramecek dole ve vyskakovacim okenku - vyska */
+@default-border-color: #eee;
 /**/
 .posAjaxBox{
 	
@@ -20,17 +20,17 @@
 	position: absolute;
 	top: 60px;
 	right:4px;
-	width:@window-width;
-	height:@window-height;
+	width:@default-window-width;
+	height:@default-window-height;
 	z-index:1000;
 	.box-shadow(0px 2px 13px 0px rgba(50, 50, 50, 0.8));
 	background-color: #fff;
-	border: 1px solid @border-color;
+	border: 1px solid @default-border-color;
 	.activity-item {
 		padding: 5px 8px;
 		font-size: 12px;
 		color: #222;
-		border-bottom: 1px solid @border-color;
+		border-bottom: 1px solid @default-border-color;
 	}
 	&.interface{/*aby okenko neujizdelo se strankou */
 		position: fixed !important;
@@ -38,7 +38,7 @@
 	
 	
 	.ajaxBoxContent{
-		height: @window-height - @window-info-height - @window-header-height - 4px;/* ty 4px je za padding headeru*/
+		height: @default-window-height - @default-window-info-height - @default-window-header-height - 4px;/* ty 4px je za padding headeru*/
 		overflow: auto;
 		
 	}
@@ -62,8 +62,9 @@
 	
 		
 	.window-info{
-		height: @window-info-height;
-		line-height: @window-info-height;
+		position: absolute;
+		height: @default-window-info-height;
+		line-height: @default-window-info-height;
 		font-size: 16px;
 		color: #666;
 		text-align: center;
@@ -72,11 +73,11 @@
 		overflow: hidden;
 		background: #eee;
 		.box-shadow(inset 0 0 15px 0px #ccc);
-		border-top: 1px solid @border-color;
+		border-top: 1px solid @default-border-color;
 	}
 	
 	.ajaxBoxHeader{
-		height: @window-header-height;
+		height: @default-window-header-height;
 		background: white;
 		padding: 2px 5px;
 	}

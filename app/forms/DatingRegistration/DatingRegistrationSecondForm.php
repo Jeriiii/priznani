@@ -23,6 +23,13 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 		$this->userDao = $userDao;
 		$this->regSession = $regSession;
 
+		//graphics
+		$renderer = $this->getRenderer();
+		$renderer->wrappers['controls']['container'] = 'div';
+		$renderer->wrappers['pair']['container'] = 'div';
+		$renderer->wrappers['label']['container'] = NULL;
+		$renderer->wrappers['control']['container'] = NULL;
+
 		$this->addText('email', 'Email')
 			->addRule(Form::FILLED, 'Email není vyplněn.')
 			->addRule(Form::EMAIL, 'Vyplněný email není platného formátu.')
