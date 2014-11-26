@@ -22,19 +22,25 @@ var reloadFn = function () {
 	fnPreventNewActivity();
 };
 
+/**
+ * Zpracuje číselnou odpověď ajaxObserveru a nastaví ji ke tlačítku
+ * @param {type} opts nastavení dotyčného okénka
+ * @param {type} data příchozí data od serveru
+ */
+function handleNumberResponse(opts, data) {//zpracování odpovědi od ajaxObserveru, konkrétně čísla s počtem zpráv. Je-li nenulové, zobrazí se vedle tlačítka.
+	if (data) {
+		$(opts.buttonSelector).find('.ajaxbox-button-info').html(data).css('display', 'block');
+	} else {
+		$(opts.buttonSelector).find('.ajaxbox-button-info').css('display', 'none');
+	}
+}
+
 $('#activities').ajaxBox({
 	buttonSelector: '#activities-btn',
 	topMargin: -10, //korekce y
 	arrowOrientation: 'right', //šipka bude vpravo
 	theme: "posAjaxBox interface", //použijí se implicitní styly, ale budou upraveny
 	headerHtml: "Aktivity", //header
-	streamSnippetModule: {
-		snippetName: 'snippet-activities-list',
-		endMessage: 'Žádné další zprávy.',
-		offsetParameter: 'activities-offset',
-		limitParameter: 'activities-limit',
-		addLimit: 5,
-		startOffset: 0,
-		dataArrived: reloadFn
-	},
+	ajaxObserverId: 'activities-observer',
+	observerResponseHandle: handleNumberResponse
 });
