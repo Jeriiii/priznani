@@ -42,5 +42,14 @@ $('#activities').ajaxBox({
 	theme: "posAjaxBox interface", //použijí se implicitní styly, ale budou upraveny
 	headerHtml: "Aktivity", //header
 	ajaxObserverId: 'activities-observer',
+	streamSnippetModule: {
+		snippetName: 'snippet-activities-list',
+		endMessage: 'Žádné další zprávy.',
+		offsetParameter: 'activities-offset',
+		limitParameter: 'activities-limit',
+		addLimit: 5,
+		startOffset: 0,
+		dataArrived: reloadFn
+	},
 	observerResponseHandle: handleNumberResponse
 });

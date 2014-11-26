@@ -189,17 +189,17 @@
 			{control jsLayout}
 
 			{if $user->isLoggedIn()}
-				{control jsLayoutLoggedIn}
-				{control chat}
 				<script>
-					$('body').activities();
-				</script>
-				<script>
-					//inicializace ajaxObserveru
+					//inicializace ajaxObserveru - nechat před ostatními skripty
 					var observer = $('body').ajaxObserver({
 						requestUrl: {$ajaxObserverLink}
 					});
 
+				</script>
+				{control jsLayoutLoggedIn}
+				{control chat}
+				<script>
+					$('body').activities();
 				</script>
 			{/if}
 
