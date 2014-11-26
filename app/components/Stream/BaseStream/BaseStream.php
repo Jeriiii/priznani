@@ -39,6 +39,7 @@ use POSComponent\Comments\StatusComments;
 use POSComponent\BaseLikes\ImageLikes;
 use POSComponent\BaseLikes\ConfessionLikes;
 use POSComponent\BaseLikes\StatusLikes;
+use POSComponent\CropImageUpload\CropImageUpload;
 
 class BaseStream extends BaseProjectControl {
 
@@ -237,8 +238,8 @@ class BaseStream extends BaseProjectControl {
 	 * @param type $name
 	 * @return \Nette\Application\UI\Form\ProfilePhotoUploadForm
 	 */
-	protected function createComponentUploadPhotoForm($name) {
-		return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+	protected function createComponentCropImageUpload($name) {
+		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
 	}
 
 	/**
