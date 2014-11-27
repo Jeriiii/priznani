@@ -1,90 +1,77 @@
 @import "../bootstrap/help/mixins.less";
 
 
-
-@droplink-width:250px;
-@droplink-height:200px;
-@droplink-info-height: 30px; /* sedy ramecek dole ve vyskakovacim okenku - vyska */
-@border-color: #eee;
-
 #activities {
+	overflow: hidden;
+	display: none;
 	
+	ul{
+		position: relative;
+		z-index: 900;
+		overflow: auto;
+		height: 90%;
+		background: #fff3f5;
+		li{
+			border-bottom: 1px solid #ddd;
+			margin: 0;
+			cursor: pointer;
+			padding: 0;
+			
+			.activity-link{
+				display: block;
+				padding: 8px 4%;
+			}
 
-	.new-counter {
-		position: absolute;
-		right: 15px;
-		bottom: -2px;
-		font-weight: bold;
-		padding: 2px;
-		border-radius: 6px;
-		background-color: #fe9430;
-		color: white;
-		.box-shadow(0px 2px 4px 0px #8b0302);
-	}
+			&.viewed{
+				background: #fff;
+			}
+
+			&:hover{
+			background: #eee;
+			}
+
+			strong{
+				font-size: 12px;
+				font-weight: 600;
+			}
+			p{
+				padding: 3px 8px;
+				font-size: 12px;
+				float: left;
+				min-width: 200px;
+				color: #444;
+			}
+
+			img{
+				float: left;
+				width: 40px !important;
+				height: 40px !important;
+			}
+		}
 	
-	.marker, .no-activities{
-		position: absolute;
-		height: @droplink-info-height;
-		left: 0;
-		line-height: @droplink-info-height;
-		font-size: 16px;
+	}
+}
+
+.activitiesBox{
+	.noConvMessages{
+		padding: 3px 5px;
 		color: #666;
 		text-align: center;
-		bottom: 0px;
-		width: 100%;
-		overflow: hidden;
-		background: #eee;
-		.box-shadow(inset 0 0 15px 0px #ccc);
-		border-top: 1px solid @border-color;
-	}
-}
-
-#activities-droplink {
-	display:none;
-	position: absolute;
-	top: 60px;
-	right:4px;
-	width:@droplink-width;
-	height:@droplink-height;
-	z-index:1000;
-	.activity-item {
-		padding: 5px 8px;
 		font-size: 12px;
-		color: #222;
-		border-bottom: 1px solid @border-color;
 	}
-	
-	.box-shadow(0px 2px 13px 0px rgba(50, 50, 50, 0.8));
-	background-color: #fff;
-	border: 1px solid @border-color;
-	
-	.arrow-up {
-		position: absolute;
-		top: -14px;
-		right: 22px;
-		width: 0; 
-		height: 0; 
-		border-left: 15px solid transparent;
-		border-right: 15px solid transparent;
-		border-bottom: 15px solid white;
-	}
-	
-	.messages{
-		width: auto;
-		height: @droplink-height - @droplink-info-height;
-		overflow: auto;
-		padding: 0 8px;
-		
-		.no-activities{
-			text-align: center;
-			font-size: 16px;
-			color: #aaa;
-		}
+
+	.ajaxBoxHeader{
+		padding: 3px 5px;
+		font-weight: 800;
+		font-size: 14px;
+		height: 20px;
 	}
 }
-
-#loadingDiv {
-	display:none;
-	padding: 4px 0;
-	text-align: center;
+.read-all-link{
+	display: block;
+	width: auto;
+	height: 100%;
+	&:hover{
+		text-decoration: underline;
+	}
 }

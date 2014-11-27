@@ -115,7 +115,7 @@ class UserGalleryImagesBaseForm extends BaseForm {
 				->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 * 1024)
 				->addCondition(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif');
 			if ($displayName) {
-				$this->addText($prefixImgName . self::IMAGE_NAME . $i, 'Jméno:')
+				$this->addText($prefixImgName . self::IMAGE_NAME . $i, 'Název:')
 					->addConditionOn($this[$prefixImgName . self::IMAGE_FILE . $i], Form::FILLED)
 					->addRule(Form::MAX_LENGTH, "Maximální délka jména fotky je %d znaků", 40);
 			}

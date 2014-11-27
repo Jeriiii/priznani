@@ -22,6 +22,7 @@ class ShowProfHelper {
 	const NAME_MIN = "showProfMin";
 	const NAME_MIN_DIV = "showProfMinDiv";
 	const NAME_DIV = "showProfDiv";
+	const NAME_NO_LINK = "showProfNoLink";
 
 	/* typy nastavení */
 	const TYPE_EL_SPAN = "span";
@@ -45,9 +46,10 @@ class ShowProfHelper {
 	 * @param array|null $href Vlasní odkaz. První prvek pole je odkaz, druhý prvek je pole parametrů.
 	 * @param boolen $min TRUE = Zobrazení bez jména vedle fotky.
 	 * @param string $el název elementu, kterým bude profil obalen
+	 * @param bool $noLink negenerovat odkaz
 	 * @return \Nette\Utils\Html
 	 */
-	public function showProf($user, $href = null, $min = FALSE, $el = 'span') {
+	public function showProf($user, $href = null, $min = FALSE, $el = 'span', $noLink = FALSE) {
 		return $this->createShowProf($user, $href, $min, $el);
 	}
 
@@ -57,11 +59,16 @@ class ShowProfHelper {
 	 * @param array $href Vlasní odkaz. První prvek pole je odkaz, druhý prvek je pole parametrů.
 	 * @param boolean $min TRUE = Zobrazení bez jména vedle fotky.
 	 * @param string $el název elementu, kterým bude profil obalen
+	 * @param bool $noLink negenerovat odkaz
 	 * @return \Nette\Utils\Html
 	 */
-	private function createShowProf($user, $href, $min, $el) {
+	private function createShowProf($user, $href, $min, $el, $noLink = FALSE) {
 		/* Výsledek je celý v odkazu */
-		$elLink = $this->createLink($href, $user);
+		if (!$noLink) {
+			$elLink = $this->createLink($href, $user);
+		} else {
+			$elLink = Html::el('span');
+		}
 
 		/* profilová fotka */
 		$elPhoto = $this->createPhoto($el, $user);

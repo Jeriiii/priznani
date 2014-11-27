@@ -51,8 +51,8 @@ class DatingEditThirdForm extends DatingRegistrationThirdForm {
 			$this->setCoupleDefaults($this->type, $couple);
 		}
 
+		$this["send"]->setAttribute("class", "btn-main medium button");
 		$this['send']->caption = "Uložit";
-
 		return $this;
 	}
 

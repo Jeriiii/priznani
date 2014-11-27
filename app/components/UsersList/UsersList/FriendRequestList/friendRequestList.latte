@@ -10,8 +10,8 @@
 		{/if}
 		<tr>
 			<td>{$friendRequest->userFrom|showProf}</td>
-			<td><a n:href="accept! id => $friendRequest->id" class="ajax">Přijmout</a></td>
-			<td><a n:href="reject! id => $friendRequest->id" class="ajax">Odmítnout</a></td>
+			<td><a n:href="accept! id => $friendRequest->id" class="ajax btn-main">Přijmout</a></td>
+			<td><a n:href="reject! id => $friendRequest->id" class="ajax btn-main">Odmítnout</a></td>
 		</tr>
 		{if $iterator->isLast()}
 			</tbody>

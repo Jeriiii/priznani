@@ -62,7 +62,7 @@ class DatingEditSecondForm extends BaseForm {
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->addSubmit('send', 'Uložit')
-			->setAttribute("class", "btn btn-info");
+			->setAttribute("class", "btn-main medium button");
 
 		return $this;
 	}
