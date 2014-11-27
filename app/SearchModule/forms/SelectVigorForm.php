@@ -23,7 +23,9 @@ class SelectVigorForm extends BaseForm {
 		$this->addSelect("vigor", "Znamení:", $vigors)
 			->setPrompt("Vyberte znamení");
 
-		$this->addSubmit('send', 'Hledat');
+		$this->setBootstrapRender();
+		$this->addSubmit('send', 'Hledat')
+			->setAttribute('class', 'btn-main');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

@@ -65,6 +65,7 @@ class EditCityForm extends BaseForm {
 			));
 		}
 
+		$this->setBootstrapRender();
 		$this->addSubmit('send', 'Uložit')
 			->setAttribute("class", "btn-main medium button");
 		$this->onValidate[] = callback($this, "existingCity");
