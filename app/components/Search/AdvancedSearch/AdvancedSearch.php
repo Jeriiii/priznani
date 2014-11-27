@@ -119,10 +119,10 @@ class AdvancedSearch extends BaseSearch {
 	}
 
 	public function render($mode) {
-		$this->renderBase($mode);
 		$this->template->setFile(dirname(__FILE__) . '/advancedSearch.latte');
 
 		$this->template->render();
+		$this->renderBase($mode);
 	}
 
 	/**
