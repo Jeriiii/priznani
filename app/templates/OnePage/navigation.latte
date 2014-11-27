@@ -3,6 +3,7 @@
 <nav id="stream-menu">
 	{include #profile}
 	<div class="usermenu">
+	<a n:href=":Search:Search:" class="add-friend" title="Hledat přátele">HLEDAT PŘÁTELE</a>
 	<a n:href=":Profil:Edit:default" class="edit" title="Editovat profil">EDITOVAT PROFIL</a>
 	<a n:href=":Profil:Show:default" class="profile" title="Muj profil">MŮJ PROFIL</a>
 	{* skrytí žádostí o ověření pro první verzi přiznání *}
@@ -38,12 +39,13 @@
 {* profilový obrázek, jméno uživatele a tlačítko editovat *}
 {define profile}
 {if $user->isLoggedIn() && $loggedUser->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
-	<div class="user-profile-picture">
+	<div class="user-profile-picture one-page-profile-picture">
 	{$loggedUser|showProfMinDiv}
 	</div>
-	<b><a n:href=":Profil:Show:default" class="big-user-name">{$loggedUser->user_name|upper}</a></b>
-	<span class="sexy-label">{$loggedUser|sexyLabel}</span>
-	<span class="first-sentence">{$loggedUser->property->first_sentence}</span>
+	<div class="name-container">
+		<a n:href=":Profil:Show:default" class="user-name">{$loggedUser->user_name|upper}</a>
+		<span class="sexy-label">{$loggedUser|sexyLabel}</span>
+	</div>
 	<div class="delimiter top"></div>
 {/if}
 {/}
@@ -52,7 +54,7 @@
 
 {define friendRequest}
 
-<div class="usermenu red">
+<div class="usermenu {if $countFriendRequests != 0}red{/if}">
 	<a title="Žádosti o přátelství" class="with-counter" id="friendRequestsBtn"><span>{$countFriendRequests}</span> ŽÁDOSTI O PŘÁTELSTVÍ</a>
 	<div id="friendRequests">
 	{control friendRequest}
@@ -63,7 +65,7 @@
 {* přátelé *}
 {define friends}
 <div class="usermenu">
-	<a title="Seznam přátel" id="friendsBtn">SEZNAM PŘÁTEL</a>
+	<a title="Seznam přátel" class="friends" id="friendsBtn">SEZNAM PŘÁTEL</a>
 	<div id="friends">
 	{control friends}
 	</div>
@@ -80,12 +82,14 @@
 </div>
 {/}
 
-{* označili mě jako sexi *}
+{* označili mě jako sexy *}
 {define markedFromOther}
 {if $countSexy != 0}
-	<a class="btn-main btn-small" title="Jsem pro ně sexi" id="markedFromOtherBtn">{$countSexy} Jsem pro ně sexi</a>
+<div class="usermenu red">
+	<a class="with-counter" title="Jsem pro ně sexy" id="markedFromOtherBtn"><span>{$countSexy}</span> JSEM PRO NĚ SEXY</a>
 	<div id="markedFromOther">
 	{control markedFromOther}
 	</div>
+</div>
 {/if}
 {/}

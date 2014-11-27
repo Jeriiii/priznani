@@ -48,6 +48,7 @@ class DatingRegistrationThirdForm extends DatingRegistrationBaseForm {
 		$this->onSuccess[] = callback($this, 'submitted');
 		$submitBtn = $this->addSubmit('send', 'Dokončit registraci');
 		$submitBtn->setAttribute("class", "btn btn-main");
+		$this->setBootstrapRender();
 	}
 
 	public function submitted($form) {

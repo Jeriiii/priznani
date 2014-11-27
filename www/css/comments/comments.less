@@ -7,6 +7,7 @@
 */
 
 
+
 .comments{
 		
 	.comment{
@@ -19,6 +20,15 @@
 			img{
 				width: 40px;
 				height: 40px;
+			}
+		}
+		
+		.react-menu{
+			text-align: right;		
+			padding: 2px 25px;
+
+			a{
+				color: #cf0707;			
 			}
 		}
 
@@ -65,7 +75,7 @@
 
 		.generatedProfile{
 			float: left;
-			width: 20%;
+			width: 11%;
 			padding: 0;
 			margin: 0 !important;
 		}
@@ -86,13 +96,14 @@
 
 		.comment-form{
 			float: left;
-			width: 80%;
+			width: 88%;
 			margin: 0;
 			padding: 0;
 		}
 
 		textarea{
 			width: 98%;
+			resize: vertical;
 			height: 50px;
 			padding: 2px 1%;
 			overflow: auto;
@@ -107,4 +118,34 @@
 
 .full-comments {
 	display: none;
+}
+
+.big-comments{
+	.add-comment{
+		margin: 5px 0;
+	}
+	
+	.generatedProfile{
+		img{
+			margin-left: 10px;
+			width: 50px;
+			height: 50px;
+		}
+	}
+	
+	.comment{
+		a.red-link{
+			padding: 0px;
+			font-size: 18px;
+		}
+		p {
+			font-size: 16px;
+			padding: 8px;
+		}
+	}
+}
+.confirm-content{
+	display: none;
+	
+	
 }

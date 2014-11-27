@@ -10,7 +10,7 @@
  */
 use Nette\Application\UI\Form as Frm,
 	Nette\Caching\Cache;
-use POSComponent\Comments\ConfessionCommentsment;
+use POSComponent\Comments\ConfessionComments;
 
 class PagePresenter extends BasePresenter {
 

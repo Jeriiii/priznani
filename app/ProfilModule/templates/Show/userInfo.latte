@@ -6,14 +6,16 @@
 		margin-top: 0;
 	}
     </style>
+	 {control css 'profile/show.less', 'profile/userInfo.less'}
 {/block}
 {block foot}
 	{control js}
 {/block}
 {block content}
 
-<h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
-
+<div class="userHead">
+{$userData|showProfDiv}
+</div>
 
 {include 'menu.latte' $userID => 'id'}
 

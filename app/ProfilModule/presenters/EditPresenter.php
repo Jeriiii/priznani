@@ -11,6 +11,7 @@ use POS\Model\UserPositionDao;
 use POS\Model\EnumPositionDao;
 use POS\Model\EnumPlaceDao;
 use POS\Model\UserPlaceDao;
+use POSComponent\CropImageUpload\CropImageUpload;
 
 class EditPresenter extends ProfilBasePresenter {
 
@@ -136,8 +137,8 @@ class EditPresenter extends ProfilBasePresenter {
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
-	protected function createComponentProfilePhotoForm($name) {
-		return new Frm \ ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+	protected function createComponentCropProfilePhoto($name) {
+		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
 	}
 
 	protected function createComponentStatusChangeForm($name) {

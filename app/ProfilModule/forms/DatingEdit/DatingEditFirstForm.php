@@ -44,7 +44,7 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 		}
 
 		$this["send"]->caption = "Uložit";
-		$this["send"]->setAttribute("class", "btn btn-info");
+		$this["send"]->setAttribute("class", "btn-main medium button");
 
 		return $this;
 	}

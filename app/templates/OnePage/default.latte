@@ -1,5 +1,5 @@
 {block head}
-    {control css 'onepage/default.less', 'stream/list.less', 'comments/comments.less'}
+    {control css 'onepage/default.less', 'stream/list.less', 'comments/comments.less', 'imgareaselect/default.less', 'imgareaselect/inWindow.less'}
 {/block}
 
 {block content}
@@ -46,6 +46,9 @@
 		$("#frm-userStream-statusForm-message").animate({ height: "200px"}, 500);
 	});
 </script>
+{* je to zvlast schvalne, nejak si to nerozumi s tou minimalizaci*}
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/jquery.imgareaselect.min.js"></script>
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/inits/profilePhoto.js"></script>
 {/block}
 
 

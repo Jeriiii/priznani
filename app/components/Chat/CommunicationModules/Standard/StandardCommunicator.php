@@ -157,7 +157,8 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 			$userIdCoded = $this->chatManager->getCoder()->encodeData($userId);
 			if (!array_key_exists($userIdCoded, $responseArray)) {//pokud je tohle prvni zprava od tohoto uzivatele
 				$name = $this->getUsername($userId); //pribaleni uzivatelskeho jmena uzivatele, s kterym komunikuji
-				$responseArray[$userIdCoded] = array('name' => $name, 'messages' => array()); //pak vytvori pole na zpravy od tohoto uzivatele
+				$href = $this->getPresenter()->link(':Profil:Show:', array('id' => $userId));
+				$responseArray[$userIdCoded] = array('name' => $name, 'href' => $href, 'messages' => array()); //pak vytvori pole na zpravy od tohoto uzivatele
 			}
 			$responseArray[$userIdCoded]['messages'][] = $this->modifyResponseRowToArray($message); //do pole pod klicem odesilatele v poli $responseArray vlozi pole se zpravou
 			usort($responseArray[$userIdCoded]['messages'], array($this, 'messageSort')); //seřadí zprávy

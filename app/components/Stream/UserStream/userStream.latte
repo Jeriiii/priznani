@@ -58,11 +58,8 @@
 {define addUserInfo}
 	{if empty($profilePhoto) &&  $user->isLoggedIn()}
 		<div id="profile-photo-upload">
-			Nahrajte si <span class="highlight">profilovou fotku</span>, aby si vás ostatní mohli prohlédnout.
-			{form uploadPhotoForm}
-				{input uploadPhotoFormImageFile0}
-				{input uploadProfilPhoto}
-			{/form}
+			Nahrajte si <a class="highlight uploadProfilePhoto">profilovou fotku</a>, aby si vás ostatní mohli prohlédnout.
+			{control cropImageUpload}
 		</div>
 	{elseif !empty($profilePhoto) && $user->isLoggedIn() &&  $place==0  && $position==0 && $placePosSession->count%5==0}
 		<div class="questionnaire-form">

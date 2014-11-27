@@ -76,6 +76,8 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 		}
 		$allow = $this->saveImages($images, $uID, $gallery->id, TRUE);
 
+		$presenter->calculateLoggedUser();
+
 		$presenter->flashMessage('Profilové foto bylo uloženo.');
 
 		$presenter->redirect('this');

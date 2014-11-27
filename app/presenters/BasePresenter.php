@@ -16,6 +16,7 @@ use Nette\Security\User;
 use POS\Ajax\ExampleHandle,
 	POS\Ajax\AjaxCrate,
 	POS\Ajax\ChatConversationsHandle;
+use POS\Ajax\ActivitesHandle;
 use POSComponent\Payment;
 use NetteExt\Serialize\Serializer;
 use NetteExt\Serialize\Relation;
@@ -527,6 +528,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 			//$handles->addHandle('chat', new ExampleHandle()); //příklad
 			$handles->addHandle('chatConversationWindow', new ChatConversationsHandle($this->chatManager, $this->getUser()->getId()));
+			$handles->addHandle('activities-observer', new ActivitesHandle($this->activitiesDao, $this->getUser()->getId()));
 			$this->ajaxObserver->sendRefreshRequests($this, $handles);
 		}
 	}

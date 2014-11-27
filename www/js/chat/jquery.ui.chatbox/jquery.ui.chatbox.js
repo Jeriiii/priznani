@@ -35,6 +35,7 @@ if (!Array.indexOf) {
 			title: null, // title of the chatbox
 			user: null, // can be anything associated with this chatbox
 			hidden: false,
+			href: '#',
 			offset: 0, // relative to right edge of the browser window
 			width: 300, // width of the chatbox
 			messageSent: function (id, user, msg) {
@@ -142,7 +143,7 @@ if (!Array.indexOf) {
 					})
 					.prepend('<span class="online-indicator"></span>')
 					.appendTo(uiChatbox),
-					uiChatboxTitle = (self.uiChatboxTitle = $('<span class="chatbox-username"></span>'))
+					uiChatboxTitle = (self.uiChatboxTitle = $('<a class="chatbox-username" href="' + options.href + '"></a>'))
 					.html(title)
 					.appendTo(uiChatboxTitlebar),
 					uiChatboxTitlebarClose = (self.uiChatboxTitlebarClose = $('<a href="#"></a>'))

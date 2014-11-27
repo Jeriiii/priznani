@@ -10,7 +10,7 @@
  * http://odyniec.net/projects/imgareaselect/
  *
  */
-
+;
 (function ($) {
 
 	var abs = Math.abs,
