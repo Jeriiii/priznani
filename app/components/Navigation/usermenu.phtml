@@ -4,7 +4,7 @@
 	<li {if $item->isCurrent} class="active"{/if}>
 		<a href="{$item->url}">
 	<!--[if IE 7]><i class="icon-chevron-right"></i><span style="float: right;">{$item->label}</span><div class="clear"><![endif]-->
-			<![if !IE 7]>{$item->label}<i class="icon-chevron-right"></i><![endif]>
+			<![if !IE 7]>{$item->label}<![endif]>
 		</a>
 		{if !$iterator->isLast()}
 		<div class="delimiter"></div>

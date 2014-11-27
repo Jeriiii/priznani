@@ -4,7 +4,8 @@ Feature: Confessions form
 		Given I am on "/"
 		And I should see "Přiznání"
 		When I fill in "note" with "<text>"
-		And I press "frm-userStream-addConfessionForm-submit"					
+		And I press "frm-userStream-addConfessionForm-submit"
+		And I look on the page
 		Then I should see "<flash_message>"
 
 		Examples:

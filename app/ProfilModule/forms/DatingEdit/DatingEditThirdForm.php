@@ -6,7 +6,7 @@ use Nette\ComponentModel\IContainer,
 	POS\Model\CoupleDao,
 	POS\Model\UserDao;
 use Nette\Database\Table\ActiveRow;
-use Nette\ObjectMixin;
+use Nette\ArrayHash;
 use POS\Model\UserCategoryDao;
 use POS\Model\UserPropertyDao;
 
@@ -60,9 +60,9 @@ class DatingEditThirdForm extends DatingRegistrationThirdForm {
 		$values = $form->values;
 		$presenter = $this->getPresenter();
 
-		$userData = new ObjectMixin();
+		$userData = new ArrayHash();
 		$this->setFirstPersonData($this->type, $userData, $values);
-		$this->userProperty->update($this->user->id, $userData);
+		$this->userPropertyDao->update($this->userProperty->id, $userData);
 
 		if ($this->isCouple($this->type)) {
 			$coupleData = new ObjectMixin();
@@ -70,7 +70,8 @@ class DatingEditThirdForm extends DatingRegistrationThirdForm {
 			$this->coupleDao->update($this->user->coupleID, $coupleData);
 		}
 
-		$this->userPropertyDao->updatePreferencesID($userData->property, $this->userCategoryDao);
+
+		$this->userPropertyDao->updatePreferencesID($this->userProperty, $this->userCategoryDao);
 
 		$presenter->calculateLoggedUser();
 		$presenter->flashMessage('Změna osobních údajů byla úspěšná');

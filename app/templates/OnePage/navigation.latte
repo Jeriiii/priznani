@@ -4,10 +4,12 @@
 	{include #profile}
 	<div class="usermenu">
 	<a n:href=":Search:Search:" class="add-friend" title="Hledat přátele">HLEDAT PŘÁTELE</a>
+	{if $user->isLoggedIn()}
 	<a n:href=":Profil:Edit:default" class="edit" title="Editovat profil">EDITOVAT PROFIL</a>
 	<a n:href=":Profil:Show:default" class="profile" title="Muj profil">MŮJ PROFIL</a>
 	{* skrytí žádostí o ověření pro první verzi přiznání *}
 	{*<a n:href=":Profil:Show:verification" class="with-counter" title="Editovat profil"><span>{$countVerificationRequests}</span> ŽÁDOSTÍ O OVĚŘENÍ</a>*}
+	{/if}
 	<a n:href=":Profil:Galleries:default" title="Editovat profil">MOJE GALERIE</a>
 	<a n:href=":Profil:Galleries:userGalleryNew" class="add-gallery" title="Profil">VYTVOŘIT GALERII</a>
 	{if $user->isLoggedIn()}
