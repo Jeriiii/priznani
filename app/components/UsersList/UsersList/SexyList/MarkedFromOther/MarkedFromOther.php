@@ -30,7 +30,7 @@ class MarkedFromOther extends BaseSexyList {
 
 	public function render() {
 		parent::render();
-		$this->template->isUserPaying = TRUE; //$this->paymentDao->isUserPaying($this->userID);
+		$this->template->isUserPaying = $this->paymentDao->isUserPaying($this->userID);
 		$this->template->countSexy = $this->youAreSexyDao->countToUser($this->userID);
 		$this->renderTemplate(dirname(__FILE__) . "/markedFromOther.latte");
 	}

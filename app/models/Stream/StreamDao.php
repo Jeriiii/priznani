@@ -191,7 +191,6 @@ class StreamDao extends AbstractDao {
 		$sel = $this->getTable();
 		$this->sortOutItems($categoryIDs, $meUserID, $sel);
 
-//die();
 		$sel->order('id DESC');
 		if ($limit != 0) {
 			$sel->limit($limit, $offset);

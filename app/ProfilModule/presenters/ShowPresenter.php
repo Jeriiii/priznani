@@ -17,6 +17,8 @@ use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
 use Nette\DateTime;
 use POSComponent\CropImageUpload\CropImageUpload;
+use POS\Model\UserDao;
+use NetteExt\Helper\ShowUserDataHelper;
 
 class ShowPresenter extends ProfilBasePresenter {
 
@@ -176,6 +178,8 @@ class ShowPresenter extends ProfilBasePresenter {
 		$this->template->userData = $user;
 		$this->template->userID = $this->userID;
 		$this->template->count = $this->dataForStream->count("id");
+		$this->template->isFriends = $this->friendDao->isFriend($id, $this->getUser()->id);
+		$this->template->sexyLabelToolTip = "Hodnost podle počtu - JE SEXY <br />" . ShowUserDataHelper::getLabelInfoText($user->property->type);
 
 		$profileGalleryID = $this->userGalleryDao->findProfileGallery($this->userID);
 		$profilePhoto = $this->userImageDao->getInGallery($profileGalleryID)->fetch();

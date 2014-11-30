@@ -85,7 +85,7 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 			$radioList = $this->addRadioList($key, $want, $this->wantToMeetOption);
 			$radioList->getSeparatorPrototype()->setName(NULL);
 
-			if (!empty($this->regSession[$key]) || $this->regSession[$key] == 0) { //0 = ne, ale empty by neprošla
+			if (!empty($this->regSession[$key]) || is_numeric($this->regSession[$key])) { //0 = ne, ale empty by neprošla
 				$radioList->setDefaultValue($this->regSession[$key]);
 			} else {
 				$radioList->setDefaultValue(2);

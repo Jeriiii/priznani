@@ -26,11 +26,13 @@ class ShowUserDataHelper {
 
 	/* konstanta určující hranice bodů, kterých může uživatel dosáhnout - když je muž */
 
-	private $LABEL_NAMES_MAN = array(
+	public static $LABEL_NAMES_MAN = array(
 		0 => 'Zajíček',
-		10 => 'Štramák',
-		50 => 'Milovník',
-		200 => 'Casanova',
+		1 => 'Misionář',
+		10 => 'Kanec',
+		100 => 'Loverboy',
+		500 => 'Sexy drak',
+		1000 => 'Cassanova',
 	);
 
 	/* číslo type v databázi */
@@ -39,11 +41,13 @@ class ShowUserDataHelper {
 
 	/* konstanta určující hranice bodů, kterých může uživatel dosáhnout - když je žena */
 
-	private $LABEL_NAMES_WOMAN = array(
-		0 => 'Zaječice',
-		10 => 'Kočka',
-		50 => 'Milovnice',
-		200 => 'Ďáblice',
+	public static $LABEL_NAMES_WOMAN = array(
+		0 => 'Žákyňka',
+		1 => 'Borůvka',
+		10 => 'Pusinka',
+		100 => 'Kočka',
+		500 => 'Královna sexu',
+		1000 => 'Bohyně sexu',
 	);
 
 	/* číslo type v databázi */
@@ -52,56 +56,59 @@ class ShowUserDataHelper {
 
 	/* konstanta určující hranice bodů, kterých může uživatel dosáhnout - když je pár */
 
-	private $LABEL_NAMES_COUPLE = array(
-		0 => 'Páreček',
-		10 => 'Králíci',
-		50 => 'Milovníci',
-		200 => 'Ďáblíci',
+	public static $LABEL_NAMES_COUPLE = array(
+		0 => 'Zajíčci',
+		1 => 'Mazlíci',
+		10 => 'Kanci',
+		100 => 'Sexy',
+		500 => 'Králové sexu',
+		1000 => 'Bohové sexu',
 	);
 
 	/* číslo type v databázi */
 
 	const TYPE_COUPLE_MAN = 4;
-
-	/* konstanta určující hranice bodů, kterých může uživatel dosáhnout - když je pár mužů */
-
-	private $LABEL_NAMES_COUPLE_MAN = array(
-		0 => 'Páreček',
-		10 => 'Králíci',
-		50 => 'Milovníci',
-		200 => 'Ďáblíci',
-	);
-
+//
+//	/* konstanta určující hranice bodů, kterých může uživatel dosáhnout - když je pár mužů */
+//
+//	private $LABEL_NAMES_COUPLE_MAN = array(
+//		0 => 'Páreček',
+//		10 => 'Králíci',
+//		50 => 'Milovníci',
+//		200 => 'Ďáblíci',
+//	);
+//
 	/* číslo type v databázi */
 
 	const TYPE_COUPLE_WOMAN = 5;
-
-	/* konstanta určující hranice bodů, kterých může uživatel dosáhnout - když je pár žen */
-
-	private $LABEL_NAMES_COUPLE_WOMAN = array(
-		0 => 'Páreček',
-		10 => 'Králíci',
-		50 => 'Milovníci',
-		200 => 'Ďáblíci',
-	);
-
+//
+//	/* konstanta určující hranice bodů, kterých může uživatel dosáhnout - když je pár žen */
+//
+//	private $LABEL_NAMES_COUPLE_WOMAN = array(
+//		0 => 'Páreček',
+//		10 => 'Králíci',
+//		50 => 'Milovníci',
+//		200 => 'Ďáblíci',
+//	);
+//
 	/* číslo type v databázi */
 
 	const TYPE_GROUP = 6;
 
-	/* konstanta určující hranice bodů, kterých může uživatel dosáhnout - když je pár žen */
-
-	private $LABEL_NAMES_GROUP = array(
-		0 => 'Páreček',
-		10 => 'Králíci',
-		50 => 'Milovníci',
-		200 => 'Ďáblíci',
-	);
-
-	/* hranice bodů a jména pro případ chyby */
-	private $LABEL_NAMES_DEFAULT = array(
-		0 => 'Tajemný stín'
-	);
+//
+//	/* konstanta určující hranice bodů, kterých může uživatel dosáhnout - když je pár žen */
+//
+//	private $LABEL_NAMES_GROUP = array(
+//		0 => 'Páreček',
+//		10 => 'Králíci',
+//		50 => 'Milovníci',
+//		200 => 'Ďáblíci',
+//	);
+//
+//	/* hranice bodů a jména pro případ chyby */
+//	private $LABEL_NAMES_DEFAULT = array(
+//		0 => 'Tajemný stín'
+//	);
 
 	/**
 	 * Vypíše sexy nálepku uživatele podle jeho vlastností a skóre
@@ -115,31 +122,18 @@ class ShowUserDataHelper {
 
 		switch ($userType) {
 			case self::TYPE_MAN:
-				$label = $this->getSexyLabel($score, $this->LABEL_NAMES_MAN);
+				$label = $this->getSexyLabel($score, self::$LABEL_NAMES_MAN);
 				break;
 
 			case self::TYPE_WOMAN:
-				$label = $this->getSexyLabel($score, $this->LABEL_NAMES_WOMAN);
+				$label = $this->getSexyLabel($score, self::$LABEL_NAMES_WOMAN);
 				break;
 
-			case self::TYPE_COUPLE:
-				$label = $this->getSexyLabel($score, $this->LABEL_NAMES_COUPLE);
+			case self::TYPE_COUPLE || self::TYPE_COUPLE_MAN || self::TYPE_COUPLE_WOMAN || self::TYPE_GROUP:
+				$label = $this->getSexyLabel($score, self::$LABEL_NAMES_COUPLE);
 				break;
-
-			case self::TYPE_COUPLE_MAN:
-				$label = $this->getSexyLabel($score, $this->LABEL_NAMES_COUPLE_MAN);
-				break;
-
-			case self::TYPE_COUPLE_WOMAN:
-				$label = $this->getSexyLabel($score, $this->LABEL_NAMES_COUPLE_WOMAN);
-				break;
-
-			case self::TYPE_GROUP:
-				$label = $this->getSexyLabel($score, $this->LABEL_NAMES_GROUP);
-				break;
-
 			default:
-				$label = $this->getSexyLabel($score, $this->LABEL_NAMES_DEFAULT);
+				$label = $this->getSexyLabel($score, self::$LABEL_NAMES_DEFAULT);
 				break;
 		}
 
@@ -163,6 +157,43 @@ class ShowUserDataHelper {
 			}
 		}
 		return $bestLabel;
+	}
+
+	/**
+	 * Vrátí info o daném labelu.
+	 * @param int $type Typ uživatele.
+	 * @return array Pole s informacemi o popisku.
+	 */
+	private static function getLabelInfo($type) {
+		switch ($type) {
+			case self::TYPE_MAN:
+				$label = self::$LABEL_NAMES_MAN;
+				break;
+
+			case self::TYPE_WOMAN:
+				$label = self::$LABEL_NAMES_WOMAN;
+				break;
+
+			case self::TYPE_COUPLE || self::TYPE_COUPLE_MAN || self::TYPE_COUPLE_WOMAN || self::TYPE_GROUP:
+				$label = self::$LABEL_NAMES_COUPLE;
+				break;
+		}
+
+		return $label;
+	}
+
+	/**
+	 * Vrátí text s informacemi o nálepkách k danému typu uživateli.
+	 * @param int $type Typ uživatele.
+	 * @return string Informace o nálepkách.
+	 */
+	public static function getLabelInfoText($type) {
+		$arrInfo = self::getLabelInfo($type);
+		$infoText = "";
+		foreach ($arrInfo as $score => $name) {
+			$infoText = $infoText . $score . " - " . $name . "<br />";
+		}
+		return $infoText;
 	}
 
 }

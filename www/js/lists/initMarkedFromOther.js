@@ -1,7 +1,6 @@
 /*
  * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
-
 /* základní nastavení vyskakovacího okénka */
 var baseSettings = {//inicializuje se nad daty, která mají být v okénku
 	buttonSelector: '#markedFromOtherBtn',
@@ -31,3 +30,4 @@ if (isUserPaying) {
 var settings = $.extend({}, baseSettings, ajaxSettings);
 
 $('#markedFromOther').ajaxBox(settings);
+

@@ -3,7 +3,7 @@ Feature: User's info
 	Scenario Outline: User's info is complete and visible
 		Given I am signed in as "<user>"
 		And I am on "/profil.show/user-info"
-		And I should see "Profil uživatele <name>"
+		And I should see "<name>"
 		And I should see "Jméno <name>"
 		And I should see "První věta <firstSentence>"
 		And I should see "Jsem <userProperty>"

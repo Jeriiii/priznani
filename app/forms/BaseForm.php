@@ -40,8 +40,11 @@ class BaseForm extends Form {
 
 	public function __construct(IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-//		$this->testMode = $this->getPresenter()->testMode;
-//		$this->productionMode = $this->getPresenter()->productionMode;
+		$presenter = $this->getPresenter();
+		if (!empty($presenter) && $presenter instanceof \Nette\Application\UI\Presenter) {
+			$this->testMode = $this->getPresenter()->testMode;
+			$this->productionMode = $this->getPresenter()->productionMode;
+		}
 	}
 
 	/**

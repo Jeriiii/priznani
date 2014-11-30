@@ -10,7 +10,18 @@ var fnPreventNewActivity = function () {
 			var statusFn = function (data, status) {
 			}; //musim mu predat nejakou fnci
 			/* oznaceni zpravy jako prectene */
-			$.get($target.data("activity-viewed-link"), statusFn);
+			var data;
+			for(var i = 0;i<2;i++) {
+				var data = $target.data("activity-viewed-link");
+				if(data === undefined) {
+					$target = $target.parent();
+					data = $target.data("activity-viewed-link");
+				}
+			}
+			
+			$.get(data, statusFn);
+			alert($target.data("activity-viewed-link"));
+			alert($target.attr("href"));
 			/* prejdu na odkaz v tlacitku */
 			window.location = $target.attr("href");
 		});
@@ -44,7 +55,7 @@ $('#activities').ajaxBox({
 	ajaxObserverId: 'activities-observer',
 	streamSnippetModule: {
 		snippetName: 'snippet-activities-list',
-		endMessage: 'Žádné další zprávy.',
+		endMessage: 'Žádné další události.',
 		offsetParameter: 'activities-offset',
 		limitParameter: 'activities-limit',
 		addLimit: 5,

@@ -56,7 +56,7 @@ class EditCityForm extends BaseForm {
 
 		$this->addGroup("Vyskytuji se");
 
-		$this->addText('city', 'Město')
+		$this->addText('city', 'Město', 40)
 			->addRule(Form::FILLED, 'Město není vyplněno.');
 
 		if (isset($property->city->name)) {
@@ -91,6 +91,7 @@ class EditCityForm extends BaseForm {
 			UserPropertyDao::COLUMN_REGION_ID => $region->id
 		));
 
+		$presenter->calculateLoggedUser();
 		$presenter->flashMessage('Město bylo uloženo.');
 		$presenter->redirect('this');
 	}

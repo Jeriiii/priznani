@@ -133,6 +133,7 @@ class SearchPresenter extends SearchBasePresenter {
 	public function renderNearMe() {
 		$this->template->cityData = $this->cityDao->getNamesOfProperties();
 		$this->template->property = $this->loggedUser->property;
+		$this->template->city = $this->cityDao->find($this->loggedUser->property->cityID)->name;
 	}
 
 	/*
@@ -183,7 +184,7 @@ class SearchPresenter extends SearchBasePresenter {
 	}
 
 	protected function createComponentVigorSearchForm($name) {
-		return new Frm \ SelectVigorForm($this->enumVigorDao, $this, $name);
+		return new Frm \ SelectVigorForm($this->enumVigorDao, $this->vigor, $this, $name);
 	}
 
 	protected function createComponentEditCityForm($name) {
