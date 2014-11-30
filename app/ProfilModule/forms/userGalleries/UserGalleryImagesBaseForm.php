@@ -233,7 +233,8 @@ class UserGalleryImagesBaseForm extends BaseForm {
 
 		//aktualizace streamu - vyhodí galerii ve streamu nahoru
 		if ($allow) {
-			$this->streamDao->aliveGallery($image->galleryID, $image->gallery->userID);
+			$user = $image->gallery->user;
+			$this->streamDao->aliveGallery($image->galleryID, $user->id, $user->property->preferencesID);
 		}
 		/* nastavení fotky jako profilové */
 		if ($profilePhoto) {

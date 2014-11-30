@@ -19,10 +19,16 @@ class AddStatusForm extends BaseForm {
 	 */
 	public $streamDao;
 
-	public function __construct(StreamDao $streamDao, StatusDao $statusDao, IContainer $parent = NULL, $name = NULL) {
+	/**
+	 * @var ActiveRow|ArrayHash
+	 */
+	private $userProperty;
+
+	public function __construct(StreamDao $streamDao, StatusDao $statusDao, $userProperty, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->statusDao = $statusDao;
 		$this->streamDao = $streamDao;
+		$this->userProperty = $userProperty;
 
 		$this->addTextarea("message", "")
 			->addRule(Form::FILLED, "Vyplňte prosím text zprávy.")
@@ -40,7 +46,7 @@ class AddStatusForm extends BaseForm {
 
 		$status = $this->statusDao->insert($values);
 
-		$this->streamDao->addNewStatus($status->id, $userID);
+		$this->streamDao->addNewStatus($status->id, $userID, $this->userProperty->preferencesID);
 
 		$presenter->flashMessage('Status byl vložen.');
 		$presenter->redirect('this');

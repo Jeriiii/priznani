@@ -136,7 +136,8 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 			$this->userDao->verify($userID);
 			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "verification");
 		} else {
-			$this->streamDao->aliveGallery($galleryId, $userID);
+			$user = $this->userDao->find($userID);
+			$this->streamDao->aliveGallery($galleryId, $userID, $user->property->preferencesID);
 			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "approve");
 		}
 
@@ -191,7 +192,8 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	 */
 	public function handleAcceptCompetitionImage($imageID) {
 		$comImage = $this->competitionsImagesDao->acceptImage($imageID);
-		$this->streamDao->aliveGallery($comImage->image->galleryID, $comImage->image->gallery->userID);
+		$user = $comImage->image->gallery->user;
+		$this->streamDao->aliveGallery($comImage->image->galleryID, $user->id, $user->property->preferencesID);
 		$this->invalidateMenuData();
 
 		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $comImage->image->gallery->userID, $comImage->imageID, "approve");
@@ -236,7 +238,8 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		if ($image->gallery->verification_gallery) {
 			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "verification");
 		} else {
-			$this->streamDao->aliveGallery($galleryId, $userID);
+			$user = $this->userDao->find($userID);
+			$this->streamDao->aliveGallery($galleryId, $userID, $user->property->preferencesID);
 			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "approve");
 		}
 
@@ -254,7 +257,8 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	public function handleAcceptIntimComImage($imgId) {
 
 		$comImage = $this->competitionsImagesDao->acceptImageIntim($imgId);
-		$this->streamDao->aliveGallery($comImage->image->galleryID, $comImage->image->gallery->userID);
+		$user = $comImage->image->gallery->user;
+		$this->streamDao->aliveGallery($comImage->image->galleryID, $user->id, $user->property->preferencesID);
 		$this->invalidateMenuData();
 
 		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $comImage->image->gallery->userID, $comImage->imageID, "approve");
