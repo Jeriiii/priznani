@@ -398,7 +398,8 @@ class FeatureContext extends MinkContext {
 	public function approveLastImage() {
 		$image = $this->userImageDao->approveLast();
 		if (!empty($image)) {
-			$this->streamDao->aliveGallery($image->galleryID, $image->gallery->userID);
+			$user = $image->gallery->user;
+			$this->streamDao->aliveGallery($image->galleryID, $user->id, $user->property->preferencesID);
 		}
 	}
 

@@ -102,7 +102,7 @@ class UserStream extends BaseStream {
 	}
 
 	protected function createComponentStatusForm($name) {
-		return new Frm\AddStatusForm($this->streamDao, $this->statusDao, $this, $name);
+		return new Frm\AddStatusForm($this->streamDao, $this->statusDao, $this->loggedUser->property, $this, $name);
 	}
 
 }

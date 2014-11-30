@@ -99,14 +99,16 @@ class StreamDao extends AbstractDao {
 	 * Přidá odkaz na gallerii do streamu
 	 * @param int $userGalleryID ID galerie
 	 * @param int $userID ID uživatele
+	 * @param int $categoryID ID kategorie
 	 */
-	public function addNewGallery($userGalleryID, $userID) {
+	public function addNewGallery($userGalleryID, $userID, $categoryID) {
 		$sel = $this->getTable();
 		$sel->insert(array(
 			"userGalleryID" => $userGalleryID,
 			"userID" => $userID,
 			"type" => 1,
 			"create" => new DateTime(),
+			self::COLUMN_CATEGORY_ID => $categoryID,
 		));
 	}
 
@@ -143,14 +145,15 @@ class StreamDao extends AbstractDao {
 	 * dostane opět nahoru ve streamu.
 	 * @param int $userGalleryID ID galerie
 	 * @param int $userID ID uživatele
+	 * @param int $categoryID ID kategorie
 	 */
-	public function aliveGallery($userGalleryID, $userID) {
+	public function aliveGallery($userGalleryID, $userID, $categoryID) {
 //smazání starého řádku
 		$sel = $this->getTable();
 		$sel->where("userGalleryID", $userGalleryID);
 		$sel->delete();
 
-		$this->addNewGallery($userGalleryID, $userID);
+		$this->addNewGallery($userGalleryID, $userID, $categoryID);
 	}
 
 	/**
@@ -167,12 +170,14 @@ class StreamDao extends AbstractDao {
 	 * Přidá nový status do streamu
 	 * @param int $stausID ID statusu
 	 * @param int $userID ID uživatele
+	 * @param int $categoryID ID kategorie
 	 */
-	public function addNewStatus($stausID, $userID) {
+	public function addNewStatus($stausID, $userID, $categoryID) {
 		$sel = $this->getTable();
 		$sel->insert(array(
 			"statusID" => $stausID,
 			"userID" => $userID,
+			self::COLUMN_CATEGORY_ID => $categoryID,
 			"create" => new DateTime(),
 		));
 	}
