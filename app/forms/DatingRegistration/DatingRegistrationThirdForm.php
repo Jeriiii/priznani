@@ -37,6 +37,8 @@ class DatingRegistrationThirdForm extends DatingRegistrationBaseForm {
 		$this->regSession = $regSession;
 		$this->regCoupleSession = $regCoupleSession;
 
+		$this->addGroup("Další údaje");
+
 		/* first person */
 		$this->addFirstPerson($type);
 
@@ -48,7 +50,6 @@ class DatingRegistrationThirdForm extends DatingRegistrationBaseForm {
 		$this->onSuccess[] = callback($this, 'submitted');
 		$submitBtn = $this->addSubmit('send', 'Dokončit registraci');
 		$submitBtn->setAttribute("class", "btn btn-main");
-		$this->setBootstrapRender();
 	}
 
 	public function submitted($form) {
@@ -84,8 +85,8 @@ class DatingRegistrationThirdForm extends DatingRegistrationBaseForm {
 	protected function setWomanData($section, ArrayHash $values, $suffix = "") {
 		$section->bra_size = $values->offsetGet("bra_size" . $suffix);
 		$section->hair_colour = $values->offsetGet("hair_colour" . $suffix);
-		$section->penis_length = "";
-		$section->penis_width = "";
+		$section->penis_length = NULL;
+		$section->penis_width = NULL;
 	}
 
 	/**
@@ -94,8 +95,8 @@ class DatingRegistrationThirdForm extends DatingRegistrationBaseForm {
 	 * @param type $suffix
 	 */
 	protected function setManData($section, ArrayHash $values, $suffix = "") {
-		$section->bra_size = "";
-		$section->hair_colour = "";
+		$section->bra_size = NULL;
+		$section->hair_colour = NULL;
 		$section->penis_length = $values->offsetGet("penis_length" . $suffix);
 		$section->penis_width = $values->offsetGet("penis_width" . $suffix);
 	}

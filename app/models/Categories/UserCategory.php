@@ -36,7 +36,7 @@ class UserCategory {
 
 	public function __construct($logedUserProperty, UserCategoryDao $userCategoryDao, Session $session) {
 		if (!($logedUserProperty instanceof ActiveRow) && !($logedUserProperty instanceof \Nette\ArrayHash)) {
-			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
+			throw new \Exception('variable $logedUserProperty must be instance of ActiveRow or ArrayHash');
 		}
 		$this->userCategoryDao = $userCategoryDao;
 		$this->userProperty = $logedUserProperty;

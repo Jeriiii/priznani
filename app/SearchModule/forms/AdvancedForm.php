@@ -102,7 +102,7 @@ class AdvancedForm extends BaseForm {
 		$this->addBodyFields();
 
 		/* políčka s návyky */
-		$this->addHabitsFields();
+		//$this->addHabitsFields(); //zakomentováno v první verzi přiznání
 
 		/* obecná políčka */
 		$this->addGeneralFields();
@@ -111,7 +111,7 @@ class AdvancedForm extends BaseForm {
 		$this->addIntrestedInFields();
 
 		/* políčka se sexuálníma praktikama */
-		$this->addPracticsFields();
+		//$this->addPracticsFields(); //zakomentováno v první verzi přiznání
 
 		$this->manageSubmittedFormValues();
 
@@ -254,6 +254,11 @@ class AdvancedForm extends BaseForm {
 
 		$this->addSelect('orientation', 'Sexuální orientace:', $orientationType)
 			->setAttribute('class', 'columnSelectWidth');
+
+		$state = $this->getStateChoices();
+
+		$this->addSelect('marital_state', 'stav:', $state)
+			->setAttribute('class', 'columnSelectWidth');
 	}
 
 	/**
@@ -304,21 +309,17 @@ class AdvancedForm extends BaseForm {
 //skupina pro obecná políčka(vzdělání a bydliště)
 		$this->addGroup('Obecné');
 
-		$gra = $this->getGraduationChoices();
-
-		$state = $this->getStateChoices();
-
-		$this->addSelect('marital_state', 'stav:', $state)
-			->setAttribute('class', 'columnSelectWidth');
-
-		$this->addSelect('graduation', 'vzdělání:', $gra)
-			->setAttribute('class', 'columnSelectWidth');
+//		$gra = $this->getGraduationChoices();
+//
+//		$this->addSelect('graduation', 'vzdělání:', $gra) //zakomentováno v první verzi přiznání
+//			->setAttribute('class', 'columnSelectWidth');
 
 		$dataRaw = $this->cityDao->getCitiesData();
 		$cityData = $this->getCityData($dataRaw);
 		$districtData = $this->getDistrictData($dataRaw);
 		$regionData = $this->getRegiontData($dataRaw);
 
+		$this->addGroup('Bydliště');
 		$this->addSelect('city', 'bydliště:', $cityData)
 			->setAttribute('class', 'columnSelectWidth');
 

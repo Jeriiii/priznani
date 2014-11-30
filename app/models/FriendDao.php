@@ -91,10 +91,8 @@ class FriendDao extends AbstractDao {
 		}
 		$sel = $this->getTable();
 		$sel->where(array(self::COLUMN_USER_ID_1 => $userID, self::COLUMN_USER_ID_2 => $friendID));
-		if ($sel->fetch()) {
-			return true;
-		}
-		return false;
+		$row = $sel->fetch();
+		return $this->exist($row);
 	}
 
 }

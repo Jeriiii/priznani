@@ -7,7 +7,7 @@
 {block content}
 	{includeblock 'navigation/searchNavigation.latte'}
 	{ifset $property->cityID}
-		{control editCityForm}
+		<span>Vyskytujete se ve městě {$city} <a n:href=":Profil:Edit:" class="btn">Změnit</a></span>
 		{control nearMeSearch 'listAll'}
 	{else}
 		<span>Nejdříve zadejte, kde se nacházíte.</span>

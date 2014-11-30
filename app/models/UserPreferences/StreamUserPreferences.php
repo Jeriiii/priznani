@@ -47,8 +47,8 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	/** @var \POS\Model\StreamDao */
 	protected $streamDao;
 
-	public function __construct($userProperty, UserDao $userDao, StreamDao $streamDao, UserCategoryDao $userCategoryDao, Session $session) {
-		parent::__construct($userProperty, $userDao, $userCategoryDao, $session);
+	public function __construct($user, UserDao $userDao, StreamDao $streamDao, UserCategoryDao $userCategoryDao, Session $session) {
+		parent::__construct($user, $userDao, $userCategoryDao, $session);
 		$this->streamDao = $streamDao;
 
 		$this->data = NULL;
@@ -206,6 +206,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * Naplní nejlepší vhodná data do sešny. Použití pouze pro inicializaci
 	 */
 	private function initializeStreamItems() {
+
 		$streamItems = $this->streamDao->getAllItemsWhatFits($this->getUserCategories(), $this->user->id, self::INIT_ITEMS_COUNT);
 		$serializer = $this->getSerializer($streamItems);
 		$this->streamSection->cachedStreamItems = $serializer->toArrayHash(); //nastaveni pole do sešny

@@ -32,6 +32,9 @@
 				{/if}
 				<div class="half-form">
 				{form addConfessionForm class=>'form-container'}
+					<ul class="error" n:if="$form->hasErrors()">
+						<li n:foreach="$form->errors as $error">{$error}</li>
+					</ul>
 					{input note class=>'form-field', placeholder=>'Přiznej se, vše bude anonymní...', rows => 3}
 					<div class="submit-container">
 						{input submit class => 'submit-button'}

@@ -22,7 +22,7 @@ class NewlyRegistredSearch extends BaseSearch {
 	}
 
 	private function getNewlyRegistred(UserDao $userDao) {
-		$users = $userDao->getAll("DESC");
+		$users = $userDao->getNewlyRegistred();
 		return $users;
 	}
 

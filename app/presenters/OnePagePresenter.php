@@ -16,6 +16,7 @@ use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\BlokedUsersList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
 use POSComponent\Confirm;
+use NetteExt\Helper\ShowUserDataHelper;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -199,6 +200,9 @@ class OnePagePresenter extends BasePresenter {
 		$this->template->countSexy = $this->youAreSexyDao->countToUser($this->userID);
 		$this->template->isUserPaying = $this->paymentDao->isUserPaying($this->userID);
 		$this->template->countVerificationRequests = $this->verificationPhotoDao->findByUserID($this->user->id)->count();
+		if ($this->getUser()->isLoggedIn()) {
+			$this->template->sexyLabelToolTip = "Hodnost podle počtu - JE SEXY <br />" . ShowUserDataHelper::getLabelInfoText($this->loggedUser->property->type);
+		}
 	}
 
 	protected function createComponentUserStream() {
@@ -211,7 +215,7 @@ class OnePagePresenter extends BasePresenter {
 			'stream.js',
 			'lists/initFriendRequest.js',
 			'lists/initFriends.js',
-			'lists/initBlokedUsers.js',
+			/* 'lists/initBlokedUsers.js', */ //zakomentováno do první verze přiznání
 			'lists/initMarkedFromOther.js'
 		));
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
@@ -271,7 +275,6 @@ class OnePagePresenter extends BasePresenter {
 	private function initializeStreamUserPreferences() {
 		$session = $this->getSession();
 		$this->streamUserPreferences = new StreamUserPreferences($this->loggedUser, $this->userDao, $this->streamDao, $this->userCategoryDao, $session);
-		//$this->streamUserPreferences->calculate();
 	}
 
 }

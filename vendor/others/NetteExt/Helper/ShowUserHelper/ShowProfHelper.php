@@ -22,7 +22,7 @@ class ShowProfHelper {
 	const NAME_MIN = "showProfMin";
 	const NAME_MIN_DIV = "showProfMinDiv";
 	const NAME_DIV = "showProfDiv";
-	const NAME_NO_LINK = "showProfNoLink";
+	const NAME_NO_LINK = "showProfMinNoLink";
 
 	/* typy nastavení */
 	const TYPE_EL_SPAN = "span";
@@ -50,7 +50,7 @@ class ShowProfHelper {
 	 * @return \Nette\Utils\Html
 	 */
 	public function showProf($user, $href = null, $min = FALSE, $el = 'span', $noLink = FALSE) {
-		return $this->createShowProf($user, $href, $min, $el);
+		return $this->createShowProf($user, $href, $min, $el, $noLink);
 	}
 
 	/**
@@ -64,27 +64,33 @@ class ShowProfHelper {
 	 */
 	private function createShowProf($user, $href, $min, $el, $noLink = FALSE) {
 		/* Výsledek je celý v odkazu */
+
 		if (!$noLink) {
 			$elLink = $this->createLink($href, $user);
+
+			/* profilová fotka */
+			$elPhoto = $this->createPhoto($el, $user);
+			$elLink->add($elPhoto);
+
+			/* přidá jméno */
+			if (!$min) {
+				$elName = Html::el($el, strtoupper($user->user_name));
+				$elName->addAttributes(array('class' => 'generatedTitle'));
+				$elLink->add($elName);
+			}
+
+			/* element, co obalí profil */
+			$elContainer = Html::el($el, array('class' => 'generatedProfile'));
+			$elContainer->add($elLink);
+
+			return $elContainer;
 		} else {
-			$elLink = Html::el('span');
+
+			$elPhoto = $this->createPhoto($el, $user);
+			$elPhoto->addAttributes(array('class' => 'generatedTitle'));
+
+			return $elPhoto;
 		}
-
-		/* profilová fotka */
-		$elPhoto = $this->createPhoto($el, $user);
-		$elLink->add($elPhoto);
-
-		/* přidá jméno */
-		if (!$min) {
-			$elName = Html::el($el, strtoupper($user->user_name));
-			$elName->addAttributes(array('class' => 'generatedTitle'));
-			$elLink->add($elName);
-		}
-
-		/* element, co obalí profil */
-		$elContainer = Html::el($el, array('class' => 'generatedProfile'));
-		$elContainer->add($elLink);
-		return $elContainer;
 	}
 
 	/**

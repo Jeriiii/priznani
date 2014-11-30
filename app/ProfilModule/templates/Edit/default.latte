@@ -27,31 +27,31 @@
 {/block}
 
 {block content}
-	<h2 n:block="title">Profil uživatele {$userData->user_name}</h2>
-	{include 'menu.latte'}
-	<div class="clear"></div>
+	<div class="edit-content">
+		<h2>Editace údajů</h2>
+		{include 'menu.latte'}
+		<div class="clear"></div>
 
-	<h2>Editace údajů</h2>
-	<div class="photo-change">
-		{$userData|showProfMin}
-		<a title="Nahrát profilovku" class="uploadProfilePhoto red-link">Upravit profilovku</a>
-		{control cropProfilePhoto}
+		<div class="photo-change">
+			{$userData|showProfMin}
+			<a title="Nahrát profilovku" class="uploadProfilePhoto red-link">Upravit profilovku</a>
+			{control cropProfilePhoto}
+		</div>
+		{control secondEditForm}
+		{* v první verzi se změna statusu skrývá *}
+		{*<h2 id="changeStatus">Změna statusu</h2>*}
+		{*control statusChangeForm*}
+		{control firstEditForm}
+		<div class="clear"></div>
+
+		{control editCityForm}
+
+		{control editPlacesPositionsForm}
+
+		{if $userData->property->type != 6}
+			{control thirdEditForm}
+		{/if}
+
 	</div>
-	{* v první verzi se změna statusu skrývá *}
-	{*<h2 id="changeStatus">Změna statusu</h2>*}
-	{*control statusChangeForm*}
-	{control firstEditForm}
-    {control secondEditForm}
-	<div class="clear"></div>
-
-	{control editCityForm}
-
-	{control editPlacesPositionsForm}
-
-	{if $userData->property->type != 6}
-		{control thirdEditForm}
-	{/if}
-
-
 	<div class="clear"></div>
 {/block}

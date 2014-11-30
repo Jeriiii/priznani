@@ -23,6 +23,9 @@ class HelperRegistrator {
 	/** @var ShowUserDataHelper */
 	public $showUserDataHelper;
 
+	/** @var TooltipHelper */
+	public $toolTipHelper;
+
 	/** @var array Callback na fci link */
 	private $linkCallback;
 
@@ -35,6 +38,7 @@ class HelperRegistrator {
 		$this->linkCallback = $linkCallback;
 		$this->showProfHelper = new ShowProfHelper($this->getImgPathHelper, $linkCallback);
 		$this->showUserDataHelper = new ShowUserDataHelper();
+		$this->toolTipHelper = new TooltipHelper;
 	}
 
 	/**
@@ -45,6 +49,7 @@ class HelperRegistrator {
 		$this->registerGetImgPathHelpers($template);
 		$this->registerShowProfHelpers($template);
 		$this->registerShowUserDataHelpers($template);
+		$this->registerToolTipHelpers($template);
 	}
 
 	private function registerShowProfHelpers($template) {
@@ -62,7 +67,7 @@ class HelperRegistrator {
 			return $showProfHelper->showProf($user, $href, FALSE, "div");
 		});
 		$template->registerHelper(ShowProfHelper::NAME_NO_LINK, function($user, $href = null) use ($showProfHelper) {
-			return $showProfHelper->showProf($user, $href, FALSE, "span", TRUE);
+			return $showProfHelper->showProf($user, $href, TRUE, "span", TRUE);
 		});
 	}
 
@@ -74,6 +79,17 @@ class HelperRegistrator {
 		$showUserHelper = $this->showUserDataHelper;
 		$template->registerHelper(ShowUserDataHelper::SEXY_LABEL_NAME, function($user) use ($showUserHelper) {
 			return $showUserHelper->showSexyLabel($user);
+		});
+	}
+
+	/**
+	 * Zaregistruje hepery pro zobrazení více informací u otazníčku
+	 * @param type $template
+	 */
+	private function registerToolTipHelpers($template) {
+		$toolTipHelper = $this->toolTipHelper;
+		$template->registerHelper(TooltipHelper::TOOL_TIP, function($infoText, $infoEl = "?") use ($toolTipHelper) {
+			return $toolTipHelper->createToolTip($infoText, $infoEl);
 		});
 	}
 

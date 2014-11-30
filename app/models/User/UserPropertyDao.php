@@ -88,9 +88,13 @@ class UserPropertyDao extends UserBaseDao {
 
 	/**
 	 * Správně nastaví nové preference uživatele.
-	 * @param ActiveRow $property
+	 * @param ActiveRow|ArrayHash $property
 	 */
-	public function updatePreferencesID(ActiveRow $property, UserCategoryDao $userCategoryDao) {
+	public function updatePreferencesID($property, UserCategoryDao $userCategoryDao) {
+		if (!($property instanceof ActiveRow) && !($property instanceof \Nette\ArrayHash)) {
+			throw new Exception('variable $property must be instance of ActiveRow or ArrayHash');
+		}
+
 		$myNewPreference = $userCategoryDao->getMyCategory($property);
 
 		$this->update($property->id, array(

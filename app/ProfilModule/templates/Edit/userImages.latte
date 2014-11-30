@@ -6,20 +6,17 @@
 		margin-top: 0;
 	}
     </style>
+	{control css 'profile/edit.less'}
 {/block}
 {block foot}
 	{control js}
 {/block}
 {block content}
-
-<h1>Moje fotky</h3>
-
-
+<h2>Galerie</h2>
+<div class="clear"></div>
 {include 'menu.latte'}
+<div class="clear"></div>
 
-<h2>Fotky</h2>
-
-{control myUserGalleries 'listAll'}
-
+{control myUserGalleries 'listAll', $paying}
 
 {/block}

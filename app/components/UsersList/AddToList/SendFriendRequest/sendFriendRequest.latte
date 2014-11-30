@@ -1,5 +1,9 @@
+{if $isSendRequest}
+	<a>Žádost odeslána</a>
+{else}
 <a n:href="sendFriendRequest!" id="send-request-btn">Žádost o přátelství</a>
 
 <div class="ajaxbox-popUp" data-ajaxbox-additional-classes="send-friend-request" data-ajaxbox-btn="#send-request-btn" data-ajaxbox-header-html="Žádost o přátelství">
 	{control requestMessageForm}
 </div>
+{/if}

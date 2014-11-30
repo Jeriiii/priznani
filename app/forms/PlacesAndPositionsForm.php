@@ -43,7 +43,7 @@ class PlacesAndPositionsForm extends BaseForm {
 	public function __construct(UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, Userdao $userDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
-
+		$this->addGroup("Místa a polohy při milování");
 
 		$this->enumPositionDao = $enumPositionDao;
 		$this->userPositionDao = $userPositionDao;
@@ -58,9 +58,10 @@ class PlacesAndPositionsForm extends BaseForm {
 				EnumPlaceDao::COLUMN_ID, EnumPlaceDao::COLUMN_PLACE
 		));
 
-		$this->addSubmit('send', 'Odeslat');
+		$this->addSubmit('send', 'Odeslat')
+			->setAttribute("class", "btn-main medium button");
 		$this->setInputContainer(FALSE);
-		$this->setBootstrapRender();
+
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

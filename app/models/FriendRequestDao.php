@@ -56,6 +56,22 @@ class FriendRequestDao extends AbstractDao {
 	}
 
 	/**
+	 * Ověří, zda byla odeslána žádost mezi uživateli. Kontroluje pouze jednosměrně,
+	 * pokud uživatel $userIDTo odeslal žádost uživateli $userIDFrom, metoda
+	 * to neodchytí.
+	 * @param int $userIDFrom ID žadatele
+	 * @param int $userIDTo ID příjemce
+	 * @return boolen TRUE = žádost byla odeslána, jinak FALSE
+	 */
+	public function isRequestSend($userIDFrom, $userIDTo) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_FROM_ID, $userIDFrom);
+		$sel->where(self::COLUMN_USER_TO_ID, $userIDTo);
+		$row = $sel->fetch();
+		return $this->exist($row);
+	}
+
+	/**
 	 * Odešle žádost o přítelství
 	 * @param int $userIDFrom ID žadatele
 	 * @param int $userIDTo ID příjemce

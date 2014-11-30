@@ -49,7 +49,7 @@ class DatingEditSecondForm extends BaseForm {
 		$this->addText('first_sentence', 'Úvodní věta (max 100 znaků)')
 			->addRule(Form::FILLED, 'Úvodní věta není vyplněna.')
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Úvodní věta\" je 100 znaků.', 100);
-		$this->addTextArea('about_me', 'O mě (max 300 znaků)', 40, 10)
+		$this->addTextArea('about_me', 'O mě (max 300 znaků)', 40, 3)
 			->addRule(Form::FILLED, 'O mě není vyplněno.')
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300);
 

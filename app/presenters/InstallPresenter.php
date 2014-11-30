@@ -101,6 +101,7 @@ class InstallPresenter extends BasePresenter {
 	}
 
 	public function actionTestData() {
+		ini_set('max_execution_time', 60);
 		$messages = new Messages;
 
 		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
@@ -111,6 +112,7 @@ class InstallPresenter extends BasePresenter {
 	}
 
 	public function actionData() {
+		ini_set('max_execution_time', 60);
 		$messages = new Messages;
 
 		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
@@ -122,7 +124,7 @@ class InstallPresenter extends BasePresenter {
 	}
 
 	public function actionAllData() {
-		ini_set('max_execution_time', 60);
+		ini_set('max_execution_time', 90);
 		$messages = new Messages;
 
 		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);

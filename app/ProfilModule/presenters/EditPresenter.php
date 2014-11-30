@@ -63,6 +63,12 @@ class EditPresenter extends ProfilBasePresenter {
 	/** @var \POS\Model\UserCategoryDao @inject */
 	public $userCategoryDao;
 
+	/** @var \POS\Model\UserAllowedDao @inject */
+	public $userAllowedDao;
+
+	/** @var \POS\Model\FriendDao @inject */
+	public $friendDao;
+
 	/** @var ActiveRow User kterému se mají editovat data */
 	protected $userData;
 	private $redirect;
@@ -88,6 +94,10 @@ class EditPresenter extends ProfilBasePresenter {
 		$this->template->cityData = $this->cityDao->getNamesOfProperties();
 	}
 
+	public function renderUserImages() {
+		$this->template->paying = $this->paymentDao->isUserPaying($this->user->id);
+	}
+
 	protected function createComponentFirstEditForm($name) {
 		$userID = $this->getUser()->getId();
 		$user = $this->userDao->find($userID);
@@ -104,7 +114,9 @@ class EditPresenter extends ProfilBasePresenter {
 	}
 
 	public function createComponentMyUserGalleries() {
-		return new MyUserGalleriesThumbnails($this->userDao, $this->userGalleryDao);
+		$session = $this->getSession();
+		$section = $session->getSection('galleriesAccess');
+		return new MyUserGalleriesThumbnails($this->userDao, $this->userGalleryDao, $this->userAllowedDao, $this->friendDao, $section);
 	}
 
 	protected function createComponentEditCityForm($name) {

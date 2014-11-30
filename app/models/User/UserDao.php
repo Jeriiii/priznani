@@ -110,6 +110,13 @@ class UserDao extends UserBaseDao {
 		return $sel->fetch();
 	}
 
+	public function getNewlyRegistred() {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_PROPERTY_ID . " IS NOT NULL");
+		$sel->order(self::COLUMN_ID . " DESC");
+		return $sel;
+	}
+
 	/**
 	 * Hledá uživatele v blízkosti bydliště
 	 * @param \Nette\Database\Table\ActiveRow $me Uživatel
@@ -158,6 +165,8 @@ class UserDao extends UserBaseDao {
 		$sel = $this->getTable();
 		$timeOne = new \Nette\DateTime();
 		$timeTwo = new \Nette\DateTime();
+
+		$sel->where(self::COLUMN_PROPERTY_ID . " IS NOT NULL");
 
 		if (empty($data)) {
 			return $sel;
@@ -568,6 +577,7 @@ class UserDao extends UserBaseDao {
 	 */
 	public function getByCategories($categoryIDs, $meID) {
 		$sel = $this->getTable();
+		$sel->where(UserDao::COLUMN_PROPERTY_ID . " IS NOT NULL");
 		$sel->where("." . UserDao::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_PREFERENCES_ID . " IN", $categoryIDs);
 		/* nevezme sam sebe */
 		$sel->where(self::TABLE_NAME . "." . self::COLUMN_ID . " != ?", $meID);

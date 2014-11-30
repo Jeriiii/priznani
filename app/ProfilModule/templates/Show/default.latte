@@ -47,7 +47,7 @@
 				</div>
 
 				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
-				<span class="sexy-label">{$userData|sexyLabel}</span>
+				<span class="sexy-label">{$userData|sexyLabel} {$sexyLabelToolTip|toolTip}</span>
 				<span class="first-sentence">{$userData->property->first_sentence}</span>
 				<div class="clear spacer"></div>
 			{if $user->isLoggedIn()}
@@ -75,7 +75,7 @@
 
 			{/if}
 
-			{if !$isMyProfile}
+			{if !$isMyProfile && !$isFriends}
 			<div class="profile-btn long-btn">
 				{control sendFriendRequest}
 			</div>

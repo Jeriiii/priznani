@@ -34,9 +34,9 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 	public function getBestUsers() {
 		$this->bestUsers = $this->section->bestUsers;
 
-		//if ($this->bestUsers === NULL) {
-		$this->calculate();
-		//}
+		if ($this->bestUsers === NULL) {
+			$this->calculate();
+		}
 
 		return $this->bestUsers;
 	}
