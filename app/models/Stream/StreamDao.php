@@ -147,10 +147,17 @@ class StreamDao extends AbstractDao {
 	 * @param int $userID ID uživatele
 	 * @param int $categoryID ID kategorie
 	 */
-	public function aliveGallery($userGalleryID, $userID, $categoryID) {
+	public function aliveGallery($userGalleryID, $userID, $categoryID = null) {
 //smazání starého řádku
 		$sel = $this->getTable();
 		$sel->where("userGalleryID", $userGalleryID);
+		if (empty($categoryID)) {
+			$streamItem = $sel->fetch();
+			if (empty($streamItem)) {
+				throw new Exception('$streamItem mustnt be NULL or FALSE');
+			}
+			$categoryID = $streamItem->offsetGet(self::COLUMN_CATEGORY_ID);
+		}
 		$sel->delete();
 
 		$this->addNewGallery($userGalleryID, $userID, $categoryID);
@@ -370,6 +377,19 @@ class StreamDao extends AbstractDao {
 			$sel->limit($limit, $offset);
 		}
 		return $sel;
+	}
+
+	/**
+	 * Změní kategorii u všech příspěvků uživatele
+	 * @param int $userID ID uživatele.
+	 * @param int $categoryID ID kategorie.
+	 */
+	public function updateCatByUser($userID, $categoryID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_ID, $userID);
+		$sel->update(array(
+			self::COLUMN_CATEGORY_ID => $categoryID
+		));
 	}
 
 }

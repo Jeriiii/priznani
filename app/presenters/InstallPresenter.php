@@ -10,6 +10,7 @@ use NetteExt\Install\DB\InstallDB;
 use NetteExt\Install\DirChecker;
 use NetteExt\Install\Messages;
 use NetteExt\Install\ClearCasch;
+use POS\Model\UserPropertyDao;
 
 class InstallPresenter extends BasePresenter {
 
@@ -43,6 +44,12 @@ class InstallPresenter extends BasePresenter {
 	 */
 	public $userCategoryDao;
 
+	/**
+	 * @var \POS\Model\StreamDao
+	 * @inject
+	 */
+	public $streamDao;
+
 	public function startup() {
 		parent::startup();
 		// ochrana proti spuštění instalace na ostrém serveru
@@ -51,6 +58,8 @@ class InstallPresenter extends BasePresenter {
 		}
 
 		$this->setLayout("layoutInstall");
+
+		$this->recalculateUserCategories();
 	}
 
 	/**
@@ -235,6 +244,26 @@ class InstallPresenter extends BasePresenter {
 			$this->userCategoryDao->insert(array("property_want_to_meet" => $id));
 		}
 		$this->userCategoryDao->endTransaction();
+	}
+
+	/**
+	 * Přepočítá u všech uživatelů kategorie, do kterých spadají.
+	 */
+	public function recalculateUserCategories() {
+		$users = $this->userDao->getAll();
+		foreach ($users as $user) {
+			$property = $user->property;
+
+			if (!empty($property)) {
+				$categoryID = $this->userCategoryDao->getMyCategory($property)->id;
+				$this->userPropertyDao->update($property->id, array(
+					UserPropertyDao::COLUMN_PREFERENCES_ID => $categoryID
+				));
+
+				/* přepočítá i výsledky ve streamu */
+				$this->streamDao->updateCatByUser($user->id, $categoryID);
+			}
+		}
 	}
 
 }

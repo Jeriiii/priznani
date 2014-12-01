@@ -36,7 +36,7 @@ class UserCategoryDao extends AbstractDao {
 		$sel = $this->getTable();
 
 		if (!($userProperty instanceof ActiveRow) && !($userProperty instanceof \Nette\ArrayHash)) {
-			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
+			throw new \Exception("variable user must be instance of ActiveRow or ArrayHash");
 		}
 
 		$catsWTMProperty = $this->getPropertyWantToMeetCats($userProperty);
@@ -54,7 +54,7 @@ class UserCategoryDao extends AbstractDao {
 	 */
 	public function getMyCategory($userProperty) {
 		if (!($userProperty instanceof ActiveRow) && !($userProperty instanceof \Nette\ArrayHash)) {
-			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
+			throw new \Exception("variable user must be instance of ActiveRow or ArrayHash");
 		}
 
 		/* wantToMeet */
