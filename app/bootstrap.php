@@ -38,7 +38,7 @@ if ($testing) {
 	$configurator->addConfig(__DIR__ . '/config/test.config.neon', FALSE);
 }
 
-//Kdyby\Events\DI\EventsExtension::register($configurator);
+Kdyby\Events\DI\EventsExtension::register($configurator);
 $container = $configurator->createContainer();
 
 // Setup router
