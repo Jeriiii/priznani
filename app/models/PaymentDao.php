@@ -132,4 +132,20 @@ class PaymentDao extends AbstractDao {
 		return $section;
 	}
 
+	/**
+	 * Vložení premium účtu
+	 * @param date $dateFrom Od (pravděpodovně dnešek)
+	 * @param date $dateTo Do (kdy to má vypršet)
+	 * @param int $userID Id uživatele
+	 * @return ActiveRow
+	 */
+	public function insertPremium($dateFrom, $dateTo, $userID) {
+		return parent::insert(array(
+				self::COLUMN_USER_ID => $userID,
+				self::COLUMN_FROM => $dateFrom,
+				self::COLUMN_TO => $dateTo,
+				self::COLUMN_TYPE => self::ACCOUNT_PREMIUM
+		));
+	}
+
 }

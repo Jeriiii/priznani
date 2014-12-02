@@ -4,6 +4,7 @@ use Nette\Application\UI\Form as Frm;
 use POS\Model\UserDao;
 use Nette\Utils\Strings;
 use Nette\Mail\IMailer;
+use Nette\DateTime;
 
 class DatingRegistrationPresenter extends BasePresenter {
 
@@ -36,6 +37,12 @@ class DatingRegistrationPresenter extends BasePresenter {
 	 * @inject
 	 */
 	public $userCategoryDao;
+
+	/**
+	 * @var \POS\Model\PaymentDao
+	 * @inject
+	 */
+	public $paymentDao;
 
 	public function startup() {
 		parent::startup();
@@ -136,6 +143,12 @@ class DatingRegistrationPresenter extends BasePresenter {
 		$user = $this->userDao->register($registrationDataUser, $userProperty->id);
 		/* aktualizace kódu s jeho id */
 		$registrationDataUser[UserDao::COLUMN_CONFIRMED] = $user[UserDao::COLUMN_CONFIRMED];
+
+		/* 14 dní premium účtu */
+		$now = new DateTime();
+		$addTime = new DateTime(); //přidaný čas, kdy bude premium
+		$addTime->modify('+14 days');
+		$this->paymentDao->insertPremium($now, $addTime, $user->id);
 
 		$registrationDataUser->firstMemberId = $user->id;
 	}

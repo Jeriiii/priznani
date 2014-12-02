@@ -95,6 +95,18 @@ class InstallDB {
 		$this->recoveryData(self::TABLE_POS);
 	}
 
+	/**
+	 * Instalace dalších dat, důležitých hlavně na produkci
+	 */
+	public function dataDbMore() {
+		$dbName = self::TABLE_POS;
+		$sql = new Sql($dbName, $this->testingMode);
+		$sql->setMoreData($this->dbDao);
+		$this->executeSql($sql);
+
+		$this->messages->addMessage("Data z databáze " . $dbName . " byla obnovena.");
+	}
+
 	private function recoveryData($dbName) {
 		$sql = new Sql($dbName, $this->testingMode);
 		$sql->setData($this->dbDao);

@@ -144,6 +144,17 @@ class InstallPresenter extends BasePresenter {
 		$this->redirect("Install:");
 	}
 
+	public function actionMoreData() {
+		ini_set('max_execution_time', 90);
+		$messages = new Messages;
+
+		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
+		$instalDB->dataDbMore();
+
+		$messages->flash($this);
+		$this->redirect("Install:");
+	}
+
 	public function actionCreateDBPatch() {
 		$messages = new Messages;
 

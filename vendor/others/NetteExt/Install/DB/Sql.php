@@ -21,6 +21,7 @@ class Sql {
 	const DIR_PATCH = "patch";
 	const DIR_DATA = "data";
 	const DIR_CHAT = "chat";
+	const DIR_MORE_DATA = "data/more";
 	const DIR_CHAT_DATA = "chat/data";
 
 	/** @var string Název databáze */
@@ -142,6 +143,13 @@ class Sql {
 	 */
 	public function addData() {
 		$this->addSqlFiles(self::DIR_DATA);
+	}
+
+	/**
+	 * Přidá další data do DB
+	 */
+	public function setMoreData() {
+		$this->addSqlFiles(self::DIR_MORE_DATA);
 	}
 
 	/**
