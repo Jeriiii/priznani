@@ -323,13 +323,13 @@ input[type="submit"]{
 	
 		
 	.usermenu{
-		
-		font-weight: 900;
-		
+		font-family: Helvetica, Arial, sans-serif;
+		font-weight: 400;
 		
 		&.red{
 			a{
 				color: @red-color !important;
+				font-weight: 600;
 			}
 		}
 		
@@ -347,10 +347,10 @@ input[type="submit"]{
 		a{
 			display: block;
 			color: black;
-			padding: 2px 4px 2px 32px;
-			font-size: 16px;
-			line-height: 30px;
-			letter-spacing: -1px;
+			padding: 0 4px 0 32px;
+			font-size: 13px;
+			line-height: @icon-size;
+			letter-spacing: -0.25px;
 			background-size: 30px;
 			overflow: hidden;
 			background-position: left center;
@@ -360,22 +360,22 @@ input[type="submit"]{
 			background-position: 200px 200px;
 			
 			&.add-friend{
-				background-position: 0 (-4*@icon-size + @icon-margin);
+				background-position: 0 (-4*@icon-size + @icon-margin - 4);
 			}
 			&.add-gallery{
-				background-position: 0 (-3*@icon-size + @icon-margin);
+				background-position: 0 (-3*@icon-size + @icon-margin - 4);
 			}
 			&.cross{
-				background-position: 0 (-2*@icon-size + @icon-margin);
+				background-position: 0 (-4*@icon-size + @icon-margin - 4);
 			}
 			&.edit{
-				background-position: 0 (-1*@icon-size + @icon-margin);
+				background-position: 0 (-1*@icon-size + @icon-margin - 4);
 			}
 			&.friends{
-				background-position: 0 (0*@icon-size + @icon-margin);
+				background-position: 0 (0*@icon-size + @icon-margin - 4);
 			}
 			&.profile{
-				background-position: 0 (-5*@icon-size + @icon-margin);
+				background-position: 0 (-5*@icon-size + @icon-margin - 4);
 			}
 			
 		}

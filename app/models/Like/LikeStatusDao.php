@@ -14,7 +14,7 @@ use Nette\Database\SqlLiteral;
  *
  * @author Daniel Holubář
  */
-class LikeStatusDao extends AbstractDao implements ILikeDao {
+class LikeStatusDao extends BaseLikeDao implements ILikeDao {
 
 	/** @var Nette\Database */
 	protected $database;
@@ -53,7 +53,7 @@ class LikeStatusDao extends AbstractDao implements ILikeDao {
 			StatusDao::COLUMN_LIKES => new SqlLiteral(StatusDao::COLUMN_LIKES . ' + 1')
 		));
 		$status = $sel->fetch();
-		$this->addActivity($ownerID, $userID, $status->statusID);
+		$this->addActivity($ownerID, $userID, $status->id);
 	}
 
 	/**

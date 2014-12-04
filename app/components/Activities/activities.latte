@@ -30,7 +30,7 @@
 {define status $activity}
 	{* doplnit odkaz! *}
 	<a href="{plink :Status: $activity->status->id}"
-	   class="activity-link {if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-link="{link viewed! activityID => $activity->id}">
+	   class="activity-link {if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
 		{include #beforeActivity}
 		Uživatel <strong>{$activity->event_creator->user_name}</strong>
 		{if $activity->type == "comment"}
@@ -44,7 +44,7 @@
 {/}
 {define image $activity}
 	<a href="{plink :Profil:Galleries:image imageID => $activity->imageID, galleryID => $activity->image->galleryID}"
-	   class="activity-link {if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-link="{link viewed! activityID => $activity->id}">
+	   class="activity-link {if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
 		{include #beforeActivity}
 		Uživatel <strong>{$activity->event_creator->user_name}</strong>
 		{if ($activity->type == "comment")}
@@ -71,7 +71,7 @@
 {/}
 {define friendsRequest $activity}
 	<span
-	   class="{if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-link="{link viewed! activityID => $activity->id}">
+	   class="{if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
 		Uživatel <strong>{$activity->event_creator->user_name}</strong> 
 		{if ($activity->type == "new-request")}
 			vás žádá o přátelství <a href="{$basePath}/?friendRequest-id={$activity->friendRequestID}&do=friendRequest-accept">Přijmout</a>
@@ -83,7 +83,7 @@
 	{if ($activity->type == "sexy")}
 		{if $userIsPaying}
 			<a href="{plink :Profil:Show: id => $activity->event_creator->id}" class="activity-link {if $activity->viewed == 0}new-activity{/if}"
-			   data-activity-viewed-link="{link viewed! activityID => $activity->id}">
+			   data-activity-viewed-id="{$activity->id}">
 				{include #beforeActivity}
 				Uživatel <strong>{$activity->event_creator->user_name}</strong>
 					vás označil jako sexy!

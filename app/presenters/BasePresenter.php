@@ -95,6 +95,19 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			}
 			$this->loggedUser = $section->loggedUser;
 		}
+
+		$this->viewedActivity();
+	}
+
+	/**
+	 * Pokud se nachází v adrese activityViewedId, označí aktivitu jako přečtenou
+	 */
+	public function viewedActivity() {
+		$httpRequest = $this->context->getByType('Nette\Http\Request');
+		$activityViewedID = $httpRequest->getQuery('activityViewedId');
+		if (!empty($activityViewedID)) {
+			$this->activitiesDao->markViewed($activityViewedID);
+		}
 	}
 
 	/**
@@ -400,6 +413,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	public function createComponentJsLayout() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
 		$files->addFiles(array(
+			'../cookies.js',
 			'iedebug.js',
 			'baseAjax.js',
 			/* 'order.js', */

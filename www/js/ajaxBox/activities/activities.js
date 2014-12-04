@@ -7,23 +7,25 @@ var fnPreventNewActivity = function () {
 		$(this).click(function (e) {
 			e.preventDefault();
 			var $target = $(e.target);
-			var statusFn = function (data, status) {
-			}; //musim mu predat nejakou fnci
+
 			/* oznaceni zpravy jako prectene */
-			var data;
+			var activityID;
 			for(var i = 0;i<2;i++) {
-				var data = $target.data("activity-viewed-link");
-				if(data === undefined) {
+				var activityID = $target.data("activity-viewed-id");
+				if(activityID === undefined) {
 					$target = $target.parent();
-					data = $target.data("activity-viewed-link");
+					activityID = $target.data("activity-viewed-id");
 				}
 			}
-			
-			$.get(data, statusFn);
-			alert($target.data("activity-viewed-link"));
-			alert($target.attr("href"));
+
+			var href = $target.attr("href");
+			if(href.indexOf("?") > -1) { //obsahuje odkaz ?
+				href = href + "&" + "activityViewedId=" + activityID;
+			} else {
+				href = href + "?" + "activityViewedId=" + activityID;
+			}
 			/* prejdu na odkaz v tlacitku */
-			window.location = $target.attr("href");
+			window.location = href;
 		});
 	});
 };

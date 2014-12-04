@@ -13,13 +13,27 @@
 	$(document).ready(function() {
 		var $contacts = $("#contacts");
 		var $chatBox = $("#chat-interface");
-		var $searchIcon = $("#chat-search");
-		$("#contact-toogle-btn").click(function(e) {
-			if($contacts.is(":visible")) {
+		var isChatBoxVisible = 1;
+		
+		/* Nastavení viditelnosti chatu z cokie. Pokud není vyplněné, dá false. */
+		if($.cookie("chat-box-visible") == 0) {
+			isChatBoxVisible = 0;
+			$contacts.hide();
+		}
+		
+		var fnToogleContact = function() {
+			if(isChatBoxVisible) {
 				$contacts.hide();
+				isChatBoxVisible = 0;
+				$.cookie("chat-box-visible", 0);
 			} else {
 				$contacts.show();
+				isChatBoxVisible = 1;
+				$.cookie("chat-box-visible", 1);
 			}
+		};
+		$("#contact-toogle-btn").click(function() {
+			fnToogleContact();
 		});
 		/* správné nastavení velikosti chatu */
 		var fnChatResize = function() {
