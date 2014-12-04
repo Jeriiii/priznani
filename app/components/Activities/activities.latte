@@ -70,13 +70,14 @@
 	</a>
 {/}
 {define friendsRequest $activity}
-	<span
-	   class="{if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
+	<a href="{plink this}" class="{if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
+		{include #beforeActivity}
 		Uživatel <strong>{$activity->event_creator->user_name}</strong> 
 		{if ($activity->type == "new-request")}
 			vás žádá o přátelství <a href="{$basePath}/?friendRequest-id={$activity->friendRequestID}&do=friendRequest-accept">Přijmout</a>
 		{/if}
-	</span>
+		{include #afterActivity}
+	</a>
 {/}
 {define user $activity}
 	{* doplnit odkaz! *}
