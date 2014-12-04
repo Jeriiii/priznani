@@ -76,7 +76,7 @@ abstract class UserBaseDao extends AbstractDao {
 	protected function getWomanData($userProperty) {
 		return array(
 			'Velikost košíčku' => UserBaseDao::getTranslateUserBraSize($userProperty->bra_size),
-			'Barva vlasů' => $userProperty->hair_colour
+			'Barva vlasů' => self::getTranslateUserHairColor($userProperty->hair_colour)
 		);
 	}
 
@@ -271,6 +271,14 @@ abstract class UserBaseDao extends AbstractDao {
 	public static function getTranslateUserBraSize($braSize) {
 		$translate_bra_size = UserBaseDao::getUserBraSizeOption();
 		return $translate_bra_size[$braSize];
+	}
+
+	/**
+	 * vrací překlad user hair color
+	 */
+	public static function getTranslateUserHairColor($hairColor) {
+		$translate_hairs = UserBaseDao::getUserHairs();
+		return $translate_hairs[$hairColor];
 	}
 
 	/*	 * ************* VRACÍ STATICKÁ POLE S PŘEKLADAMA ****************** */

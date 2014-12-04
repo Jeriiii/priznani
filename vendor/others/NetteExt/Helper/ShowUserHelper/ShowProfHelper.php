@@ -14,6 +14,7 @@ namespace NetteExt\Helper;
 
 use \Nette\Database\Table\ActiveRow;
 use Nette\Utils\Html;
+use Nette\Utils\Strings;
 
 class ShowProfHelper {
 	/* názvy helperů */
@@ -74,7 +75,7 @@ class ShowProfHelper {
 
 			/* přidá jméno */
 			if (!$min) {
-				$elName = Html::el($el, strtoupper($user->user_name));
+				$elName = Html::el($el, Strings::upper($user->user_name));
 				$elName->addAttributes(array('class' => 'generatedTitle'));
 				$elLink->add($elName);
 			}

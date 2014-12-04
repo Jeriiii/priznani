@@ -122,8 +122,13 @@ class UserCategoryDao extends AbstractDao {
 		for ($i = 0; $i < (count($property) - 1); $i++) {
 			$conProperty = $conProperty . " OR " . CatPropertyWantToMeetDao::COLUMN_TYPE . "= ? ";
 		}
-		$sel->where($conProperty, $property);
 
+		/* wtf oprava - padalo to kdyz byl zadan jen jeden parametr v $property */
+		if (count($property) == 1) {
+			$property = $property[0];
+		}
+
+		$sel->where($conProperty, $property);
 		return $sel;
 	}
 
