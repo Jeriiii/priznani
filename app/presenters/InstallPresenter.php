@@ -50,6 +50,12 @@ class InstallPresenter extends BasePresenter {
 	 */
 	public $streamDao;
 
+	/**
+	 * @var \POS\Model\ConfessionDao
+	 * @inject
+	 */
+	public $confessionDao;
+
 	public function startup() {
 		parent::startup();
 		// ochrana proti spuštění instalace na ostrém serveru
@@ -59,7 +65,7 @@ class InstallPresenter extends BasePresenter {
 
 		$this->setLayout("layoutInstall");
 
-		$this->recalculateUserCategories();
+		//$this->recalculateUserCategories();
 	}
 
 	/**

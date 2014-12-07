@@ -20,6 +20,7 @@ use Nette\Database\Table\Selection;
 class UserDao extends UserBaseDao {
 
 	const TABLE_NAME = "users";
+	const TABLE_NAME_OLD = "users_old";
 	const PROPERTIES_TABLE_NAME = "users_properties";
 
 	/* sloupce */
@@ -56,6 +57,14 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Vrací starou tabulku
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getOldTable() {
+		return $this->createSelection(self::TABLE_NAME_OLD);
+	}
+
+	/**
 	 * Vrátí další údaje o uživateli
 	 * @param int $userID
 	 * @return bool|Database\Table\IRow
@@ -74,6 +83,17 @@ class UserDao extends UserBaseDao {
 	 */
 	public function findByEmail($email) {
 		$sel = $this->getTable();
+		$sel->where(self::COLUMN_EMAIL, $email);
+		return $sel->fetch();
+	}
+
+	/**
+	 * Najde uživatele podle jeho emailu
+	 * @param String $email Email uživatele
+	 * @return bool|Database\Table\IRow
+	 */
+	public function findByOldEmail($email) {
+		$sel = $this->getOldTable();
 		$sel->where(self::COLUMN_EMAIL, $email);
 		return $sel->fetch();
 	}

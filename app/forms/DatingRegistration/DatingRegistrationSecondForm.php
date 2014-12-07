@@ -85,8 +85,19 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 		$this->regSession->passwordHash = $pass;
 		$this->regSession->first_sentence = $values->first_sentence;
 		$this->regSession->about_me = $values->about_me;
+		$this->checkOldUser($this->regSession, $values);
 
 		$presenter->redirect('DatingRegistration:ThirdRegForm');
+	}
+
+	public function checkOldUser($regSession, $values) {
+		$email = $this->userDao->findByOldEmail($values->email);
+		$oldUser = FALSE;
+		if ($email) {
+			$this->getPresenter()->flashMessage("Účet byl propojen se starším účtem. Děkujeme, že jste s námi.");
+			$oldUser = TRUE;
+		}
+		$regSession->oldUser = $oldUser;
 	}
 
 	/**

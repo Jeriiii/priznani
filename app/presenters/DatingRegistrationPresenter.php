@@ -147,7 +147,11 @@ class DatingRegistrationPresenter extends BasePresenter {
 		/* 14 dní premium účtu */
 		$now = new DateTime();
 		$addTime = new DateTime(); //přidaný čas, kdy bude premium
-		$addTime->modify('+14 days');
+		if ($registrationDataUser->oldUser) {
+			$addTime->modify('+21 days');
+		} else {
+			$addTime->modify('+14 days');
+		}
 		$this->paymentDao->insertPremium($now, $addTime, $user->id);
 
 		$registrationDataUser->firstMemberId = $user->id;

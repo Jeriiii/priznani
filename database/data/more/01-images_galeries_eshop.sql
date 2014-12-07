@@ -271,11 +271,13 @@ INSERT INTO `eshop_games_orders` (`id`, `name`, `surname`, `email`, `address`, `
 INSERT INTO `galleries` (`id`, `name`, `sexmode`, `partymode`, `competition`, `description`, `imageUrl`, `current`, `lastImageID`) VALUES
 	(3, 'Obrázky 18+', 0, 0, 0, '', '', 0, NULL),
 	(4, 'Sputěž o nejlepší fotku z párty', 0, 0, 1, '', '', 0, NULL),
-	(5, 'Nejhezčí prsa 2013', 1, 0, 1, 'Rozhodněte, která z našich fanynek má nejhezčí prsa pro rok 2013! Soutěžte také a vyhrajte dárek pod stromeček.', 'images/galleries/5/79.JPG', 0, 522),
-	(6, 'Vánoční a Silvestrovská soutěž', 0, 1, 1, 'Soutěž o nejlepší fotku z pařby s Vánoční nebo Silvestrovskou tématikou', '', 0, 490),
-	(8, 'Nejhezčí pánský zadek 2014', 1, 0, 1, 'Soutěž o nejhezčí pánský zadek v uplých boxerkách pro rok 2014.', 'images/galleries/8/361.jpg', 0, 429),
-	(9, 'Od fanoušků Přiznání o sexu', 1, 0, 0, 'Žhavé erotické fotky od našich fanoušků.', 'images/galleries/9/534.jpg', 1, 825),
+	(5, 'Nejhezčí prsa 2013', 1, 0, 1, 'Rozhodněte, která z našich fanynek má nejhezčí prsa pro rok 2013! Soutěžte také a vyhrajte dárek pod stromeček.', 'images/galleries/5/79.JPG', 0, NULL),
+	(6, 'Vánoční a Silvestrovská soutěž', 0, 1, 1, 'Soutěž o nejlepší fotku z pařby s Vánoční nebo Silvestrovskou tématikou', '', 0, NULL),
+	(8, 'Nejhezčí pánský zadek 2014', 1, 0, 1, 'Soutěž o nejhezčí pánský zadek v uplých boxerkách pro rok 2014.', 'images/galleries/8/361.jpg', 0, NULL),
+	(9, 'Od fanoušků Přiznání o sexu', 1, 0, 0, 'Žhavé erotické fotky od našich fanoušků.', 'images/galleries/9/534.jpg', 1, NULL),
 	(10, 'Vtípky', 0, 0, 0, '', '', 0, NULL);
+
+
 
 INSERT INTO `images` (`id`, `galleryID`, `videoID`, `name`, `comment`, `user_name`, `user_phone`, `user_email`, `suffix`, `order`, `userID`, `idInGallery`, `approved`, `widthGalScrn`, `heightGalScrn`) VALUES
 	(48, 4, NULL, 'Vodka pártyyyyy :-)', 'Takhle slaví narozeniny v Budějovicích :-)', 'Petr Kukrál', '773538835', 'p.kukral@jkbusiness.cz', 'jpg', 0, NULL, NULL, 0, 700, 525),
@@ -975,7 +977,7 @@ INSERT INTO `images` (`id`, `galleryID`, `videoID`, `name`, `comment`, `user_nam
 	(878, 9, NULL, 'Bříško :-)', '', 'Kattis', 'nic', 'nic', 'jpg', 0, 1, NULL, 0, NULL, NULL),
 	(879, 9, NULL, 'mám raději tvrdší sex!!!', '', 'Eddy', 'nic', 'nic', 'jpg', 0, 1, NULL, 0, NULL, NULL);
 
-UPDATE `pos`.`galleries` SET `lastImageID`=522 WHERE  `id`=5;
-UPDATE `pos`.`galleries` SET `lastImageID`=490 WHERE  `id`=6;
-UPDATE `pos`.`galleries` SET `lastImageID`=429 WHERE  `id`=8;
-UPDATE `pos`.`galleries` SET `lastImageID`=825 WHERE  `id`=9;
+UPDATE `galleries` SET `lastImageID`=522 WHERE  `id`=5;
+UPDATE `galleries` SET `lastImageID`=490 WHERE  `id`=6;
+UPDATE `galleries` SET `lastImageID`=429 WHERE  `id`=8;
+UPDATE `galleries` SET `lastImageID`=825 WHERE  `id`=9;

@@ -95,13 +95,8 @@ class SignPresenter extends BasePresenter {
 	}
 
 	public function actionOut() {
-		$this->getSession('allow')->remove();
 		$this->getUser()->logout();
-		$this->getSession(self::USER_INFO_SESSION_NAME)->remove();
-		$this->getSession(StreamUserPreferences::NAME_SESSION_STREAM_ITEMS)->remove();
-		$this->getSession(ChatManager::CHAT_MINUTE_SESSION_NAME)->remove();
-		$this->getSession('loggedUser')->remove();
-		$this->getSession(ActivityReporter::SECTION_NAME)->remove();
+		$this->getSession()->destroy();
 		$this->flashMessage("Byl jste úspěšně odhlášen");
 		$this->redirect('Sign:in');
 	}

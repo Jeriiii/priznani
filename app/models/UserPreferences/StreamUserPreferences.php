@@ -122,8 +122,8 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 */
 	private function loadNewItems($limit, $offset) {
 		if ($this->data->count() < $limit + $offset) {
-			$minCount = $offset - $this->data->count();
-			$streamItems = $this->streamDao->getAllItemsWhatFits($this->getUserCategories(), $this->user->id, $minCount, $limit);
+			//$minCount = $offset - $this->data->count();
+			$streamItems = $this->streamDao->getAllItemsWhatFits($this->getUserCategories(), $this->user->id, $limit, $offset);
 			$newItems = $this->getSerializer($streamItems);
 			$this->appendToData($newItems->toArrayHash());
 		}
