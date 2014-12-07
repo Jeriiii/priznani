@@ -54,20 +54,20 @@ class HelperRegistrator {
 
 	private function registerShowProfHelpers($template) {
 		$showProfHelper = $this->showProfHelper;
-		$template->registerHelper(ShowProfHelper::NAME, function($user, $href = null) use ($showProfHelper) {
-			return $showProfHelper->showProf($user, $href, FALSE);
+		$template->registerHelper(ShowProfHelper::NAME, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, FALSE, $minSize);
 		});
-		$template->registerHelper(ShowProfHelper::NAME_MIN, function($user, $href = null) use ($showProfHelper) {
-			return $showProfHelper->showProf($user, $href, TRUE);
+		$template->registerHelper(ShowProfHelper::NAME_MIN, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, TRUE, $minSize);
 		});
-		$template->registerHelper(ShowProfHelper::NAME_MIN_DIV, function($user, $href = null) use ($showProfHelper) {
-			return $showProfHelper->showProf($user, $href, TRUE, "div");
+		$template->registerHelper(ShowProfHelper::NAME_MIN_DIV, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, TRUE, $minSize, "div");
 		});
-		$template->registerHelper(ShowProfHelper::NAME_DIV, function($user, $href = null) use ($showProfHelper) {
-			return $showProfHelper->showProf($user, $href, FALSE, "div");
+		$template->registerHelper(ShowProfHelper::NAME_DIV, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, FALSE, $minSize, "div");
 		});
-		$template->registerHelper(ShowProfHelper::NAME_NO_LINK, function($user, $href = null) use ($showProfHelper) {
-			return $showProfHelper->showProf($user, $href, TRUE, "span", TRUE);
+		$template->registerHelper(ShowProfHelper::NAME_NO_LINK, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, TRUE, $minSize, "span", TRUE);
 		});
 	}
 

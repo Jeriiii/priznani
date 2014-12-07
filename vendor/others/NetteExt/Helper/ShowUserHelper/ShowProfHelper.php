@@ -50,8 +50,8 @@ class ShowProfHelper {
 	 * @param bool $noLink negenerovat odkaz
 	 * @return \Nette\Utils\Html
 	 */
-	public function showProf($user, $href = null, $min = FALSE, $el = 'span', $noLink = FALSE) {
-		return $this->createShowProf($user, $href, $min, $el, $noLink);
+	public function showProf($user, $href = null, $min = FALSE, $minSize = TRUE, $el = 'span', $noLink = FALSE) {
+		return $this->createShowProf($user, $href, $min, $minSize, $el, $noLink);
 	}
 
 	/**
@@ -63,14 +63,14 @@ class ShowProfHelper {
 	 * @param bool $noLink negenerovat odkaz
 	 * @return \Nette\Utils\Html
 	 */
-	private function createShowProf($user, $href, $min, $el, $noLink = FALSE) {
+	private function createShowProf($user, $href, $min, $minSize = TRUE, $el, $noLink = FALSE) {
 		/* Výsledek je celý v odkazu */
 
 		if (!$noLink) {
 			$elLink = $this->createLink($href, $user);
 
 			/* profilová fotka */
-			$elPhoto = $this->createPhoto($el, $user);
+			$elPhoto = $this->createPhoto($el, $user, $minSize);
 			$elLink->add($elPhoto);
 
 			/* přidá jméno */
@@ -100,12 +100,16 @@ class ShowProfHelper {
 	 * @param \Nette\Database\Table\ActiveRow $user Zádnam o uživateli.
 	 * @return \Nette\Utils\Html
 	 */
-	private function createPhoto($el, $user) {
+	private function createPhoto($el, $user, $minSize) {
 		$elPhoto = Html::el($el);
 		$img = Html::el("img");
 
 		if (!empty($user->profilFotoID)) {
-			$src = $this->getImgPathHelper->getImgMinPath($user->profilFoto, GetImgPathHelper::TYPE_USER_GALLERY);
+			if ($minSize) {
+				$src = $this->getImgPathHelper->getImgMinPath($user->profilFoto, GetImgPathHelper::TYPE_USER_GALLERY);
+			} else {
+				$src = $this->getImgPathHelper->getImgScrnPath($user->profilFoto, GetImgPathHelper::TYPE_USER_GALLERY);
+			}
 		} else {
 			//$femalePhoto = $user->property->user_property == "women" ? TRUE : FALSE;
 			$src = $this->getImgPathHelper->getImgDefProf(/* $femalePhoto */);

@@ -37,7 +37,7 @@
 		<div id="stream-menu">
 
 				<div class="user-profile-picture">
-					{$userData|showProfMinDiv}
+					{$userData|showProfMinDiv: NULL, FALSE}
 					{if $isMyProfile}
 						<div class="photoLinkContainer">
 							<a class="photoLink uploadProfilePhoto" id="addProfilePhoto" title="Nahrát profilovku">Nahrát profilovku</a>
