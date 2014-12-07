@@ -41,7 +41,7 @@
 		/* URL, na kterou se bude komponenta dotazovat */
 		requestUrl: '/',
 		/* prodleva mezi dotazy na server */
-		requestTimeout: 5000
+		requestTimeout: 30000
 	};
 
 

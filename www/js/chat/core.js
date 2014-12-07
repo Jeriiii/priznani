@@ -24,8 +24,16 @@
 		initializeContactList();
 		initializeConversationList();
 		reloadWindowUnload();
-		setWaitTime(chatopts.minRequestTimeout);
-		refreshMessages(0);
+		var interval = $.cookie("chat-request-interval");
+		var waitingTime = $.cookie("chat-waiting-time");
+		if(!waitingTime){
+			$.cookie("chat-waiting-time", 0);
+		}
+		if(!interval){
+			$.cookie("chat-request-interval", chatopts.maxRequestTimeout);
+		}
+		refreshMessages();
+		
 	};
 
 	/* proměnná pro poslední známé id zprávy */
@@ -37,13 +45,15 @@
 	/* implicitní hodnoty nastavení pluginu */
 	$.fn.chat.defaults = {
 		/* minimální čekání mezi zasíláním požadavků. Této hodnoty dosáhne chat při aktivním používání */
-		minRequestTimeout: 1000,
+		minRequestTimeout: 3000,
 		/* maximální čekání mezi zasíláním požadavků na nové zprávy. Této hodnoty postupně dosáhne neaktivní chat. */
-		maxRequestTimeout: 8000,
+		maxRequestTimeout: 60000,
 		/* pokud selže požadavek, toto je doba čekání, po které se to zkusí znovu */
-		failResponseTimeout: 10000,
+		failResponseTimeout: 100000,
 		/* o kolik se zvýší čekání při přijetí prázdné odpovědi */
-		timeoutStep: 500,
+		timeoutStep: 2000,
+		/* jak často prohlížeč zkontroluje, zda se nemá zeptat serveru na nové zprávy*/
+		controlTime: 2000,
 		/* selektor pro položku (jméno) na seznamu kontaktů */
 		contactListItems: '.contact-link',
 		/* selektor pro položku (jméno) na seznamu konverzací */
@@ -67,26 +77,35 @@
 
 	/**
 	 * Pravidelně obnovuje stav příchozích zpráv
-	 * @param waitTime cas, ktery bude cekat pred refreshem
 	 * */
-	function refreshMessages(waitTime) {
+	function refreshMessages() {
 		if (messageSent) {//pokud byla ted nekdy odeslana zprava
-			waitTime = this.chatopts.minRequestTimeout;
+			$.cookie("chat-request-interval", this.chatopts.minRequestTimeout);
 			messageSent = false;
 		}
+		var interval = $.cookie("chat-request-interval");
+		var waitingTime = parseInt($.cookie("chat-waiting-time"));
+		
+		
+		if(waitingTime >= interval){
+			sendRefreshRequest();
+			$.cookie("chat-waiting-time", 0);
+		}else{
+			$.cookie("chat-waiting-time", waitingTime + this.chatopts.controlTime);
+		}
+		
 		setTimeout(function () {
 			//console.log("CHAT - refreshing");//pro debug
-			sendRefreshRequest(waitTime);
-		}, waitTime);
+			refreshMessages();
+		}, this.chatopts.controlTime);
 
 	}
 	/**
 	 * Pošle na server ajaxový požadavek (dotaz) na nové zprávy
 	 * Zaroven posílá informace o tom, které zprávy si uživatel přečetl
 	 * a tudíž se mají označit za přečtené.
-	 * @param waitTime aktualní hodnota času, po který se čekalo na zavolání
 	 * */
-	function sendRefreshRequest(waitTime) {
+	function sendRefreshRequest() {
 		var chatopts = this.chatopts;
 		var data = {
 			'chat-communicator-lastid': $.fn.chat.lastId,
@@ -125,9 +144,8 @@
 					});
 				});
 			}
-			refreshMessages(waitTime);
 		}).fail(function () {
-			refreshMessages(chatopts.failResponseTimeout);
+			$.cookie("chat-request-interval", chatopts.failResponseTimeout);
 		});
 	}
 
@@ -140,17 +158,18 @@
 	function sendRefreshGet(data) {
 		var chatopts = this.chatopts;
 		$.getJSON(refreshMessagesLink, data, function (jsondata) {
+			var waitTime;
 			if ($.isEmptyObject(jsondata)) {
-				waitTime = Math.min(waitTime + chatopts.timeoutStep, chatopts.maxRequestTimeout);
+				waitTime = Math.min(parseInt($.cookie("chat-request-interval")) + chatopts.timeoutStep, chatopts.maxRequestTimeout);
 				//console.log("CHAT - no new data - request timeout is now: " + waitTime);//pro debug
 			} else {
 				handleResponse(jsondata);
 				waitTime = chatopts.minRequestTimeout;
 				//console.log("CHAT - data arrived - request timeout is now: " + waitTime);//pro debug
 			}
-			refreshMessages(waitTime);
+			$.cookie("chat-request-interval", waitTime);
 		}).fail(function () {
-			refreshMessages(chatopts.failResponseTimeout);
+			$.cookie("chat-request-interval", chatopts.failResponseTimeout);
 		});
 	}
 
@@ -169,14 +188,6 @@
 	 */
 	function setChatOpts(chatopts) {
 		this.chatopts = chatopts;
-	}
-
-	/**
-	 * Nastavení času čekání na počáteční hodnotu
-	 * @param {int} time čas k nastavení
-	 */
-	function setWaitTime(time) {
-		waitTime = time;
 	}
 
 	/**

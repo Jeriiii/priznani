@@ -14,12 +14,19 @@
 		li{
 			border-bottom: 1px solid #ddd;
 			margin: 0;
-			cursor: pointer;
 			padding: 0;
 			
-			.activity-link{
+			.activity-link, .activity-span{
 				display: block;
-				padding: 8px 4%;
+				padding: 3px 8px;
+				font-size: 12px;
+				//min-width: 200px;
+				color: #444;
+				width: auto;
+				min-height: 42px;
+			}
+			.activity-link{
+				cursor: pointer;
 			}
 			
 			.new-activity{
@@ -38,13 +45,15 @@
 				font-size: 12px;
 				font-weight: 600;
 			}
-			a{
-				padding: 3px 8px;
-				font-size: 12px;
-				float: left;
-				//min-width: 200px;
-				color: #444;
-				width: 368px;
+			
+			.request-button{
+				display: inline-block;
+				font-size: 12px !important;
+				line-height: 12px;
+				height: auto;
+				width: auto;
+				padding: 3px 20px;
+				margin: 4px 0px 8px 8px;
 			}
 
 			img{

@@ -33,6 +33,7 @@ class RequestMessageForm extends BaseForm {
 		$message = $this->addTextArea("message", "Zpráva pro příjemce");
 		$message->addRule(Form::FILLED, "Vyplňte zprávu pro příjemce.");
 		$message->addRule(Form::MAX_LENGTH, "Maximální délka zprávy je %d znaků", 200);
+		$message->setDefaultValue("Chci tě poznat!");
 
 		$this->addSubmit('send', 'Odeslat');
 		$this->setBootstrapRender();

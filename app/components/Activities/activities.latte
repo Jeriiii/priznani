@@ -13,7 +13,7 @@
 					{else}
 						{include user activity => $activity}
 					{/if}
-
+					<div class="clear"></div>
 			</li>
 		{/foreach}
 	{/ifset}
@@ -25,7 +25,7 @@
 	{$activity->event_creator|showProfMinNoLink }
 {/}
 {define afterActivity}
-				<div class="clear"></div>
+	
 {/}
 {define status $activity}
 	{* doplnit odkaz! *}
@@ -41,6 +41,7 @@
 		{/if}
 		{include #afterActivity}
 	</a>
+	
 {/}
 {define image $activity}
 	<a href="{plink :Profil:Galleries:image imageID => $activity->imageID, galleryID => $activity->image->galleryID}"
@@ -70,14 +71,19 @@
 	</a>
 {/}
 {define friendsRequest $activity}
-	<a href="{plink this}" class="{if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
+<!--	<div href="{plink this}" class="{if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">-->
+	<span class="activity-span {if $activity->viewed == 0}new-activity{/if}">
 		{include #beforeActivity}
 		Uživatel <strong>{$activity->event_creator->user_name}</strong> 
 		{if ($activity->type == "new-request")}
-			vás žádá o přátelství <a href="{$basePath}/?friendRequest-id={$activity->friendRequestID}&do=friendRequest-accept">Přijmout</a>
+			vás žádá o přátelství
+			<div>
+				<a href="{$basePath}/?friendRequest-id={$activity->friendRequestID}&do=friendRequest-accept" class="request-button btn-main btn-small">Přijmout</a>
+				<a href="{$basePath}/?friendRequest-id={$activity->friendRequestID}&do=friendRequest-reject" class="request-button btn-main btn-small">Odmítnout</a>
+			</div>
 		{/if}
 		{include #afterActivity}
-	</a>
+	</span>
 {/}
 {define user $activity}
 	{* doplnit odkaz! *}
