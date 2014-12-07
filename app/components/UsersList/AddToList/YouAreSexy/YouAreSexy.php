@@ -13,15 +13,22 @@
 namespace POSComponent\AddToList;
 
 use POS\Model\YouAreSexyDao;
+use POS\Model\UserPropertyDao;
 
 class YouAreSexy extends AddToList {
 
 	/** @var \POS\Model\YouAreSexyDao */
 	public $youAreSexyDao;
 
-	public function __construct(YouAreSexyDao $youAreSexyDao, $userIDFrom, $userIDTo, $parent, $name) {
+	/**
+	 * @var \POS\Model\UserPropertyDao
+	 */
+	public $userPropertyDao;
+
+	public function __construct(YouAreSexyDao $youAreSexyDao, UserPropertyDao $userPropertyDao, $userIDFrom, $userIDTo, $parent, $name) {
 		parent::__construct($userIDFrom, $userIDTo, $parent, $name);
 		$this->youAreSexyDao = $youAreSexyDao;
+		$this->userPropertyDao = $userPropertyDao;
 	}
 
 	/**
@@ -36,9 +43,11 @@ class YouAreSexy extends AddToList {
 	public function handleYouAreSexy() {
 		try {
 			$this->youAreSexyDao->addSexy($this->userIDFrom, $this->userIDTo);
+			$this->userPropertyDao->incraseScoreBy($this->userIDTo, 1);
 		} catch (\POS\Exception\DuplicateRowException $e) {
 			$this->flashMessage("Uživatel byl již označen.");
 		}
+
 		$this->redrawControl();
 	}
 

@@ -104,6 +104,9 @@ class ShowPresenter extends ProfilBasePresenter {
 
 	/** @var \POS\Model\EnumVigorDao @inject */
 	public $enumVigorDao;
+
+	/** @var \POS\Model\UserPropertyDao @inject */
+	public $userPropertyDao;
 	public $dataForStream;
 
 	/** @var \Nette\Database\Table\ActiveRow|\Nette\ArrayHash */
@@ -347,7 +350,7 @@ class ShowPresenter extends ProfilBasePresenter {
 		$userIDFrom = $this->getUser()->id;
 		$userIDTo = $this->userID;
 
-		return new YouAreSexy($this->youAreSexyDao, $userIDFrom, $userIDTo, $this, $name);
+		return new YouAreSexy($this->youAreSexyDao, $this->userPropertyDao, $userIDFrom, $userIDTo, $this, $name);
 	}
 
 	protected function createComponentFriendsList($name) {
