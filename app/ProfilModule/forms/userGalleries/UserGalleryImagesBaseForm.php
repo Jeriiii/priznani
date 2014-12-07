@@ -166,7 +166,8 @@ class UserGalleryImagesBaseForm extends BaseForm {
 				$imageDB = $this->saveImageToDB($galleryID, $name, $description, $suffix, $allow, $profilePhoto);
 
 				//nahraje soubor
-				$this->upload($image[self::IMAGE_FILE], $imageDB->id, $suffix, $galleryID, $userID, 525, 700, 100, 130);
+				$addWatermark = $profilePhoto == TRUE ? FALSE : TRUE;
+				$this->upload($image[self::IMAGE_FILE], $imageDB->id, $suffix, $galleryID, $userID, 525, 700, 100, 130, $addWatermark);
 
 				//zaznamenání velikosti screnu do proměných width/heightGalScrn
 				$this->changeSizeGalScrnDB($galleryID, $userID, $imageDB->id, $suffix);
