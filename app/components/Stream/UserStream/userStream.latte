@@ -59,12 +59,12 @@
 {/}
 
 {define addUserInfo}
-	{if empty($profilePhoto) &&  $user->isLoggedIn()}
+	{if $user->isLoggedIn() && empty($profilePhoto)}
 		<div id="profile-photo-upload">
 			Nahrajte si <a class="highlight uploadProfilePhoto">profilovou fotku</a>, aby si vás ostatní mohli prohlédnout.
 			{control cropImageUpload}
 		</div>
-	{elseif !empty($profilePhoto) && $user->isLoggedIn() &&  $place==0  && $position==0 && $placePosSession->count%5==0}
+	{elseif $user->isLoggedIn() && !empty($profilePhoto) &&  $place==0  && $position==0 && $placePosSession->count%5==0}
 		<div class="questionnaire-form">
 			<h4 class="question-title">Chcete další téma ke konverzaci? Vyplňte si:</h4>
 			{control placesAndPositionsForm}

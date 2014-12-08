@@ -68,11 +68,10 @@ class UserStream extends BaseStream {
 				$this->template->position = $position;
 			}
 			$this->template->userData = $userData;
-		}
 
-// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
-		$profileGalleryID = $this->userGalleryDao->findProfileGallery($user->id);
-		$this->template->profilePhoto = $this->userImageDao->getInGallery($profileGalleryID)->fetch();
+			// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
+			$this->template->profilePhoto = $userData->profilFotoID;
+		}
 
 		$this->renderBase($mode, $templateName);
 	}
