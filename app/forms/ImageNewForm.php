@@ -65,7 +65,15 @@ class ImageNewForm extends ImageBaseForm {
 		$id = $this->imageDao->insert($values);
 
 		$galleryFolder = GalleryPathCreator::getGalleryFolder($this->id_gallery);
-		$this->upload($image, $id, $values['suffix'], $galleryFolder, 500, 700, 100, 130);
+		$path = $this->upload($image, $id, $values['suffix'], $galleryFolder, 500, 700, 100, 130);
+
+		if ($path) {
+			$image = Image::fromFile($path);
+			$this->imageDao->update($id, array(
+				ImageDao::COLUMN_GAL_SCRN_HEIGHT => $image->getHeight(),
+				ImageDao::COLUMN_GAL_SCRN_WIDTH => $image->getWidth()
+			));
+		}
 
 		$presenter->flashMessage('Obrázek byl vytvořen. Počkejte prosím na schválení adminem.');
 		$presenter->redirect('Competition:', array("imageID" => $id));

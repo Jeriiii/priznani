@@ -22,10 +22,13 @@ class ImageBaseForm extends Form {
 	 */
 	public function upload(FileUpload $image, $id, $suffix, $folder, $max_height, $max_width, $max_minheight, $max_minwidth) {
 		if ($image->isOK() & $image->isImage()) {
-			UploadImage::upload($image, $id, $suffix, $folder, $max_height, $max_width, $max_minheight, $max_minwidth);
+			$infoImg = UploadImage::upload($image, $id, $suffix, $folder, $max_height, $max_width, $max_minheight, $max_minwidth);
+			$scrnPath = $infoImg[0];
 		} else {
 			$this->addError('Chyba při nahrávání souboru. Zkuste to prosím znovu.');
+			$scrnPath = FALSE;
 		}
+		return $scrnPath;
 	}
 
 	/**
