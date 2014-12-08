@@ -183,6 +183,14 @@ class BaseStream extends BaseProjectControl {
 			$this->renderProfileStream($templateName);
 		}
 
+		/* zda-li zobrazit dotaz na blíbenou polohu nebo pozici */
+		$user = $this->presenter->user;
+		if ($user->isLoggedIn()) {
+			$userData = $this->loggedUser;
+			// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
+			$this->template->profilePhoto = $userData->profilFotoID;
+		}
+
 		$this->template->render();
 	}
 

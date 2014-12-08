@@ -45,21 +45,21 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 			->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu')
 			->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password'])
 			->setAttribute('placeholder', 'pro kontrolu...');
-		$this->addText('first_sentence', 'Úvodní věta')
+		$this->addText('first_sentence', 'O mně')
 			->addRule(Form::FILLED, 'Úvodní věta není vyplněna.')
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Úvodní věta\" je 100 znaků.', 100)
 			->setAttribute('placeholder', 'max 100 znaků');
-		$this->addTextArea('about_me', 'O mně', 40, 3)
-			->addRule(Form::FILLED, 'O mně není vyplněno.')
-			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300)
-			->setAttribute('placeholder', 'max 300 znaků');
+//		$this->addTextArea('about_me', 'O mně', 40, 3)
+//			->addRule(Form::FILLED, 'O mně není vyplněno.')
+//			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300)
+//			->setAttribute('placeholder', 'max 300 znaků');
 
 		if (isset($regSession)) {
 			$this->setDefaults(array(
 				'email' => $regSession->email,
 				'user_name' => $regSession->user_name,
 				'first_sentence' => $regSession->first_sentence,
-				'about_me' => $regSession->about_me,
+				/* 'about_me' => $regSession->about_me, */
 			));
 		}
 
@@ -84,7 +84,7 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 		$this->regSession->password = $values->password;
 		$this->regSession->passwordHash = $pass;
 		$this->regSession->first_sentence = $values->first_sentence;
-		$this->regSession->about_me = $values->about_me;
+		$this->regSession->about_me = ""; //$values->about_me;
 		$this->checkOldUser($this->regSession, $values);
 
 		$presenter->redirect('DatingRegistration:ThirdRegForm');
