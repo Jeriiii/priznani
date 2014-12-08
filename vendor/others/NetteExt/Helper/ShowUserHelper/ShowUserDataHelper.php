@@ -43,11 +43,11 @@ class ShowUserDataHelper {
 
 	public static $LABEL_NAMES_WOMAN = array(
 		0 => 'Žákyňka',
-		1 => 'Borůvka',
-		10 => 'Pusinka',
-		100 => 'Kočka',
+		1 => 'Pusinka',
+		10 => 'Kočka',
+		100 => 'Dračice',
 		500 => 'Královna sexu',
-		1000 => 'Bohyně sexu',
+		1000 => 'Bohyně',
 	);
 
 	/* číslo type v databázi */
