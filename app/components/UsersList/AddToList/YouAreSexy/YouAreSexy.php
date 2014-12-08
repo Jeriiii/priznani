@@ -43,7 +43,6 @@ class YouAreSexy extends AddToList {
 	public function handleYouAreSexy() {
 		try {
 			$this->youAreSexyDao->addSexy($this->userIDFrom, $this->userIDTo);
-			$this->userPropertyDao->incraseScoreBy($this->userIDTo, 1);
 		} catch (\POS\Exception\DuplicateRowException $e) {
 			$this->flashMessage("Uživatel byl již označen.");
 		}

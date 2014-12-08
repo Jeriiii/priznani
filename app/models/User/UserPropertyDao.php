@@ -173,7 +173,7 @@ class UserPropertyDao extends UserBaseDao {
 		$sel = $this->createSelection(UserDao::TABLE_NAME);
 		$propId = $sel->wherePrimary($userID)
 			->fetch()
-			->offsetGet(UserDao::COLUMN_ID);
+			->offsetGet(UserDao::COLUMN_PROPERTY_ID); //property
 		$sel2 = $this->getTable();
 		$sel2->where(self::COLUMN_ID, $propId)
 			->update(array($column_name => new SqlLiteral($column_name . ' + ' . $amount)));

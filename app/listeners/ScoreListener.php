@@ -20,7 +20,7 @@ class ScoreListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 	/**
 	 * Skóre přidané v případě, že je uživatel označen jako sexy
 	 */
-	const SCORE_ADDED_IS_SEXY = 5;
+	const SCORE_ADDED_IS_SEXY = 1;
 
 	/**
 	 * @var \POS\Model\UserPropertyDao
