@@ -91,7 +91,9 @@ class EmailNotify extends Object {
 	 * Vrátí předmět emailu
 	 */
 	private function getEmailSubject() {
+		$title = $this->getTittle();
 
+		return "Máte " . $title;
 	}
 
 	/**
@@ -106,7 +108,50 @@ class EmailNotify extends Object {
 	 * Vrtátí zprávu co se má odeslat uživateli.
 	 */
 	private function getEmailBody() {
+		$title = $this->getTittle();
 
+		$body = "Ahoj, \n\nmáš " . $title . " na http://datenode.cz/. Neváhej a ozvi se.\n\Tvé Datenode";
+		return $body;
+	}
+
+	/*	 * **************************** generování titulku emailu ***************************************** */
+
+	private function getTittle() {
+		$messagesNotify = $this->getMessageTitle();
+		$activitiesNotify = $this->getActivityTitle();
+		$and = $this->getAndToTitle();
+
+		return $messagesNotify . $and . $activitiesNotify;
+	}
+
+	private function getAndToTitle() {
+		$and = "";
+
+		if ($this->countMessages > 0 && ($this->countOthersActivities > 0 || $this->countYouAreSexy > 0)) {
+			$and = " a ";
+		}
+
+		return $and;
+	}
+
+	private function getActivityTitle() {
+		$activitiesNotify = "";
+
+		if ($this->countOthersActivities > 0 || $this->countYouAreSexy > 0) {
+			$activitiesNotify = $this->countOthersActivities + $this->countYouAreSexy . " nových upozornění";
+		}
+
+		return $activitiesNotify;
+	}
+
+	private function getMessageTitle() {
+		$messagesNotify = "";
+
+		if ($this->countMessages > 0) {
+			$messagesNotify = $this->countMessages . " nových zpráv";
+		}
+
+		return $messagesNotify;
 	}
 
 }
