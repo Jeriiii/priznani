@@ -110,7 +110,7 @@ class EmailNotify extends Object {
 	private function getEmailBody() {
 		$title = $this->getTittle();
 
-		$body = "Ahoj, \n\nmáš " . $title . " na http://datenode.cz/. Neváhej a ozvi se.\n\Tvé Datenode";
+		$body = "Ahoj, \n\nmáš " . $title . " na http://datenode.cz/. Neváhej a ozvi se.\nTvé Datenode";
 		return $body;
 	}
 
