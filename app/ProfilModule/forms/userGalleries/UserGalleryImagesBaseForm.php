@@ -71,8 +71,12 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	private function upload($image, $id, $suffix, $galleryID, $userID, $max_height, $max_width, $max_minheight, $max_minwidth, $addWatermarks = TRUE) {
 		if ($image instanceof Image || ($image->isOK() && $image->isImage())) {
 			/* uložení souboru a renačtení */
+
+			/* vytvoří složku pro uživatele a galerii, pokud neexistuje */
+			$galleriesPath = GalleryPathCreator::getBaseUserGalleryPath($userID);
 			$galleryPath = GalleryPathCreator::getUserGalleryPath($galleryID, $userID);
-			File::createDir($galleryPath);
+			File::createDir($galleriesPath); // složka uživatele
+			File::createDir($galleryPath); // složka galerie
 
 			$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryID, $userID);
 
