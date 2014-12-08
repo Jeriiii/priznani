@@ -4,57 +4,67 @@
  * Vydává schválená přiznání.
  */
 use Notify\EmailNotifies;
+use POS\Model\UserPropertyDao;
 
 class CronPresenter extends BasePresenter {
 
 	private $dataToDebug;
 
-	/**
-	 * @var \POS\Model\ConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ConfessionDao @inject */
 	public $confessionDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\AdviceDao
-	 * @inject
-	 */
+	/** @var \POS\Model\AdviceDao @inject */
 	public $adviceDao;
 
-	/**
-	 * @var \POS\Model\PartyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\PartyDao @inject */
 	public $partyDao;
 
-	/**
-	 * @var \POS\Model\ChatMessagesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ChatMessagesDao @inject */
 	public $chatMessagesDao;
 
-	/**
-	 * @var \POS\Model\ActivitiesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ActivitiesDao @inject */
 	public $activitiesDao;
 
-	/**
-	 * @var \Nette\Mail\IMailer
-	 * @inject
-	 */
+	/** @var \Nette\Mail\IMailer @inject */
 	public $mailer;
+
+	/** @var \POS\Model\UserDao @inject */
+	public $userDao;
+
+	/** @var \POS\Model\YouAreSexyDao @inject */
+	public $youAreSexyDao;
+
+	/** @var \POS\Model\UserPropertyDao @inject */
+	public $userPropertyDao;
 
 	public function startup() {
 		parent::startup();
 
 		$this->setLayout("simpleLayout");
+	}
+
+	public function actionRecalculateUsersMarks() {
+		$users = $this->userDao->getAll();
+
+		//$this->userDao->begginTransaction();
+
+		foreach ($users as $user) {
+			$property = $user->property;
+			$score = $this->youAreSexyDao->countToUser($user->id, TRUE);
+			if (!empty($property)) {
+				$this->userPropertyDao->update($property->id, array(
+					UserPropertyDao::COLUMN_SCORE => $score
+				));
+			}
+		}
+
+		//$this->userDao->endTransaction();
+
+		echo "Proběhlo přepočítání nálepek";
+		die();
 	}
 
 	public function actionSendNotifies() {

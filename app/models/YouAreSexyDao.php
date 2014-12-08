@@ -77,10 +77,10 @@ class YouAreSexyDao extends AbstractDao {
 	 * @param int $userToID
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function countToUser($userToID) {
+	public function countToUser($userToID, $reloadDataFromCache = FALSE) {
 		$section = $this->getUnicateSection(self::TABLE_NAME);
 
-		if (empty($section->countToUser)) {
+		if (empty($section->countToUser) || $reloadDataFromCache) {
 			$sel = $this->getAllToUser($userToID);
 			$section->countToUser = $sel->count();
 		}
