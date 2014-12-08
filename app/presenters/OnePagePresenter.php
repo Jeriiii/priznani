@@ -212,6 +212,7 @@ class OnePagePresenter extends BasePresenter {
 	public function createComponentJs() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
+			'profilePhotoBackground.js',
 			'stream.js',
 			'lists/initFriendRequest.js',
 			'lists/initFriends.js',
