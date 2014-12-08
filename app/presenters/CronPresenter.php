@@ -3,6 +3,8 @@
 /**
  * Vydává schválená přiznání.
  */
+use Notify\EmailNotifies;
+
 class CronPresenter extends BasePresenter {
 
 	private $dataToDebug;
@@ -31,10 +33,52 @@ class CronPresenter extends BasePresenter {
 	 */
 	public $partyDao;
 
+	/**
+	 * @var \POS\Model\ChatMessagesDao
+	 * @inject
+	 */
+	public $chatMessagesDao;
+
+	/**
+	 * @var \POS\Model\ActivitiesDao
+	 * @inject
+	 */
+	public $activitiesDao;
+
+	/**
+	 * @var \Nette\Mail\IMailer
+	 * @inject
+	 */
+	public $mailer;
+
 	public function startup() {
 		parent::startup();
 
 		$this->setLayout("simpleLayout");
+	}
+
+	public function actionSendNotifies() {
+		$activities = $this->activitiesDao->getNotViewedNotSendNotify();
+		$messages = $this->chatMessagesDao->getNotReadedNotSendNotify();
+
+		$emailNotifies = new EmailNotifies($this->mailer);
+		/* upozornění na aktivity */
+		foreach ($activities as $activity) {
+			$emailNotifies->addActivity($activity->event_owner, $activity);
+		}
+
+		/* upozornění na zprávy */
+		foreach ($messages as $message) {
+			$emailNotifies->addMessage($message->recipient);
+		}
+
+		$emailNotifies->sendEmails();
+
+		$this->activitiesDao->updateSendNotify();
+		$this->chatMessagesDao->updateSendNotify();
+
+		echo "Oznámení byly odeslány";
+		die();
 	}
 
 	public function actionReleaseConfessions() {

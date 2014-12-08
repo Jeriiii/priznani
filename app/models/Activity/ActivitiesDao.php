@@ -29,6 +29,7 @@ class ActivitiesDao extends AbstractDao {
 	const COLUMN_COMMENT_IMAGE_ID = "commentImageID";
 	const COLUMN_FRIEND_REQUEST_ID = "friendRequestID";
 	const COLUMN_VIEWED = "viewed";
+	const COLUMN_SEND_NOTIFY = "sendNotify";
 
 	private function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -337,6 +338,28 @@ class ActivitiesDao extends AbstractDao {
 		$sel->where(self::COLUMN_EVENT_OWNER_ID, $userID);
 		$sel->update(array(
 			self::COLUMN_VIEWED => 1
+		));
+	}
+
+	/**
+	 * Vrátí nepřečtené aktivity o kterých ještě neodešel email s upozorněním.
+	 * @return Nepřečtené aktivity o kterých ještě neodešel email s upozorněním.
+	 */
+	public function getNotViewedNotSendNotify() {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_SEND_NOTIFY, 0);
+		$sel->where(self::COLUMN_VIEWED, 0);
+
+		return $sel;
+	}
+
+	/**
+	 * Označí nepřečtené aktivity o kterých ještě neodešel email s upozorněním jako odeslané upozorněné
+	 */
+	public function updateSendNotify() {
+		$sel = $this->getNotViewedNotSendNotify();
+		$sel->update(array(
+			self::COLUMN_SEND_NOTIFY => 1
 		));
 	}
 

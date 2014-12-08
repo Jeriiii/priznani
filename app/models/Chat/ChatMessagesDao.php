@@ -24,6 +24,7 @@ class ChatMessagesDao extends AbstractDao {
 	const COLUMN_TYPE = "type";
 	const COLUMN_READED = "readed";
 	const COLUMN_CHECKED_BY_CRON = "checked_by_cron";
+	const COLUMN_SEND_NOTIFY = "sendNotify";
 
 
 	/* priznakove konstanty */
@@ -329,6 +330,28 @@ class ChatMessagesDao extends AbstractDao {
 			));
 		}
 		return $selection;
+	}
+
+	/**
+	 * Vrátí nepřečtené zprávy o kterých ještě neodešel email s upozorněním.
+	 * @return Nepřečtené zprávy o kterých ještě neodešel email s upozorněním.
+	 */
+	public function getNotReadedNotSendNotify() {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_SEND_NOTIFY, 0);
+		$sel->where(self::COLUMN_READED, 0);
+
+		return $sel;
+	}
+
+	/**
+	 * Označí nepřečtené zprávy o kterých ještě neodešel email s upozorněním jako odeslané upozorněné
+	 */
+	public function updateSendNotify() {
+		$sel = $this->getNotReadedNotSendNotify();
+		$sel->update(array(
+			self::COLUMN_SEND_NOTIFY => 1
+		));
 	}
 
 }
