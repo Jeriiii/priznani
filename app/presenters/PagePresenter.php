@@ -121,6 +121,7 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function actionDefault($url, $order) {
+		$this->redirect(":OnePage:");
 		$this->url = $url;
 		$this->setMode();
 		$this->template->url = $url;
