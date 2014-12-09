@@ -61,7 +61,7 @@ class SignInForm extends BaseForm {
 			} elseif ($presenter->user->isInRole("admin") || $presenter->user->isInRole("superadmin")) {
 				$presenter->redirect('Admin:Forms:forms');
 			} else {
-				$presenter->redirect('Homepage:');
+				$presenter->redirect(':OnePage:');
 			}
 		} catch (NS\AuthenticationException $e) {
 			$form->addError(Html::el('div')->setText($e->getMessage())->setClass('alert alert-danger'));
