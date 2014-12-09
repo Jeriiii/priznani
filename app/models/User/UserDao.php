@@ -468,7 +468,7 @@ class UserDao extends UserBaseDao {
 		$userShortInfo = array(
 			'Jsem' => UserBaseDao::getTranslateUserProperty($userProperty->type),
 			'Stav' => UserBaseDao::getTranslateUserState($userProperty->marital_state),
-			'Věk' => $this->getAge($userProperty->age),
+			'Věk' => self::getAge($userProperty->age),
 			/* 'Chtěl bych potkat' => UserBaseDao::getTranslateUserInterestedIn($userProperty->interested_in), */
 			/* 'První věta' => $userProperty->first_sentence, */
 		);
@@ -607,7 +607,7 @@ class UserDao extends UserBaseDao {
 		if ($blokedUsers->count(UserBlokedDao::COLUMN_ID)) {
 			$sel->where(self::TABLE_NAME . "." . self::COLUMN_ID . " NOT IN", $blokedUsers);
 		}
-		return $sel;
+		return $sel->order(self::COLUMN_PROFIL_PHOTO_ID . " DESC");
 	}
 
 	/**
