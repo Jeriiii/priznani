@@ -68,7 +68,7 @@ class DatingEditThirdForm extends DatingRegistrationThirdForm {
 		if ($this->isCouple($this->type)) {
 			$coupleData = new ArrayHash();
 			$this->setSecondPersonData($this->type, $coupleData, $values);
-			$this->coupleDao->update($this->user->coupleID, $coupleData);
+			$this->coupleDao->update($this->couple->id, $coupleData);
 		}
 
 
