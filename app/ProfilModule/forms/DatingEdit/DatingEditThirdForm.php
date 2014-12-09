@@ -9,6 +9,7 @@ use Nette\Database\Table\ActiveRow;
 use Nette\ArrayHash;
 use POS\Model\UserCategoryDao;
 use POS\Model\UserPropertyDao;
+use Nette\ObjectMixin;
 
 /**
  * Editace dalších nastavení pro muže, ženu a pár.
@@ -65,7 +66,7 @@ class DatingEditThirdForm extends DatingRegistrationThirdForm {
 		$this->userPropertyDao->update($this->userProperty->id, $userData);
 
 		if ($this->isCouple($this->type)) {
-			$coupleData = new ObjectMixin();
+			$coupleData = new ArrayHash();
 			$this->setSecondPersonData($this->type, $coupleData, $values);
 			$this->coupleDao->update($this->user->coupleID, $coupleData);
 		}

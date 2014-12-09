@@ -125,11 +125,11 @@ class GetImgPathHelper {
 
 		switch ($type) {
 			case self::TYPE_IMG:
-			case self::TYPE_STREAM:
 				return ImagePathCreator::getImgPath($image->id, $image->suffix, $galleryFolder, $basePath);
 			case self::TYPE_MIN_IMG:
 				return ImagePathCreator::getImgMinPath($image->id, $image->suffix, $galleryFolder, $basePath);
 			case self::TYPE_SCRN_IMG:
+			case self::TYPE_STREAM:
 				return ImagePathCreator::getImgScrnPath($image->id, $image->suffix, $galleryFolder, $basePath);
 			case self::TYPE_MIN_SQR_IMG:
 				return ImagePathCreator::getImgMinSqrPath($image->id, $image->suffix, $galleryFolder, $basePath);
