@@ -68,6 +68,21 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	}
 
 	/**
+	 * Obnoví příspěvek z databáze, pokud byl již načten v paměti.
+	 * @param int $streamItemId ID položky ve streamu
+	 */
+	public function reloadItem($streamItemId) {
+		/* byl již příspěvek načten do sesseion? */
+		if (array_key_exists($streamItemId, $this->data)) {
+			$streamItem = $this->streamDao->find($streamItemId);
+			if ($streamItem) {
+				$newItem = $this->getSerializer($streamItem);
+				$this->data->offsetSet($newItem->id, $newItem);
+			}
+		}
+	}
+
+	/**
 	 * Načte z databáze nová data z databáze, uloží je do sešny a přidá k aktuálním datům
 	 */
 	public function addNewData() {
