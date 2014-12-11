@@ -4,8 +4,8 @@
 	{include #profile}
 	<div class="usermenu">
 	{if ! $user->isLoggedIn()}
-	<a n:href=":Sign:in:" title="Přihlášení">PŘIHLÁŠENÍ</a>
-	<a n:href=":Sign:registration:" title="Registrace">REGISTRACE</a>
+	<a n:href=":Sign:in" title="Přihlášení">PŘIHLÁŠENÍ</a>
+	<a n:href=":Sign:registration" title="Registrace">REGISTRACE</a>
 	{/if}
 	<a n:href=":Search:Search:" class="add-friend" title="Hledat přátele">HLEDAT PŘÁTELE</a>
 	{if $user->isLoggedIn()}
