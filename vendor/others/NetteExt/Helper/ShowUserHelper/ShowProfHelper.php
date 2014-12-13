@@ -15,6 +15,7 @@ namespace NetteExt\Helper;
 use \Nette\Database\Table\ActiveRow;
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
+use Nette\DateTime;
 
 class ShowProfHelper {
 	/* názvy helperů */
@@ -24,6 +25,7 @@ class ShowProfHelper {
 	const NAME_MIN_DIV = "showProfMinDiv";
 	const NAME_DIV = "showProfDiv";
 	const NAME_NO_LINK = "showProfMinNoLink";
+	const NAME_SEARCH = "showProfSearch";
 
 	/* typy nastavení */
 	const TYPE_EL_SPAN = "span";
@@ -50,8 +52,8 @@ class ShowProfHelper {
 	 * @param bool $noLink negenerovat odkaz
 	 * @return \Nette\Utils\Html
 	 */
-	public function showProf($user, $href = null, $min = FALSE, $minSize = TRUE, $el = 'span', $noLink = FALSE) {
-		return $this->createShowProf($user, $href, $min, $minSize, $el, $noLink);
+	public function showProf($user, $href = null, $min = FALSE, $minSize = TRUE, $el = 'span', $noLink = FALSE, $search = FALSE) {
+		return $this->createShowProf($user, $href, $min, $minSize, $el, $noLink, $search);
 	}
 
 	/**
@@ -63,7 +65,7 @@ class ShowProfHelper {
 	 * @param bool $noLink negenerovat odkaz
 	 * @return \Nette\Utils\Html
 	 */
-	private function createShowProf($user, $href, $min, $minSize = TRUE, $el, $noLink = FALSE) {
+	private function createShowProf($user, $href, $min, $minSize = TRUE, $el, $noLink = FALSE, $search = FALSE) {
 		/* Výsledek je celý v odkazu */
 
 		if (!$noLink) {
@@ -78,6 +80,26 @@ class ShowProfHelper {
 				$elName = Html::el($el, Strings::upper($user->user_name));
 				$elName->addAttributes(array('class' => 'generatedTitle'));
 				$elLink->add($elName);
+				if ($search) {
+					$userAge = $elName = Html::el("div", "Věk " . \POS\Model\UserDao::getAge($user->property->age));
+					$elLink->add($userAge);
+					$userType = $elName = Html::el("div", "Věk " . \POS\Model\UserDao::getTranslateUserProperty($user->property->type));
+					$elLink->add($userType);
+				}
+				$now = new DateTime();
+				$lastActive = $now->diff(new DateTime($user->last_active));
+				if ($lastActive->m > 0) {
+					$lastActive = " ";
+				} else if ($lastActive->d > 0) {
+					$lastActive = "(" . $lastActive->d . " d" . ")";
+				} else if ($lastActive->h > 0) {
+					$lastActive = "(" . $lastActive->h . " h" . ")";
+				} else {
+					$lastActive = "(" . $lastActive->m . " m" . ")";
+				}
+				$elLastActive = Html::el($el, $lastActive);
+				$elLastActive->addAttributes(array('class' => 'lastActive'));
+				$elLink->add($elLastActive);
 			}
 
 			/* element, co obalí profil */

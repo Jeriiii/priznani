@@ -305,6 +305,25 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Nastaví uživatele jako aktivního, pokud od posledního nastavení uběhla alespoň minuta
+	 * @param type $userID
+	 */
+	public function setActive($userID) {
+		$name = self::TABLE_NAME . "LastActive";
+		$section = $this->session->getSection($name);
+
+		if ($section->isActive === NULL) {
+			$section->setExpiration("1 minute");
+			$section->isActive = 1;
+			$sel = $this->getTable();
+			$sel->wherePrimary($userID);
+			$sel->update(array(
+				self::COLUMN_LAST_ACTIVE => new \Nette\DateTime()
+			));
+		}
+	}
+
+	/**
 	 * Zaregistruje uživatele
 	 * @param array $data Data obsahující nejen informace o páru, musí se
 	 * proto probrat.

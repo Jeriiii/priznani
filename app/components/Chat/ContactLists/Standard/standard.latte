@@ -5,6 +5,7 @@
 		<li id="contact->user2-{$id}" data-id="{$id}" data-title="{$contact->user2->user_name}" class="contact-link">
 			{$contact->user2|showProfMin}<span class="chat-username">{$contact->user2->user_name}</span>
 			<span class="online-indicator"></span>
+			<span class="chatLastActivity">{$contactList->getLastActivity($contact->user2)}</span>
 		</li>
 	{/foreach}	
 </ul>
