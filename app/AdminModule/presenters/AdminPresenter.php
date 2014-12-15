@@ -43,7 +43,6 @@ class AdminPresenter extends AdminSpacePresenter {
 		$this->template->users = $this->userDao->getInRoleUsersLimit($userPag->itemsPerPage, $userPag->offset);
 		$this->template->admins = $this->userDao->getInRoleAdminLimit($adminPag->itemsPerPage, $adminPag->offset);
 		$this->template->superadmins = $this->userDao->getInRoleSuperadminLimit($superadminPag->itemsPerPage, $superadminPag->offset);
-		$this->template->totalCount = $this->userDao->getTotalCount();
 	}
 
 	protected function createComponentPasswordForm($name) {

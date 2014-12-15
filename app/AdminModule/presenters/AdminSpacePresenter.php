@@ -106,6 +106,7 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 		$navigation["OBJEDNÁVKY"] = $this->link("GameOrders:");
 		$navigation["UŽIV. ZPRÁVY " . $this->getCountLable($countData["messageCount"])] = $this->link("Contacts:");
 		$navigation["DEMOGRAFIE"] = $this->link("Cities:");
+		$navigation["STATISTIKY"] = $this->link("Statistic:");
 
 		return $navigation;
 	}

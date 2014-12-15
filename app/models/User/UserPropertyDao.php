@@ -87,6 +87,18 @@ class UserPropertyDao extends UserBaseDao {
 	}
 
 	/**
+	 * Vrátí uživatele podle jeho typu
+	 * @param int $type od 1 - 6 (1 - muž, 2 - žena ...)
+	 * @return Selection
+	 */
+	public function getByType($type) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_TYPE, $type);
+
+		return $sel;
+	}
+
+	/**
 	 * Správně nastaví nové preference uživatele.
 	 * @param ActiveRow|ArrayHash $property
 	 */
