@@ -81,10 +81,10 @@ class ShowProfHelper {
 				$elName->addAttributes(array('class' => 'generatedTitle'));
 				$elLink->add($elName);
 				if ($search) {
-					$userAge = $elName = Html::el("div", "Věk " . \POS\Model\UserDao::getAge($user->property->age));
-					$elLink->add($userAge);
-					$userType = $elName = Html::el("div", "Věk " . \POS\Model\UserDao::getTranslateUserProperty($user->property->type));
-					$elLink->add($userType);
+//					$userAge = $elName = Html::el("div", "Věk " . \POS\Model\UserDao::getAge($user->property->age));
+//					$elLink->add($userAge);
+//					$userType = $elName = Html::el("div", "Věk " . \POS\Model\UserDao::getTranslateUserProperty($user->property->type));
+//					$elLink->add($userType);
 				}
 				$now = new DateTime();
 				$lastActive = $now->diff(new DateTime($user->last_active));

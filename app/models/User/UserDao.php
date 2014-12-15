@@ -138,6 +138,16 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Vrátí aktivní uživatele (online a poslední přihlášené)
+	 * @return Selection
+	 */
+	public function getActive() {
+		$sel = $this->getTable();
+		$sel->order(self::COLUMN_LAST_ACTIVE);
+		return $sel;
+	}
+
+	/**
 	 * Hledá uživatele v blízkosti bydliště
 	 * @param \Nette\Database\Table\ActiveRow $me Uživatel
 	 * @return Nette\Database\Table\Selection
@@ -626,7 +636,11 @@ class UserDao extends UserBaseDao {
 		if ($blokedUsers->count(UserBlokedDao::COLUMN_ID)) {
 			$sel->where(self::TABLE_NAME . "." . self::COLUMN_ID . " NOT IN", $blokedUsers);
 		}
-		return $sel->order(self::COLUMN_PROFIL_PHOTO_ID . " DESC");
+
+		$sel->order(self::COLUMN_PROFIL_PHOTO_ID . " DESC");
+		$sel->order(self::COLUMN_LAST_ACTIVE . " ASC");
+
+		return $sel;
 	}
 
 	/**

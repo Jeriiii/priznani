@@ -45,7 +45,11 @@ class StandardContactList extends BaseChatComponent implements IContactList {
 		} else if ($lastActive->h > 0) {
 			$lastActive = "(" . $lastActive->h . " h" . ")";
 		} else {
-			$lastActive = "(" . $lastActive->m . " m" . ")";
+			if ($lastActive->m < 5) {
+				$lastActive = "online";
+			} else {
+				$lastActive = "(" . $lastActive->m . " m" . ")";
+			}
 		}
 		return $lastActive;
 	}

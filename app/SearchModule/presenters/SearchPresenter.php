@@ -8,6 +8,7 @@ use POSComponent\Search\NewlyRegistredSearch;
 use POSComponent\Search\NearMeSearch;
 use POSComponent\Search\AdvancedSearch;
 use POSComponent\Search\VigorSearch;
+use POSComponent\Search\ActiveUsersSearch;
 
 class SearchPresenter extends SearchBasePresenter {
 
@@ -177,6 +178,10 @@ class SearchPresenter extends SearchBasePresenter {
 
 	protected function createComponentNewlyRegistredSearch($name) {
 		return new NewlyRegistredSearch($this->userDao, $this, $name);
+	}
+
+	protected function createComponentActiveUsersSearch($name) {
+		return new ActiveUsersSearch($this->userDao, $this, $name);
 	}
 
 	protected function createComponentVigorSearch($name) {

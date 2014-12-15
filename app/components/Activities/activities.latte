@@ -78,8 +78,8 @@
 		{if ($activity->type == "new-request")}
 			vás žádá o přátelství
 			<div>
-				<a href="{$basePath}/?friendRequest-id={$activity->friendRequestID}&do=friendRequest-accept" class="request-button btn-main btn-small">Přijmout</a>
-				<a href="{$basePath}/?friendRequest-id={$activity->friendRequestID}&do=friendRequest-reject" class="request-button btn-main btn-small">Odmítnout</a>
+				<a data-activity-viewed-id="{$activity->id}" href="{$basePath}/?friendRequest-id={$activity->friendRequestID}&do=friendRequest-accept" class="request-button btn-main btn-small">Přijmout</a>
+				<a data-activity-viewed-id="{$activity->id}" href="{$basePath}/?friendRequest-id={$activity->friendRequestID}&do=friendRequest-reject" class="request-button btn-main btn-small">Odmítnout</a>
 			</div>
 		{/if}
 		{include #afterActivity}
