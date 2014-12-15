@@ -143,7 +143,7 @@ class UserDao extends UserBaseDao {
 	 */
 	public function getActive() {
 		$sel = $this->getTable();
-		$sel->order(self::COLUMN_LAST_ACTIVE);
+		$sel->order(self::COLUMN_LAST_ACTIVE . " DESC");
 		return $sel;
 	}
 
