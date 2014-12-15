@@ -1,10 +1,34 @@
 {block head}
-
+	<style>
+		h2{
+			padding-bottom: 20px;
+		}
+	</style>
 {/block}
 
 {block content}
-	<h3>Celkový počet uživatelů: {$totalCount}</h3>
-	<h3>Mužů: {$countMan}, Žen: {$countWoman}, Pár: {$countCouple}, Pár mužů: {$countCoupleMen}, Pár žen: {$countCoupleWomen}, Skupina: {$countGroup}</h3>
+	<h2>Registrovaní uživatelé</h2>
+	<span>Celkový počet uživatelů: <strong>{$totalCount}</strong></span><br /><br />
+	<table class="table">
+		<thead>
+			<th>Mužů</th>
+			<th>Žen</th>
+			<th>Pár</th>
+			<th>Pár mužů</th>
+			<th>Pár žen</th>
+			<th>Skupina</th>
+		</thead>
+		<tbody>
+			<tr>
+				<td><strong>{$countMan}</strong></td>
+				<td><strong>{$countWoman}</strong></td>
+				<td><strong>{$countCouple}</strong></td>
+				<td><strong>{$countCoupleMen}</strong></td>
+				<td><strong>{$countCoupleWomen}</strong></td>
+				<td><strong>{$countGroup}</strong></td>
+			</tr>
+		</tbody>
+	</table>
 	<h2>Návštěvnost</h2>
-	<a href="http://www.google.com/analytics/">google analytisc</a>
+	<a class="btn btn-default" href="http://www.google.com/analytics/">google analytisc</a>
 {/block}
