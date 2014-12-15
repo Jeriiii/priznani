@@ -38,6 +38,10 @@ class GetImgPathHelper {
 	/* gallery types */
 	const TYPE_GALLERY = "g";
 	const TYPE_USER_GALLERY = "ug";
+	/* typ defaultní fotky */
+	const TYPE_DEF_PHOTO_MAN = 0;
+	const TYPE_DEF_PHOTO_WOMAN = 1;
+	const TYPE_DEF_PHOTO_COUPLE = 2;
 
 	/** @var \Nette\Http\Url */
 	private $url;
@@ -60,14 +64,16 @@ class GetImgPathHelper {
 	 * Vrátí cestu k defaultní profilové fotce.
 	 * @return string
 	 */
-	public function getImgDefProf($female = FALSE) {
+	public function getImgDefProf($type = 1) {
 		$basePath = $this->getBasePath();
-		if ($female) {
-			$femaleProfPhoto = "female-profile-blank.jpg";
+		if ($type == self::TYPE_DEF_PHOTO_MAN) {
+			$name = "man.jpg";
+		} elseif ($type == self::TYPE_DEF_PHOTO_MAN) {
+			$name = "woman.jpg";
 		} else {
-			$maleProfPhoto = "blank_profil.png";
+			$name = "couple.jpg";
 		}
-		return ImagePathCreator::getBasePath("users", $basePath) . "blank_profil.png";
+		return ImagePathCreator::getBasePath("users", $basePath) . $name;
 	}
 
 	/**

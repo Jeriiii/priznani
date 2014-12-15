@@ -293,6 +293,8 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		$profilFoto = new Relation('profilFoto');
 		$profilFoto->addRel($galleryRel);
 		$userRel->addRel($profilFoto);
+		$property = new Relation("property");
+		$userRel->addRel($property);
 		return $userRel;
 	}
 

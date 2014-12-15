@@ -133,8 +133,14 @@ class ShowProfHelper {
 				$src = $this->getImgPathHelper->getImgScrnPath($user->profilFoto, GetImgPathHelper::TYPE_USER_GALLERY);
 			}
 		} else {
-			//$femalePhoto = $user->property->user_property == "women" ? TRUE : FALSE;
-			$src = $this->getImgPathHelper->getImgDefProf(/* $femalePhoto */);
+			if (empty($user->property) || $user->property->type == 1) {
+				$type = GetImgPathHelper::TYPE_DEF_PHOTO_MAN;
+			} elseif ($user->property->type == 2) {
+				$type = GetImgPathHelper::TYPE_DEF_PHOTO_WOMAN;
+			} else {
+				$type = GetImgPathHelper::TYPE_DEF_PHOTO_COUPLE;
+			}
+			$src = $this->getImgPathHelper->getImgDefProf($type);
 		}
 
 		$img->src($src);

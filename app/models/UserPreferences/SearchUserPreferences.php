@@ -48,10 +48,12 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 	public function saveBestUsers($users) {
 		$relProfilPhoto = new Relation("profilFoto");
 		$relGallery = new Relation("gallery");
+		$relProperty = new Relation("property");
 		$relProfilPhoto->addRel($relGallery);
 
 		$ser = new Serializer($users);
 		$ser->addRel($relProfilPhoto);
+		$ser->addRel($relProperty);
 
 		$this->bestUsers = $ser->toArrayHash();
 		$this->section->bestUsers = $this->bestUsers;
