@@ -6,13 +6,15 @@
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
 @unreaded-color: #fff3f5;
-@contact-item-height: 40px;/* výška položky kontaktů */
+@contact-item-height: 35px;/* výška položky kontaktů */
 @contact-item-vertical-padding: 4px;
 
 
 /*@online-indicator-size: 12px;*//*ODKOMENTOVAT PRO ZAPNUTI ONLINE INDIKATORU*/
 @online-indicator-size: 0px;/* a smazat tohle*/
 
+@contacts-font-family: Helvetica, Arial, 'lucida grande',tahoma,verdana,arial,sans-serif;
+@contacts-font-size: 12px;
 
 /* interface */
 @chat-color: #2c2c2d;
@@ -29,7 +31,7 @@
 	position: fixed;
 		top: 0;
 		right: 0;
-		width: 250px;
+		width: 210px;
 		height: 100%;
 		overflow: hidden;
 		
@@ -96,7 +98,9 @@
 				}
 				span.text {
 					display: inline-block;
-					padding-top: 5px;
+					padding-top: 7px;
+					font-family: @contacts-font-family;
+					font-size: @contacts-font-size + 2;
 				}
 			}
 			
@@ -133,7 +137,14 @@
 						margin-right: 6px + @online-indicator-size;
 						line-height: @contact-item-height;
 						vertical-align: top;
-						font-family: 'Source Sans Pro';
+						font-family: @contacts-font-family;
+						font-size: @contacts-font-size;
+				}
+				
+				.chatLastActivity{
+					font-size: @contacts-font-size;
+					font-family: @contacts-font-family;
+					line-height: @contact-item-height;
 				}
 				
 				
@@ -210,8 +221,8 @@
 				
 				img{
 					float: left;
-					width: 40px !important;
-					height: 40px !important;
+					width: 35px !important;
+					height: 35px !important;
 				}
 			}
 		
