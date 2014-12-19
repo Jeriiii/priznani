@@ -166,11 +166,11 @@ class UploadImage extends UploadFile {
 	 * @return název obrázku s příponou
 	 */
 	public static function uploadToTemp(FileUpload $upload, $min_width, $min_height, $max_width, $max_height) {
-		$filename = Strings::random(8);
+		$filename = Strings::random(20);
 		$path = ImagePathCreator::getImgPath($filename, self::suffix($upload->name), 'temp');
 
 		while (file_exists($path)) {
-			$filename = Strings::random(8);
+			$filename = Strings::random(20);
 			$path = ImagePathCreator::getImgPath($filename, self::suffix($upload->name), 'temp');
 		}
 		$upload->move($path);
