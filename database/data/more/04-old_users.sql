@@ -1,25 +1,3 @@
-
-
-CREATE TABLE IF NOT EXISTS `users_old` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `propertyID` int(11) unsigned DEFAULT NULL,
-  `coupleID` int(11) unsigned DEFAULT NULL,
-  `profilFotoID` int(11) unsigned DEFAULT NULL,
-  `confirmed` varchar(100) DEFAULT NULL,
-  `admin_score` int(100) DEFAULT NULL,
-  `role` varchar(50) NOT NULL DEFAULT '',
-  `last_active` datetime DEFAULT NULL,
-  `created` datetime DEFAULT NULL,
-  `email` varchar(50) DEFAULT '',
-  `user_name` varchar(20) DEFAULT '',
-  `password` varchar(200) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`),
-  KEY `FK_users_users_properties` (`propertyID`),
-  KEY `FK_users_couple` (`coupleID`),
-  KEY `FK_users_user_images` (`profilFotoID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13022 ;
-
-
 INSERT INTO `users_old` (`id`, `propertyID`, `coupleID`, `profilFotoID`, `confirmed`, `admin_score`, `role`, `last_active`, `created`, `email`, `user_name`, `password`) VALUES
 (1, NULL, NULL, NULL, '', 13574, 'superadmin', NULL, NULL, 'P.Kukral@seznam.cz', 'Jerry', '3c4d22e96a8af7b8e9e42b336b0c55f2be5929ce9dab5e7b0805e352078eefda79c41f8576b281dfd3bd062e32fd77994001b3f79fbdd28edb7b08931c3aeb49'),
 (2, NULL, NULL, NULL, '1', 9383, 'superadmin', NULL, NULL, 'j.kukralova@jkbusiness.cz', 'Jana', '3c4d22e96a8af7b8e9e42b336b0c55f2be5929ce9dab5e7b0805e352078eefda79c41f8576b281dfd3bd062e32fd77994001b3f79fbdd28edb7b08931c3aeb49'),
