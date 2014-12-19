@@ -109,7 +109,7 @@
 	#contacts{
 		height: 100%;
 		overflow: auto;
-		width: 250px;
+		width: 210px;
 		border-bottom: 1px solid #aaa;
 		li{
 				cursor: pointer;
@@ -145,12 +145,9 @@
 					font-size: @contacts-font-size;
 					font-family: @contacts-font-family;
 					line-height: @contact-item-height;
-				}
-				.chatLastActivity{
 					display: inline-block;
-					line-height: 40px;
 					vertical-align: top;
-					font-family: 'Source Sans Pro';
+					float: right;
 				}
 				
 				
@@ -191,6 +188,9 @@
 @media screen and (max-width: 980px){
 	.inner{
 		width: 750px !important;
+	}
+	#right-dock{
+		display: none;
 	}
 }
 
