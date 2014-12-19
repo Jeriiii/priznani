@@ -113,7 +113,7 @@ class BaseLikes extends BaseProjectControl {
 	public function __construct(ILikeDao $likeDao, $likeItem, $userID, $ownerID, $nameLabel, $nameLikeButton = self::DEFAULT_NAME_LIKE_BUTTON) {
 		parent::__construct();
 		if (!($likeItem instanceof ActiveRow) && !($likeItem instanceof ArrayHash)) {
-			throw new Exception('Variable $likeItem must be instance of ActiveRow or ArrayHash');
+			throw new \Exception('Variable $likeItem must be instance of ActiveRow or ArrayHash ' . $ownerID);
 		}
 		$this->ownerID = $ownerID;
 		$this->likeDao = $likeDao;
