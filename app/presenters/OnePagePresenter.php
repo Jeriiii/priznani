@@ -17,6 +17,7 @@ use POSComponent\UsersList\BlokedUsersList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
 use POSComponent\Confirm;
 use NetteExt\Helper\ShowUserDataHelper;
+use NetteExt\DaoBox;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -26,161 +27,86 @@ class OnePagePresenter extends BasePresenter {
 	 */
 	public $streamUserPreferences;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\UserBlokedDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserBlokedDao @inject */
 	public $userBlokedDao;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserGalleryDao @inject */
 	public $userGalleryDao;
 
-	/**
-	 * @var \POS\Model\UserImageDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\ConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ConfessionDao @inject */
 	public $confessionDao;
 
-	/**
-	 * @var \POS\Model\StatusDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StatusDao @inject */
 	public $statusDao;
 
-	/**
-	 * @var \POS\Model\ImageLikesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ImageLikesDao @inject */
 	public $imageLikesDao;
 
-	/**
-	 * @var \POS\Model\LikeStatusDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeStatusDao @inject */
 	public $likeStatusDao;
 
-	/**
-	 * @var \POS\Model\FriendRequestDao
-	 * @inject
-	 */
+	/** @var \POS\Model\FriendRequestDao @inject */
 	public $friendRequestDao;
 
-	/**
-	 * @var \POS\Model\FriendDao
-	 * @inject
-	 */
+	/** @var \POS\Model\FriendDao @inject */
 	public $friendDao;
 
-	/**
-	 * @var \POS\Model\UserCategoryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserCategoryDao @inject */
 	public $userCategoryDao;
 
-	/**
-	 * @var \POS\Model\UserPositionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPositionDao @inject */
 	public $userPositionDao;
 
-	/**
-	 * @var \POS\Model\EnumPositionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumPositionDao @inject */
 	public $enumPositionDao;
 
-	/**
-	 * @var \POS\Model\UserPlaceDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPlaceDao @inject */
 	public $userPlaceDao;
 
-	/**
-	 * @var \POS\Model\EnumPlaceDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumPlaceDao @inject */
 	public $enumPlaceDao;
 
-	/**
-	 * @var \POS\Model\LikeImageCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeImageCommentDao @inject */
 	public $likeImageCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentImagesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentImagesDao @inject */
 	public $commentImagesDao;
 
-	/**
-	 * @var \POS\Model\LikeStatusCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeStatusCommentDao @inject */
 	public $likeStatusCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentStatusesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentStatusesDao @inject */
 	public $commentStatusesDao;
 
-	/**
-	 * @var \POS\Model\LikeConfessionCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeConfessionCommentDao @inject */
 	public $likeCOnfessionCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentConfessionsDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentConfessionsDao @inject */
 	public $commentConfessionsDao;
 
-	/**
-	 * @var \POS\Model\LikeConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeConfessionDao @inject */
 	public $likeConfessionDao;
 
-	/**
-	 * @var \POS\Model\VerificationPhotoRequestsDao
-	 * @inject
-	 */
+	/** @var \POS\Model\VerificationPhotoRequestsDao @inject */
 	public $verificationPhotoDao;
 
-	/**
-	 * @var \POS\Model\YouAreSexyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\YouAreSexyDao @inject */
 	public $youAreSexyDao;
 
-	/**
-	 * @var \POS\Model\PaymentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\PaymentDao @inject */
 	public $paymentDao;
+
+	/** @var \POS\Model\UsersNewsDao @inject */
+	public $usersNewsDao;
 
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
@@ -206,7 +132,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeCOnfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao, $this->loggedUser);
+		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeCOnfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao, $this->usersNewsDao, $this->loggedUser);
 	}
 
 	public function createComponentJs() {
@@ -217,7 +143,8 @@ class OnePagePresenter extends BasePresenter {
 			'lists/initFriendRequest.js',
 			'lists/initFriends.js',
 			/* 'lists/initBlokedUsers.js', */ //zakomentováno do první verze přiznání
-			'lists/initMarkedFromOther.js'
+			'lists/initMarkedFromOther.js',
+			'onepage/default.js'
 		));
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {

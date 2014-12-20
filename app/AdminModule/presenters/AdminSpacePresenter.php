@@ -102,11 +102,14 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 			$navigation["SCHVAL. FOTEK " . $this->getCountLable($countData["imageCount"])] = $this->link("AcceptImages:");
 		}
 		$navigation["MUJ ÚČET"] = $this->link("Admin:myAccounts");
-		$navigation["PLATBY"] = $this->link("Payments:");
-		$navigation["OBJEDNÁVKY"] = $this->link("GameOrders:");
-		$navigation["UŽIV. ZPRÁVY " . $this->getCountLable($countData["messageCount"])] = $this->link("Contacts:");
-		$navigation["DEMOGRAFIE"] = $this->link("Cities:");
-		$navigation["STATISTIKY"] = $this->link("Statistic:");
+		if ($user->isAllowed('accept_images')) {
+			$navigation["PLATBY"] = $this->link("Payments:");
+			$navigation["OBJEDNÁVKY"] = $this->link("GameOrders:");
+			$navigation["UŽIV. ZPRÁVY " . $this->getCountLable($countData["messageCount"])] = $this->link("Contacts:");
+			$navigation["DEMOGRAFIE"] = $this->link("Cities:");
+			$navigation["NOVINKY"] = $this->link("News:");
+			$navigation["STATISTIKY"] = $this->link("Statistic:");
+		}
 
 		return $navigation;
 	}

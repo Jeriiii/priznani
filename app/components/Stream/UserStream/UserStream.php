@@ -29,21 +29,24 @@ use POS\Model\CommentStatusesDao;
 use POS\Model\LikeConfessionCommentDao;
 use POS\Model\CommentConfessionsDao;
 use POS\Model\LikeConfessionDao;
+use POS\Model\UsersNewsDao;
 
 class UserStream extends BaseStream {
 
 	/** @var \POS\Model\StreamDao */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\StatusDao
-	 */
+	/** @var \POS\Model\StatusDao */
 	public $statusDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, LikeConfessionDao $likeConfessionDao, $userData) {
+	/** @var \POS\Model\UsersNewsDao @inject */
+	public $usersNewsDao;
+
+	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, StatusDao $statusDao, StreamDao $streamDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, LikeConfessionDao $likeConfessionDao, UsersNewsDao $usersNewsDao, $userData) {
 		parent::__construct($data, $likeStatusDao, $imageLikesDao, $userDao, $userGalleryDao, $userImageDao, $confDao, $streamDao, $userPositionDao, $enumPositionDao, $userPlaceDao, $enumPlaceDao, $likeImageCommentDao, $commentImagesDao, $likeStatusCommentDao, $commentStatusesDao, $likeConfessionCommentDao, $commentConfessionsDao, $likeConfessionDao, $userData);
 		$this->streamDao = $streamDao;
 		$this->statusDao = $statusDao;
+		$this->usersNewsDao = $usersNewsDao;
 	}
 
 	public function render() {
@@ -68,9 +71,7 @@ class UserStream extends BaseStream {
 				$this->template->position = $position;
 			}
 			$this->template->userData = $userData;
-
-			// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
-			$this->template->profilePhoto = $userData->profilFotoID;
+			$this->template->newInfo = $this->usersNewsDao->getActual($this->loggedUser->id);
 		}
 
 		$this->renderBase($mode, $templateName);
@@ -102,6 +103,11 @@ class UserStream extends BaseStream {
 
 	protected function createComponentStatusForm($name) {
 		return new Frm\AddStatusForm($this->streamDao, $this->statusDao, $this->loggedUser->property, $this, $name);
+	}
+
+	public function handleNewReaded($newID) {
+		$this->usersNewsDao->deleteByUser($this->loggedUser->id, $newID);
+		$this->redirect("this");
 	}
 
 }

@@ -78,6 +78,13 @@
 			<a class="highlight uploadProfilePhoto btn-main">Nahrát profilovou fotku</a>
 			{control cropImageUpload}
 		</div>
+	{elseif !empty($newInfo)}
+		<div id="news">
+			<header>{$newInfo->name}</header>
+			<p id="news-short">{$newInfo->text|truncate:100} {if strlen(utf8_decode($newInfo->text)) > 100}<a id="news-more">více</a>{/if}</p>
+			<p id="news-long">{!$newInfo->text|nl2br}</p>
+			<a n:href="newReaded! newID => $newInfo->id" class="btn-main btn-small">PŘEČTENO</a>
+		</div>
 	{elseif $user->isLoggedIn() && !empty($profilePhoto) &&  $place==0  && $position==0 && $placePosSession->count%5==0}
 		<div class="questionnaire-form">
 			<h4 class="question-title">Chcete další téma ke konverzaci? Vyplňte si:</h4>
