@@ -47,40 +47,22 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	/** @var array proměnné pro js překlad */
 	protected $jsVariables = array();
 
-	/**
-	 * @var \POS\Model\ActivitiesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ActivitiesDao @inject */
 	public $activitiesDao;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Chat\ChatManager
-	 * @inject
-	 */
+	/** @var \POS\Chat\ChatManager @inject */
 	public $chatManager;
 
-	/**
-	 * @var \POS\Ajax\AjaxObserver
-	 * @inject
-	 */
+	/** @var \POS\Ajax\AjaxObserver @inject */
 	public $ajaxObserver;
 
-	/**
-	 * @var \POS\Listeners\Services\ActivityReporter
-	 * @inject
-	 */
+	/** @var \POS\Listeners\Services\ActivityReporter @inject */
 	public $activityReporter;
 
-	/**
-	 * @var \POS\Model\PaymentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\PaymentDao @inject */
 	public $paymentDao;
 
 	public function startup() {
