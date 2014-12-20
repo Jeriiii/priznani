@@ -59,9 +59,10 @@ class PaymentDao extends AbstractDao {
 	 * @return bool TRUE - platící / FALSE - neplatící
 	 */
 	public function isUserPaying($userID) {
-		$sel = $this->getUserPayments($userID);
-		$row = $sel->fetch();
-		return $this->exist($row);
+//		$sel = $this->getUserPayments($userID);
+//		$row = $sel->fetch();
+//		return $this->exist($row);
+		return TRUE;
 	}
 
 	/**
@@ -70,9 +71,10 @@ class PaymentDao extends AbstractDao {
 	 * @return bool TRUE - platící / FALSE - neplatící
 	 */
 	public function isUserPremium($userID) {
-		$sel = $this->getUserPremium($userID);
-		$row = $sel->fetch();
-		return $this->exist($row);
+//		$sel = $this->getUserPremium($userID);
+//		$row = $sel->fetch();
+//		return $this->exist($row);
+		return TRUE;
 	}
 
 	/**
@@ -81,9 +83,10 @@ class PaymentDao extends AbstractDao {
 	 * @return bool TRUE - platící / FALSE - neplatící
 	 */
 	public function isUserExclusive($userID) {
-		$sel = $this->getUserExclusive($userID);
-		$row = $sel->fetch();
-		return $this->exist($row);
+//		$sel = $this->getUserExclusive($userID);
+//		$row = $sel->fetch();
+//		return $this->exist($row);
+		return TRUE;
 	}
 
 	/**
