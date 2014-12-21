@@ -68,7 +68,7 @@ class GetImgPathHelper {
 		$basePath = $this->getBasePath();
 		if ($type == self::TYPE_DEF_PHOTO_MAN) {
 			$name = "man.jpg";
-		} elseif ($type == self::TYPE_DEF_PHOTO_MAN) {
+		} elseif ($type == self::TYPE_DEF_PHOTO_WOMAN) {
 			$name = "woman.jpg";
 		} else {
 			$name = "couple.jpg";
