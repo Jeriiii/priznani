@@ -133,7 +133,7 @@ class ShowProfHelper {
 				$src = $this->getImgPathHelper->getImgScrnPath($user->profilFoto, GetImgPathHelper::TYPE_USER_GALLERY);
 			}
 		} else {
-			if (empty($user->property) || $user->property->type == 1) {
+			if (empty($user->propertyID) || $user->property->type == 1) {
 				$type = GetImgPathHelper::TYPE_DEF_PHOTO_MAN;
 			} elseif ($user->property->type == 2) {
 				$type = GetImgPathHelper::TYPE_DEF_PHOTO_WOMAN;
