@@ -43,8 +43,8 @@ class UsersGallery extends BaseGallery {
 	 */
 	private $ownerID;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao, LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, $loggedUser) {
-		parent::__construct($images, $image, $gallery, $domain, $partymode);
+	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao, LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, $loggedUser, $parent, $name) {
+		parent::__construct($images, $image, $gallery, $domain, $partymode, $parent, $name);
 		parent::setUserImageDao($userImageDao);
 		$this->imageLikesDao = $imageLikesDao;
 		$this->likeImageCommentDao = $likeImageCommentDao;
@@ -54,6 +54,7 @@ class UsersGallery extends BaseGallery {
 	}
 
 	public function render() {
+		$this->template->userData = $this->loggedUser;
 		parent::renderBaseGallery("../UsersGallery/usersGallery.latte");
 	}
 
@@ -67,13 +68,13 @@ class UsersGallery extends BaseGallery {
 	}
 
 	/**
-	 * ostranění obrázku
+	 * odstranění obrázku
 	 * @param type $imageID ID obrázku, který se má odstranit
 	 */
 	public function handleRemoveImage($imageID) {
 		$image = $this->getImages()->find($imageID);
 
-		$folderPath = WWW_DIR . "/images/userGalleries/" . $this->getPresenter()->context->getUser()->getId() . "/" . $image->galleryID . "/";
+		$folderPath = WWW_DIR . "/images/userGalleries/" . $image->gallery->userID . "/" . $image->galleryID . "/";
 		$imageFileName = $image->id . "." . $image->suffix;
 
 		parent::removeImage($image, $folderPath, $imageFileName);

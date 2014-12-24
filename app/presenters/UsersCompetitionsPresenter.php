@@ -157,13 +157,13 @@ class UsersCompetitionsPresenter extends BasePresenter {
 	 * Vytvoří komponentu pro procházení fotek galerie
 	 * @return \POSComponent\Galleries\Images\UsersCompetitionsGallery
 	 */
-	public function createComponentGallery() {
+	public function createComponentGallery($name) {
 		$imagesID = $this->competitionsImagesDao->getApprovedByComp($this->gallery->id);
 		$iID = array_keys($imagesID);
 		$images = $this->userImageDao->getAllById($iID);
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
-		return new UsersCompetitionsGallery($images, $this->compImage->image, $this->gallery, $domain, $this->partymode, $this->likeImageCommentDao, $this->userImageDao, $this->commentImagesDao, $this->imageLikesDao, $this->loggedUser);
+		return new UsersCompetitionsGallery($images, $this->compImage->image, $this->gallery, $domain, $this->partymode, $this->likeImageCommentDao, $this->userImageDao, $this->commentImagesDao, $this->imageLikesDao, $this->loggedUser, $this, $name);
 	}
 
 	/**

@@ -100,6 +100,11 @@ class GalleriesPresenter extends \BasePresenter {
 	 */
 	public $likeImageCommentDao;
 
+	/**
+	 * @var ActiveRow Aktuální obrázek
+	 */
+	private $image;
+
 	public function startup() {
 		parent::startup();
 
@@ -208,6 +213,21 @@ class GalleriesPresenter extends \BasePresenter {
 		} else {
 			throw new Exception("Musíte nastavit buď ID uživatele, nebo ID galerie.");
 		}
+
+		//vytahnu konkretni vybranou fotku podle imageID - objekt
+		$image = $this->userImageDao->find($this->imageID);
+		if (empty($image)) {
+			$this->flashMessage("Obrázek nebyl nalezen");
+			if ($galleryID) {
+				$this->redirect("listUserGalleryImages", array("galleryID" => $galleryID));
+			}
+			if ($userID) {
+				$this->redirect(":Profil:Show:", array("userID" => $userID));
+			}
+			$this->redirect(":OnePage:");
+		}
+
+		$this->image = $image;
 	}
 
 	public function actionVerification($galleryID) {
@@ -372,31 +392,28 @@ class GalleriesPresenter extends \BasePresenter {
 		return new UserGalleryImagesThumbnails($images, $this->userDao);
 	}
 
-	protected function createComponentGallery() {
-		//vytahnu konkretni vybranou fotku podle imageID - objekt
-		$image = $this->userImageDao->find($this->imageID);
-
+	protected function createComponentGallery($name) {
 		//vytahnu konkretni galerie podle galleryID
-		$gallery = $this->userGaleryDao->find($image->galleryID);
+		$gallery = $this->userGaleryDao->find($this->image->galleryID);
 
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
 		//$domain = "http://priznaniosexu.cz";
 
-		return new UsersGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->loggedUser);
+		return new UsersGallery($this->images, $this->image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->loggedUser, $this, $name);
 	}
 
 	/**
 	 * Továrnička na verifikační galerii
 	 * @return VerificationGallery
 	 */
-	public function createComponentVerificationGallery() {
+	public function createComponentVerificationGallery($name) {
 		if ($this->verificationExists) {
 			$image = $this->userImageDao->find($this->imageID);
 			$gallery = $this->userGaleryDao->find($this->galleryID);
 			$httpRequest = $this->context->httpRequest;
 			$domain = $httpRequest->getUrl()->host;
-			return new VerificationGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this->isPaying, $this);
+			return new VerificationGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this->isPaying, $this, $name);
 		}
 	}
 

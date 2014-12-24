@@ -31,8 +31,8 @@ class CompetitionGallery extends BaseGallery {
 	 */
 	public $imageDao;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, ImageDao $imageDao, GalleryDao $galleryDao, StreamDao $streamDao) {
-		parent::__construct($images, $image, $gallery, $domain, $partymode);
+	public function __construct($images, $image, $gallery, $domain, $partymode, ImageDao $imageDao, GalleryDao $galleryDao, StreamDao $streamDao, $parent, $name) {
+		parent::__construct($images, $image, $gallery, $domain, $partymode, $parent, $name);
 
 		$this->streamDao = $streamDao;
 		$this->galleryDao = $galleryDao;
@@ -55,21 +55,21 @@ class CompetitionGallery extends BaseGallery {
 		$this->galleryDao->updateLastImage($image->galleryID, $image->id);
 
 		if ($image->gallery->sexmode && $image->gallery->current) {
-		$this->streamDao-> aliveCompGallery($image->galleryID);
+			$this->streamDao->aliveCompGallery($image->galleryID);
 		}
 
 		$this->setImage($imageID, $this->imageDao);
-		}
+	}
 
-		/**
-		 * ostranění obrázku
-		 * @param type $imageID ID obrázku, který se má odstranit
-		 */
-		public function handleRemoveImage($imageID) {
-			$image = $this->imageDao->find($imageID);
+	/**
+	 * ostranění obrázku
+	 * @param type $imageID ID obrázku, který se má odstranit
+	 */
+	public function handleRemoveImage($imageID) {
+		$image = $this->imageDao->find($imageID);
 
-		$folderPath = WWW_DIR. "/images/galleries/" . $image->galleryID . "/";
-			$imageFileName  = $image->id . "." . $image->suffix;
+		$folderPath = WWW_DIR . "/images/galleries/" . $image->galleryID . "/";
+		$imageFileName = $image->id . "." . $image->suffix;
 
 		parent::removeImage($image, $folderPath, $imageFileName);
 		$image->delete();

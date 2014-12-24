@@ -42,8 +42,8 @@ class UsersCompetitionsGallery extends BaseGallery {
 	 */
 	private $ownerID;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, LikeImageCommentDao $likeImageCommentDao, UserImageDao $userImageDao, CommentImagesDao $commentImagesDao, ImageLikesDao $imageLikesDao, $loggedUser) {
-		parent::__construct($images, $image, $gallery, $domain, $partymode);
+	public function __construct($images, $image, $gallery, $domain, $partymode, LikeImageCommentDao $likeImageCommentDao, UserImageDao $userImageDao, CommentImagesDao $commentImagesDao, ImageLikesDao $imageLikesDao, $loggedUser, $parent, $name) {
+		parent::__construct($images, $image, $gallery, $domain, $partymode, $parent, $name);
 		parent::setUserImageDao($userImageDao);
 		$this->image = $image;
 		$this->imageLikesDao = $imageLikesDao;
