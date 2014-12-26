@@ -70,7 +70,7 @@ abstract class AbstractDao extends Object {
 	 * Finds the entity by its primary key.
 	 *
 	 * @param mixed|array $primaryKey Primary key of the entity. Array when the primary key is composite.
-	 * @return bool|Database\Table\IRow Single table row or `FALSE` if the row was not found.
+	 * @return Database\Table\IRow|bool Single table row or `FALSE` if the row was not found.
 	 */
 	public function find($primaryKey) {
 		$table = $this->getTable();

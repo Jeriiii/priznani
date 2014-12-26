@@ -16,6 +16,7 @@ use \Nette\Database\Table\ActiveRow;
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
 use Nette\DateTime;
+use POS\Model\UserDao;
 
 class ShowProfHelper {
 	/* názvy helperů */
@@ -80,12 +81,6 @@ class ShowProfHelper {
 				$elName = Html::el($el, Strings::upper($user->user_name));
 				$elName->addAttributes(array('class' => 'generatedTitle'));
 				$elLink->add($elName);
-				if ($search) {
-//					$userAge = $elName = Html::el("div", "Věk " . \POS\Model\UserDao::getAge($user->property->age));
-//					$elLink->add($userAge);
-//					$userType = $elName = Html::el("div", "Věk " . \POS\Model\UserDao::getTranslateUserProperty($user->property->type));
-//					$elLink->add($userType);
-				}
 				$now = new DateTime();
 				$lastActive = $now->diff(new DateTime($user->last_active));
 				if ($lastActive->m > 0) {
@@ -100,6 +95,13 @@ class ShowProfHelper {
 				$elLastActive = Html::el($el, $lastActive);
 				$elLastActive->addAttributes(array('class' => 'lastActive'));
 				$elLink->add($elLastActive);
+
+				if ($search) {
+					$userType = $elName = Html::el("div class='more-info red'", " " . UserDao::getTranslateUserProperty($user->property->type));
+					$elLink->add($userType);
+					$userAge = $elName = Html::el("div class='more-info'", "Věk " . UserDao::getAge($user->property->age));
+					$elLink->add($userAge);
+				}
 			}
 
 			/* element, co obalí profil */
@@ -109,7 +111,7 @@ class ShowProfHelper {
 			return $elContainer;
 		} else {
 
-			$elPhoto = $this->createPhoto($el, $user);
+			$elPhoto = $this->createPhoto($el, $user, $minSize);
 			$elPhoto->addAttributes(array('class' => 'generatedTitle'));
 
 			return $elPhoto;

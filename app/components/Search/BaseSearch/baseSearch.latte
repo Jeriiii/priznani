@@ -2,7 +2,7 @@
 	{foreach $items as $item}
 		<li>
 			{if $mode == 'listAll'}
-				{$item|showProfDiv: array(':Profil:Show:default', 'id' => $item->id)}
+				{$item|showProfSearch: array(':Profil:Show:default', 'id' => $item->id)}
 			{else}
 				{$item|showProfMinDiv: array(':Profil:Show:default', 'id' => $item->id)}
 			{/if}
