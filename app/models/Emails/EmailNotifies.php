@@ -12,25 +12,9 @@
 
 namespace Notify;
 
-use Nette\Mail\IMailer;
 use Nette\Database\Table\ActiveRow;
-use Nette\Object;
 
-class EmailNotifies extends Object {
-
-	/**
-	 * @var IMailer Odesílání emailů
-	 */
-	private $mailer;
-
-	/**
-	 * @var array Pole oznámení (EmailNotify), co se mají poslat
-	 */
-	private $emailNotifies = array();
-
-	public function __construct(IMailer $mailer) {
-		$this->mailer = $mailer;
-	}
+class EmailNotifies extends Emails {
 
 	/**
 	 * Přidá aktivitu mezi upozornění k odeslání
@@ -52,21 +36,10 @@ class EmailNotifies extends Object {
 	}
 
 	/**
-	 * Odešle všechny upozornění a odstraní je z fronty
-	 */
-	public function sendEmails() {
-		$notifies = $this->emailNotifies;
-		foreach ($notifies as $notify) {
-			$notify->sendEmail($this->mailer);
-		}
-		$this->emailNotifies = array();
-	}
-
-	/**
 	 * existuje již oznámení pro uživatele
 	 * @return EmailNotify Upozornění pro uživatele.
 	 */
-	private function getUserNotify($user) {
+	protected function getUserNotify($user) {
 		if (!array_key_exists($user->id, $this->emailNotifies)) {
 			$this->emailNotifies[$user->id] = new EmailNotify($user);
 		}

@@ -5,6 +5,7 @@
  */
 use Notify\EmailNotifies;
 use POS\Model\UserPropertyDao;
+use Notify\EmailsForOldUsers;
 
 class CronPresenter extends BasePresenter {
 
@@ -39,6 +40,9 @@ class CronPresenter extends BasePresenter {
 
 	/** @var \POS\Model\UserPropertyDao @inject */
 	public $userPropertyDao;
+
+	/** @var \POS\Model\OldUserDao @inject */
+	public $oldUserDao;
 
 	public function startup() {
 		parent::startup();
@@ -88,6 +92,28 @@ class CronPresenter extends BasePresenter {
 		$this->chatMessagesDao->updateSendNotify();
 
 		echo "Oznámení byly odeslány";
+		die();
+	}
+
+	/**
+	 * Napíše email starším uživatelům z první verze přiznání.
+	 */
+	public function actionSendEmailOldUsers() {
+		$limit = 200;
+		$users = $this->oldUserDao->getNoNotify($limit);
+		$emailNotifies = new EmailsForOldUsers($this->mailer);
+
+		/* upozornění na aktivity */
+		foreach ($users as $user) {
+			$emailNotifies->addEmail($user);
+		}
+
+		$emailNotifies->sendEmails();
+
+		$this->oldUserDao->updateLimitNotify($users);
+
+		$countNoNotify = $this->oldUserDao->countNoNotify();
+		echo "Bylo odesláno " . $users->count() . " oznámení o nové seznamce. $countNoNotify jich ještě čeká.";
 		die();
 	}
 

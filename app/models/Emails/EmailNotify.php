@@ -15,9 +15,8 @@ namespace Notify;
 use Nette\Database\Table\ActiveRow;
 use Nette\Mail\IMailer;
 use Nette\Mail\Message;
-use Nette\Object;
 
-class EmailNotify extends Object {
+class EmailNotify extends Email {
 
 	/**
 	 * @var int Počet zpráv pro uživatele.
@@ -34,22 +33,12 @@ class EmailNotify extends Object {
 	 */
 	private $countOthersActivities;
 
-	/**
-	 * @var ActiveRow Uživatel
-	 */
-	private $user;
-
-	/**
-	 * Emailová adresa odesílatele (stránky)
-	 */
-	const EMAIL_ADDRESS_SENDER = "info@priznaniosexu.cz";
-
 	public function __construct($user) {
-		$this->user = $user;
+		parent::__construct($user);
 	}
 
 	/**
-	 * Přidání zprávy do upozornění
+	 * Zvýší počet zpráv pro uživatele - aby uživatel věděl, mi napsalo 20 lidí
 	 * @param string $message Zpráva příjemnce
 	 */
 	public function addMessage() {
@@ -72,42 +61,19 @@ class EmailNotify extends Object {
 		}
 	}
 
-	public function sendEmail(IMailer $mailer) {
-		$mail = new Message;
-		$mail->setFrom(self::EMAIL_ADDRESS_SENDER);
-
-		$email = $this->getEmailAddress();
-		$subject = $this->getEmailSubject();
-		$body = $this->getEmailBody();
-
-		$mail->addTo($email);
-		$mail->setSubject($subject);
-		$mail->setBody($body);
-
-		$mailer->send($mail);
-	}
-
 	/**
 	 * Vrátí předmět emailu
 	 */
-	private function getEmailSubject() {
+	public function getEmailSubject() {
 		$title = $this->getTittle();
 
 		return "Máte " . $title;
 	}
 
 	/**
-	 * Vrátí emailovou adresu příjemce
-	 * @return string Emailová adresa
-	 */
-	private function getEmailAddress() {
-		return $this->user->email;
-	}
-
-	/**
 	 * Vrtátí zprávu co se má odeslat uživateli.
 	 */
-	private function getEmailBody() {
+	public function getEmailBody() {
 		$title = $this->getTittle();
 
 		$body = "Ahoj, \n\nmáš " . $title . " na http://datenode.cz/. Neváhej a ozvi se.\nTvé Datenode";

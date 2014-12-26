@@ -1,4 +1,5 @@
 services:
+	oldUserDao: \POS\Model\OldUserDao
 	userDao: \POS\Model\UserDao
 	userPropertyDao: \POS\Model\UserPropertyDao
 	formDao: \POS\Model\FormDao
