@@ -148,6 +148,11 @@ class PagePresenter extends BasePresenter {
 		$this->includeThread($this, $order);
 	}
 
+	public function actionNaturalScience() {
+		$this->flashMessage("Videa Přírodovědy s Alex již nejsou na Datenode");
+		$this->redirect("Page:metro");
+	}
+
 	public function actionSimpleForm($url) {
 		$this->setLayout('simpleLayout');
 		$this->url = $url;
