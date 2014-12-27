@@ -8,8 +8,9 @@ namespace POS\Listeners\Services;
 
 use POS\Model\UserDao;
 use Nette\Http\Session;
-use Nette\DateTime,
-	DateInterval;
+use Nette\DateTime;
+use DateInterval;
+use Nette\Http\SessionSection;
 
 /**
  * ActivityReporter slouží jako služba pro DI container, která může informovat listenery o aktivitě uživatele.
@@ -32,9 +33,9 @@ class ActivityReporter extends \Nette\Object {
 	public $onUserFirstTodayActivity = array();
 
 	/**
-	 * @var Session
+	 * @var SessionSection
 	 */
-	public $session;
+	public $section;
 
 	/**
 	 * @var \POS\Model\UserDao
@@ -50,13 +51,13 @@ class ActivityReporter extends \Nette\Object {
 	const SECTION_NAME = 'SignRewardListenerSection';
 
 	public function __construct(Session $session, UserDao $userDao) {
-		$this->session = $session;
+		$this->section = $session->getSection(self::SECTION_NAME);
 		$this->userDao = $userDao;
 
 		$testing = (isset($_SERVER['TESTING']) && $_SERVER['TESTING']) ||
 			(isset($_SERVER['HTTP_X_TESTING']) && $_SERVER['HTTP_X_TESTING']);
 		if (!$testing) {
-			$this->session->setExpiration('30 days');
+			$this->section->setExpiration('30 days');
 		}
 	}
 
@@ -66,7 +67,7 @@ class ActivityReporter extends \Nette\Object {
 	 * @param type $user uživatel z presenteru
 	 */
 	public function handleUsersActivity($user) {
-		$section = $this->session->getSection(self::SECTION_NAME); //načtení sešny
+		$section = $this->section; //načtení sešny
 		$this->onUserActivity($user->getId());
 		$this->loadSessionData($user->id, $section); //po tomhle kroku mám v sešně určitě data
 		if (!$this->isToday($section->lastActivity)) {//pokud je poslední aktivita dneska, nedělám nic
