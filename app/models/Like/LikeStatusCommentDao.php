@@ -49,7 +49,7 @@ class LikeStatusCommentDao extends AbstractDao implements ILikeDao {
 		));
 		$commentLike = $sel->fetch();
 
-		$this->addActivity($ownerID, $userID, $commentLike->commentID);
+		$this->addActivity($ownerID, $userID, $commentLike->id);
 	}
 
 	/**
@@ -78,7 +78,7 @@ class LikeStatusCommentDao extends AbstractDao implements ILikeDao {
 		));
 		$commentLike = $sel->fetch();
 
-		$this->removeActivity($ownerID, $userID, $commentLike->commentID);
+		$this->removeActivity($ownerID, $userID, $commentLike->id);
 	}
 
 	/**
@@ -100,6 +100,20 @@ class LikeStatusCommentDao extends AbstractDao implements ILikeDao {
 		} else {
 			return FALSE;
 		}
+	}
+
+	/**
+	 * Vrátí liky komentáře statusu
+	 * @param int $commentID
+	 * @return @return Nette\Database\Table\Selection Liky příspěvku.
+	 */
+	public function getByItem($commentID, $limit = 0, $offset = 0) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_COMMENT_ID, $commentID);
+		if ($limit != 0) {
+			$sel->limit($limit, $offset);
+		}
+		return $sel;
 	}
 
 	/**
