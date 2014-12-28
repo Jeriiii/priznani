@@ -26,29 +26,19 @@ class BaseUserGalleriesThumbnails extends BaseProjectControl {
 
 	protected $cssVariables = array();
 
-	/**
-	 * @var \POS\Model\UserDao
-	 */
+	/** @var \POS\Model\UserDao */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 */
+	/** @var \POS\Model\UserGalleryDao */
 	public $userGalleryDao;
 
-	/**
-	 * @var \POS\Model\UserAllowedDao
-	 */
+	/** @var \POS\Model\UserAllowedDao */
 	public $userAllowedDao;
 
-	/**
-	 * @var \POS\Model\FriendDao
-	 */
+	/** @var \POS\Model\FriendDao */
 	public $friendDao;
 
-	/**
-	 * @var \Nette\Http\SessionSection
-	 */
+	/** @var \Nette\Http\SessionSection */
 	private $section;
 
 	public function __construct(UserDao $userDao, UserGalleryDao $userGalleryDao, UserAllowedDao $userAllowedDao, FriendDao $friendDao, SessionSection $section, IContainer $parent = NULL, $name = NULL) {

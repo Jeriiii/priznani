@@ -45,12 +45,14 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 	 * @param int $imageID ID lajknutého obrázku
 	 */
 	public function handleLike($userID, $imageID) {
+		/* musí se přepočítat, protože se sice v handleru pošle správné ID obrázku, ale špatné id presenteru */
+		$this->liked = $this->getLikedByUser($userID, $imageID);
+
 		if ($this->liked == FALSE) {
 			$this->justLike = TRUE;
 			$this->liked = TRUE;
 			$this->likeDao->addLiked($imageID, $userID, $this->ownerID);
 		}
-
 		$this->redrawControl();
 	}
 

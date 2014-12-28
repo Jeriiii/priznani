@@ -27,82 +27,44 @@ class GalleriesPresenter extends \BasePresenter {
 	private $images;
 	public $verificationExists;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserGalleryDao @inject */
 	public $userGaleryDao;
 
-	/**
-	 * @var \POS\Model\UserImageDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\UsersCompetitionsDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UsersCompetitionsDao @inject */
 	public $usersCompetitionsDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\CompetitionsImagesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CompetitionsImagesDao @inject */
 	public $competitionsImagesDao;
 
-	/**
-	 * @var \POS\Model\ImageLikesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ImageLikesDao @inject */
 	public $imageLikesDao;
 
-	/**
-	 * @var \POS\Model\PaymentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\PaymentDao @inject */
 	public $paymentDao;
 
-	/**
-	 * @var \POS\Model\UserAllowedDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserAllowedDao @inject */
 	public $userAllowedDao;
 	public $isPaying;
 
-	/**
-	 * @var \POS\Model\FriendDao
-	 * @inject
-	 */
+	/** @var \POS\Model\FriendDao @inject */
 	public $friendDao;
 
-	/**
-	 * @var \POS\Model\CommentImagesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentImagesDao @inject */
 	public $commentImagesDao;
 
-	/**
-	 * @var \POS\Model\LikeImageCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeImageCommentDao @inject */
 	public $likeImageCommentDao;
 
-	/**
-	 * @var ActiveRow Aktuální obrázek
-	 */
+	/** @var ActiveRow Aktuální obrázek */
 	private $image;
 
 	public function startup() {
@@ -155,13 +117,13 @@ class GalleriesPresenter extends \BasePresenter {
 		$myGallery = FALSE;
 
 		if (!empty($userID)) {
-//je vlastník
+			/* je vlastník */
 			if ($userID == $this->getUser()->id) {
 				$this->template->paying = $this->isPaying;
 				$myGallery = TRUE;
 			}
 		} else {
-//nebyla zvolena konkrétní­ galerie
+			/* nebyla zvolena konkrétní­ galerie */
 			$this->template->paying = $this->isPaying;
 			$myGallery = TRUE;
 		}
@@ -184,7 +146,7 @@ class GalleriesPresenter extends \BasePresenter {
 			$this->redirect("Galleries:verification", array("galleryID" => $gallery->id));
 		}
 
-		//je vlastník
+		/* je vlastník */
 		if ($gallery->userID == $this->getUser()->id) {
 			$myGallery = TRUE;
 			$this->template->paying = $this->isPaying;
@@ -278,7 +240,7 @@ class GalleriesPresenter extends \BasePresenter {
 
 	public function handledeleteGallery($galleryID) {
 		$gallery = $this->userGaleryDao->find($galleryID);
-		//pokud je galerie soukromá, provede test, zda uživatel platí
+		/* pokud je galerie soukromá, provede test, zda uživatel platí */
 		if ($gallery->private) {
 			$this->checkPaying();
 		}

@@ -146,7 +146,7 @@ class BaseLikes extends BaseProjectControl {
 	 * @param int $commentID ID commentu, který hledáme
 	 * @return bool
 	 */
-	private function getLikedByUser($userID, $commentID) {
+	protected function getLikedByUser($userID, $commentID) {
 		$liked = $this->likeDao->likedByUser($userID, $commentID);
 		return $liked;
 	}

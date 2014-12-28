@@ -12,7 +12,7 @@ use Nette\Database\SqlLiteral;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class LikeStatusCommentDao extends AbstractDao implements ILikeDao {
+class LikeStatusCommentDao extends BaseLikeDao implements ILikeDao {
 
 	const TABLE_NAME = "like_status_comments";
 

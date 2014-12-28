@@ -97,7 +97,9 @@ class FriendRequestDao extends AbstractDao {
 		$friendRequest = $sel->fetch();
 
 		/* vytvoření přátelství */
-		$this->createFriendship($friendRequest);
+		if (!empty($friendRequest)) { //empty by mělo být jen v případě, že již přátelství odklikl na jiném místě, třeba v aktualitách
+			$this->createFriendship($friendRequest);
+		}
 
 		/* smazání žádosti */
 		$this->delete($friendRequestID);

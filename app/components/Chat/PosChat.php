@@ -29,7 +29,7 @@ class PosChat extends BaseProjectControl {
 		parent::__construct($parent, $name);
 		$user = $this->getPresenter()->getUser();
 		if (!$user->isLoggedIn()) {
-			$this->getPresenter()->redirect("Homepage:");
+			$this->getPresenter()->redirect(":Onepage:");
 		}
 		$this->chatManager = $manager;
 	}

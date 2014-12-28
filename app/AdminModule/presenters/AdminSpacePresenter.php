@@ -22,22 +22,13 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 	public $id_file;
 	public $text;
 
-	/**
-	 * @var \POS\Model\ConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ConfessionDao @inject */
 	public $confessionDao;
 
-	/**
-	 * @var \POS\Model\UserImageDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\ContactDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ContactDao @inject */
 	public $contactDao;
 
 	/**
@@ -58,7 +49,9 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 				$this->flashMessage('Uplynula doba neaktivity! Systém vás z bezpečnostních důvodů odhlásil.', 'warning');
 			}
 
-			$this->redirect(':Sign:in', array('backlink' => $this->backlink()));
+			$backlinkSection = $this->getSession(\Nette\Application\UI\Form\SignInForm::SECTION_BACKLINK_NAME);
+			$backlinkSection->link = $this->backlink();
+			$this->redirect(':Sign:in', array('backlink' => true));
 		} else { //kontrola opravnění pro vztup do příslušné sekce
 			if (!$this->user->isAllowed($this->name, $this->action)) {
 				$this->flashMessage('Na vstup do této sekce nemáte dostatečná oprávnění!', 'warning');

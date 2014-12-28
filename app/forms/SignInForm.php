@@ -13,6 +13,8 @@ use Nette\Utils\Html;
 
 class SignInForm extends BaseForm {
 
+	const SECTION_BACKLINK_NAME = "backlink";
+
 	/**
 	 * @var boolean Cesta zpět odkud uživatel přišel
 	 */
@@ -73,7 +75,7 @@ class SignInForm extends BaseForm {
 	 */
 	private function redirectBacklink() {
 		/* nastaven backlink */
-		$backlinkSession = $this->presenter->getSession('backlink');
+		$backlinkSession = $this->presenter->getSession(self::SECTION_BACKLINK_NAME);
 		$link = $backlinkSession->link;
 		$query = $backlinkSession->query;
 		$backlinkSession->remove();
@@ -81,7 +83,7 @@ class SignInForm extends BaseForm {
 		if (!empty($link)) {
 			$presenter->redirect($link, $query);
 		} else {
-			$presenter->redirect('Homepage:');
+			$presenter->redirect(':OnePage:');
 		}
 	}
 
