@@ -269,6 +269,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	private function getUserGalleryRel($galleryLastImageRel) {
 		$galleryRel = new Relation('userGallery');
 		$galleryRel->addRel($galleryLastImageRel);
+		$galleryRel->addRel(new Relation('user'));
 		return $galleryRel;
 	}
 
