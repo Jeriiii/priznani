@@ -22,9 +22,7 @@ use NetteExt\Helper\ShowUserDataHelper;
 
 class ShowPresenter extends ProfilBasePresenter {
 
-	/**
-	 * @var int ID uživatele, jehož profil je zobrazován
-	 */
+	/** @var int ID uživatele, jehož profil je zobrazován */
 	private $userID;
 
 	/** @var \POS\Model\UserDao @inject */
@@ -288,17 +286,14 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \POSComponent\Galleries\UserGalleries\UserGalleries
 	 */
 	public function createComponentUserGalleries() {
-		$session = $this->getSession();
-		$section = $session->getSection('galleriesAccess');
-
-		return new UserGalleriesThumbnails($this->userDao, $this->userGalleryDao, $this->userAllowedDao, $this->friendDao, $section);
+		return new UserGalleriesThumbnails($this->userDao, $this->userGalleryDao, $this->userAllowedDao, $this->friendDao);
 	}
 
 	/**
 	 * vykresluje obrázky ze všech galerií daného uživatele
 	 */
 	protected function createComponentUserImagesAll() {
-		$images = $this->userImageDao->getAllFromUser($this->userID);
+		$images = $this->userImageDao->getAllFromUser($this->userID, $this->loggedUser->id, $this->userGalleryDao);
 
 		return new UserGalleryImagesThumbnails($images, $this->userDao);
 	}

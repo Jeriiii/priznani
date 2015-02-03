@@ -6,6 +6,9 @@
 
 namespace POS\Model;
 
+use Nette\Database\Table\Selection;
+use Nette\Database\Table\ActiveRow;
+
 /**
  * NAME DAO NAMEDao
  * slouží k
@@ -30,6 +33,7 @@ class UserGalleryDao extends BaseGalleryDao {
 	const COLUMN_DESCRIPTION = "description";
 	const COLUMN_PROFILE = "profil_gallery";
 	const COLUMN_VERIFICATION = "verification_gallery";
+	const COLUMN_PRIVATE = "private";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -75,18 +79,6 @@ class UserGalleryDao extends BaseGalleryDao {
 		$sel->order(self::COLUMN_ID . " DESC");
 
 		return $sel;
-	}
-
-	/**
-	 * vrátí ID vlastníka galeria
-	 * @param type $galleryID ID galerie, jejíž vlastníka hledáme
-	 * @return Nette\Database\Table\ActiveRow
-	 */
-	public function getGalleryOwnerID($galleryID) {
-		$sel = $this->getTable();
-		$sel->select('userID');
-		$sel->where(self::COLUMN_ID, $galleryID);
-		return $sel->fetch();
 	}
 
 	/**
@@ -213,118 +205,112 @@ class UserGalleryDao extends BaseGalleryDao {
 		return $sel->fetch();
 	}
 
-	/*	 * ****************************** UPDATE **************************** */
-
 	/**
-	 * Změní nejlepší a poslední vložený obrázek.
-	 * @param int $galleryID ID galerie
-	 * @param type $bestImageID ID nejlepšího obrázku.
-	 * @param type $lastImageID ID posledního vloženého obrázku.
+	 * Získá informace o přistupech do galerií uživatele. Přidá do session, pokud vní nejsou.
+	 * @param int $ownerID ID vlastníka galerie
+	 * @param int $loggedUserID ID přihlášeného uživatele.
+	 * @param Nette\Database\Table\Selection $galleries Galerie u kterých se má ověřit, jestli do ní má uživatel přístup
+	 * @return array
 	 */
-	public function updateBestAndLastImage($galleryID, $bestImageID, $lastImageID) {
-		$sel = $this->getTable();
-		$sel->wherePrimary($galleryID);
-		$sel->update(array(
-			UserGalleryDao::COLUMN_BEST_IMAGE_ID => $bestImageID,
-			UserGalleryDao::COLUMN_LAST_IMAGE_ID => $lastImageID
-		));
-	}
+	public function getAccessData($ownerID, $loggedUserID, $galleries) {
+		$sectionGalleryAccess = $this->getGallAccessSection();
+		$gallAccess = $sectionGalleryAccess->galleriesAccess;
 
-	/**
-	 * Změní hodnoty muž|žena|pár|3 a více u galerie.
-	 * @param int $galleryID ID galerie.
-	 * @param int $man Muž.
-	 * @param int $women Žena.
-	 * @param int $couple Par.
-	 * @param int $more 3 a více.
-	 */
-	public function updateGender($galleryID, $man, $women, $couple, $more) {
-		$sel = $this->getTable();
-		$sel->wherePrimary($galleryID);
-		$sel->update(array(
-			self::COLUMN_MAN => $man,
-			self::COLUMN_WOMEN => $women,
-			self::COLUMN_COUPLE => $couple,
-			self::COLUMN_MORE => $more
-		));
+		if (empty($gallAccess)) {
+			$gallAccess = $this->getGalleriesAccesInfo($loggedUserID, $ownerID, $gallAccess, $galleries);
+		} else {
+			foreach ($galleries as $gallery) {
+				if (!array_key_exists($gallery->id, $gallAccess)) {
+					/* jednorázově doplní data o všech galeriích */
+					$gallAccess = $this->getGalleriesAccesInfo($loggedUserID, $ownerID, $gallAccess, $galleries);
+					break; //všechna data doplnněna, alg. se může ukončit
+				}
+			}
+		}
+
+		$sectionGalleryAccess->galleriesAccess = $gallAccess;
+		return $gallAccess;
 	}
 
 	/**
 	 * Při procházení galerií cizích lidí ukládá informace o přistupu
 	 * přihlášeného uživatele do session. V případě neexistence záznamu
 	 * o nějké galerii je informace o ní připojena k dosavadním datům.
-	 * @param int $userID ID přihlášeného uživatele
+	 * @param int $loggedUserID ID přihlášeného uživatele
 	 * @param int $ownerID ID vlastníka galerie
-	 * @param SessionSection $section session pro uložení dat
-	 * @return Array pole s daty o přístupu uživatele do galerií
+	 * @param array $gallAccess Data o přístupu uživatelů k jednotlivým galeriím
+	 * @param Nette\Database\Table\Selection $galleries Galerie u kterých se má ověřit, jestli do ní má uživatel přístup
+	 * @return array Pole s daty o přístupu uživatele do galerií
 	 */
-	public function getGalleriesAccesInfo($userID, $ownerID, $section) {
-		$selGallery = $this->getTable();
-		$isFriend = $this->checkFriend($userID, $ownerID);
-		$isOwner = $this->checkOwner($userID, $ownerID);
-		$section->setExpiration('2 hours');
+	public function getGalleriesAccesInfo($loggedUserID, $ownerID, $gallAccess, Selection $galleries) {
+		$isFriend = $this->checkFriend($loggedUserID, $ownerID);
 
-//nahraju galerie uživatele, kterého prohlížím
-		$galleries = $selGallery->where(UserGalleryDao::COLUMN_USER_ID, $ownerID);
+		$galleriesAccess = empty($gallAccess) ? array() : $gallAccess; //pukud není zatím žádný záznam v session
 
-		$galleriesAccess = $this->getSectionData($section);
+		foreach ($galleries as $gallery) {
+			$galleriesAccess = $this->getGalleryAccessInfo($galleriesAccess, $gallery, $loggedUserID, $isFriend);
+		}
 
-		foreach ($galleries as $item) {
-//pokud je uživatel vlastníkem automaticky má přístup (občas se tam objeví id uživatelovo galerie ikdyž ji neprochazim)
-			if ($isOwner) {
-				$galleriesAccess[$item->id] = TRUE;
-			}
+		return $galleriesAccess;
+	}
 
-//pokud záznam ještě není v session
-			if (empty($galleriesAccess[$item->id])) {
-//pokud je nastavena privátní galerie, zkoumáme podmínky pro přístup
-				if ($item->private) {
-//pokud je kamarád a galerie je kamarádům přístupná
-					if ($isFriend && $item->allow_friends) {
-						$galleriesAccess[$item->id] = TRUE;
+	/**
+	 * Zjistí, zda má uživatel přístup do této galerie.
+	 * @param \Nette\Database\Table\ActiveRow $gallery Galerie u které se má zjistit, zda do ní uživatel může nebo ne.
+	 * @param int $loggedUserID ID přihlášeného uživatele
+	 * @param int $ownerID ID vlastníka galerie
+	 * @return bool Má uživatel přístup do galerie nebo ne.
+	 */
+	public function haveAccessIntoGallery($gallery, $loggedUserID, $ownerID) {
+		$isFriend = $this->checkFriend($loggedUserID, $ownerID);
+		$sectionGalleryAccess = $this->getGallAccessSection();
+		$gallAccess = $sectionGalleryAccess->galleriesAccess;
+		$gallAccess = empty($gallAccess) ? array() : $gallAccess; //pukud není zatím žádný záznam v session
 
-//pokudje kamarád a galerie je kamarádům nepřístupná
-					} elseif ($isFriend && !$item->allow_friends && !$item->verification_gallery) {
+		$galleriesAccess = $this->getGalleryAccessInfo($gallAccess, $gallery, $loggedUserID, $isFriend);
+		return $galleriesAccess[$gallery->id];
+	}
 
-//pokud je mu povoleno vstoupit
-						if ($this->checkAllowed($item->id, $userID)) {
-							$galleriesAccess[$item->id] = TRUE;
-						} else {
-							$galleriesAccess[$item->id] = FALSE;
-						}
+	/**
+	 * Zjistí, zda má uživatel přístup do této galerie.
+	 * @param array $galleriesAccess Data o přístupu uživatelů k jednotlivým galeriím, nebo prázdné pole.
+	 * @param \Nette\Database\Table\ActiveRow $gallery Galerie u které se má zjistit, zda do ní uživatel může nebo ne.
+	 * @param int $loggedUserID ID přihlášeného uživatele
+	 * @param bool $isFriend Je uživatel přítel majitele galerie
+	 * @return array Data o přístupu uživatelů k jednotlivým galeriím.
+	 */
+	private function getGalleryAccessInfo(array $galleriesAccess, $gallery, $loggedUserID, $isFriend) {
+		/* pokud je uživatel vlastníkem automaticky má přístup (občas se tam objeví id uživatelovo galerie ikdyž ji neprochazim) */
+		if ($loggedUserID == $gallery->userID /* owner */) {
+			$galleriesAccess[$gallery->id] = TRUE;
+			return $galleriesAccess;
+		}
 
-//pokud není kamarád
-					} elseif (!$isFriend) {
+		/* pokud záznam ještě není v session */
+		if (!array_key_exists($gallery->id, $galleriesAccess)) {
+			$galleriesAccess[$gallery->id] = FALSE;
 
-//pokud přestože není kamarád může vstoupit
-						if ($this->checkAllowed($item->id, $userID)) {
-							$galleriesAccess[$item->id] = TRUE;
-						} else {
-							$galleriesAccess[$item->id] = FALSE;
-						}
-
-//možnost nastávající při nesplnění předchozích podmínek
-					} else {
-						$galleriesAccess[$item->id] = FALSE;
-					}
-					//verifikační galerie
-				} else if ($item->verification_gallery) {
-					if ($this->checkAllowed($item->id, $userID)) {
-						$galleriesAccess[$item->id] = TRUE;
-					} else {
-						$galleriesAccess[$item->id] = FALSE;
-					}
-//galerie je veřejná, proto má vstup garantován
-				} else {
-					$galleriesAccess[$item->id] = TRUE;
+			/* pokud je nastavena privátní galerie, zkoumáme podmínky pro přístup */
+			if ($gallery->private) {
+				if ($isFriend && $gallery->allow_friends) {// pokud je kamarád a galerie je kamarádům přístupná
+					$galleriesAccess[$gallery->id] = TRUE;
+				} else if ($this->checkAllowed($gallery->id, $loggedUserID)) { // Zkusí se podívat do DB, zda mu vlastník nedal přístup ručně
+					$galleriesAccess[$gallery->id] = TRUE;
 				}
+			} else { // galerie je veřejná, proto má vstup garantován
+				$galleriesAccess[$gallery->id] = TRUE;
 			}
 		}
 
-//update session
-		$section->galleriesAccess = $galleriesAccess;
-
 		return $galleriesAccess;
+	}
+
+	/**
+	 * Vrátí sečnu k přístupu do galerií.
+	 * @return Sečna k přístupům do galerí.
+	 */
+	private function getGallAccessSection() {
+		return $this->getUnicateSection(self::TABLE_NAME, '2 hours');
 	}
 
 	/**
@@ -367,31 +353,40 @@ class UserGalleryDao extends BaseGalleryDao {
 		return FALSE;
 	}
 
+	/*	 * ****************************** UPDATE **************************** */
+
 	/**
-	 * pokud je sekce v session prázdná,
-	 * vrátí prázdné pole, jinak nahraje data z sekce
-	 * @param SessionSection $section sekce session s daty
+	 * Změní nejlepší a poslední vložený obrázek.
+	 * @param int $galleryID ID galerie
+	 * @param type $bestImageID ID nejlepšího obrázku.
+	 * @param type $lastImageID ID posledního vloženého obrázku.
 	 */
-	private function getSectionData($section) {
-		if (!empty($section->galleriesAccess)) {
-			return $section->galleriesAccess;
-		} else {
-			return array();
-		}
+	public function updateBestAndLastImage($galleryID, $bestImageID, $lastImageID) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($galleryID);
+		$sel->update(array(
+			UserGalleryDao::COLUMN_BEST_IMAGE_ID => $bestImageID,
+			UserGalleryDao::COLUMN_LAST_IMAGE_ID => $lastImageID
+		));
 	}
 
 	/**
-	 * Zjistí, zda je uživatel procházející galerie zároveň
-	 * vlastníkem.
-	 * @param type $userID ID uživatele
-	 * @param type $ownerID ID vlastníka
-	 * @return boolean je/není vlastník
+	 * Změní hodnoty muž|žena|pár|3 a více u galerie.
+	 * @param int $galleryID ID galerie.
+	 * @param int $man Muž.
+	 * @param int $women Žena.
+	 * @param int $couple Par.
+	 * @param int $more 3 a více.
 	 */
-	private function checkOwner($userID, $ownerID) {
-		if ($userID == $ownerID) {
-			return TRUE;
-		}
-		return FALSE;
+	public function updateGender($galleryID, $man, $women, $couple, $more) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($galleryID);
+		$sel->update(array(
+			self::COLUMN_MAN => $man,
+			self::COLUMN_WOMEN => $women,
+			self::COLUMN_COUPLE => $couple,
+			self::COLUMN_MORE => $more
+		));
 	}
 
 }

@@ -22,8 +22,8 @@ use POSComponent\BaseProjectControl;
 use Nette\Http\SessionSection;
 
 class BaseUserGalleriesThumbnails extends BaseProjectControl {
-	/* proměnné pro css překlad */
 
+	/** proměnné pro css překlad */
 	protected $cssVariables = array();
 
 	/** @var \POS\Model\UserDao */
@@ -38,22 +38,18 @@ class BaseUserGalleriesThumbnails extends BaseProjectControl {
 	/** @var \POS\Model\FriendDao */
 	public $friendDao;
 
-	/** @var \Nette\Http\SessionSection */
-	private $section;
-
-	public function __construct(UserDao $userDao, UserGalleryDao $userGalleryDao, UserAllowedDao $userAllowedDao, FriendDao $friendDao, SessionSection $section, IContainer $parent = NULL, $name = NULL) {
+	public function __construct(UserDao $userDao, UserGalleryDao $userGalleryDao, UserAllowedDao $userAllowedDao, FriendDao $friendDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->userDao = $userDao;
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userAllowedDao = $userAllowedDao;
 		$this->friendDao = $friendDao;
-		$this->section = $section;
 	}
 
 	public function renderBase($mode, $galleries, $ownerID, $templateName = "baseGallery.latte") {
 		$this->setCssParams();
 		$this->template->userData = $this->userDao->find($ownerID);
-		$accessData = $this->getAccessData($ownerID, $galleries);
+		$accessData = $this->userGalleryDao->getAccessData($ownerID, $this->presenter->user->id, $galleries);
 		$this->template->accessData = $accessData;
 
 		/* vrati pouze posledni vsechny nahledy galerie daneho uzivatele */
@@ -123,31 +119,8 @@ class BaseUserGalleriesThumbnails extends BaseProjectControl {
 			return \cssmin::minify($code);
 		});
 
-// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		/* nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu */
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
-	}
-
-	/**
-	 * získá informace o přistupech do galerií uživatele,
-	 * přidá do session, pokud vní nejsou
-	 * @param int $ownerID ID vlastníka galerie
-	 * @param Nette\Database\Table\Selection $galleries
-	 * @return array
-	 */
-	private function getAccessData($ownerID, $galleries) {
-		$accessData = array();
-		if (empty($this->section->galleriesAccess)) {
-			return $accessData = $this->userGalleryDao->getGalleriesAccesInfo($this->presenter->user->id, $ownerID, $this->section);
-		} else {
-			foreach ($galleries as $item) {
-				if (!array_key_exists($item->id, $this->section->galleriesAccess)) {
-					$accessData = $this->userGalleryDao->getGalleriesAccesInfo($this->presenter->user->id, $ownerID, $this->section);
-				} else {
-					$accessData = $this->section->galleriesAccess;
-				}
-			}
-			return $accessData;
-		}
 	}
 
 }

@@ -25,14 +25,13 @@ class UserGalleryBaseForm extends UserGalleryImagesBaseForm {
 		$this->addTextArea('description', 'Popis galerie:', 100, 2)
 			->addRule(Form::MAX_LENGTH, "Maximální délka popisu galerie je %d znaků", 500);
 
-		/* skryto pro první verzi přiznání */
-		/* if ($isPaying) {
-		  $this->addCheckbox('private', Html::el()->setHtml('Soukromá <span class="tooltip-sign">?
-		  <div class="tooltip-element">
-		  Pokud nastavíte galerii jako soukromou, <br />budou si ji moci prohlížet pouze vaši přátelé a lidé,<br />kterým to dovolíte.
-		  </div>
-		  </span>'));
-		  } */
+		if ($isPaying) {
+			$this->addCheckbox('private', Html::el()->setHtml('Soukromá <span class="tooltip-sign">?
+			<div class="tooltip-element">
+			Pokud nastavíte galerii jako soukromou, <br />budou si ji moci prohlížet pouze vaši přátelé a lidé,<br />kterým to dovolíte.
+			</div>
+			</span>'));
+		}
 
 		return $this;
 	}

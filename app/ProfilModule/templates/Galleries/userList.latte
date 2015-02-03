@@ -8,8 +8,8 @@
 <h2>Seznam lidí, kteří mají přístup do této galerie</h2>
 <br />
 <h3>Přátelé:</h3>
-{foreach $friends as $item}
-	{$item->user_name}<br />
+{foreach $friends as $friend}
+	<a n:href=":Profil:Show: id=> $friend->user2ID">{$friend->user2->user_name}</a>,
 {/foreach}
 {snippet friends}
 	{control allowFriendsForm}

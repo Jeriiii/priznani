@@ -114,9 +114,7 @@ class EditPresenter extends ProfilBasePresenter {
 	}
 
 	public function createComponentMyUserGalleries() {
-		$session = $this->getSession();
-		$section = $session->getSection('galleriesAccess');
-		return new MyUserGalleriesThumbnails($this->userDao, $this->userGalleryDao, $this->userAllowedDao, $this->friendDao, $section);
+		return new MyUserGalleriesThumbnails($this->userDao, $this->userGalleryDao, $this->userAllowedDao, $this->friendDao);
 	}
 
 	protected function createComponentEditCityForm($name) {

@@ -18,6 +18,7 @@ use POSComponent\Galleries\Images\VerificationGallery;
 use NetteExt\File;
 use NetteExt\Path\GalleryPathCreator;
 use NetteExt\Path\ImagePathCreator;
+use Nette\Database\Table\ActiveRow;
 
 class GalleriesPresenter extends \BasePresenter {
 
@@ -88,7 +89,7 @@ class GalleriesPresenter extends \BasePresenter {
 		$competitionData = $this->usersCompetitionsDao->getLastCompetitionNameAndId();
 		$competitionImage = $this->competitionsImagesDao->findByImgAndCmpId($this->imageID, $competitionData->id);
 
-// Ochrana před opakovaným vložením
+		/* Ochrana před opakovaným vložením */
 		if (!$competitionImage) {
 			$this->template->competition = $competitionData;
 		} else {
@@ -134,7 +135,8 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function actionListUserGalleryImages($galleryID) {
-		$this->checkAccess($galleryID);
+		$gallery = $this->userGaleryDao->find($galleryID);
+		$this->checkAccess($gallery);
 
 		$this->galleryID = $galleryID;
 	}
@@ -163,15 +165,15 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function actionImage($imageID, $galleryID = NULL, $userID = NULL) {
-
-		$this->checkAccess($galleryID);
+		$gallery = $this->userGaleryDao->find($galleryID);
+		$this->checkAccess($gallery);
 
 		$this->imageID = $imageID;
 		/* nastaví obrázzky podle uživatele nebo podle galerie */
 		if (!empty($galleryID)) {
 			$this->images = $this->userImageDao->getInGallery($galleryID);
 		} elseif (!empty($userID)) {
-			$this->images = $this->userImageDao->getAllFromUser($userID);
+			$this->images = $this->userImageDao->getAllFromUser($userID, $this->loggedUser->id, $this->userGaleryDao);
 		} else {
 			throw new Exception("Musíte nastavit buď ID uživatele, nebo ID galerie.");
 		}
@@ -325,15 +327,11 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function createComponentUserGalleries() {
-		$session = $this->getSession();
-		$section = $session->getSection('galleriesAccess');
-		return new UserGalleriesThumbnails($this->userDao, $this->userGaleryDao, $this->userAllowedDao, $this->friendDao, $section);
+		return new UserGalleriesThumbnails($this->userDao, $this->userGaleryDao, $this->userAllowedDao, $this->friendDao);
 	}
 
 	public function createComponentMyUserGalleries() {
-		$session = $this->getSession();
-		$section = $session->getSection('galleriesAccess');
-		return new MyUserGalleriesThumbnails($this->userDao, $this->userGaleryDao, $this->userAllowedDao, $this->friendDao, $section);
+		return new MyUserGalleriesThumbnails($this->userDao, $this->userGaleryDao, $this->userAllowedDao, $this->friendDao);
 	}
 
 	/**
@@ -400,28 +398,15 @@ class GalleriesPresenter extends \BasePresenter {
 	 * Otestuje zda je informace o glaerii v session, pokud ne přidá ji,
 	 * poté provede test, zda uživatel muže do galerie a v případě
 	 * potřebu ho přesměruje a napíše proč
-	 * @param int $galleryID ID galerie
+	 * @param ActiveRow $gallery Galerie
 	 */
-	private function checkAccess($galleryID) {
-		$session = $this->getSession();
-		$section = $session->getSection('galleriesAccess');
-		$owner = $this->userGaleryDao->getGalleryOwnerID($galleryID);
+	private function checkAccess(ActiveRow $gallery) {
+		$ownerID = $gallery->userID;
+		$haveAccess = $this->userGaleryDao->haveAccessIntoGallery($gallery, $this->loggedUser->id, $ownerID);
 
-		if (empty($section->galleriesAccess)) {
-			$accessData = $this->userGaleryDao->getGalleriesAccesInfo($this->user->id, $owner->userID, $section);
-		} else {
-			if (!array_key_exists($galleryID, $section->galleriesAccess)) {
-				$accessData = $this->userGaleryDao->getGalleriesAccesInfo($this->user->id, $owner->userID, $section);
-				if (!$accessData[$galleryID]) {
-					$this->flashMessage("Do této galerie nemáte přístup.");
-					$this->redirect("Galleries:default", array("userID" => $owner->userID)); //TODO
-				}
-			} else {
-				if (!$section->galleriesAccess[$galleryID]) {
-					$this->flashMessage("Do této galerie nemáte přístup.");
-					$this->redirect("Galleries:default", array("userID" => $owner->userID)); //TODO
-				}
-			}
+		if (!$haveAccess) {
+			$this->flashMessage("Do této galerie nemáte přístup.");
+			$this->redirect("Galleries:default", array("userID" => $ownerID)); //TODO
 		}
 	}
 

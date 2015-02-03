@@ -49,99 +49,61 @@ class BaseStream extends BaseProjectControl {
 	/** @var int Jaké příspěvky se mají načítat z DB - posun od posledního vydaného příspěvku */
 	protected $offset = null;
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 */
+	/** @var \POS\Model\UserGalleryDao */
 	public $userGalleryDao;
 
-	/**
-	 * @var \POS\Model\ImageGalleryDao
-	 */
+	/** @var \POS\Model\ImageGalleryDao */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\ConfessionDao
-	 */
+	/** @var \POS\Model\ConfessionDao */
 	public $confessionDao;
 
-	/**
-	 * @var \POS\Model\ImageLikesDao
-	 */
+	/** @var \POS\Model\ImageLikesDao */
 	public $imageLikesDao;
 
-	/**
-	 * @var \POS\Model\LikeStatusDao
-	 */
+	/** @var \POS\Model\LikeStatusDao */
 	public $likeStatusDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 */
+	/** @var \POS\Model\StreamDao */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\UserPositionDao
-	 */
+	/** @var \POS\Model\UserPositionDao */
 	public $userPositionDao;
 
-	/**
-	 * @var \POS\Model\EnumPositionDao
-	 */
+	/** @var \POS\Model\EnumPositionDao */
 	public $enumPositionDao;
 
-	/**
-	 * @var \POS\Model\UserPlaceDao
-	 */
+	/** @var \POS\Model\UserPlaceDao */
 	public $userPlaceDao;
 
-	/**
-	 * @var \POS\Model\EnumPlaceDao
-	 */
+	/** @var \POS\Model\EnumPlaceDao */
 	public $enumPlaceDao;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 */
+	/** @var \POS\Model\UserDao */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\LikeImageCommentDao
-	 */
+	/** @var \POS\Model\LikeImageCommentDao */
 	public $likeImageCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentImagesDao
-	 */
+	/** @var \POS\Model\CommentImagesDao */
 	public $commentImagesDao;
 
-	/**
-	 * @var \POS\Model\LikeStatusCommentDao
-	 */
+	/** @var \POS\Model\LikeStatusCommentDao */
 	public $likeStatusCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentStatusesDao
-	 */
+	/** @var \POS\Model\CommentStatusesDao */
 	public $commentStatusesDao;
 
-	/**
-	 * @var \POS\Model\LikeConfessionCommentDao
-	 */
+	/** @var \POS\Model\LikeConfessionCommentDao */
 	public $likeConfessionCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentConfessionsDao
-	 */
+	/** @var \POS\Model\CommentConfessionsDao */
 	public $commentConfessionsDao;
 
-	/**
-	 * @var ArrayHash|ActiveRow
-	 */
+	/** @var ArrayHash|ActiveRow */
 	public $loggedUser;
 
-	/**
-	 * @var \POS\Model\LikeConfessionDao
-	 */
+	/** @var \POS\Model\LikeConfessionDao */
 	public $likeConfessionDao;
 
 	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, LikeConfessionDao $likeConfessionDao, $loggedUser) {
@@ -191,6 +153,8 @@ class BaseStream extends BaseProjectControl {
 			$this->template->profilePhoto = $userData->profilFotoID;
 		}
 
+		/* pro určování přístupu do public / private galerií */
+		$this->template->userGalleryDao = $this->userGalleryDao;
 		$this->template->render();
 	}
 
