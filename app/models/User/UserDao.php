@@ -246,22 +246,28 @@ class UserDao extends UserBaseDao {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".smoke", $data['smoke']);
 		}
 		if (!empty($data['men'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".want_to_meet_men", $data['men']);
+			$columnName = self::COLUMN_PROPERTY_ID . ".want_to_meet_men";
+			$sel->where($columnName . " = ? OR " . $columnName . " = ?", array(1, 2));
 		}
 		if (!empty($data['women'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".want_to_meet_women", $data['women']);
+			$columnName = self::COLUMN_PROPERTY_ID . ".want_to_meet_women";
+			$sel->where($columnName . " = ? OR " . $columnName . " = ?", array(1, 2));
 		}
 		if (!empty($data['couple'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".want_to_meet_couple", $data['couple']);
+			$columnName = self::COLUMN_PROPERTY_ID . ".want_to_meet_couple";
+			$sel->where($columnName . " = ? OR " . $columnName . " = ?", array(1, 2));
 		}
 		if (!empty($data['men_couple'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".want_to_meet_couple_men", $data['men_couple']);
+			$columnName = self::COLUMN_PROPERTY_ID . ".want_to_meet_couple_men";
+			$sel->where($columnName . " = ? OR " . $columnName . " = ?", array(1, 2));
 		}
 		if (!empty($data['women_couple'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".want_to_meet_couple_women", $data['women_couple']);
+			$columnName = self::COLUMN_PROPERTY_ID . ".want_to_meet_couple_women";
+			$sel->where($columnName . " = ? OR " . $columnName . " = ?", array(1, 2));
 		}
 		if (!empty($data['more'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".want_to_meet_group", $data['more']);
+			$columnName = self::COLUMN_PROPERTY_ID . ".want_to_meet_group";
+			$sel->where($columnName . " = ? OR " . $columnName . " = ?", array(1, 2));
 		}
 		if (!empty($data['marital_state'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".marital_state", $data['marital_state']);
