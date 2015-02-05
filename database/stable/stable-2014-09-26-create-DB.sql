@@ -720,20 +720,6 @@ CREATE TABLE IF NOT EXISTS `users_competitions` (
 
 -- Export dat nebyl vybrán.
 
-
--- Exportování struktury pro tabulka pos.users_fotos
-CREATE TABLE IF NOT EXISTS `users_fotos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `userId` int(11) NOT NULL,
-  `suffix` varchar(5) DEFAULT NULL,
-  `description` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `userId` (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Export dat nebyl vybrán.
-
-
 -- Exportování struktury pro tabulka pos.users_properties
 CREATE TABLE IF NOT EXISTS `users_properties` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
