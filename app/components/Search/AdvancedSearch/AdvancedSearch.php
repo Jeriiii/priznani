@@ -104,7 +104,7 @@ class AdvancedSearch extends BaseSearch {
 		$this->enumSmokeDao = $enumSmokeDao;
 		$this->enumTallnessDao = $enumTallnessDao;
 
-		$users = $this->getusers($searchData);
+		$users = $this->getUsers($searchData);
 		parent::__construct($users, $parent, $name);
 		$this->cityDao = $cityDao;
 	}
@@ -130,7 +130,7 @@ class AdvancedSearch extends BaseSearch {
 	 * @param array $searchData
 	 * @return Nette\Database\Table\Selection
 	 */
-	private function getusers($searchData) {
+	private function getUsers($searchData) {
 		$users = $this->userDao->getBySearchData($searchData);
 		return $users;
 	}
