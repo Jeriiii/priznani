@@ -6,12 +6,10 @@
  * @author     Patrick Kusebauch
  * @package    NudaJeFuc
  */
-use Nette\Application\UI,
-	Nette\Security as NS,
-	Nette\Application\UI\Form as Frm;
-use POS\UserPreferences\StreamUserPreferences;
-use POS\Chat\ChatManager;
-use POS\Listeners\Services\ActivityReporter;
+use Nette\Security as NS;
+use Nette\DateTime;
+use POS\Model\UserDao;
+use Nette\Application\UI\Form as Frm;
 
 class SignPresenter extends BasePresenter {
 
@@ -33,22 +31,13 @@ class SignPresenter extends BasePresenter {
 	 */
 	private $backquery;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\UserChangePasswordDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserChangePasswordDao @inject */
 	public $userChangePasswordDao;
 
-	/**
-	 * @var \Nette\Mail\IMailer
-	 * @inject
-	 */
+	/** @var \Nette\Mail\IMailer @inject */
 	public $mailer;
 
 	/* uživatel pro práci se změnou hesla */
@@ -71,8 +60,23 @@ class SignPresenter extends BasePresenter {
 			if (empty($user)) {
 				$this->flashMessage("Potvrzení emailu se nezdařilo, jestli potíže přetrvávají, kontaktujte administrátora stránek.", "error");
 			} else {
-				$this->userDao->setUserRoleByConfirm($code);
-				$this->flashMessage("Potvrzení bylo úspěšné, nyní se můžete přihlásit.", "info");
+				if (empty($user->last_signed_in)) { //už se někdy přihlásil?
+					$this->userDao->setUserRoleByConfirm($code);
+					$identity = new NS\Identity($user->id, $user->role, $user->toArray());
+					$this->getUser()->login($identity);
+					$this->getUser()->setExpiration('30 minutes', TRUE);
+
+					/* zaznamenání, že se uživatel poprvé přihlásil */
+					$user->update(array(
+						UserDao::COLUMN_LAST_SIGNED_DAY => new DateTime()
+					));
+
+					$this->flashMessage("Potvrzení bylo úspěšné, systém vás automaticky přihlásil.", "info");
+					$this->redirect("OnePage:");
+				} else {
+					$this->flashMessage("Potvrzení bylo úspěšné, můžete se přihlásil.", "info");
+					$this->redirect("Sign:in");
+				}
 			}
 		}
 	}
@@ -99,6 +103,10 @@ class SignPresenter extends BasePresenter {
 		$this->getSession()->destroy();
 		$this->flashMessage("Byl jste úspěšně odhlášen");
 		$this->redirect('Sign:in');
+	}
+
+	public function actionRegistration() {
+		$this->redirect(":DatingRegistration:");
 	}
 
 	protected function createComponentRegistrationForm($name) {
