@@ -102,7 +102,7 @@ class UserImageDao extends AbstractDao {
 	public function getUnapproved($rejected = FALSE) {
 		$sel = $this->getTable();
 
-		$sel->where(":" . UserGalleryDao::TABLE_NAME . "." . UserGalleryDao::COLUMN_VERIFICATION, 0);
+		$sel->where("." . self::COLUMN_GALLERY_ID . "." . UserGalleryDao::COLUMN_VERIFICATION, 0);
 		$sel->where(self::COLUMN_APPROVED, 0);
 		if ($rejected) {
 			$sel->where(self::COLUMN_REJECTED, 0);
@@ -306,7 +306,9 @@ class UserImageDao extends AbstractDao {
 		$image = $sel->fetch();
 		if (!empty($image)) {
 			$image->update(array(
-				self::COLUMN_APPROVED => 1
+				self::COLUMN_APPROVED => 1,
+				self::COLUMN_CHECK_APPROVED => 0,
+				self::COLUMN_REJECTED => 0
 			));
 		}
 
