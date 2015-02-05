@@ -31,9 +31,9 @@
 				{include #galleryEditButtons "gallery" => $gallery, "iterator" => $iterator}
 			{/ifset}
 			{if $accessData[$gallery->id]}
-				{if $gallery->lastImageID && $gallery->bestImageID}
-					<img src="{$basePath}/images/userGalleries/{$userData->id}/{$gallery->id}/minSqr{$gallery->bestImageID}.{$gallery->lastImage->suffix}" width="100%" height="100%"/>
-				{/if}
+				{ifset $gallery->lastImageID}
+					<img src="{$basePath}/images/userGalleries/{$userData->id}/{$gallery->id}/minSqr{$gallery->lastImageID}.{$gallery->lastImage->suffix}" width="100%" height="100%"/>
+				{/ifset}
 
 				<a class="view" href="{plink Galleries:listUserGalleryImages galleryID => $gallery->id}">{$gallery->name} {if $gallery->private}<br />(soukromá){/if}</a>
 			{else}
