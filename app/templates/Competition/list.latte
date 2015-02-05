@@ -55,10 +55,10 @@
 		{if $iterator->isFirst()}
 			<h2>Nové soutěže brzy spustíme</h2>
 		{/if}
-		{*<div class="icon-container date">
+		<div class="icon-container date">
 			<img src="{$basePath}/{$com->imageUrl}" width="100%" height="100%"/>
 			<a n:href="UsersCompetitions: galleryID => $com->id">{$com->name}</a>
-		</div> *}
+		</div>
 	{/foreach}
 	{foreach $galleries as $gallery}
 		<div class="icon-container date">
