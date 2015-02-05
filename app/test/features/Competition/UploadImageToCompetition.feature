@@ -9,7 +9,7 @@ Feature: Upload Image to Competition
 		And I fill in "name" with "Test user"
 		And I fill in "surname" with "Testus"
 		And I fill in "phone" with "112567"
-		And I attach the file "<image>" to "newCompImageFormImageFile0"
+		And I attach to "newCompImageFormImageFile0" the file "<image>"
 		And I fill in "newCompImageFormImageName0" with "Test image"
 		And I fill in "newCompImageFormImageDescription0" with "Image for test the upload"
 		And I press "_submit"
