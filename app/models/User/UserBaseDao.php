@@ -123,7 +123,7 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	protected function getBaseData($user) {
 		return array(
-			'Věk' => $this->getAge($user->age),
+			'Věk' => self::getAge($user->age),
 			'Výška' => UserBaseDao::getTranslateUserTallness($user->tallness),
 			'Typ těla' => UserBaseDao::getTranslateUserShape($user->shape),
 			'Kouřeni cigaret' => UserBaseDao::getTranslateUserHabit($user->smoke),
@@ -138,7 +138,7 @@ abstract class UserBaseDao extends AbstractDao {
 	 * Vrátí věk z datumu narození.
 	 * @param date $birth
 	 */
-	protected function getAge($birth) {
+	public static function getAge($birth) {
 		$now = new \Nette\DateTime;
 		$birth = new \Nette\DateTime($birth);
 		$diff = $now->diff($birth);
