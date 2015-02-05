@@ -160,7 +160,7 @@ class MinkContext extends RawMinkContext implements TranslatedContextInterface {
 	 *
 	 * @When /^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)"$/
 	 */
-	public function attachFileToField($field, $path) {
+	public function attachFileToField($path, $field) {
 		$field = $this->fixStepArgument($field);
 
 		if ($this->getMinkParameter('files_path')) {

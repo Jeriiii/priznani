@@ -75,7 +75,7 @@ class DatabaseManager {
 	 * Executes initialization scripts from init folder
 	 */
 	function initScripts() {
-		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$ON_START_FOLDER_NAME);
+		//$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$ON_START_FOLDER_NAME);
 	}
 
 	/**
