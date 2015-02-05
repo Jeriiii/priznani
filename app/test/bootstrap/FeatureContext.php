@@ -54,10 +54,7 @@ class FeatureContext extends MinkContext {
 	/** @var TestDao */
 	private $testDao;
 
-	/**
-	 * @var \POS\Model\PaymentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\PaymentDao */
 	private $paymentDao;
 
 	/**
@@ -403,6 +400,24 @@ class FeatureContext extends MinkContext {
 		}
 	}
 
+	/**
+	 * @When /^I attach to "([^"]*)" the file "([^"]*)"$/
+	 */
+	public function iAttachToTheFile($field, $path) {
+		/* nastavení pro soubory */
+		$absoluteBasePath = __DIR__ . "/../" . "features/files/";
+
+		parent::attachFileToField($absoluteBasePath . $path, $field);
+	}
+
+	/**
+	 * Překrytí fce pro nahrávání souborů
+	 * @param type $field
+	 * @param type $path
+	 */
+//	public function attachFileToField($field, $path) {
+//
+//	}
 //	/**
 //	 * @When /^I attach to  "([^"]*)" the file "([^"]*)"$/
 //	 */
