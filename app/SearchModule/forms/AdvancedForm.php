@@ -23,59 +23,37 @@ use POS\Model\EnumTallnessDao;
  */
 class AdvancedForm extends BaseForm {
 
-	/**
-	 * @var \POS\Model\CityDao
-	 */
+	/** @var \POS\Model\CityDao */
 	public $cityDao;
 
-	/**
-	 * @var \POS\Model\EnumBraSizeDao
-	 */
+	/** @var \POS\Model\EnumBraSizeDao */
 	public $enumBraSizeDao;
 
-	/**
-	 * @var \POS\Model\EnumGraduationDao
-	 */
+	/** @var \POS\Model\EnumGraduationDao */
 	public $enumGraduationDao;
 
-	/**
-	 * @var \POS\Model\EnumHairColourDao
-	 */
+	/** @var \POS\Model\EnumHairColourDao */
 	public $enumHairColourDao;
 
-	/**
-	 * @var \POS\Model\EnumMaritalStateDao
-	 */
+	/** @var \POS\Model\EnumMaritalStateDao */
 	public $enumMaritalStateDao;
 
-	/**
-	 * @var \POS\Model\EnumOrientationDao
-	 */
+	/** @var \POS\Model\EnumOrientationDao */
 	public $enumOrientationDao;
 
-	/**
-	 * @var \POS\Model\EnumPenisWidthDao
-	 */
+	/** @var \POS\Model\EnumPenisWidthDao */
 	public $enumPenisWidthDao;
 
-	/**
-	 * @var \POS\Model\EnumPropertyDao
-	 */
+	/** @var \POS\Model\EnumPropertyDao */
 	public $enumPropertyDao;
 
-	/**
-	 * @var \POS\Model\EnumShapeDao
-	 */
+	/** @var \POS\Model\EnumShapeDao */
 	public $enumShapeDao;
 
-	/**
-	 * @var \POS\Model\EnumSmokeDao
-	 */
+	/** @var \POS\Model\EnumSmokeDao */
 	public $enumSmokeDao;
 
-	/**
-	 * @var \POS\Model\EnumTallnessDao
-	 */
+	/** @var \POS\Model\EnumTallnessDao */
 	public $enumTallnessDao;
 
 	public function __construct(EnumBraSizeDao $enumBraSizeDao, EnumGraduationDao $enumGraduationDao, EnumHairColourDao $enumHairColourDao, EnumMaritalStateDao $enumMaritalStateDao, EnumOrientationDao $enumOrientationDao, EnumPenisWidthDao $enumPenisWidthDao, EnumPropertyDao $enumPropertyDao, EnumShapeDao $enumShapeDao, EnumSmokeDao $enumSmokeDao, EnumTallnessDao $enumTallnessDao, CityDao $cityDao, IContainer $parent = NULL, $name = NULL) {
@@ -265,7 +243,7 @@ class AdvancedForm extends BaseForm {
 	 * funkce přidá sekci s údaji o těle
 	 */
 	private function addBodyFields() {
-//skupina pro políčka s tělem
+		/* skupina pro políčka s tělem */
 		$this->addGroup('Tělo');
 
 		$shapeTypes = $this->getShapeChoices();
@@ -334,7 +312,7 @@ class AdvancedForm extends BaseForm {
 	 * funkce přidá sekci s údaji o zájmech
 	 */
 	private function addIntrestedInFields() {
-//skupina pro políčka se zájmy koho potkat
+		/* skupina pro políčka se zájmy koho potkat */
 		$this->addGroup('Chce potkat');
 
 		$this->addCheckbox('men', 'muži');
@@ -349,7 +327,7 @@ class AdvancedForm extends BaseForm {
 	 * funkce přidá sekci s údaji o praktikách
 	 */
 	private function addPracticsFields() {
-//skupina pro políčka se sexuálními praktikami
+		/* skupina pro políčka se sexuálními praktikami */
 		$this->addGroup('Sexuální praktiky');
 
 		$this->addCheckbox('threesome', 'trojka');

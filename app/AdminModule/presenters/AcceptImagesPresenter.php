@@ -20,65 +20,37 @@ use NetteExt\Path\GalleryPathCreator;
 
 class AcceptImagesPresenter extends AdminSpacePresenter {
 
-	/**
-	 * @var \POS\Model\UserImageDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\ActivitiesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ActivitiesDao @inject */
 	public $ActivitiesDao;
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserGalleryDao @inject */
 	public $userGalleryDao;
 
-	/**
-	 * @var \POS\Model\CompetitionsImagesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CompetitionsImagesDao @inject */
 	public $competitionsImagesDao;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var Nette\Database\Table\Selection Uživatelské obrázky
-	 */
+	/** @var Nette\Database\Table\Selection Uživatelské obrázky */
 	public $userImages;
 
-	/**
-	 * @var Nette\Database\Table\Selection Obrázky ze soutěží.
-	 */
+	/** @var Nette\Database\Table\Selection Obrázky ze soutěží. */
 	public $compImages;
 
-	/**
-	 * @var Nette\Database\Table\Selection Ověřovací obrázky.
-	 */
+	/** @var Nette\Database\Table\Selection Ověřovací obrázky. */
 	public $verificationImages;
 
-	/**
-	 * @var Nette\Database\Table\Selection Neykontrolované automaticky schválené obrázky.
-	 */
+	/** @var Nette\Database\Table\Selection Neykontrolované automaticky schválené obrázky. */
 	public $userNotCheckImages;
 
-	/**
-	 * Načte neschválené obrázky z DB
-	 */
+	/** Načte neschválené obrázky z DB */
 	private function setImages() {
 		$this->verificationImages = $this->userImageDao->getVerifUnapprovedImages();
 		$this->compImages = $this->competitionsImagesDao->getUnapproved();

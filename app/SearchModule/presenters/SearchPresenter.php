@@ -15,112 +15,58 @@ class SearchPresenter extends SearchBasePresenter {
 	private $user;
 	private $fotos;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\UserPropertyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPropertyDao @inject */
 	public $userPropertyDao;
 
-	/**
-	 * @var \POS\Model\CityDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CityDao @inject */
 	public $cityDao;
 
-	/**
-	 * @var \POS\Model\DistrictDao
-	 * @inject
-	 */
+	/** @var \POS\Model\DistrictDao @inject */
 	public $districtDao;
 
-	/**
-	 * @var \POS\Model\RegionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\RegionDao @inject */
 	public $regionDao;
 
-	/**
-	 * uchovává parametry pro podrobné hledání
-	 * @var array
-	 */
+	/** uchovává parametry pro podrobné hledání @var array */
 	public $searchData;
 
-	/**
-	 * @var \POS\Model\UserCategoryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserCategoryDao @inject */
 	public $userCategoryDao;
 
-	/**
-	 * @var \POS\Model\EnumBraSizeDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumBraSizeDao @inject */
 	public $enumBraSizeDao;
 
-	/**
-	 * @var \POS\Model\EnumGraduationDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumGraduationDao @inject */
 	public $enumGraduationDao;
 
-	/**
-	 * @var \POS\Model\EnumHairColourDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumHairColourDao @inject */
 	public $enumHairColourDao;
 
-	/**
-	 * @var \POS\Model\EnumMaritalStateDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumMaritalStateDao @inject */
 	public $enumMaritalStateDao;
 
-	/**
-	 * @var \POS\Model\EnumOrientationDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumOrientationDao @inject */
 	public $enumOrientationDao;
 
-	/**
-	 * @var \POS\Model\EnumPenisWidthDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumPenisWidthDao @inject */
 	public $enumPenisWidthDao;
 
-	/**
-	 * @var \POS\Model\EnumPropertyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumPropertyDao @inject */
 	public $enumPropertyDao;
 
-	/**
-	 * @var \POS\Model\EnumShapeDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumShapeDao @inject */
 	public $enumShapeDao;
 
-	/**
-	 * @var \POS\Model\EnumSmokeDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumSmokeDao @inject */
 	public $enumSmokeDao;
 
-	/**
-	 * @var \POS\Model\EnumTallnessDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumTallnessDao @inject */
 	public $enumTallnessDao;
 
-	/**
-	 * @var \POS\Model\EnumVigorDao
-	 * @inject
-	 */
+	/** @var \POS\Model\EnumVigorDao @inject */
 	public $enumVigorDao;
 
 	/** @var int|boolean Znamení co se vyhledává. Když není zadáno = FALSE. */
