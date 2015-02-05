@@ -54,17 +54,17 @@ function prepareAutocomplete() {
 function processResult(data) {
 	var dataArray = [];
 	$.each(data, function (key, value) {
-				dataArray.push(value.user);
-			});
-			 $("#frm-allowUserForm-user_name").autocomplete({
-				source: dataArray
-			});
-			$.ui.autocomplete.filter = function (array, term) {
-				var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(term), "i");
-				return $.grep(array, function (value) {
-					return matcher.test(value.label || value.value || value);
-				});
-			};
+		dataArray.push(value.user);
+	});
+	 $("#frm-allowUserForm-user_name").autocomplete({
+		source: dataArray
+	});
+	$.ui.autocomplete.filter = function (array, term) {
+		var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(term), "i");
+		return $.grep(array, function (value) {
+			return matcher.test(value.label || value.value || value);
+		});
+	};
 }
 
 /**
