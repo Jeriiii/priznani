@@ -1,14 +1,24 @@
+{block head}
+{control css "gallery/component-gallery.less"}
+{/}
+
 {block content}
 
 <div class="top-container">
 	<div>
-		<a n:href=":Profil:Show: $gallery->userID">{$gallery->user->user_name|firstUpper}</a> <span class="slash">/</span> <span>Galerie {$gallery->name}</span>
+		<div class="float-left">
+			<a n:href=":Profil:Show: $gallery->userID">{$gallery->user->user_name|firstUpper}</a> 
+			<span class="slash">/</span> 
+			<span>Galerie {$gallery->name}</span>
+		</div>
+		{if $myGallery}
+		<div class="float-left">
+			<a n:href="Galleries:userGalleryChange $galleryID" class="btn-main btn-small btn-edit-2">
+				změnit
+			</a>
+		</div>
+		{/if}
 	</div>
-	{if $myGallery && $private && $paying}
-		<a href="{plink Galleries:userList $galleryID}" class="btn-main btn-small right">
-			nastavení soukromých galerií
-		</a>
-	{/if}
 </div>
 <div class="clear"></div>
 
