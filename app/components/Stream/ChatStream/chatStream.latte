@@ -8,15 +8,17 @@
 			<div id="stream-loader"><img src="{$basePath}/img/ajax-loader.gif"></div>
 		</div>
 		<div n:snippet="stream-messages" data-ajax-append="true">
-			{foreach $messages as $message}
-				<div class="stream-message">
-					<a n:href="Profil:Show: $message->id_sender">{$message->sender->user_name}</a>
-					<p>{$message->text}</p>
-				</div>
-			{/foreach}
+			{ifset $messages}
+				{foreach $messages as $message}
+					<div class="stream-message">
+						<a href="{plink Profil:Show: $message->id_sender}">{$message->sender->user_name}</a>
+						<p>{$message->text}</p>
+					</div>
+				{/foreach}
+			{/ifset}
 		</div>
 		<div n:snippet="messageNewForm" class="message-new-form">
-			{include #messageNewForm}
+			{control messageNewForm}
 		</div>
 	 </div>
 	 <div class="clear"></div>

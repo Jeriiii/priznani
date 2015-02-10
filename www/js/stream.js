@@ -11,7 +11,6 @@
 		var opts = $.extend({}, $.fn.stream.defaults, options);
 		setOpts(opts);
 		setAjaxLocation(opts);
-		//alert("sdf");
 		timeCheckStream();
 	};
 
@@ -59,6 +58,9 @@
 						$.fn.stream.run = false;//zastaví dotazování
 					}
 					if (data.snippets['snippet-profilStream-posts'] == "") {//pokud snippet už neobnovuje data
+						$.fn.stream.run = false;//zastaví dotazování
+					}
+					if (data.snippets['snippet-valChatMessages-stream-messages'] == "") {//pokud snippet už neobnovuje data
 						$.fn.stream.run = false;//zastaví dotazování
 					}
 				},

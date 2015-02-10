@@ -26,8 +26,9 @@ class ChatPresenter extends BasePresenter {
 
 	}
 
-	protected function createComponentChatMessages($name) {
-		return new ChatStream($this->messages, $this->chatMessagesDao, 30, $this, $name);
+	protected function createComponentValChatMessages($name) {
+		$valConversationID = 1;
+		return new ChatStream($this->chatMessagesDao, $this->loggedUser, $valConversationID, $this->messages, 30, $this, $name);
 	}
 
 }

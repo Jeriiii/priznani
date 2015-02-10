@@ -29,16 +29,25 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	private $limit;
 
 	/** @var ChatMessageDao */
-	private $chatMessageDao;
+	private $chatMessagesDao;
 
-	public function __construct(Selection $messages, ChatMessagesDao $chatMessagesDao, $limit = 30, IContainer $parent = NULL, $name = NULL) {
+	/** @var ActiveRow|ArrayHash */
+	private $loggedUser;
+
+	/** @var int ID konverzace */
+	private $conversationID;
+
+	public function __construct(ChatMessagesDao $chatMessagesDao, $loggedUser, $conversationID, Selection $messages = null, $limit = 10, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->limit = $limit;
 		$this->messages = $messages;
 		$this->chatMessagesDao = $chatMessagesDao;
+		$this->loggedUser = $loggedUser;
+		$this->conversationID = $conversationID;
 	}
 
 	public function render() {
+		$this->setData();
 		$this->template->setFile(dirname(__FILE__) . '/chatStream.latte');
 		$this->template->render();
 	}
@@ -48,10 +57,9 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	 * požadavku v závislosti na předaném offsetu (posunu od shora).
 	 * @param int $offset Offset předaný metodou handleGetMoreData. Při vyrendrování komponenty je nula.
 	 */
-	public function handleGetMoreData($offset, $limit) {
+	public function handleGetMoreData($offset) {
 		$this->offset = $offset;
-		$this->limit = $limit;
-		$this->setData($this->offset);
+		$this->setData($offset);
 
 		if ($this->presenter->isAjax()) {
 			$this->invalidateControl('stream-messages');
@@ -64,13 +72,18 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	 * Uloží předaný ofsset jako parametr třídy a invaliduje snippet s příspěvky
 	 * @param int $offset O kolik příspěvků se mám při načítání dalších příspěvků z DB posunout.
 	 */
-	public function setData($offset) {
-		$messages = $this->messages->limit($this->limit, $this->offset);
+	public function setData($offset = 0) {
+		if (!empty($offset)) {
+			$messages = $this->messages->limit($this->limit, $offset);
+		} else {
+			$messages = $this->messages->limit($this->limit);
+		}
+
 		$this->template->messages = $messages;
 	}
 
 	protected function createComponentMessageNewForm($name) {
-		return new MessageNewForm($this->chatMessagesDao, $this, $name);
+		return new MessageNewForm($this->chatMessagesDao, $this->loggedUser->id, $this->conversationID, $this, $name);
 	}
 
 }
