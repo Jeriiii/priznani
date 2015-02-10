@@ -14,6 +14,8 @@ namespace POSComponent\Stream;
 
 use Nette\ComponentModel\IContainer;
 use Nette\Database\Table\Selection;
+use Nette\Application\UI\Form\MessageNewForm;
+use POS\Model\ChatMessagesDao;
 
 class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 
@@ -23,9 +25,17 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	/** @var int Posun (zpráv) od konce konverzace. 0 = načti poslední zprávy z konverzace */
 	private $offset;
 
-	public function __construct(Selection $messages, IContainer $parent = NULL, $name = NULL) {
+	/** @var int Maximální počet zpráv načtených na jeden požadavek */
+	private $limit;
+
+	/** @var ChatMessageDao */
+	private $chatMessageDao;
+
+	public function __construct(Selection $messages, ChatMessagesDao $chatMessagesDao, $limit = 30, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
+		$this->limit = $limit;
 		$this->messages = $messages;
+		$this->chatMessagesDao = $chatMessagesDao;
 	}
 
 	public function render() {
@@ -57,6 +67,10 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	public function setData($offset) {
 		$messages = $this->messages->limit($this->limit, $this->offset);
 		$this->template->messages = $messages;
+	}
+
+	protected function createComponentMessageNewForm($name) {
+		return new MessageNewForm($this->chatMessagesDao, $this, $name);
 	}
 
 }

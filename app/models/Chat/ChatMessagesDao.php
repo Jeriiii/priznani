@@ -25,6 +25,7 @@ class ChatMessagesDao extends AbstractDao {
 	const COLUMN_READED = "readed";
 	const COLUMN_CHECKED_BY_CRON = "checked_by_cron";
 	const COLUMN_SEND_NOTIFY = "sendNotify";
+	const COLUMN_CONVERSATION_ID = "id_conversation";
 
 
 	/* priznakove konstanty */
@@ -52,6 +53,24 @@ class ChatMessagesDao extends AbstractDao {
 		return $sel->insert(array(
 				self::COLUMN_ID_SENDER => $idSender,
 				self::COLUMN_ID_RECIPIENT => $idRecipient,
+				self::COLUMN_TEXT => $text,
+				self::COLUMN_TYPE => self::TYPE_TEXT_MESSAGE,
+				self::COLUMN_READED => self::MESSAGE_UNREADED
+		));
+	}
+
+	/**
+	 * Přidá novou textovou zprávu ("odešle" novou zprávu)
+	 * @param int $idSender odesilatel zprávy
+	 * @param int $idConversation ID konverzace
+	 * @param String $text text zprávy
+	 * @return Nette\Database\Table\IRow | int | bool vytvořená zpráva
+	 */
+	public function addConversationMessage($idSender, $idConversation, $text) {
+		$sel = $this->getTable();
+		return $sel->insert(array(
+				self::COLUMN_ID_SENDER => $idSender,
+				self::COLUMN_CONVERSATION_ID => $idConversation,
 				self::COLUMN_TEXT => $text,
 				self::COLUMN_TYPE => self::TYPE_TEXT_MESSAGE,
 				self::COLUMN_READED => self::MESSAGE_UNREADED
@@ -91,6 +110,18 @@ class ChatMessagesDao extends AbstractDao {
 	public function getMessage($id) {
 		$sel = $this->getTable();
 		return $sel->wherePrimary($id);
+	}
+
+	/**
+	 * Vrátí zprávy z konverzace.
+	 * @param int $conversationID Id konverzace.
+	 * @return Nette\Database\Table\Selection zpráva
+	 */
+	public function getMessagesByConversation($conversationID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_CONVERSATION_ID, $conversationID);
+		$sel->order("id DESC");
+		return $sel;
 	}
 
 	/**
