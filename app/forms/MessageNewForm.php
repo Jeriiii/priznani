@@ -51,7 +51,7 @@ class MessageNewForm extends BaseForm {
 		return $this;
 	}
 
-	public function submitted(CommentNewForm $form) {
+	public function submitted(MessageNewForm $form) {
 		$values = $form->getValues();
 		$this->chatMessagesDao->addConversationMessage(
 			$this->senderID, $this->conversationID, $values->message
