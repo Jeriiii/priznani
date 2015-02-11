@@ -1,0 +1,16 @@
+{block content}
+<h2>Valentýnský chat</h2>
+{control valChatMessages}
+{/block}
+
+{block foot}
+{control js 'stream.js'}
+<script>
+	$(document).ready(function () {
+		$("body").stream({
+			addoffset: 30,
+			offsetName: "valChatMessages-offset"
+		});
+	});
+</script>
+{/block}

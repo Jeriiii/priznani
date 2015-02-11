@@ -17,12 +17,12 @@ class ChatPresenter extends BasePresenter {
 	/** @var Selection */
 	public $messages;
 
-	public function actionValentin() {
+	public function actionValentyn() {
 		$valentinConversationID = 1;
 		$this->messages = $this->chatMessagesDao->getMessagesByConversation($valentinConversationID);
 	}
 
-	public function renderValentin() {
+	public function renderValentyn() {
 
 	}
 
