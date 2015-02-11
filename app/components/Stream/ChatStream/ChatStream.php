@@ -37,6 +37,9 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	/** @var int ID konverzace */
 	private $conversationID;
 
+	/** 	@var bool flag zda už byla nastavena data pro stream */
+	private $dataSet = false;
+
 	public function __construct(ChatMessagesDao $chatMessagesDao, $loggedUser, $conversationID, Selection $messages = null, $limit = 10, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->limit = $limit;
@@ -47,7 +50,7 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	}
 
 	public function render() {
-		if (!$this->getPresenter()->isAjax()) {
+		if (!$this->dataSet) {
 			$this->setData();
 		}
 		$this->template->setFile(dirname(__FILE__) . '/chatStream.latte');
@@ -75,6 +78,7 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	 * @param int $offset O kolik příspěvků se mám při načítání dalších příspěvků z DB posunout.
 	 */
 	public function setData($offset = 0) {
+		$this->dataSet = true;
 		if (!empty($offset)) {
 			$messages = $this->messages->limit($this->limit, $offset);
 		} else {
