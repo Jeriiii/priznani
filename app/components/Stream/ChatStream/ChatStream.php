@@ -37,8 +37,8 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	/** @var int ID konverzace */
 	private $conversationID;
 
-	/** @var bool flag zda už byla nastavena data pro stream */
-	private $dataSet = false;
+	/** @var \Nette\Http\SessionSection sekce sešny pro uchovávání údajů mezi požadavky */
+	private $session;
 
 	public function __construct(ChatMessagesDao $chatMessagesDao, $loggedUser, $conversationID, Selection $messages = null, $limit = 10, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
@@ -47,11 +47,14 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 		$this->chatMessagesDao = $chatMessagesDao;
 		$this->loggedUser = $loggedUser;
 		$this->conversationID = $conversationID;
+		$this->session = $this->getPresenter()->getSession("chat-conversation"); //pro uchovávání id
 	}
 
 	public function render() {
-		if (!$this->dataSet) {
+		if (!$this->getPresenter()->isAjax()) {
 			$this->setData();
+			$this->session->lastId = 0;
+			$this->session->lastId = $this->messages->fetch()->id; //při obnovení stránky
 		}
 		$this->template->setFile(dirname(__FILE__) . '/chatStream.latte');
 		$this->template->render();
@@ -74,22 +77,40 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	}
 
 	/**
+	 * Tuto metodu zavolejte ze metody render.
+	 * Do snippetu s novými zprávami načte všechny zprávy s novějším id než je dané id.
+	 */
+	public function handleGetNewData() {
+		$lastId = $this->session->lastId;
+		$newMessages = $this->chatMessagesDao->getNewMessagesFromConversation($this->conversationID, $lastId);
+		foreach ($newMessages as $message) {//zjištění id poslední zprávy
+			$lastId = $message->id;
+		}
+		//$this->session->lastId = $lastId;
+		$this->template->newMessages = $newMessages;
+		if ($this->presenter->isAjax()) {
+			$this->invalidateControl('new-stream-messages');
+		} else {
+			$this->redirect('this');
+		}
+	}
+
+	/**
 	 * Uloží předaný ofsset jako parametr třídy a invaliduje snippet s příspěvky
 	 * @param int $offset O kolik příspěvků se mám při načítání dalších příspěvků z DB posunout.
 	 */
 	public function setData($offset = 0) {
-		$this->dataSet = true;
 		if (!empty($offset)) {
 			$messages = $this->messages->limit($this->limit, $offset);
 		} else {
 			$messages = $this->messages->limit($this->limit);
 		}
-
+		/* přetočení prvků, aby byla nejnovější zpráva poslední ze zpráv omezených limitem */
 		$this->template->messages = $this->reverseSelection($messages);
 	}
 
 	/**
-	 * Vrátí Selection v opačném pořadí ve formě pole
+	 * Vrátí Selection v opačném pořadí ve formě pole - tj. vrací pole s prvky selection, akorát obráceně
 	 */
 	public function reverseSelection(Selection $selection) {
 		$retArray = array();

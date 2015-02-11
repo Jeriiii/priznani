@@ -18,6 +18,17 @@
 				{/foreach}
 			{/ifset}
 		</div>
+		<div n:snippet="new-stream-messages" {* data-ajax-append="true"*}>
+			{ifset $newMessages}
+				{foreach $newMessages as $message}
+					<div class="stream-message">
+						<a href="{plink Profil:Show: $message->id_sender}">{$message->sender->user_name}</a>
+						<p>{$message->text}</p>
+					</div>
+				{/foreach}
+			{/ifset}
+		</div>
+		<a id="refresh-conversation" class="ajax" n:href="getNewData!">{* načíst nové zprávy *}</a>
 		<div n:snippet="messageNewForm" class="message-new-form">
 			{control messageNewForm}
 		</div>

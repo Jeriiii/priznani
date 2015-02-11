@@ -14,5 +14,13 @@
 			msgText: "Žádné předchozí zprávy nebyly nalezeny."
 		});
 	});
+
+	/* obnovovací funkce */
+	$(document).ready(function () {
+		var refreshButton = $("#refresh-conversation");
+		setInterval(function(){
+			refreshButton.trigger('click');
+		}, 2000);/* zde nastavit čas obnovování */
+	});
 </script>
 {/block}

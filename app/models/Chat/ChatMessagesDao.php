@@ -125,6 +125,19 @@ class ChatMessagesDao extends AbstractDao {
 	}
 
 	/**
+	 * Vrátí z konverzace zprávy, které jsou novější než zpráva s daným id.
+	 * @param int $conversationID id konverzace
+	 * @param int $lastId id poslední známé zprávy
+	 * @return Nette\Database\Table\Selection zprávy
+	 */
+	public function getNewMessagesFromConversation($conversationID, $lastId) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID . " > ?", $lastId); /* s přibývajícími zprávami je selektivnější filtrovat nejdřív nové */
+		$sel->where(self::COLUMN_CONVERSATION_ID, $conversationID);
+		return $sel;
+	}
+
+	/**
 	 * Nastaví zprávu jako přečtenou/nepřečtenou
 	 * Nekontroluje příjemce zpráv.
 	 * @param int $id id zprávy
