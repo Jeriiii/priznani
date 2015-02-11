@@ -56,6 +56,7 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 			$this->session->lastId = 0;
 			$this->session->lastId = $this->messages->fetch()->id; //při obnovení stránky
 		}
+		$this->template->loggedUser = $this->loggedUser;
 		$this->template->setFile(dirname(__FILE__) . '/chatStream.latte');
 		$this->template->render();
 	}

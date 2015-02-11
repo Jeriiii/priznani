@@ -1,4 +1,4 @@
-<section id="chat-messages">
+<section id="chat-stream">
 	<div id="stream">
 		<div class="loaderbar">
 			<div class="stream-btn-next">
@@ -12,8 +12,12 @@
 			{ifset $messages}
 				{foreach $messages as $message}
 					<div class="stream-message">
-						<a href="{plink Profil:Show: $message->id_sender}">{$message->sender->user_name}</a>
-						<p>{$message->text}</p>
+						<div class="message-user">
+						{$message->sender|showProfMinDiv}
+						</div>
+						<div class="message-arrow"></div>
+						<p class="message-text">{$message->text}</p>
+						<div class="clear"></div>
 					</div>
 				{/foreach}
 			{/ifset}
@@ -22,16 +26,25 @@
 			{ifset $newMessages}
 				{foreach $newMessages as $message}
 					<div class="stream-message">
-						<a href="{plink Profil:Show: $message->id_sender}">{$message->sender->user_name}</a>
-						<p>{$message->text}</p>
+						<div class="message-user">
+						{$message->sender|showProfMinDiv}
+						</div>
+						<div class="message-arrow"></div>
+						<p class="message-text">{$message->text}</p>
+						<div class="clear"></div>
 					</div>
 				{/foreach}
 			{/ifset}
 		</div>
 		<a id="refresh-conversation" class="ajax" n:href="getNewData!">{* načíst nové zprávy *}</a>
-		<div n:snippet="messageNewForm" class="message-new-form">
+	</div>
+	<div class="message-new-form">
+		{$loggedUser|showProfMinDiv}
+		<div class="message-arrow"></div>
+		<div n:snippet="messageNewForm" class="message-new-snippet">
 			{control messageNewForm}
 		</div>
-	 </div>
-	 <div class="clear"></div>
+		<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
 </section>

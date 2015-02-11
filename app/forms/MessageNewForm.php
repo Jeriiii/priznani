@@ -44,7 +44,8 @@ class MessageNewForm extends BaseForm {
 		/* formulář */
 		$this->addText("message", "", 400, 400)
 			->addRule(Form::FILLED, "Musíte zadat zprávu.")
-			->addRule(Form::MAX_LENGTH, "Zpráva nesmí obsahovat více než 400 znaků.", 400);
+			->addRule(Form::MAX_LENGTH, "Zpráva nesmí obsahovat více než 400 znaků.", 400)
+			->setAttribute("autofocus");
 		$this->addSubmit("submit", "ODESLAT");
 		$this->setBootstrapRender();
 
