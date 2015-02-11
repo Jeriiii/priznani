@@ -239,6 +239,7 @@ class ChatMessagesDao extends AbstractDao {
 	 */
 	public function getLastTextMessages($idUser, $amount = 10, $offset = 0) {
 		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID_RECIPIENT, "IS NOT NULL");
 		$sel->where(self::COLUMN_ID_SENDER . '=? OR ' . self::COLUMN_ID_RECIPIENT . '=?', $idUser, $idUser);
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		$sel->order(self::COLUMN_ID . ' DESC');
@@ -256,6 +257,7 @@ class ChatMessagesDao extends AbstractDao {
 	 */
 	public function getLastTextMessagesBetweenUsers($idUser, $idSecondUser, $amount = 10, $offset = 0) {
 		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID_RECIPIENT, "IS NOT NULL");
 		$sel->where(self::COLUMN_ID_SENDER . '=? AND ' . self::COLUMN_ID_RECIPIENT . '=?' .
 			' OR ' . self::COLUMN_ID_RECIPIENT . '=? AND ' . self::COLUMN_ID_SENDER . '=?', $idUser, $idSecondUser, $idUser, $idSecondUser);
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
@@ -274,6 +276,7 @@ class ChatMessagesDao extends AbstractDao {
 	 */
 	public function getLastTextMessagesBy($idSender, $idRecipient, $amount = 10, $offset = 0) {
 		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID_RECIPIENT, "IS NOT NULL");
 		$sel->where(self::COLUMN_ID_SENDER, $idSender);
 		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
@@ -293,6 +296,7 @@ class ChatMessagesDao extends AbstractDao {
 	public function getLastMessageFromEachSender($idUser, $limit = 10, $offset = 0) {
 		return $this->database->query('SELECT *
 										FROM (SELECT * FROM chat_messages ORDER BY id DESC) AS a
+										WHERE id_recipient IS NOT NULL
 										WHERE id_recipient = ? OR id_sender = ?
 										GROUP BY id_recipient, id_sender DESC
 										LIMIT ' . $limit . ';', $idUser, $idUser);
@@ -309,6 +313,7 @@ class ChatMessagesDao extends AbstractDao {
 	public function getLastConversationMessagesIDs($idUser, $limit = 10, $offset = 0) {
 		$sel = $this->getTable();
 		$sel->select('DISTINCT ' . self::COLUMN_ID_SENDER . ', ' . self::COLUMN_ID_RECIPIENT);
+		$sel->where(self::COLUMN_ID_RECIPIENT, "IS NOT NULL");
 		$sel->where(self::COLUMN_ID_RECIPIENT . '= ?' . ' OR ' . self::COLUMN_ID_SENDER . ' = ?', $idUser, $idUser);
 		$sel->order(self::COLUMN_ID . ' DESC');
 		$sel->limit($limit, $offset);

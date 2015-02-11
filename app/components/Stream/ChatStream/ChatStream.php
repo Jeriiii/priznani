@@ -49,7 +49,12 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	public function render() {
 		if (!$this->getPresenter()->isAjax()) {
 			$this->setData();
-			$this->template->lastId = $this->messages->fetch()->id; //při obnovení stránky, počítá s tím, že messages už nejsou potřeba (převedeny do pole)
+			$lastMessage = $this->messages->fetch(); //při obnovení stránky, počítá s tím, že messages už nejsou potřeba (převedeny do pole)
+			if ($lastMessage) {
+				$this->template->lastId = $lastMessage->id;
+			} else {
+				$this->template->lastId = 0;
+			}
 		}
 		$this->template->loggedUser = $this->loggedUser;
 		$this->template->setFile(dirname(__FILE__) . '/chatStream.latte');

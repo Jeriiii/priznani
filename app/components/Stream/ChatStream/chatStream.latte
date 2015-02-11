@@ -46,6 +46,7 @@
 		</div>
 		<a id="refresh-conversation" class="ajax" n:href="getNewData!">{* načíst nové zprávy *}</a>
 	</div>
+	{ifset $loggedUser}
 	<div class="message-new-form">
 		{$loggedUser|showProfMinDiv}
 		<div class="message-arrow"></div>
@@ -59,5 +60,8 @@
 		</div>
 		<div class="clear"></div>
 	</div>
+	{else}
+		<p>Přispívat budeš moci pouze pokud se <a href="{plink "DatingRegistration:"}" class="red-link" title="Registruj se">zaregistruješ</a>.</p>
+	{/ifset}
 	<div class="clear"></div>
 </section>
