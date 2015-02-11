@@ -37,7 +37,7 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	/** @var int ID konverzace */
 	private $conversationID;
 
-	/** 	@var bool flag zda už byla nastavena data pro stream */
+	/** @var bool flag zda už byla nastavena data pro stream */
 	private $dataSet = false;
 
 	public function __construct(ChatMessagesDao $chatMessagesDao, $loggedUser, $conversationID, Selection $messages = null, $limit = 10, IContainer $parent = NULL, $name = NULL) {

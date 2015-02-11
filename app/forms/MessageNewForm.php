@@ -56,14 +56,15 @@ class MessageNewForm extends BaseForm {
 		$this->chatMessagesDao->addConversationMessage(
 			$this->senderID, $this->conversationID, $values->message
 		);
-
-		if ($this->presenter->isAjax()) {
-			$form->clearFields();
-			$this->chatStream->redrawControl('messageNewForm');
-			$this->chatStream->redrawControl('stream-messages');
-		} else {
-			$this->presenter->redirect('this');
-		}
+		$this->presenter->redirect('this');
+		/* odkomentovat v připadě obnovování snippetu, nutno odladit */
+		/* if ($this->presenter->isAjax()) {
+		  $form->clearFields();
+		  $this->chatStream->redrawControl('messageNewForm');
+		  $this->chatStream->redrawControl('stream-messages');
+		  } else {
+		  $this->presenter->redirect('this');
+		  } */
 	}
 
 }
