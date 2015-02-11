@@ -12,15 +12,22 @@
 <script>
 	$(document).ready(function () {
 		$("body").stream({
-			addoffset: 10,
+			addoffset: 30,
 			offsetName: "valChatMessages-offset",
 			msgElement: ".stream-info-message",
 			msgText: "Žádné předchozí zprávy nebyly nalezeny."
 		});
 	});
 
-	/* obnovovací funkce */
+
 	$(document).ready(function () {
+		$("#chat-stream #stream").scrollTop($("#chat-stream #stream").prop("scrollHeight"));/* posunutí na konec */
+
+		$("#frm-valChatMessages-messageNewForm").submit(function(){
+			$("#chat-stream #stream").scrollTop($("#chat-stream #stream").prop("scrollHeight"));/* posunutí na konec */
+		});
+
+		/* obnovovací funkce */
 		var refreshButton = $("#refresh-conversation");
 		setInterval(function(){
 			refreshButton.trigger('click');
