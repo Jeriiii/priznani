@@ -85,7 +85,18 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 			$messages = $this->messages->limit($this->limit);
 		}
 
-		$this->template->messages = $messages;
+		$this->template->messages = $this->reverseSelection($messages);
+	}
+
+	/**
+	 * Vrátí Selection v opačném pořadí ve formě pole
+	 */
+	public function reverseSelection(Selection $selection) {
+		$retArray = array();
+		foreach ($selection as $selItem) {
+			array_unshift($retArray, $selItem);
+		}
+		return $retArray;
 	}
 
 	protected function createComponentMessageNewForm($name) {
