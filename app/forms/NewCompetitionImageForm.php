@@ -59,7 +59,7 @@ class NewCompetitionImageForm extends UserGalleryImagesBaseForm {
 
 		$this->addImageFields(self::NUMBER_OF_IMAGE);
 
-		$this->addGroup("Uživatelské údaje");
+		$this->addGroup("Kontaktní údaje výherce (nezveřejníme)");
 		$this->addText('name', 'Jméno:')
 			->addRule(Form::FILLED, 'Prosím vyplňte jméno');
 		$this->addText('surname', 'Příjmení:')
