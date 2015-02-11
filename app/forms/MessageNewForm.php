@@ -63,7 +63,7 @@ class MessageNewForm extends BaseForm {
 		if ($this->presenter->isAjax()) {
 			$form->clearFields();
 			$this->chatStream->redrawControl('messageNewForm');
-			$this->chatStream->redrawControl('new-stream-messages');
+			/* nepřekreslovat nové zprávy - smaže to předchozí nové zprávy */
 		} else {
 			$this->presenter->redirect('this');
 		}

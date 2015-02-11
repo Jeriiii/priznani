@@ -7,6 +7,9 @@
 			<div class="stream-message loading-message"></div>
 			<div id="stream-loader"><img src="{$basePath}/img/ajax-loader.gif"></div>
 		</div>
+		{ifset $lastId}
+			<script>var lastId = {$lastId};</script>
+		{/ifset}
 		<div class="stream-info-message"></div>
 		<div n:snippet="stream-messages" data-ajax-prepend="true">
 			{ifset $messages}
@@ -22,7 +25,7 @@
 				{/foreach}
 			{/ifset}
 		</div>
-		<div n:snippet="new-stream-messages" {* data-ajax-append="true"*}>
+		<div n:snippet="new-stream-messages" data-ajax-append="true">
 			{ifset $newMessages}
 				{foreach $newMessages as $message}
 					<div class="stream-message">
@@ -33,6 +36,11 @@
 						<p class="message-text">{$message->text}</p>
 						<div class="clear"></div>
 					</div>
+					{if $iterator->isLast()}
+						<script>
+							lastId = {$message->id};
+						</script>
+					{/if}
 				{/foreach}
 			{/ifset}
 		</div>
@@ -43,6 +51,11 @@
 		<div class="message-arrow"></div>
 		<div n:snippet="messageNewForm" class="message-new-snippet">
 			{control messageNewForm}
+			<script>
+				if (typeof pushOnEnd == 'function') { /* pokud funkce existuje */
+					pushOnEnd();
+				}
+			</script>
 		</div>
 		<div class="clear"></div>
 	</div>

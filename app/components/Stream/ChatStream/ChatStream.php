@@ -37,9 +37,6 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	/** @var int ID konverzace */
 	private $conversationID;
 
-	/** @var \Nette\Http\SessionSection sekce sešny pro uchovávání údajů mezi požadavky */
-	private $session;
-
 	public function __construct(ChatMessagesDao $chatMessagesDao, $loggedUser, $conversationID, Selection $messages = null, $limit = 10, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->limit = $limit;
@@ -47,14 +44,12 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 		$this->chatMessagesDao = $chatMessagesDao;
 		$this->loggedUser = $loggedUser;
 		$this->conversationID = $conversationID;
-		$this->session = $this->getPresenter()->getSession("chat-conversation"); //pro uchovávání id
 	}
 
 	public function render() {
 		if (!$this->getPresenter()->isAjax()) {
 			$this->setData();
-			$this->session->lastId = 0;
-			$this->session->lastId = $this->messages->fetch()->id; //při obnovení stránky
+			$this->template->lastId = $this->messages->fetch()->id; //při obnovení stránky, počítá s tím, že messages už nejsou potřeba (převedeny do pole)
 		}
 		$this->template->loggedUser = $this->loggedUser;
 		$this->template->setFile(dirname(__FILE__) . '/chatStream.latte');
@@ -80,14 +75,10 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	/**
 	 * Tuto metodu zavolejte ze metody render.
 	 * Do snippetu s novými zprávami načte všechny zprávy s novějším id než je dané id.
+	 * @param int $lastId dané id
 	 */
-	public function handleGetNewData() {
-		$lastId = $this->session->lastId;
+	public function handleGetNewData($lastId) {
 		$newMessages = $this->chatMessagesDao->getNewMessagesFromConversation($this->conversationID, $lastId);
-		foreach ($newMessages as $message) {//zjištění id poslední zprávy
-			$lastId = $message->id;
-		}
-		//$this->session->lastId = $lastId;
 		$this->template->newMessages = $newMessages;
 		if ($this->presenter->isAjax()) {
 			$this->invalidateControl('new-stream-messages');

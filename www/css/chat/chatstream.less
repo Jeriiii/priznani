@@ -13,9 +13,10 @@
 }
 
 #chat-stream{
+	width: 100%;
+	max-width: 500px;
 	
-	#stream{
-		width: 100%;
+	#stream{		
 		height: 600px;
 		padding: 10px 0 25px 0; 
 		overflow: auto;
@@ -27,12 +28,12 @@
 		padding: 0.5% 0;
 		
 		.message-user{
-			width: 5%;
+			width: 8%;
 			float:left;
 		}
 		.message-text{
 			float:left;
-			width: 87%;
+			width: 82%;
 			min-height: 40px;
 			padding: 5px 15px;
 			.conversation-box();
@@ -60,14 +61,14 @@
 		
 		.message-new-snippet{
 			float: left;
-			width: 87%;
+			width: 82%;
 			padding: 0;
 			
 		}
 		
 		.generatedProfile{
 			float: left;
-			width: 5%;
+			width: 8%;
 		}
 		
 		input[type='text']{
@@ -120,14 +121,15 @@
 	}
 	.message-text, .message-new-snippet{
 		float: right !important;
-		width: 86% !important;
+		width: 82% !important;
 	}
 	.message-new-snippet{
-		margin-right: 5%;
+		margin-right: 8%;
 	}
 }
 
 @media (max-width: 600px) {
+	
 	#pagename span{
 		display: none;
 	}
