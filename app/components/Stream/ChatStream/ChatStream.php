@@ -47,7 +47,9 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	}
 
 	public function render() {
-		$this->setData();
+		if (!$this->getPresenter()->isAjax()) {
+			$this->setData();
+		}
 		$this->template->setFile(dirname(__FILE__) . '/chatStream.latte');
 		$this->template->render();
 	}
