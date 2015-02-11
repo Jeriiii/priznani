@@ -55,7 +55,7 @@ class NewCompetitionImageForm extends UserGalleryImagesBaseForm {
 
 		$this->galleryID = $galleryID;
 
-		$this->addGroup("Obrázek");
+		$this->addGroup("Soutěžní fotka");
 
 		$this->addImageFields(self::NUMBER_OF_IMAGE);
 
@@ -66,6 +66,10 @@ class NewCompetitionImageForm extends UserGalleryImagesBaseForm {
 			->addRule(Form::FILLED, 'Prosím vyplňte příjmení');
 		$this->addText('phone', 'Telefon:')
 			->addRule(Form::FILLED, 'Prosím vyplňte telefon');
+		$this->addCheckbox("agreement", Html::el('a')
+				->href("http://datenode.cz/soutez/fotografie.pdf")
+				->setHtml('Souhlasím s podmínkami'))
+			->addRule(Form::FILLED, "Musíte souhlasit s podmínkami.");
 
 		$this->addSubmit("submit", "Přidat fotku")->setAttribute('class', 'btn-main medium');
 
@@ -77,6 +81,7 @@ class NewCompetitionImageForm extends UserGalleryImagesBaseForm {
 	public function submitted(NewCompetitionImageForm $form) {
 		$values = $form->values;
 
+		unset($values->agreement);
 		$images = $this->getArrayWithImages($values, self::NUMBER_OF_IMAGE);
 		$isFill = $this->isFillImage($images);
 

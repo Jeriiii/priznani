@@ -103,7 +103,10 @@ class UsersCompetitionsPresenter extends BasePresenter {
 
 		if (empty($imageID)) {
 			/* zatím žádný obrázek v galerii není */
-			$this->redirect("Competition:uploadImage");
+			if (empty($galleryID)) {
+				$this->gallery = $this->usersCompetitionsDao->findLast();
+			}
+			$this->redirect("Competition:uploadCompetitionImage", $this->gallery->id);
 		} else {
 			// obrázek nalezen, nastavení obrázku do presenteru
 			$this->imageID = $imageID;
