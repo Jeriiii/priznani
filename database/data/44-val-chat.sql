@@ -1,2 +1,2 @@
 /* prvni kategorie je valentzn */
-INSERT INTO `pos`.`conversation` (`name`) VALUES ('Valentýn');
+INSERT INTO `conversation` (`id`,`name`) VALUES (1,'Valentýn');

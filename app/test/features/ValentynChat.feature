@@ -10,7 +10,6 @@ Feature: Testing chat on valentyn
 		And I am on "/chat/valentyn"
 		When I fill in <message> for "frm-valChatMessages-messageNewForm-message"
 		And I press "frm-valChatMessages-messageNewForm-submit"
-		And I look on the page
 		Then I should see <message>
 		
 		Examples:
