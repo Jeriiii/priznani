@@ -9,7 +9,7 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB;
 
 ALTER TABLE `conversation`
-	CHANGE COLUMN `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT FIRST;
+	CHANGE COLUMN `id` `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST;
 
 /* propojení s tabulkami zpráv */
 ALTER TABLE `chat_messages`

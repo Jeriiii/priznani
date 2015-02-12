@@ -1,18 +1,13 @@
+{block head}
+	{control css 'chat/chatstream.less'}
+{/}
+
 {block content}
 <h2>Valentýnský chat</h2>
 {control valChatMessages}
 {/block}
 
 {block foot}
-{control js 'stream.js'}
-<script>
-	$(document).ready(function () {
-		$("body").stream({
-			addoffset: 30,
-			offsetName: "valChatMessages-offset",
-			msgElement: ".stream-info-message",
-			msgText: "Žádné předchozí zprávy nebyly nalezeny."
-		});
-	});
-</script>
+{control js 'stream.js', "chat/stream-chat-init.js"}
+
 {/block}

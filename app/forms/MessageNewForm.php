@@ -42,8 +42,10 @@ class MessageNewForm extends BaseForm {
 		$this->ajax();
 
 		/* formulář */
-		$this->addTextArea("message", "", 60, 4)
-			->addRule(Form::FILLED, "Musíte zadat zprávu.");
+		$this->addText("message", "", 400, 400)
+			->addRule(Form::FILLED, "Musíte zadat zprávu.")
+			->addRule(Form::MAX_LENGTH, "Zpráva nesmí obsahovat více než 400 znaků.", 400)
+			->setAttribute("autofocus");
 		$this->addSubmit("submit", "ODESLAT");
 		$this->setBootstrapRender();
 
@@ -57,10 +59,11 @@ class MessageNewForm extends BaseForm {
 			$this->senderID, $this->conversationID, $values->message
 		);
 
+
 		if ($this->presenter->isAjax()) {
 			$form->clearFields();
 			$this->chatStream->redrawControl('messageNewForm');
-			$this->chatStream->redrawControl('stream-messages');
+			/* nepřekreslovat nové zprávy - smaže to předchozí nové zprávy */
 		} else {
 			$this->presenter->redirect('this');
 		}

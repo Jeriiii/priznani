@@ -37,9 +37,6 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	/** @var int ID konverzace */
 	private $conversationID;
 
-	/** 	@var bool flag zda už byla nastavena data pro stream */
-	private $dataSet = false;
-
 	public function __construct(ChatMessagesDao $chatMessagesDao, $loggedUser, $conversationID, Selection $messages = null, $limit = 10, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->limit = $limit;
@@ -50,9 +47,16 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	}
 
 	public function render() {
-		if (!$this->dataSet) {
+		if (!$this->getPresenter()->isAjax()) {
 			$this->setData();
+			$lastMessage = $this->messages->fetch(); //při obnovení stránky, počítá s tím, že messages už nejsou potřeba (převedeny do pole)
+			if ($lastMessage) {
+				$this->template->lastId = $lastMessage->id;
+			} else {
+				$this->template->lastId = 0;
+			}
 		}
+		$this->template->loggedUser = $this->loggedUser;
 		$this->template->setFile(dirname(__FILE__) . '/chatStream.latte');
 		$this->template->render();
 	}
@@ -74,18 +78,43 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	}
 
 	/**
+	 * Tuto metodu zavolejte ze metody render.
+	 * Do snippetu s novými zprávami načte všechny zprávy s novějším id než je dané id.
+	 * @param int $lastId dané id
+	 */
+	public function handleGetNewData($lastId) {
+		$newMessages = $this->chatMessagesDao->getNewMessagesFromConversation($this->conversationID, $lastId);
+		$this->template->newMessages = $newMessages;
+		if ($this->presenter->isAjax()) {
+			$this->invalidateControl('new-stream-messages');
+		} else {
+			$this->redirect('this');
+		}
+	}
+
+	/**
 	 * Uloží předaný ofsset jako parametr třídy a invaliduje snippet s příspěvky
 	 * @param int $offset O kolik příspěvků se mám při načítání dalších příspěvků z DB posunout.
 	 */
 	public function setData($offset = 0) {
-		$this->dataSet = true;
 		if (!empty($offset)) {
 			$messages = $this->messages->limit($this->limit, $offset);
 		} else {
 			$messages = $this->messages->limit($this->limit);
 		}
+		/* přetočení prvků, aby byla nejnovější zpráva poslední ze zpráv omezených limitem */
+		$this->template->messages = $this->reverseSelection($messages);
+	}
 
-		$this->template->messages = $messages;
+	/**
+	 * Vrátí Selection v opačném pořadí ve formě pole - tj. vrací pole s prvky selection, akorát obráceně
+	 */
+	public function reverseSelection(Selection $selection) {
+		$retArray = array();
+		foreach ($selection as $selItem) {
+			array_unshift($retArray, $selItem);
+		}
+		return $retArray;
 	}
 
 	protected function createComponentMessageNewForm($name) {
