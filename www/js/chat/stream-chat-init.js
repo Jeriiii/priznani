@@ -15,36 +15,41 @@ function focusMessageField() {
 	$("#frm-valChatMessages-messageNewForm-message").focus();/* posunutí na konec */
 }
 
-/**
- * Načte nové zprávy do snippetu s novými zprávami - to posléze opakuje
- * @param { int } timeout čas opakování [ms]
- */
-function getNewMessages(timeout) {
-	setTimeout(function () {
-		$.nette.ajax({
-			url: $("#refresh-conversation").attr('href') + "&valChatMessages-lastId=" + lastId,
-			success: function () {
-				getNewMessages(timeout);
-			},
-			error: function () {
-				getNewMessages(timeout + 200);
-			}
+;
+$(function () {
+
+
+	/**
+	 * Načte nové zprávy do snippetu s novými zprávami - to posléze opakuje
+	 * @param { int } timeout čas opakování [ms]
+	 */
+	function getNewMessages(timeout) {
+		setTimeout(function () {
+			$.nette.ajax({
+				url: $("#refresh-conversation").attr('href') + "&valChatMessages-lastId=" + lastId,
+				success: function () {
+					getNewMessages(timeout);
+				},
+				error: function () {
+					getNewMessages(timeout + 200);
+				}
+			});
+			;
+		}, timeout);/* zde nastavit čas obnovování */
+	}
+
+
+	$(document).ready(function () {
+		$("body").stream({
+			addoffset: 30,
+			offsetName: "valChatMessages-offset",
+			msgElement: ".stream-info-message",
+			msgText: "Žádné předchozí zprávy nebyly nalezeny."
 		});
-		;
-	}, timeout);/* zde nastavit čas obnovování */
-}
-
-
-$(document).ready(function () {
-	$("body").stream({
-		addoffset: 30,
-		offsetName: "valChatMessages-offset",
-		msgElement: ".stream-info-message",
-		msgText: "Žádné předchozí zprávy nebyly nalezeny."
 	});
-});
 
-$(document).ready(function () {
-	pushOnEnd();
-	getNewMessages(4000);
+	$(document).ready(function () {
+		pushOnEnd();
+		getNewMessages(4000);
+	});
 });
