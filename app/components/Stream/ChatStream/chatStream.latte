@@ -39,6 +39,9 @@
 					{if $iterator->isLast()}
 						<script>
 							lastId = {$message->id};
+							if (typeof focusMessageField == 'function') { /* pokud funkce existuje */
+								focusMessageField();
+							}
 						</script>
 					{/if}
 				{/foreach}

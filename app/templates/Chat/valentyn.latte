@@ -8,43 +8,6 @@
 {/block}
 
 {block foot}
-{control js 'stream.js'}
-<script>
-	$(document).ready(function () {
-		$("body").stream({
-			addoffset: 30,
-			offsetName: "valChatMessages-offset",
-			msgElement: ".stream-info-message",
-			msgText: "Žádné předchozí zprávy nebyly nalezeny."
-		});
-	});
+{control js 'stream.js', "chat/stream-chat-init.js"}
 
-	/**
-	 * Načte nové zprávy do snippetu s novými zprávami - to posléze opakuje
-	 * @param { int } timeout čas opakování [ms]
-	 */
-	function getNewMessages(timeout) {
-		setTimeout(function(){
-			$.nette.ajax({
-				url: $("#refresh-conversation").attr('href') + "&valChatMessages-lastId=" + lastId,
-				success: function(){
-					getNewMessages(timeout);
-				}
-			});
-			;
-		}, timeout);/* zde nastavit čas obnovování */
-	}
-
-	/**
-	 * Posune posuvník okna na jeho konec
-	 */
-	function pushOnEnd() {
-		$("#chat-stream #stream").scrollTop($("#chat-stream #stream").prop("scrollHeight"));/* posunutí na konec */
-	}
-
-	$(document).ready(function () {
-		pushOnEnd();
-		getNewMessages(2000);
-	});
-</script>
 {/block}
