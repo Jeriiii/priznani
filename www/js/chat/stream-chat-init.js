@@ -46,5 +46,5 @@ $(document).ready(function () {
 
 $(document).ready(function () {
 	pushOnEnd();
-	getNewMessages(2000);
+	getNewMessages(4000);
 });
