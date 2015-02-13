@@ -120,7 +120,6 @@
 		</div>
 		<div id="usermenu">
 			{block usermenu}{/block}
-			<a n:href="Chat:valentyn" title="Valentýnský chat" class="btn-main valentine-chat-button">Valentýnský chat</a>
 			{if !$user->isLoggedIn()}
 			<a n:href="DatingRegistration:" class="btn-main registration-btn" title="Registruj se!">REGISTRACE</a>
 			{/if}
@@ -148,9 +147,10 @@
 			{/cache}
 		{else}
 			{cache}
-				<a n:href=":OnePage:"><h1 id="pagename">{!$pagename}</h1></a>
+				<a n:href=":OnePage:" class="pagenamelink"><h1 id="pagename">{!$pagename}</h1></a>
 			{/cache}
 		{/if}
+		<a n:href="Chat:valentyn" title="Valentýnský chat" class="btn-main valentine-chat-button">Valentýnský chat</a>
 		{block orders}{/block}
 		{block nextAdmission}{/block}
 		<div class="clear"></div>
