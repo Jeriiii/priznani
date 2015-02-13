@@ -121,10 +121,10 @@ Feature: Create new gallery
 		# vidím normální galerii
 		Given I am signed in as "group@test.cz"
 		Then I am on "profil.show/?id=3"
-		And I look on the page
 		And I should see "Galerie na testování přátel"
 
 		# po nahrání 3 fotek už vidím jiný text
+		Given I am signed in as "user@test.cz"
 		And I am on "profil.galleries/user-gallery-new"
 		And I should see "Pokud nastavíte galerii jako soukromou"
 
@@ -141,8 +141,15 @@ Feature: Create new gallery
 		And Approve last image
 		And Approve last image
 
-		# vidím normální galerii
+		# nejsem jeho přítel, tak bych jí neměl vidět
+		Then I am on "sign/out"
 		Given I am signed in as "group@test.cz"
+		Then I am on "profil.show/?id=3"
+		And I should not see "Tuto galerii by už vidět neměl"
+
+		# přítel by ji vidět měl
+		Then I am on "sign/out"
+		Given I am signed in as "admin@test.cz"
 		Then I am on "profil.show/?id=3"
 		And I should see "Tuto galerii by už vidět neměl"
 
