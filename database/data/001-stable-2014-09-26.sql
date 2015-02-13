@@ -9933,9 +9933,9 @@ INSERT INTO `party_confessions` (`id`, `note`, `mark`, `was_on_fb`, `create`, `r
 	(5817, 'Nenávidím když jdu z akce a ať už nechtěně nebo chtěně dostanu náladu cestovat, vždy to dopadne špatně, posledně jsem ještě 2 dny jezdil kolem města kam jsem chtěl jet protože jsem různě ve vlacích potkával kamarády a přidával se k nim na akce na které jeli. Nezapomenu tenkrát tu kocovinu po třech dnech chlastání. -_-', 0, 0, '2014-04-22 21:42:01', NULL, NULL, 0, 0, 0, 0, 0, NULL),
 	(5818, 'Kamarát bol raz taký ožratý, že sa vyzliekol, vošiel do skrine, zavrel sa tam a začal sa sprchovať.', 0, 0, '2014-04-24 17:59:32', NULL, NULL, 0, 0, 0, 0, 0, NULL),
 	(5819, 'Když se opiju tak brečím\r\nDruhy den se tomu s  kámošema smějeme :D', 0, 0, '2014-04-25 14:24:51', NULL, NULL, 0, 0, 0, 0, 0, NULL),
-	(5820, 'Právě teď jsen ja sracky a není nad to vypít si aebstarou dobrou partou \'))', 0, 0, '2014-04-25 22:43:55', NULL, NULL, 0, 0, 0, 0, 0, NULL),
+	(5820, 'Právě teď jsen ja sracky a není nad to vypít si aebstarou dobrou partou \ ', 0, 0, '2014-04-25 22:43:55', NULL, NULL, 0, 0, 0, 0, 0, NULL),
 	(5821, 'Loňskou zimu jsem šel z dyzi nalamanej jako sviňa mohlo byt kolem 4 a byl jsem tak zduněnej že jsem si ani neodemkl dveře asi 20 minut jsem bouchal na dveře a uspěšně, otevřela mě teta, když se mě ráno máma ptala (nevim jak se dozvěděla že jsem bouchal) kde jsem měl klíče tak jsem odvětil že jsem si je nechal doma abych je neztratil a dostalo se mi odpovědi tak proč jsem je našla ráno hozený venku :D', 0, 0, '2014-04-26 17:51:18', NULL, NULL, 0, 0, 0, 0, 0, NULL),
-	(5822, 'To jsem si takhle jednou vyrazila s kámošem do Prahy do klubu. Poznali jsme tam jednoho týpka a vídali se s ním pravidelně v Praze. Když jsme opět vyrazili do klubu, strašně jsem se opila a druhý den ráno jsem měla okno. :D což se mi normálně nestává...nejhorší na tom je, že mezi těma dvěma kámošema vznikla hádka a skončilo to na policii, když jsem byla vypovídat, dost jsem se divila a styděla..."slečno, pamatujete si, jak jste se dostali domů?", pan XY uvádí, že jste s ním měla pohlavní styk" ....no nepamatuju si absolutně nic :-/', 0, 0, '2014-04-26 21:34:44', NULL, NULL, 0, 0, 0, 0, 0, NULL),
+	(5822, 'To jsem si takhle jednou vyrazila s kámošem do Prahy do klubu. Poznali jsme tam jednoho týpka a vídali se s ním pravidelně v Praze. Když jsme opět vyrazili do klubu, strašně jsem se opila a druhý den ráno jsem měla okno. :D což se mi normálně nestává...nejhorší na tom je, že mezi těma dvěma kámošema vznikla hádka a skončilo to na policii, když jsem byla vypovídat, dost jsem se divila a styděla..."slečno, pamatujete si, jak jste se dostali domů?", pan XY uvádí, že jste s ním měla pohlavní styk" ....no nepamatuju si absolutně nic :-/ ', 0, 0, '2014-04-26 21:34:44', NULL, NULL, 0, 0, 0, 0, 0, NULL),
 	(5823, 'Jednou mi kamarádka po pařbě psala, že má video se mnou. Říkala jsem si, že to bude trapas, ale až jsem to viděla nestačila jsem se divit. Polovina byla o tom jak se bavím s rýnou a nadávám ji, že mi neodpovídá. Doteď nechápu jak jsem v tom stavu mohla tahat kámoše skoro kilometr domů mu ani sobě.', 0, 0, '2014-04-27 21:38:09', NULL, NULL, 0, 0, 0, 0, 0, NULL),
 	(5824, 'Když půjdete domů, v krvi nějaký to promile, a už z dálky uvidíte fízly, radši to vemte jinudy, jsou schopný vám napařit pokutu za veřejný pohoršování i jen tak pro nic za nic, že se vracíte domů napitý se z toho vyspat a je holt asi sere, že vy máte volno a oni ne. A ne, nemusíte se ani moc motat nebo dělat bordel. Vlastní zkušenost.', 0, 0, '2014-04-28 06:51:31', NULL, NULL, 0, 0, 0, 0, 0, NULL),
 	(5825, 'Jednou jsem odjel z diskoteky z Citova až do Přerova na názníku autobusu :D ..je i video :D to byla jazda kurwa', 0, 0, '2014-04-30 09:41:35', NULL, NULL, 0, 0, 0, 0, 0, NULL);
@@ -10112,10 +10112,6 @@ INSERT INTO `users` (`id`, `propertyID`, `coupleID`, `profilFotoID`, `wasCategor
 INSERT INTO `users_competitions` (`id`, `name`, `description`, `imageUrl`, `current`, `lastImageID`) VALUES
 	(1, 'Test competition', 'Test competition', 'images/galleries/5/79.JPG', 0, NULL);
 /*!40000 ALTER TABLE `users_competitions` ENABLE KEYS */;
-
--- Exportování dat pro tabulku pos.users_fotos: ~0 rows (přibližně)
-/*!40000 ALTER TABLE `users_fotos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users_fotos` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.users_properties: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `users_properties` DISABLE KEYS */;

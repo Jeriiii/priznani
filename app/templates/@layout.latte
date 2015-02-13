@@ -120,6 +120,7 @@
 		</div>
 		<div id="usermenu">
 			{block usermenu}{/block}
+			<a n:href="Chat:valentyn" title="Valentýnský chat" class="btn-main valentine-chat-button">Valentýnský chat</a>
 			{if !$user->isLoggedIn()}
 			<a n:href="DatingRegistration:" class="btn-main registration-btn" title="Registruj se!">REGISTRACE</a>
 			{/if}
@@ -153,7 +154,6 @@
 		{block orders}{/block}
 		{block nextAdmission}{/block}
 		<div class="clear"></div>
-
 	    </header>
 		</div>
 	    <div class="clear" id="header-placeholder"></div>

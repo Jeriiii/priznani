@@ -66,3 +66,4 @@ services:
 	verificationPhotoRequestsDao: POS\Model\VerificationPhotoRequestsDao
 	NewsDao: POS\Model\NewsDao
 	UsersNewsDao: POS\Model\UsersNewsDao
+	ConversationDao: POS\Model\ConversationDao
