@@ -1,4 +1,5 @@
 <section id="chat-stream">
+	{ifset $loggedUser}
 	<div id="stream">
 		<div class="loaderbar">
 			<div class="stream-btn-next">
@@ -49,7 +50,7 @@
 		</div>
 		<a id="refresh-conversation" class="ajax" n:href="getNewData!">{* načíst nové zprávy *}</a>
 	</div>
-	{ifset $loggedUser}
+	
 	<div class="message-new-form">
 		{$loggedUser|showProfMinDiv}
 		<div class="message-arrow"></div>
@@ -64,7 +65,9 @@
 		<div class="clear"></div>
 	</div>
 	{else}
-		<p>Přispívat budeš moci pouze pokud se <a href="{plink "DatingRegistration:"}" class="red-link" title="Registruj se">zaregistruješ</a>.</p>
+		<p>Na Valentýna se již poslalo <strong>{$countMessages}</strong> zpráv.</p>
+		<p>Zobrazit chat a přispívat budeš moci pouze pokud se <a href="{plink "DatingRegistration:"}" class="red-link" title="Registruj se">zaregistruješ</a>
+			nebo se <a href="{plink ":Sign:in"}" class="red-link" title="Registruj se">přihlásíš</a>.</p>
 	{/ifset}
 	<div class="clear"></div>
 </section>
