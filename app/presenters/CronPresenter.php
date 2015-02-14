@@ -83,7 +83,9 @@ class CronPresenter extends BasePresenter {
 
 		/* upozornění na zprávy */
 		foreach ($messages as $message) {
-			$emailNotifies->addMessage($message->recipient);
+			if (isset($message->recipient)) { //konverzace jsou null a tak se neposílají
+				$emailNotifies->addMessage($message->recipient);
+			}
 		}
 
 		$emailNotifies->sendEmails();
