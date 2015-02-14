@@ -25,6 +25,7 @@ class ChatMessagesDao extends AbstractDao {
 	const COLUMN_READED = "readed";
 	const COLUMN_CHECKED_BY_CRON = "checked_by_cron";
 	const COLUMN_SEND_NOTIFY = "sendNotify";
+	const COLUMN_CONVERSATION_ID = "id_conversation";
 
 
 	/* priznakove konstanty */
@@ -52,6 +53,24 @@ class ChatMessagesDao extends AbstractDao {
 		return $sel->insert(array(
 				self::COLUMN_ID_SENDER => $idSender,
 				self::COLUMN_ID_RECIPIENT => $idRecipient,
+				self::COLUMN_TEXT => $text,
+				self::COLUMN_TYPE => self::TYPE_TEXT_MESSAGE,
+				self::COLUMN_READED => self::MESSAGE_UNREADED
+		));
+	}
+
+	/**
+	 * Přidá novou textovou zprávu ("odešle" novou zprávu)
+	 * @param int $idSender odesilatel zprávy
+	 * @param int $idConversation ID konverzace
+	 * @param String $text text zprávy
+	 * @return Nette\Database\Table\IRow | int | bool vytvořená zpráva
+	 */
+	public function addConversationMessage($idSender, $idConversation, $text) {
+		$sel = $this->getTable();
+		return $sel->insert(array(
+				self::COLUMN_ID_SENDER => $idSender,
+				self::COLUMN_CONVERSATION_ID => $idConversation,
 				self::COLUMN_TEXT => $text,
 				self::COLUMN_TYPE => self::TYPE_TEXT_MESSAGE,
 				self::COLUMN_READED => self::MESSAGE_UNREADED
@@ -94,6 +113,31 @@ class ChatMessagesDao extends AbstractDao {
 	}
 
 	/**
+	 * Vrátí zprávy z konverzace.
+	 * @param int $conversationID Id konverzace.
+	 * @return Nette\Database\Table\Selection zpráva
+	 */
+	public function getMessagesByConversation($conversationID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_CONVERSATION_ID, $conversationID);
+		$sel->order("id DESC");
+		return $sel;
+	}
+
+	/**
+	 * Vrátí z konverzace zprávy, které jsou novější než zpráva s daným id.
+	 * @param int $conversationID id konverzace
+	 * @param int $lastId id poslední známé zprávy
+	 * @return Nette\Database\Table\Selection zprávy
+	 */
+	public function getNewMessagesFromConversation($conversationID, $lastId) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID . " > ?", $lastId); /* s přibývajícími zprávami je selektivnější filtrovat nejdřív nové */
+		$sel->where(self::COLUMN_CONVERSATION_ID, $conversationID);
+		return $sel;
+	}
+
+	/**
 	 * Nastaví zprávu jako přečtenou/nepřečtenou
 	 * Nekontroluje příjemce zpráv.
 	 * @param int $id id zprávy
@@ -127,6 +171,7 @@ class ChatMessagesDao extends AbstractDao {
 	public function setMultipleMessagesReaded(array $ids, $idRecipient, $readed) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_ID, $ids);
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
 		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
 		return $this->setSelectionReaded($sel, $readed);
 	}
@@ -139,6 +184,7 @@ class ChatMessagesDao extends AbstractDao {
 	public function getAllUnreadedTextMessages($idRecipient) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_READED, self::MESSAGE_UNREADED); //casem bude vsech neprectenych mene, nez zprav jednoho uzivatele
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
 		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		return $sel;
@@ -153,6 +199,7 @@ class ChatMessagesDao extends AbstractDao {
 	public function getAllNewerMessagesThan($messageId, $idRecipient) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_ID . ' > ?', $messageId);
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
 		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		return $sel;
@@ -182,6 +229,7 @@ class ChatMessagesDao extends AbstractDao {
 		$sel->where(self::COLUMN_READED, self::MESSAGE_UNREADED); //casem bude vsech neprectenych mene, nez zprav jednoho uzivatele
 		$sel->where(self::COLUMN_ID_SENDER, $idSender);
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
 		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
 		return $sel;
 	}
@@ -195,6 +243,7 @@ class ChatMessagesDao extends AbstractDao {
 	 */
 	public function getLastTextMessages($idUser, $amount = 10, $offset = 0) {
 		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
 		$sel->where(self::COLUMN_ID_SENDER . '=? OR ' . self::COLUMN_ID_RECIPIENT . '=?', $idUser, $idUser);
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		$sel->order(self::COLUMN_ID . ' DESC');
@@ -212,6 +261,7 @@ class ChatMessagesDao extends AbstractDao {
 	 */
 	public function getLastTextMessagesBetweenUsers($idUser, $idSecondUser, $amount = 10, $offset = 0) {
 		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
 		$sel->where(self::COLUMN_ID_SENDER . '=? AND ' . self::COLUMN_ID_RECIPIENT . '=?' .
 			' OR ' . self::COLUMN_ID_RECIPIENT . '=? AND ' . self::COLUMN_ID_SENDER . '=?', $idUser, $idSecondUser, $idUser, $idSecondUser);
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
@@ -231,6 +281,7 @@ class ChatMessagesDao extends AbstractDao {
 	public function getLastTextMessagesBy($idSender, $idRecipient, $amount = 10, $offset = 0) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_ID_SENDER, $idSender);
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
 		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 		$sel->order(self::COLUMN_ID . ' DESC');
@@ -249,6 +300,7 @@ class ChatMessagesDao extends AbstractDao {
 	public function getLastMessageFromEachSender($idUser, $limit = 10, $offset = 0) {
 		return $this->database->query('SELECT *
 										FROM (SELECT * FROM chat_messages ORDER BY id DESC) AS a
+										WHERE id_recipient IS NOT NULL
 										WHERE id_recipient = ? OR id_sender = ?
 										GROUP BY id_recipient, id_sender DESC
 										LIMIT ' . $limit . ';', $idUser, $idUser);
@@ -265,6 +317,7 @@ class ChatMessagesDao extends AbstractDao {
 	public function getLastConversationMessagesIDs($idUser, $limit = 10, $offset = 0) {
 		$sel = $this->getTable();
 		$sel->select('DISTINCT ' . self::COLUMN_ID_SENDER . ', ' . self::COLUMN_ID_RECIPIENT);
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
 		$sel->where(self::COLUMN_ID_RECIPIENT . '= ?' . ' OR ' . self::COLUMN_ID_SENDER . ' = ?', $idUser, $idUser);
 		$sel->order(self::COLUMN_ID . ' DESC');
 		$sel->limit($limit, $offset);
@@ -279,6 +332,7 @@ class ChatMessagesDao extends AbstractDao {
 	public function getAllCronGroupedMessages() {
 		$sel = $this->getTable();
 		$sel->select('*, count(id) AS cnt');
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
 		$sel->group(self::COLUMN_ID_SENDER . ',' . self::COLUMN_ID_RECIPIENT . ',' . self::COLUMN_CHECKED_BY_CRON);
 		return $sel;
 	}
@@ -306,6 +360,7 @@ class ChatMessagesDao extends AbstractDao {
 	public function markAsChecked($senderID, $recipientID) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_ID_SENDER, $senderID);
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
 		$sel->where(self::COLUMN_ID_RECIPIENT, $recipientID);
 		$sel->update(array(
 			self::COLUMN_CHECKED_BY_CRON => 1

@@ -1,5 +1,5 @@
 ;
-(function($) {
+(function ($) {
 
 	/* nastavení */
 	var opts;
@@ -7,11 +7,10 @@
 	var ajaxLocation;
 
 	/* main */
-	$.fn.stream = function(options) {
+	$.fn.stream = function (options) {
 		var opts = $.extend({}, $.fn.stream.defaults, options);
 		setOpts(opts);
 		setAjaxLocation(opts);
-		//alert("sdf");
 		timeCheckStream();
 	};
 
@@ -54,15 +53,20 @@
 			$.nette.ajax({
 				url: ajaxUrl,
 				async: false,
-				success: function(data, status, jqXHR) {
+				success: function (data, status, jqXHR) {
 					if (data.snippets['snippet-userStream-posts'] == "") {//pokud snippet už neobnovuje data
 						$.fn.stream.run = false;//zastaví dotazování
 					}
 					if (data.snippets['snippet-profilStream-posts'] == "") {//pokud snippet už neobnovuje data
 						$.fn.stream.run = false;//zastaví dotazování
 					}
+					if (data.snippets['snippet-valChatMessages-stream-messages'] == "") {//pokud snippet už neobnovuje data
+						$.fn.stream.run = false;//zastaví dotazování
+					} else {
+						$("#chat-stream #stream").scrollTop(30 * 50);/* posunutí chat streamu o kus níž, když se načtou data */
+					}
 				},
-				error: function(jqXHR, status, errorThrown) {
+				error: function (jqXHR, status, errorThrown) {
 					$.fn.stream.run = false;
 				}
 			});
@@ -76,7 +80,7 @@
 
 	/* naplánuje další kontrolu za daný časový interval(půl vteřinu) */
 	function timeCheckStream() {
-		setTimeout(function() {
+		setTimeout(function () {
 			visibleCheckStream();
 		}, 500);
 	}

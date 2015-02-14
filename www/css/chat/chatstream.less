@@ -1,0 +1,181 @@
+/*
+* @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
+*//* 
+    Created on : 11.2.2015, 14:32:51
+    Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
+*/
+
+.conversation-box(){
+	border-radius: 6px;
+	box-shadow: 0px 2px 25px 0px rgba(50,50,50,0.8);
+	background-color: #fff;
+	border: 1px solid #eee;
+}
+
+#chat-stream{
+	width: 100%;
+	max-width: 500px;
+	
+	#stream{		
+		height: 500px;
+		padding: 10px 0 25px 0; 
+		overflow: auto;
+	}
+	
+	.stream-message{
+		
+		width: 99%;
+		padding: 0.5% 0;
+		
+		.message-user{
+			width: 8%;
+			float:left;
+		}
+		.message-text{
+			float:left;
+			width: 82%;
+			font-family: Helvetica;
+			min-height: 20px;
+			padding: 5px 15px;
+			.conversation-box();
+		}
+		
+	}
+	
+	.message-arrow{
+			width: 2%;
+			float:left;
+			width: 0; 
+			height: 0; 
+			position: relative;
+			top: 6px;
+			left: 1px;
+			border-top: 10px solid transparent;
+			border-bottom: 10px solid transparent;
+			border-right:10px solid #fff;
+	}
+	
+	
+	.message-new-form{
+		overflow: hidden;
+		padding: 15px 0px 5px 0px;
+		
+		.message-new-snippet{
+			float: left;
+			width: 82%;
+			padding: 0;
+			
+		}
+		
+		.generatedProfile{
+			float: left;
+			width: 8%;
+		}
+		
+		input[type='text']{
+			width: 96%;
+			font-size: 14px;
+			font-family: Helvetica;
+			padding: 10px 2%;
+			min-height: 30px; 
+			.conversation-box();
+		}
+		
+		input[type='submit']{
+			height: 40px;
+			margin: 15px 0;
+		}
+		
+	}
+	#stream-loader, .stream-info-message{
+		text-align: center;
+		margin-bottom: 10px; 
+	}
+}
+
+@media (max-width: 1400px) {
+	.inner{
+		margin: 0 0 0 100px;
+	}
+}
+
+@media (max-width: 1300px) {
+	.inner{
+		width: 70%;
+	}
+}
+
+@media (max-width: 1150px) {
+	.inner{
+		margin: 0;
+	}
+}
+
+@media (max-width: 1000px) {
+	.inner{
+		width: 100% !important;
+	}
+	
+	#snippet-valChatMessages-messageNewForm{
+		.controls{
+			float:left;
+			max-width: 70%;
+		}
+		
+		input[type='submit']{
+			width: auto !important;
+			position: relative;
+			height: 52px !important;
+			padding: 0 12%;
+			margin: 0px 5% !important;
+		}
+		
+	}
+}
+
+.valentine-chat-button{
+	display: none;
+}
+
+@media (max-width: 750px) {
+	.message-arrow{
+		display: none;
+	}
+	.message-text, .message-new-snippet{
+		float: right !important;
+		width: 82% !important;
+	}
+	.message-new-snippet{
+		margin-right: 8%;
+	}
+}
+
+@media (max-width: 600px) {
+	
+	#pagename span{
+		display: none;
+	}
+	.message-text, .message-new-snippet{
+		width: 75% !important;
+	}
+}
+@media (max-width: 450px) {
+	#snippet-valChatMessages-messageNewForm{
+			.controls{
+				float:left;
+				max-width: 57%;
+			}
+	}
+}
+
+@media (max-width: 320px) {
+	.message-text, .message-new-snippet{
+		width: 60% !important;
+	}
+	#snippet-valChatMessages-messageNewForm{
+			.controls{
+				float:left;
+				max-width: 50%;
+			}
+	}
+}

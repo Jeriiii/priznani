@@ -3,10 +3,10 @@
  *
  * @copyright Copyright (c) 2009, 2010 Jan Marek
  * @copyright Copyright (c) 2009, 2010 David Grudl
- * @copyright Copyright (c) 2012-2014 Vojtěch Dobeš
+ * @copyright Copyright (c) 2012 Vojtěch Dobeš
  * @license MIT
  *
- * @version 2.0.0
+ * @version 1.2.2
  */
 
 (function(window, $, undefined) {
@@ -148,15 +148,12 @@ var nette = function () {
 	/**
 	 * Executes AJAX request. Attaches listeners and events.
 	 *
-	 * @param  {object|string} settings or URL
+	 * @param  {object} settings
 	 * @param  {Element|null} ussually Anchor or Form
 	 * @param  {event|null} event causing the request
 	 * @return {jqXHR|null}
 	 */
 	this.ajax = function (settings, ui, e) {
-		if ($.type(settings) === 'string') {
-			settings = {url: settings};
-		}
 		if (!settings.nette && ui && e) {
 			var $el = $(ui), xhr, originalBeforeSend;
 			var analyze = settings.nette = {
@@ -366,46 +363,28 @@ $.nette.ext('forms', {
 		if (!analyze || !analyze.form) return;
 		var e = analyze.e;
 		var originalData = settings.data || {};
-		var data = {};
+		var formData = {};
 
 		if (analyze.isSubmit) {
-			data[analyze.el.attr('name')] = analyze.el.val() || '';
+			formData[analyze.el.attr('name')] = analyze.el.val() || '';
 		} else if (analyze.isImage) {
 			var offset = analyze.el.offset();
 			var name = analyze.el.attr('name');
 			var dataOffset = [ Math.max(0, e.pageX - offset.left), Math.max(0, e.pageY - offset.top) ];
 
 			if (name.indexOf('[', 0) !== -1) { // inside a container
-				data[name] = dataOffset;
+				formData[name] = dataOffset;
 			} else {
-				data[name + '.x'] = dataOffset[0];
-				data[name + '.y'] = dataOffset[1];
+				formData[name + '.x'] = dataOffset[0];
+				formData[name + '.y'] = dataOffset[1];
 			}
 		}
-		
-		// https://developer.mozilla.org/en-US/docs/Web/Guide/Using_FormData_Objects#Sending_files_using_a_FormData_object
-		if (analyze.form.attr('method').toLowerCase() === 'post' && 'FormData' in window) {
-			var formData = new FormData(analyze.form[0]);
-			for (var i in data) {
-				formData.append(i, data[i]);
-			}
 
-			if (typeof originalData !== 'string') {
-				for (var i in originalData) {
-					formData.append(i, originalData[i]);
-				}
-			}
-
-			settings.data = formData;
-			settings.processData = false;
-			settings.contentType = false;
-		} else {
-			if (typeof originalData !== 'string') {
-				originalData = $.param(originalData);
-			}
-			data = $.param(data);
-			settings.data = analyze.form.serialize() + (data ? '&' + data : '') + '&' + originalData;
+		if (typeof originalData !== 'string') {
+			originalData = $.param(originalData);
 		}
+		formData = $.param(formData);
+		settings.data = analyze.form.serialize() + (formData ? '&' + formData : '') + '&' + originalData;
 	}
 });
 
@@ -459,8 +438,6 @@ $.nette.ext('snippets', {
 	applySnippet: function ($el, html, back) {
 		if (!back && $el.is('[data-ajax-append]')) {
 			$el.append(html);
-		} else if (!back && $el.is('[data-ajax-prepend]')) {
-			$el.prepend(html);
 		} else {
 			$el.html(html);
 		}
