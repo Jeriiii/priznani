@@ -99,3 +99,58 @@ Feature: Create new gallery
 		Examples:
 			| otherUser			| userName			| imageName1	| imageName2	| galleryName	|
 			| admin@test.cz		| Test User			| Foto 1		| Foto 2		| Super fotky	|
+
+	Scenario: User can change gallery to just for friends
+		Given I am signed in as "user@test.cz"
+		# nahrání fotek, dokud nejsou 3 schválené
+		And I am on "profil.galleries/user-gallery-new"
+		And I should see "Tuto možnost můžete používat, až budete mít 1 schválené fotky."
+
+		When I fill in "Galerie na testování přátel" for "name"
+		And I attach to "userGalleryNewImageFile0" the file "man.png"
+		And I attach to "userGalleryNewImageFile1" the file "man.png"
+		And I attach to "userGalleryNewImageFile2" the file "man.png"
+
+		And I press "_submit"
+
+		# schválení fotek
+		And Approve last image
+		And Approve last image
+		And Approve last image
+
+		# vidím normální galerii
+		Given I am signed in as "group@test.cz"
+		Then I am on "profil.show/?id=3"
+		And I should see "Galerie na testování přátel"
+
+		# po nahrání 3 fotek už vidím jiný text
+		Given I am signed in as "user@test.cz"
+		And I am on "profil.galleries/user-gallery-new"
+		And I should see "Pokud nastavíte galerii jako soukromou"
+
+		When I fill in "Tuto galerii by už vidět neměl" for "name"
+		And I attach to "userGalleryNewImageFile0" the file "man.png"
+		And I attach to "userGalleryNewImageFile1" the file "man.png"
+		And I attach to "userGalleryNewImageFile2" the file "man.png"
+		
+		And I check "private"
+		And I press "_submit"
+
+		# schválení fotek
+		And Approve last image
+		And Approve last image
+		And Approve last image
+
+		# nejsem jeho přítel, tak bych jí neměl vidět
+		Then I am on "sign/out"
+		Given I am signed in as "group@test.cz"
+		Then I am on "profil.show/?id=3"
+		And I should not see "Tuto galerii by už vidět neměl"
+
+		# přítel by ji vidět měl
+		Then I am on "sign/out"
+		Given I am signed in as "admin@test.cz"
+		Then I am on "profil.show/?id=3"
+		And I should see "Tuto galerii by už vidět neměl"
+
+

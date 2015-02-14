@@ -23,8 +23,8 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 	public $userImageDao;
 	private $galleryID;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, $isPaying, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $isPaying, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, $isPaying, $userID, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $isPaying, $userID, $parent, $name);
 		//form
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;

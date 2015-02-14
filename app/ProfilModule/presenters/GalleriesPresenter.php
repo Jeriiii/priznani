@@ -236,6 +236,7 @@ class GalleriesPresenter extends \BasePresenter {
 		if ($gallery->private) {
 			$this->checkPaying();
 		}
+		$this->template->galleryID = $this->galleryID;
 		$this->template->private = $gallery->private;
 		$this->template->paying = $this->paymentDao->isUserPaying($this->user->id);
 	}
@@ -311,11 +312,11 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	protected function createComponentUserGalleryNew($name) {
-		return new Frm\UserGalleryNewForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->isPaying, $this, $name);
+		return new Frm\UserGalleryNewForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->isPaying, $this->loggedUser->id, $this, $name);
 	}
 
 	protected function createComponentUserGalleryChange($name) {
-		return new Frm\UserGalleryChangeForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this->isPaying, $this, $name);
+		return new Frm\UserGalleryChangeForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this->isPaying, $this->loggedUser->id, $this, $name);
 	}
 
 	protected function createComponentNewImage($name) {
