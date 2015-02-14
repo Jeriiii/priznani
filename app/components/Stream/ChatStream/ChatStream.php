@@ -56,7 +56,6 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 				$this->template->lastId = 0;
 			}
 		}
-		$this->template->countMessages = $this->messages->count();
 		$this->template->loggedUser = $this->loggedUser;
 		$this->template->setFile(dirname(__FILE__) . '/chatStream.latte');
 		$this->template->render();
