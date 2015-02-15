@@ -101,7 +101,7 @@ class CronPresenter extends BasePresenter {
 	 * Napíše email starším uživatelům z první verze přiznání.
 	 */
 	public function actionSendEmailOldUsers() {
-		$limit = 200;
+		$limit = 2; //200;
 		$users = $this->oldUserDao->getNoNotify($limit);
 		$emailNotifies = new EmailsForOldUsers($this->mailer);
 

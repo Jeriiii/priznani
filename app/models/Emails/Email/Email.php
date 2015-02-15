@@ -43,7 +43,7 @@ abstract class Email extends Object implements IEmail {
 
 		$mail->addTo($email);
 		$mail->setSubject($subject);
-		$mail->setBody($body);
+		$mail->setHtmlBody($body);
 
 		$mailer->send($mail);
 	}
