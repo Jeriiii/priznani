@@ -25,12 +25,23 @@ abstract class Email extends Object implements IEmail {
 	public $user;
 
 	/**
+	 * @var bool HTML body
+	 */
+	public $htmlBody;
+
+	/**
+	 * @var type
+	 */
+	public $var;
+
+	/**
 	 * Emailová adresa odesílatele (stránky)
 	 */
 	const EMAIL_ADDRESS_SENDER = "info@priznaniosexu.cz";
 
-	public function __construct($user) {
+	public function __construct($user, $htmlBody = false) {
 		$this->user = $user;
+		$this->htmlBody = $htmlBody;
 	}
 
 	public function sendEmail(IMailer $mailer) {
@@ -43,7 +54,12 @@ abstract class Email extends Object implements IEmail {
 
 		$mail->addTo($email);
 		$mail->setSubject($subject);
-		$mail->setHtmlBody($body);
+
+		if ($this->htmlBody) {
+			$mail->setHtmlBody($body);
+		} else {
+			$mail->setBody($body);
+		}
 
 		$mailer->send($mail);
 	}

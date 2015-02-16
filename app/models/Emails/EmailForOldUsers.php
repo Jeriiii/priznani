@@ -13,6 +13,10 @@ namespace Notify;
  */
 class EmailForOldUsers extends Email {
 
+	public function __construct($user) {
+		parent::__construct($user, true);
+	}
+
 	/**
 	 * Vrátí emailovou adresu příjemce
 	 * @return string Emailová adresa
