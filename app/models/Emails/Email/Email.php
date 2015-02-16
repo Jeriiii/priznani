@@ -30,18 +30,19 @@ abstract class Email extends Object implements IEmail {
 	public $htmlBody;
 
 	/**
-	 * @var type
+	 * @var string Cesta k obrázkům, co se mají připojit do mailu. Dá se na ně pak odkazovat z HTML.
 	 */
-	public $var;
+	public $imgsBasePath;
 
 	/**
 	 * Emailová adresa odesílatele (stránky)
 	 */
 	const EMAIL_ADDRESS_SENDER = "info@priznaniosexu.cz";
 
-	public function __construct($user, $htmlBody = false) {
+	public function __construct($user, $htmlBody = false, $imgsBasePath = null) {
 		$this->user = $user;
 		$this->htmlBody = $htmlBody;
+		$this->imgsBasePath = $imgsBasePath;
 	}
 
 	public function sendEmail(IMailer $mailer) {
@@ -56,7 +57,7 @@ abstract class Email extends Object implements IEmail {
 		$mail->setSubject($subject);
 
 		if ($this->htmlBody) {
-			$mail->setHtmlBody($body);
+			$mail->setHtmlBody($body, $this->imgsBasePath);
 		} else {
 			$mail->setBody($body);
 		}
