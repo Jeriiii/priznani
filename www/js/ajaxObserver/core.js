@@ -47,13 +47,15 @@
 
 	/**
 	 * Nastavení options
-	 * @param obopts nastaveni k nastaveni
+	 * @param {Object} description obopts nastaveni k nastaveni
 	 */
 	function setObserverOpts(obopts) {
 		this.observerOpts = obopts;
 	}
 
-	/* Zavolá požadavek na nová data. Poté volá sama sebe. */
+	/**
+	 *  Zavolá požadavek na nová data. Poté volá sama sebe.
+	 */
 	function refreshRequest() {
 		var opts = this.observerOpts;
 
@@ -64,7 +66,6 @@
 					refreshFunction(data);
 				}
 			});
-
 		}).always(function () {
 			setTimeout(function () {
 				refreshRequest();

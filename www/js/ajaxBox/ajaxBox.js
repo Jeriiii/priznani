@@ -32,9 +32,9 @@
 
 	/**
 	 * Nastaví pozici okénka dle nastavení
-	 * @param {type} opts parametry
-	 * @param {type} box okénko
-	 * @param {type} button tlačítko okénka
+	 * @param {Object} opts parametry
+	 * @param {Object} box okénko
+	 * @param {Object} button tlačítko okénka
 	 */
 	$.fn.ajaxBox.setBoxPosition = function (opts, box, button) {
 		//nastavení správné pozice
@@ -142,16 +142,25 @@
 		$(boxSelector).css('display', 'block');//otevření jediného okénka
 		$(button).addClass('active');
 		if (opts.hideOthers) {//vyvolani pozadi
-			$('body').prepend('<div class="activeBackground" data-related="' + opts.buttonSelector + '"></div>');
-			$(boxSelector).css('z-index', '10001');
-			$('.activeBackground').css('position', 'fixed');
-			$('.activeBackground').css('top', 0);
-			$('.activeBackground').css('left', 0);
-			$('.activeBackground').css('z-index', '10000');
-			$('.activeBackground').css('width', $(document).width());
-			$('.activeBackground').css('height', $(document).height());
+			showBlackBackground(opts, boxSelector);
 		}
 	};
+
+	/**
+	 * Vytvoří zašedlé pozadí pod okénkem
+	 * @param {Object} opts nastavení
+	 * @param {String} boxSelector selektor pro okénko (jedno), které má být vidět
+	 */
+	function showBlackBackground(opts, boxSelector) {
+		$('body').prepend('<div class="activeBackground" data-related="' + opts.buttonSelector + '"></div>');
+		$(boxSelector).css('z-index', '10001');
+		$('.activeBackground').css('position', 'fixed');
+		$('.activeBackground').css('top', 0);
+		$('.activeBackground').css('left', 0);
+		$('.activeBackground').css('z-index', '10000');
+		$('.activeBackground').css('width', $(document).width());
+		$('.activeBackground').css('height', $(document).height());
+	}
 
 	/**
 	 * Nainicializuje okénko
@@ -163,14 +172,12 @@
 		/* zkontroluje, zda není tlačítko předané přes data elementu */
 		boxopts = getAttrData($this, boxopts);
 		boxopts = applyModulesStarts(boxopts);
-
 		//obalení okénkem a potřebnými elementy
 		addHtml($this, boxopts);
 		///////////////
-
 		addBinds(boxopts);
 		watchForUpdateNeed(boxopts);
-		if (boxopts.ajaxObserverId) {
+		if (boxopts.ajaxObserverId) {//registrace u observeru
 			observer.register(boxopts.ajaxObserverId, function (data) {
 				boxopts.observerResponseHandle(boxopts, data);
 			});
@@ -214,13 +221,13 @@
 		if ($box.data("ajaxbox-info-message") !== undefined) {
 			opts.infoMessage = $box.data("ajaxbox-info-message");
 		}
-
 		return opts;
 	}
 
 
 	/** obalí data okénkem a nastaví jeho pozici vzhledem k tlačítku
 	 * @param {object} data DOM objekt pro data
+	 * @param {Object} opts nastavení komponenty
 	 * */
 	function addHtml(data, opts) {
 		var button = $(opts.buttonSelector);//tlačítko
@@ -230,27 +237,62 @@
 
 		box.css('display', 'none');//okénko není vidět
 
+		addContentWrapHtml(opts, data, box);
+		addHeaderHtml(opts, box);
+		addArrowHtml(opts, box);
+		addInfoElementsHtml(opts, box, button);
+
+		$.fn.ajaxBox.setBoxPosition(opts, box, button);
+		data.css('display', 'block');//zobrazení dat, pokud byla skrytá
+	}
+
+	/**
+	 * Obalí obsah html tagy
+	 * @param {Object} opts nastavení
+	 * @param {Object} data DOM object s daty
+	 * @param {Object} box DOM objekt vytvořeného okénka
+	 */
+	function addContentWrapHtml(opts, data, box) {
 		data.wrap('<div class="ajaxBoxContent"></div>');//zabalení obsahu
 		data.wrap('<div class="ajaxBoxData"></div>');//zabalení obsahu
 		box.find('.ajaxBoxContent').append('<span class="loadingGif clear"></span>');//gif na konci
 		if (!opts.loadUrl) {
 			box.find('.loadingGif').css('display', 'none');
 		}
-
+	}
+	/**
+	 * Přidá hlavičku okénka a zavírací křížek
+	 * @param {Object} opts nastavení
+	 * @param {Object} box DOM objekt vytvořeného okénka
+	 */
+	function addHeaderHtml(opts, box) {
 		box.prepend('<div class="ajaxBoxHeader">' + opts.headerHtml + '</div>');//přidání šipečky
 		if (box.hasClass('posPopUp')) {//přidání zavíracího křížku
 			box.find('.ajaxBoxHeader').append('<span class="close-cross">×</span>');
 		}
-		box.prepend('<div class="arrow-up"></div>');//přidání šipečky
-		box.append('<div class="window-info">' + opts.infoMessage + '</div>');//informační boxík okénka (dole)
-		button.append('<div class="ajaxbox-button-info"></div>');
-		button.find('.ajaxbox-button-info').css('display', 'none');
+	}
 
+	/**
+	 * Přidá html pro šipečku okénka
+	 * @param {Object} opts nastavení
+	 * @param {Object} box DOM objekt vytvořeného okénka
+	 */
+	function addArrowHtml(opts, box) {
+		box.prepend('<div class="arrow-up"></div>');//přidání šipečky
 		if (opts.arrowOrientation === 'left') {//orientace okénka
 			box.find('.arrow-up').addClass('on-left');//přidání třídy k šipečce (aby byla vlevo)
 		}
-		$.fn.ajaxBox.setBoxPosition(opts, box, button);
-		data.css('display', 'block');//zobrazení dat, pokud byla skrytá
+	}
+	/**
+	 * Přidá daném okénku elementy s informacemi (spodní informační panel a bublinku k tlačítku)
+	 * @param {Object} opts nastavení
+	 * @param {Object} box DOM objekt vytvořeného okénka
+	 * @param {Object} button tlačítko vytvořeného okénka
+	 */
+	function addInfoElementsHtml(opts, box, button) {
+		box.append('<div class="window-info">' + opts.infoMessage + '</div>');//informační boxík okénka (dole)
+		button.append('<div class="ajaxbox-button-info"></div>');
+		button.find('.ajaxbox-button-info').css('display', 'none');
 	}
 
 	/**
@@ -328,7 +370,18 @@
 		var boxSelector = 'div[data-related="' + opts.buttonSelector + '"]';
 		var content = $(boxSelector).find('.ajaxBoxContent');
 
-		$(opts.buttonSelector).click(function (e) {//zavření při otevření jiného okénka
+		bindOpenCloseListener(opts);//zavření při otevření jiného okénka
+		bindCloseButtons(opts, boxSelector);
+		bindCloseOnClick(opts, boxSelector);
+		addSlimScroll(content);
+		addResizeBehavior(opts, boxSelector);
+	}
+	/**
+	 * Nabinduje okénku click listener, který jej otevře/zavře, když se klikne na jeho tlačítko
+	 * @param {Object} opts nastavení
+	 */
+	function bindOpenCloseListener(opts) {
+		$(opts.buttonSelector).click(function (e) {
 			if ($(e.target).is('.ajaxBox *, .ajaxBox')) {
 				return;
 			}
@@ -341,15 +394,13 @@
 				$.fn.ajaxBox.openWindow(opts, this);
 			}
 		});
-
-		var closeFn = function () {
-			$(boxSelector).css('display', 'none');
-			$(opts.buttonSelector).removeClass('active');
-			$('.activeBackground[data-related=' + opts.buttonSelector + ']').remove();
-		};
-		$(boxSelector + ' .close-cross').click(closeFn);
-		$(boxSelector + ' .close').click(closeFn);
-
+	}
+	/**
+	 * Nabinduje listener, který zavře okénko, pokud se klikne mimo něj
+	 * @param {Object} opts nastavení
+	 * @param {Object} boxSelector selektor okénka
+	 */
+	function bindCloseOnClick(opts, boxSelector) {
 		$('*').click(function (event) {//zavření při kliknutí mimo okénka
 			if (!$(event.target).is(opts.buttonSelector, '.ajaxBox')) {
 				if (!$(event.target).is('.ajaxBox *, .ajaxBox')) {
@@ -359,16 +410,43 @@
 				}
 			}
 		});
-		//pridani vlastniho posuvniku
-		content.slimScroll({
-			height: content.height() + 'px'
-		});
+	}
 
+	/**
+	 * Nabinduje chování okénka v případě změny velikosti okna
+	 * @param {Object} opts nastavení
+	 * @param {Object} boxSelector selektor okénka
+	 */
+	function addResizeBehavior(opts, boxSelector) {
 		/* nabindování přepočítání polohy na změnu vel. okna */
 		$(window).resize(function () {
 			$.fn.ajaxBox.setBoxPosition(opts, $(boxSelector), $(opts.buttonSelector));
 		});
+	}
 
+	/**
+	 * Danému elementu přidá vlastní posuvník
+	 * @param {Object} content element s obsahem
+	 */
+	function addSlimScroll(content) {
+		//pridani vlastniho posuvniku
+		content.slimScroll({
+			height: content.height() + 'px'
+		});
+	}
+	/**
+	 * Nabinduje danému okénku listener, který ho za určitých podmínek zavře (např při kliknutí na zavírací tlačítko)
+	 * @param {Object} opts nastavení
+	 * @param {String} boxSelector selektor okénka
+	 */
+	function bindCloseButtons(opts, boxSelector) {
+		var closeFn = function () {
+			$(boxSelector).css('display', 'none');
+			$(opts.buttonSelector).removeClass('active');
+			$('.activeBackground[data-related=' + opts.buttonSelector + ']').remove();
+		};
+		$(boxSelector + ' .close-cross').click(closeFn);
+		$(boxSelector + ' .close').click(closeFn);
 	}
 
 
@@ -376,8 +454,8 @@
 	/************MODULES**************/
 	/**
 	 * Nastaví funkce v nastavení tak, aby okénko fungovalo jako ajaxový dropdown
-	 * @param {type} options původní nastavení
-	 * @return {array} nové nastavení
+	 * @param {Object} options původní nastavení
+	 * @return {Object} nové nastavení
 	 */
 	function applyStreamSnippetModuleStart(options) {
 		var params = options.streamSnippetModule;
@@ -409,7 +487,7 @@
 
 	/**
 	 * Finální úpravy modulu pro ajaxový dropdown
-	 * @param {type} options nastavení okénka
+	 * @param {Object} options nastavení okénka
 	 */
 	function applyStreamSnippetModuleEnd(options) {
 		$('div[data-related="' + options.buttonSelector + '"] .loadingGif').css('display', 'block');
