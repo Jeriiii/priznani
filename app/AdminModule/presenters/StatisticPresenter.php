@@ -10,6 +10,7 @@ use Nette;
 use App\Forms as Frm;
 use POS\Model\UserPropertyDao;
 use Nette\DateTime;
+use POSComponent\GraphComponent;
 
 /**
  * Adminstrace statistik
@@ -36,16 +37,19 @@ class StatisticPresenter extends AdminSpacePresenter {
 		$this->template->countGroup = $this->userPropertyDao->getByType(UserPropertyDao::PROPERTY_GROUP)->count();
 
 		$this->template->totalCount = $this->userPropertyDao->getAll()->count();
+	}
 
+	protected function createComponentGraph($name) {
 		$countDays = 7;
 		$fromDate = new DateTime();
 		$fromDate->modify("- $countDays days");
 		$dailyRegistrations = $this->statisticManager->getRegUsersByDay($this->userDao, $fromDate, $countDays);
-		$this->template->dailyRegistrations = $dailyRegistrations;
 
-		$fromDate->modify('+ 1 days');
-		$this->template->fromDate = $fromDate;
-		$this->template->countDays = $countDays;
+		$fromDate->modify('+ 1 days'); //korekce posunu dnů
+
+		$graphComponent = new GraphComponent($dailyRegistrations, $fromDate, $this, $name);
+
+		return $graphComponent;
 	}
 
 }

@@ -1,0 +1,64 @@
+{********** popisek Y osy ***************}
+{define yLegend}
+{var $days = array( 'Monday' => 'Pondělí', 'Tuesday' => 'Úterý', 'Wednesday' => 'Středa',
+'Thursday' => 'Čtvrtek', 'Friday' => 'Pátek', 'Saturday' => 'Sobota', 'Sunday' => 'Neděle')}
+
+{for $i = 0; $i < $countItems; $i++}
+	{if $interval == 0} {* = dny *}
+		"{$days[$fromDate->format('l')]}"
+		<?php $fromDate->modify('+ 1 days') ?>
+		{if $i < ($countItems - 1)}, {/if} {* za posledním prvekm není čárka *}
+	{/if}
+{/for}
+{/define}
+
+<script type="text/javascript">
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'areaspline'
+        },
+        title: {
+            text: {$header}
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            verticalAlign: 'top',
+            x: 150,
+            y: 100,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        xAxis: {
+            categories: [
+                {include #yLegend}
+			]
+        },
+        yAxis: {
+            title: {
+                text: {$graphName}
+            }
+        },
+        tooltip: {
+            shared: true,
+            valueSuffix: ' units'
+        },
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            areaspline: {
+                fillOpacity: 0.5
+            }
+        },
+        series: [{
+            name: 'Registrace',
+            data: [{foreach $items as $item}{$item}{if !$iterator->last},{/if}{/foreach}]
+        }]
+    });
+});
+</script>
+<script src="{$basePath}/js/graphs/highcharts.js"></script>
+<script src="{$basePath}/js/graphs/modules/exporting.js"></script>
