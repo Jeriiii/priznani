@@ -101,8 +101,10 @@ class CronPresenter extends BasePresenter {
 	}
 
 	public function actionSendNewsletters() {
-		$limit = 1;
-		$users = $this->imageDao->getAll()->limit($limit);
+		ini_set('max_execution_time', 300);
+		$offset = 50;
+		$limit = 50;
+		$users = $this->imageDao->getAll()->limit($limit, $offset);
 
 		$emailNotifies = new \Notify\EmailsNewsletter($this->mailer);
 

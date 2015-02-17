@@ -13,12 +13,16 @@ namespace Notify;
  */
 class EmailNewsletter extends Email {
 
+	public function __construct($user) {
+		parent::__construct($user, true);
+	}
+
 	/**
 	 * Vrátí emailovou adresu příjemce
 	 * @return string Emailová adresa
 	 */
 	public function getEmailBody() {
-		return 'Pojď se znovu účastnit naší Valentýnské soutěže na Datenode.cz (Přiznání o sexu). Ve hře jsou opravdu hodnotné ceny až do 1390,- Kč od našeho sponzora, sexshopu Růžový slon. \nJednoduchá pravidla najdeš na http://datenode.cz/competition/upload-competition-image?galleryID=2, fotku mohou vložit muži i ženy, soutěž platí do 28. února 2015.';
+		return "Soutěž Přiznání o sexu<br /><br />Pojď se znovu účastnit naší <strong style='color: #cf0707'>(po)Valentýnské soutěže</strong> na Datenode.cz (<strong style='color: #cf0707'>Přiznání o sexu</strong>). Ve hře jsou opravdu hodnotné <strong style='color: #cf0707'>ceny až do 1390,- Kč</strong> od našeho sponzora, sexshopu Růžový slon. <br />Jednoduchá pravidla najdeš <a href='http://datenode.cz/competition/upload-competition-image?galleryID=2' style='color: #cf0707'>ZDE</a>, fotku mohou vložit muži i ženy, soutěž platí do 28. února 2015.<br /><br />Váš tým Přiznání o sexu";
 	}
 
 	/**
