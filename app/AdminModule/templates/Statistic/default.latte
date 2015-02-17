@@ -31,4 +31,63 @@
 	</table>
 	<h2>Návštěvnost</h2>
 	<a class="btn btn-default" href="http://www.google.com/analytics/">google analytisc</a>
+	
+	<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+{/block}
+
+{block foot}
+<script type="text/javascript">
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'areaspline'
+        },
+        title: {
+            text: 'Average fruit consumption during one week'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            verticalAlign: 'top',
+            x: 150,
+            y: 100,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        xAxis: {
+            categories: [
+                {for $i = 0; $i < $countDays; $i++}
+					{$fromDate->format('l')}
+					<?php $fromDate->modify('+ 1 days') ?>
+					{if $i < ($countDays - 1)}, {/if}
+				{/for}
+            ]
+        },
+        yAxis: {
+            title: {
+                text: 'Fruit units'
+            }
+        },
+        tooltip: {
+            shared: true,
+            valueSuffix: ' units'
+        },
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            areaspline: {
+                fillOpacity: 0.5
+            }
+        },
+        series: [{
+            name: 'Registrace',
+            data: [{foreach $dailyRegistrations as $dayReg}{$dayReg}{if !$iterator->last},{/if}{/foreach}]
+        }]
+    });
+});
+</script>
+<script src="{$basePath}/js/graphs/highcharts.js"></script>
+<script src="{$basePath}/js/graphs/modules/exporting.js"></script>
 {/block}

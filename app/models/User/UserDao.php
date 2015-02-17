@@ -10,6 +10,7 @@ use Nette\Database\SqlLiteral;
 use Authorizator;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
+use Nette\DateTime;
 
 /**
  * Uživatelé UsersDao
@@ -185,6 +186,22 @@ class UserDao extends UserBaseDao {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_VIGOR, $vigor);
 		return $sel;
+	}
+
+	/**
+	 * Spočítá počet registrací za jeden den.
+	 * @param DateTime $day Den, za který se mají statistiky spočítat.
+	 * @return int Počet registrací za danný den.
+	 */
+	public function countRegByDay(DateTime $day) {
+		$sel = $this->getTable();
+
+		$sel->where(self::COLUMN_CREATED . " >= ?", $day->format('Y-m-d') . "00:00:00");
+		$day->modify('+ 1 days');
+		$sel->where(self::COLUMN_CREATED . " < ?", $day->format('Y-m-d') . "00:00:00");
+		$day->modify('- 1 days');
+
+		return $sel->count();
 	}
 
 	/**

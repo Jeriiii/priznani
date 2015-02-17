@@ -45,7 +45,7 @@ abstract class AbstractDao extends Object {
 	/**
 	 * Vrátí všechny řádky z databáze
 	 * @param type $order Seřazení podle id
-	 * @return type Nette\Database\Table\Selection
+	 * @return Nette\Database\Table\Selection
 	 */
 	public function getAll($order = "ASC") {
 		$sel = $this->getTable();

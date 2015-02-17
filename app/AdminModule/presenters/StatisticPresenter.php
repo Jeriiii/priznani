@@ -9,6 +9,7 @@ namespace AdminModule;
 use Nette;
 use App\Forms as Frm;
 use POS\Model\UserPropertyDao;
+use Nette\DateTime;
 
 /**
  * Adminstrace statistik
@@ -17,11 +18,14 @@ use POS\Model\UserPropertyDao;
  */
 class StatisticPresenter extends AdminSpacePresenter {
 
-	/**
-	 * @var \POS\Model\UserPropertyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPropertyDao @inject */
 	public $userPropertyDao;
+
+	/** @var \POS\Statistics\StatisticManager @inject */
+	public $statisticManager;
+
+	/** @var \POS\Model\UserDao @inject */
+	public $userDao;
 
 	public function renderDefault() {
 		$this->template->countMan = $this->userPropertyDao->getByType(UserPropertyDao::PROPERTY_MAN)->count();
@@ -32,6 +36,16 @@ class StatisticPresenter extends AdminSpacePresenter {
 		$this->template->countGroup = $this->userPropertyDao->getByType(UserPropertyDao::PROPERTY_GROUP)->count();
 
 		$this->template->totalCount = $this->userPropertyDao->getAll()->count();
+
+		$countDays = 7;
+		$fromDate = new DateTime();
+		$fromDate->modify("- $countDays days");
+		$dailyRegistrations = $this->statisticManager->getRegUsersByDay($this->userDao, $fromDate, $countDays);
+		$this->template->dailyRegistrations = $dailyRegistrations;
+
+		$fromDate->modify('+ 1 days');
+		$this->template->fromDate = $fromDate;
+		$this->template->countDays = $countDays;
 	}
 
 }
