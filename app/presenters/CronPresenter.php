@@ -44,6 +44,9 @@ class CronPresenter extends BasePresenter {
 	/** @var \POS\Model\OldUserDao @inject */
 	public $oldUserDao;
 
+	/** @var \POS\Model\ImageDao @inject */
+	public $imageDao;
+
 	public function startup() {
 		parent::startup();
 
@@ -97,11 +100,30 @@ class CronPresenter extends BasePresenter {
 		die();
 	}
 
+	public function actionSendNewsletters() {
+		ini_set('max_execution_time', 300);
+		$offset = 50;
+		$limit = 50;
+		$users = $this->imageDao->getAll()->limit($limit, $offset);
+
+		$emailNotifies = new \Notify\EmailsNewsletter($this->mailer);
+
+		/* upozornění na aktivity */
+		foreach ($users as $user) {
+			$emailNotifies->addEmail($user);
+		}
+
+		$emailNotifies->sendEmails();
+
+		echo 'Bylo odesláno ' . $users->count() . ' emailů';
+		die();
+	}
+
 	/**
 	 * Napíše email starším uživatelům z první verze přiznání.
 	 */
 	public function actionSendEmailOldUsers() {
-		$limit = 200;
+		$limit = 2; //200;
 		$users = $this->oldUserDao->getNoNotify($limit);
 		$emailNotifies = new EmailsForOldUsers($this->mailer);
 
