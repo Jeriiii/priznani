@@ -44,6 +44,9 @@ class CronPresenter extends BasePresenter {
 	/** @var \POS\Model\OldUserDao @inject */
 	public $oldUserDao;
 
+	/** @var \POS\Model\ImageDao @inject */
+	public $imageDao;
+
 	public function startup() {
 		parent::startup();
 
@@ -94,6 +97,23 @@ class CronPresenter extends BasePresenter {
 		$this->chatMessagesDao->updateSendNotify();
 
 		echo "Oznámení byly odeslány";
+		die();
+	}
+
+	public function actionSendNewsletters() {
+		$limit = 1;
+		$users = $this->imageDao->getAll()->limit($limit);
+
+		$emailNotifies = new \Notify\EmailsNewsletter($this->mailer);
+
+		/* upozornění na aktivity */
+		foreach ($users as $user) {
+			$emailNotifies->addEmail($user);
+		}
+
+		$emailNotifies->sendEmails();
+
+		echo 'Bylo odesláno ' . $users->count() . ' emailů';
 		die();
 	}
 
