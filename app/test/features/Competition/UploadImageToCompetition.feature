@@ -12,6 +12,7 @@ Feature: Upload Image to Competition
 		And I attach to "newCompImageFormImageFile0" the file "<image>"
 		And I fill in "newCompImageFormImageName0" with "Test image"
 		And I fill in "newCompImageFormImageDescription0" with "Image for test the upload"
+		And I check "agreement"
 		And I press "_submit"
 		Then I should see "Fotka byla přidaná. Nyní je ve frontě na schválení."
 
