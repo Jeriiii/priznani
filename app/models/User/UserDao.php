@@ -196,10 +196,27 @@ class UserDao extends UserBaseDao {
 	public function countRegByDay(DateTime $day) {
 		$sel = $this->getTable();
 
-		$sel->where(self::COLUMN_CREATED . " >= ?", $day->format('Y-m-d') . "00:00:00");
+		$sel->where(self::COLUMN_CREATED . " >= ?", $day->format('Y-m-d') . ' ' . "00:00:00");
 		$day->modify('+ 1 days');
-		$sel->where(self::COLUMN_CREATED . " < ?", $day->format('Y-m-d') . "00:00:00");
+
+		$sel->where(self::COLUMN_CREATED . " < ?", $day->format('Y-m-d') . ' ' . "00:00:00");
 		$day->modify('- 1 days');
+
+		return $sel->count();
+	}
+
+	/**
+	 * Spočítá počet registrací za jeden měsíc.
+	 * @param DateTime $month Den, za který se mají statistiky spočítat.
+	 * @return int Počet registrací za danný den.
+	 */
+	public function countRegByMonth(DateTime $month) {
+		$sel = $this->getTable();
+
+		$sel->where(self::COLUMN_CREATED . " >= ?", $month->format('Y-m-') . "00" . ' ' . "00:00:00");
+		$month->modify('+ 1 month');
+		$sel->where(self::COLUMN_CREATED . " < ?", $month->format('Y-m-') . "00" . ' ' . "00:00:00");
+		$month->modify('- 1 month');
 
 		return $sel->count();
 	}

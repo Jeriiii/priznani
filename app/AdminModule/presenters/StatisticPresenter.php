@@ -6,11 +6,11 @@
 
 namespace AdminModule;
 
-use Nette;
 use App\Forms as Frm;
 use POS\Model\UserPropertyDao;
 use Nette\DateTime;
-use POSComponent\GraphComponent;
+use POSComponent\Graph;
+use Nette\Forms\Container;
 
 /**
  * Adminstrace statistik
@@ -28,6 +28,13 @@ class StatisticPresenter extends AdminSpacePresenter {
 	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
+	public function startup() {
+		parent::startup();
+		Container::extensionMethod('addDatePicker', function (Container $container, $name, $label = NULL) {
+			return $container[$name] = new \NetteExt\Picker\DatePicker($label);
+		});
+	}
+
 	public function renderDefault() {
 		$this->template->countMan = $this->userPropertyDao->getByType(UserPropertyDao::PROPERTY_MAN)->count();
 		$this->template->countWoman = $this->userPropertyDao->getByType(UserPropertyDao::PROPERTY_WOMAN)->count();
@@ -39,15 +46,12 @@ class StatisticPresenter extends AdminSpacePresenter {
 		$this->template->totalCount = $this->userPropertyDao->getAll()->count();
 	}
 
-	protected function createComponentGraph($name) {
-		$countDays = 7;
-		$fromDate = new DateTime();
-		$fromDate->modify("- $countDays days");
-		$dailyRegistrations = $this->statisticManager->getRegUsersByDay($this->userDao, $fromDate, $countDays);
+	protected function createComponentDailyGraph($name) {
 
-		$fromDate->modify('+ 1 days'); //korekce posunu dnů
+		$this->statisticManager->setUserDao($this->userDao);
+		$regStats = $this->statisticManager->getRegUsers();
 
-		$graphComponent = new GraphComponent($dailyRegistrations, $fromDate, $this, $name);
+		$graphComponent = new Graph($regStats, $this, $name);
 
 		return $graphComponent;
 	}

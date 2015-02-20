@@ -1,0 +1,75 @@
+{********** popisek Y osy ***************}
+{define yLegend}
+{var $days = array( 'Monday' => 'Pondělí', 'Tuesday' => 'Úterý', 'Wednesday' => 'Středa',
+'Thursday' => 'Čtvrtek', 'Friday' => 'Pátek', 'Saturday' => 'Sobota', 'Sunday' => 'Neděle')}
+
+{for $i = 0; $i < $countItems + 1; $i++} {* +1 aby to započítalo i aktuální den *}
+	{if $interval == 0} {* = dny *}
+		"{$days[$fromDate->format('l')]} {$fromDate->format('d.m.')}"
+		<?php $fromDate->modify('+ 1 days') ?>
+		{if $i < ($countItems)}, {/if} {* za posledním prvekm není čárka *}
+	{/if}
+{/for}
+
+{var $months = array( 'January' => 'Leden', 'February' => 'Únor', 'March' => 'Březen',
+'April' => 'Duben', 'May' => 'Květen', 'June' => 'Červen', 'July' => 'Červenec',
+'August' => 'Srpen', 'September' => 'Září', 'October' => 'Říjen', 'November' => 'Listopad',
+'December' => 'Prosinec')}
+
+{for $i = 0; $i < $countItems + 1; $i++} {* +1 aby to započítalo i aktuální den *}
+	{if $interval == 2} {* = měsíce *}
+		"{$months[$fromDate->format('F')]} {$fromDate->format('y')}"
+		<?php $fromDate->modify('+ 1 month') ?>
+		{if $i < ($countItems)}, {/if} {* za posledním prvekm není čárka *}
+	{/if}
+{/for}
+{/define}
+
+<script type="text/javascript">
+$(function () {
+    $('#{!$elementId}').highcharts({
+        chart: {
+            type: 'areaspline'
+        },
+        title: {
+            text: {$header}
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            verticalAlign: 'top',
+            x: 150,
+            y: 100,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        xAxis: {
+            categories: [
+                {include #yLegend}
+			]
+        },
+        yAxis: {
+            title: {
+                text: {$graphName}
+            }
+        },
+        tooltip: {
+            shared: true,
+            valueSuffix: ' units'
+        },
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            areaspline: {
+                fillOpacity: 0.5
+            }
+        },
+        series: [{
+            name: 'Registrace',
+            data: [{foreach $items as $item}{$item}{if !$iterator->last},{/if}{/foreach}]
+        }]
+    });
+});
+</script>

@@ -4,6 +4,7 @@
 			padding-bottom: 20px;
 		}
 	</style>
+	{control css 'graph/default.less'}
 {/block}
 
 {block content}
@@ -32,9 +33,13 @@
 	<h2>Návštěvnost</h2>
 	<a class="btn btn-default" href="http://www.google.com/analytics/">google analytisc</a>
 	
-	<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	{control dailyGraph "dailyGraph"}
+	{*control monthlyGraph "monthlyGraph"*}
 {/block}
 
 {block foot}
-{control graph}
+{control dailyGraph:js "dailyGraph"}
+{*control monthlyGraph:js "monthlyGraph"*}
+<script src="{$basePath}/js/graphs/highcharts.js"></script>
+<script src="{$basePath}/js/graphs/modules/exporting.js"></script>
 {/block}
