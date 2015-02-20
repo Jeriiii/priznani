@@ -1,14 +1,14 @@
 {block head}
 {*<link rel="stylesheet" href="{$basePath}/css/bonuses.css" type="text/css">*}
 <link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
-<script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>  
+<script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>
 {control css "competition/listImages.less", 'bootstrap/forms-medium.less'}
 {/}
 {block content}
 
-<!--div>
-<a n:href="Galleries:ListUserGalleryImages galleryID => $galleryID" class="btn-main btn-small">Zpět do galerie</a>
-</div-->
+<div class="btn-main-group">
+	<a n:href="Galleries:ListUserGalleryImages galleryID => $galleryID">Zpět</a>
+</div>
 <h2>Editace galerie</h2>
 <div class="container-medium">
 	{control userGalleryChange}
@@ -20,7 +20,7 @@
     {control myUserImagesInGallery "listAll", $paying, $private}
     <div class="clear"></div>
 </section>
-	
+
 {/}
 
 {block foot}
