@@ -80,6 +80,15 @@ class ChatManager extends \Nette\Object {
 	}
 
 	/**
+	 * Vrátí kontakt na admina
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function getAdminContact() {
+		return $this->userDao->getInRoleSuperadminLimit(1)
+				->fetch();
+	}
+
+	/**
 	 * Posle uzivateli zpravu
 	 * @param int $idSender id odesilatele
 	 * @param int $idRecipient id prijemce

@@ -7,7 +7,13 @@
 			<span class="online-indicator"></span>
 			<span class="chatLastActivity">{$contactList->getLastActivity($contact->user2)}</span>
 		</li>
-	{/foreach}	
+	{/foreach}
+	{var $adminid = $coder->encodeData($admin->id)}
+	<li id="contact->user2-{$adminid}" data-id="{$adminid}" data-title="Dotazy/podpora" class="contact-link">
+		{$admin|showProfMin}<span class="chat-username">Dotazy/podpora</span>
+		<span class="online-indicator"></span>
+		<span class="chatLastActivity">{$contactList->getLastActivity($admin)}</span>
+	</li>
 </ul>
 
 <script>
