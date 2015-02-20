@@ -47,6 +47,7 @@ class UserPropertyDao extends UserBaseDao {
 	const COLUMN_PREFERENCES_ID = "preferencesID";
 	const COLUMN_COINS = "coins";
 	const COLUMN_SCORE = "score";
+	const COLUMN_SOUND_EFFECT = "sound_effect";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
