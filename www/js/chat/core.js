@@ -26,14 +26,14 @@
 		reloadWindowUnload();
 		var interval = $.cookie("chat-request-interval");
 		var waitingTime = $.cookie("chat-waiting-time");
-		if(!waitingTime){
+		if (!waitingTime) {
 			$.cookie("chat-waiting-time", 0);
 		}
-		if(!interval){
+		if (!interval) {
 			$.cookie("chat-request-interval", chatopts.maxRequestTimeout);
 		}
 		refreshMessages();
-		
+
 	};
 
 	/* proměnná pro poslední známé id zprávy */
@@ -85,15 +85,15 @@
 		}
 		var interval = $.cookie("chat-request-interval");
 		var waitingTime = parseInt($.cookie("chat-waiting-time"));
-		
-		
-		if(waitingTime >= interval){
+
+
+		if (waitingTime >= interval) {
 			sendRefreshRequest();
 			$.cookie("chat-waiting-time", 0);
-		}else{
+		} else {
 			$.cookie("chat-waiting-time", waitingTime + this.chatopts.controlTime);
 		}
-		
+
 		setTimeout(function () {
 			//console.log("CHAT - refreshing");//pro debug
 			refreshMessages();
@@ -251,6 +251,9 @@
 				addMessage(iduser, name, href, message.name, message.id, message.text, message.type);
 				if (message.type == 0) {//textové zprávy se aktualizují v seznamu konverzací
 					actualizeMessageInConversationList(iduser, name, message.text);
+					if (message.readed == 0) {
+						playMessageSound();//prehrani zvuku
+					}
 				}
 				if (message.id > $.fn.chat.lastId) {//aktualizace nejvyssiho id
 					$.fn.chat.lastId = message.id;
@@ -388,6 +391,16 @@
 	 */
 	function clearInfoMessages(id) {
 		$('#' + id + ' .ui-chatbox-nopeer').css('display', 'none');
+	}
+
+	/**
+	 * Pustí zvuk zprávy
+	 */
+	function playMessageSound() {
+		var soundElement = document.getElementById("chat-beep");
+		if (soundElement) {
+			soundElement.play();
+		}
 	}
 
 	/**

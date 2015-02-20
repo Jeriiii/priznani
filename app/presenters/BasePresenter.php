@@ -220,7 +220,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 * @return \POSComponent\Chat\PosChat
 	 */
 	protected function createComponentChat($name) {
-		return new POSComponent\Chat\PosChat($this->chatManager, $this, $name);
+		return new POSComponent\Chat\PosChat($this->chatManager, $this->loggedUser, $this, $name);
 	}
 
 	/**
