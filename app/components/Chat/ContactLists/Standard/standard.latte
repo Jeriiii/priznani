@@ -8,8 +8,9 @@
 			<span class="chatLastActivity">{$contactList->getLastActivity($contact->user2)}</span>
 		</li>
 	{/foreach}
+	<li class="support-contact-spacer"></li>
 	{var $adminid = $coder->encodeData($admin->id)}
-	<li id="contact->user2-{$adminid}" data-id="{$adminid}" data-title="Dotazy/podpora" class="contact-link">
+	<li id="contact->user2-{$adminid}" data-id="{$adminid}" data-title="Dotazy/podpora" class="contact-link support-contact">
 		{$admin|showProfMin}<span class="chat-username">Dotazy/podpora</span>
 		<span class="online-indicator"></span>
 		<span class="chatLastActivity">{$contactList->getLastActivity($admin)}</span>
