@@ -31,6 +31,7 @@ class FirstImageUploadForm extends BaseForm {
 
 		$this->addUpload('imageToUpload', 'Přidat fotku:')
 			->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 * 1024)
+			->addRule(Form::IMAGE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/png,image/jpeg,image/gif')
 			->addCondition(Form::MIME_TYPE, 'Povolené formáty fotografií jsou JPEG,  JPG, PNG nebo GIF', 'image/jpg,image/png,image/jpeg,image/gif');
 		$this->addSubmit('uploadImageToCrop', 'Nahrát');
 
