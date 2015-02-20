@@ -113,6 +113,10 @@ class EditPresenter extends ProfilBasePresenter {
 		return new Frm\DatingEditThirdForm($this->userCategoryDao, $this->userPropertyDao, $this->coupleDao, $this->userDao, $this->loggedUser->property, $this->loggedUser->couple, $this, $name);
 	}
 
+	protected function createComponentSettingsEditForm($name) {
+		return new Frm\SettingsEditForm($this->userPropertyDao, $this->loggedUser->property, $this, $name);
+	}
+
 	public function createComponentMyUserGalleries() {
 		return new MyUserGalleriesThumbnails($this->userDao, $this->userGalleryDao, $this->userAllowedDao, $this->friendDao);
 	}
