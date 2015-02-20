@@ -10,7 +10,9 @@
 		<div class="clear"></div>
 	</div>
 	<div class="clear"></div>
-
+	{if $loggedUser->property->sound_effect == 1}
+	<audio id="chat-beep" src="{$basePath}/sounds/kiss01.WAV"></audio>
+	{/if}
 	{control contactList}
 
 	{control conversationList}
