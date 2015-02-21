@@ -18,14 +18,14 @@ use POS\Model\UserDao;
 use Nette\DateTime;
 
 class StatisticManager {
-	
+
 	/** @var UserDao */
 	private $userDao;
-	
+
 	public function setUserDao($userDao) {
 		$this->userDao = $userDao;
 	}
-	
+
 	/**
 	 * Vrací objekt pro práci s registracemi a statistikami.
 	 * @return RegistrationStatistics Spočítá statistiky registrovaných uživatelů
@@ -33,6 +33,24 @@ class StatisticManager {
 	public function getRegUsers() {
 		$regStat = new RegistrationStatistics($this->userDao);
 		return $regStat;
+	}
+
+	/**
+	 * Vrací objekt pro práci s počtem jednotlivých skupin uživatelů.
+	 * @return PeopleBySexStatistics Spočítá statistiky skupin uživatelů
+	 */
+	public function getPeopleBySex() {
+		$sexStat = new PeopleBySexStatistics($this->userDao);
+		return $sexStat;
+	}
+
+	/**
+	 * Vrací objekt pro práci s počtem jednotlivých skupin uživatelů.
+	 * @return PeopleBySexStatistics Spočítá statistiky skupin uživatelů
+	 */
+	public function getPeopleByAge() {
+		$sexStat = new PeopleByAgeStatistics($this->userDao);
+		return $sexStat;
 	}
 
 }

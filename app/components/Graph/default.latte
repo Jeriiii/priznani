@@ -1,3 +1,7 @@
-{control intervalPickerForm}
+<h2 class="graph">{$graphName}</h2>
+
+{if $graphType != 'pie'}
+	{control intervalPickerForm}
+{/if}
 
 <div id="{$elementId}" style="min-width: 310px; height: 400px; margin: 0 auto"></div>

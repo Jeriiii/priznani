@@ -46,14 +46,39 @@ class StatisticPresenter extends AdminSpacePresenter {
 		$this->template->totalCount = $this->userPropertyDao->getAll()->count();
 	}
 
-	protected function createComponentDailyGraph($name) {
-
+	protected function createComponentRegistrationGraph($name) {
 		$this->statisticManager->setUserDao($this->userDao);
 		$regStats = $this->statisticManager->getRegUsers();
 
-		$graphComponent = new Graph($regStats, $this, $name);
+		$graph = new Graph($regStats, $this, $name);
+		$graph->graphName = 'Statistika registrací';
+		$graph->linename1 = 'Počet registrací';
 
-		return $graphComponent;
+		return $graph;
+	}
+
+	protected function createComponentPeopleBySexGraph($name) {
+		$this->statisticManager->setUserDao($this->userDao);
+		$sexStats = $this->statisticManager->getPeopleBySex();
+
+		$graph = new Graph($sexStats, $this, $name);
+		$graph->graphName = 'Statistika zastoupení skupin';
+		$graph->setTypePie();
+		$graph->linename1 = 'Počet lidí ve skupině';
+
+		return $graph;
+	}
+
+	protected function createComponentPeopleByAgeGraph($name) {
+		$this->statisticManager->setUserDao($this->userDao);
+		$sexStats = $this->statisticManager->getPeopleByAge();
+
+		$graph = new Graph($sexStats, $this, $name);
+		$graph->graphName = 'Statistika podle věku';
+		$graph->setTypePie();
+		$graph->linename1 = 'Počet lidí';
+
+		return $graph;
 	}
 
 }

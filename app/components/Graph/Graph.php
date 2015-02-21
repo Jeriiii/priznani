@@ -23,7 +23,12 @@ class Graph extends BaseProjectControl {
 	const INTERVAL_DAILY = 'days';
 	const INTERVAL_MONTHLY = 'months';
 
+	/* Typy grafu */
+	const GRAPH_TYPE_AREASPLINE = 'areaspline'; //hory
+	const GRAPH_TYPE_PIE = 'pie'; //koláč
+
 	/** @var array Data (hodnoty), které se mají do grafu zobrazit. */
+
 	private $dataToGraph = NULL;
 
 	/** @var DateTime Data (hodnoty), které se mají do grafu zobrazit. */
@@ -33,10 +38,16 @@ class Graph extends BaseProjectControl {
 	private $interval = self::INTERVAL_DAILY;
 
 	/** @var string Název celého grafu */
-	public $graphName = "Graf";
+	public $graphName = 'Graf';
+
+	/** @var string Typ grafu */
+	private $graphType = self::GRAPH_TYPE_AREASPLINE;
+
+	/** @var string Název čáry */
+	public $linename1 = '';
 
 	/** @var string Velký nadpis celého grafu */
-	public $header = "";
+	public $header = '';
 
 	/** @var int Počet jednotek (počet dní, měsíců ...) */
 	private $countItems = 6; // 6 dní = jeden týden (6 + 1)
@@ -51,6 +62,38 @@ class Graph extends BaseProjectControl {
 
 		$this->fromDate = new DateTime();
 		$this->fromDate->modify('- ' . ($this->countItems) . ' ' . $this->interval);
+	}
+
+	/**
+	 * Vykresli graf.
+	 * @param int $elementId Id html elementu, na který se má graf (plugin) navázat
+	 */
+	public function render($elementId) {
+		$this->template->elementId = $elementId;
+		$this->template->graphName = $this->graphName;
+		$this->template->graphType = $this->graphType;
+
+		$this->template->setFile(dirname(__FILE__) . '/default.latte');
+		$this->template->render();
+	}
+
+	/**
+	 * Vykresli nastavení js pluginu.
+	 * @param int $elementId Id html elementu, na který se má graf (plugin) navázat
+	 */
+	public function renderJs($elementId) {
+		$this->template->items = $this->getDataGraph();
+		$this->template->fromDate = $this->fromDate;
+		$this->template->countItems = $this->countItems;
+		$this->template->interval = $this->interval;
+		$this->template->graphName = $this->graphName;
+		$this->template->graphType = $this->graphType;
+		$this->template->header = $this->header;
+		$this->template->elementId = $elementId;
+		$this->template->linename1 = $this->linename1;
+
+		$this->template->setFile(dirname(__FILE__) . '/js.latte');
+		$this->template->render();
 	}
 
 	public function setInterval($interval) {
@@ -84,31 +127,10 @@ class Graph extends BaseProjectControl {
 	}
 
 	/**
-	 * Vykresli graf.
-	 * @param int $elementId Id html elementu, na který se má graf (plugin) navázat
+	 * Nastaví typ grafu na koláč
 	 */
-	public function render($elementId) {
-		$this->template->elementId = $elementId;
-
-		$this->template->setFile(dirname(__FILE__) . '/default.latte');
-		$this->template->render();
-	}
-
-	/**
-	 * Vykresli nastavení js pluginu.
-	 * @param int $elementId Id html elementu, na který se má graf (plugin) navázat
-	 */
-	public function renderJs($elementId) {
-		$this->template->items = $this->getDataGraph();
-		$this->template->fromDate = $this->fromDate;
-		$this->template->countItems = $this->countItems;
-		$this->template->interval = $this->interval;
-		$this->template->graphName = $this->graphName;
-		$this->template->header = $this->header;
-		$this->template->elementId = $elementId;
-
-		$this->template->setFile(dirname(__FILE__) . '/js.latte');
-		$this->template->render();
+	public function setTypePie() {
+		$this->graphType = self::GRAPH_TYPE_PIE;
 	}
 
 	public function getDataGraph() {

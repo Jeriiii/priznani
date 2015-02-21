@@ -222,6 +222,31 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Spočítá celkový počet druhů uživatelů (mužů, žen, párů ...)
+	 * @return Selection
+	 */
+	public function getUsersBySex() {
+		$sel = $this->getTable();
+		$sel->select(self::COLUMN_PROPERTY_ID . '.type AS name, count(' . self::TABLE_NAME . '.' . self::COLUMN_ID . ') AS countItems');
+		$sel->where(self::COLUMN_TYPE . '!=?', 0);
+		$sel->group(self::COLUMN_TYPE);
+		return $sel;
+	}
+
+	/**
+	 * Spočítá celkový počet věkových skupin uživatelů
+	 * @param int $yearFrom Rok od (např. 1990)
+	 * @param int $yearTo Rok do
+	 * @return Selection
+	 */
+	public function getUsersByAge($yearFrom, $yearTo) {
+		$sel = $this->createSelection(UserPropertyDao::TABLE_NAME);
+		$sel->where('year(' . self::COLUMN_AGE . ') <=?', $yearFrom);
+		$sel->where('year(' . self::COLUMN_AGE . ') >=?', $yearTo);
+		return $sel->count();
+	}
+
+	/**
 	 * Vyhledá užigvatele podle zadaných kriterií
 	 * @param array $data pole dat, podle kterých se provede hledání
 	 * @return Nette\Database\Table\Selection
