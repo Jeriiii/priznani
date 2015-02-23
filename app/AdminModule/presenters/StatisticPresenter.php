@@ -51,11 +51,9 @@ class StatisticPresenter extends AdminSpacePresenter {
 		$this->statisticManager->setUserDao($this->userDao);
 		$regStats = $this->statisticManager->getRegUsers();
 
-		$lines = new Lines();
-		$lines->addLine($regStats, 'Počet registrací');
-
-		$graph = new Graph($lines, $this, $name);
+		$graph = new Graph($this, $name);
 		$graph->graphName = 'Statistika registrací';
+		$graph->addLine($regStats, 'Počet registrací');
 
 		return $graph;
 	}
@@ -64,11 +62,9 @@ class StatisticPresenter extends AdminSpacePresenter {
 		$this->statisticManager->setUserDao($this->userDao);
 		$sexStats = $this->statisticManager->getPeopleBySex();
 
-		$lines = new Lines();
-		$lines->addLine($sexStats, 'Počet lidí ve skupině');
-
-		$graph = new Graph($lines, $this, $name);
+		$graph = new Graph($this, $name);
 		$graph->graphName = 'Statistika zastoupení skupin';
+		$graph->addLine($sexStats, 'Počet lidí ve skupině');
 		$graph->setTypePie();
 
 		return $graph;
@@ -78,11 +74,9 @@ class StatisticPresenter extends AdminSpacePresenter {
 		$this->statisticManager->setUserDao($this->userDao);
 		$ageStats = $this->statisticManager->getPeopleByAge();
 
-		$lines = new Lines();
-		$lines->addLine($ageStats, 'Počet lidí');
-
-		$graph = new Graph($lines, $this, $name);
+		$graph = new Graph($this, $name);
 		$graph->graphName = 'Statistika podle věku';
+		$graph->addLine($ageStats, 'Počet lidí');
 		$graph->setTypePie();
 
 		return $graph;

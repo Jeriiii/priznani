@@ -1,5 +1,6 @@
 {define series}
 	{foreach $lines as $line}
+		{
 		{if $graphType == 'areaspline'}
 			name: "{$line->name}",
 			data: [
@@ -18,6 +19,8 @@
 				{/foreach}
 			]
 		{/if}
+		}
+		{if !$iterator->last},{/if}
 	{/foreach}
 {/define}
 
@@ -78,9 +81,9 @@ $(function () {
         plotOptions: {
             {include #plotOptions}
         },
-        series: [{
+        series: [
             {include #series}
-        }]
+        ]
     });
 });
 </script>

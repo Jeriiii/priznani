@@ -23,11 +23,11 @@ class Lines {
 
 	/**
 	 * Přidá další čárů do grafu.
-	 * @param IStatistics $dataModel Model pro zobrazení dat.
+	 * @param IStatistics|array $data Model pro zobrazení dat | data.
 	 * @param string $name Název čáry v grafu.
 	 */
-	public function addLine(IStatistics $dataModel, $name) {
-		$this->lines[] = new Line($dataModel, $name);
+	public function addLine($data, $name) {
+		$this->lines[] = new Line($name, $data);
 	}
 
 	/**

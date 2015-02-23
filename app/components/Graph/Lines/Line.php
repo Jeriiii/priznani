@@ -8,6 +8,7 @@ namespace POSComponent;
 
 use POS\Statistics\IStatistics;
 use Nette\ArrayHash;
+use Exception;
 
 /**
  * Jedna čára (jedny zobrazené data) v grafu
@@ -23,7 +24,7 @@ class Line implements \IteratorAggregate {
 	private $data = array();
 
 	/** @var IStatistics Model ye kterého se tahají data pro danou čáru. */
-	private $dataModel;
+	private $dataModel = NULL;
 
 	/** @var DateTime Data (hodnoty), které se mají do grafu zobrazit. */
 	private $fromDate = NULL;
@@ -37,10 +38,27 @@ class Line implements \IteratorAggregate {
 	/** @var int Mód, po jakém časovém intervalu se mají zobrazovat data.	 */
 	private $interval;
 
-	public function __construct(IStatistics $dataModel, $name) {
-		$this->dataModel = $dataModel;
+	public function __construct($name, $data = NULL) {
 		$this->name = $name;
 		$this->interval = self::DAILY_MODE;
+
+		if ($data instanceof IStatistics) {
+			$this->dataModel = $data;
+		} else if (is_array($data)) {
+			$this->data = $data;
+		} else if ($data === NULL) {
+			//záměrně je to prázdné
+		} else {
+			throw new Exception('Variable $data must by instance of IStatistics or array.');
+		}
+	}
+
+	public function addDataModel(IStatistics $dataModel) {
+		$this->dataModel = $dataModel;
+	}
+
+	public function addData(array $data) {
+		$this->data = $data;
 	}
 
 	/**
@@ -59,20 +77,24 @@ class Line implements \IteratorAggregate {
 	 * Vrátí data o čáře
 	 */
 	public function getData() {
-		$data = array();
-
 		if ($this->fromDate === NULL) {
 			throw new Exception('You must call setInterval method first.');
 		}
 
-		/* spočítá data, co se mají zobrazit v grafu */
-		if ($this->interval == self::DAILY_MODE) {
-			$data = $this->dataModel->getDaily($this->fromDate, $this->countItems);
-		} else {
-			$data = $this->dataModel->getMonthly($this->fromDate, $this->countItems);
+		if (empty($this->data) && empty($this->dataModel)) {
+			throw new Exception('You must set dataModel or data.');
 		}
 
-		return $data;
+		if (empty($this->data)) {
+			/* spočítá data, co se mají zobrazit v grafu */
+			if ($this->interval == self::DAILY_MODE) {
+				$this->data = $this->dataModel->getDaily($this->fromDate, $this->countItems);
+			} else {
+				$this->data = $this->dataModel->getMonthly($this->fromDate, $this->countItems);
+			}
+		}
+
+		return $this->data;
 	}
 
 	public function getName() {

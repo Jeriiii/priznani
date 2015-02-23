@@ -11,6 +11,7 @@ use Nette\Application\UI\Form\IntervalPickerForm;
 use DateInterval;
 use POS\Statistics\IStatistics;
 use POSComponent\Lines;
+use POSComponent\Line;
 
 /**
  * Komponenta zobrazující data do grafu. Jde o graf
@@ -51,15 +52,28 @@ class Graph extends BaseProjectControl {
 	private $countItems = 6; // 6 dní = jeden týden (6 + 1)
 
 	/** @var Lines Křivky, co se mají zobrazit v grafu. */
-	private $lines;
+	private $lines = NULL;
 
-	public function __construct(Lines $lines, $parent, $name) {
+	public function __construct($parent, $name, Lines $lines = NULL) {
 		parent::__construct($parent, $name);
 
 		$this->lines = $lines;
 
 		$this->fromDate = new DateTime();
 		$this->fromDate->modify('- ' . ($this->countItems) . ' ' . $this->interval);
+	}
+
+	/**
+	 * Přidá další čárů do grafu.
+	 * @param IStatistics|array $data Model pro zobrazení dat | data.
+	 * @param string $name Název čáry v grafu.
+	 */
+	public function addLine($data, $name) {
+		if ($this->lines === NULL) {
+			$this->lines = new Lines();
+		}
+
+		$this->lines->addLine($data, $name);
 	}
 
 	/**
