@@ -29,6 +29,12 @@ class StatisticPresenter extends AdminSpacePresenter {
 	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
+	/** @var \POS\Model\StreamDao @inject */
+	public $streamDao;
+
+	/** @var \POS\Model\UserImageDao @inject */
+	public $userImageDao;
+
 	public function startup() {
 		parent::startup();
 		Container::extensionMethod('addDatePicker', function (Container $container, $name, $label = NULL) {
@@ -54,6 +60,24 @@ class StatisticPresenter extends AdminSpacePresenter {
 		$graph = new Graph($this, $name);
 		$graph->graphName = 'Statistika registrací';
 		$graph->addLine($regStats, 'Počet registrací');
+
+		return $graph;
+	}
+
+	protected function createComponentActivityGraph($name) {
+		$this->statisticManager->setStreamDao($this->streamDao);
+		$this->statisticManager->setUserImageDao($this->userImageDao);
+
+		$confStats = $this->statisticManager->getStreamConfessions();
+		$statusStats = $this->statisticManager->getStreamStatus();
+		$imgsStats = $this->statisticManager->getUserImagesGallery();
+
+		$graph = new Graph($this, $name);
+		$graph->graphName = 'Statistika aktivity uživatelů';
+		$graph->addLine($confStats, 'Počet přiznání');
+		$graph->addLine($statusStats, 'Počet statusů');
+		$graph->addLine($imgsStats, 'Počet obrázků');
+		//$graph->addTotalLine("Celkový součet aktivit");
 
 		return $graph;
 	}

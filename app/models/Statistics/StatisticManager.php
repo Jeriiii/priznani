@@ -15,6 +15,8 @@ namespace POS\Statistics;
 
 use Nette\Database\Table\Selection;
 use POS\Model\UserDao;
+use POS\Model\StreamDao;
+use POS\Model\UserImageDao;
 use Nette\DateTime;
 
 class StatisticManager {
@@ -22,8 +24,22 @@ class StatisticManager {
 	/** @var UserDao */
 	private $userDao;
 
+	/** @var StreamDao */
+	public $streamDao;
+
+	/** @var UserImageDao */
+	public $userImageDao;
+
 	public function setUserDao($userDao) {
 		$this->userDao = $userDao;
+	}
+
+	public function setStreamDao($streamDao) {
+		$this->streamDao = $streamDao;
+	}
+
+	public function setUserImageDao($userImageDao) {
+		$this->userImageDao = $userImageDao;
 	}
 
 	/**
@@ -33,6 +49,33 @@ class StatisticManager {
 	public function getRegUsers() {
 		$regStat = new RegistrationStatistics($this->userDao);
 		return $regStat;
+	}
+
+	/**
+	 * Vrací objekt pro práci se statusy a statistikami.
+	 * @return StreamStatusStatistics Spočítá statistiky registrovaných uživatelů
+	 */
+	public function getStreamStatus() {
+		$statStat = new StreamStatusStatistics($this->streamDao);
+		return $statStat;
+	}
+
+	/**
+	 * Vrací objekt pro práci s nahráním obrázků a jejich statisitkami.
+	 * @return StreamUserGalleriesStatistics Spočítá statistiky se změnami galerií
+	 */
+	public function getUserImagesGallery() {
+		$imgsStat = new UserImagesStatistics($this->userImageDao);
+		return $imgsStat;
+	}
+
+	/**
+	 * Vrací objekt pro práci s přiznáními a statistikami.
+	 * @return StreamConfessionsStatistics Spočítá statistiky registrovaných uživatelů
+	 */
+	public function getStreamConfessions() {
+		$confStat = new StreamConfessionsStatistics($this->streamDao);
+		return $confStat;
 	}
 
 	/**

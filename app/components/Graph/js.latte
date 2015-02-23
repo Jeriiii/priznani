@@ -1,7 +1,7 @@
 {define series}
 	{foreach $lines as $line}
 		{
-		{if $graphType == 'areaspline'}
+		{if $graphType == 'areaspline' || $graphType == 'area'}
 			name: "{$line->name}",
 			data: [
 				{foreach $line->getData() as $key => $point}
@@ -25,9 +25,20 @@
 {/define}
 
 {define plotOptions}
+	{if $graphType == 'area'}
+		area: {
+			stacking: 'normal',
+			lineColor: '#666666',
+			lineWidth: 1,
+			marker: {
+				lineWidth: 1,
+				lineColor: '#666666'
+			}
+		}
+	{/if}
 	{if $graphType == 'areaspline'}
 		areaspline: {
-			fillOpacity: 0.5
+			fillOpacity: 0.3
 		}
 	{/if}
 	{if $graphType == 'pie'}
@@ -46,7 +57,7 @@
 $(function () {
     $('#{!$elementId}').highcharts({
         chart: {
-            type: 'areaspline'
+            type: {$graphType}
         },
         title: {
             text: {$header}

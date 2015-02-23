@@ -28,6 +28,7 @@ class Graph extends BaseProjectControl {
 	/* Typy grafu */
 	const GRAPH_TYPE_AREASPLINE = 'areaspline'; //hory
 	const GRAPH_TYPE_PIE = 'pie'; //koláč
+	const GRAPH_TYPE_AREA = 'area'; //hodnoty se sčítají a dělají hory
 
 	/** @var DateTime Data (hodnoty), které se mají do grafu zobrazit. */
 
@@ -54,6 +55,9 @@ class Graph extends BaseProjectControl {
 	/** @var Lines Křivky, co se mají zobrazit v grafu. */
 	private $lines = NULL;
 
+	/** @var string Součet všech křivek */
+	private $totalLineName = NULL;
+
 	public function __construct($parent, $name, Lines $lines = NULL) {
 		parent::__construct($parent, $name);
 
@@ -74,6 +78,14 @@ class Graph extends BaseProjectControl {
 		}
 
 		$this->lines->addLine($data, $name);
+	}
+
+	/**
+	 * Přidá čáru s celkovým součtem všech čar.
+	 * @param string $name Název čáry se součtem všech ostatních.
+	 */
+	public function addTotalLine($name) {
+		$this->totalLineName = $name;
 	}
 
 	/**
@@ -146,6 +158,13 @@ class Graph extends BaseProjectControl {
 	}
 
 	/**
+	 * Nastaví typ grafu na sečítající se hory
+	 */
+	public function setTypeArea() {
+		$this->graphType = self::GRAPH_TYPE_AREA;
+	}
+
+	/**
 	 * Vrátí data do grafu.
 	 * @return Lines
 	 */
@@ -155,6 +174,10 @@ class Graph extends BaseProjectControl {
 		}
 
 		$this->lines->setInterval($this->fromDate, $this->countItems);
+
+		if (!empty($this->totalLineName)) {
+			$this->lines->addTotalLine($this->totalLineName);
+		}
 
 		return $this->lines->getLines();
 	}

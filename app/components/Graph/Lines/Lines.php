@@ -21,13 +21,43 @@ class Lines {
 	/** @var Line Křivky které mají jít do grafu. */
 	private $lines = array();
 
+	/** @var DateTime Data (hodnoty), které se mají do grafu zobrazit. */
+	private $fromDate = NULL;
+
+	/** @var int Počet jednotek (počet dní, měsíců ...) */
+	private $countItems; // 6 dní = jeden týden (6 + 1)
+
 	/**
 	 * Přidá další čárů do grafu.
 	 * @param IStatistics|array $data Model pro zobrazení dat | data.
 	 * @param string $name Název čáry v grafu.
 	 */
+
 	public function addLine($data, $name) {
 		$this->lines[] = new Line($name, $data);
+	}
+
+	/**
+	 * Přidá čáru s celkovým součtem všech čar. Musí se přidat jako poslední křívka!
+	 * @param string $name Název čáry se součtem všech ostatních.
+	 */
+	public function addTotalLine($name) {
+		$data = array();
+
+		foreach ($this->lines as $line) {
+			$dataLine = $line->getData();
+			foreach ($dataLine as $key => $val) {
+				if (array_key_exists($key, $data)) {
+					$data[$key] = $data[$key] + $val;
+				} else {
+					$data[$key] = $val;
+				}
+			}
+		}
+
+		$line = new Line($name, $data);
+		$line->setInterval($this->fromDate, $this->countItems);
+		$this->lines[] = $line;
 	}
 
 	/**
@@ -48,10 +78,11 @@ class Lines {
 	}
 
 	public function setInterval($fromDate, $countItems) {
-		$fromDate = new DateTime($fromDate); //ochrana proti posunutí datumu z vnějšku
+		$this->fromDate = new DateTime($fromDate); //ochrana proti posunutí datumu z vnějšku
+		$this->countItems = $countItems;
 
 		foreach ($this->lines as $line) {
-			$line->setInterval($fromDate, $countItems);
+			$line->setInterval($this->fromDate, $this->countItems);
 		}
 	}
 
