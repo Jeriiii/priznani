@@ -1,18 +1,24 @@
 {define series}
-	{if $graphType == 'areaspline'}
-		name: "{$linename1}",
-		data: [{foreach $items as $item}{$item}{if !$iterator->last},{/if}{/foreach}]
-	{/if}
-	{if $graphType == 'pie'}
-		type: 'pie',
-		name: "{$linename1}",
-		data: [
-			{foreach $items as $item}
-				['{$item->name}', {$item->count}]
-				{if !$iterator->last},{/if}
-			{/foreach}
-		]
-	{/if}
+	{foreach $lines as $line}
+		{if $graphType == 'areaspline'}
+			name: "{$line->name}",
+			data: [
+				{foreach $line->getData() as $key => $point}
+					{$point}{if !$iterator->last},{/if}
+				{/foreach}
+			]
+		{/if}
+		{if $graphType == 'pie'}
+			type: 'pie',
+			name: "{$line->name}",
+			data: [
+				{foreach $line->getData() as $point}
+					['{$point->name}', {$point->count}]
+					{if !$iterator->last},{/if}
+				{/foreach}
+			]
+		{/if}
+	{/foreach}
 {/define}
 
 {define plotOptions}

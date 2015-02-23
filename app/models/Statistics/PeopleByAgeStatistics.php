@@ -29,7 +29,7 @@ class PeopleByAgeStatistics extends Statistics {
 	 * @param DateTime $fromDate Počáteční datum, od kdy chci vědět registrace.
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function countRegByInterval() {
+	public function countByInterval() {
 		$ages = array(
 			array(
 				'from' => 18,
@@ -75,7 +75,7 @@ class PeopleByAgeStatistics extends Statistics {
 	}
 
 	protected function getByIntervals(DateTime $fromDate, $countDates, $typeOfInterval = self::DAY) {
-		$data = $this->countRegByInterval();
+		$data = $this->countByInterval();
 		return $data;
 	}
 

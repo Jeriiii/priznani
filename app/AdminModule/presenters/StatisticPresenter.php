@@ -11,6 +11,7 @@ use POS\Model\UserPropertyDao;
 use Nette\DateTime;
 use POSComponent\Graph;
 use Nette\Forms\Container;
+use POSComponent\Lines;
 
 /**
  * Adminstrace statistik
@@ -50,9 +51,11 @@ class StatisticPresenter extends AdminSpacePresenter {
 		$this->statisticManager->setUserDao($this->userDao);
 		$regStats = $this->statisticManager->getRegUsers();
 
-		$graph = new Graph($regStats, $this, $name);
+		$lines = new Lines();
+		$lines->addLine($regStats, 'Počet registrací');
+
+		$graph = new Graph($lines, $this, $name);
 		$graph->graphName = 'Statistika registrací';
-		$graph->linename1 = 'Počet registrací';
 
 		return $graph;
 	}
@@ -61,22 +64,26 @@ class StatisticPresenter extends AdminSpacePresenter {
 		$this->statisticManager->setUserDao($this->userDao);
 		$sexStats = $this->statisticManager->getPeopleBySex();
 
-		$graph = new Graph($sexStats, $this, $name);
+		$lines = new Lines();
+		$lines->addLine($sexStats, 'Počet lidí ve skupině');
+
+		$graph = new Graph($lines, $this, $name);
 		$graph->graphName = 'Statistika zastoupení skupin';
 		$graph->setTypePie();
-		$graph->linename1 = 'Počet lidí ve skupině';
 
 		return $graph;
 	}
 
 	protected function createComponentPeopleByAgeGraph($name) {
 		$this->statisticManager->setUserDao($this->userDao);
-		$sexStats = $this->statisticManager->getPeopleByAge();
+		$ageStats = $this->statisticManager->getPeopleByAge();
 
-		$graph = new Graph($sexStats, $this, $name);
+		$lines = new Lines();
+		$lines->addLine($ageStats, 'Počet lidí');
+
+		$graph = new Graph($lines, $this, $name);
 		$graph->graphName = 'Statistika podle věku';
 		$graph->setTypePie();
-		$graph->linename1 = 'Počet lidí';
 
 		return $graph;
 	}

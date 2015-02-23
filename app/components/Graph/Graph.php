@@ -10,6 +10,7 @@ use Nette\DateTime;
 use Nette\Application\UI\Form\IntervalPickerForm;
 use DateInterval;
 use POS\Statistics\IStatistics;
+use POSComponent\Lines;
 
 /**
  * Komponenta zobrazující data do grafu. Jde o graf
@@ -27,11 +28,8 @@ class Graph extends BaseProjectControl {
 	const GRAPH_TYPE_AREASPLINE = 'areaspline'; //hory
 	const GRAPH_TYPE_PIE = 'pie'; //koláč
 
-	/** @var array Data (hodnoty), které se mají do grafu zobrazit. */
-
-	private $dataToGraph = NULL;
-
 	/** @var DateTime Data (hodnoty), které se mají do grafu zobrazit. */
+
 	private $fromDate;
 
 	/** @var int Čas, který se má zobrazit na Y ose (dny, týdny, měsíce, roky) */
@@ -52,13 +50,13 @@ class Graph extends BaseProjectControl {
 	/** @var int Počet jednotek (počet dní, měsíců ...) */
 	private $countItems = 6; // 6 dní = jeden týden (6 + 1)
 
-	/** @var IStatistics Objekt který vrací data, co se mají zobrazit v grafu. */
-	private $statistics;
+	/** @var Lines Křivky, co se mají zobrazit v grafu. */
+	private $lines;
 
-	public function __construct(IStatistics $statistics, $parent, $name) {
+	public function __construct(Lines $lines, $parent, $name) {
 		parent::__construct($parent, $name);
 
-		$this->statistics = $statistics;
+		$this->lines = $lines;
 
 		$this->fromDate = new DateTime();
 		$this->fromDate->modify('- ' . ($this->countItems) . ' ' . $this->interval);
@@ -82,7 +80,7 @@ class Graph extends BaseProjectControl {
 	 * @param int $elementId Id html elementu, na který se má graf (plugin) navázat
 	 */
 	public function renderJs($elementId) {
-		$this->template->items = $this->getDataGraph();
+		$this->template->lines = $this->getLinesInGraph();
 		$this->template->fromDate = $this->fromDate;
 		$this->template->countItems = $this->countItems;
 		$this->template->interval = $this->interval;
@@ -133,21 +131,18 @@ class Graph extends BaseProjectControl {
 		$this->graphType = self::GRAPH_TYPE_PIE;
 	}
 
-	public function getDataGraph() {
-		$countItems = $this->countItems + 1; //aby to započítalo i aktuální den
-		if ($this->dataToGraph === NULL) {
-			/* spočítá data, co se mají zobrazit v grafu */
-			switch ($this->interval) {
-				case self::INTERVAL_DAILY:
-					$this->dataToGraph = $this->statistics->getDaily($this->fromDate, $countItems);
-					break;
-				case self::INTERVAL_MONTHLY:
-					$this->dataToGraph = $this->statistics->getMonthly($this->fromDate, $countItems);
-					break;
-			}
+	/**
+	 * Vrátí data do grafu.
+	 * @return Lines
+	 */
+	public function getLinesInGraph() {
+		if ($this->interval == self::INTERVAL_MONTHLY) {
+			$this->lines->setMonthly();
 		}
 
-		return $this->dataToGraph;
+		$this->lines->setInterval($this->fromDate, $this->countItems);
+
+		return $this->lines->getLines();
 	}
 
 	protected function createComponentIntervalPickerForm($name) {
