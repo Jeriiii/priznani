@@ -9,7 +9,9 @@
 	    {ifset #uploadImage}
 			{include #uploadImage}
 		{/ifset}
-		{ifset $userData}<a href="{plink :Profil:Show: id => $userData->id}" class="username">{$userData->user_name|upper}</a>{/ifset}
+		{ifset #userProfilLink}
+			{include #userProfilLink}
+		{/ifset}
 	    <div class="clear"></div>
 	</div>
 

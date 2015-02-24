@@ -18,6 +18,10 @@
 {$image->description}
 {/}
 
+{define userProfilLink}
+<a href="{plink :Profil:Show: id => $image->gallery->userID}" class="username">{$image->gallery->user->user_name|upper}</a>
+{/}
+
 {define uploadImage}
 <a href="{plink Galleries:userGalleryNew}" id="add-photo-button" class="btn-main medium right">
 	vytvořit vlastní galerii
