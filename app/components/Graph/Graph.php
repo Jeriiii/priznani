@@ -27,6 +27,7 @@ class Graph extends BaseProjectControl {
 
 	/* Typy grafu */
 	const GRAPH_TYPE_AREASPLINE = 'areaspline'; //hory
+	const GRAPH_TYPE_LINE = 'line'; //prostá čára
 	const GRAPH_TYPE_PIE = 'pie'; //koláč
 	const GRAPH_TYPE_AREA = 'area'; //hodnoty se sčítají a dělají hory
 
@@ -155,6 +156,13 @@ class Graph extends BaseProjectControl {
 	 */
 	public function setTypePie() {
 		$this->graphType = self::GRAPH_TYPE_PIE;
+	}
+
+	/**
+	 * Nastaví typ grafu na prostou křivku
+	 */
+	public function setTypeLine() {
+		$this->graphType = self::GRAPH_TYPE_LINE;
 	}
 
 	/**

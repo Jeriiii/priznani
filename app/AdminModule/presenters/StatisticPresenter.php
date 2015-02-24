@@ -77,7 +77,8 @@ class StatisticPresenter extends AdminSpacePresenter {
 		$graph->addLine($confStats, 'Počet přiznání');
 		$graph->addLine($statusStats, 'Počet statusů');
 		$graph->addLine($imgsStats, 'Počet obrázků');
-		//$graph->addTotalLine("Celkový součet aktivit");
+		$graph->addTotalLine("Cel. součet aktivit");
+		$graph->setTypeLine();
 
 		return $graph;
 	}

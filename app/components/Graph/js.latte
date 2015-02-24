@@ -1,7 +1,7 @@
 {define series}
 	{foreach $lines as $line}
 		{
-		{if $graphType == 'areaspline' || $graphType == 'area'}
+		{if $graphType == 'areaspline' || $graphType == 'area' || $graphType == 'line'}
 			name: "{$line->name}",
 			data: [
 				{foreach $line->getData() as $key => $point}
@@ -36,9 +36,17 @@
 			}
 		}
 	{/if}
+	{if $graphType == 'line'}
+		line: {
+			dataLabels: {
+				enabled: true
+			},
+			enableMouseTracking: false
+		}
+	{/if}
 	{if $graphType == 'areaspline'}
 		areaspline: {
-			fillOpacity: 0.3
+			fillOpacity: 0.4
 		}
 	{/if}
 	{if $graphType == 'pie'}
