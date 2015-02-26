@@ -8,6 +8,7 @@ namespace POSComponent\Comments;
 
 use POS\Model\CommentImagesDao;
 use POS\Model\LikeImageCommentDao;
+use POS\UserPreferences\StreamUserPreferences;
 
 /**
  * Komponenta pro vykreslení komentářů k obrázku.
@@ -16,8 +17,8 @@ use POS\Model\LikeImageCommentDao;
  */
 class ImageComments extends BaseComments {
 
-	public function __construct(LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, $image, $userData, $ownerID) {
-		parent::__construct($likeImageCommentDao, $commentImagesDao, $image, $userData, $ownerID);
+	public function __construct(LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, $image, $userData, $ownerID, StreamUserPreferences $cachedStreamPreferences = NULL) {
+		parent::__construct($likeImageCommentDao, $commentImagesDao, $image, $userData, $ownerID, $cachedStreamPreferences);
 	}
 
 }

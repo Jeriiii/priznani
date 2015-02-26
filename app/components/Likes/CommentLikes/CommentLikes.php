@@ -7,6 +7,7 @@
 namespace POSComponent\BaseLikes;
 
 use POS\Model\AbstractDao;
+use POS\UserPreferences\StreamUserPreferences;
 
 /**
  * Komponenta pro lajkování commentů, obstarává připočítávání lajků;
@@ -28,9 +29,10 @@ class CommentLikes extends BaseLikes implements IBaseLikes {
 	 * @param Nette\Database\Table\ActiveRow $comment comment, který se bude lajkovat
 	 * @param int $userID ID uživatele, který lajkuje comment
 	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
+	 * @param \POS\UserPreferences\StreamUserPreferences $cachedStreamPreferences objekt obsahující položky ve streamu, pokud se používá cachování. Pokud se nepoužívá, pak je NULL
 	 */
-	public function __construct(AbstractDao $likeImageCommentDao, $comment, $userID, $ownerID) {
-		parent::__construct($likeImageCommentDao, $comment, $userID, $ownerID, self::COMMENT_LABEL, self::COMMON_LIKE_BUTTON);
+	public function __construct(AbstractDao $likeImageCommentDao, $comment, $userID, $ownerID, StreamUserPreferences $cachedStreamPreferences = NULL) {
+		parent::__construct($likeImageCommentDao, $comment, $userID, $ownerID, self::COMMENT_LABEL, self::COMMON_LIKE_BUTTON, $cachedStreamPreferences);
 	}
 
 	/**
