@@ -1,0 +1,108 @@
+{define series}
+	{foreach $lines as $line}
+		{
+		{if $graphType == 'areaspline' || $graphType == 'area' || $graphType == 'line'}
+			name: "{$line->name}",
+			data: [
+				{foreach $line->getData() as $key => $point}
+					{$point}{if !$iterator->last},{/if}
+				{/foreach}
+			]
+		{/if}
+		{if $graphType == 'pie'}
+			type: 'pie',
+			name: "{$line->name}",
+			data: [
+				{foreach $line->getData() as $point}
+					['{$point->name}', {$point->count}]
+					{if !$iterator->last},{/if}
+				{/foreach}
+			]
+		{/if}
+		}
+		{if !$iterator->last},{/if}
+	{/foreach}
+{/define}
+
+{define plotOptions}
+	{if $graphType == 'area'}
+		area: {
+			stacking: 'normal',
+			lineColor: '#666666',
+			lineWidth: 1,
+			marker: {
+				lineWidth: 1,
+				lineColor: '#666666'
+			}
+		}
+	{/if}
+	{if $graphType == 'line'}
+		line: {
+			dataLabels: {
+				enabled: true
+			},
+			enableMouseTracking: false
+		}
+	{/if}
+	{if $graphType == 'areaspline'}
+		areaspline: {
+			fillOpacity: 0.4
+		}
+	{/if}
+	{if $graphType == 'pie'}
+		pie: {
+			allowPointSelect: true,
+			cursor: 'pointer',
+			dataLabels: {
+				enabled: false
+			},
+			showInLegend: true
+		}
+	{/if}
+{/define}
+
+<script type="text/javascript">
+$(function () {
+    $('#{!$elementId}').highcharts({
+        chart: {
+            type: {$graphType}
+        },
+        title: {
+            text: {$header}
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            verticalAlign: 'top',
+            x: 150,
+            y: 100,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        xAxis: {
+            categories: [
+				{include 'yLegend.latte'}
+			]
+        },
+        yAxis: {
+            title: {
+                text: {$graphName}
+            }
+        },
+        tooltip: {
+            shared: true,
+            valueSuffix: ' units'
+        },
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            {include #plotOptions}
+        },
+        series: [
+            {include #series}
+        ]
+    });
+});
+</script>

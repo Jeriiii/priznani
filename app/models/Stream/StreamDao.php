@@ -23,8 +23,10 @@ class StreamDao extends AbstractDao {
 	const COLUMN_USER_ID = "userID";
 	const COLUMN_CATEGORY_ID = "categoryID";
 	const COLUMN_AGE = "age";
+	const COLUMN_CREATED = 'create';
 	const COLUMN_TALLNESS = "tallness";
 	const COLUMN_CONFESSION_ID = "confessionID";
+	const COLUMN_STATUS_ID = "statusID";
 
 	/**
 	 * Vrací tuto tabulku
@@ -138,6 +140,72 @@ class StreamDao extends AbstractDao {
 			"type" => 1,
 			"create" => new DateTime(),
 		));
+	}
+
+	/**
+	 * Spočítá počet přiznání za jeden den.
+	 * @param DateTime $day Den, za který se mají statistiky spočítat.
+	 * @return int Počet registrací za danný den.
+	 */
+	public function countConfessionByDay(DateTime $day) {
+		$sel = $this->getByDay($day, self::COLUMN_CREATED, self::COLUMN_CONFESSION_ID . ' IS NOT NULL');
+
+		return $sel->count();
+	}
+
+	/**
+	 * Spočítá počet přiznání za jeden měsíc.
+	 * @param DateTime $month Den, za který se mají statistiky spočítat.
+	 * @return int Počet registrací za danný den.
+	 */
+	public function countConfessionByMonth(DateTime $month) {
+		$sel = $this->getByMonth($month, self::COLUMN_CREATED, self::COLUMN_CONFESSION_ID . ' IS NOT NULL');
+
+		return $sel->count();
+	}
+
+	/**
+	 * Spočítá počet statusů za jeden den.
+	 * @param DateTime $day Den, za který se mají statistiky spočítat.
+	 * @return int Počet registrací za danný den.
+	 */
+	public function countStatusByDay(DateTime $day) {
+		$sel = $this->getByDay($day, self::COLUMN_CREATED, self::COLUMN_STATUS_ID . ' IS NOT NULL');
+
+		return $sel->count();
+	}
+
+	/**
+	 * Spočítá počet statusů za jeden měsíc.
+	 * @param DateTime $month Den, za který se mají statistiky spočítat.
+	 * @return int Počet registrací za danný den.
+	 */
+	public function countStatusByMonth(DateTime $month) {
+		$sel = $this->getByMonth($month, self::COLUMN_CREATED, self::COLUMN_STATUS_ID . ' IS NOT NULL');
+
+		return $sel->count();
+	}
+
+	/**
+	 * Spočítá počet statusů za jeden den.
+	 * @param DateTime $day Den, za který se mají statistiky spočítat.
+	 * @return int Počet registrací za danný den.
+	 */
+	public function countChangeGalleryByDay(DateTime $day) {
+		$sel = $this->getByDay($day, self::COLUMN_CREATED, self::COLUMN_USER_GALLERY_ID . ' IS NOT NULL');
+
+		return $sel->count();
+	}
+
+	/**
+	 * Spočítá počet statusů za jeden měsíc.
+	 * @param DateTime $month Den, za který se mají statistiky spočítat.
+	 * @return int Počet registrací za danný den.
+	 */
+	public function countChangeGalleryByMonth(DateTime $month) {
+		$sel = $this->getByMonth($month, self::COLUMN_CREATED, self::COLUMN_USER_GALLERY_ID . ' IS NOT NULL');
+
+		return $sel->count();
 	}
 
 	/**

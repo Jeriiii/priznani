@@ -6,6 +6,7 @@
 use Notify\EmailNotifies;
 use POS\Model\UserPropertyDao;
 use Notify\EmailsForOldUsers;
+use Nette\Application\Responses\JsonResponse;
 
 class CronPresenter extends BasePresenter {
 

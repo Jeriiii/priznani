@@ -52,6 +52,7 @@ common:
 		authenticator: Authenticator
 
 		chatManager: POS\Chat\ChatManager
+		statisticManager: POS\Statistics\StatisticManager
 		ajaxObserver: POS\Ajax\AjaxObserver
 		authorizator:
 			class: Acl
@@ -66,14 +67,6 @@ production < common:
 	parameters:
 		database:
 			driver: mysql
-			#host: wm38.wedos.net
-			#dbname: d30935_priznan
-			#user: a30935_priznan
-			#password: EfHKeb7e
-			#host: wm33.wedos.net
-			#dbname: d42750_priznan
-			#user: a42750_priznan
-			#password: 845DjQBp
 			host: 127.0.0.1
 			dbname: datenodecz
 			user: datenodecz001

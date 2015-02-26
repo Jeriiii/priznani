@@ -11,6 +11,7 @@ use POS\Model\UserGalleryDao;
 use POS\Model\StreamDao;
 use NetteExt\Arrays;
 use Nette\Http\Session;
+use Nette\DateTime;
 
 /**
  * NAME DAO NAMEDao
@@ -36,6 +37,7 @@ class UserImageDao extends AbstractDao {
 	const COLUMN_GAL_SCRN_WIDTH = "widthGalScrn";
 	const COLUMN_GAL_SCRN_HEIGHT = "heightGalScrn";
 	const COLUMN_CHECK_APPROVED = "checkApproved";
+	const COLUMN_CREATED = "created";
 
 	/**
 	 * @var \POS\Model\UserGalleryDao
@@ -120,6 +122,28 @@ class UserImageDao extends AbstractDao {
 		$sel->where(":" . UserGalleryDao::TABLE_NAME . "." . UserGalleryDao::COLUMN_VERIFICATION, 0);
 		$sel->where(self::COLUMN_CHECK_APPROVED, 1);
 		return $sel;
+	}
+
+	/**
+	 * Spočítá počet obrázků za jeden den.
+	 * @param DateTime $day Den, za který se mají statistiky spočítat.
+	 * @return int Počet registrací za danný den.
+	 */
+	public function countByDay(DateTime $day) {
+		$sel = parent::getByDay($day, self::COLUMN_CREATED);
+
+		return $sel->count();
+	}
+
+	/**
+	 * Spočítá počet obrázků za jeden měsíc.
+	 * @param DateTime $month Den, za který se mají statistiky spočítat.
+	 * @return int Počet registrací za danný den.
+	 */
+	public function countByMonth(DateTime $month) {
+		$sel = parent::getByMonth($month, self::COLUMN_CREATED);
+
+		return $sel->count();
 	}
 
 	/**

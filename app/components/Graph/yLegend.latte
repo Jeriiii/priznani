@@ -1,0 +1,26 @@
+{********** popisek Y osy ***************}
+{block yLegend}
+{var $days = array( 'Monday' => 'Pondělí', 'Tuesday' => 'Úterý', 'Wednesday' => 'Středa',
+'Thursday' => 'Čtvrtek', 'Friday' => 'Pátek', 'Saturday' => 'Sobota', 'Sunday' => 'Neděle')}
+
+{if $interval == 'days'} {* = dny *}
+	{for $i = 0; $i < $countItems + 1; $i++} {* +1 aby to započítalo i aktuální den *}
+		"{$days[$fromDate->format('l')]} {$fromDate->format('d.m.')}"
+		<?php $fromDate->modify('+ 1 days') ?>
+		{if $i < ($countItems)}, {/if} {* za posledním prvekm není čárka *}
+	{/for}
+{/if}
+
+{var $months = array( 'January' => 'Leden', 'February' => 'Únor', 'March' => 'Březen',
+'April' => 'Duben', 'May' => 'Květen', 'June' => 'Červen', 'July' => 'Červenec',
+'August' => 'Srpen', 'September' => 'Září', 'October' => 'Říjen', 'November' => 'Listopad',
+'December' => 'Prosinec')}
+
+{if $interval == 'months'} {* = měsíce *}
+	{for $i = 0; $i < $countItems + 1; $i++} {* +1 aby to započítalo i aktuální den *}
+		"{$months[$fromDate->format('F')]} {$fromDate->format('y')}"
+		<?php $fromDate->modify('+ 1 month') ?>
+		{if $i < ($countItems)}, {/if} {* za posledním prvekm není čárka *}
+	{/for}
+{/if}
+{/block}

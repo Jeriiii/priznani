@@ -10,6 +10,7 @@ use Nette\Database\SqlLiteral;
 use Authorizator;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
+use Nette\DateTime;
 
 /**
  * Uživatelé UsersDao
@@ -185,6 +186,64 @@ class UserDao extends UserBaseDao {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_VIGOR, $vigor);
 		return $sel;
+	}
+
+	/**
+	 * Spočítá počet registrací za jeden den.
+	 * @param DateTime $day Den, za který se mají statistiky spočítat.
+	 * @return int Počet registrací za danný den.
+	 */
+	public function countRegByDay(DateTime $day) {
+		$sel = $this->getTable();
+
+		$sel->where(self::COLUMN_CREATED . " >= ?", $day->format('Y-m-d') . ' ' . "00:00:00");
+		$day->modify('+ 1 days');
+
+		$sel->where(self::COLUMN_CREATED . " < ?", $day->format('Y-m-d') . ' ' . "00:00:00");
+		$day->modify('- 1 days');
+
+		return $sel->count();
+	}
+
+	/**
+	 * Spočítá počet registrací za jeden měsíc.
+	 * @param DateTime $month Den, za který se mají statistiky spočítat.
+	 * @return int Počet registrací za danný den.
+	 */
+	public function countRegByMonth(DateTime $month) {
+		$sel = $this->getTable();
+
+		$sel->where(self::COLUMN_CREATED . " >= ?", $month->format('Y-m-') . "00" . ' ' . "00:00:00");
+		$month->modify('+ 1 month');
+		$sel->where(self::COLUMN_CREATED . " < ?", $month->format('Y-m-') . "00" . ' ' . "00:00:00");
+		$month->modify('- 1 month');
+
+		return $sel->count();
+	}
+
+	/**
+	 * Spočítá celkový počet druhů uživatelů (mužů, žen, párů ...)
+	 * @return Selection
+	 */
+	public function getUsersBySex() {
+		$sel = $this->getTable();
+		$sel->select(self::COLUMN_PROPERTY_ID . '.type AS name, count(' . self::TABLE_NAME . '.' . self::COLUMN_ID . ') AS countItems');
+		$sel->where(self::COLUMN_TYPE . '!=?', 0);
+		$sel->group(self::COLUMN_TYPE);
+		return $sel;
+	}
+
+	/**
+	 * Spočítá celkový počet věkových skupin uživatelů
+	 * @param int $yearFrom Rok od (např. 1990)
+	 * @param int $yearTo Rok do
+	 * @return Selection
+	 */
+	public function getUsersByAge($yearFrom, $yearTo) {
+		$sel = $this->createSelection(UserPropertyDao::TABLE_NAME);
+		$sel->where('year(' . self::COLUMN_AGE . ') <=?', $yearFrom);
+		$sel->where('year(' . self::COLUMN_AGE . ') >=?', $yearTo);
+		return $sel->count();
 	}
 
 	/**

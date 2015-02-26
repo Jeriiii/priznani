@@ -9,6 +9,7 @@ namespace POS\Model;
 use Nette\Database;
 use Nette\Object;
 use Nette\Http\Session;
+use Nette\DateTime;
 
 /**
  * Abstraktní DAO AbstractDao
@@ -159,6 +160,48 @@ abstract class AbstractDao extends Object {
 			$data->offsetSet($key, $record);
 		}
 		return $data;
+	}
+
+	/**
+	 * Nastaví statistiky na měsíční.
+	 * @param DateTime $month
+	 * @param string $columnDateSortName Název sloupce podle kterého se mají filtrovat časy
+	 * @param string $where
+	 */
+	protected function getByMonth(DateTime $month, $columnDateSortName, $where = NULL) {
+		$sel = $this->getTable();
+
+		if (!empty($where)) {
+			$sel->where($where);
+		}
+
+		$sel->where($columnDateSortName . " >= ?", $month->format('Y-m-') . "00" . ' ' . "00:00:00");
+		$month->modify('+ 1 month');
+		$sel->where($columnDateSortName . " < ?", $month->format('Y-m-') . "00" . ' ' . "00:00:00");
+		$month->modify('- 1 month');
+
+		return $sel;
+	}
+
+	/**
+	 * Nastaví statistiky na denní.
+	 * @param DateTime $day
+	 * @param string $columnDateSortName Název sloupce podle kterého se mají filtrovat časy
+	 * @param string $where
+	 */
+	protected function getByDay(DateTime $day, $columnDateSortName, $where = NULL) {
+		$sel = $this->getTable();
+
+		if (!empty($where)) {
+			$sel->where($where);
+		}
+
+		$sel->where($columnDateSortName . " >= ?", $day->format('Y-m-d') . ' ' . "00:00:00");
+		$day->modify('+ 1 days');
+		$sel->where($columnDateSortName . " < ?", $day->format('Y-m-d') . ' ' . "00:00:00");
+		$day->modify('- 1 days');
+
+		return $sel;
 	}
 
 }
