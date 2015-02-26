@@ -79,6 +79,17 @@ abstract class AbstractDao extends Object {
 	}
 
 	/**
+	 * Najde řádek podle primárního klíče a vrátí ho, ale neprovede fetch jako u find()
+	 *
+	 * @param mixed|array $primaryKey Primary key of the entity. Array when the primary key is composite.
+	 * @return Database\Table\Selection|bool Selection with single table row or `FALSE` if the row was not found.
+	 */
+	public function findNoFetch($primaryKey) {
+		$table = $this->getTable();
+		return $table->wherePrimary($primaryKey);
+	}
+
+	/**
 	 * Insert a single row with values from array, or a set of rows selected by the given Selection object.
 	 *
 	 * @param array|\Traversable|Database\Table\Selection $data Array/Traversable of (column => value) to insert, or
