@@ -214,4 +214,28 @@ class CronPresenter extends BasePresenter {
 		$this->template->dataToDebug = $this->dataToDebug;
 	}
 
+	public function actionMailToJSON($userName, $userPassword) {
+		/* kontrola uživatele */
+		if ($userName != 'mailuser' || $userPassword != 'a10b06001') {
+			$message = array(
+				'access' => 'denied',
+				'access2' => 'denied',
+				'access3' => 'denied'
+			);
+
+			$this->sendJson($message);
+		}
+	}
+
+	public function renderMailToJSON($userName, $userPassword) {
+		$messages = array(
+			'abc@seznam.cz' => 'Zpráva pro ABC',
+			'def@seznam.cz' => 'Zpráva pro DEF',
+			'ghi@seznam.cz' => 'Zpráva pro GHI',
+		);
+
+		$json = new JsonResponse($messages, "application/json; charset=utf-8");
+		$this->sendResponse($json);
+	}
+
 }
