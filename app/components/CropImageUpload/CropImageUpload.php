@@ -60,7 +60,7 @@ class CropImageUpload extends BaseProjectControl {
 	public function render() {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/cropImageUpload.latte');
-
+		$template->onMobile = $this->getDeviceDetector()->isMobile();
 		if (!empty($this->cropImageName)) {
 			$template->uploadedImageName = $this->cropImageName;
 		}
@@ -91,7 +91,11 @@ class CropImageUpload extends BaseProjectControl {
 	 * @return \Nette\Application\UI\Form\BaseForm
 	 */
 	protected function createComponentFirstImageUploadForm($name) {
-		new \Nette\Application\UI\Form\FirstImageUploadForm(WWW_DIR . '/image-temp/', $this, $name);
+		if ($this->getDeviceDetector()->isMobile()) {
+			return new Frm\SimpleProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+		} else {
+			return new \Nette\Application\UI\Form\FirstImageUploadForm(WWW_DIR . '/image-temp/', $this, $name);
+		}
 	}
 
 }
