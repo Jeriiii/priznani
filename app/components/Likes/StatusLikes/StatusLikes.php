@@ -7,6 +7,7 @@
 namespace POSComponent\BaseLikes;
 
 use POS\Model\LikeStatusDao;
+use POS\UserPreferences\StreamUserPreferences;
 
 /**
  * Komponenta pro lajkování statusů, obstarává připočítávání lajků;
@@ -27,9 +28,10 @@ class StatusLikes extends BaseLikes implements IBaseLikes {
 	 * @param Nette\Database\Table\ActiveRow $status status, který se bude lajkovat
 	 * @param int $userID ID uživatele, který lajkuje status
 	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
+	 * @param \POS\UserPreferences\StreamUserPreferences $cachedStreamPreferences objekt obsahující položky ve streamu, pokud se používá cachování. Pokud se nepoužívá, pak je NULL
 	 */
-	public function __construct(LikeStatusDao $likeStatusDao, $status, $userID, $ownerID) {
-		parent::__construct($likeStatusDao, $status, $userID, $ownerID, self::STATUS_LABEL);
+	public function __construct(LikeStatusDao $likeStatusDao, $status, $userID, $ownerID, StreamUserPreferences $cachedStreamPreferences = NULL) {
+		parent::__construct($likeStatusDao, $status, $userID, $ownerID, self::STATUS_LABEL, self::DEFAULT_NAME_LIKE_BUTTON, $cachedStreamPreferences);
 	}
 
 	/**

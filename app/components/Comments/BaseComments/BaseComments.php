@@ -17,6 +17,7 @@ use Exception;
 use POSComponent\Confirm;
 use Nette\Application\UI\Multiplier;
 use POSComponent\BaseLikes\CommentLikes;
+use POS\UserPreferences\StreamUserPreferences;
 
 /**
  * Komponenta pro vykreslení tlačítek na lajkování.
@@ -77,7 +78,10 @@ class BaseComments extends BaseProjectControl {
 	 */
 	private $ownerID;
 
-	public function __construct(ILikeDao $likeImageCommentDao, ICommentDao $commentDao, $item, $userData, $ownerID) {
+	/** @var \POS\UserPreferences\StreamUserPreferences objekt dat, který obsahuje prvky souvisejícího streamu */
+	private $cachedStreamPreferences;
+
+	public function __construct(ILikeDao $likeImageCommentDao, ICommentDao $commentDao, $item, $userData, $ownerID, StreamUserPreferences $cachedStreamPreferences = NULL) {
 		parent::__construct();
 		if (!($item instanceof ActiveRow) && !($item instanceof \Nette\ArrayHash)) {
 			throw new \Exception("variable $item must be instance of ActiveRow or ArrayHash");
@@ -93,6 +97,7 @@ class BaseComments extends BaseProjectControl {
 		$this->countComments = $this->item->comments;
 		$this->userData = $userData;
 		$this->ownerID = $ownerID;
+		$this->cachedStreamPreferences = $cachedStreamPreferences;
 	}
 
 	/**
@@ -151,7 +156,7 @@ class BaseComments extends BaseProjectControl {
 		return new Multiplier(function ($imageComment) use ($imageComments) {
 			$userID = $this->presenter->user->id;
 			$imageComment = $imageComments->offsetGet($imageComment);
-			return new CommentLikes($this->likeImageCommentDao, $imageComment, $userID, $imageComment->userID);
+			return new CommentLikes($this->likeImageCommentDao, $imageComment, $userID, $imageComment->userID, $this->cachedStreamPreferences);
 		});
 	}
 
