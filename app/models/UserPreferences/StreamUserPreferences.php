@@ -80,6 +80,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 				$newItems = $this->getSerializer($streamItem)->toArrayHash(); /* musí to být takhle, protože Serializer má na vstupu Selection */
 				$newItem = $newItems->offsetGet($itemId);
 				$this->data->offsetSet($newItem->id, $newItem);
+				$this->setData($this->data);
 			}
 		}
 	}
@@ -226,7 +227,15 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 
 		$streamItems = $this->streamDao->getAllItemsWhatFits($this->getUserCategories(), $this->user->id, self::INIT_ITEMS_COUNT);
 		$serializer = $this->getSerializer($streamItems);
-		$this->streamSection->cachedStreamItems = $serializer->toArrayHash(); //nastaveni pole do sešny
+		$this->setData($serializer->toArrayHash());
+	}
+
+	/**
+	 * Uloží data do proměnné data a do sešny.
+	 * @param ArrayHash $data data v arrayHashi
+	 */
+	private function setData($data) {
+		$this->streamSection->cachedStreamItems = $data; //nastaveni pole do sešny
 		$this->data = $this->streamSection->cachedStreamItems;
 	}
 
