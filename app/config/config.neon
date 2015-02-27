@@ -52,6 +52,7 @@ common:
 		authenticator: Authenticator
 
 		chatManager: POS\Chat\ChatManager
+		deviceDetector: NetteExt\DeviceDetector
 		statisticManager: POS\Statistics\StatisticManager
 		ajaxObserver: POS\Ajax\AjaxObserver
 		authorizator:
