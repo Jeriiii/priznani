@@ -4,6 +4,7 @@ namespace POSComponent;
 
 use Nette\Application\UI\Control;
 use NetteExt\Helper\HelperRegistrator;
+use NetteExt\DeviceDetector;
 
 /**
  * Nejzákladnější komponenta pro další komponenty
@@ -15,6 +16,9 @@ class BaseProjectControl extends Control {
 
 	/** @var boolean|NULL Říká, jestli je aplikace spuštěna na produkci. NULL = proměnná nebyla nastavena */
 	private $productionMode = NULL;
+
+	/** @var DeviceDetector detektor vlastností zařízení */
+	private $deviceDetector = NULL;
 
 	/*	 * ******************** Metody pro práci s módy *************************** */
 
@@ -83,6 +87,17 @@ class BaseProjectControl extends Control {
 
 	public function setPresenter($presenter) {
 		$this->presenter = $presenter;
+	}
+
+	/**
+	 * Vytvoří nový detektor zařízení, použít pokud není možné jej injectnout.
+	 * @return DeviceDetector
+	 */
+	public function getDeviceDetector() {
+		if (empty($this->deviceDetector)) {
+			$this->deviceDetector = new DeviceDetector($this->getPresenter()->getSession());
+		}
+		return $this->deviceDetector;
 	}
 
 }
