@@ -8,7 +8,7 @@
 		{control afterUploadForm}
 {else}
 	<div class="ajaxbox-popUp" id="addProfilePhotoWindow" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-header-html="Nahrát profilovku">
-		<p class="instructions">Vyberte prosím fotku ze svého počítače. V dalším kroku ji budete moci oříznout.</p>
+		{if !$onMobile}<p class="instructions">Vyberte prosím fotku ze svého počítače. V dalším kroku ji budete moci oříznout.</p>{/if}
 		{control firstImageUploadForm}
 {/ifset}
 </div>

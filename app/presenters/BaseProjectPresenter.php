@@ -14,6 +14,9 @@ class BaseProjectPresenter extends Nette\Application\UI\Presenter {
 	/** @var boolean Říká, jestli je aplikace spuštěna na produkci */
 	public $productionMode;
 
+	/** @var \NetteExt\DeviceDetector @inject */
+	public $deviceDetector;
+
 	protected function startup() {
 		parent::startup();
 		$this->testMode = $this->context->parameters["testMode"];

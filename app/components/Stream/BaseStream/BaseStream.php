@@ -223,7 +223,7 @@ class BaseStream extends BaseProjectControl {
 
 		return new Multiplier(function ($streamItem) use ($streamItems) {
 			$userGallery = $streamItems->offsetGet($streamItem)->userGallery;
-			return new ImageLikes($this->imageLikesDao, $userGallery->lastImage, $this->loggedUser->id, $userGallery->userID);
+			return new ImageLikes($this->imageLikesDao, $userGallery->lastImage, $this->loggedUser->id, $userGallery->userID, $this->dataForStream);
 		});
 	}
 
@@ -232,7 +232,7 @@ class BaseStream extends BaseProjectControl {
 
 		return new Multiplier(function ($streamItem) use ($streamItems) {
 			$userGallery = $streamItems->offsetGet($streamItem)->userGallery;
-			$imageComments = new ImageComments($this->likeImageCommentDao, $this->commentImagesDao, $userGallery->lastImage, $this->loggedUser, $userGallery->userID);
+			$imageComments = new ImageComments($this->likeImageCommentDao, $this->commentImagesDao, $userGallery->lastImage, $this->loggedUser, $userGallery->userID, $this->dataForStream);
 			$imageComments->setPresenter($this->getPresenter());
 			return $imageComments;
 		});
@@ -247,7 +247,7 @@ class BaseStream extends BaseProjectControl {
 
 		return new Multiplier(function ($streamItem) use ($streamItems) {
 			$status = $streamItems->offsetGet($streamItem)->status;
-			return new StatusLikes($this->likeStatusDao, $status, $this->loggedUser->id, $status->userID);
+			return new StatusLikes($this->likeStatusDao, $status, $this->loggedUser->id, $status->userID, $this->dataForStream);
 		});
 	}
 
@@ -260,7 +260,7 @@ class BaseStream extends BaseProjectControl {
 
 		return new Multiplier(function ($streamItem) use ($streamItems) {
 			$status = $streamItems->offsetGet($streamItem)->status;
-			$statusComments = new StatusComments($this->likeStatusCommentDao, $this->commentStatusesDao, $status, $this->loggedUser, $status->userID);
+			$statusComments = new StatusComments($this->likeStatusCommentDao, $this->commentStatusesDao, $status, $this->loggedUser, $status->userID, $this->dataForStream);
 			$statusComments->setPresenter($this->getPresenter());
 			return $statusComments;
 		});
@@ -283,7 +283,7 @@ class BaseStream extends BaseProjectControl {
 
 		return new Multiplier(function ($streamItem) use ($streamItems) {
 			$confession = $streamItems->offsetGet($streamItem)->confession;
-			return new ConfessionLikes($this->likeConfessionDao, $confession, $this->loggedUser->id);
+			return new ConfessionLikes($this->likeConfessionDao, $confession, $this->loggedUser->id, $this->dataForStream);
 		});
 	}
 

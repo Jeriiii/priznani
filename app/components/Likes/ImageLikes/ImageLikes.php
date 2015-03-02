@@ -8,6 +8,7 @@ namespace POSComponent\BaseLikes;
 
 use POS\Model\ImageLikesDao;
 use POS\Model\UserImageDao;
+use POS\UserPreferences\StreamUserPreferences;
 
 /**
  * Komponenta pro lajkování obrázků, obstarává připočítávání lajků;
@@ -34,9 +35,10 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 	 * @param Nette\Database\Table\ActiveRow $image obrázek, kterému se lajk přičte
 	 * @param int $userID ID uživatele, který lajkuje
 	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
+	 * @param \POS\UserPreferences\StreamUserPreferences $cachedStreamPreferences objekt obsahující položky ve streamu, pokud se používá cachování. Pokud se nepoužívá, pak je NULL
 	 */
-	public function __construct(ImageLikesDao $imageLikesDao, $image, $userID, $ownerID) {
-		parent::__construct($imageLikesDao, $image, $userID, $ownerID, self::IMAGE_LABEL, self::IMAGE_LIKE_BUTTON);
+	public function __construct(ImageLikesDao $imageLikesDao, $image, $userID, $ownerID, StreamUserPreferences $cachedStreamPreferences = NULL) {
+		parent::__construct($imageLikesDao, $image, $userID, $ownerID, self::IMAGE_LABEL, self::IMAGE_LIKE_BUTTON, $cachedStreamPreferences);
 	}
 
 	/**

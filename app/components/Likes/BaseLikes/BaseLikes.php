@@ -14,6 +14,7 @@ use POS\Model\AbstractDao;
 use Nette\Database\Table\ActiveRow;
 use POS\Model\ILikeDao;
 use Nette\ArrayHash;
+use POS\UserPreferences\StreamUserPreferences;
 
 /**
  * Komponenta pro vykreslení tlačítek na lajkování.
@@ -62,6 +63,9 @@ class BaseLikes extends BaseProjectControl {
 	 */
 	public $ownerID;
 
+	/** @var \POS\UserPreferences\StreamUserPreferences objekt dat, který obsahuje prvky souvisejícího streamu */
+	protected $cachedStreamPreferences;
+
 	/**
 	 * @var bool TRUE pokud právě lajknul příspěvek. Používá se k tomu
 	 * že $item, třeba obrázek se pošle v konstruktoru a má konečné
@@ -109,8 +113,9 @@ class BaseLikes extends BaseProjectControl {
 	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
 	 * @param string $nameLabel viz. kom. třídy
 	 * @param string $nameLikeButton viz. kom. třídy
+	 * @param \POS\UserPreferences\StreamUserPreferences $cachedStreamPreferences objekt obsahující položky ve streamu, pokud se používá cachování. Pokud se nepoužívá, pak je NULL
 	 */
-	public function __construct(ILikeDao $likeDao, $likeItem, $userID, $ownerID, $nameLabel, $nameLikeButton = self::DEFAULT_NAME_LIKE_BUTTON) {
+	public function __construct(ILikeDao $likeDao, $likeItem, $userID, $ownerID, $nameLabel, $nameLikeButton = self::DEFAULT_NAME_LIKE_BUTTON, StreamUserPreferences $cachedStreamPreferences = NULL) {
 		parent::__construct();
 		if (!($likeItem instanceof ActiveRow) && !($likeItem instanceof ArrayHash)) {
 			throw new \Exception('Variable $likeItem must be instance of ActiveRow or ArrayHash ' . $ownerID);
@@ -122,6 +127,7 @@ class BaseLikes extends BaseProjectControl {
 		$this->likeItem = $likeItem;
 		$this->nameLabel = $nameLabel;
 		$this->nameLikeButton = $nameLikeButton;
+		$this->cachedStreamPreferences = $cachedStreamPreferences;
 	}
 
 	/**
@@ -136,6 +142,9 @@ class BaseLikes extends BaseProjectControl {
 		$template->label = $this->nameLabel;
 		/* pokud uživatel právě liknul, přičteme +1. Viz komentář u proměnné $justLike */
 		$template->likes = $this->justLike ? $this->likeItem->likes + 1 : $this->likeItem->likes;
+		if ($this->justLike && $this->cachedStreamPreferences) {
+			$this->cachedStreamPreferences->reloadItem($this->name);
+		}
 		$template->item = $this->likeItem;
 		$template->render();
 	}

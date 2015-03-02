@@ -8,6 +8,7 @@ namespace POSComponent\Comments;
 
 use POS\Model\LikeConfessionCommentDao;
 use POS\Model\CommentConfessionsDao;
+use POS\UserPreferences\StreamUserPreferences;
 
 /**
  * Komponenta pro vykreslení komentářů k statusu.
@@ -16,8 +17,8 @@ use POS\Model\CommentConfessionsDao;
  */
 class ConfessionComments extends BaseComments {
 
-	public function __construct(LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, $confession, $userData) {
-		parent::__construct($likeConfessionCommentDao, $commentConfessionsDao, $confession, $userData, 0);
+	public function __construct(LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, $confession, $userData, StreamUserPreferences $cachedStreamPreferences = NULL) {
+		parent::__construct($likeConfessionCommentDao, $commentConfessionsDao, $confession, $userData, 0, $cachedStreamPreferences);
 	}
 
 }

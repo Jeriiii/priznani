@@ -7,6 +7,7 @@
 namespace POSComponent\BaseLikes;
 
 use POS\Model\LikeConfessionDao;
+use POS\UserPreferences\StreamUserPreferences;
 
 /**
  * Komponenta pro lajkování přiznání, obstarává připočítávání lajků;
@@ -27,9 +28,10 @@ class ConfessionLikes extends BaseLikes implements IBaseLikes {
 	 * @param Nette\Database\Table\ActiveRow $confession přiznání, které se bude lajkovat
 	 * @param int $userID ID uživatele, který lajkuje
 	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
+	 * @param \POS\UserPreferences\StreamUserPreferences $cachedStreamPreferences objekt obsahující položky ve streamu, pokud se používá cachování. Pokud se nepoužívá, pak je NULL
 	 */
-	public function __construct(LikeConfessionDao $likeConfessionDao, $confession, $userID) {
-		parent::__construct($likeConfessionDao, $confession, $userID, 0, self::STATUS_LABEL);
+	public function __construct(LikeConfessionDao $likeConfessionDao, $confession, $userID, StreamUserPreferences $cachedStreamPreferences = NULL) {
+		parent::__construct($likeConfessionDao, $confession, $userID, 0, self::STATUS_LABEL, self::DEFAULT_NAME_LIKE_BUTTON, $cachedStreamPreferences);
 	}
 
 	/**
