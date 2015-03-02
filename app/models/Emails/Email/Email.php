@@ -45,6 +45,10 @@ abstract class Email extends Object implements IEmail {
 		$this->imgsBasePath = $imgsBasePath;
 	}
 
+	/**
+	 * Pošle email uživateli.
+	 * @param IMailer $mailer
+	 */
 	public function sendEmail(IMailer $mailer) {
 		$mail = new Message;
 		$mail->setFrom(self::EMAIL_ADDRESS_SENDER);
@@ -63,6 +67,32 @@ abstract class Email extends Object implements IEmail {
 		}
 
 		$mailer->send($mail);
+	}
+
+	/**
+	 * Vrátí email, který se má poslat.
+	 * @return array Email, který se má poslat.
+	 */
+	public function getEmail() {
+		$subject = $this->getEmailSubject();
+		$body = $this->getEmailBody();
+		$from = self::EMAIL_ADDRESS_SENDER;
+		$to = $this->getEmailAddress();
+		$htmlBody = false;
+
+		if ($this->htmlBody) {
+			$htmlBody = true;
+		}
+
+		$email = array(
+			'from' => $from,
+			'to' => $to,
+			'body' => $body,
+			'subject' => $subject,
+			'htmlBody' => $htmlBody
+		);
+
+		return $email;
 	}
 
 	/**

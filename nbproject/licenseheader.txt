@@ -1,3 +1,8 @@
-/*
-* @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
-*/
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}@copyright Copyright (c) 2013-2015 Kukral COMPANY s.r.o.
+${licensePrefix}created on ${date}
+<#if licenseLast??>
+${licenseLast}
+</#if>

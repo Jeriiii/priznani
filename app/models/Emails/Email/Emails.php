@@ -16,28 +16,33 @@ use Nette\Mail\IMailer;
 class Emails {
 
 	/**
-	 * @var IMailer Odesílání emailů
-	 */
-	private $mailer;
-
-	/**
-	 * @var array Pole oznámení (EmailNotify), co se mají poslat
+	 * @var array Pole oznámení (Email), co se mají poslat
 	 */
 	protected $emailNotifies = array();
-
-	public function __construct(IMailer $mailer) {
-		$this->mailer = $mailer;
-	}
 
 	/**
 	 * Odešle všechny upozornění a odstraní je z fronty
 	 */
-	public function sendEmails() {
+	public function sendEmails(IMailer $mailer) {
 		$notifies = $this->emailNotifies;
 		foreach ($notifies as $notify) {
-			$notify->sendEmail($this->mailer);
+			$notify->sendEmail($mailer);
 		}
 		$this->emailNotifies = array();
+	}
+
+	/**
+	 * Vrací pole s emaily, co se mají poslat.
+	 * @return array Pole s emaily, co se mají poslat.
+	 */
+	public function getEmails() {
+		$notifies = $this->emailNotifies;
+		$emails = array();
+		foreach ($notifies as $notify) {
+			$emails[] = $notify->getEmail();
+		}
+
+		return $emails;
 	}
 
 }

@@ -3,10 +3,7 @@
 /**
  * Vydává schválená přiznání.
  */
-use Notify\EmailNotifies;
 use POS\Model\UserPropertyDao;
-use Notify\EmailsForOldUsers;
-use Nette\Application\Responses\JsonResponse;
 
 class CronPresenter extends BasePresenter {
 
@@ -18,21 +15,6 @@ class CronPresenter extends BasePresenter {
 	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/** @var \POS\Model\AdviceDao @inject */
-	public $adviceDao;
-
-	/** @var \POS\Model\PartyDao @inject */
-	public $partyDao;
-
-	/** @var \POS\Model\ChatMessagesDao @inject */
-	public $chatMessagesDao;
-
-	/** @var \POS\Model\ActivitiesDao @inject */
-	public $activitiesDao;
-
-	/** @var \Nette\Mail\IMailer @inject */
-	public $mailer;
-
 	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
@@ -41,12 +23,6 @@ class CronPresenter extends BasePresenter {
 
 	/** @var \POS\Model\UserPropertyDao @inject */
 	public $userPropertyDao;
-
-	/** @var \POS\Model\OldUserDao @inject */
-	public $oldUserDao;
-
-	/** @var \POS\Model\ImageDao @inject */
-	public $imageDao;
 
 	public function startup() {
 		parent::startup();
@@ -75,73 +51,6 @@ class CronPresenter extends BasePresenter {
 		die();
 	}
 
-	public function actionSendNotifies() {
-		$activities = $this->activitiesDao->getNotViewedNotSendNotify();
-		$messages = $this->chatMessagesDao->getNotReadedNotSendNotify();
-
-		$emailNotifies = new EmailNotifies($this->mailer);
-		/* upozornění na aktivity */
-		foreach ($activities as $activity) {
-			$emailNotifies->addActivity($activity->event_owner, $activity);
-		}
-
-		/* upozornění na zprávy */
-		foreach ($messages as $message) {
-			if (isset($message->recipient)) { //konverzace jsou null a tak se neposílají
-				$emailNotifies->addMessage($message->recipient);
-			}
-		}
-
-		$emailNotifies->sendEmails();
-
-		$this->activitiesDao->updateSendNotify();
-		$this->chatMessagesDao->updateSendNotify();
-
-		echo "Oznámení byly odeslány";
-		die();
-	}
-
-	public function actionSendNewsletters() {
-		ini_set('max_execution_time', 300);
-		$offset = 50;
-		$limit = 50;
-		$users = $this->imageDao->getAll()->limit($limit, $offset);
-
-		$emailNotifies = new \Notify\EmailsNewsletter($this->mailer);
-
-		/* upozornění na aktivity */
-		foreach ($users as $user) {
-			$emailNotifies->addEmail($user);
-		}
-
-		$emailNotifies->sendEmails();
-
-		echo 'Bylo odesláno ' . $users->count() . ' emailů';
-		die();
-	}
-
-	/**
-	 * Napíše email starším uživatelům z první verze přiznání.
-	 */
-	public function actionSendEmailOldUsers() {
-		$limit = 2; //200;
-		$users = $this->oldUserDao->getNoNotify($limit);
-		$emailNotifies = new EmailsForOldUsers($this->mailer);
-
-		/* upozornění na aktivity */
-		foreach ($users as $user) {
-			$emailNotifies->addEmail($user);
-		}
-
-		$emailNotifies->sendEmails();
-
-		$this->oldUserDao->updateLimitNotify($users);
-
-		$countNoNotify = $this->oldUserDao->countNoNotify();
-		echo "Bylo odesláno " . $users->count() . " oznámení o nové seznamce. $countNoNotify jich ještě čeká.";
-		die();
-	}
-
 	public function actionReleaseConfessions() {
 //		$allConCount = $this->confessionDao->countReleaseNotStream();
 
@@ -166,76 +75,6 @@ class CronPresenter extends BasePresenter {
 //		echo("Nahrávání proběhlo úspěšně, bylo nahráno " . --$counter . " přiznání z " . $allConCount);
 		die();
 //		$this->redirect("this");
-	}
-
-	public function actionWow() {
-		$pripojeni_manius['ip'] = '91.219.244.178';
-		$pripojeni_manius['uzivatel'] = 'priznani';
-		$pripojeni_manius['heslo'] = 'SJ28XNypF';
-		$pripojeni_manius['db'] = 'priznani';
-		$spojeni_manius = mysql_connect($pripojeni_manius['ip'], $pripojeni_manius['uzivatel'], $pripojeni_manius['heslo']);
-		mysql_select_db($pripojeni_manius['db'], $spojeni_manius);
-		mysql_set_charset('utf8', $spojeni_manius);
-
-		$now = new DateTime();
-		$morning = $now->setTime(0, 0, 0)->modify('-1 day');
-		$now2 = new DateTime();
-		$night = $now2->setTime(23, 59, 59)->modify('-1 day');
-
-		$partyConfessions = $this->partyDao->getBetweenRelease($morning, $night);
-
-		$query = "";
-
-		foreach ($partyConfessions as $confession) {
-			$release_date = new DateTime($confession->release_date);
-			$release_date = $release_date->modify('+1 day')->format('Y-m-d H:i:s');
-			$insert = "INSERT into priznanizparby (text, datum) VALUES ('" . addslashes($confession->note) . "', '" . $release_date . "');";
-			mysql_query($insert, $spojeni_manius);
-			$query = $query . $insert;
-		}
-
-		$sexConfessions = $this->confessionDao->getBetweenRelease($morning, $night);
-
-		$query2 = "";
-
-		foreach ($sexConfessions as $confession) {
-			$release_date = new DateTime($confession->release_date);
-			$release_date = $release_date->modify('+1 day')->format('Y-m-d H:i:s');
-			$insert = "INSERT into priznaniosexu (text, datum) VALUES ('" . addslashes($confession->note) . "', '" . $release_date . "');";
-			mysql_query($insert, $spojeni_manius);
-			$query2 = $query2 . $insert;
-		}
-		$this->dataToDebug = $query;
-		//mysql_query($query, $spojeni_manius);
-		mysql_close($spojeni_manius);
-	}
-
-	public function renderWow() {
-		$this->template->dataToDebug = $this->dataToDebug;
-	}
-
-	public function actionMailToJSON($userName, $userPassword) {
-		/* kontrola uživatele */
-		if ($userName != 'mailuser' || $userPassword != 'a10b06001') {
-			$message = array(
-				'access' => 'denied',
-				'access2' => 'denied',
-				'access3' => 'denied'
-			);
-
-			$this->sendJson($message);
-		}
-	}
-
-	public function renderMailToJSON($userName, $userPassword) {
-		$messages = array(
-			'abc@seznam.cz' => 'Zpráva pro ABC',
-			'def@seznam.cz' => 'Zpráva pro DEF',
-			'ghi@seznam.cz' => 'Zpráva pro GHI',
-		);
-
-		$json = new JsonResponse($messages, "application/json; charset=utf-8");
-		$this->sendResponse($json);
 	}
 
 }

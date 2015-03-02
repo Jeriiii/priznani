@@ -1,26 +1,19 @@
 <?php
 
-include_once 'MailReadJSON.php';
+require_once 'autoload.php'; //načtení tříd NETTE, načítají se jen ty třídy, co jsou potřeba
+require_once 'MailReadJSON.php';
+require_once 'DBConnection.php';
+require_once 'urlBuilder.php';
 
-function __autoload($className) {
-	$dirs = array('Mail');
+use Cron\MailReadJSON;
 
-	foreach ($dirs as $dir) {
-		if (file_exists($dir . '/' . $className . '.php')) {
+$mailer = new MailReadJSON();
 
-		}
-	}
-}
+/* emaily s aktualitami */
+$mailer->sendEmails(urlBuilder('mail-to-json'));
+$mailer->readUrl(urlBuilder('mail-is-sended')); //označí emaily jako odeslané
 
-$url = 'http://localhost/nette/pos/www/cron/mail-to-json?userName=mailuser&userPassword=a10b06001';
-$mailer = new Cron\MailReadJSON();
-$mailer->readUrl($url);
-
-$message = new Nette\Mail\Message();
-$message->setFrom('info@priznaniosexu.cz');
-$message->addTo('test@test.cz');
-$message->setBody('Toto je tělo emailu.');
-
-$sendMailer = new \Nette\Mail\SendmailMailer();
-$sendMailer->send($message);
-
+/* emaily pro bývalé uživatele */
+$mailer->setEmailType(MailReadJSON::TYPE_EMAIL_OLD_USERS);
+$mailer->sendEmails(urlBuilder('mail-to-old-users-json'));
+$mailer->readUrl(urlBuilder('mail-old-users-is-sended')); //označí emaily jako odeslané
