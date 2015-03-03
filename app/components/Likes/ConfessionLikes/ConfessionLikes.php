@@ -30,8 +30,13 @@ class ConfessionLikes extends BaseLikes implements IBaseLikes {
 	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
 	 * @param \POS\UserPreferences\StreamUserPreferences $cachedStreamPreferences objekt obsahující položky ve streamu, pokud se používá cachování. Pokud se nepoužívá, pak je NULL
 	 */
-	public function __construct(LikeConfessionDao $likeConfessionDao, $confession, $userID, StreamUserPreferences $cachedStreamPreferences = NULL) {
-		parent::__construct($likeConfessionDao, $confession, $userID, 0, self::STATUS_LABEL, self::DEFAULT_NAME_LIKE_BUTTON, $cachedStreamPreferences);
+	public function __construct(LikeConfessionDao $likeConfessionDao, $confession, $userID, $cachedStreamPreferences = NULL) {
+
+		if ($cachedStreamPreferences instanceof StreamUserPreferences) {
+			parent::__construct($likeConfessionDao, $confession, $userID, 0, self::STATUS_LABEL, self::DEFAULT_NAME_LIKE_BUTTON, $cachedStreamPreferences);
+		} else {
+			parent::__construct($likeConfessionDao, $confession, $userID, 0, self::STATUS_LABEL, self::DEFAULT_NAME_LIKE_BUTTON, NULL);
+		}
 	}
 
 	/**

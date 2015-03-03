@@ -17,8 +17,12 @@ use POS\UserPreferences\StreamUserPreferences;
  */
 class ImageComments extends BaseComments {
 
-	public function __construct(LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, $image, $userData, $ownerID, StreamUserPreferences $cachedStreamPreferences = NULL) {
-		parent::__construct($likeImageCommentDao, $commentImagesDao, $image, $userData, $ownerID, $cachedStreamPreferences);
+	public function __construct(LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, $image, $userData, $ownerID, $cachedStreamPreferences = NULL) {
+		if ($cachedStreamPreferences instanceof StreamUserPreferences) {
+			parent::__construct($likeImageCommentDao, $commentImagesDao, $image, $userData, $ownerID, $cachedStreamPreferences);
+		} else {
+			parent::__construct($likeImageCommentDao, $commentImagesDao, $image, $userData, $ownerID, NULL);
+		}
 	}
 
 }
