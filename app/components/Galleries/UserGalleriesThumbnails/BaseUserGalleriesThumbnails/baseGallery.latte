@@ -26,6 +26,7 @@
 		{include #addNewGallery}
 	{/ifset}
 	{foreach $galleries as $gallery}
+		{if $gallery->offsetExists('name')}
 		<div class="img-container {if $iterator->getCounter() % 3 == 0}third-multiple{/if}">
 			{ifset #galleryEditButtons}
 				{include #galleryEditButtons "gallery" => $gallery, "iterator" => $iterator}
@@ -34,13 +35,13 @@
 				{ifset $gallery->lastImageID}
 					<img src="{$basePath}/images/userGalleries/{$userData->id}/{$gallery->id}/minSqr{$gallery->lastImageID}.{$gallery->lastImage->suffix}" width="100%" height="100%"/>
 				{/ifset}
-				
+
 				<a class="view" href="{plink Galleries:listUserGalleryImages galleryID => $gallery->id}">{$gallery->name} {if $gallery->private}<br />(soukromá){/if}</a>
 			{else}
 				<img src="{$basePath}/images/icons/Lock-icon.png" title="{$gallery->name}" width="100%" height="100%"/>
 			{/if}
 		</div>
-
+		{/if}
     {/foreach}
 	<div class="clear"></div>
 </section>

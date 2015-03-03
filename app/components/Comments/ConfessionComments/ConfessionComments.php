@@ -17,8 +17,12 @@ use POS\UserPreferences\StreamUserPreferences;
  */
 class ConfessionComments extends BaseComments {
 
-	public function __construct(LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, $confession, $userData, StreamUserPreferences $cachedStreamPreferences = NULL) {
-		parent::__construct($likeConfessionCommentDao, $commentConfessionsDao, $confession, $userData, 0, $cachedStreamPreferences);
+	public function __construct(LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, $confession, $userData, $cachedStreamPreferences = NULL) {
+		if ($cachedStreamPreferences instanceof StreamUserPreferences) {
+			parent::__construct($likeConfessionCommentDao, $commentConfessionsDao, $confession, $userData, 0, $cachedStreamPreferences);
+		} else {
+			parent::__construct($likeConfessionCommentDao, $commentConfessionsDao, $confession, $userData, 0, NULL);
+		}
 	}
 
 }

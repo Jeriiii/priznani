@@ -37,8 +37,12 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
 	 * @param \POS\UserPreferences\StreamUserPreferences $cachedStreamPreferences objekt obsahující položky ve streamu, pokud se používá cachování. Pokud se nepoužívá, pak je NULL
 	 */
-	public function __construct(ImageLikesDao $imageLikesDao, $image, $userID, $ownerID, StreamUserPreferences $cachedStreamPreferences = NULL) {
-		parent::__construct($imageLikesDao, $image, $userID, $ownerID, self::IMAGE_LABEL, self::IMAGE_LIKE_BUTTON, $cachedStreamPreferences);
+	public function __construct(ImageLikesDao $imageLikesDao, $image, $userID, $ownerID, $cachedStreamPreferences = NULL) {
+		if ($cachedStreamPreferences instanceof StreamUserPreferences) {
+			parent::__construct($imageLikesDao, $image, $userID, $ownerID, self::IMAGE_LABEL, self::IMAGE_LIKE_BUTTON, $cachedStreamPreferences);
+		} else {
+			parent::__construct($imageLikesDao, $image, $userID, $ownerID, self::IMAGE_LABEL, self::IMAGE_LIKE_BUTTON, NULL);
+		}
 	}
 
 	/**
