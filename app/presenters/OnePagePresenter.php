@@ -195,6 +195,11 @@ class OnePagePresenter extends BasePresenter {
 		} else {
 			$this->dataForStream = $this->streamDao->getForUnloggedUser("DESC");
 		}
+		foreach ($this->dataForStream as $item) {
+			echo $item->confession->id . '<br />';
+		}
+
+		die();
 	}
 
 	/**

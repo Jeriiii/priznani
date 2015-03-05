@@ -136,7 +136,6 @@ class BaseStream extends BaseProjectControl {
 	 * @param type $templateName
 	 */
 	public function renderBase($mode, $templateName = "baseStream.latte") {
-
 		if ($mode == "mainStream") {
 			$this->renderMainStream($templateName);
 		}

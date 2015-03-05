@@ -11,6 +11,7 @@ use NetteExt\Install\DirChecker;
 use NetteExt\Install\Messages;
 use NetteExt\Install\ClearCasch;
 use POS\Model\UserPropertyDao;
+use NetteExt\DBMover\DBMover;
 
 class InstallPresenter extends BasePresenter {
 
@@ -101,6 +102,19 @@ class InstallPresenter extends BasePresenter {
 		$dirCheker->addUsers($this->userDao);
 		$dirCheker->check();
 
+		$messages->flash($this);
+		$this->redirect("Install:");
+	}
+
+	public function actionMoveDb() {
+		ini_set('max_execution_time', 600);
+		$messages = new Messages;
+
+		$dbMover = new DBMover($this->dbDao);
+		$dbMover->saveToCache();
+		$dbMover->loadFromCache();
+
+		$messages->addMessage('Data byla uložena do DB');
 		$messages->flash($this);
 		$this->redirect("Install:");
 	}

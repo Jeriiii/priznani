@@ -47,7 +47,6 @@ class Serializer {
 				$data[] = $dataRow;
 			}
 		}
-
 		return ArrayHash::from($data);
 	}
 

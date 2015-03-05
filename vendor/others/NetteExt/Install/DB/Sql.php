@@ -165,7 +165,7 @@ class Sql {
 	 * @param \POS\Model\DatabaseDao $dbDao
 	 */
 	public function addRemoveData($dbDao) {
-		$sqlAllTables = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" . $this->dbName . "' AND TABLE_TYPE = 'BASE TABLE'";
+		$sqlAllTables = self::getAllTablesNameInDB($this->dbName);
 		$allTables = $dbDao->getDatabase()->query($sqlAllTables);
 
 		$sql = "";
@@ -182,6 +182,16 @@ class Sql {
 	 */
 	public function getSQLRootDir() {
 		return $this->sqlRootDir;
+	}
+
+	/**
+	 * Vrátí všechny názvy tabulek z dané DB.
+	 * @param string $dbName Název databáze.
+	 * @return string
+	 */
+	public static function getAllTablesNameInDB($dbName) {
+		$sqlAllTables = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" . $dbName . "' AND TABLE_TYPE = 'BASE TABLE'";
+		return $sqlAllTables;
 	}
 
 }
