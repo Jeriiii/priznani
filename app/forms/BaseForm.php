@@ -9,6 +9,7 @@ use Nette\Application\UI\Form,
 	Nette\Mail\Message;
 use POS\Model\UserDao;
 use Nette\Forms\Controls;
+use NetteExt\DeviceDetector;
 
 class BaseForm extends Form {
 
@@ -17,6 +18,9 @@ class BaseForm extends Form {
 
 	/** @var boolean Je spuštěna aplikace na produkci? */
 	protected $productionMode;
+
+	/** @var \NetteExt\DeviceDetector detektor zařízení */
+	public $deviceDetector;
 
 	/*	 * ** BOOTSTRAP PROMĚNNÉ - použijí se jen při zavolání metody na boostrap vykreslení ** * */
 
@@ -44,6 +48,7 @@ class BaseForm extends Form {
 		if (!empty($presenter) && $presenter instanceof \Nette\Application\UI\Presenter) {
 			$this->testMode = $this->getPresenter()->testMode;
 			$this->productionMode = $this->getPresenter()->productionMode;
+			$this->deviceDetector = new DeviceDetector($this->getPresenter()->getSession());
 		}
 	}
 
