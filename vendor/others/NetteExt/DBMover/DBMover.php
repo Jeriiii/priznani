@@ -17,6 +17,7 @@ use POS\Model\ConfessionDao;
 use POS\Model\AdviceDao;
 use POS\Model\ChatMessagesDao;
 use POS\Model\StreamDao;
+use POS\Model\OldUserDao;
 use NetteExt\DBMover\DBDataInstaler;
 
 /**
@@ -32,8 +33,9 @@ class DBMover {
 	/** @var array Tabulky, se kterými se nemá pracovat - např. jsou moc velké než aby se
 	 * ukládali do cache. */
 	private $notUseTables = array(
-//		ConfessionDao::TABLE_NAME, AdviceDao::TABLE_NAME,
-		ChatMessagesDao::TABLE_NAME, StreamDao::TABLE_NAME
+		ConfessionDao::TABLE_NAME, AdviceDao::TABLE_NAME,
+		ChatMessagesDao::TABLE_NAME, StreamDao::TABLE_NAME,
+		OldUserDao::TABLE_NAME
 	);
 
 	/** @var DatabaseDao */
@@ -43,7 +45,7 @@ class DBMover {
 	private $tableNames = array();
 
 	/** @var string Název databáze. */
-	private $dbName = 'pos';
+	private $dbName = 'datenodecz'; //'datenodecz';
 
 	public function __construct(DatabaseDao $databaseDao) {
 		$this->databaseDao = $databaseDao;
@@ -65,7 +67,7 @@ class DBMover {
 	public function saveToCache() {
 		$data = $this->loadDB();
 
-		$sorter = new TablesSorter($this->databaseDao, $this->notUseTables);
+		$sorter = new TablesSorter($this->databaseDao, $this->notUseTables, $this->dbName);
 		$tables = $sorter->sort($data);
 
 		$cache = self::createCache();

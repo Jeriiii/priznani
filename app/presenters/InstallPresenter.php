@@ -15,46 +15,25 @@ use NetteExt\DBMover\DBMover;
 
 class InstallPresenter extends BasePresenter {
 
-	/**
-	 * @var \POS\Model\DatabaseDao
-	 * @inject
-	 */
+	/** @var \POS\Model\DatabaseDao @inject */
 	public $dbDao;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\CatPropertyWantToMeetDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CatPropertyWantToMeetDao @inject */
 	public $catPropertyWantToMeetDao;
 
-	/**
-	 * @var \POS\Model\UserPropertyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPropertyDao @inject */
 	public $userPropertyDao;
 
-	/**
-	 * @var \POS\Model\UserCategoryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserCategoryDao @inject */
 	public $userCategoryDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\ConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ConfessionDao @inject */
 	public $confessionDao;
 
 	public function startup() {

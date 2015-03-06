@@ -21,20 +21,20 @@ use POS\Model\ImageDao;
  */
 class TablesSorter {
 
-	const DB_NAME = 'pos';
+	/** @var string Název databáze, se kterou se pracuje. */
+	private $dbName;
 
-	/**
-	 * @var DatabaseDao Dao pro práci s celou DB
-	 */
+	/** @var DatabaseDao Dao pro práci s celou DB */
 	private $databaseDao;
 
 	/** @var array Tabulky, se kterými se nemá pracovat - např. jsou moc velké než aby se
 	 * ukládali do cache. */
 	private $notUseTables;
 
-	public function __construct(DatabaseDao $databaseDao, array $notUseTables) {
+	public function __construct(DatabaseDao $databaseDao, array $notUseTables, $dbName) {
 		$this->databaseDao = $databaseDao;
 		$this->notUseTables = $notUseTables;
+		$this->dbName = $dbName;
 	}
 
 	/**
@@ -58,7 +58,7 @@ class TablesSorter {
 	private function createTables(array $tables) {
 		foreach ($tables as $tableName => $table) {
 			$tab = new Table($tableName, $table);
-			$refs = $this->databaseDao->getAnchestors(self::DB_NAME, $tableName);
+			$refs = $this->databaseDao->getAnchestors($this->dbName, $tableName);
 
 			/* přidání předchůdců tabulky */
 			foreach ($refs as $ref) {
