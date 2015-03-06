@@ -67,17 +67,30 @@ class Sql {
 	}
 
 	/**
+	 * Nastaví SQL pro smazání a celé vytvoření jedné databáze. Obsahuje i data.
+	 */
+	public function setSqlAllDB() {
+		$this->setSqlStructDB();
+		$this->addData();
+	}
+
+	/**
+	 * Nastaví SQL pro smazání a celé vytvoření jedné databáze. NEobsahuje data.
+	 */
+	public function addDBStruct() {
+		$this->setSqlStructDB();
+	}
+
+	/**
 	 * Nastaví SQL pro smazání a celé vytvoření jedné databáze. Neobsahuje
 	 * data pro chat databázi
 	 * Tu pak i naplní daty.
 	 */
-	public function setSqlAllDB() {
-
+	public function setSqlStructDB() {
 		$this->addStartSql(TRUE);
 		$this->addStable();
 		$this->addPatches();
 		$this->addDevelopSql();
-		$this->addData();
 	}
 
 	/**

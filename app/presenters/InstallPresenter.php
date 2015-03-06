@@ -106,15 +106,33 @@ class InstallPresenter extends BasePresenter {
 		$this->redirect("Install:");
 	}
 
+	public function actionDBStruct() {
+		ini_set('max_execution_time', 300);
+		$messages = new Messages;
+
+		/* vyčistí cache */
+		$clearCache = new ClearCasch($messages);
+		$clearCache->clearCache();
+
+		/* obnoví kompletně celou DB pos i postest */
+		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
+		$instalDB->installDBStruct();
+
+		$messages->flash($this);
+		$this->redirect("Install:");
+	}
+
 	public function actionMoveDb() {
 		ini_set('max_execution_time', 600);
 		$messages = new Messages;
 
 		$dbMover = new DBMover($this->dbDao);
-		$dbMover->saveToCache();
-		$dbMover->loadFromCache();
-
+		//$dbMover->saveToCache();
 		$messages->addMessage('Data byla uložena do DB');
+
+		$dbMover->loadFromCache();
+		$messages->addMessage('Data byla načtena z DB');
+
 		$messages->flash($this);
 		$this->redirect("Install:");
 	}

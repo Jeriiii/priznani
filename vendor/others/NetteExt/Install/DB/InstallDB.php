@@ -52,6 +52,24 @@ class InstallDB {
 	}
 
 	/**
+	 * Reinstaluje obě databáze.
+	 */
+	public function installDBStruct() {
+		$this->installPosDbStruct();
+	}
+
+	/**
+	 * Reinstaluje db struct data budou smazána.
+	 */
+	public function installPosDbStruct() {
+		$sql = new Sql(self::TABLE_POS, $this->testingMode);
+
+		$sql->setSqlStructDB();
+		$this->executeSql($sql);
+		$this->messages->addMessage("Databáze " . self::TABLE_POS . " byla úspěšně nainstalována. Data byla smazána.");
+	}
+
+	/**
 	 * Reinstaluje a naplní daty normální databázi.
 	 */
 	public function installPosDb() {

@@ -17,6 +17,7 @@ use POS\Model\ConfessionDao;
 use POS\Model\AdviceDao;
 use POS\Model\ChatMessagesDao;
 use POS\Model\StreamDao;
+use NetteExt\DBMover\DBDataInstaler;
 
 /**
  * Přesune DB tak, že načte data z DB a uloží do cache. Na cílovém stroji
@@ -31,7 +32,7 @@ class DBMover {
 	/** @var array Tabulky, se kterými se nemá pracovat - např. jsou moc velké než aby se
 	 * ukládali do cache. */
 	private $notUseTables = array(
-		ConfessionDao::TABLE_NAME, AdviceDao::TABLE_NAME,
+//		ConfessionDao::TABLE_NAME, AdviceDao::TABLE_NAME,
 		ChatMessagesDao::TABLE_NAME, StreamDao::TABLE_NAME
 	);
 
@@ -78,10 +79,8 @@ class DBMover {
 		$cache = self::createCache();
 		$data = $cache->load(self::CACHE_DATA_NAME);
 
-		$instaler = new DBDataInstaler();
-
-		dump($data);
-		die();
+		$instaler = new DBDataInstaler($this->databaseDao);
+		$instaler->install($data);
 
 		$this->data = $data;
 	}

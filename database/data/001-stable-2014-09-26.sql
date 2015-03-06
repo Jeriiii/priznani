@@ -9089,7 +9089,7 @@ INSERT INTO `confessions` (`id`, `note`, `mark`, `inStream`, `was_on_fb`, `creat
 -- Exportování dat pro tabulku pos.couple: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `couple` DISABLE KEYS */;
 INSERT INTO `couple` (`id`, `age`, `marital_state`, `orientation`, `tallness`, `shape`, `type`, `penis_length`, `penis_width`, `bra_size`, `smoke`, `drink`, `graduation`, `hair_colour`) VALUES
-	(1, '0000-00-00', 'free', 'hetero', 160, '0', 3, NULL, NULL, 'a', 'often', 'often', 'zs', '1');
+	(1, '1972-01-01', 'free', 'hetero', 160, '0', 3, NULL, NULL, 'a', 'often', 'often', 'zs', '1');
 /*!40000 ALTER TABLE `couple` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.embed_videos: ~0 rows (přibližně)
