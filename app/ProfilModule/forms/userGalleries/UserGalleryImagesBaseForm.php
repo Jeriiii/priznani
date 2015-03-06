@@ -113,12 +113,16 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	public function addImageFields($count, $displayName = TRUE, $dislplayDesc = TRUE) {
 		/* Pro unikátnost názvu pole - pro testy */
 		$prefixImgName = $this->getImgNamePrefix();
+		$imageAlert = 'Přílohou musí být obrázek formátu .jpg, .gif nebo .png';
+		if ($this->deviceDetector->isMobile()) {
+			$imageAlert = $imageAlert . ' Je možné, že typ vašeho mobilu nepodporuje nahrávání formátu JPG.';
+		}
 
 		for ($i = 0; $i < $count; $i++) {
 			$this->addUpload($prefixImgName . self::IMAGE_FILE . $i, 'Přidat fotku:')
 				->addRule(Form::MAX_FILE_SIZE, 'Fotografie nesmí být větší než 4MB', 4 * 1024 * 1024)
 				->addCondition(Form::FILLED)
-				->addRule(Form::IMAGE, 'Přílohou musí být obrázek formátu .jpg, .gif nebo .png');
+				->addRule(Form::IMAGE, $imageAlert);
 			if ($displayName) {
 				$this->addText($prefixImgName . self::IMAGE_NAME . $i, 'Název:')
 					->addConditionOn($this[$prefixImgName . self::IMAGE_FILE . $i], Form::FILLED)
