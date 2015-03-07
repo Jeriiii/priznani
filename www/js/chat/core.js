@@ -251,7 +251,7 @@
 				addMessage(iduser, name, href, message.name, message.id, message.text, message.type);
 				if (message.type == 0) {//textové zprávy se aktualizují v seznamu konverzací
 					actualizeMessageInConversationList(iduser, name, message.text);
-					if (message.readed == 0) {
+					if (message.readed == 0 && message.fromMe == 0) {
 						playMessageSound();//prehrani zvuku
 					}
 				}
