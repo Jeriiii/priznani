@@ -313,10 +313,9 @@
 		var truncated = jQuery.trim(text).substring(0, 35).split(" ").slice(0, -1).join(" ") + "...";
 		var listItem = $('#conversations li[data-id="' + id + '"]');
 		if (!(listItem.length > 0)) {//pokud v konverzacich neni zaznam
-			var conList = $('#conversations ul');
-			var newListItem = '<li data-id="' + id + '" data-title="' + name + '" class="conversation-link">\n\
-			<strong>' + name + '</strong><p class="lastmessage">' + truncated + '</p></li>';
-			conList.prepend(newListItem);//prida se do seznamu
+			if($('#conversations ul').children().length > 0){//pokud uz ma zaznamy - okno konverzaci uz bylo otevreno a nacteno
+				$('#messages-btn').trigger('reloadRequest');
+			}
 		} else {
 			listItem.removeClass('unreaded');//aktualizuje se po zobrazeni zpravy
 			listItem.find('.lastmessage').text(truncated);
