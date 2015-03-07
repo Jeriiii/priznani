@@ -84,8 +84,12 @@ class ChatManager extends \Nette\Object {
 	 * @return \Nette\Database\Table\Selection
 	 */
 	public function getAdminContact() {
-		return $this->userDao->getInRoleSuperadminLimit(1)
-				->fetch();
+		$superadmin = $this->userDao->find('221');
+		if (empty($superadmin)) {
+			$superadmin = $this->userDao->getInRoleSuperadminLimit(1)->fetch();
+		}
+
+		return $superadmin;
 	}
 
 	/**
