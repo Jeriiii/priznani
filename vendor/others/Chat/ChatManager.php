@@ -165,12 +165,23 @@ class ChatManager extends \Nette\Object {
 	/**
 	 * Nastaví všechny zprávy s id v poli jako přečtené/nepřečtené
 	 * @param array $ids neasociativni pole idček
-	 * @param boolean $readed přečtená/nepřečtená
 	 * @param int $idUser id příjemce kvůli bezpečnosti
+	 * @param boolean $readed přečtená/nepřečtená
 	 * @return Nette\Database\Table\Selection upravené zprávy
 	 */
 	public function setMessagesReaded($ids, $idUser, $readed) {
 		return $this->messagesDao->setMultipleMessagesReaded($ids, $idUser, $readed);
+	}
+
+	/**
+	 * Nastaví zprávu a všechny starší zprávy jako přečtené/nepřečtené
+	 * @param int maxId id zprávy
+	 * @param int $idUser id příjemce kvůli bezpečnosti
+	 * @param boolean $readed přečtená/nepřečtená
+	 * @return Nette\Database\Table\Selection upravené zprávy
+	 */
+	public function setOlderMessagesReaded($maxId, $idUser, $readed) {
+		return $this->messagesDao->setAllOlderMessagesReaded($maxId, $idUser, $readed);
 	}
 
 	/**
