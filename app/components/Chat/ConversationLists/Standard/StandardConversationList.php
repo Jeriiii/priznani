@@ -87,8 +87,8 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 
 	/**
 	 * Vrátí uživatele s daným ID, který není přihlášený uživatel, aby mohl být vykreslen jeho profil
-	 * @param int $id id prvního uživatele
-	 * @param int $id id druhého uživatele
+	 * @param int $id1 id prvního uživatele
+	 * @param int $id2 id druhého uživatele
 	 * @return Selection
 	 */
 	public function getCorrectUser($id1, $id2) {
