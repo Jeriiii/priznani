@@ -68,10 +68,10 @@ production < common:
 	parameters:
 		database:
 			driver: mysql
-			host: wm49.wedos.net
-			dbname: d42750_pos7
-			user: a42750_pos7
-			password: hvLCbh2k
+			host: wm48.wedos.net
+			dbname: d42750_pos9
+			user: a42750_pos9
+			password: 5pJtB4ET
 			productionMode: TRUE
 
 		chatDatabase:
