@@ -72,8 +72,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		$user = $this->getPresenter()->getUser();
 		if ($user->isLoggedIn()) {
 			$readedArray = (array) Json::decode($readedmessages);
-			$this->chatManager->setMessagesReaded($readedArray, $user->getId(), TRUE); //oznaceni zprav za prectene
-
+			$this->chatManager->setOlderMessagesReaded($readedArray, $user->getId(), TRUE); //oznaceni zprav za prectene
 			$this->sendRefreshResponse($lastid);
 		}
 	}

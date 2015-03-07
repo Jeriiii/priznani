@@ -375,6 +375,18 @@
 		bindCloseOnClick(opts, boxSelector);
 		addSlimScroll(content);
 		addResizeBehavior(opts, boxSelector);
+		addReloadTrigger(opts);
+	}
+	
+	/**
+	 * Přidá možnost triggerem vyvolat obnovení dat
+	 * @param {Object} opts nastavení
+	 */
+	function addReloadTrigger(opts) {
+		var options = opts;
+		$(options.buttonSelector).bind('reloadRequest', function(){
+			//NOT IMPLEMENTED YET
+		});
 	}
 	/**
 	 * Nabinduje okénku click listener, který jej otevře/zavře, když se klikne na jeho tlačítko
