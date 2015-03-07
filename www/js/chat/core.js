@@ -338,6 +338,7 @@
 		blockWindowUnload('Ještě se načítají zprávy, opravdu chcete odejít?');
 		$.getJSON(loadMessagesLink, data, function (jsondata) {
 			handleResponse(jsondata);
+			sendRefreshRequest();
 		});
 	}
 
