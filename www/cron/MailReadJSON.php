@@ -65,7 +65,7 @@ class MailReadJSON {
 	 * Odešlě emaily.
 	 * @param array $emails Emaily, co se mají poslat.
 	 */
-	private function send($emails) {
+	private function send(array $emails) {
 		$sendMailer = new SendmailMailer;
 
 		foreach ($emails as $email) {

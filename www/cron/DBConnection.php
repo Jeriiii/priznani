@@ -25,18 +25,20 @@ class DBConnection {
 		$driver = 'mysql';
 
 //		$host = '127.0.0.1';
-//		$dbname = 'datenodecz';
+//		$dbname = 'datenodecz01';
+//		$user = 'datenodecz001';
+//		$password = 'a10b0618p';
 
 		$host = 'localhost';
 		$dbname = 'pos_cron_emails';
-
-		$dsn = "$driver://host=$host;dbname=$dbname;";
-
 		$user = 'root';
 		$password = 'root';
 
-//		$user = 'datenodecz001';
-//		$password = 'a10b0618p';
+		$dsn = "$driver://host=$host;dbname=$dbname;";
+
+
+
+
 
 		$connection = new Connection($dsn, $user, $password);
 

@@ -10,7 +10,7 @@
  * @param string $action Action presenteru.
  */
 function urlBuilder($action = 'mail-to-json') {
-	$domain = 'http://localhost/nette/pos/www';
+	$domain = 'http://42750.w50.wedos.ws';
 	$user = 'userName=mailuser&userPassword=a10b06001';
 	$presenter = 'cron-email';
 	$url = $domain . '/' . $presenter . '/' . $action . '?' . $user;
