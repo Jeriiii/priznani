@@ -41,13 +41,13 @@ class DBDataInstaler {
 
 	public function install(array $tables) {
 
-//		foreach ($tables as $tableName => $tableData) {
-//			if ($tableName == 'files' || $tableName == 'users_fotos') {
-//				continue;
-//			}
-//
-//			$this->insertRows($tableName, $tableData);
-//		}
+		foreach ($tables as $tableName => $tableData) {
+			if ($tableName == 'files' || $tableName == 'users_fotos') {
+				continue;
+			}
+
+			$this->insertRows($tableName, $tableData);
+		}
 
 		foreach ($tables as $tableName => $tableData) {
 			if (!array_key_exists($tableName, $this->circleRel)) {

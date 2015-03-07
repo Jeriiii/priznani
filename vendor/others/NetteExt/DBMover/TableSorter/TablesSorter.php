@@ -135,8 +135,6 @@ class TablesSorter {
 		/* odstranění kruhové závislosti mezi tabulkami users_images a users_galleries a images a gelleries - vzniká náhledem galerie */
 		$tables[UserGalleryDao::TABLE_NAME]->removeAncestor(UserImageDao::TABLE_NAME);
 		$tables[GalleryDao::TABLE_NAME]->removeAncestor(ImageDao::TABLE_NAME);
-		/* dočasné smazání tabulky - časem lze celý řádek odstranit */
-		$tables['files']->removeAncestor('texts');
 	}
 
 }
