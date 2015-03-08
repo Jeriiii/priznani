@@ -1,0 +1,36 @@
+{block head}
+<link rel="stylesheet" href="{$basePath}/css/jquery-ui-autocomplete/jquery-ui.min.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/css/jquery-ui-autocomplete/jquery-ui.structure.min.css" type="text/css">
+{control css 'bootstrap/forms-medium.less'}
+
+{/} 
+{block content}
+<h2>Seznam lidí, kteří mají přístup do této galerie</h2>
+<br />
+<h3>Přátelé:</h3>
+{foreach $friends as $friend}
+	<a n:href=":Profil:Show: id=> $friend->user2ID">{$friend->user2->user_name}</a>,
+{/foreach}
+{snippet friends}
+	{control allowFriendsForm}
+{/snippet}
+<br />
+<h3>Přidaní:</h3>
+{snippet allowedUsers}
+	{if count($allowedUsers) > 0}
+		{foreach $allowedUsers as $item}
+			{$item->user->user_name} - <a class="ajax" n:href="removeFriend! $item->userID, galleryID=>$galleryID">Odebrat</a><br />
+		{/foreach}
+	{else}
+		<p>Přidejte lidi, kteří budou mít přístup do této galerie.</p>
+	{/if}
+{control allowUserForm}
+{/snippet}
+<a class="btn-main medium" n:href="Galleries:listUserGalleryImages galleryID=>$galleryID">Zpět na galerii</a>
+{/block}
+{block jqueryUI}
+<script src="{$basePath}/js/jquery-ui-autocomplete/jquery-ui.js"></script>
+{/block}
+{block foot}
+	<script type="text/javascript" src="{$basePath}/js/allowGallery.js"></script>
+{/block}

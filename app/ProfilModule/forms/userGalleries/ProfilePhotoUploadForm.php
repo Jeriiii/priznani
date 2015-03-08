@@ -5,6 +5,8 @@ namespace Nette\Application\UI\Form;
 use POS\Model\UserGalleryDao,
 	POS\Model\UserImageDao,
 	POS\Model\StreamDao;
+use POS\Model\UserDao;
+use NetteExt\Form\Upload\UploadImage;
 
 /**
  * Formulář pro nahrávání profilových fotek.
@@ -33,9 +35,14 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 		$this->userImageDao = $userImageDao;
 		$this->streamDao = $streamDao;
 
-		$this->addGroup('Nahrát profilové foto');
-		$this->addImageFields(1, false, false); //foto bez popisu a nazvu
-		$this->addSubmit('send', 'Odeslat');
+		$this->addText('imageName')->setAttribute('class', 'imgCropInput');
+		$this->addText('imageX1')->setAttribute('class', 'imgCropInput');
+		$this->addText('imageX2')->setAttribute('class', 'imgCropInput');
+		$this->addText('imageY1')->setAttribute('class', 'imgCropInput');
+		$this->addText('imageY2')->setAttribute('class', 'imgCropInput');
+
+
+		$this->addSubmit('uploadProfilPhoto', 'Nahrát');
 
 		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
@@ -44,29 +51,36 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 
 	public function submitted($form) {
 		$values = $form->getValues();
+		$filename = $values->imageName;
+		$presenter = $this->getPresenter();
 
-		$image = $this->getArrayWithImages($values, 1);
-		$isFilled = $this->isFillImage($image);
+		$image = UploadImage::getImageFromTemp($filename);
 
-
-
-		if ($isFilled) {
-			$presenter = $this->getPresenter();
-			$uID = $presenter->getUser()->getId();
-			$gallery = $this->userGalleryDao->findProfileGallery($uID);
-			if (!$gallery) {
-				$gallery = $this->userGalleryDao->createProfileGallery($uID);
-			}
-			$allow = $this->saveImages($image, $uID, $gallery->id);
-			if ($allow) {
-				$presenter->flashMessage('Profilové foto bylo uloženo.');
-			} else {
-				$presenter->flashMessage('Profilové foto bylo uloženo. Nyní je ve frontě na schválení.');
-			}
+		if (empty($image)) {
+			$presenter->flashMessage('Obrázek nenalezen, zkuste to prosím znovu.');
 			$presenter->redirect('this');
-		} else {
-			$this->addError("Vyberte platný soubor");
 		}
+		$image->crop($values->imageX1, $values->imageY1, $values->imageX2 - $values->imageX1, $values->imageY2 - $values->imageY1);
+
+
+		$images = array(
+			array(self::IMAGE_FILE => $image,
+				self::IMAGE_NAME => $filename
+			)
+		);
+
+		$uID = $presenter->getUser()->getId();
+		$gallery = $this->userGalleryDao->findProfileGallery($uID);
+		if (!$gallery) {
+			$gallery = $this->userGalleryDao->createProfileGallery($uID);
+		}
+		$allow = $this->saveImages($images, $uID, $gallery->id, TRUE);
+
+		$presenter->calculateLoggedUser();
+
+		$presenter->flashMessage('Profilové foto bylo uloženo.');
+
+		$presenter->redirect('this');
 	}
 
 }

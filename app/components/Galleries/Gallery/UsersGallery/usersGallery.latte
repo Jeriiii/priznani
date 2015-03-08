@@ -18,6 +18,10 @@
 {$image->description}
 {/}
 
+{define userProfilLink}
+<a href="{plink :Profil:Show: id => $image->gallery->userID}" class="username">{$image->gallery->user->user_name|upper}</a>
+{/}
+
 {define uploadImage}
 <a href="{plink Galleries:userGalleryNew}" id="add-photo-button" class="btn-main medium right">
 	vytvořit vlastní galerii
@@ -25,9 +29,15 @@
 {/}
  
 {define imageMainScreen}
-	<img src="{$image|getImgPath}" alt="{$image->name}"
-		{ifset $imgPaddingTopBottom}
-			style = "padding: {!$imgPaddingTopBottom}px 0;"
-		{/ifset}
-		{if $setWidth} width="700" {else} height="525" {/if} />
+	<img src="{$image|getImgScrnPath}" alt="{$image->name}"
+		style = "padding: {!$imgPaddingTopBottom}px {!$imgPaddingLeftRight}px;"
+		width="{$image->widthGalScrn}" height="{$image->heightGalScrn}" />
+{/}
+
+{define likes}
+	{control likes}
+{/}
+
+{define comments}
+	{control comments}
 {/}

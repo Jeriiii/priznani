@@ -1,0 +1,16 @@
+{layout '../BaseUserGalleriesThumbnails/baseGallery.latte'}
+
+{define addNewGallery}
+<div class="img-container">
+	<img src="{$basePath}/images/layout/add_gallery.jpg" width="200px" height="200px"/>			
+	<a href="{plink Galleries:userGalleryNew}">Přidat novou galerii</a>
+</div>
+{/}
+
+{define galleryEditButtons}
+	{if !($gallery->private && !$paying)} {* tlačítka se nezobrazí, pokud je galerie private a už. je neplatící *}
+		<a href="{plink Galleries:userGalleryChange galleryID => $gallery->id}" class="btn-action btn-edit" title="editovat galerie"></a>
+		{var $link = array('deleteGallery!', array(galleryID => $gallery->id) )}
+		{control deleteGallery $gallery->id, $gallery->name, $link}
+	{/if}
+{/}

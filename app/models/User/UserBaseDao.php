@@ -17,7 +17,7 @@ abstract class UserBaseDao extends AbstractDao {
 
 	const COLUMN_ID = "id";
 	const COLUMN_AGE = "age";
-	const COLUMN_USER_PROPERTY = "user_property";
+	const COLUMN_TYPE = "type";
 	const COLUMN_MARITAL_STATE = "marital_state";
 	const COLUMN_ORIENTATION = "orientation";
 	const COLUMN_TALLNESS = "tallness";
@@ -29,18 +29,41 @@ abstract class UserBaseDao extends AbstractDao {
 	const COLUMN_GRADUATION = "graduation";
 	const COLUMN_BRA_SIZE = "bra_size";
 	const COLUMN_HAIR_COLOUR = "hair_colour";
+	const COLUMN_VIGOR = "vigor";
+
+	/* Druh uživatele */
+	const PROPERTY_MAN = 1;
+	const PROPERTY_WOMAN = 2;
+	const PROPERTY_COUPLE = 3;
+	const PROPERTY_COUPLE_MAN = 4;
+	const PROPERTY_COUPLE_WOMAN = 5;
+	const PROPERTY_GROUP = 6;
+
+	/* Znamení uživatele */
+	const VIGOR_VODNAR = 1;
+	const VIGOR_RYBY = 2;
+	const VIGOR_BERNA = 3;
+	const VIGOR_BYK = 4;
+	const VIGOR_BLIZENEC = 5;
+	const VIGOR_RAK = 6;
+	const VIGOR_LEV = 7;
+	const VIGOR_PANNA = 8;
+	const VIGOR_VAHY = 9;
+	const VIGOR_STIR = 10;
+	const VIGOR_STRELEC = 11;
+	const VIGOR_KOZOROH = 12;
 
 	/**
 	 * vrátí specifické věci pro pohlaví
 	 */
 	protected function getSex($userProperty) {
-		$property = $userProperty->user_property;
+		$property = $userProperty->type;
 		/* žena */
-		if ($property == "w" || $property == "c" || $property == "cw") {
+		if ($property == 2 || $property == 3 || $property == 5) {
 			return $this->getWomanData($userProperty);
 		}
 		/* muž */
-		if ($property == "m" || $property == "cm") {
+		if ($property == 1 || $property == 4) {
 			return $this->getManData($userProperty);
 		}
 		/* skupina */
@@ -53,7 +76,7 @@ abstract class UserBaseDao extends AbstractDao {
 	protected function getWomanData($userProperty) {
 		return array(
 			'Velikost košíčku' => UserBaseDao::getTranslateUserBraSize($userProperty->bra_size),
-			'Barva vlasů' => $userProperty->hair_colour
+			'Barva vlasů' => self::getTranslateUserHairColor($userProperty->hair_colour)
 		);
 	}
 
@@ -62,8 +85,8 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	protected function getManData($userProperty) {
 		return array(
-			'Délka penisu' => UserBaseDao::getTranslateUserPenisLength($userProperty->penis_length),
-			'Šířka penisu' => UserBaseDao::getTranslateUserPenisWidth($userProperty->penis_width),
+			'Délka penisu (cm)' => $userProperty->penis_length,
+			'Obvod penisu' => UserBaseDao::getTranslateUserPenisWidth($userProperty->penis_width),
 		);
 	}
 
@@ -77,7 +100,6 @@ abstract class UserBaseDao extends AbstractDao {
 			'Skupinový sex' => $user->group,
 			'BDSM' => $user->bdsm,
 			'Polykání' => $user->swallow,
-			'Sperma' => $user->cum,
 			'Orální sex' => $user->oral,
 			'Piss' => $user->piss,
 			'Sex masáž' => $user->sex_massage,
@@ -101,7 +123,7 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	protected function getBaseData($user) {
 		return array(
-			'Věk' => $user->age,
+			'Věk' => self::getAge($user->age),
 			'Výška' => UserBaseDao::getTranslateUserTallness($user->tallness),
 			'Typ těla' => UserBaseDao::getTranslateUserShape($user->shape),
 			'Kouřeni cigaret' => UserBaseDao::getTranslateUserHabit($user->smoke),
@@ -110,6 +132,17 @@ abstract class UserBaseDao extends AbstractDao {
 			'Status' => UserBaseDao::getTranslateUserState($user->marital_state),
 			'Sexuální orientace' => UserBaseDao::getTranslateUserOrientacion($user->orientation),
 		);
+	}
+
+	/**
+	 * Vrátí věk z datumu narození.
+	 * @param date $birth
+	 */
+	public static function getAge($birth) {
+		$now = new \Nette\DateTime;
+		$birth = new \Nette\DateTime($birth);
+		$diff = $now->diff($birth);
+		return $diff->y;
 	}
 
 	/*
@@ -149,8 +182,9 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	protected function getBaseUserProperty($data) {
 		$property[UserPropertyDao::COLUMN_AGE] = $data->age;
+		$property[UserPropertyDao::COLUMN_VIGOR] = $data->vigor;
 		$property[UserPropertyDao::COLUMN_MARITAL_STATE] = $data->marital_state;
-		$property[UserPropertyDao::COLUMN_USER_PROPERTY] = $data->user_property;
+		$property[UserPropertyDao::COLUMN_TYPE] = $data->type;
 		$property[UserPropertyDao::COLUMN_ORIENTATION] = $data->orientation;
 		$property[UserPropertyDao::COLUMN_TALLNESS] = $data->tallness;
 		$property[UserPropertyDao::COLUMN_SHAPE] = $data->shape;
@@ -224,15 +258,7 @@ abstract class UserBaseDao extends AbstractDao {
 	}
 
 	/**
-	 * vrací překlad user penis lenght - délka penisu uživatele
-	 */
-	public static function getTranslateUserPenisLength($penisLength) {
-		$translate_penis_length = UserBaseDao::getUserPenisLengthOption();
-		return $translate_penis_length[$penisLength];
-	}
-
-	/**
-	 * vrací překlad user penis width - šířka penisu uživatele
+	 * vrací překlad user penis width - obvod penisu uživatele
 	 */
 	public static function getTranslateUserPenisWidth($penisWidth) {
 		$translate_penis_width = UserBaseDao::getUserPenisWidthOption();
@@ -247,6 +273,14 @@ abstract class UserBaseDao extends AbstractDao {
 		return $translate_bra_size[$braSize];
 	}
 
+	/**
+	 * vrací překlad user hair color
+	 */
+	public static function getTranslateUserHairColor($hairColor) {
+		$translate_hairs = UserBaseDao::getUserHairs();
+		return $translate_hairs[$hairColor];
+	}
+
 	/*	 * ************* VRACÍ STATICKÁ POLE S PŘEKLADAMA ****************** */
 
 	/**
@@ -254,12 +288,12 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserPropertyOption() {
 		return array(
-			'w' => 'Žena',
-			'm' => 'Muž',
-			'c' => 'Pár',
-			'cw' => 'Pár dvě ženy',
-			'cm' => 'Pár dva muži',
-			'g' => 'Skupina',
+			2 => 'Žena',
+			1 => 'Muž',
+			3 => 'Pár',
+			5 => 'Pár dvě ženy',
+			4 => 'Pár dva muži',
+			6 => 'Skupina',
 		);
 	}
 
@@ -268,10 +302,10 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserInterestInOption() {
 		return array(
-			'w' => 'Žena',
-			'm' => 'Muž',
-			'c' => 'Pár',
-			'g' => 'Skupina',
+			2 => 'Žena',
+			1 => 'Muž',
+			3 => 'Pár',
+			6 => 'Skupina',
 		);
 	}
 
@@ -291,12 +325,12 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserStateOption() {
 		return array(
-			'free' => 'volný',
-			'maried' => 'ženatý / vdaná',
-			'divorced' => 'rozvedený/á',
-			'separated' => 'oddělený/á',
-			'widow' => 'vdovec / vdova',
-			'engaged' => 'zadaný',
+			1 => 'volný',
+			2 => 'ženatý / vdaná',
+			3 => 'rozvedený/á',
+			4 => 'oddělený/á',
+			5 => 'vdovec / vdova',
+			6 => 'zadaný',
 		);
 	}
 
@@ -305,10 +339,10 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserOrientationOption() {
 		return array(
-			'hetero' => 'hetero',
-			'homo' => 'homo',
-			'bi' => 'bi',
-			'biTry' => 'bi - chtěl bych zkusit',
+			1 => 'hetero',
+			2 => 'homo',
+			3 => 'bi',
+			4 => 'bi - chtěl bych zkusit',
 		);
 	}
 
@@ -317,11 +351,11 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserTallnessOption() {
 		return array(
-			'160' => '< 160 cm',
-			'170' => '160 - 170 cm',
-			'180' => '170 - 180 cm',
-			'190' => '180 - 190 cm',
-			'200' => '> 190 cm',
+			'1' => '< 160 cm',
+			'2' => '160 - 170 cm',
+			'3' => '170 - 180 cm',
+			'4' => '180 - 190 cm',
+			'5' => '> 190 cm',
 		);
 	}
 
@@ -330,12 +364,12 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserShapeOption() {
 		return array(
-			'0' => 'hubená',
-			'1' => 'štíhlá',
-			'2' => 'normální',
-			'3' => 'atletická',
-			'4' => 'plnoštíhlá',
-			'5' => 'při těle',
+			1 => 'atletická',
+			2 => 'hubená',
+			3 => 'štíhlá',
+			4 => 'normální',
+			5 => 'plnoštíhlá',
+			6 => 'při těle',
 		);
 	}
 
@@ -344,9 +378,9 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserHabitOption() {
 		return array(
-			'often' => 'často',
-			'no' => 'ne',
-			'occasionlly' => 'příležitostně',
+			1 => 'často',
+			2 => 'ne',
+			3 => 'příležitostně',
 		);
 	}
 
@@ -355,34 +389,23 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserGraduationOption() {
 		return array(
-			'zs' => 'základní',
-			'sou' => 'vyučen/a',
-			'sos' => 'střední',
-			'vos' => 'vyšší odborné',
-			'vs' => 'vysoké',
+			1 => 'základní',
+			2 => 'vyučen/a',
+			3 => 'střední',
+			4 => 'vyšší odborné',
+			5 => 'vysoké',
 		);
 	}
 
 	/**
-	 * vrací pole s překlady pro user Penis Length - délka penisu
-	 */
-	public static function getUserPenisLengthOption() {
-		return array(
-			'tiny' => 'malá',
-			'normal' => 'střední',
-			'big' => 'velká',
-			'huge' => 'obrovská',
-		);
-	}
-
-	/**
-	 * vrací pole s překlady pro user penis width - šířka penisu
+	 * vrací pole s překlady pro user penis width - obvod penisu
 	 */
 	public static function getUserPenisWidthOption() {
 		return array(
-			'tiny' => 'hubený',
-			'normal' => 'střední',
-			'big' => 'tlustý',
+			1 => '3cm-8cm',
+			2 => '8cm-11cm',
+			3 => '11cm-15cm',
+			4 => '15cm-20cm'
 		);
 	}
 
@@ -391,12 +414,25 @@ abstract class UserBaseDao extends AbstractDao {
 	 */
 	public static function getUserBraSizeOption() {
 		return array(
-			'a' => 'A',
-			'b' => 'B',
-			'c' => 'C',
-			'd' => 'D',
-			'e' => 'E',
-			'f' => 'F',
+			1 => 'A',
+			2 => 'B',
+			3 => 'C',
+			4 => 'D',
+			5 => 'E',
+			6 => 'F',
+		);
+	}
+
+	/**
+	 * vrací pole s překlady pro barvu vlasů
+	 */
+	public static function getUserHairs() {
+		return array(
+			1 => 'blond',
+			2 => 'hnědá',
+			3 => 'zrzavá',
+			4 => 'černá',
+			5 => 'jiná',
 		);
 	}
 

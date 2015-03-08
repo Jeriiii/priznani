@@ -6,7 +6,7 @@
 				leftposition = $("#confession").width() + 60;
 			var $rollbar = $('#rollbar');
 			var $bar = $('.bar');
-              if (!msie6) {
+              if (!msie6 && $rollbar.offset()) {
                 var top = $rollbar.offset().top - parseFloat($bar.css('top').replace(/auto/, 0));
                 $(window).bind('scroll', function (event) {
                   var y = $(this).scrollTop();

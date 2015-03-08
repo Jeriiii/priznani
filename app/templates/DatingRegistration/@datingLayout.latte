@@ -23,7 +23,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 			Nové technologie, <b>revoluční ceny</b>, kvalitní zákaznický servis, spokojení zákazníci, mladá flexibilní firma.
 		</p>
 	</a>
-	
+
 	<a href="http://akcnidrinky.cz/">
 		<img src="{$basePath}/images/bars/akcnidrinky.jpg" width="140"/>
 		<p>
@@ -46,19 +46,25 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 {/block}
 
 {block content}
+<div class="form-window">
 	{include #datingContent}
+</div>
 {/block}
 
 {block head}
 	<link rel="stylesheet" href="{$basePath}/css/bar.css" type="text/css">
+
+	{control css 'sign/universal.less', 'sign/registration.less'}
+
 	{ifset #datingHead}
 		{include #datingHead}
 	{/ifset}
 {/block}
 
 {block foot}
-	<script type="text/javascript" src="{$basePath}/js/infobar.js"></script>
+<script type="text/javascript" src="{$basePath}/js/infobar.js"></script>
 	{ifset #datingFoot}
 		{include #datingFoot}
 	{/ifset}
+	{control js 'features/body-image-fitter.js'}
 {/block}

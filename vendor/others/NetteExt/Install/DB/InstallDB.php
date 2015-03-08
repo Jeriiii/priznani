@@ -26,14 +26,15 @@ class InstallDB {
 	/** @var Database\Context */
 	private $dbConection;
 
-	/** @var Messages */
+	/** @var Messages Zprávy co se zobrazí uživateli */
 	private $messages;
 
-	/**
-	 * @param \POS\Model\DatabaseDao $dbDao
-	 */
-	public function __construct($dbDao, $messages = NULL) {
+	/** @var boolean TRUE = Je instalace DB zaplá testovacím nástrojem? Jinak FALSE. */
+	private $testingMode;
+
+	public function __construct($dbDao, $testingMode, $messages = NULL) {
 		$this->dbDao = $dbDao;
+		$this->testingMode = $testingMode;
 		$this->dbConection = $dbDao->getDatabase();
 		if (isset($messages)) {
 			$this->messages = $messages;
@@ -48,14 +49,31 @@ class InstallDB {
 	public function installAll() {
 		$this->installPosDb();
 		$this->instalPostestDb();
-		$this->instalPoschatDb();
+	}
+
+	/**
+	 * Reinstaluje obě databáze.
+	 */
+	public function installDBStruct() {
+		$this->installPosDbStruct();
+	}
+
+	/**
+	 * Reinstaluje db struct data budou smazána.
+	 */
+	public function installPosDbStruct() {
+		$sql = new Sql(self::TABLE_POS, $this->testingMode);
+
+		$sql->setSqlStructDB();
+		$this->executeSql($sql);
+		$this->messages->addMessage("Databáze " . self::TABLE_POS . " byla úspěšně nainstalována. Data byla smazána.");
 	}
 
 	/**
 	 * Reinstaluje a naplní daty normální databázi.
 	 */
 	public function installPosDb() {
-		$sql = new Sql(self::TABLE_POS);
+		$sql = new Sql(self::TABLE_POS, $this->testingMode);
 		$sql->setSqlAllDB();
 		$this->executeSql($sql);
 
@@ -66,7 +84,7 @@ class InstallDB {
 	 * Reinstaluje a naplní daty testovací databázi.
 	 */
 	public function instalPostestDb() {
-		$sql = new Sql(self::TABLE_POS_TEST);
+		$sql = new Sql(self::TABLE_POS_TEST, $this->testingMode);
 		$sql->setSqlAllDB();
 		$this->executeSql($sql);
 
@@ -77,7 +95,7 @@ class InstallDB {
 	 * Reinstaluje a naplní daty databázi chatu.
 	 */
 	public function instalPoschatDb() {
-		$sql = new Sql(self::TABLE_POS_CHAT);
+		$sql = new Sql(self::TABLE_POS_CHAT, $this->testingMode);
 		$sql->setSqlChatDB();
 		$this->executeSql($sql);
 
@@ -95,8 +113,20 @@ class InstallDB {
 		$this->recoveryData(self::TABLE_POS);
 	}
 
+	/**
+	 * Instalace dalších dat, důležitých hlavně na produkci
+	 */
+	public function dataDbMore() {
+		$dbName = self::TABLE_POS;
+		$sql = new Sql($dbName, $this->testingMode);
+		$sql->setMoreData($this->dbDao);
+		$this->executeSql($sql);
+
+		$this->messages->addMessage("Data z databáze " . $dbName . " byla obnovena.");
+	}
+
 	private function recoveryData($dbName) {
-		$sql = new Sql($dbName);
+		$sql = new Sql($dbName, $this->testingMode);
 		$sql->setData($this->dbDao);
 		$this->executeSql($sql);
 
@@ -115,6 +145,14 @@ class InstallDB {
 		}
 
 		$this->dbDao->endTransaction();
+	}
+
+	/**
+	 * Vytvoří path z existujících SQL na úpravu DB (bez dat)
+	 */
+	public function createPath() {
+		$patch = new Patch($this->messages);
+		$patch->create();
 	}
 
 }

@@ -1,5 +1,5 @@
 default:
   extensions:
     Behat\MinkExtension\Extension:
-      base_url:  'http://localhost/nette/pos/www/'
-	  files_path: 'C:\webhost\nette\pos\app\test\features\files'
+      base_url:  'http://localhost/priznani/www/'
+	  files_path: 'yourPathToFiles'

@@ -27,8 +27,8 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 	 */
 	const NUMBER_OF_IMAGE = 4;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $isPaying, $userID, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $isPaying, $userID, $parent, $name);
 
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
@@ -37,14 +37,10 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 
 		$this->addImageFields(self::NUMBER_OF_IMAGE, FALSE, FALSE);
 
-		$this->addGroup('Kategorie');
-		$this->genderCheckboxes();
-
 		$this->addSubmit("submit", "Vytvořit galerie")
 			->setAttribute('class', 'btn-main medium');
 
 		$this->setBootstrapRender();
-		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
@@ -66,6 +62,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 			unset($values->agreement);
 
 			$galleryID = $this->saveGallery($values, $userID);
+
 			$allow = $this->saveImages($images, $userID, $galleryID);
 
 			if ($allow) {
@@ -73,6 +70,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 			} else {
 				$presenter->flashMessage('Galerie byla vytvořena. Fotky budou nejdříve schváleny adminem.');
 			}
+
 			$presenter->redirect('Galleries:');
 		}
 	}
@@ -87,10 +85,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 		$valuesGallery['name'] = $values->name;
 		$valuesGallery['description'] = $values->description;
 		$valuesGallery['userId'] = $userID;
-		$valuesGallery['man'] = $values->man;
-		$valuesGallery['women'] = $values->women;
-		$valuesGallery['couple'] = $values->couple;
-		$valuesGallery['more'] = $values->more;
+		$valuesGallery['private'] = isset($values->private) ? isset($values->private) : 0;
 
 		$gallery = $this->userGalleryDao->insert($valuesGallery);
 		return $gallery->id;

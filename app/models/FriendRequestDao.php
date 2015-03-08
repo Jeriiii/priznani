@@ -40,13 +40,35 @@ class FriendRequestDao extends AbstractDao {
 	/**
 	 * Vrátí všechny žádosti, které žádají tohoto uživatele o přátelství.
 	 * @param int $userToID
+	 * @param int $limit Maximální počet příspěvků. 0 = vše.
+	 * @param int $offset Posun od začátku načítaných příspěvků.
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function getAllToUser($userToID) {
+	public function getAllToUser($userToID, $limit = 0, $offset = 0) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_USER_TO_ID, $userToID);
 
+		if ($limit != 0) {
+			$sel->limit($limit, $offset);
+		}
+
 		return $sel;
+	}
+
+	/**
+	 * Ověří, zda byla odeslána žádost mezi uživateli. Kontroluje pouze jednosměrně,
+	 * pokud uživatel $userIDTo odeslal žádost uživateli $userIDFrom, metoda
+	 * to neodchytí.
+	 * @param int $userIDFrom ID žadatele
+	 * @param int $userIDTo ID příjemce
+	 * @return boolen TRUE = žádost byla odeslána, jinak FALSE
+	 */
+	public function isRequestSend($userIDFrom, $userIDTo) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_FROM_ID, $userIDFrom);
+		$sel->where(self::COLUMN_USER_TO_ID, $userIDTo);
+		$row = $sel->fetch();
+		return $this->exist($row);
 	}
 
 	/**
@@ -75,7 +97,9 @@ class FriendRequestDao extends AbstractDao {
 		$friendRequest = $sel->fetch();
 
 		/* vytvoření přátelství */
-		$this->createFriendship($friendRequest);
+		if (!empty($friendRequest)) { //empty by mělo být jen v případě, že již přátelství odklikl na jiném místě, třeba v aktualitách
+			$this->createFriendship($friendRequest);
+		}
 
 		/* smazání žádosti */
 		$this->delete($friendRequestID);

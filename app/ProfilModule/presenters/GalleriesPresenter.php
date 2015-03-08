@@ -9,14 +9,16 @@ use Nette\Security\User;
 use Nette\Http\Request;
 use Nette\Application\UI\Form as Frm;
 use Navigation\Navigation;
-use POSComponent\Galleries\UserGalleries\MyUserGalleries;
-use POSComponent\Galleries\UserGalleries\UserGalleries;
-use POSComponent\Galleries\UserImagesInGallery\UserImagesInGallery;
-use POSComponent\Galleries\UserImagesInGallery\MyUserImagesInGallery;
+use POSComponent\Galleries\UserGalleriesThumbnails\MyUserGalleriesThumbnails;
+use POSComponent\Galleries\UserGalleriesThumbnails\UserGalleriesThumbnails;
+use POSComponent\Galleries\UserImagesGalleryThumbnails\UserGalleryImagesThumbnails;
+use POSComponent\Galleries\UserImagesGalleryThumbnails\MyUserGalleryImagesThumbnails;
 use POSComponent\Galleries\Images\UsersGallery;
+use POSComponent\Galleries\Images\VerificationGallery;
 use NetteExt\File;
 use NetteExt\Path\GalleryPathCreator;
 use NetteExt\Path\ImagePathCreator;
+use Nette\Database\Table\ActiveRow;
 
 class GalleriesPresenter extends \BasePresenter {
 
@@ -24,42 +26,47 @@ class GalleriesPresenter extends \BasePresenter {
 	public $imageID;
 	public $id_image;
 	private $images;
+	public $verificationExists;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserGalleryDao @inject */
 	public $userGaleryDao;
 
-	/**
-	 * @var \POS\Model\UserImageDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\UsersCompetitionsDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UsersCompetitionsDao @inject */
 	public $usersCompetitionsDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\CompetitionsImagesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CompetitionsImagesDao @inject */
 	public $competitionsImagesDao;
+
+	/** @var \POS\Model\ImageLikesDao @inject */
+	public $imageLikesDao;
+
+	/** @var \POS\Model\PaymentDao @inject */
+	public $paymentDao;
+
+	/** @var \POS\Model\UserAllowedDao @inject */
+	public $userAllowedDao;
+	public $isPaying;
+
+	/** @var \POS\Model\FriendDao @inject */
+	public $friendDao;
+
+	/** @var \POS\Model\CommentImagesDao @inject */
+	public $commentImagesDao;
+
+	/** @var \POS\Model\LikeImageCommentDao @inject */
+	public $likeImageCommentDao;
+
+	/** @var ActiveRow Aktuální obrázek */
+	private $image;
 
 	public function startup() {
 		parent::startup();
@@ -71,6 +78,8 @@ class GalleriesPresenter extends \BasePresenter {
 		));
 
 		$this->checkLoggedIn();
+
+		$this->isPaying = $this->paymentDao->isUserPaying($this->user->id);
 	}
 
 	public function actionEditGalleryImage($imageID, $galleryID) {
@@ -80,7 +89,7 @@ class GalleriesPresenter extends \BasePresenter {
 		$competitionData = $this->usersCompetitionsDao->getLastCompetitionNameAndId();
 		$competitionImage = $this->competitionsImagesDao->findByImgAndCmpId($this->imageID, $competitionData->id);
 
-		// Ochrana před opakovaným vložením
+		/* Ochrana před opakovaným vložením */
 		if (!$competitionImage) {
 			$this->template->competition = $competitionData;
 		} else {
@@ -109,12 +118,14 @@ class GalleriesPresenter extends \BasePresenter {
 		$myGallery = FALSE;
 
 		if (!empty($userID)) {
-			//je vlastník
+			/* je vlastník */
 			if ($userID == $this->getUser()->id) {
+				$this->template->paying = $this->isPaying;
 				$myGallery = TRUE;
 			}
 		} else {
-			//nebyla zvolena konkrétní galerie
+			/* nebyla zvolena konkrétní­ galerie */
+			$this->template->paying = $this->isPaying;
 			$myGallery = TRUE;
 		}
 
@@ -124,36 +135,119 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function actionListUserGalleryImages($galleryID) {
+		$gallery = $this->userGaleryDao->find($galleryID);
+		$this->checkAccess($gallery);
+
 		$this->galleryID = $galleryID;
 	}
 
 	public function renderListUserGalleryImages($galleryID) {
 		$gallery = $this->userGaleryDao->find($galleryID);
 
-		//je vlastník
+		if ($gallery->verification_gallery) {
+			$this->redirect("Galleries:verification", array("galleryID" => $gallery->id));
+		}
+
+		/* je vlastník */
 		if ($gallery->userID == $this->getUser()->id) {
 			$myGallery = TRUE;
+			$this->template->paying = $this->isPaying;
+			$this->template->private = $gallery->private;
 		} else {
 			$myGallery = FALSE;
 		}
 
+		$this->template->galleryID = $galleryID;
 		$this->template->galleryOwner = $gallery->userID;
+		$this->template->private = $gallery->private;
+		$this->template->gallery = $gallery;
 		$this->template->myGallery = $myGallery;
 	}
 
 	public function actionImage($imageID, $galleryID = NULL, $userID = NULL) {
+		$gallery = $this->userGaleryDao->find($galleryID);
+		$this->checkAccess($gallery);
+
 		$this->imageID = $imageID;
-		/* nastaví obrázky podle uživatele nebo podle galerie */
+		/* nastaví obrázzky podle uživatele nebo podle galerie */
 		if (!empty($galleryID)) {
 			$this->images = $this->userImageDao->getInGallery($galleryID);
 		} elseif (!empty($userID)) {
-			$this->images = $this->userImageDao->getAllFromUser($userID);
+			$this->images = $this->userImageDao->getAllFromUser($userID, $this->loggedUser->id, $this->userGaleryDao);
 		} else {
 			throw new Exception("Musíte nastavit buď ID uživatele, nebo ID galerie.");
 		}
+
+		//vytahnu konkretni vybranou fotku podle imageID - objekt
+		$image = $this->userImageDao->find($this->imageID);
+		if (empty($image)) {
+			$this->flashMessage("Obrázek nebyl nalezen");
+			if ($galleryID) {
+				$this->redirect("listUserGalleryImages", array("galleryID" => $galleryID));
+			}
+			if ($userID) {
+				$this->redirect(":Profil:Show:", array("userID" => $userID));
+			}
+			$this->redirect(":OnePage:");
+		}
+
+		$this->image = $image;
+	}
+
+	public function actionVerification($galleryID) {
+		$galleryData = $this->userGaleryDao->find($galleryID);
+		$allowed = $this->userAllowedDao->getByUserID($this->getUser()->getId(), $galleryID);
+		// kontrola, jestli se na galerii chce podívat vlastník
+		if ($galleryData->userID != $this->getUser()->getId()) {
+			if (!$allowed) {
+				$this->flashMessage("Tato galerie je nepřístupná.");
+				$this->redirect("Show:default", array('id' => $galleryData->userID));
+			}
+		}
+
+		if (!empty($galleryID)) {
+			$this->verificationExists = TRUE;
+			$this->galleryID = $galleryID;
+			$this->images = $this->userImageDao->getInGallery($galleryID);
+			$image = $galleryData->lastImage;
+			$this->imageID = $image->id;
+		} else {
+			$this->verificationExists = FALSE;
+		}
+		$this->template->exists = $this->verificationExists;
+	}
+
+	public function renderUserList($galleryID) {
+		$this->checkPaying();
+		$this->template->friends = $this->friendDao->getUsersContactList($this->user->id);
+		$this->template->allowedUsers = $this->userAllowedDao->getAllowedByGallery($galleryID);
+		$this->template->galleryID = $galleryID;
+		$gallery = $this->userGaleryDao->find($galleryID);
+
+		if ($this->user->id != $gallery->userID) {
+			$this->flashMessage("Tato sekce je nepřístupná.");
+			$this->redirect("Show:default", array('id' => $gallery->userID));
+		}
+	}
+
+	public function renderUserGalleryChange($galleryID) {
+		$gallery = $this->userGaleryDao->find($galleryID);
+		//pokud je galerie soukromá, provede test, zda uživatel platí
+		if ($gallery->private) {
+			$this->checkPaying();
+		}
+		$this->template->galleryID = $this->galleryID;
+		$this->template->private = $gallery->private;
+		$this->template->paying = $this->paymentDao->isUserPaying($this->user->id);
 	}
 
 	public function handledeleteGallery($galleryID) {
+		$gallery = $this->userGaleryDao->find($galleryID);
+		/* pokud je galerie soukromá, provede test, zda uživatel platí */
+		if ($gallery->private) {
+			$this->checkPaying();
+		}
+
 		$this->streamDao->deleteUserGallery($galleryID);
 
 		$images = $this->userImageDao->getInGallery($galleryID);
@@ -175,6 +269,11 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function handledeleteImage($id_image, $id_gallery, $redirekt = TRUE) {
+		$gallery = $this->userGaleryDao->find($id_gallery);
+		//pokud je galerie soukromá, provede test, zda uživatel platí
+		if ($gallery->private) {
+			$this->checkPaying();
+		}
 		$image = $this->userImageDao->find($id_image);
 
 		$userID = $this->getUser()->getId();
@@ -186,6 +285,17 @@ class GalleriesPresenter extends \BasePresenter {
 
 		if ($redirekt) {
 			$this->flashMessage("Obrázek byl smazán.");
+			$this->redirect("this");
+		}
+	}
+
+	public function handleRemoveFriend($userID, $galleryID) {
+		$row = $this->userAllowedDao->getByUserID($userID, $galleryID);
+		$this->userAllowedDao->delete($row->id);
+
+		if ($this->isAjax()) {
+			$this->redrawControl("allowedUsers");
+		} else {
 			$this->redirect("this");
 		}
 	}
@@ -202,11 +312,11 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	protected function createComponentUserGalleryNew($name) {
-		return new Frm\UserGalleryNewForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+		return new Frm\UserGalleryNewForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->isPaying, $this->loggedUser->id, $this, $name);
 	}
 
 	protected function createComponentUserGalleryChange($name) {
-		return new Frm\UserGalleryChangeForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this, $name);
+		return new Frm\UserGalleryChangeForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this->isPaying, $this->loggedUser->id, $this, $name);
 	}
 
 	protected function createComponentNewImage($name) {
@@ -218,11 +328,11 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function createComponentUserGalleries() {
-		return new UserGalleries($this->userDao, $this->userGaleryDao);
+		return new UserGalleriesThumbnails($this->userDao, $this->userGaleryDao, $this->userAllowedDao, $this->friendDao);
 	}
 
 	public function createComponentMyUserGalleries() {
-		return new MyUserGalleries($this->userDao, $this->userGaleryDao);
+		return new MyUserGalleriesThumbnails($this->userDao, $this->userGaleryDao, $this->userAllowedDao, $this->friendDao);
 	}
 
 	/**
@@ -231,7 +341,7 @@ class GalleriesPresenter extends \BasePresenter {
 	protected function createComponentMyUserImagesInGallery() {
 		$images = $this->userImageDao->getInGallery($this->galleryID);
 
-		return new MyUserImagesInGallery($this->galleryID, $images, $this->userDao);
+		return new MyUserGalleryImagesThumbnails($this->galleryID, $images, $this->userDao, $this->userAllowedDao);
 	}
 
 	/**
@@ -240,47 +350,74 @@ class GalleriesPresenter extends \BasePresenter {
 	protected function createComponentUserImagesInGallery() {
 		$images = $this->userImageDao->getInGallery($this->galleryID);
 
-		return new UserImagesInGallery($images, $this->userDao);
+		return new UserGalleryImagesThumbnails($images, $this->userDao);
 	}
 
-	protected function createComponentGallery() {
-		//vytahnu konkretni vybranou fotku podle imageID - objekt
-		$image = $this->userImageDao->find($this->imageID);
-
+	protected function createComponentGallery($name) {
 		//vytahnu konkretni galerie podle galleryID
-		$gallery = $this->userGaleryDao->find($image->galleryID);
+		$gallery = $this->userGaleryDao->find($this->image->galleryID);
 
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
 		//$domain = "http://priznaniosexu.cz";
 
-		return new UsersGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao);
+		return new UsersGallery($this->images, $this->image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->loggedUser, $this, $name);
 	}
 
-	protected function createComponentNavigation($name) {
-		//Získání potřebných dat(user id, galerie daného usera)
-		$userID = $this->getUser()->id;
-		$user = $this->userDao->find($userID);
-
-		//vytvoření navigace a naplnění daty
-		$nav = new Navigation($this, $name);
-		$navigation = $nav->setupHomepage($user->user_name, $this->link("Galleries:default"));
-		//označí aktuální stránku jako aktivní v navigaci
-		if ($this->isLinkCurrent("Galleries:default")) {
-			$nav->setCurrentNode($navigation);
+	/**
+	 * Továrnička na verifikační galerii
+	 * @return VerificationGallery
+	 */
+	public function createComponentVerificationGallery($name) {
+		if ($this->verificationExists) {
+			$image = $this->userImageDao->find($this->imageID);
+			$gallery = $this->userGaleryDao->find($this->galleryID);
+			$httpRequest = $this->context->httpRequest;
+			$domain = $httpRequest->getUrl()->host;
+			return new VerificationGallery($this->images, $image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this->isPaying, $this, $name);
 		}
+	}
 
-		//získání dat pro přípravu galerii do breadcrumbs
-		$galleries = $this->userGaleryDao->getInUser($userID);
+	/**
+	 * Továrnička na formulář pro verifikační fotku
+	 * @param type $name
+	 * @return \Nette\Application\UI\Form\VerificationImageNewForm
+	 */
+	public function createComponentVerificationForm($name) {
+		return new Frm\VerificationImageNewForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+	}
 
-		//příprava všech galerií pro možnost použití drobečkové navigace
-		foreach ($galleries as $gallery) {
-			$link = $this->link("Galleries:listUserGalleryImage", array("galleryID" => $gallery->id));
-			$sec = $navigation->add($gallery->name, $link);
+	protected function createComponentAllowUserForm($name) {
+		return new Frm\AllowForm($this->userAllowedDao, $this->userDao, $this, $name);
+	}
 
-			if ($this->galleryID == $gallery->id) {
-				$nav->setCurrentNode($sec);
-			}
+	protected function createComponentAllowFriendsForm($name) {
+		return new Frm\AllowFriendsForm($this->userGaleryDao, $this, $name);
+	}
+
+	/**
+	 * Otestuje zda je informace o glaerii v session, pokud ne přidá ji,
+	 * poté provede test, zda uživatel muže do galerie a v případě
+	 * potřebu ho přesměruje a napíše proč
+	 * @param ActiveRow $gallery Galerie
+	 */
+	private function checkAccess(ActiveRow $gallery) {
+		$ownerID = $gallery->userID;
+		$haveAccess = $this->userGaleryDao->haveAccessIntoGallery($gallery, $this->loggedUser->id, $ownerID);
+
+		if (!$haveAccess) {
+			$this->flashMessage("Do této galerie nemáte přístup.");
+			$this->redirect("Galleries:default", array("userID" => $ownerID)); //TODO
+		}
+	}
+
+	/**
+	 * otestuje, zda je uživatel platící, pokud ne, provede redirect
+	 */
+	private function checkPaying() {
+		if (!$this->isPaying) {
+			$this->flashMessage("Tato akce je zablokována.");
+			$this->redirect("Galleries:");
 		}
 	}
 

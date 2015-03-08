@@ -1,40 +1,64 @@
 <?php
 
 /*
- * @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 namespace POSComponent\BaseLikes;
 
 use POS\Model\ImageLikesDao;
 use POS\Model\UserImageDao;
+use POS\UserPreferences\StreamUserPreferences;
 
 /**
- * Description of ImageLikes
+ * Komponenta pro lajkování obrázků, obstarává připočítávání lajků;
+ * zaznamená, kdo lajkoval; a vykresluje obsluhu lajkování (tlačítko)
  *
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 class ImageLikes extends BaseLikes implements IBaseLikes {
 
-	public $imageLikesDao;
-	public $userImageDao;
-	public $image;
+	/**
+	 * @const IMAGE_LABEL text do informace o přihlášení kvůli hodnocení obrázku
+	 */
+	const IMAGE_LABEL = "obrázku";
 
-	public function __construct(ImageLikesDao $imageLikesDao = NULL, UserImageDao $userImageDao = NULL, $image = NULL, $userID = NULL) {
-		$this->image = $image;
-		parent::__construct($imageLikesDao, $this->image, $userID);
-		$this->imageLikesDao = $imageLikesDao;
-		$this->userImageDao = $userImageDao;
+	/**
+	 * @const IMAGE_LIKE_BUTTON text lajkovacího tlačítka pro obrázky
+	 */
+	const IMAGE_LIKE_BUTTON = "Sexy";
+
+	/**
+	 * Konstruktor komponenty, předáváme potřebné proměnné
+	 * @param \POS\Model\ImageLikesDao $imageLikesDao DAO pro záznam, kdo lajkl jaký obrázek
+	 * @param \POS\Model\UserImageDao $userImageDao DAO pro práci s uživatelskými obrázky(kvůli připočtení lajku)
+	 * @param Nette\Database\Table\ActiveRow $image obrázek, kterému se lajk přičte
+	 * @param int $userID ID uživatele, který lajkuje
+	 * @param int $ownerID ID uživatele, kterýmu obrázek patří.
+	 * @param \POS\UserPreferences\StreamUserPreferences $cachedStreamPreferences objekt obsahující položky ve streamu, pokud se používá cachování. Pokud se nepoužívá, pak je NULL
+	 */
+	public function __construct(ImageLikesDao $imageLikesDao, $image, $userID, $ownerID, $cachedStreamPreferences = NULL) {
+		if ($cachedStreamPreferences instanceof StreamUserPreferences) {
+			parent::__construct($imageLikesDao, $image, $userID, $ownerID, self::IMAGE_LABEL, self::IMAGE_LIKE_BUTTON, $cachedStreamPreferences);
+		} else {
+			parent::__construct($imageLikesDao, $image, $userID, $ownerID, self::IMAGE_LABEL, self::IMAGE_LIKE_BUTTON, NULL);
+		}
 	}
 
-	public function render() {
-		parent::render();
-	}
+	/**
+	 * Signál pro provedení lajku, přičte lajk obrázku a zaznamená, kdo lajkl
+	 * @param int $userID ID uživatele, který lajkl obrázek
+	 * @param int $imageID ID lajknutého obrázku
+	 */
+	public function handleLike($userID, $imageID) {
+		/* musí se přepočítat, protože se sice v handleru pošle správné ID obrázku, ale špatné id presenteru */
+		$this->liked = $this->getLikedByUser($userID, $imageID);
 
-	public function handleSexy($userID, $imageID) {
-		$this->imageLikesDao->addLiked($imageID, $userID);
-		$this->image = $this->userImageDao->addLike($imageID);
-
+		if ($this->liked == FALSE) {
+			$this->justLike = TRUE;
+			$this->liked = TRUE;
+			$this->likeDao->addLiked($imageID, $userID, $this->ownerID);
+		}
 		$this->redrawControl();
 	}
 

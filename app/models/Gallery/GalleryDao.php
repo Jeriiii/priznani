@@ -23,6 +23,7 @@ class GalleryDao extends BaseGalleryDao {
 	const COLUMN_SEX_MODE = "sexmode";
 	const COLUMN_PARTY_MODE = "partymode";
 	const COMULN_COMPETITION = "competition";
+	const COLUMN_LAST_IMAGE_ID = 'lastImageID';
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);

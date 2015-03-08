@@ -1,0 +1,9 @@
+<div class="payment-window" n:snippet="payment">
+{if $accountChoose}
+	{include 'accountChoose.latte'}
+{elseif $paymentChoose}
+	{include 'paymentChoose.latte'}
+{elseif $paymentComplete}
+	{include 'paymentComplete.latte'}
+{/if}
+</div>

@@ -6,18 +6,20 @@
 		margin-top: 0;
 	}
     </style>
+	{control css 'profile/show.less', 'profile/userImages.less'}
 {/block}
 {block foot}
-	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>
+{control js}
 {/block}
 {block content}
 
-<h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
+<div class="userHead">
+	{$userData|showProfDiv}
+</div>
 
 
-{include 'menu.latte' $userID => 'id'}
-
-<h2>Fotky</h2>
+{include 'menu.latte' $userID => 'id', active => "images"}
+<div class="clear"></div>
 
 {control userImagesAll 'listAll', $userID}
 

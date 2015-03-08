@@ -8,7 +8,7 @@ use Nette\Application\UI\Form,
 use POS\Model\UserDao;
 use Nette\Http\SessionSection;
 
-class DatingRegistrationSecondForm extends BaseForm {
+class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 
 	/**
 	 * @var \POS\Model\UserDao
@@ -23,6 +23,13 @@ class DatingRegistrationSecondForm extends BaseForm {
 		$this->userDao = $userDao;
 		$this->regSession = $regSession;
 
+		//graphics
+		$renderer = $this->getRenderer();
+		$renderer->wrappers['controls']['container'] = 'div';
+		$renderer->wrappers['pair']['container'] = 'div';
+		$renderer->wrappers['label']['container'] = NULL;
+		$renderer->wrappers['control']['container'] = NULL;
+
 		$this->addText('email', 'Email')
 			->addRule(Form::FILLED, 'Email není vyplněn.')
 			->addRule(Form::EMAIL, 'Vyplněný email není platného formátu.')
@@ -34,22 +41,25 @@ class DatingRegistrationSecondForm extends BaseForm {
 			->addRule(Form::FILLED, 'Heslo není vyplněno.')
 			->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaky', 4)
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Heslo\" je 100 znaků.', 100);
-		$this->addPassword('passwordVerify', 'Heslo pro kontrolu:')
+		$this->addPassword('passwordVerify', 'Heslo znovu')
 			->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu')
-			->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password']);
-		$this->addText('first_sentence', 'Úvodní věta (max 100 znaků)')
+			->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password'])
+			->setAttribute('placeholder', 'pro kontrolu...');
+		$this->addText('first_sentence', 'O mně')
 			->addRule(Form::FILLED, 'Úvodní věta není vyplněna.')
-			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Úvodní věta\" je 100 znaků.', 100);
-		$this->addTextArea('about_me', 'O mě (max 300 znaků)', 40, 10)
-			->addRule(Form::FILLED, 'O mě není vyplněno.')
-			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300);
+			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Úvodní věta\" je 100 znaků.', 100)
+			->setAttribute('placeholder', 'max 100 znaků');
+//		$this->addTextArea('about_me', 'O mně', 40, 3)
+//			->addRule(Form::FILLED, 'O mně není vyplněno.')
+//			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300)
+//			->setAttribute('placeholder', 'max 300 znaků');
 
 		if (isset($regSession)) {
 			$this->setDefaults(array(
 				'email' => $regSession->email,
 				'user_name' => $regSession->user_name,
 				'first_sentence' => $regSession->first_sentence,
-				'about_me' => $regSession->about_me
+				/* 'about_me' => $regSession->about_me, */
 			));
 		}
 
@@ -57,7 +67,7 @@ class DatingRegistrationSecondForm extends BaseForm {
 		$this->onValidate[] = callback($this, "uniqueUserName");
 		$this->onValidate[] = callback($this, "uniqueEmail");
 		$this->addSubmit('send', 'Do třetí části registrace')
-			->setAttribute("class", "btn btn-success");
+			->setAttribute("class", "btn btn-main");
 
 		return $this;
 	}
@@ -74,9 +84,20 @@ class DatingRegistrationSecondForm extends BaseForm {
 		$this->regSession->password = $values->password;
 		$this->regSession->passwordHash = $pass;
 		$this->regSession->first_sentence = $values->first_sentence;
-		$this->regSession->about_me = $values->about_me;
+		$this->regSession->about_me = ""; //$values->about_me;
+		$this->checkOldUser($this->regSession, $values);
 
-		$presenter->redirect('Datingregistration:PreThirdRegForm');
+		$presenter->redirect('DatingRegistration:ThirdRegForm');
+	}
+
+	public function checkOldUser($regSession, $values) {
+		$email = $this->userDao->findByOldEmail($values->email);
+		$oldUser = FALSE;
+		if ($email) {
+			$this->getPresenter()->flashMessage("Účet byl propojen se starším účtem. Děkujeme, že jste s námi.");
+			$oldUser = TRUE;
+		}
+		$regSession->oldUser = $oldUser;
 	}
 
 	/**

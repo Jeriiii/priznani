@@ -282,14 +282,14 @@ class CompetitionPresenter extends BasePresenter {
 		}
 	}
 
-	protected function createComponentGallery() {
+	protected function createComponentGallery($name) {
 		if ($this->getUser()->isInRole("admin") || $this->getUser()->isInRole("superadmin")) {
 			$images = $this->imageDao->getInGallery($this->gallery->id);
 		} else {
 			$images = $this->imageDao->getApproved($this->gallery->id);
 		}
 
-		return new CompetitionGallery($images, $this->image, $this->gallery, $this->domain, $this->partymode, $this->imageDao, $this->galleryDao, $this->streamDao);
+		return new CompetitionGallery($images, $this->image, $this->gallery, $this->domain, $this->partymode, $this->imageDao, $this->galleryDao, $this->streamDao, $this, $name);
 	}
 
 	protected function createComponentImageNew($name) {

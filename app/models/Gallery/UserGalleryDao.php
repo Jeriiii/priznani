@@ -6,6 +6,9 @@
 
 namespace POS\Model;
 
+use Nette\Database\Table\Selection;
+use Nette\Database\Table\ActiveRow;
+
 /**
  * NAME DAO NAMEDao
  * slouží k
@@ -29,6 +32,8 @@ class UserGalleryDao extends BaseGalleryDao {
 	const COLUMN_NAME = "name";
 	const COLUMN_DESCRIPTION = "description";
 	const COLUMN_PROFILE = "profil_gallery";
+	const COLUMN_VERIFICATION = "verification_gallery";
+	const COLUMN_PRIVATE = "private";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -43,6 +48,36 @@ class UserGalleryDao extends BaseGalleryDao {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_USER_ID, $userID);
 		$sel->order(self::COLUMN_ID . " DESC");
+		return $sel;
+	}
+
+	/**
+	 * Vrátí galerie určitého uživatele, které nejsou verifikační.
+	 * @param type $userID ID uživatele, jehož galerie hledáme
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getInUserWithoutVerif($userID, $viewerID) {
+
+		$selAllow = $this->createSelection(UserAllowedDao::TABLE_NAME);
+		$allowedGalleries = $selAllow->where(UserAllowedDao::COLUMN_USER_ID, $viewerID);
+		$allowed = array();
+
+		if (count($allowedGalleries) != 0) {
+			foreach ($allowedGalleries as $item) {
+				if ($item->gallery->userID == $userID) {
+					$allowed[] = $item->galleryID;
+				}
+			}
+		}
+		$sel = $this->getTable();
+		if (!empty($allowed)) {
+			$sel->where(self::COLUMN_USER_ID, $userID)->where(self::COLUMN_VERIFICATION . " = ? OR id IN ?", 0, $allowed);
+		} else {
+			$sel->where(self::COLUMN_USER_ID, $userID)->where(self::COLUMN_VERIFICATION, 0);
+		}
+
+		$sel->order(self::COLUMN_ID . " DESC");
+
 		return $sel;
 	}
 
@@ -92,6 +127,28 @@ class UserGalleryDao extends BaseGalleryDao {
 	}
 
 	/**
+	 * Vrátí všechny verifikační galerie
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function findVerificationGalleries() {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_VERIFICATION, 1);
+		return $sel;
+	}
+
+	/**
+	 * Vrátí verifiakční galerii určitého uživatele
+	 * @param type $userID ID uživatele, jehož verifikační galerii hledáme
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function findVerificationGalleryByUser($userID) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_ID, $userID);
+		$sel->where(self::COLUMN_VERIFICATION, 1);
+		return $sel->fetch();
+	}
+
+	/**
 	 * Vytvoří defaultní galerii uživateli
 	 * @param int $userID ID uživatele.
 	 * @return Database\Table\IRow
@@ -122,6 +179,21 @@ class UserGalleryDao extends BaseGalleryDao {
 	}
 
 	/**
+	 * Vytvoří verifikační galerii určitého uživatele
+	 * @param type $userID IDuživatele, pro kterého vytvoříme galerii
+	 * @return Nette\Database\Table\ActiveRow
+	 */
+	public function createVerificationGallery($userID) {
+		$sel = $this->getTable();
+		$verificationGallery = $sel->insert(array(
+			self::COLUMN_NAME => "Ověřovací fotky",
+			self::COLUMN_USER_ID => $userID,
+			self::COLUMN_VERIFICATION => 1,
+		));
+		return $verificationGallery;
+	}
+
+	/**
 	 * Vrátí poslední obrázek z galerie usera
 	 * @param int $userID ID usera, jemuž patří galerie
 	 * @return @return Database\Table\ActiveRow
@@ -131,6 +203,154 @@ class UserGalleryDao extends BaseGalleryDao {
 		$sel->select("lastImageID");
 		$sel->where(self::COLUMN_USER_ID, $userID);
 		return $sel->fetch();
+	}
+
+	/**
+	 * Získá informace o přistupech do galerií uživatele. Přidá do session, pokud vní nejsou.
+	 * @param int $ownerID ID vlastníka galerie
+	 * @param int $loggedUserID ID přihlášeného uživatele.
+	 * @param Nette\Database\Table\Selection $galleries Galerie u kterých se má ověřit, jestli do ní má uživatel přístup
+	 * @return array
+	 */
+	public function getAccessData($ownerID, $loggedUserID, $galleries) {
+		$sectionGalleryAccess = $this->getGallAccessSection();
+		$gallAccess = $sectionGalleryAccess->galleriesAccess;
+
+		if (empty($gallAccess)) {
+			$gallAccess = $this->getGalleriesAccesInfo($loggedUserID, $ownerID, $gallAccess, $galleries);
+		} else {
+			foreach ($galleries as $gallery) {
+				if (!array_key_exists($gallery->id, $gallAccess)) {
+					/* jednorázově doplní data o všech galeriích */
+					$gallAccess = $this->getGalleriesAccesInfo($loggedUserID, $ownerID, $gallAccess, $galleries);
+					break; //všechna data doplnněna, alg. se může ukončit
+				}
+			}
+		}
+
+		$sectionGalleryAccess->galleriesAccess = $gallAccess;
+		return $gallAccess;
+	}
+
+	/**
+	 * Při procházení galerií cizích lidí ukládá informace o přistupu
+	 * přihlášeného uživatele do session. V případě neexistence záznamu
+	 * o nějké galerii je informace o ní připojena k dosavadním datům.
+	 * @param int $loggedUserID ID přihlášeného uživatele
+	 * @param int $ownerID ID vlastníka galerie
+	 * @param array $gallAccess Data o přístupu uživatelů k jednotlivým galeriím
+	 * @param Nette\Database\Table\Selection $galleries Galerie u kterých se má ověřit, jestli do ní má uživatel přístup
+	 * @return array Pole s daty o přístupu uživatele do galerií
+	 */
+	public function getGalleriesAccesInfo($loggedUserID, $ownerID, $gallAccess, Selection $galleries) {
+		$isFriend = $this->checkFriend($loggedUserID, $ownerID);
+
+		$galleriesAccess = empty($gallAccess) ? array() : $gallAccess; //pukud není zatím žádný záznam v session
+
+		foreach ($galleries as $gallery) {
+			$galleriesAccess = $this->getGalleryAccessInfo($galleriesAccess, $gallery, $loggedUserID, $isFriend);
+		}
+
+		return $galleriesAccess;
+	}
+
+	/**
+	 * Zjistí, zda má uživatel přístup do této galerie.
+	 * @param \Nette\Database\Table\ActiveRow $gallery Galerie u které se má zjistit, zda do ní uživatel může nebo ne.
+	 * @param int $loggedUserID ID přihlášeného uživatele
+	 * @param int $ownerID ID vlastníka galerie
+	 * @return bool Má uživatel přístup do galerie nebo ne.
+	 */
+	public function haveAccessIntoGallery($gallery, $loggedUserID, $ownerID) {
+		$isFriend = $this->checkFriend($loggedUserID, $ownerID);
+		$sectionGalleryAccess = $this->getGallAccessSection();
+		$gallAccess = $sectionGalleryAccess->galleriesAccess;
+		$gallAccess = empty($gallAccess) ? array() : $gallAccess; //pukud není zatím žádný záznam v session
+
+		$galleriesAccess = $this->getGalleryAccessInfo($gallAccess, $gallery, $loggedUserID, $isFriend);
+		return $galleriesAccess[$gallery->id];
+	}
+
+	/**
+	 * Zjistí, zda má uživatel přístup do této galerie.
+	 * @param array $galleriesAccess Data o přístupu uživatelů k jednotlivým galeriím, nebo prázdné pole.
+	 * @param \Nette\Database\Table\ActiveRow $gallery Galerie u které se má zjistit, zda do ní uživatel může nebo ne.
+	 * @param int $loggedUserID ID přihlášeného uživatele
+	 * @param bool $isFriend Je uživatel přítel majitele galerie
+	 * @return array Data o přístupu uživatelů k jednotlivým galeriím.
+	 */
+	private function getGalleryAccessInfo(array $galleriesAccess, $gallery, $loggedUserID, $isFriend) {
+		/* pokud je uživatel vlastníkem automaticky má přístup (občas se tam objeví id uživatelovo galerie ikdyž ji neprochazim) */
+		if ($loggedUserID == $gallery->userID /* owner */) {
+			$galleriesAccess[$gallery->id] = TRUE;
+			return $galleriesAccess;
+		}
+
+		/* pokud záznam ještě není v session */
+		if (!array_key_exists($gallery->id, $galleriesAccess)) {
+			$galleriesAccess[$gallery->id] = FALSE;
+
+			/* pokud je nastavena privátní galerie, zkoumáme podmínky pro přístup */
+			if ($gallery->private) {
+				if ($isFriend && $gallery->allow_friends) {// pokud je kamarád a galerie je kamarádům přístupná
+					$galleriesAccess[$gallery->id] = TRUE;
+				} else if ($this->checkAllowed($gallery->id, $loggedUserID)) { // Zkusí se podívat do DB, zda mu vlastník nedal přístup ručně
+					$galleriesAccess[$gallery->id] = TRUE;
+				}
+			} else { // galerie je veřejná, proto má vstup garantován
+				$galleriesAccess[$gallery->id] = TRUE;
+			}
+		}
+
+		return $galleriesAccess;
+	}
+
+	/**
+	 * Vrátí sečnu k přístupu do galerií.
+	 * @return Sečna k přístupům do galerí.
+	 */
+	private function getGallAccessSection() {
+		return $this->getUnicateSection(self::TABLE_NAME, '2 hours');
+	}
+
+	/**
+	 * Podle parametrů vyhodnotí, zda je uživateli
+	 * dovoleno procházet galerii na základě povolení vlastníka
+	 * @param int $galleryID ID galerie
+	 * @param int $userID ID uživatele
+	 * @return boolean může/nemůže prcházet galerii
+	 */
+	private function checkAllowed($galleryID, $userID) {
+		$selAllowed = $this->createSelection(UserAllowedDao::TABLE_NAME);
+		$selAllowed->where(UserAllowedDao::COLUMN_GALLERY_ID, $galleryID);
+		$selAllowed->where(UserAllowedDao::COLUMN_USER_ID, $userID);
+		$allowed = $selAllowed->fetch();
+		if ($allowed) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	/**
+	 * Zjistí, zda je uživatel přítelem vlastníka
+	 * galerie
+	 * @param int $userID ID uživatele
+	 * @param int $ownerID ID vlastníka
+	 * @return boolean je/není přítel
+	 */
+	private function checkFriend($userID, $ownerID) {
+		if ($userID == $ownerID) {
+			return TRUE;
+		}
+		$selFriend = $this->createSelection(FriendDao::TABLE_NAME);
+//zjistím, jestli se jedná o kamaráda
+		$selFriend->where(FriendDao::COLUMN_USER_ID_1, $userID);
+		$selFriend->where(FriendDao::COLUMN_USER_ID_2, $ownerID);
+		$isFriend = $selFriend->fetch();
+		if ($isFriend) {
+			return TRUE;
+		}
+		return FALSE;
 	}
 
 	/*	 * ****************************** UPDATE **************************** */

@@ -21,6 +21,7 @@ class Sql {
 	const DIR_PATCH = "patch";
 	const DIR_DATA = "data";
 	const DIR_CHAT = "chat";
+	const DIR_MORE_DATA = "data/more";
 	const DIR_CHAT_DATA = "chat/data";
 
 	/** @var string Název databáze */
@@ -32,16 +33,17 @@ class Sql {
 	/** @var string Cesta do kořenové složky s SQL */
 	private $sqlRootDir;
 
-	public function __construct($dbName) {
+	public function __construct($dbName, $testingMode) {
 		$this->dbName = $dbName;
-		$testing = (isset($_SERVER['TESTING']) && $_SERVER['TESTING']) ||
-			(isset($_SERVER['HTTP_X_TESTING']) && $_SERVER['HTTP_X_TESTING']);
+		$this->setRootDir();
+	}
 
-		if ($testing) {
-			$this->sqlRootDir = WWW_DIR . "/../../../" . self::DIR_DATABASE;
-		} else {
-			$this->sqlRootDir = WWW_DIR . "/../" . self::DIR_DATABASE;
-		}
+	/**
+	 * Nastaví kořenovou složku SQL scriptů.
+	 * @param boolean $testingMode Je instalace SQL zapnutá testovacím nástrojem?
+	 */
+	private function setRootDir() {
+		$this->sqlRootDir = WWW_DIR . "/../" . self::DIR_DATABASE;
 	}
 
 	/**
@@ -65,27 +67,30 @@ class Sql {
 	}
 
 	/**
-	 * Nastaví SQL pro smazání a celé vytvoření jedné databáze. Neobsahuje
-	 * data pro chat databázi
-	 * Tu pak i naplní daty.
+	 * Nastaví SQL pro smazání a celé vytvoření jedné databáze. Obsahuje i data.
 	 */
 	public function setSqlAllDB() {
-
-		$this->addStartSql(TRUE);
-		$this->addStable();
-		$this->addPatches();
-		$this->addDevelopSql();
+		$this->setSqlStructDB();
 		$this->addData();
 	}
 
 	/**
-	 * Nastaví SQL pro smazání a celé databáze pro chat.
+	 * Nastaví SQL pro smazání a celé vytvoření jedné databáze. NEobsahuje data.
+	 */
+	public function addDBStruct() {
+		$this->setSqlStructDB();
+	}
+
+	/**
+	 * Nastaví SQL pro smazání a celé vytvoření jedné databáze. Neobsahuje
+	 * data pro chat databázi
 	 * Tu pak i naplní daty.
 	 */
-	public function setSqlChatDB() {
-
+	public function setSqlStructDB() {
 		$this->addStartSql(TRUE);
-		$this->addChat();
+		$this->addStable();
+		$this->addPatches();
+		$this->addDevelopSql();
 	}
 
 	/**
@@ -154,6 +159,13 @@ class Sql {
 	}
 
 	/**
+	 * Přidá další data do DB
+	 */
+	public function setMoreData() {
+		$this->addSqlFiles(self::DIR_MORE_DATA);
+	}
+
+	/**
 	 * Přidá chat data do DB
 	 */
 	public function addChat() {
@@ -166,7 +178,7 @@ class Sql {
 	 * @param \POS\Model\DatabaseDao $dbDao
 	 */
 	public function addRemoveData($dbDao) {
-		$sqlAllTables = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" . $this->dbName . "' AND TABLE_TYPE = 'BASE TABLE'";
+		$sqlAllTables = self::getAllTablesNameInDB($this->dbName);
 		$allTables = $dbDao->getDatabase()->query($sqlAllTables);
 
 		$sql = "";
@@ -175,6 +187,24 @@ class Sql {
 		}
 
 		$this->addSql($sql);
+	}
+
+	/**
+	 * Vrátí celou cestu ke kořenové složce s SQL scripty.
+	 * @return string
+	 */
+	public function getSQLRootDir() {
+		return $this->sqlRootDir;
+	}
+
+	/**
+	 * Vrátí všechny názvy tabulek z dané DB.
+	 * @param string $dbName Název databáze.
+	 * @return string
+	 */
+	public static function getAllTablesNameInDB($dbName) {
+		$sqlAllTables = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" . $dbName . "' AND TABLE_TYPE = 'BASE TABLE'";
+		return $sqlAllTables;
 	}
 
 }

@@ -1,4 +1,4 @@
-﻿{**
+{**
  * My Application layout template.
  *
  * @copyright  Copyright (c) 2010 John Doe
@@ -14,7 +14,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="author" content="Petr Kukrál" />
+<!--		<meta name="author" content="Petr Kukrál" />-->
 		<meta name="Content-language" content="cs" />
 		<meta name="robots" content="{$robots}" n:ifset="$robots">
 		<meta name="verification" content="37e898047322c2e4e70968ca2c138f0d" />
@@ -45,45 +45,42 @@
 			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">
 			<link rel="shortcut icon" href="{$basePath}/partyicon.ico" type="image/x-icon">
 		{else}
-		    {var $pagename = 'přiznání<b>o</b>sexu<span>.cz</span>'}
+		    {var $pagename = '<b>DATE</b>NODE<span>.cz beta</span>'}
 			{ifset #meta}
 				{* inportujou se specialni meta tagy *}
 				{include #meta}
 			{else}
 			<title>Přiznání o sexu</title>
 
-			<meta name="keywords" content="přiznání o sexu" />
-			<meta name="description" content="Přiznání o sexu" />
+			<meta name="keywords" content="Erotická sociální síť datenode.cz" />
+			<meta name="description" content="Erotická sociální síť datenode.cz" />
 
-			<meta property="og:title" content="Přiznání o sexu" />
+			<meta property="og:title" content="Erotická sociální síť datenode.cz" />
 			<meta property="og:type" content="article" />
-			<meta property="og:image" content="http://priznaniosexu.cz/images/fbkiss.jpg" />
-			<meta property="og:site_name" content="priznaniosexu.cz" />
-			<meta property="og:description" content="Stala se Vám v posteli nějaká zajímavá, vtipná či šokující příhoda, ale bojíte se to veřejně říct? Přiznejte se na http://priznaniosexu.cz/. Všechna přiznání jsou 100% ANONYMNÍ. " />
+			<meta property="og:image" content="http://datenode.cz/images/sign/background-photo.jpg" />
+			<meta property="og:site_name" content="datenode.cz" />
+			<meta property="og:description" content="Chcete se opravdu seznámit, nebo jen pokecat a sdílet fotky? Zaregistrujte se, ostaní tam již na vás čekají." />
 			{/ifset}
 			{control cssLayout}
-<!--			<link rel="stylesheet" href="{$basePath}/css/layout.css" type="text/css">
-			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">-->
 			<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
 
 			{* mobile *}
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
-			<link media="handheld, only screen and (max-width: 480px), only screen and (max-device-width: 854px)" href="{$basePath}/css/mobile-layout.css" type="text/css" rel="stylesheet" />
+			<link media="handheld, only screen and (max-width: 480px), only screen and (max-device-width: 1000px)" href="{$basePath}/css/mobile-layout.css" type="text/css" rel="stylesheet" />
 
 		{/if}
-		<link rel="stylesheet" href="{$basePath}/css/jqueryUI/jquery-ui.custom.min.css" type="text/css">
 		{block head}{/block}
-        <link href='http://fonts.googleapis.com/css?family=Exo:200,600,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-		<?php echo $google_analytics; ?>
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+		{includeblock 'layoutBloks/googleAnalytics.latte'}
 	</head>
 
 	<body>
 	<div id="page-shadow"></div>
-		{includeblock 'menu/menu-pos.latte'}
+		{includeblock 'layoutBloks/menu/menu-pos.latte'}
         <div id="left-side">
 			{if $partymode}
 			{cache}
-				{includeblock 'menu/menu-pzp.latte'}
+				{includeblock 'layoutBloks/menu/menu-pzp.latte'}
 				<div id="left-panel">
 					<div id="left-menu">
 						{include #pzpicons}
@@ -102,15 +99,16 @@
 						{include #posicons}
 					</div>
 				</div>
+				{* zakomentování v prvním vydání přiznání
 				<div id="left-panel-label">
 					<nav id="title-container">
 						{include #posmenu}
 					</nav>
-				</div>
+				</div>*}
 			{/cache}
 	    {/if}
         </div>
-	    <div id="header" class="partygradient"></div>
+	    <div id="header" class="partygradient">
 	    <header class="inner">
 		{*mobilni menu*}
 		<div id="mobile-menu">
@@ -120,20 +118,28 @@
 			{include #posmenu}
 		    </nav>
 		</div>
-		{* *}
-		{*includeblock 'menu/user-layout-menu.latte'*}
-                <div id="usermenu">
-                    {ifset $identity}
-                        <strong n:ifset="$identity->user_name" id="droplink">{$identity->user_name}</strong>
-                    {else}
-                        <a href="#" id="droplink">registrace/přihlášení</a>
-                    {/ifset}
-						{control userMenu}
-                        <div class="clear"></div>
-                 </div>
-				{*if $user->isLoggedIn()}
-					{control activities}
-				{/if*}
+		<div id="usermenu">
+			{block usermenu}{/block}
+			{if !$user->isLoggedIn()}
+			<a n:href="DatingRegistration:" class="btn-main registration-btn" title="Registruj se!">REGISTRACE</a>
+			{/if}
+			{ifset $identity}
+				<span n:ifset="$identity->user_name" id="droplink" class="user-btn {*with-text - odkomentovat pokud budeme chtit dovnitr text*}"></span>
+			{else}
+				<div id="line-sign-in-form">
+					{control signInForm}
+				</div>
+			{/ifset}
+			{control userMenu}
+		{if $user->isLoggedIn()}
+			{* skryto pro první verzi přiznání *}
+			{*<a href="#" title="Platby" class="payment-btn user-btn" id="coins-btn"></a>
+			{control payment} *}
+			{control activities}
+			<a href="#" title="Poslední zprávy" class="user-btn" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
+		{/if}
+			<div class="clear"></div>
+		</div>
 		{if $partymode}
 		    {cache}
 				<a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
@@ -141,30 +147,23 @@
 			{/cache}
 		{else}
 			{cache}
-				<a n:href=":OnePage:" title="Přiznání o sexu" id="kiss"></a>
-				<a n:href=":OnePage:"><h1 id="pagename">{!$pagename}</h1></a>
+				<a n:href=":OnePage:" class="pagenamelink"><h1 id="pagename">{!$pagename}</h1></a>
 			{/cache}
-		    {/if}
-		{if !empty($url) && $url == "poradna-o-sexu"}
-		{else}
 		{/if}
-		{*block nextAdmission}{/block*}
 		{block orders}{/block}
 		{block nextAdmission}{/block}
 		<div class="clear"></div>
-
 	    </header>
-	    <div class="clear"></div>
+		</div>
+	    <div class="clear" id="header-placeholder"></div>
 	    {block beforeContent}{/block}
-	    <section class="inner">
+	    <section class="inner content-section">
 		<div n:foreach="$flashes as $flash" class='flash {$flash->type}'>
 		    {$flash->message}
 		</div>
 		{block content}{/block}
 		<div class="clear"></div>
 	    </section>
-
-		{*control chat*}
 		<footer class="inner">
 		    <div id="footline"></div>
 		    <div class="left">
@@ -173,40 +172,42 @@
 		    </div>
 		    <div class="right">
 			<nav id="footernav">
-			    {*if $user->isLoggedIn()}
-					    {widget loggedInMenu}
+			    {if $user->isLoggedIn()}
+					    {control loggedInMenu}
 			    {else}
-					    {widget loggedOutMenu}
-			    {/if*}
+					    {control loggedOutMenu}
+			    {/if}
 			</nav>
 			<br />
 			www.priznaniosexu.cz
 		    </div>
 		    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-
-		    {if $existForm}
-			<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
-		    {/if}
 		    <div id="fb-root"></div>
 			{block jqueryUI}{* překrývá se, pokud je potřeba přiřadit jiné (větší) jQuery *}
 				<script type="text/javascript" src="{$basePath}/js/jquery-ui.light.min.js"></script>
 			{/block}
-			<script type="text/javascript" src="{$basePath}/js/mobile/responsive-menu.js"></script>
-
-			{*include #user-menu-scripts*}
-
 			{control jsLayout}
-			{*if $user->isLoggedIn()}
+
+			{if $user->isLoggedIn()}
+				<script>
+					//inicializace ajaxObserveru - nechat před ostatními skripty
+					var observer = $('body').ajaxObserver({
+						requestUrl: {$ajaxObserverLink}
+					});
+
+				</script>
 				{control jsLayoutLoggedIn}
-			{/if*}
-
-
-
-			{if $fbToDatabase}
-				{control fbLikeAndCommentToDatabase}
-
+				{control chat}
+				<script>
+					$('body').activities();
+				</script>
 			{/if}
-		{block foot}{/block}
+
+
+
+			{control fbLikeAndCommentToDatabase}
+
+			{block foot}{/block}
 			<div class="clear"></div>
 		</footer>
 	</body>

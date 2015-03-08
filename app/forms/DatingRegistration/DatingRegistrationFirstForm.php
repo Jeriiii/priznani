@@ -6,11 +6,12 @@ use Nette\Application\UI\Form;
 use Nette\ComponentModel\IContainer;
 use POS\Model\UserDao;
 use Nette\Http\SessionSection;
+use Nette\DateTime;
 
 /**
  * První formulář registrace
  */
-class DatingRegistrationFirstForm extends BaseForm {
+class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 
 	/**
 	 * @var \POS\Model\UserDao
@@ -20,20 +21,25 @@ class DatingRegistrationFirstForm extends BaseForm {
 	/** @var \Nette\Http\SessionSection */
 	private $regSession;
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, $regSession = NULL) {
+	/** @var \Nette\Http\SessionSection */
+	private $regCoupleSession;
+
+	/** @var array Možnosti pro zaškrtnutí s kým se chci potkat. */
+	private $wantToMeetOption = array(1 => "ano", 2 => "nezáleží", 0 => "ne");
+
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, $regSession = NULL, $regCoupleSession = NULL, $isRegistration = TRUE) {
 		parent::__construct($parent, $name);
 
 		$this->userDao = $userDao;
 		$this->regSession = $regSession;
+		$this->regCoupleSession = $regCoupleSession;
 
 		$this->addGroup('Základní údaje:');
 
-		$this->addText('age', 'Věk')
-			->addRule(Form::FILLED, 'Věk není vyplněn.')
-			->addRule(Form::INTEGER, 'Věk není číslo.')
-			->addRule(Form::RANGE, 'Věk musí být od %d do %d let.', array(18, 120));
+		$secondAge = !empty($regCoupleSession) ? $regCoupleSession->age : NULL;
+		$this->addAge($regSession->age, $secondAge, $regSession->type, $isRegistration);
 
-		$this->addSelect('user_property', 'Jsem:', $this->userDao->getUserPropertyOption());
+		$this->addSelect('type', 'Jsem:', $this->userDao->getUserPropertyOption());
 
 		$this->addGroup('Zajímám se o:');
 
@@ -41,31 +47,32 @@ class DatingRegistrationFirstForm extends BaseForm {
 
 		if (isset($regSession)) {
 			$this->setDefaults(array(
-				"age" => $regSession->age,
-				"user_property" => $regSession->user_property
+				"type" => $regSession->type
 			));
 		}
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->onValidate[] = callback($this, 'validateWantToMeet');
+		$this->onValidate[] = callback($this, 'validateAge');
 		$this->addSubmit('send', 'Do druhé části registrace')
-			->setAttribute("class", "btn btn-success");
+			->setAttribute("class", "btn btn-main");
 
 		return $this;
 	}
 
 	public function submitted($form) {
-		$values = $form->values;
+		$values = $form->getValues();
 		$presenter = $this->getPresenter();
 
-		//uložení checkboxů
-		foreach ($this->userDao->getArrWantToMeet() as $key => $interest) {
-			$this->regSession[$key] = $values[$key] == TRUE ? 1 : 0;
-		}
-
 		$this->regSession->role = 'unconfirmed_user';
-		$this->regSession->age = $values->age;
-		$this->regSession->user_property = $values->user_property;
+		$this->regSession->age = $this->getAge($values);
+		$this->regCoupleSession->age = $this->getSecondAge($values);
+		$this->regSession->vigor = $this->getVigor($this->regSession->age);
+		$this->regSession->type = $values->type;
+
+		foreach ($this->userDao->getArrWantToMeet() as $key => $want) {
+			$this->regSession[$key] = $values[$key];
+		}
 
 		$presenter->redirect('Datingregistration:SecondRegForm');
 	}
@@ -75,8 +82,14 @@ class DatingRegistrationFirstForm extends BaseForm {
 	 */
 	public function addWantToMeet() {
 		foreach ($this->userDao->getArrWantToMeet() as $key => $want) {
-			$checkBox = $this->addCheckbox($key, $want);
-			$checkBox->setDefaultValue($this->regSession[$key]);
+			$radioList = $this->addRadioList($key, $want, $this->wantToMeetOption);
+			$radioList->getSeparatorPrototype()->setName(NULL);
+
+			if (!empty($this->regSession[$key]) || is_numeric($this->regSession[$key])) { //0 = ne, ale empty by neprošla
+				$radioList->setDefaultValue($this->regSession[$key]);
+			} else {
+				$radioList->setDefaultValue(2);
+			}
 		}
 	}
 
@@ -88,12 +101,12 @@ class DatingRegistrationFirstForm extends BaseForm {
 		$values = $form->values;
 
 		foreach ($this->userDao->getArrWantToMeet() as $key => $interest) {
-			if ($values[$key]) {
+			if ($values[$key] == 1) { //alespoň jedno ANO
 				return;
 			}
 		}
 
-		$this->addError("Zaškrtněte prosím o koho se zajímáte");
+		$this->addError("Zaškrtněte prosím o koho se zajímáte - alespoň jedno ano");
 	}
 
 }

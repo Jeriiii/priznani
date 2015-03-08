@@ -1,20 +1,19 @@
-;(function($) {
-	
+;
+(function ($) {
+
 	/* nastavení */
 	var opts;
 	/* odkaz na další data - pro ajax */
 	var ajaxLocation;
-	
+
 	/* main */
-	$.fn.stream = function(options) {
+	$.fn.stream = function (options) {
 		var opts = $.extend({}, $.fn.stream.defaults, options);
 		setOpts(opts);
 		setAjaxLocation(opts);
-		//alert("sdf");
-		$.nette.init();
 		timeCheckStream();
 	};
-	
+
 	$.fn.stream.defaults = {
 		offset: 0,
 		/* kolik dalších příspěvků (dat) má plugin načíst při najetí na konec */
@@ -28,38 +27,51 @@
 		/* html element obsahující zprávu pro uživatele viz. msgText */
 		msgElement: '.stream-message',
 		/* text zprávy, který se zobrazí když už nejsou k dispozici další data */
-		msgText: "Žádné starší příspěvky nebyly nalezeny",//Žádné starší příspěvky nebyly nalezeny
+		msgText: "Žádné starší příspěvky nebyly nalezeny", //Žádné starší příspěvky nebyly nalezeny
 		/* název parametru v URL, který nastavuje vždy aktuální offset hodnotu při každém ajaxovém požadavku */
-		offsetName: 'userStream-offset',
-		/* maximální počet příspěvků (dat), který se může pluginem celkově načíst */
-		rows: 6
+		offsetName: 'userStream-offset'
 	};
+
+	/**
+	 * Signál k zastavení dotazování - false zastaví dotazování
+	 */
+	$.fn.stream.run = true;
+
 	/* prodlouží stream */
-	function changeStream() {	
+	function changeStream() {
 		$(this.opts.btnNext).hide();
-		
+
 		/* přidá další příspěvky */
-		if(this.opts.offset+1 <= this.opts.rows) {
-			
+		if ($.fn.stream.run) {
+
 			this.opts.offset = this.opts.offset + this.opts.addoffset;
 
 			var ajaxUrl = this.ajaxLocation + "&" + this.opts.offsetName + "=" + this.opts.offset;
-			
+
 			$(this.opts.ajaxLocation).attr("href", ajaxUrl);
-			
+
 			$.nette.ajax({
 				url: ajaxUrl,
 				async: false,
-				success: function(response) {
-							//console.log(response);
+				success: function (data, status, jqXHR) {
+					if (data.snippets['snippet-userStream-posts'] == "") {//pokud snippet už neobnovuje data
+						$.fn.stream.run = false;//zastaví dotazování
+					}
+					if (data.snippets['snippet-profilStream-posts'] == "") {//pokud snippet už neobnovuje data
+						$.fn.stream.run = false;//zastaví dotazování
+					}
+					if (data.snippets['snippet-valChatMessages-stream-messages'] == "") {//pokud snippet už neobnovuje data
+						$.fn.stream.run = false;//zastaví dotazování
+					} else {
+						$("#chat-stream #stream").scrollTop(30 * 50);/* posunutí chat streamu o kus níž, když se načtou data */
+					}
 				},
-				complete: function(payload) {
-							//console.log(payload);
+				error: function (jqXHR, status, errorThrown) {
+					$.fn.stream.run = false;
 				}
 			});
-		}
-		/* Nejsou-li žádné další příspěvky, vypíše hlášku, že už nejsou */
-		if(this.opts.offset+1 > this.opts.rows) {
+		} else {
+			/* Nejsou-li žádné další příspěvky, vypíše hlášku, že už nejsou */
 			$(this.opts.msgElement).text(this.opts.msgText);
 			$(this.opts.streamLoader).hide();
 			$(this.opts.btnNext).hide();
@@ -68,8 +80,11 @@
 
 	/* naplánuje další kontrolu za daný časový interval(půl vteřinu) */
 	function timeCheckStream() {
-		setTimeout(function() { visibleCheckStream();}, 500);
+		setTimeout(function () {
+			visibleCheckStream();
+		}, 500);
 	}
+
 
 	/* zkontroluje, zda je uživatel na konci seznamu. Když ano, zavolá prodloužení */
 	function visibleCheckStream() {
@@ -80,20 +95,20 @@
 		var maxTop = documentScrollTop + viewportHeight;
 		var elementOffset = $(this.opts.streamLoader).offset();
 
-		/* naskroluju-li nakonec stránky if větev projde */   
-		if( elementOffset.top >= minTop &&  elementOffset.top <= maxTop) {
+		/* naskroluju-li nakonec stránky if větev projde */
+		if (elementOffset.top >= minTop && elementOffset.top <= maxTop) {
 			changeStream();
 		}
 		timeCheckStream();
 	}
-	
+
 	function setOpts(opts) {
 		this.opts = opts;
 	}
-	
+
 	function setAjaxLocation(opts) {
 		this.ajaxLocation = $(opts.linkElement).attr('href');
 	}
-	
+
 })(jQuery);
 

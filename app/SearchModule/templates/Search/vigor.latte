@@ -1,0 +1,13 @@
+{block head}
+{control css 'bootstrap/forms-medium.less', 'search/default.less'}
+{/block}
+{block foot}
+{/block}
+{block content}
+
+{includeblock 'navigation/searchNavigation.latte'}
+
+{control vigorSearchForm}
+{control vigorSearch 'listAll'}
+
+{/block}

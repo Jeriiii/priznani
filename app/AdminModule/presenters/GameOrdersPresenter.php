@@ -7,7 +7,9 @@ use App\Forms as Frm;
 use Grido\Grid;
 
 /**
- * GameOrdersPresenter Description
+ * Pracuje s daty objednávek her a obstarává jejich vykreslení
+ *
+ * @author Daniel Holubář
  */
 class GameOrdersPresenter extends AdminSpacePresenter {
 

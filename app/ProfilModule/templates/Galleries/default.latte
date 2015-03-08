@@ -4,15 +4,12 @@
 {* drobečkové menu - nyní nemá význam*}
 {*control navigation:breadcrumbs*}
 {if $myGallery}
-	{control myUserGalleries $mode}
+	{control myUserGalleries $mode, $paying}
 {else}
 	{control userGalleries $mode, $userID}
 {/if}
 
 {/}
 {block foot}
-{if $myGallery}
-<script type="text/javascript" src="{$basePath}/js/bootstrap-modal.min.js" ></script>
-{/if}
 {/}
 

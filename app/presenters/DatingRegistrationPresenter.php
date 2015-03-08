@@ -1,12 +1,10 @@
 <?php
 
-use Nette\Application\UI\Form as Frm,
-	Nette\Security as NS,
-	Nette\ComponentModel\IContainer,
-	Nette\Database;
+use Nette\Application\UI\Form as Frm;
 use POS\Model\UserDao;
 use Nette\Utils\Strings;
 use Nette\Mail\IMailer;
+use Nette\DateTime;
 
 class DatingRegistrationPresenter extends BasePresenter {
 
@@ -34,10 +32,26 @@ class DatingRegistrationPresenter extends BasePresenter {
 	 */
 	public $mailer;
 
+	/**
+	 * @var \POS\Model\UserCategoryDao
+	 * @inject
+	 */
+	public $userCategoryDao;
+
+	/**
+	 * @var \POS\Model\PaymentDao
+	 * @inject
+	 */
+	public $paymentDao;
+
 	public function startup() {
 		parent::startup();
 
 		$this->setLayout("datingLayout");
+	}
+
+	public function renderDefault() {
+		$this->template->type = $this->getRegSession()->type;
 	}
 
 	public function registred() {
@@ -46,9 +60,9 @@ class DatingRegistrationPresenter extends BasePresenter {
 		//SEND EMAIL
 		$this->sendMail($userSession);
 
-		if ($userSession->user_property == "m") {
+		if ($userSession->type == 1) {
 			$this->flashMessage("Byl jste úspěšně zaregistrován. Prosím potvrďte svůj email.");
-		} else if ($userSession->user_property == "w") {
+		} else if ($userSession->type == 2) {
 			$this->flashMessage("Byla jste úspěšně zaregistrována. Prosím potvrďte svůj email.");
 		} else {
 			$this->flashMessage("Byli jste úspěšně zaregistrováni. Prosím potvrďte svůj email.");
@@ -72,32 +86,30 @@ class DatingRegistrationPresenter extends BasePresenter {
 		$regForm->sendMail($email, $password, $code);
 	}
 
+	public function actionThirdRegForm() {
+		$type = $this->getRegSession()->type; // typ uživatele
+		if ($type == UserDao::PROPERTY_GROUP) {
+			$this->redirect("DatingRegistration:register");
+		}
+	}
+
+	public function renderThirdRegForm() {
+		$type = $this->getRegSession()->type; // typ uživatele
+		$this->template->firstManLabel = Frm\DatingRegistrationThirdForm::getFirstManName($type);
+		$this->template->secondManLabel = Frm\DatingRegistrationThirdForm::getSecondManName($type);
+		$this->template->type = $type;
+
+		$this->template->isCouple = Frm\DatingRegistrationThirdForm::isCouple($type);
+		$this->template->isFirstMan = Frm\DatingRegistrationThirdForm::isFirstMan($type);
+		$this->template->isFirstWoman = Frm\DatingRegistrationThirdForm::isFirstWoman($type);
+		$this->template->isSecondMan = Frm\DatingRegistrationThirdForm::isSecondMan($type);
+		$this->template->isSecondWoman = Frm\DatingRegistrationThirdForm::isSecondWoman($type);
+	}
+
 	public function renderRegistered() {
 		$registrationDataUser = $this->getRegSession();
 		$this->template->registrationDataUser = $registrationDataUser;
 		$this->flashMessage('Registrace byla úspěšná');
-	}
-
-	public function actionPreThirdRegForm() {
-		$registrationDataUser = $this->getRegSession();
-		$registrationDataCouple = $this->getRegSessionForCouple();
-
-		if ($registrationDataUser->user_property == "m") {
-			$this->setView("thirdRegManForm");
-		} else if ($registrationDataUser->user_property == "w") {
-			$this->setView("thirdRegWomanForm");
-		} else if ($registrationDataUser->user_property == "g") {
-			$this->redirect("DatingRegistration:register");
-		} else if ($registrationDataUser->user_property == "cw") {
-			$registrationDataCouple->user_property = 'w';
-			$this->setView("thirdRegWomanForm");
-		} else if ($registrationDataUser->user_property == "c") {
-			$registrationDataCouple->user_property = 'm';
-			$this->setView("thirdRegWomanForm");
-		} else if ($registrationDataUser->user_property == "cm") {
-			$registrationDataCouple->user_property = 'm';
-			$this->setView("thirdRegManForm");
-		}
 	}
 
 	/**
@@ -105,32 +117,50 @@ class DatingRegistrationPresenter extends BasePresenter {
 	 * Pokud jde o pár, přesměruje se na zaregistrování partnera
 	 */
 	public function actionRegister() {
+		$this->register();
+
+		$registrationDataUser = $this->getRegSession();
+		$type = $registrationDataUser->type; // typ uživatele
+
+		if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_MAN || $type == UserDao::PROPERTY_COUPLE_WOMAN) {
+			$this->registerCouple();
+		}
+
+		/* dokončení registrace */
+		$registrationDataUser->firstMemberId = NULL;
+		$this->registred();
+	}
+
+	/**
+	 * Registruje muže, ženu, skupinu či prvního z páru
+	 */
+	public function register() {
 		//session s datama prvniho registrovaneho uzivatele pro vkládání do db
 		$registrationDataUser = $this->getRegSession();
 		$registrationDataUser[UserDao::COLUMN_CONFIRMED] = Strings::random(29);
 
-		$userProperty = $this->userPropertyDao->registerProperty($registrationDataUser);
+		$userProperty = $this->userPropertyDao->registerProperty($registrationDataUser, $this->userCategoryDao);
 		$user = $this->userDao->register($registrationDataUser, $userProperty->id);
 		/* aktualizace kódu s jeho id */
 		$registrationDataUser[UserDao::COLUMN_CONFIRMED] = $user[UserDao::COLUMN_CONFIRMED];
 
-		$registrationDataUser->firstMemberId = $user->id;
-
-		if ($registrationDataUser->user_property == "cw") {
-			$this->redirect("DatingRegistration:fourthRegWomanForm");
-		} else if ($registrationDataUser->user_property == "cm" || $registrationDataUser->user_property == "c") {
-			$this->redirect("DatingRegistration:fourthRegManForm");
+		/* 14 dní premium účtu */
+		$now = new DateTime();
+		$addTime = new DateTime(); //přidaný čas, kdy bude premium
+		if ($registrationDataUser->oldUser) {
+			$addTime->modify('+21 days');
 		} else {
-			/* dokončení registrace */
-			$registrationDataUser->firstMemberId = NULL;
-			$this->registred();
+			$addTime->modify('+14 days');
 		}
+		$this->paymentDao->insertPremium($now, $addTime, $user->id);
+
+		$registrationDataUser->firstMemberId = $user->id;
 	}
 
 	/**
-	 * Uložení dat o páru do DB
+	 * Uložení dat o páru (druhého z páru) do DB
 	 */
-	public function actionRegisterCouple() {
+	public function registerCouple() {
 		$registrationDataCouple = $this->getRegSessionForCouple();
 		$registrationDataUser = $this->getRegSession();
 
@@ -138,32 +168,18 @@ class DatingRegistrationPresenter extends BasePresenter {
 		$registrationDataCouple->coupleId = $couple->id;
 
 		$this->userDao->setCouple($registrationDataUser->firstMemberId, $couple->id);
-
-		$this->registred();
 	}
 
 	protected function createComponentFirstRegForm($name) {
-		return new Frm\DatingRegistrationFirstForm($this->userDao, $this, $name, $this->getRegSession());
+		return new Frm\DatingRegistrationFirstForm($this->userDao, $this, $name, $this->getRegSession(), $this->getRegSessionForCouple());
 	}
 
 	protected function createComponentSecondRegForm($name) {
 		return new Frm\DatingRegistrationSecondForm($this->userDao, $this, $name, $this->getRegSession());
 	}
 
-	protected function createComponentThirdRegManForm($name) {
-		return new Frm\DatingRegistrationManThirdForm($this->userDao, $this, $name, $this->getRegSession());
-	}
-
-	protected function createComponentThirdRegWomanForm($name) {
-		return new Frm\DatingRegistrationWomanThirdForm($this->userDao, $this, $name, $this->getRegSession());
-	}
-
-	protected function createComponentFourthRegWomanForm($name) {
-		return new Frm\DatingRegistrationWomanFourthForm($this->userDao, $this, $name, $this->getRegSessionForCouple());
-	}
-
-	protected function createComponentFourthRegManForm($name) {
-		return new Frm\DatingRegistrationManFourthForm($this->userDao, $this, $name, $this->getRegSessionForCouple());
+	protected function createComponentThirdRegForm($name) {
+		return new Frm\DatingRegistrationThirdForm($this->userDao, $this->getRegSession(), $this->getRegSessionForCouple(), $this, $name);
 	}
 
 	/**

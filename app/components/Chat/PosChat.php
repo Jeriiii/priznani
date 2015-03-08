@@ -22,12 +22,20 @@ class PosChat extends BaseProjectControl {
 	 */
 	protected $chatManager;
 
+	/** Proměnná s uživatelskými daty (cachovaný řádek z tabulky users). Obsahuje relace na profilFoto, gallery, property @var ArrayHash|ActiveRow řádek z tabulky users */
+	protected $loggedUser;
+
 	/**
 	 * Standardni konstruktor, predani sluzby chat manageru
 	 */
-	function __construct(ChatManager $manager, $parent = NULL, $name = NULL) {
+	function __construct(ChatManager $manager, $loggedUser, $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
+		$user = $this->getPresenter()->getUser();
+		if (!$user->isLoggedIn()) {
+			$this->getPresenter()->redirect(":Onepage:");
+		}
 		$this->chatManager = $manager;
+		$this->loggedUser = $loggedUser;
 	}
 
 	/**
@@ -38,6 +46,7 @@ class PosChat extends BaseProjectControl {
 		$template->setFile(dirname(__FILE__) . '/poschat.latte');
 		$user = $this->getPresenter()->getUser();
 		$template->logged = $user->isLoggedIn() && $user->getIdentity();
+		$template->loggedUser = $this->loggedUser;
 		$template->render();
 	}
 

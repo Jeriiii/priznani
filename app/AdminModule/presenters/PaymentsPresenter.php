@@ -1,9 +1,7 @@
 <?php
 
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 /**
@@ -14,6 +12,9 @@
 
 namespace AdminModule;
 
+use POS\Forms\PaymentNewForm;
+use POS\Grids\PaymentGrid;
+
 class PaymentsPresenter extends AdminSpacePresenter {
 
 	/**
@@ -23,27 +24,28 @@ class PaymentsPresenter extends AdminSpacePresenter {
 	public $paymentDao;
 
 	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
+	/**
 	 * Komponenta grido vykresluje přehledně tabulky s daty o platbách
 	 * @param type $name
 	 */
 	protected function createComponentGrid($name) {
-		$grid = new \Grido\Grid($this, $name);
-		$grid->setModel($this->paymentDao->getPaymentsData());
+		return new PaymentGrid($this->paymentDao, $this, $name);
+	}
 
-		/* sloupce komponenty */
-		$grid->addColumnText("id", "ID")
-			->setDefaultSort('ASC');
+	protected function createComponentPaymentNewForm($name) {
+		return new PaymentNewForm($this->userDao, $this->paymentDao, $this, $name);
+	}
 
-		$grid->addColumnText("user_name", "Username")
-			->setFilterText()
-			->setColumn('userID.user_name');
+	public function handleDeletePayment($id) {
+		$this->paymentDao->delete($id);
 
-		$grid->addColumnEmail("email", "Email")
-			->setFilterText()
-			->setColumn('userID.email');
-
-		$grid->addColumnDate("create", "Create");
-		/* konec sloupců */
+		$this->flashMessage("Platba byla smazána.");
+		$this->redirect("this");
 	}
 
 }

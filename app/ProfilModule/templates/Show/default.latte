@@ -1,22 +1,21 @@
 {block head}
 	<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
-	<link rel="stylesheet" href="{$basePath}/css/bootstrap.min.css" type="text/css">
 	<style>
 	h1 {
 		margin-top: 0;
 	}
     </style>
-    {control css 'stream/list.less', 'chat/popup.less'}
+    {control css 'profile/show.less', 'stream/list.less', 'chat/popup.less', 'comments/comments.less', 'imgareaselect/default.less', 'imgareaselect/inWindow.less'}
 {/block}
 
-{block jqueryUI}
-	<script type="text/javascript" src="{$basePath}/js/jquery-ui.modals.min.js"></script>
-{/block}
 
 {block foot}
-	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>
 	<script type="text/javascript" src="{$basePath}/js/jqueryUI-tabs.js"></script>
+
 {control js}
+{* je to zvlast schvalne, nejak si to nerozumi s tou minimalizaci*}
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/jquery.imgareaselect.min.js"></script>
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/inits/profilePhoto.js"></script>
 
 <script>
 	$(document).ready(function () {
@@ -33,44 +32,97 @@
 </script>
 {/block}
 {block content}
+<section id="onepage">
+	<div id="content">
+		<div id="stream-menu">
 
-<h3 n:block="title">Profil uživatele {$userData->user_name}</h3>
+				<div class="user-profile-picture">
+					{$userData|showProfMinDiv: NULL, FALSE}
+					{if $isMyProfile}
+						<div class="photoLinkContainer">
+							<a class="photoLink uploadProfilePhoto" id="addProfilePhoto" title="Nahrát profilovku">Nahrát profilovku</a>
+						</div>
+						{control uploadPhoto}
+					{/if}
+				</div>
 
-<a href="#" title="Poslat zprávu" id="sendmessage-button" class="btn-main btn-small right">Poslat zprávu uživateli {$userData->user_name}</a>
+				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
+				<span class="sexy-label">{$userData|sexyLabel} {$sexyLabelToolTip|toolTip}</span>
+				<span class="first-sentence">{$userData->property->first_sentence}</span>
+				<div class="clear spacer"></div>
+			{if $user->isLoggedIn()}
+
+				{if $isMyProfile}
+					<a n:href=":Profil:Edit:default" class="profile-btn long-btn">Editovat</a>
+					<a title="Nahrát profilovku" class="profile-btn uploadProfilePhoto btn-main btn-small long-btn">Nahrát profilovku</a>
+					{* skrytí žádostí o ověření pro první verzi přiznání *}
+					{*<a n:href="Galleries:verificationImageNew" class="profile-btn long-btn">Být ověřený uživatel</a>*}
+					<div class="clear"></div>
+				{else}
+				<div class="profile-btn like-action-panel">
+					<div class="sexybutton">
+						{control youAreSexy}
+					</div>
+					<a href="#" title="Poslat zprávu" id="sendmessage-button" class="profile-btn btn-main btn-small right send-message-btn">
+					</a>
+					<div class="ajaxbox-popUp" data-ajaxbox-btn="#sendmessage-button" data-ajaxbox-header-html="Poslat zprávu">
+						{control sendMessageForm}
+					</div>
+					<div class="clear"></div>
+				</div>
+
+				{/if}
+
+			{/if}
+
+			{if !$isMyProfile && !$isFriends}
+			<div class="profile-btn long-btn">
+				{control sendFriendRequest}
+			</div>
+			{/if}
+			<div class="spacer"></div>
+			<div class="delimiter red"></div>
+			<span class="red-title with-button">O MNĚ {if $isMyProfile}<a n:href="Edit:">upravit</a>{/if}</span>
+			<div class="delimiter red clear"></div>
+
+			{control userInfo "listFew", $userID}
+
+			<div class="delimiter red"></div>
+			<span class="red-title">GALERIE</span>
+			<div class="delimiter red"></div>
+			<div class="square-list">
+				{control userGalleries 'listFew', $userID}
+			</div>
 
 
-<div id="sendmessage-dialog" title="Poslat zprávu uživateli {$userData->user_name}">
-	{control sendMessageForm}
-</div>
+			<div class="delimiter red"></div>
+			<span class="red-title">PŘÁTELÉ</span>
+			<div class="delimiter red"></div>
+			<div class="square-list">
+				{control friendsList}
+			</div>
 
-{if $hasProfilePhoto}
-	<img src="{$profilePhoto|getImgSqrPath}" alt="{$profilePhoto->name}"/>
-{/if}
+			{*control sexyListMarkedFromOther*}{* importovana a nastavena komponenta, prozatim nevykreslena *}
 
-{include 'menu.latte' $userID => 'id'}
+		</div>
 
-{control sendFriendRequest}
-{control youAreSexy}
+		{include 'menu.latte' $userID => 'id'}
 
-{control friendsList}
-
-{control sexyListIMarked}
-
-<h2>Zeď</h2>
-{control userGalleries 'listFew', $userID}
-
-<h2>Příspěvky uživatele</h2>
-{control profilStream}
-
-<h2>Informace o uživateli</h2>
-{control userInfo "listFew", $userID}
-
-<h2>Nahrání profilovky</h2>
-
-{control uploadPhotoForm}
+		{control profilStream}
+	</div>
+	<div class="clear"></div>
 
 
 
+
+
+
+<div id="right-dock">
+	    {*reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama *}
+	</div>
+	<div class="clear"></div>
+
+</section>
 
 
 {/block}

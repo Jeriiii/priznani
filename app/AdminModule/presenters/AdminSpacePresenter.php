@@ -22,22 +22,13 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 	public $id_file;
 	public $text;
 
-	/**
-	 * @var \POS\Model\ConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ConfessionDao @inject */
 	public $confessionDao;
 
-	/**
-	 * @var \POS\Model\UserImageDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\ContactDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ContactDao @inject */
 	public $contactDao;
 
 	/**
@@ -52,11 +43,30 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 
 	public function startup() {
 		parent::startup();
+<<<<<<< HEAD
 
 		$this->checkLoggedIn();
 //umístění cache
+=======
+		//přesměrování s backlinkem pro případ, že uživatel není přihlášen
+		if (!$this->user->isLoggedIn()) {
+			if ($this->user->getLogoutReason() === User::INACTIVITY) {
+				$this->flashMessage('Uplynula doba neaktivity! Systém vás z bezpečnostních důvodů odhlásil.', 'warning');
+			}
+
+			$backlinkSection = $this->getSession(\Nette\Application\UI\Form\SignInForm::SECTION_BACKLINK_NAME);
+			$backlinkSection->link = $this->backlink();
+			$this->redirect(':Sign:in', array('backlink' => true));
+		} else { //kontrola opravnění pro vztup do příslušné sekce
+			if (!$this->user->isAllowed($this->name, $this->action)) {
+				$this->flashMessage('Na vstup do této sekce nemáte dostatečná oprávnění!', 'warning');
+				$this->redirect(':Homepage:');
+			}
+		}
+		//umístění cache
+>>>>>>> opravy-pri-prechodu-na-novy-server
 		$this->storage = new \Nette\Caching\Storages\FileStorage('../temp');
-// vytvoření cache
+		// vytvoření cache
 		$this->cache = new Cache($this->storage);
 		$this->setLayout('adminLayout');
 	}
@@ -91,9 +101,14 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 			$navigation["SCHVAL. FOTEK " . $this->getCountLable($countData["imageCount"])] = $this->link("AcceptImages:");
 		}
 		$navigation["MUJ ÚČET"] = $this->link("Admin:myAccounts");
-		$navigation["PLATBY"] = $this->link("Payments:");
-		$navigation["OBJEDNÁVKY"] = $this->link("GameOrders:");
-		$navigation["UŽIV. ZPRÁVY " . $this->getCountLable($countData["messageCount"])] = $this->link("Contacts:");
+		if ($user->isAllowed('accept_images')) {
+			$navigation["PLATBY"] = $this->link("Payments:");
+			$navigation["OBJEDNÁVKY"] = $this->link("GameOrders:");
+			$navigation["UŽIV. ZPRÁVY " . $this->getCountLable($countData["messageCount"])] = $this->link("Contacts:");
+			$navigation["DEMOGRAFIE"] = $this->link("Cities:");
+			$navigation["NOVINKY"] = $this->link("News:");
+			$navigation["STATISTIKY"] = $this->link("Statistic:");
+		}
 
 		return $navigation;
 	}
@@ -177,6 +192,24 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 			$data = $this->cache->load("menuCountData");
 		}
 		return $data;
+	}
+
+	public function createComponentCss() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
+		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
+
+		if (!empty($this->cssVariables)) {
+			$varFilter = new WebLoader\Filter\VariablesFilter($this->cssVariables);
+			$compiler->addFileFilter($varFilter);
+		}
+
+		$compiler->addFileFilter(new \Webloader\Filter\LessFilter());
+		$compiler->addFileFilter(function ($code, $compiler, $path) {
+			return \cssmin::minify($code);
+		});
+
+// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
 }

@@ -17,7 +17,7 @@ class BaseGallery extends BaseProjectControl {
 
 	private $images;
 	/* aktualni obrazek */
-	private $image;
+	protected $image;
 	/* aktualni galerie */
 	protected $gallery;
 	/* aktualni domena */
@@ -37,7 +37,8 @@ class BaseGallery extends BaseProjectControl {
 	 */
 	public $imageDao;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode) {
+	public function __construct($images, $image, $gallery, $domain, $partymode, $parent, $name) {
+		parent::__construct($parent, $name);
 		$this->images = $images->order("id DESC");
 		$this->image = $image;
 		$this->gallery = $gallery;
@@ -60,14 +61,9 @@ class BaseGallery extends BaseProjectControl {
 
 		$this->template->imageLink = $this->getPresenter()->link("this", array("imageID" => $this->image->id, "galleryID" => null));
 
-		// rozhoduje, zda je obrázek vyšší nebo širší
-		if ($this->image->widthGalScrn == 700) {
-			$setWidth = TRUE;
-			$this->template->imgPaddingTopBottom = (525 - $this->image->heightGalScrn) / 2;
-		} else {
-			$setWidth = FALSE;
-		}
-		$this->template->setWidth = $setWidth;
+		/* pomocí paddingů zarovná obrázek do prostřed obrazovky */
+		$this->template->imgPaddingTopBottom = (525 - $this->image->heightGalScrn) / 2;
+		$this->template->imgPaddingLeftRight = (700 - $this->image->widthGalScrn) / 2;
 
 		$this->template->setFile(dirname(__FILE__) . '/' . $templateName);
 		$this->template->render();
@@ -147,14 +143,19 @@ class BaseGallery extends BaseProjectControl {
 			}
 		}
 
+		$galleryID = $this->gallery->id;
+		$this->setBeforeAndAfterImage();
+
 		$this->getImages()->delete($image->id);
 
-		$this->setBeforeAndAfterImage();
 		if (!empty($this->beforeImageID)) {
-			$this->setImage($this->beforeImageID);
-		} else {
-			$this->setImage($this->afterImageID);
+			$this->presenter->redirect("this", array("imageID" => $this->beforeImageID));
 		}
+		if (!empty($this->afterImageID)) {
+			$this->presenter->redirect("this", array("imageID" => $this->afterImageID));
+		}
+		$this->presenter->flashMessage("Byl smazán poslední obrázek z galerie.");
+		$this->presenter->redirect(":OnePage:", array("galleryID" => $galleryID));
 	}
 
 	protected function setUserImageDao(UserImageDao $userImageDao) {
@@ -169,7 +170,7 @@ class BaseGallery extends BaseProjectControl {
 	 * vrátí tabulku s obrázky
 	 * @return \POS\Model\BaseGalleryDao
 	 */
-	private function getImages() {
+	protected function getImages() {
 		if (isset($this->userImageDao)) {
 			return $this->userImageDao;
 		}

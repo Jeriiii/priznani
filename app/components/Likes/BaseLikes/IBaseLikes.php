@@ -1,16 +1,21 @@
 <?php
 
 /*
- * @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
+ * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
 namespace POSComponent\BaseLikes;
 
 /**
  * Rozhraní pro komponenty obsluhující lajkování
- * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Daniel Holubář
  */
 interface IBaseLikes {
 
-	public function handleSexy($userID, $imageID);
+	/**
+	 * Signál pro provedení lajku, přičte lajk obrázku/statusu a zaznamená, kdo lajkl
+	 * @param int $userID ID uživatele, který lajkl obrázek
+	 * @param int $ID ID lajknutého obrázku/statusu
+	 */
+	public function handleLike($userID, $ID);
 }

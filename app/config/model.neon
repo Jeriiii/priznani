@@ -1,4 +1,5 @@
 services:
+	oldUserDao: \POS\Model\OldUserDao
 	userDao: \POS\Model\UserDao
 	userPropertyDao: \POS\Model\UserPropertyDao
 	formDao: \POS\Model\FormDao
@@ -11,7 +12,6 @@ services:
 	imageDao: \POS\Model\ImageDao
 	videoDao: \POS\Model\VideoDao
 	coupleDao: \POS\Model\CoupleDao
-	polls: Polls
 	#facebook: Facebook
 	streamDao: \POS\Model\StreamDao
 	embedVideos: embedVideos
@@ -21,7 +21,7 @@ services:
 	activitiesDao: \POS\Model\ActivitiesDao
 	databaseDao: \POS\Model\DatabaseDao
 	contactDao: POS\Model\ContactDao
-	chatMessagesDao: POS\Model\ChatMessagesDao(@nette.database.chat.context)
+	chatMessagesDao: POS\Model\ChatMessagesDao
 	usersCompetitionsDao: POS\Model\UsersCompetitionsDao
 	competitionsImagesDao: POS\Model\CompetitionsImagesDao
 	youAreSexyDao: POS\Model\YouAreSexyDao
@@ -30,3 +30,40 @@ services:
 	statusDao: POS\Model\StatusDao
 	userChangePasswordDao:  POS\Model\UserChangePasswordDao
 	imageLikesDao:	POS\Model\ImageLikesDao
+	cityDao:	POS\Model\CityDao
+	districtDao:	POS\Model\DistrictDao
+	regionDao:	POS\Model\RegionDao
+	streamCategoriesDao:	POS\Model\StreamCategoriesDao
+	likeStatusDao:	POS\Model\LikeStatusDao
+	commentImagesDao:	POS\Model\CommentImagesDao
+	likeImageCommentDao:	POS\Model\LikeImageCommentDao
+	enumStatusDao: POS\Model\EnumStatusDao
+	catPropertyWantToMeetDao: POS\Model\CatPropertyWantToMeetDao
+	userCategoryDao: POS\Model\UserCategoryDao
+	userPositionDao:	POS\Model\UserPositionDao
+	enumPositionDao:	POS\Model\EnumPositionDao
+	enumPlaceDao:	POS\Model\EnumPlaceDao
+	userPlaceDao:	POS\Model\UserPlaceDao
+	userBlokedDao:	POS\Model\UserBlokedDao
+	userAllowedDao:	POS\Model\UserAllowedDao
+	enumBraSizeDao:	POS\Model\EnumBraSizeDao
+	enumDrinkDao:	POS\Model\EnumDrinkDao
+	enumGraduationDao:	POS\Model\EnumGraduationDao
+	enumHairColourDao:	POS\Model\EnumHairColourDao
+	enumMaritalStateDao:	POS\Model\EnumMaritalStateDao
+	enumOrientationDao:	POS\Model\EnumOrientationDao
+	enumPenisWidthDao:	POS\Model\EnumPenisWidthDao
+	enumPropertyDao:	POS\Model\EnumPropertyDao
+	enumShapeDao:	POS\Model\EnumShapeDao
+	enumSmokeDao:	POS\Model\EnumSmokeDao
+	enumTallnessDao:	POS\Model\EnumTallnessDao
+	enumVigorDao:	POS\Model\EnumVigorDao
+	commentStatusesDao:	POS\Model\CommentStatusesDao
+	likeStatusCommentDao:	POS\Model\LikeStatusCommentDao
+	commentCofessionsDao:	POS\Model\CommentConfessionsDao
+	likeConfessionCommentDao:	POS\Model\LikeConfessionCommentDao
+	likeConfessionDao:	POS\Model\LikeConfessionDao
+	verificationPhotoRequestsDao: POS\Model\VerificationPhotoRequestsDao
+	NewsDao: POS\Model\NewsDao
+	UsersNewsDao: POS\Model\UsersNewsDao
+	ConversationDao: POS\Model\ConversationDao

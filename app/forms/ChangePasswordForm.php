@@ -9,7 +9,11 @@ use Nette\Utils\Html;
 use POS\Model\UserDao;
 use POS\Model\UserChangePasswordDao;
 use Nette\Application\UI\Form;
+use Nette\Mail\IMailer;
 
+/**
+ * Formulář pro změnu hesla
+ */
 class ChangePasswordForm extends BaseForm {
 
 	/**
@@ -30,20 +34,22 @@ class ChangePasswordForm extends BaseForm {
 	public $mailer;
 	public $userForPassChange;
 
-	public function __construct(UserDao $userDao, UserChangePasswordDao $userChangePasswordDao, $userForPassChange, \Nette\Mail\IMailer $mailer, IContainer $parent = NULL, $name = NULL) {
+	public function __construct(UserDao $userDao, UserChangePasswordDao $userChangePasswordDao, $userForPassChange, IMailer $mailer, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
 		$this->mailer = $mailer;
 		$this->userChangePasswordDao = $userChangePasswordDao;
 		$this->userDao = $userDao;
 		$this->userForPassChange = $userForPassChange;
+
+		$this->addGroup("Změna hesla");
 		$this->addPassword('password', 'Heslo:', 30, 200)
 			->setRequired('Zvolte si heslo')
 			->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaky', 3);
 		$this->addPassword('passwordVerify', 'Heslo pro kontrolu:', 30, 200)
 			->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu')
 			->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password']);
-		$this->addSubmit('send', 'Získat nové heslo');
+		$this->addSubmit('send', 'Změnit heslo');
 		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;

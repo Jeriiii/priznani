@@ -10,26 +10,47 @@ namespace POSComponent\Galleries\Images;
 
 use POS\Model\UserImageDao;
 use POS\Model\ImageLikesDao;
+use POS\Model\CommentImagesDao;
+use POS\Model\LikeImageCommentDao;
+use POSComponent\Comments\ImageComments;
+use POSComponent\BaseLikes\ImageLikes;
 
 class UsersCompetitionsGallery extends BaseGallery {
-
-	/**
-	 * @var \POS\Model\UsersCompetitionsDao
-	 */
-	public $userImageDao;
 
 	/**
 	 * @var \POS\Model\ImageLikesDao
 	 */
 	public $imageLikesDao;
-	protected $image;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao) {
-		parent::__construct($images, $image, $gallery, $domain, $partymode);
+	/**
+	 * @var \POS\Model\CommentImagesDao
+	 */
+	public $commentImagesDao;
+
+	/**
+	 * @var \POS\Model\LikeImageCommentDao
+	 */
+	public $likeImageCommentDao;
+
+	/**
+	 * @var ActiveRow|ArrayHash $loggedUser
+	 */
+	public $loggedUser;
+
+	/**
+	 * @var int ID uživatele, kterému patří obrázek.
+	 */
+	private $ownerID;
+
+	public function __construct($images, $image, $gallery, $domain, $partymode, LikeImageCommentDao $likeImageCommentDao, UserImageDao $userImageDao, CommentImagesDao $commentImagesDao, ImageLikesDao $imageLikesDao, $loggedUser, $parent, $name) {
+		parent::__construct($images, $image, $gallery, $domain, $partymode, $parent, $name);
 		parent::setUserImageDao($userImageDao);
 		$this->image = $image;
-		$this->userImageDao = $userImageDao;
 		$this->imageLikesDao = $imageLikesDao;
+		$this->commentImagesDao = $commentImagesDao;
+		$this->likeImageCommentDao = $likeImageCommentDao;
+		$this->loggedUser = $loggedUser;
+		$this->ownerID = 0; //neexistuje vlastník
 	}
 
 	public function render() {
@@ -37,12 +58,17 @@ class UsersCompetitionsGallery extends BaseGallery {
 	}
 
 	public function createComponentLikes() {
-		if ($this->presenter->user->isLoggedIn()) {
-			$likes = new \POSComponent\BaseLikes\ImageLikes($this->imageLikesDao, $this->userImageDao, $this->image, $this->presenter->user->id);
-		} else {
-			$likes = new \POSComponent\BaseLikes\ImageLikes();
-		}
-		return $likes;
+		return new ImageLikes($this->imageLikesDao, $this->image, $this->loggedUser->id, $this->ownerID);
+	}
+
+	/**
+	 * Komponenta pro komentování obrázků
+	 * @return \POSComponent\Comments\ImageComments
+	 */
+	public function createComponentComments() {
+		$imageComments = new ImageComments($this->likeImageCommentDao, $this->commentImagesDao, $this->image, $this->loggedUser, $this->ownerID);
+		$imageComments->setPresenter($this->getPresenter());
+		return $imageComments;
 	}
 
 }

@@ -1,9 +1,21 @@
 {* Latte template *}
 
 {block menu}
-<nav>
-	<span><a n:href="default $userID">Zeď</a></span>
-	<span><a n:href="userImages $userID">Fotky</a></span>
-	<span><a n:href="userInfo $userID">Informace</a></span>
-</nav>
+{var $buttonCount = 3}{*změnit podle počtu tlačítek*}
+{*if $user->loggedIn && $user->id == $userID}
+	{var $buttonCount += 2}
+{/if*}
+
+<nav class="profile-menu btn-cnt-{$buttonCount}">
+	<a n:href="default $userID">ZEĎ</a>
+	<a n:href="userImages $userID" class="{if isset($active) && $active == "images"}active{/if}">FOTKY</a>
+	<a n:href="userInfo $userID" class="{if isset($active) && $active == "info"}active{/if}">INFORMACE</a>
+	{if $userData->verified}
+		{if $asked}
+			<span>Žádost o ověřovací fotku podána</span>
+		{else}
+			<span><a n:href="requestConfirmPhoto! $userID, $user->id">Zádost o ověřovací fotku</a></span>
+		{/if}
+	{/if}
+	</nav>
 {/block}

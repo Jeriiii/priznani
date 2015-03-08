@@ -7,7 +7,7 @@
 /**
  * Description of AcceptImagesPresenter
  *
- * @author Daniel
+ * @author Daniel Holubář
  */
 
 namespace AdminModule;
@@ -20,57 +20,99 @@ use NetteExt\Path\GalleryPathCreator;
 
 class AcceptImagesPresenter extends AdminSpacePresenter {
 
-	/**
-	 * @var \POS\Model\UserImageDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ActivitiesDao @inject */
+	public $ActivitiesDao;
+
+	/** @var \POS\Model\UserGalleryDao @inject */
 	public $userGalleryDao;
 
-	/**
-	 * @var \POS\Model\CompetitionsImagesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CompetitionsImagesDao @inject */
 	public $competitionsImagesDao;
 
+	/** @var \POS\Model\UserDao @inject */
+	public $userDao;
+
+	/** @var Nette\Database\Table\Selection Uživatelské obrázky */
+	public $userImages;
+
+	/** @var Nette\Database\Table\Selection Obrázky ze soutěží. */
+	public $compImages;
+
+	/** @var Nette\Database\Table\Selection Ověřovací obrázky. */
+	public $verificationImages;
+
+	/** @var Nette\Database\Table\Selection Neykontrolované automaticky schválené obrázky. */
+	public $userNotCheckImages;
+
+	/** Načte neschválené obrázky z DB */
+	private function setImages() {
+		$this->verificationImages = $this->userImageDao->getVerifUnapprovedImages();
+		$this->compImages = $this->competitionsImagesDao->getUnapproved();
+		$this->userImages = $this->userImageDao->getUnapproved();
+		$this->userNotCheckImages = $this->userImageDao->getNotCheck();
+	}
+
+	/**
+	 * Nastaví countery do templaty
+	 */
+	private function setCounters() {
+		$this->template->usrCount = $this->userImages->count(UserImageDao::TABLE_NAME . ".id");
+		$this->template->compCount = $this->compImages->count("id");
+		$this->template->verCount = $this->verificationImages->count(UserImageDao::TABLE_NAME . ".id");
+		$this->template->notCheckCount = $this->userNotCheckImages->count(UserImageDao::TABLE_NAME . ".id");
+	}
+
 	public function renderDefault() {
-		$compImages = $this->competitionsImagesDao->getUnapproved();
-		$compIndexes = $this->getImagesIndexes($compImages);
+		$this->setImages();
+		$this->setCounters();
 
-		$images = $this->userImageDao->getUnapproved($compIndexes);
-		$this->template->images = $images;
-
-		$this->template->usrCount = $images->count("id");
-		$this->template->compCount = $compImages->count("id");
+		$this->template->images = $this->userImages;
 	}
 
 	public function renderAcceptCompetitionImages() {
-		$images = $this->competitionsImagesDao->getUnapproved();
-		$compIndexes = $this->getImagesIndexes($images);
-		$usrImages = $this->userImageDao->getUnapproved($compIndexes);
-		$this->template->images = $images;
+		$this->setImages();
+		$this->setCounters();
 
-		$this->template->compCount = $images->count("id");
-		$this->template->usrCount = $usrImages->count("id");
+		$this->template->images = $this->compImages;
 	}
 
-	public function handleAcceptImage($imgId, $galleryId) {
+	public function renderAcceptVerificationImages() {
+		$this->setImages();
+		$this->setCounters();
+
+		$this->template->images = $this->verificationImages;
+	}
+
+	public function renderCheckUserImages() {
+		$this->setImages();
+		$this->setCounters();
+
+		$this->template->images = $this->userNotCheckImages;
+	}
+
+	/**
+	 * Schvaluje uživatelské a ověřovací obrázky
+	 * @param type $imgId ID obrázku
+	 * @param type $galleryId ID galerie
+	 * @param type $userID ID vlastníka obrázku
+	 */
+	public function handleAcceptImage($imgId, $galleryId, $userID) {
 		$image = $this->userImageDao->approve($imgId);
+		if ($image->gallery->verification_gallery) {
+			$this->userDao->verify($userID);
+			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "verification");
+		} else {
+			$user = $this->userDao->find($userID);
+			$this->streamDao->aliveGallery($galleryId, $userID, $user->property->preferencesID);
+			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "approve");
+		}
 
-		$userID = $this->userGalleryDao->find($image->galleryID)->userID;
-
-		$this->streamDao->aliveGallery($galleryId, $userID);
 		$this->invalidateMenuData();
 
 		if ($this->isAjax("imageAcceptance")) {
@@ -80,11 +122,30 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		}
 	}
 
-	public function handleDeleteImage($imgId, $galleryId) {
+	/**
+	 * Odmítne oběřovací foto
+	 * @param type $imgID ID obrázku
+	 */
+	public function handleRejectImage($imgID) {
+		$image = $this->userImageDao->reject($imgID);
+		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $image->gallery->userID, $imgID, "reject");
+
+		if ($this->isAjax("imageAcceptance")) {
+			$this->redrawControl('imageAcceptance');
+		} else {
+			$this->redirect("this");
+		}
+	}
+
+	/**
+	 * Maže uživatelské a ověřovací obrázky
+	 * @param type $imgId ID obrázku, který bude smazán
+	 */
+	public function handleDeleteImage($imgId) {
 		$image = $this->userImageDao->find($imgId);
 		$userID = $image->gallery->userID;
 
-		$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryId, $userID);
+		$galleryFolder = GalleryPathCreator::getUserGalleryFolder($image->galleryID, $userID);
 		File::removeImage($image->id, $image->suffix, $galleryFolder);
 
 		$image->delete();
@@ -97,10 +158,17 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		}
 	}
 
+	/**
+	 * Schvaluej obrázky ze soutěže
+	 * @param type $imageID ID obrázku, který bude schválen
+	 */
 	public function handleAcceptCompetitionImage($imageID) {
 		$comImage = $this->competitionsImagesDao->acceptImage($imageID);
-		$this->streamDao->aliveGallery($comImage->image->galleryID, $comImage->image->gallery->userID);
+		$user = $comImage->image->gallery->user;
+		$this->streamDao->aliveGallery($comImage->image->galleryID, $user->id, $user->property->preferencesID);
 		$this->invalidateMenuData();
+
+		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $comImage->image->gallery->userID, $comImage->imageID, "approve");
 
 		if ($this->isAjax()) {
 			$this->redrawControl('imageAcceptance');
@@ -109,8 +177,18 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		}
 	}
 
+	/**
+	 * Maže obrázky ze soutěže
+	 * @param type $imageID ID obrázku, který bude samzán
+	 */
 	public function handleDeleteCompetitionImage($imageID) {
-		$this->competitionsImagesDao->delete($imageID);
+		$image = $this->competitionsImagesDao->find($imageID);
+		$userID = $image->gallery->userID;
+
+		$galleryFolder = GalleryPathCreator::getUserGalleryFolder($image->galleryID, $userID);
+		File::removeImage($image->id, $image->suffix, $galleryFolder);
+
+		$image->delete();
 		$this->invalidateMenuData();
 
 		if ($this->isAjax("imageAcceptance")) {
@@ -120,14 +198,48 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		}
 	}
 
-	public function getImagesIndexes($images) {
-		$indexes = array();
+	/**
+	 * schválí fotku jako intimní
+	 * @param type $imgId ID obrázku
+	 * @param type $galleryId ID galerie
+	 * @param type $userID ID uživatele, kterému patří obrázek
+	 */
+	public function handleAcceptIntimImage($imgId, $galleryId, $userID) {
 
-		foreach ($images as $item) {
-			$indexes[] = $item->image->id;
+		$image = $this->userImageDao->approveIntim($imgId);
+		if ($image->gallery->verification_gallery) {
+			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "verification");
+		} else {
+			$user = $this->userDao->find($userID);
+			$this->streamDao->aliveGallery($galleryId, $userID, $user->property->preferencesID);
+			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "approve");
 		}
 
-		return $indexes;
+		if ($this->isAjax("imageAcceptance")) {
+			$this->redrawControl('imageAcceptance');
+		} else {
+			$this->redirect("this");
+		}
+	}
+
+	/**
+	 * schválí fotku jako intimní
+	 * @param type $imgId ID obrázku
+	 */
+	public function handleAcceptIntimComImage($imgId) {
+
+		$comImage = $this->competitionsImagesDao->acceptImageIntim($imgId);
+		$user = $comImage->image->gallery->user;
+		$this->streamDao->aliveGallery($comImage->image->galleryID, $user->id, $user->property->preferencesID);
+		$this->invalidateMenuData();
+
+		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $comImage->image->gallery->userID, $comImage->imageID, "approve");
+
+		if ($this->isAjax("imageAcceptance")) {
+			$this->redrawControl('imageAcceptance');
+		} else {
+			$this->redirect("this");
+		}
 	}
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 use POSComponent\Galleries\Images\UsersCompetitionsGallery;
-use POSComponent\Galleries\UserImagesInGallery\CompetitionsImagesInGallery;
+use POSComponent\Galleries\UserImagesGalleryThumbnails\CompetitionsGalleryIamgesThumbnails;
 use Nette\Application\UI\Form as Frm;
 
 /*
@@ -67,6 +67,18 @@ class UsersCompetitionsPresenter extends BasePresenter {
 	 */
 	public $imageLikesDao;
 
+	/**
+	 * @var POS\Model\CommentImagesDao
+	 * @inject
+	 */
+	public $commentImagesDao;
+
+	/**
+	 * @var POS\Model\LikeImageCommentDao
+	 * @inject
+	 */
+	public $likeImageCommentDao;
+
 	public function actionDefault($imageID, $galleryID) {
 		//určitá galerie
 		if (!empty($galleryID)) {
@@ -91,7 +103,10 @@ class UsersCompetitionsPresenter extends BasePresenter {
 
 		if (empty($imageID)) {
 			/* zatím žádný obrázek v galerii není */
-			$this->redirect("Competition:uploadImage");
+			if (empty($galleryID)) {
+				$this->gallery = $this->usersCompetitionsDao->findLast();
+			}
+			$this->redirect("Competition:uploadCompetitionImage", $this->gallery->id);
 		} else {
 			// obrázek nalezen, nastavení obrázku do presenteru
 			$this->imageID = $imageID;
@@ -145,13 +160,13 @@ class UsersCompetitionsPresenter extends BasePresenter {
 	 * Vytvoří komponentu pro procházení fotek galerie
 	 * @return \POSComponent\Galleries\Images\UsersCompetitionsGallery
 	 */
-	public function createComponentGallery() {
+	public function createComponentGallery($name) {
 		$imagesID = $this->competitionsImagesDao->getApprovedByComp($this->gallery->id);
 		$iID = array_keys($imagesID);
 		$images = $this->userImageDao->getAllById($iID);
 		$httpRequest = $this->context->httpRequest;
 		$domain = $httpRequest->getUrl()->host;
-		return new UsersCompetitionsGallery($images, $this->compImage->image, $this->gallery, $domain, $this->partymode, $this->userImageDao, $this->imageLikesDao);
+		return new UsersCompetitionsGallery($images, $this->compImage->image, $this->gallery, $domain, $this->partymode, $this->likeImageCommentDao, $this->userImageDao, $this->commentImagesDao, $this->imageLikesDao, $this->loggedUser, $this, $name);
 	}
 
 	/**
@@ -162,7 +177,7 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		$imagesID = $this->competitionsImagesDao->getApprovedByComp($this->gallery->id);
 		$iID = array_keys($imagesID);
 		$images = $this->userImageDao->getAllById($iID);
-		return new CompetitionsImagesInGallery($images, $this->userDao);
+		return new CompetitionsGalleryIamgesThumbnails($images, $this->userDao);
 	}
 
 	public function createComponentNewImageForm($name) {

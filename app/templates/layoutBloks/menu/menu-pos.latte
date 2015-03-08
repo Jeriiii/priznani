@@ -1,0 +1,27 @@
+
+{define posicons}
+    <a title="Hlavní stránka" n:href=":OnePage:" class="first"></a>
+    {*<a n:href=":Page:default url => poradna-o-sexu" class="second"></a>*}
+    {*<a n:href="this" class="third"></a>*}
+    <a title="Erotické hry" n:href=":Eshop:game" class="fourth"></a>
+    <a title="Soutěže" n:href=":Competition:list" class="fifth"></a>
+    <a title="Bonusy" n:href=":Page:metro" class="sixth"></a>
+{/}
+
+{define posmenu}
+	{if $user->isLoggedIn()}
+    <a n:href=":OnePage:" class="first">Seznamka</a>
+	{else}
+	<a n:href=":Sign:in" class="first">Přihlášení</a>
+	<a n:href=":Sign:registration" class="first">Registrace</a>
+	{/if}
+    {*<a n:href=":Page:default url => poradna-o-sexu" class="second">Poradna</a>*}
+    {*<a n:href="this" class="third">Seznamka (připravujeme)</a>*}
+    <a n:href=":Eshop:game" class="fourth">Erotické hry</a>
+	{if $user->isLoggedIn()}
+    <a n:href=":Competition:list" class="fifth">Soutěže a galerie</a>
+    <a n:href=":Page:metro" class="sixth">Bonusy</a>
+	<a n:href="signOut!" class="sixth">Odhlášení</a>
+	{/if}
+	<a n:href=":Chat:valentyn" title="Valentýnský chat">Valentýnský chat</a>
+{/}

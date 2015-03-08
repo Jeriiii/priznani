@@ -5,8 +5,7 @@
  *
  * Základní třída pro všechny presentery nastavující společné části.
  *
- * @author     Petr Kukrál
- * @package    jkbusiness
+ * @author	Petr Kukrál
  */
 use Nette\Application\UI\Form as Frm,
 	\Navigation\Navigation,
@@ -14,6 +13,15 @@ use Nette\Application\UI\Form as Frm,
 	Nette\Http\Url,
 	Nette\Http\Request;
 use Nette\Security\User;
+use POS\Ajax\ExampleHandle,
+	POS\Ajax\AjaxCrate,
+	POS\Ajax\ChatConversationsHandle;
+use POS\Ajax\ActivitesHandle;
+use POSComponent\Payment;
+use NetteExt\Serialize\Serializer;
+use NetteExt\Serialize\Relation;
+use POS\Model\PaymentDao;
+use Nette\Http\SessionSection;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -21,90 +29,113 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	public $domain;
 	public $partystyle;
 
+	/**
+	 * Proměnná s uživatelskými daty (cachovaný řádek z tabulky users). Obsahuje relace na profilFoto, gallery, property
+	 * @var ArrayHash|ActiveRow řádek z tabulky users
+	 */
+	protected $loggedUser;
+
 	/* modes */
 	public $partymode = FALSE;
 	public $sexmode = FALSE;
 	public $advicemode = FALSE;
 	public $datemode = FALSE;
 
-	/* proměnné pro css překlad */
+	/** @var array proměnné pro css překlad */
 	protected $cssVariables = array();
-	/* proměnné pro js překlad */
+
+	/** @var array proměnné pro js překlad */
 	protected $jsVariables = array();
 
-	/**
-	 * @var \POS\Model\ActivitiesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ActivitiesDao @inject */
 	public $activitiesDao;
 
-	/**
-	 * @var \POS\Chat\ChatManager
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
+	public $userDao;
+
+	/** @var \POS\Chat\ChatManager @inject */
 	public $chatManager;
+
+	/** @var \POS\Ajax\AjaxObserver @inject */
+	public $ajaxObserver;
+
+	/** @var \POS\Listeners\Services\ActivityReporter @inject */
+	public $activityReporter;
+
+	/** @var \POS\Model\PaymentDao @inject */
+	public $paymentDao;
 
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
+		if ($this->getUser()->isLoggedIn()) {
+			$this->activityReporter->handleUsersActivity($this->getUser());
+			$section = $this->getSectionLoggedUser();
+			if (empty($section->loggedUser)) {
+				$this->calculateLoggedUser();
+			}
+			$this->loggedUser = $section->loggedUser;
+			$this->userDao->setActive($this->loggedUser->id);
+		}
+
+		$this->viewedActivity();
+	}
+
+	/**
+	 * Pokud se nachází v adrese activityViewedId, označí aktivitu jako přečtenou
+	 */
+	public function viewedActivity() {
+		$httpRequest = $this->context->getByType('Nette\Http\Request');
+		$activityViewedID = $httpRequest->getQuery('activityViewedId');
+		if (!empty($activityViewedID)) {
+			$this->activitiesDao->markViewed($activityViewedID);
+		}
+	}
+
+	/**
+	 * @return Nette\Http\Session|Nette\Http\SessionSection
+	 */
+	protected function getSectionLoggedUser() {
+		$sectionLoggedUser = $this->getSession('loggedUser');
+		return $sectionLoggedUser;
+	}
+
+	/**
+	 * Uloží do sečny aktuální data o přihlášeném uživateli.
+	 */
+	public function calculateLoggedUser() {
+		$user = $this->userDao->getUser($this->getUser()->getId());
+		$section = $this->getSectionLoggedUser();
+		$section->setExpiration('20 minutes');
+
+		$relProfilPhoto = new Relation("profilFoto");
+		$relGallery = new Relation("gallery");
+		$relProperty = new Relation("property");
+		$relCouple = new Relation("couple");
+		$relProfilPhoto->addRel($relGallery);
+
+		$ser = new Serializer($user);
+		$ser->addRel($relProfilPhoto);
+		$ser->addRel($relProperty);
+		$ser->addRel($relCouple);
+
+		$sel = (array) $ser->toArrayHash();
+		/* vytazeni jen jednoho radku */
+		$userRow = array_shift($sel);
+		$section->loggedUser = $userRow;
 	}
 
 	public function beforeRender() {
-		if ($this->name == "Competition") {
-			$this->template->fbToDatabase = FALSE;
-			if ($this->action == "default") {
-				$this->template->existForm = FALSE;
-			} else {
-				$this->template->existForm = TRUE;
-			}
-		} else {
-			$this->template->existForm = TRUE;
-			$this->template->fbToDatabase = TRUE;
-			if ($this->name != "Sign") {
-				//die("Stránky přiznáníosexu jsou dočasně mimo provoz.");
-			}
-		}
 		$this->template->partymode = $this->partymode;
 		if ($this->getUser()->isLoggedIn()) {
 			$this->template->identity = $this->getUser()->getIdentity();
 		}
-//		$user = $this->getUser();
-//		$authorizator = new MyAuthorizator;
-//		$httpRequest = $this->context->httpRequest;
-//		$this->domain = $httpRequest
-//							->getUrl()
-//							->host;
-//
-//		if($this->domain == "priznanizparby" || $this->domain == "priznanizparby.cz" || $httpRequest->getQuery('url') == "priznanizparby")
-//		{
-//			$this->partystyle = TRUE;die();
-//		}
-//		else
-//		{
-//			$this->partystyle = FALSE;
-//		}
-//		$this->template->partystyle = $this->partystyle;
 
 		$this->template->domain = $this->domain;
 
 		$this->template->facebook_html = "";
 		$this->template->facebook_script = "";
-
-		$name = "UA-34882037-3";
-		$this->template->google_analytics = "
-				<script type='text/javascript'>
-					var _gaq = _gaq || [];
-					  _gaq.push(['_setAccount', '" . $name . "']);
-					  _gaq.push(['_trackPageview']);
-
-					  (function() {
-						var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-						ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-						var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-					  })();
-				</script>
-			";
-
+		$this->template->ajaxObserverLink = $this->link('ajaxRefresh!'); //odkaz pro ajaxObserver na pravidelne pozadavky
 
 		$this->fillJsVariablesWithLinks();
 	}
@@ -163,7 +194,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 * @return \POSComponent\Chat\PosChat
 	 */
 	protected function createComponentChat($name) {
-		return new POSComponent\Chat\PosChat($this->chatManager, $this, $name);
+		return new POSComponent\Chat\PosChat($this->chatManager, $this->loggedUser, $this, $name);
 	}
 
 	/**
@@ -176,20 +207,19 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$nav->setMenuTemplate(APP_DIR . '/components/Navigation/usermenu.phtml');
 		$navigation = array();
 
-		//prihlaseny uzivatel
-		if ($this->getUser()->isLoggedIn()) {
 
+		if ($this->getUser()->isLoggedIn()) {
+//prihlaseny uzivatel
 			if ($user->isInRole('admin') || $user->isInRole('superadmin')) {
 				$navigation["Administrace"] = $this->link(":Admin:Admin:default");
 			}
 
+			$navigation["Editovat profil"] = $this->link(":Profil:Edit:");
+			$navigation["Hledat uživatele"] = $this->link(":Search:Search:");
 			$navigation["Moje galerie"] = $this->link(":Profil:Galleries:");
-//			$navigation["Přiznání"] = $this->link(":Page:");
-//			$navigation["Nastavení"] = $this->link("#");
 			$navigation["Odhlásit se"] = $this->link(":Sign:out");
-
-			//neprihlaseny uzivatel
 		} else {
+//neprihlaseny uzivatel
 			$navigation["Přihlášení"] = $this->link(":Sign:in");
 			$navigation["Registrace"] = $this->link(":Sign:registration");
 		}
@@ -208,7 +238,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 * @return \Activities Komponenta aktivit
 	 */
 	protected function createComponentActivities() {
-		$activities = new Activities($this->getUser()->id, $this->activitiesDao);
+		$activities = new Activities($this->activitiesDao, $this->loggedUser, $this->paymentDao);
 		return $activities;
 	}
 
@@ -276,7 +306,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			return cssmin::minify($code);
 		});
 
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
@@ -300,10 +330,12 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'mobile/responsive-menu.less',
 			'chat/jquery.ui.chatbox.css',
 			'chat/default.less',
-			'chat/jquery-ui.less'
+			'chat/jquery-ui.less',
+			'form.css',
+			'variables.less'
 		));
 
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
@@ -318,7 +350,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 		$files->addFiles(array('bootstrap/helpNew/bootstrap.less'));
 
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
@@ -331,13 +363,31 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			return $packer->pack();
 		});
 
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
 	public function createComponentJsLayout() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
-		$files->addFiles(array('iedebug.js', 'baseAjax.js', 'order.js', 'fbBase.js', 'leftMenu.js', 'user-layout-menu.js', '../nette.ajax.js'));
+		$files->addFiles(array(
+			'../cookies.js',
+			'iedebug.js',
+			'baseAjax.js',
+			/* 'order.js', */
+			'fbBase.js',
+			/* 'leftMenu.js', */
+			'../nette.ajax.js',
+			'initAjax.js',
+			'../mobile/responsive-menu.js',
+			'../forms/netteForms.js',
+			'../ajaxObserver/core.js',
+			'../ajaxBox/ajaxBox.js',
+			'../ajaxBox/ajaxbox-standard-init.js',
+			'../ajaxBox/ajaxBox.otherFnc.js',
+			'../features/jquery.slimscroll.js',
+			'../ajaxBox/confirm/confirm.js',
+			'../ajaxBox/popUp/init-simple-popUp.js'
+		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {
@@ -345,18 +395,20 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			return $packer->pack();
 		});
 
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		/* nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu */
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
 	public function createComponentJsLayoutLoggedIn() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
-			'activities.js',
 			'chat/core.js',
 			'chat/init.js',
 			'chat/jquery.ui.chatbox/jquery.ui.chatbox.js',
-			'chat/jquery.ui.chatbox/chatboxManager.js'
+			'chat/jquery.ui.chatbox/chatboxManager.js',
+			'chat/toogleContacts.js',
+			'ajaxBox/ajaxbox-signed-in-init.js',
+			'ajaxBox/activities/activities.js',
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
@@ -438,6 +490,32 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$this->getUser()->logout();
 		$this->flashMessage("Byl jste úspěšně odhlášen");
 		$this->redirect('this');
+	}
+
+	/**
+	 * Zpracování požadavku ajaxObserveru viz dokumentace "ajaxObserver"
+	 */
+	public function handleAjaxRefresh() {
+		if ($this->isAjax()) {
+			$handles = new AjaxCrate();
+
+			//$handles->addHandle('chat', new ExampleHandle()); //příklad
+			$handles->addHandle('chatConversationWindow', new ChatConversationsHandle($this->chatManager, $this->getUser()->getId()));
+			$handles->addHandle('activities-observer', new ActivitesHandle($this->activitiesDao, $this->getUser()->getId()));
+			$this->ajaxObserver->sendRefreshRequests($this, $handles);
+		}
+	}
+
+	/**
+	 * Sign in form component factory.
+	 * @return Nette\Application\UI\Form
+	 */
+	protected function createComponentSignInForm($name) {
+		return new Frm\signInForm($this->backlink, $this, $name);
+	}
+
+	protected function createComponentPayment($name) {
+		return new Payment($this, $name);
 	}
 
 }

@@ -1,22 +1,12 @@
 {block head}
-	<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
-	<link rel="stylesheet" href="{$basePath}/bootstrap/css/bootstrap.css" type="text/css">
+{control css 'search/default.less'}
 {/block}
 {block foot}
-	<script type="text/javascript" src="{$basePath}/js/slimbox2.js" ></script>
 {/block}
 {block content}
 
-<h1>Vyhledávání osob</h1>
+{includeblock 'navigation/searchNavigation.latte'}
 
-<a n:href="Search:lastHour">V poslední hodině</a>
-
-<a n:href="Search:newlyRegistered">Nově registrovaní</a>
-
-<a n:href="Search:nearMe">Blízko mě</a>
-
-<a n:href="Search:advancedSearch">Pokročilé hledání</a>
-
-{control baseSearch}
+{control bestMatchSearch 'listAll'}
 
 {/block}

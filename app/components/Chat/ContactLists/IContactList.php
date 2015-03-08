@@ -7,7 +7,7 @@
 namespace POSComponent\Chat;
 
 /**
- * Obecná komponenta pro vykreslení seznamu konverzací
+ * Obecná komponenta pro vykreslení seznamu kontaktů
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
 interface IContactList {

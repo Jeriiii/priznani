@@ -1,0 +1,28 @@
+{layout '../BaseUserGalleryImagesThumbnails/baseUserGalleryImagesThumbnails.latte'}
+{define addNewImage}
+{if $private}
+	{if $paying}
+		<div class="img-container">
+			<img src="{$basePath}/images/layout/add_photo.jpg" width="200px" height="200px"/>			
+			<a href="{plink Galleries:imageNew galleryID => $galleryID}">Přidat novou fotku</a>           
+		</div>
+	{/if}
+{else}
+	<div class="img-container">
+		<img src="{$basePath}/images/layout/add_photo.jpg" width="200px" height="200px"/>			
+		<a href="{plink Galleries:imageNew galleryID => $galleryID}">Přidat novou fotku</a>           
+	</div>
+{/if}
+{/}
+
+{define imageEditButtons}
+{if !($private && !$paying)} {* tlačítka se nezobrazí, pokud je galerie private a už. je neplatící *}
+		<a class="btn-action btn-edit" href="{plink Galleries:editGalleryImage imageID => $image->id, galleryID => $image->galleryID, redirekt => FALSE}"  title="editovat fotku"></a>
+		{var $link = array('deleteImage!', array('id_image' => $image->id, 'id_gallery' => $image->galleryID, 'redirekt' => FALSE) )}
+		{control deleteImage $image->id, $image->name, $link, "Smazat obrázek", "Opravdu chcete smazat obrázek?"}
+{/if}
+{/}
+
+{define imageLink}
+	<a class="view" href="{plink Galleries:image imageID => $image->id, galleryID => $image->galleryID}">{$image->name}</a>
+{/}

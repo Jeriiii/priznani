@@ -1,0 +1,59 @@
+/*
+* @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
+*//* 
+    Created on : 25.11.2014, 11:36:58
+    Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
+*/
+
+#addProfilePhotoWindow .cropContainer{
+	position: relative;
+	
+	div{
+		position: absolute !important;
+	}
+}
+
+#addProfilePhotoWindow .cropContainer img{
+	display: block;
+}
+
+#addProfilePhotoWindow{
+	display: none;
+}
+
+.posPopUp{
+	
+	p.instructions{
+		padding: 10px 0;
+		font-size: 13px;
+	}
+	
+	&.withImage{
+	
+		width: 1020px;
+		height: 600px;
+
+		.ajaxBoxContent{
+			height: 535px;
+		}
+		
+		.imgCropInput, label{
+			display: none;
+		}
+	
+	}
+	
+	form{
+		
+		padding: 20px 10px;
+		
+		label{
+			font-weight: 600;
+			padding: 5px 10px 0 10px;
+		}
+		
+		input[type='file']{
+			padding: 5px 10px;
+		}
+	}
+}

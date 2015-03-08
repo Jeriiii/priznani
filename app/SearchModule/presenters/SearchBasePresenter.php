@@ -7,4 +7,10 @@ namespace SearchModule;
  */
 class SearchBasePresenter extends \BasePresenter {
 
+	public function startup() {
+		parent::startup();
+
+		$this->checkLoggedIn();
+	}
+
 }

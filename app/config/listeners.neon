@@ -1,0 +1,8 @@
+services:
+	activityReporter: POS\Listeners\Services\ActivityReporter
+	coinListener:
+		class: POS\Listeners\CoinListener
+		tags: [kdyby.subscriber]
+	scoreListener:
+		class: POS\Listeners\ScoreListener
+		tags: [kdyby.subscriber]

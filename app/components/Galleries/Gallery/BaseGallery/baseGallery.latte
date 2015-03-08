@@ -1,20 +1,28 @@
 {includeblock 'baseBlocks.latte'}
 {snippet}
 	<div id="top_container">
-	    <h2 id="image_name">{$image->name|firstUpper}{ifset #isApprovedText}{include #isApprovedText}{/ifset}</h2>
+		{if empty($gallery->verification_gallery)}
+			<h2 id="image_name">{$image->name|firstUpper}{ifset #isApprovedText}{include #isApprovedText}{/ifset}</h2>
+		{else}
+			<h2 id="image_name">{$image->name|firstUpper}{if $image->approved}<br /> - schváleno{else}<br />{if $image->rejected} - vráceno{else} - neschváleno{/if}{/if}</h2>
+		{/if}
 	    {ifset #uploadImage}
 			{include #uploadImage}
 		{/ifset}
-	    {ifset $username}<span class="username">{$username}</span>{/ifset}
+		{ifset #userProfilLink}
+			{include #userProfilLink}
+		{/ifset}
 	    <div class="clear"></div>
 	</div>
-	
+
 	<div id="image_container">
 		<div id="image_content">
 			<div id="image">
-				<div class="fb-like-container" >
-					{include #fbLike} {* baseBlocks.latte *}
-				</div>
+				{ifset #fbLike}
+					<div class="fb-like-container" >
+						{include #fbLike} {* baseBlocks.latte *}
+					</div>
+				{/ifset}
 				{include #imageMainScreen}
 				<div class="clear"></div>
 				<div id="voting"></div>
@@ -37,8 +45,16 @@
 					{include #imageComment}
 				</p>
 				<div class="float-left btn-list">
-					{*include #likes*}
+					{ifset #likes}
+						{include #likes}
+					{/ifset}
 					{include #menuButtons}
+				</div>
+				<div class="clear"></div>
+				<div class="big-comments">
+					{ifset #comments}
+						{include #comments}
+					{/ifset}
 				</div>
 				<div class="clear"></div>
 			</div>
@@ -49,8 +65,8 @@
 		{*<div class="image-links">
 			{include #othersImages}{* baseBlocks.latte */}
 		</div>*}
-	</div>	
-	
+	</div>
+
 	<div id="link-and-fb">
 		{* udaje pro adminy *}
 		{if $user->isInRole("superadmin")}
@@ -58,7 +74,9 @@
 			{ifset #infoAboutOvner}{include #infoAboutOvner}{/ifset}
 			{include #adminRemoveImage} {* baseBlocks.latte *}
 		{/if}
-		{include #fbComment}{* baseBlocks.latte *}
+		{ifset #fbComment}
+			{include #fbComment}{* competitionGallery.latte *}
+		{/ifset}
 	</div>
 	<script type="text/javascript">FB.XFBML.parse(document.getElementById('fb'));//revalidace fb komponent</script>
 	<div id="horadd" style="text-align: center; margin-bottom: 10px;">

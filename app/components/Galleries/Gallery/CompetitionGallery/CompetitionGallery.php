@@ -31,8 +31,8 @@ class CompetitionGallery extends BaseGallery {
 	 */
 	public $imageDao;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, ImageDao $imageDao, GalleryDao $galleryDao, StreamDao $streamDao) {
-		parent::__construct($images, $image, $gallery, $domain, $partymode);
+	public function __construct($images, $image, $gallery, $domain, $partymode, ImageDao $imageDao, GalleryDao $galleryDao, StreamDao $streamDao, $parent, $name) {
+		parent::__construct($images, $image, $gallery, $domain, $partymode, $parent, $name);
 
 		$this->streamDao = $streamDao;
 		$this->galleryDao = $galleryDao;

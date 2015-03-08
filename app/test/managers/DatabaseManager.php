@@ -75,24 +75,25 @@ class DatabaseManager {
 	 * Executes initialization scripts from init folder
 	 */
 	function initScripts() {
-		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$ON_START_FOLDER_NAME);
+		//$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$ON_START_FOLDER_NAME);
 	}
 
 	/**
 	 * Executes scripts from feature start folder
 	 */
 	function featureStartScripts() {
-		$installDB = new InstallDB($this->databaseDao);
-		//$installDB->instalPostestDb();
+		$installDB = new InstallDB($this->databaseDao, TRUE);
 		$installDB->dataTestDb();
-		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_START_FOLDER_NAME);
+//		 stará verze
+//		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_START_FOLDER_NAME);
 	}
 
 	/**
 	 * Executes scripts from feature end folder
 	 */
 	function featureEndScripts() {
-		$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_END_FOLDER_NAME);
+		// stará verze
+		//$this->executeAllSqlInFolder($this->sqlFolder . '/' . self::$FEATURE_END_FOLDER_NAME);
 	}
 
 	/**

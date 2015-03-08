@@ -1,20 +1,34 @@
 {block head}
-    {control css 'onepage/default.less', 'stream/list.less'}
+    {control css 'onepage/default.less', 'stream/list.less', 'comments/comments.less', 'imgareaselect/default.less', 'imgareaselect/inWindow.less'}
 {/block}
 
 {block content}
 <section id="onepage">
-	<nav id="stream-menu">
-	    <a n:href=":Profil:Galleries:default" class="btn-main btn-small" title="Editovat profil">Moje galerie</a>
-	    <a n:href=":Profil:Galleries:userGalleryNew" class="btn-main btn-small" title="Profil">Vytvořit galerii</a>
-		{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
-	    <div class="clear"></div>
-	</nav>
-	{control userStream}
-	<div id="right-dock">
-	    {*reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama *}
+	{includeblock 'navigation.latte'}
+	<div id="best-match">
+		{if $user->isLoggedIn()}
+			{if $loggedUser->propertyID}
+				{control bestMatchSearch 'listFew'}
+			{else} {* vyzve uživatele k dokončení registrace *}
+				Pokud se chcete seznámit, vyplňte o sobě <a n:href="DatingRegistration:" class="btn-main btn-small">další informace</a>.
+			{/if}
+		{/if}
 	</div>
+	{control userStream}
+	<a id="right-dock" n:href=":UsersCompetitions:">
+		<h2>Valentýnská soutěž na datenode klikni <span class="link">zde</span>:</h2>
+		<h3>1. místo:</h3>
+		<p>Masážní vibrátor Power</p>
+		<img src="http://www.ruzovyslon.cz/images/stories/3000000263/akupower.jpg" height="100px">
+		<h3>2. místo:</h3>
+		<p>Silikonový vibrátor Borůvka</p>
+		<img src="http://www.ruzovyslon.cz/images/stories/3000009787/boruvka2-1.jpg" height="100px">
+		<h3>3. místo:</h3>
+		<p>Venušiny kuličky</p>
+		<img src="http://www.ruzovyslon.cz/images/stories/3009100011/d5c7ea6ebd97a748d800ab09f6e95db1.jpg" height="100px">
+	</a>
 	<div class="clear"></div>
+
 </section>
 {/block}
 
@@ -22,9 +36,15 @@
 {control js}
 <script>
 	$(document).ready(function () {
+
+		$.convRunAjax = true;
+		$.convOffset = 0;
+		$.convLimit = 5;
+
+		{* záložky u okének na vkládání obsahu/fotek *}
 		$( ".stream-form" ).tabs();
+		{* stream *}
 		$("body").stream({
-			rows: {$count},
 			addoffset: 4
 		});
 	});
@@ -35,6 +55,9 @@
 		$("#frm-userStream-statusForm-message").animate({ height: "200px"}, 500);
 	});
 </script>
+{* je to zvlast schvalne, nejak si to nerozumi s tou minimalizaci*}
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/jquery.imgareaselect.min.js"></script>
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/inits/profilePhoto.js"></script>
 {/block}
 
 

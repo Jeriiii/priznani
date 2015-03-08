@@ -9,6 +9,7 @@ common:
 	includes:
 		- model.neon
 		- localeconection.neon
+		- listeners.neon
 	
 	parameters:
 		facebook:
@@ -37,15 +38,12 @@ common:
 				dsn: '%database.driver%:host=%database.host%;dbname=%database.dbname%'
 				user: %database.user%
 				password: %database.password%
-			chat:
-				dsn: '%chatDatabase.driver%:host=%chatDatabase.host%;dbname=%chatDatabase.dbname%'
-				user: %chatDatabase.user%
-				password: %chatDatabase.password%
 	
 #	testMode: %testMode%
 
 	services:
-		database: @POS\Model\UserDao
+		database: @nette.database.default
+		session: Nette\Http\Session
 
 		#facebook: Facebook( {appId: %facebook.appId%, secret: %facebook.secret%} )
 
@@ -54,6 +52,9 @@ common:
 		authenticator: Authenticator
 
 		chatManager: POS\Chat\ChatManager
+		deviceDetector: NetteExt\DeviceDetector
+		statisticManager: POS\Statistics\StatisticManager
+		ajaxObserver: POS\Ajax\AjaxObserver
 		authorizator:
 			class: Acl
 
@@ -67,27 +68,18 @@ production < common:
 	parameters:
 		database:
 			driver: mysql
-			#host: wm38.wedos.net
-			#dbname: d30935_priznan
-			#user: a30935_priznan
-			#password: EfHKeb7e
-			#host: wm33.wedos.net
-			#dbname: d42750_priznan
-			#user: a42750_priznan
-			#password: 845DjQBp
-			host: wm59.wedos.net
-			dbname: d42750_pos5
-			user: a42750_pos5
-			password: TUuSTbgH
-
-		productionMode: TRUE
+			host: wm48.wedos.net
+			dbname: d42750_pos9
+			user: a42750_pos9
+			password: 5pJtB4ET
+			productionMode: TRUE
 
 		chatDatabase:
-			driver: mysql
-			host: wm41.wedos.net
-			dbname: d42750_poschat
-			user: a42750_poschat
-			password: jVXCEMSR
+			#driver: mysql
+			#host: localhost
+			#dbname: poschat
+			#user: root
+			#password: root
 
 development < common:
 

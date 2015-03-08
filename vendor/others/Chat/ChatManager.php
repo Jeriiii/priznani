@@ -10,6 +10,7 @@ use POS\Model\ChatMessagesDao;
 use \POS\Model\UserDao;
 use POS\Model\FriendDao;
 use POS\Model\PaymentDao;
+use Nette\Http\Session;
 
 /**
  * Správce chatu, používaný pro obecné operace chatu, které se týkají přístupu k modelům
@@ -17,7 +18,7 @@ use POS\Model\PaymentDao;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class ChatManager {
+class ChatManager extends \Nette\Object {
 
 	/**
 	 * DAO pro kontakty
@@ -50,13 +51,22 @@ class ChatManager {
 	private $coder;
 
 	/**
+	 * Sešna k různému použití
+	 * @var Session
+	 */
+	private $session;
+
+	const CHAT_MINUTE_SESSION_NAME = 'minuteChatCache';
+
+	/**
 	 * Standardni konstruktor, predani potrebnych DAO z presenteru
 	 */
-	function __construct(FriendDao $contactsDao, ChatMessagesDao $messagesDao, UserDao $userDao, PaymentDao $paymentDao) {
+	function __construct(FriendDao $contactsDao, ChatMessagesDao $messagesDao, UserDao $userDao, PaymentDao $paymentDao, Session $session) {
 		$this->contactsDao = $contactsDao;
 		$this->messagesDao = $messagesDao;
 		$this->userDao = $userDao;
 		$this->paymentDao = $paymentDao;
+		$this->session = $session;
 		$this->coder = new ChatCoder();
 	}
 
@@ -67,6 +77,19 @@ class ChatManager {
 	 */
 	public function getContacts($userId) {
 		return $this->contactsDao->getUsersContactList($userId);
+	}
+
+	/**
+	 * Vrátí kontakt na admina
+	 * @return \Nette\Database\Table\Selection
+	 */
+	public function getAdminContact() {
+		$superadmin = $this->userDao->find('221');
+		if (empty($superadmin)) {
+			$superadmin = $this->userDao->getInRoleSuperadminLimit(1)->fetch();
+		}
+
+		return $superadmin;
 	}
 
 	/**
@@ -112,6 +135,7 @@ class ChatManager {
 	 * Vrátí posledních několik zpráv z konverzace dvou uživatelů
 	 * @param int $idSender id prvního uživatele
 	 * @param int $idRecipient id druhého uživatele
+	 * @return \Nette\Database\Table\Selection zprávy
 	 */
 	public function getLastMessagesBetween($idSender, $idRecipient) {
 		return $this->messagesDao->getLastTextMessagesBetweenUsers($idSender, $idRecipient, 6);
@@ -146,10 +170,11 @@ class ChatManager {
 	 * Nastaví všechny zprávy s id v poli jako přečtené/nepřečtené
 	 * @param array $ids neasociativni pole idček
 	 * @param boolean $readed přečtená/nepřečtená
+	 * @param int $idUser id příjemce kvůli bezpečnosti
 	 * @return Nette\Database\Table\Selection upravené zprávy
 	 */
-	public function setMessagesReaded($ids, $readed) {
-		return $this->messagesDao->setMultipleMessagesReaded($ids, $readed);
+	public function setMessagesReaded($ids, $idUser, $readed) {
+		return $this->messagesDao->setMultipleMessagesReaded($ids, $idUser, $readed);
 	}
 
 	/**
@@ -173,10 +198,75 @@ class ChatManager {
 
 	/**
 	 * Vrátí poslední zprávu z (téměř) všech konverzací (existuje maximum konverzací)
-	 * @return \Nette\Database\Table\Selection zpravy
+	 * @param int $idUser id uživatele
+	 * @param int $limit limit počtu konverzací
+	 * @param int $offset offset počtu konverzací
+	 * @param bool $forceUpdate při TRUE ignoruje data v sešně a vynutí získání nových
+	 * @return array ActiveRows jako položky pole
 	 */
-	public function getConversations($idUser) {
-		return $this->messagesDao->getLastMessageFromEachSender($idUser, 10);
+	public function getConversations($idUser, $limit = 20, $offset = 0, $forceUpdate = FALSE) {
+		$section = $this->session->getSection(self::CHAT_MINUTE_SESSION_NAME);
+		$section->setExpiration('1 minute');
+		if (empty($section->lastConversations) || $forceUpdate) {
+			$lastChanges = $this->messagesDao->getLastConversationMessagesIDs($idUser, $limit, $offset);
+			$filteredIds = $this->filterConversationIDs($idUser, $lastChanges);
+			if ($offset > 0) {//pokud se doptávám na další věci
+				$section->lastConversations = $this->filterExistingIDs($filteredIds, $section->lastConversations);
+			} else {
+				$section->lastConversations = $filteredIds;
+			}
+		}
+		$conversationsUsersIDs = $section->lastConversations;
+		$messages = array();
+		foreach ($conversationsUsersIDs as $idOfOtherUser) {
+			$messages[] = $this->messagesDao->getLastTextMessagesBetweenUsers($idUser, $idOfOtherUser, 1)->fetch();
+		}
+		return $messages;
+	}
+
+	/**
+	 * Vyfiltruje pole s ID tak, aby žádné nebylo opakováno dvakrát a mělo
+	 * přednost to, které není daný uživatel
+	 * @param int $idUser id uživatele, kterého chceme odfiltrovat
+	 * @param Selection $lastChanges selection z tabulky zpráv s ID
+	 */
+	private function filterConversationIDs($idUser, $lastChanges) {
+		$conversationUsers = array();
+		foreach ($lastChanges as $message) {
+			if ($message->offsetGet(ChatMessagesDao::COLUMN_ID_SENDER) != $idUser) {
+				$correctID = $message->offsetGet(ChatMessagesDao::COLUMN_ID_SENDER);
+			} else {
+				$correctID = $message->offsetGet(ChatMessagesDao::COLUMN_ID_RECIPIENT);
+			}
+			if (!in_array($correctID, $conversationUsers)) {
+				$conversationUsers[] = $correctID;
+			}
+		}
+		return $conversationUsers;
+	}
+
+	/**
+	 * Projde dvě pole plná ID a vrátí z nového pole jen ty hodnoty, které nebyly ve starém
+	 * @param array $newPairs nové pole
+	 * @param array $existing staré pole
+	 * @return array nové pole bez hodnot, co byly ve starém
+	 */
+	private function filterExistingIDs($newPairs, $existing) {
+		$returnArray = array();
+		foreach ($newPairs as $id) {
+			if (!empty($existing) && !in_array($id, $existing)) {
+				$returnArray[] = $id;
+			}
+		}
+		return $returnArray;
+	}
+
+	/**
+	 * Vrátí uživatele s daným ID kvůli profilu
+	 * @param type $id
+	 */
+	public function getUserWithId($id) {
+		return $this->userDao->find($id);
 	}
 
 }

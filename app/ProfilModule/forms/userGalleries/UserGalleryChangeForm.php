@@ -23,8 +23,8 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 	public $userImageDao;
 	private $galleryID;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, $isPaying, $userID, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $isPaying, $userID, $parent, $name);
 		//form
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
@@ -32,23 +32,15 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 
 		$gallery = $this->userGalleryDao->find($galleryID);
 
-		$this->addGroup('Kategorie');
-
-		$this->genderCheckboxes();
-
 		$this->setDefaults(array(
 			"name" => $gallery->name,
 			"description" => $gallery->description,
-			"man" => $gallery->man,
-			"women" => $gallery->women,
-			"couple" => $gallery->couple,
-			"more" => $gallery->more,
+			"private" => $gallery->private
 		));
 
 		$this->addSubmit('send', 'Změnit')->setAttribute('class', 'btn-main medium');
 
 		$this->setBootstrapRender();
-		$this->onValidate[] = callback($this, 'genderCheckboxValidation');
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

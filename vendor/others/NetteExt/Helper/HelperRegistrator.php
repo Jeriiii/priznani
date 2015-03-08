@@ -20,6 +20,12 @@ class HelperRegistrator {
 	/** @var ShowProfHelper */
 	public $showProfHelper;
 
+	/** @var ShowUserDataHelper */
+	public $showUserDataHelper;
+
+	/** @var TooltipHelper */
+	public $toolTipHelper;
+
 	/** @var array Callback na fci link */
 	private $linkCallback;
 
@@ -31,6 +37,8 @@ class HelperRegistrator {
 		$this->getImgPathHelper = new GetImgPathHelper($url);
 		$this->linkCallback = $linkCallback;
 		$this->showProfHelper = new ShowProfHelper($this->getImgPathHelper, $linkCallback);
+		$this->showUserDataHelper = new ShowUserDataHelper();
+		$this->toolTipHelper = new TooltipHelper;
 	}
 
 	/**
@@ -40,15 +48,51 @@ class HelperRegistrator {
 	public function registerHelpers($template) {
 		$this->registerGetImgPathHelpers($template);
 		$this->registerShowProfHelpers($template);
+		$this->registerShowUserDataHelpers($template);
+		$this->registerToolTipHelpers($template);
 	}
 
 	private function registerShowProfHelpers($template) {
 		$showProfHelper = $this->showProfHelper;
-		$template->registerHelper(ShowProfHelper::NAME, function($user, $href = null) use ($showProfHelper) {
-			return $showProfHelper->showProf($user, $href, FALSE);
+		$template->registerHelper(ShowProfHelper::NAME, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, FALSE, $minSize);
 		});
-		$template->registerHelper(ShowProfHelper::NAME_MIN, function($user, $href = null) use ($showProfHelper) {
-			return $showProfHelper->showProf($user, $href, TRUE);
+		$template->registerHelper(ShowProfHelper::NAME_MIN, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, TRUE, $minSize);
+		});
+		$template->registerHelper(ShowProfHelper::NAME_MIN_DIV, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, TRUE, $minSize, "div");
+		});
+		$template->registerHelper(ShowProfHelper::NAME_DIV, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, FALSE, $minSize, "div");
+		});
+		$template->registerHelper(ShowProfHelper::NAME_NO_LINK, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, TRUE, $minSize, "span", TRUE);
+		});
+		$template->registerHelper(ShowProfHelper::NAME_SEARCH, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, FALSE, $minSize, "div", FALSE, TRUE);
+		});
+	}
+
+	/**
+	 * Zaregistruje hepery pro získávání dat o profilu
+	 * @param type $template
+	 */
+	private function registerShowUserDataHelpers($template) {
+		$showUserHelper = $this->showUserDataHelper;
+		$template->registerHelper(ShowUserDataHelper::SEXY_LABEL_NAME, function($user) use ($showUserHelper) {
+			return $showUserHelper->showSexyLabel($user);
+		});
+	}
+
+	/**
+	 * Zaregistruje hepery pro zobrazení více informací u otazníčku
+	 * @param type $template
+	 */
+	private function registerToolTipHelpers($template) {
+		$toolTipHelper = $this->toolTipHelper;
+		$template->registerHelper(TooltipHelper::TOOL_TIP, function($infoText, $infoEl = "?") use ($toolTipHelper) {
+			return $toolTipHelper->createToolTip($infoText, $infoEl);
 		});
 	}
 

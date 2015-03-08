@@ -14,7 +14,7 @@
 // Need this to make IE happy
 // see http://soledadpenades.com/2007/05/17/arrayindexof-in-internet-explorer/
 if (!Array.indexOf) {
-	Array.prototype.indexOf = function(obj) {
+	Array.prototype.indexOf = function (obj) {
 		for (var i = 0; i < this.length; i++) {
 			if (this[i] == obj) {
 				return i;
@@ -28,28 +28,29 @@ if (!Array.indexOf) {
 
 
 // TODO: implement destroy()
-(function($) {
+(function ($) {
 	$.widget("ui.chatbox", {
 		options: {
 			id: null, //id for the DOM element
 			title: null, // title of the chatbox
 			user: null, // can be anything associated with this chatbox
 			hidden: false,
+			href: '#',
 			offset: 0, // relative to right edge of the browser window
 			width: 300, // width of the chatbox
-			messageSent: function(id, user, msg) {
+			messageSent: function (id, user, msg) {
 				// override this
 				this.boxManager.addMsg(user.first_name, msg);
 			},
-			boxClosed: function(id) {
+			boxClosed: function (id) {
 			}, // called when the close icon is clicked
 			boxManager: {
 				// thanks to the widget factory facility
 				// similar to http://alexsexton.com/?p=51
-				init: function(elem) {
+				init: function (elem) {
 					this.elem = elem;
 				},
-				addMsg: function(peer, msg) {
+				addMsg: function (peer, msg) {
 					var self = this;
 					var box = self.elem.uiChatboxLog;
 					var e = document.createElement('div');
@@ -84,33 +85,33 @@ if (!Array.indexOf) {
 						self.highlightBox();
 					}
 				},
-				highlightBox: function() {
+				highlightBox: function () {
 					var self = this;
 					self.elem.uiChatboxTitlebar.effect("highlight", {}, 300);
-					self.elem.uiChatbox.effect("bounce", {times: 3}, 300, function() {
+					self.elem.uiChatbox.effect("bounce", {times: 3}, 300, function () {
 						self.highlightLock = false;
 						self._scrollToBottom();
 					});
 				},
-				toggleBox: function() {
+				toggleBox: function () {
 					this.elem.uiChatbox.toggle();
 				},
-				_scrollToBottom: function() {
+				_scrollToBottom: function () {
 					var box = this.elem.uiChatboxLog;
 					box.scrollTop(box.get(0).scrollHeight);
 				}
 			}
 		},
-		toggleContent: function(event) {
+		toggleContent: function (event) {
 			this.uiChatboxContent.toggle();
 			if (this.uiChatboxContent.is(":visible")) {
 				this.uiChatboxInputBox.focus();
 			}
 		},
-		widget: function() {
+		widget: function () {
 			return this.uiChatbox
 		},
-		_create: function() {
+		_create: function () {
 			var self = this,
 					options = self.options,
 					title = options.title || "No Title",
@@ -122,12 +123,12 @@ if (!Array.indexOf) {
 							'ui-chatbox'
 							)
 					.attr('outline', 0)
-					.focusin(function() {
+					.focusin(function () {
 						// ui-state-highlight is not really helpful here
 						//self.uiChatbox.removeClass('ui-state-highlight');
 						self.uiChatboxTitlebar.addClass('ui-state-focus');
 					})
-					.focusout(function() {
+					.focusout(function () {
 						self.uiChatboxTitlebar.removeClass('ui-state-focus');
 					}),
 					// titlebar
@@ -137,11 +138,12 @@ if (!Array.indexOf) {
 							'ui-chatbox-titlebar ' +
 							'ui-dialog-header' // take advantage of dialog header style
 							)
-					.click(function(event) {
+					.click(function (event) {
 						self.toggleContent(event);
 					})
+					.prepend('<span class="online-indicator"></span>')
 					.appendTo(uiChatbox),
-					uiChatboxTitle = (self.uiChatboxTitle = $('<span></span>'))
+					uiChatboxTitle = (self.uiChatboxTitle = $('<a class="chatbox-username" href="' + options.href + '"></a>'))
 					.html(title)
 					.appendTo(uiChatboxTitlebar),
 					uiChatboxTitlebarClose = (self.uiChatboxTitlebarClose = $('<a href="#"></a>'))
@@ -149,13 +151,13 @@ if (!Array.indexOf) {
 							'ui-chatbox-icon '
 							)
 					.attr('role', 'button')
-					.hover(function() {
+					.hover(function () {
 						uiChatboxTitlebarClose.addClass('ui-state-hover');
 					},
-							function() {
+							function () {
 								uiChatboxTitlebarClose.removeClass('ui-state-hover');
 							})
-					.click(function(event) {
+					.click(function (event) {
 						uiChatbox.hide();
 						self.options.boxClosed(self.options.id);
 						return false;
@@ -171,13 +173,13 @@ if (!Array.indexOf) {
 							'ui-chatbox-icon'
 							)
 					.attr('role', 'button')
-					.hover(function() {
+					.hover(function () {
 						uiChatboxTitlebarMinimize.addClass('ui-state-hover');
 					},
-							function() {
+							function () {
 								uiChatboxTitlebarMinimize.removeClass('ui-state-hover');
 							})
-					.click(function(event) {
+					.click(function (event) {
 						self.toggleContent(event);
 						return false;
 					})
@@ -202,17 +204,18 @@ if (!Array.indexOf) {
 					.addClass('ui-widget-content ' +
 							'ui-chatbox-input'
 							)
-					.click(function(event) {
+					.click(function (event) {
 						// anything?
 					})
-					.appendTo(uiChatboxContent),
+					.appendTo(uiChatboxContent)
+					.before('<div class="chatbox-delimiter"></div>'),
 					uiChatboxInputBox = (self.uiChatboxInputBox = $('<textarea></textarea>'))
 					.addClass('ui-widget-content ' +
 							'ui-chatbox-input-box ' +
 							'ui-corner-all'
 							)
 					.appendTo(uiChatboxInput)
-					.keydown(function(event) {
+					.keydown(function (event) {
 						if (event.keyCode && event.keyCode == $.ui.keyCode.ENTER) {
 							msg = $.trim($(this).val());
 							if (msg.length > 0) {
@@ -222,12 +225,12 @@ if (!Array.indexOf) {
 							return false;
 						}
 					})
-					.focusin(function() {
+					.focusin(function () {
 						uiChatboxInputBox.addClass('ui-chatbox-input-focus');
 						var box = $(this).parent().prev();
 						box.scrollTop(box.get(0).scrollHeight);
 					})
-					.focusout(function() {
+					.focusout(function () {
 						uiChatboxInputBox.removeClass('ui-chatbox-input-focus');
 					});
 
@@ -235,7 +238,7 @@ if (!Array.indexOf) {
 			uiChatboxTitlebar.find('*').add(uiChatboxTitlebar).disableSelection();
 
 			// switch focus to input box when whatever clicked
-			uiChatboxContent.children().click(function() {
+			uiChatboxContent.children().click(function () {
 				// click on any children, set focus on input box
 				self.uiChatboxInputBox.focus();
 			});
@@ -249,7 +252,7 @@ if (!Array.indexOf) {
 				uiChatbox.show();
 			}
 		},
-		_setOption: function(option, value) {
+		_setOption: function (option, value) {
 			if (value != null) {
 				switch (option) {
 					case "hidden":
@@ -268,14 +271,14 @@ if (!Array.indexOf) {
 			}
 			$.Widget.prototype._setOption.apply(this, arguments);
 		},
-		_setWidth: function(width) {
+		_setWidth: function (width) {
 			this.uiChatboxTitlebar.width(width + "px");
 			this.uiChatboxLog.width(width + "px");
 			this.uiChatboxInput.css("maxWidth", width + "px");
 			// padding:2, boarder:2, margin:5
 			this.uiChatboxInputBox.css("width", (width - 18) + "px");
 		},
-		_position: function(offset) {
+		_position: function (offset) {
 			this.uiChatbox.css("right", offset);
 		}
 	});

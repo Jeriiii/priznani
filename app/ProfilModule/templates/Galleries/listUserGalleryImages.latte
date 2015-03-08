@@ -1,23 +1,34 @@
+{block head}
+{control css "gallery/component-gallery.less"}
+{/}
+
 {block content}
 
 <div class="top-container">
-	{control navigation:breadcrumbs}
-	<a href="{plink :OnePage:}" id="add-photo-button" class="btn-main btn-small right">
-		zpět na stream
-	</a>
+	<div>
+		<div class="float-left">
+			<a n:href=":Profil:Show: $gallery->userID">{$gallery->user->user_name|firstUpper}</a> 
+			<span class="slash">/</span> 
+			<span>Galerie {$gallery->name}</span>
+		</div>
+		{if $myGallery}
+		<div class="float-left">
+			<a n:href="Galleries:userGalleryChange $galleryID" class="btn-main btn-small btn-edit-2">
+				změnit
+			</a>
+		</div>
+		{/if}
+	</div>
 </div>
 <div class="clear"></div>
 
 {if $myGallery}
-	{control myUserImagesInGallery "listAll"}
+	{control myUserImagesInGallery "listAll", $paying, $private}
 {else}
 	{control userImagesInGallery "listAll", $galleryOwner}
 {/if}
 
 {/}
 {block foot}
-{if $myGallery}
-<script type="text/javascript" src="{$basePath}/js/bootstrap-modal.min.js" ></script>
-{/if}
 {/}
 {block pageContent}
