@@ -16,14 +16,17 @@ use Nette\Mail\Message;
  */
 class MailReadJSON {
 
+	/** @var \POS\Model\DatabaseDao @inject */
+	public $databaseDao;
+
 	const TYPE_EMAIL_NOTIFY = 1;
 	const TYPE_EMAIL_OLD_USERS = 2;
 
 	/** @var int emailType Typ posílaného emailu */
 	private $emailType = self::TYPE_EMAIL_NOTIFY;
 
-	public function __construct() {
-		;
+	public function __construct($databaseDao) {
+		$this->databaseDao = $databaseDao;
 	}
 
 	/**
@@ -119,8 +122,7 @@ class MailReadJSON {
 	 * @param array $emails Poslané emaily.
 	 */
 	private function recordEmails($emails) {
-		$database = DBConnection::getDatabase();
-		$sel = $database->table('sended_emails');
+		$sel = $this->databaseDao->createSelection('sended_emails');
 		$sel->insert(array(
 			'count' => count($emails),
 			'type' => self::TYPE_EMAIL_NOTIFY

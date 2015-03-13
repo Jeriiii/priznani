@@ -10,7 +10,6 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DEVELOPMENT);
 
 use Cron\MailReadJSON;
-use Nette\Mail\SendmailMailer;
 
 $mailer = new MailReadJSON();
 

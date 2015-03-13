@@ -1,9 +1,17 @@
-parameters:
+production:
+	parameters:
+	database:
+		dsn: 'mysql:host=127.0.0.1;dbname=datenodecz01'
+		user: datenodecz001
+		password: a10b0618p
+		options:
+			lazy: yes
 
-
-database:
-	dsn: 'mysql:host=127.0.0.1;dbname=test'
-	user:
-	password:
-	options:
-		lazy: yes
+development:
+	parameters:
+	database:
+		dsn: 'mysql:host=localhost;dbname=pos_cron_emails'
+		user: root
+		password: root
+		options:
+			lazy: yes
