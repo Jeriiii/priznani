@@ -54,6 +54,7 @@
 						<p>{$dataItem->confession->note}</p>
 						<div class="react-menu">
 							{control likeConfession-$dataItem->id}
+							{control pollsControl-$dataItem->id}
 						</div>
 						<div class="dotline"></div>
 						{control commentConfession-$dataItem->id}
@@ -73,9 +74,7 @@
 						<div class="dotline"></div>
 						{control commentStatus-$dataItem->id}
 					{/ifset}
-					{*<div class="votes">
-						{control pollsControl-$dataItem->id}
-					</div>*}
+					
 				</div>
 			{/foreach}
 		</div>

@@ -40,6 +40,7 @@ use POSComponent\BaseLikes\ImageLikes;
 use POSComponent\BaseLikes\ConfessionLikes;
 use POSComponent\BaseLikes\StatusLikes;
 use POSComponent\CropImageUpload\CropImageUpload;
+use Polly;
 
 class BaseStream extends BaseProjectControl {
 
@@ -223,6 +224,16 @@ class BaseStream extends BaseProjectControl {
 		return new Multiplier(function ($streamItem) use ($streamItems) {
 			$userGallery = $streamItems->offsetGet($streamItem)->userGallery;
 			return new ImageLikes($this->imageLikesDao, $userGallery->lastImage, $this->loggedUser->id, $userGallery->userID, $this->dataForStream);
+		});
+	}
+
+	protected function createComponentPollsControl() {
+		$streamItems = $this->dataForStream;
+		$confessionDao = $this->confessionDao;
+
+		return new Multiplier(function ($confessionId) use ($streamItems, $confessionDao ) {
+			$confession = $streamItems->offsetGet($confessionId)->confession;
+			return new Polly($confession, $confessionDao);
 		});
 	}
 
