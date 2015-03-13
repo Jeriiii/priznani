@@ -87,6 +87,7 @@ class UsersCompetitionsPresenter extends BasePresenter {
 
 	public function renderDefault($imageID, $galleryID) {
 		if (!empty($this->imageID)) {
+			$httpRequest = $this->context->httpRequest;
 			$domain = $httpRequest->getUrl()->host;
 			$this->template->imageLink = $domain . "/images/galleries/" . $this->gallery->id . "/" . $this->compImage->image->id . "." . $this->compImage->image->suffix;
 		} else {
@@ -133,7 +134,7 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		$imagesID = $this->competitionsImagesDao->getApprovedByComp($this->gallery->id);
 		$iID = array_keys($imagesID);
 		$images = $this->userImageDao->getAllById($iID);
-		$httpRequest = $this->context->httpRequest;
+
 		return new UsersCompetitionsGallery($images, $this->compImage->image, $this->gallery, $this->likeImageCommentDao, $this->userImageDao, $this->commentImagesDao, $this->imageLikesDao, $this->loggedUser, $this, $name);
 	}
 
