@@ -18,45 +18,23 @@ use Nette\DateTime;
 
 class FormsPresenter extends AdminSpacePresenter {
 
-	/**
-	 * @var \POS\Model\FormDao
-	 * @inject
-	 */
+	/** @var \POS\Model\FormDao @inject */
 	public $formDao;
 
-	/**
-	 * @var \POS\Model\AdviceDao
-	 * @inject
-	 */
+	/** @var \POS\Model\AdviceDao @inject */
 	public $adviceDao;
 
-	/**
-	 * @var \POS\Model\PartyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\PartyDao @inject */
 	public $partyDao;
 
-	/**
-	 * @var \POS\Model\ConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ConfessionDao @inject */
 	public $confessionDao;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
-
-
-
-
 
 	/* smazat */
 	public $type;

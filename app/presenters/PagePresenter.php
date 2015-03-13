@@ -24,52 +24,28 @@ class PagePresenter extends BasePresenter {
 	public $confessions;
 	private $page;
 
-	/**
-	 * @var \POS\Model\PartyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\PartyDao @inject */
 	public $partyDao;
 
-	/**
-	 * @var \POS\Model\ConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ConfessionDao @inject */
 	public $confessionDao;
 
-	/**
-	 * @var \POS\Model\AdviceDao
-	 * @inject
-	 */
+	/** @var \POS\Model\AdviceDao @inject */
 	public $adviceDao;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\GalleryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\GalleryDao @inject */
 	public $galleryDao;
 
-	/**
-	 * @var \POS\Model\LikeConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeConfessionDao @inject */
 	public $likeConfessionDao;
 
-	/**
-	 * @var \POS\Model\LikeConfessionCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeConfessionCommentDao @inject */
 	public $likeConfessionCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentConfessionsDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentConfessionsDao @inject */
 	public $commentConfessionsDao;
 
 	public function startup() {
