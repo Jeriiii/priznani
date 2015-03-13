@@ -105,7 +105,7 @@
 
 <div id="thread">
 		<div id="left_confession">
-		{if $advicemode}
+		{*if $advicemode}
 		<h2>Poradna</h2>
 			{form adviceForm class=>'form-container'}
 				{input note class=>'form-field', placeholder=>'Otázka k sexu...'}
@@ -115,7 +115,7 @@
 				{label nick class => 'hidden' /}
 				{input nick class => 'hidden'}
 			{/form}
-		{elseif $sexmode}
+		{elseif $sexmode*}
 			{form form1Form class=>'form-container'}
 				{input note class=>'form-field', placeholder=>'Přiznání o sexu...'}
 				<div class="submit-container">
@@ -124,7 +124,7 @@
 				{label nick class => 'hidden' /}
 				{input nick class => 'hidden'}
 			{/form}
-		{else}
+		{*else}
 			{form partyConfessionForm class=>'form-container'}
 				{input note class=>'form-field', placeholder=>'Přiznání z pařby...'}
 				<div class="submit-container">
@@ -133,7 +133,7 @@
 				{label nick class => 'hidden' /}
 				{input nick class => 'hidden'}
 			{/form}
-		{/if}
+		{/if*}
 
 		{foreach $confessions as $confession}
 			{if $iterator->isOdd()}
@@ -164,11 +164,7 @@
 			<h2>Nejnovější soutěže</h2>
 			<a n:href="Competition:">
 				<div class="cut">
-					{if $partymode}
-					<img src="{$basePath}/images/party/menu.png" width="48" {if $partymode}style="top: -97px;"{/if}/>
-					{else}
-					<img src="{$basePath}/images/layout/plus.png" width="48" {if $partymode}style="top: -144px;"{/if}/>	
-					{/if}	
+					<img src="{$basePath}/images/layout/plus.png" width="48"/>		
 				</div>
 				<p class="rounded-more">
 					{$news["competition"]->description|truncate:250}
@@ -181,7 +177,7 @@
 			<h2>Novinky z přiznání o sexu</h2>
 			<a n:href="Page: url => priznani-o-sexu" id="new1">
 				<div class="cut">
-					<img src="{$basePath}/images/{if $partymode}party{else}layout{/if}/menu.png" width="48" {if $partymode}style="top: -144px;"{/if}/>
+					<img src="{$basePath}/images/layout/menu.png" width="48" />
 				</div>
 				<p class="rounded-more">
 					{$news["confession"]->note|truncate:250}
@@ -194,7 +190,7 @@
 			<h2>Novinky z poradny o sexu</h2>
 			<a n:href="Page: url => poradna-o-sexu" id="new2">
 				<div class="cut">
-					<img src="{$basePath}/images/{if $partymode}party{else}layout{/if}/menu.png" width="48" />
+					<img src="{$basePath}/images/layout/menu.png" width="48" />
 				</div>
 				<p class="rounded-more">
 					{$news["advice"]->note|truncate:250}

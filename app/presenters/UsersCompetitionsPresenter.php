@@ -16,67 +16,36 @@ class UsersCompetitionsPresenter extends BasePresenter {
 	public $imageID;
 	public $compImage;
 	public $gallery;
-	public $domain;
 	public $galleryID;
 
-	/**
-	 * @var POS\Model\UsersCompetitionsDao
-	 * @inject
-	 */
+	/** @var POS\Model\UsersCompetitionsDao @inject */
 	public $usersCompetitionsDao;
 
-	/**
-	 * @var POS\Model\CompetitionsImagesDao
-	 * @inject
-	 */
+	/** @var POS\Model\CompetitionsImagesDao @inject */
 	public $competitionsImagesDao;
 
-	/**
-	 * @var POS\Model\UserImageDao
-	 * @inject
-	 */
+	/** @var POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
-	/**
-	 * @var POS\Model\userDao
-	 * @inject
-	 */
+	/** @var POS\Model\userDao @inject */
 	public $userDao;
 
-	/**
-	 * @var POS\Model\GalleryDao
-	 * @inject
-	 */
+	/** @var POS\Model\GalleryDao @inject */
 	public $galleryDao;
 
-	/**
-	 * @var POS\Model\UserGalleryDao
-	 * @inject
-	 */
+	/** @var POS\Model\UserGalleryDao @inject */
 	public $userGalleryDao;
 
-	/**
-	 * @var POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var POS\Model\ImageLikesDao
-	 * @inject
-	 */
+	/** @var POS\Model\ImageLikesDao @inject */
 	public $imageLikesDao;
 
-	/**
-	 * @var POS\Model\CommentImagesDao
-	 * @inject
-	 */
+	/** @var POS\Model\CommentImagesDao @inject */
 	public $commentImagesDao;
 
-	/**
-	 * @var POS\Model\LikeImageCommentDao
-	 * @inject
-	 */
+	/** @var POS\Model\LikeImageCommentDao @inject */
 	public $likeImageCommentDao;
 
 	public function actionDefault($imageID, $galleryID) {
@@ -113,13 +82,13 @@ class UsersCompetitionsPresenter extends BasePresenter {
 			$this->compImage = $this->competitionsImagesDao->findByImgId($this->imageID);
 
 			$this->gallery = $this->usersCompetitionsDao->find($this->compImage->competitionID);
-			$this->domain = $this->partymode ? "http://priznanizparby.cz" : "http://priznaniosexu.cz";
 		}
 	}
 
 	public function renderDefault($imageID, $galleryID) {
 		if (!empty($this->imageID)) {
-			$this->template->imageLink = $this->domain . "/images/galleries/" . $this->gallery->id . "/" . $this->compImage->image->id . "." . $this->compImage->image->suffix;
+			$domain = $httpRequest->getUrl()->host;
+			$this->template->imageLink = $domain . "/images/galleries/" . $this->gallery->id . "/" . $this->compImage->image->id . "." . $this->compImage->image->suffix;
 		} else {
 			$this->template->imageLink = null;
 		}
@@ -165,8 +134,7 @@ class UsersCompetitionsPresenter extends BasePresenter {
 		$iID = array_keys($imagesID);
 		$images = $this->userImageDao->getAllById($iID);
 		$httpRequest = $this->context->httpRequest;
-		$domain = $httpRequest->getUrl()->host;
-		return new UsersCompetitionsGallery($images, $this->compImage->image, $this->gallery, $domain, $this->partymode, $this->likeImageCommentDao, $this->userImageDao, $this->commentImagesDao, $this->imageLikesDao, $this->loggedUser, $this, $name);
+		return new UsersCompetitionsGallery($images, $this->compImage->image, $this->gallery, $this->likeImageCommentDao, $this->userImageDao, $this->commentImagesDao, $this->imageLikesDao, $this->loggedUser, $this, $name);
 	}
 
 	/**

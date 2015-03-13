@@ -35,12 +35,6 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	protected $loggedUser;
 
-	/* modes */
-	public $partymode = FALSE;
-	public $sexmode = FALSE;
-	public $advicemode = FALSE;
-	public $datemode = FALSE;
-
 	/** @var array proměnné pro css překlad */
 	protected $cssVariables = array();
 
@@ -126,7 +120,6 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	}
 
 	public function beforeRender() {
-		$this->template->partymode = $this->partymode;
 		if ($this->getUser()->isLoggedIn()) {
 			$this->template->identity = $this->getUser()->getIdentity();
 		}
@@ -242,56 +235,6 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		return $activities;
 	}
 
-	/**
-	 * nastaví mód dle url
-	 */
-	protected function setMode($url = NULL) {
-		if (empty($url))
-			$url = $this->url;
-
-		if ($this->url == "priznanizparby") {
-			$this->partymode = TRUE;
-		} elseif ($this->url == "poradna-o-sexu") {
-			$this->advicemode = TRUE;
-		} elseif ($this->url == "seznamka") {
-			$this->datemode = TRUE;
-		} else {
-			$this->sexmode = TRUE;
-		}
-
-		$this->setTemplateMode($this->template);
-	}
-
-	/**
-	 * nastaví mód template
-	 */
-	protected function setTemplateMode($template) {
-		$template->partymode = $this->partymode;
-		$template->sexmode = $this->sexmode;
-		$template->advicemode = $this->advicemode;
-		$template->datemode = $this->datemode;
-	}
-
-	protected function setPartyMode() {
-		$this->partymode = TRUE;
-		$this->setTemplateMode($this->template);
-	}
-
-	protected function setSexMode() {
-		$this->sexmode = TRUE;
-		$this->setTemplateMode($this->template);
-	}
-
-	protected function setAdviceMode() {
-		$this->advicemode = TRUE;
-		$this->setTemplateMode($this->template);
-	}
-
-	protected function setDateMode() {
-		$this->datemode = TRUE;
-		$this->setTemplateMode($this->template);
-	}
-
 	public function createComponentCss() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
 		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
@@ -306,7 +249,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			return cssmin::minify($code);
 		});
 
-// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		/* nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu */
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 

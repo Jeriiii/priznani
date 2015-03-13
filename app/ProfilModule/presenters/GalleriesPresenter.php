@@ -358,10 +358,8 @@ class GalleriesPresenter extends \BasePresenter {
 		$gallery = $this->userGaleryDao->find($this->image->galleryID);
 
 		$httpRequest = $this->context->httpRequest;
-		$domain = $httpRequest->getUrl()->host;
-		//$domain = "http://priznaniosexu.cz";
 
-		return new UsersGallery($this->images, $this->image, $gallery, $domain, TRUE, $this->userImageDao, $this->imageLikesDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->loggedUser, $this, $name);
+		return new UsersGallery($this->images, $this->image, $gallery, $this->userImageDao, $this->imageLikesDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->loggedUser, $this, $name);
 	}
 
 	/**

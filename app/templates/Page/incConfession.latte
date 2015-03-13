@@ -4,16 +4,8 @@
 		{$confession->note}
 	</p>
 	<div class="create-time">
-		{if $partymode}
-		<a n:href="Page:partyConfession id => $confession->id">
-		{var fb = "party-confession"}
-		{elseif $advicemode}
-		<a n:href="Page:advice id => $confession->id">
-		{var fb = "advice"}
-		{else}
 		<a n:href="Page:confession id => $confession->id">
 		{var fb = "confession"}
-		{/if}
 			vydáno {date_format($confession->release_date, "d.m. Y")} v {date_format($confession->release_date, "H:i")}
 		</a>
 	</div>

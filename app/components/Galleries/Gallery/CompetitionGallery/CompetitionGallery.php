@@ -14,25 +14,17 @@ use POS\Model\StreamDao;
 
 class CompetitionGallery extends BaseGallery {
 
-	/**
-	 * @var \POS\Model\GalleryDao
-	 */
+	/** @var \POS\Model\GalleryDao */
 	public $galleryDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var \POS\Model\ImageDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ImageDao @inject */
 	public $imageDao;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, ImageDao $imageDao, GalleryDao $galleryDao, StreamDao $streamDao, $parent, $name) {
-		parent::__construct($images, $image, $gallery, $domain, $partymode, $parent, $name);
+	public function __construct($images, $image, $gallery, ImageDao $imageDao, GalleryDao $galleryDao, StreamDao $streamDao, $parent, $name) {
+		parent::__construct($images, $image, $gallery, $parent, $name);
 
 		$this->streamDao = $streamDao;
 		$this->galleryDao = $galleryDao;
@@ -54,7 +46,7 @@ class CompetitionGallery extends BaseGallery {
 		$image = $this->imageDao->find($imageID);
 		$this->galleryDao->updateLastImage($image->galleryID, $image->id);
 
-		if ($image->gallery->sexmode && $image->gallery->current) {
+		if ($image->gallery->current) {
 			$this->streamDao->aliveCompGallery($image->galleryID);
 		}
 

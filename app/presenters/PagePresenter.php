@@ -204,8 +204,6 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function actionPartyConfession($id) {
-		//$this->url = $this->domain;
-		$this->setPartyMode();
 		$this->id_confession = $id;
 		$confession = $this->getDao()->find($id);
 		if (empty($confession)) {
@@ -244,7 +242,6 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function renderAdminScore() {
-		$this->setSexMode();
 		$this->template->admins = $this->userDao->getAdminScore();
 	}
 
@@ -299,15 +296,7 @@ class PagePresenter extends BasePresenter {
 	 * vrati spravnou tabulku bud priznani nebo poradny
 	 */
 	public function getDao() {
-		if ($this->partymode) {
-			return $this->partyDao;
-		} elseif ($this->advicemode) {
-			return $this->adviceDao;
-		} elseif ($this->sexmode) {
-			return $this->confessionDao;
-		} else {
-			new Exception("Mode didn´t choose,");
-		}
+		return $this->confessionDao;
 	}
 
 	/* pro vypsani vice priznani */

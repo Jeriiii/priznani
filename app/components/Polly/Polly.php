@@ -27,7 +27,6 @@ class Polly extends BaseProjectControl {
 		$this->template->setFile(dirname(__FILE__) . '/polly.latte');
 		$this->template->confession = $this->confession;
 		$polls = $this->getSession();
-		$this->template->partymode = $this->getPresenter()->partymode;
 		$this->template->polls = $polls;
 		$this->template->render();
 	}
