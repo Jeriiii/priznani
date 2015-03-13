@@ -43,6 +43,11 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 
 	public function startup() {
 		parent::startup();
+<<<<<<< HEAD
+
+		$this->checkLoggedIn();
+//umístění cache
+=======
 		//přesměrování s backlinkem pro případ, že uživatel není přihlášen
 		if (!$this->user->isLoggedIn()) {
 			if ($this->user->getLogoutReason() === User::INACTIVITY) {
@@ -59,6 +64,7 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 			}
 		}
 		//umístění cache
+>>>>>>> opravy-pri-prechodu-na-novy-server
 		$this->storage = new \Nette\Caching\Storages\FileStorage('../temp');
 		// vytvoření cache
 		$this->cache = new Cache($this->storage);

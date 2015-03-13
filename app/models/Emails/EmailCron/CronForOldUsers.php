@@ -18,7 +18,7 @@ class CronForOldUsers extends CronEmails {
 	public $oldUserDao;
 
 	/** @var int $limit Limit, s kolika emaily se v jednom kroku pracuje. */
-	private $limit = 2;
+	private $limit = 10;
 
 	public function __construct($oldUserDao) {
 		$this->oldUserDao = $oldUserDao;
