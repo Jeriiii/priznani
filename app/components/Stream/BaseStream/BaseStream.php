@@ -279,10 +279,14 @@ class BaseStream extends BaseProjectControl {
 
 	protected function createComponentLikeConfession() {
 		$streamItems = $this->dataForStream;
+		$userID = NULL;
+		if (!empty($this->loggedUser)) {
+			$userID = $this->loggedUser->id;
+		}
 
-		return new Multiplier(function ($streamItem) use ($streamItems) {
+		return new Multiplier(function ($streamItem) use ($streamItems, $userID) {
 			$confession = $streamItems->offsetGet($streamItem)->confession;
-			return new ConfessionLikes($this->likeConfessionDao, $confession, $this->loggedUser->id, $this->dataForStream);
+			return new ConfessionLikes($this->likeConfessionDao, $confession, $userID, $this->dataForStream);
 		});
 	}
 

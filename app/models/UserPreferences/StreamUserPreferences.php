@@ -251,16 +251,16 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		$galleryRel = $this->getGalleryRel($userGalleryLastImageRel);
 		$userRel = $this->getUserRel($galleryRel);
 		$statusRel = $this->getStatusRel($userRel);
+		$confessionRel = $this->getConfessionRel();
 
-		$serializer = $this->createSerializer($streamItems, $galleryRel, $statusRel, $userRel, $userGalleryRel);
+		$serializer = $this->createSerializer($streamItems, $galleryRel, $statusRel, $userRel, $userGalleryRel, $confessionRel);
 		return $serializer;
 	}
 
-	private function createSerializer($streamItems, Relation $galleryRel, Relation $statusRel, Relation $userRel, Relation $userGalleryRel) {
+	private function createSerializer($streamItems, Relation $galleryRel, Relation $statusRel, Relation $userRel, Relation $userGalleryRel, Relation $confessionsRel) {
 		$serializer = new Serializer($streamItems);
 
 		$adviceRel = new Relation('advice');
-		$confessionsRel = new Relation('confession');
 
 		$serializer->addRel($galleryRel);
 		$serializer->addRel($statusRel);
@@ -319,6 +319,11 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 		$statusRel = new Relation('status');
 		$statusRel->addRel($userRel);
 		return $statusRel;
+	}
+
+	private function getConfessionRel() {
+		$confRel = new Relation('confession');
+		return $confRel;
 	}
 
 	/**

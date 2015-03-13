@@ -13,7 +13,7 @@ use NetteExt\Install\ClearCasch;
 use POS\Model\UserPropertyDao;
 use NetteExt\DBMover\DBMover;
 
-class InstallPresenter extends BasePresenter {
+class InstallPresenter extends BaseProjectPresenter {
 
 	/** @var \POS\Model\DatabaseDao @inject */
 	public $dbDao;

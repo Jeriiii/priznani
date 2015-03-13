@@ -53,10 +53,10 @@
 						<a href="{plink Page:confession id => $dataItem->confessionID}" title="Přiznání o sexu"><h3>Přiznání</h3></a>
 						<p>{$dataItem->confession->note}</p>
 						<div class="react-menu">
-							{*control likeConfession-$dataItem->id*}
+							{control likeConfession-$dataItem->id}
 						</div>
 						<div class="dotline"></div>
-						{*control commentConfession-$dataItem->id*}
+						{control commentConfession-$dataItem->id}
 					{/ifset}
 
 					{ifset $dataItem->adviceID}
