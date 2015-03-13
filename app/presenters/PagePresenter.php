@@ -172,7 +172,6 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function actionConfession($id) {
-		$this->setMode("priznani-o-sexu");
 		$this->id_confession = $id;
 		$confession = $this->getDao()->find($id);
 		if (empty($confession)) {
