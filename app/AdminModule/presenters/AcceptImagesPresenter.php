@@ -182,7 +182,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	 * @param type $imageID ID obrázku, který bude samzán
 	 */
 	public function handleDeleteCompetitionImage($imageID) {
-		$image = $this->competitionsImagesDao->find($imageID);
+		$image = $this->competitionsImagesDao->find($imageID)->image;
 		$userID = $image->gallery->userID;
 
 		$galleryFolder = GalleryPathCreator::getUserGalleryFolder($image->galleryID, $userID);
