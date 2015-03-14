@@ -30,9 +30,11 @@ class BaseSearch extends BaseProjectControl {
 	public function renderBase($mode) {
 		$this->template->setFile(dirname(__FILE__) . '/baseSearch.latte');
 
-		if ($mode == 'listFew') {
-			$this->users = array_slice((array) $this->users, 0, self::LIMIT_LIST_FEW - 1);
-		}
+//		if ($mode == 'listFew') {
+//			$this->users = array_slice((array) $this->users, 0, self::LIMIT_LIST_FEW - 1);
+//		}
+
+		$this->users->limit(self::LIMIT_LIST_FEW);
 
 		$this->template->items = $this->users;
 		$this->template->mode = $mode;

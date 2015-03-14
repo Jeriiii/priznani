@@ -49,7 +49,7 @@ class BaseUserPreferences {
 
 	const NAME_SESSION_BEST_U = "bestUsers";
 
-	public function __construct($user, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session) {
+	public function __construct($user, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session, $expirationTime = '45 min') {
 		if (!($user instanceof ActiveRow) && !($user instanceof \Nette\ArrayHash)) {
 			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
 		}
@@ -61,7 +61,7 @@ class BaseUserPreferences {
 		$this->session = $session;
 
 		$this->section = $session->getSection(self::NAME_SESSION_BEST_U);
-		$this->section->setExpiration("45 min");
+		$this->section->setExpiration($expirationTime);
 	}
 
 	/**
