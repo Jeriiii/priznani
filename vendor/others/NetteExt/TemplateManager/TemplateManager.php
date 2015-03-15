@@ -22,11 +22,11 @@ class TemplateManager extends \Nette\Object {
 	 * @param IViewList $viewList objekt s nastavením, které šablony se mají použít
 	 */
 	public function setTemplates(Presenter $presenter, IViewList $viewList) {
-		if ($viewList->hasView($presenter->name, $presenter->view)) {
-			$this->setView($presenter, $viewList->getViewName($presenter->name, $presenter->view));
-		}
 		if ($viewList->hasLayout($presenter->name, $presenter->view)) {
 			$this->setLayout($presenter, $viewList->getLayoutName($presenter->name, $presenter->view));
+		}
+		if ($viewList->hasView($presenter->name, $presenter->view)) {
+			$this->setView($presenter, $viewList->getViewName($presenter->name, $presenter->view));
 		}
 	}
 
