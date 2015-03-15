@@ -66,6 +66,8 @@
 			 zamítl váši žádost o ověřovací obrázek'
 		{elseif ($activity->type == "like")}
 			 lajknul váš obrázek {$activity->image->name}
+		{elseif ($activity->type == "profilImgNoOnFront")}
+			 lajknul váš obrázek {$activity->image->name}
 		{/if}
 		{include #afterActivity}
 	</a>

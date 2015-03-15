@@ -50,12 +50,19 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	/** @var Nette\Database\Table\Selection Neykontrolované automaticky schválené obrázky. */
 	public $userNotCheckImages;
 
+	/** @var \POS\Model\ActivitiesDao @inject */
+	public $activitiesDao;
+
+	/** @var Nette\Database\Table\Selection Obrázky u kterých ještě nebylo rozhodnuto, zda mohou jít na hlavní stranu přiznání o sexu. */
+	public $userNotCheckFrontPageImages;
+
 	/** Načte neschválené obrázky z DB */
 	private function setImages() {
 		$this->verificationImages = $this->userImageDao->getVerifUnapprovedImages();
 		$this->compImages = $this->competitionsImagesDao->getUnapproved();
 		$this->userImages = $this->userImageDao->getUnapproved();
 		$this->userNotCheckImages = $this->userImageDao->getNotCheck();
+		$this->userNotCheckFrontPageImages = $this->userImageDao->getNotCheckFrontPage();
 	}
 
 	/**
@@ -66,6 +73,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		$this->template->compCount = $this->compImages->count("id");
 		$this->template->verCount = $this->verificationImages->count(UserImageDao::TABLE_NAME . ".id");
 		$this->template->notCheckCount = $this->userNotCheckImages->count(UserImageDao::TABLE_NAME . ".id");
+		$this->template->notCheckFrontPageCount = $this->userNotCheckFrontPageImages->count("id");
 	}
 
 	public function renderDefault() {
@@ -94,6 +102,38 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		$this->setCounters();
 
 		$this->template->images = $this->userNotCheckImages;
+	}
+
+	public function renderCheckFrontPageUserImages() {
+		$this->setImages();
+		$this->setCounters();
+
+		$this->template->images = $this->userNotCheckFrontPageImages;
+	}
+
+	/**
+	 * Označí obrázek jako že se hodí/nehodí na hlavní stránku.
+	 * @param int $isOnFrontPage Je/Není na hl. stránku.
+	 * @param int $imageId Id obrázku.
+	 */
+	public function handleFrontPage($isOnFrontPage, $imageId) {
+		$this->userImageDao->update($imageId, array(
+			UserImageDao::COLUMN_ON_FRONT_PAGE => $isOnFrontPage ? 1 : 0
+		));
+
+		/* pokud jde o profilovou fotku, upozorní na to uživatele */
+		if ($this->userImageDao->isProfile($imageId)) { //jde o profilovou fotku?
+			$image = $this->userImageDao->find($imageId);
+			$this->activitiesDao->createImageActivity(NULL, $image->gallery->userID, $imageId, 'profilImgNoOnFront');
+		}
+
+		$this->invalidateMenuData();
+
+		if ($this->isAjax("imageAcceptance")) {
+			$this->invalidateControl('imageAcceptance');
+		} else {
+			$this->redirect("this");
+		}
 	}
 
 	/**

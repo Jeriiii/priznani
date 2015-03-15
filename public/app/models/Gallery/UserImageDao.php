@@ -38,6 +38,7 @@ class UserImageDao extends AbstractDao {
 	const COLUMN_GAL_SCRN_HEIGHT = "heightGalScrn";
 	const COLUMN_CHECK_APPROVED = "checkApproved";
 	const COLUMN_CREATED = "created";
+	const COLUMN_ON_FRONT_PAGE = 'isOnFrontPage';
 
 	/**
 	 * @var \POS\Model\UserGalleryDao
@@ -125,6 +126,17 @@ class UserImageDao extends AbstractDao {
 	}
 
 	/**
+	 * Vrátí všechny nezkontrolované obrázky, u kterých není rozhodnuto, zda mohou jít na hlavní stranu.
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getNotCheckFrontPage() {
+		$sel = $this->getTable();
+
+		$sel->where(self::COLUMN_ON_FRONT_PAGE . ' IS NULL');
+		return $sel;
+	}
+
+	/**
 	 * Spočítá počet obrázků za jeden den.
 	 * @param DateTime $day Den, za který se mají statistiky spočítat.
 	 * @return int Počet registrací za danný den.
@@ -180,6 +192,20 @@ class UserImageDao extends AbstractDao {
 		$sel->select('id');
 		$sel->where(self::COLUMN_APPROVED, 0);
 		return $sel->count();
+	}
+
+	/**
+	 * Jedná se o profilovou fotku?
+	 * @param int $imageId Id obrázku.
+	 * @return bool TRUE = jde o profilovou fotku, jinak FALSE.
+	 */
+	public function isProfile($imageId) {
+		/* pokusí se najít uživatele s touto profilovou fotkou */
+		$sel = $this->createSelection(UserDao::TABLE_NAME);
+		$sel->where(UserDao::COLUMN_PROFIL_PHOTO_ID, $imageId);
+
+		$user = $sel->fetch();
+		return $this->exist($user);
 	}
 
 	/**
