@@ -42,3 +42,4 @@ public/app/test/sql/featureend/*
 public/app/test/config/behat.local.yml
 
 public/nbproject/licenseheader.txt
+/cron/nbproject/private/

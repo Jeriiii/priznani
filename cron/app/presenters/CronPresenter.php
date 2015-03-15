@@ -14,17 +14,24 @@ class CronPresenter extends BasePresenter {
 	/** @var \POS\Model\DatabaseDao @inject */
 	public $databaseDao;
 
-	public function actionDefault() {
+	public function actionHourly() {
 		$mailer = new MailReadJSON($this->databaseDao);
-
-		/* emaily s aktualitami */
-		$mailer->sendEmails(self::urlBuilder('mail-to-json'));
-		//$mailer->readUrl(self::urlBuilder('mail-is-sended')); //označí emaily jako odeslané
 
 		/* emaily pro bývalé uživatele */
 		$mailer->setEmailType(MailReadJSON::TYPE_EMAIL_OLD_USERS);
 		$mailer->sendEmails(self::urlBuilder('mail-to-old-users-json'));
-		//$mailer->readUrl(self::urlBuilder('mail-old-users-is-sended')); //označí emaily jako odeslané
+		$mailer->readUrl(self::urlBuilder('mail-old-users-is-sended')); //označí emaily jako odeslané
+
+		echo 'emaily byly odeslány';
+		die();
+	}
+
+	public function actionDaily() {
+		$mailer = new MailReadJSON($this->databaseDao);
+
+		/* emaily s aktualitami */
+		$mailer->sendEmails(self::urlBuilder('mail-to-json'));
+		$mailer->readUrl(self::urlBuilder('mail-is-sended')); //označí emaily jako odeslané
 
 		echo 'emaily byly odeslány';
 		die();
@@ -40,10 +47,6 @@ class CronPresenter extends BasePresenter {
 		$presenter = 'cron-email';
 		$url = $domain . '/' . $presenter . '/' . $action . '?' . $user;
 		return $url;
-	}
-
-	public function renderDefault() {
-
 	}
 
 }
