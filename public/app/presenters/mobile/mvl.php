@@ -15,6 +15,8 @@ class Mvl extends MobileViewList {
 
 	function __construct() {
 		parent::__construct();
+
+		$this->addView("OnePage", "default");
 	}
 
 }

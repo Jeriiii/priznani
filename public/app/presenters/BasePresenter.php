@@ -339,6 +339,28 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
+	/**
+	 * Vytvoření komponenty k mimifikaci stylů k mobilní verzi v jQueryMobile
+	 * @return \WebLoader\Nette\CssLoader
+	 */
+	public function createComponentCssMobileLayout() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
+		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
+
+		if (!empty($this->cssVariables)) {
+			$varFilter = new WebLoader\Filter\VariablesFilter($this->cssVariables);
+			$compiler->addFileFilter($varFilter);
+		}
+		$compiler->addFileFilter(new \Webloader\Filter\LessFilter());
+		$compiler->addFileFilter(function ($code, $compiler, $path) {
+			return cssmin::minify($code);
+		});
+
+//		$files->addFiles(array(
+//		));
+		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
+	}
+
 	public function createComponentCssBoostrapModal() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
 		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
@@ -396,6 +418,29 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		});
 
 		/* nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu */
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+
+	/**
+	 * Vytvoření komponenty k mimifikaci skriptů k mobilní verzi v jQueryMobile
+	 * @return \WebLoader\Nette\CssLoader
+	 */
+	public function createComponentJsMobileLayout() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
+		$files->addFiles(array(
+			'baseAjax.js',
+			'fbBase.js',
+			'../nette.ajax.js',
+			'initAjax.js',
+			'../ajaxObserver/core.js'
+		));
+
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+		$compiler->addFilter(function ($code) {
+			$packer = new JavaScriptPacker($code, "None");
+			return $packer->pack();
+		});
+
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="Content-language" content="cs" />
+		<meta name="robots" content="{$robots}" n:ifset="$robots">
+		<meta name="verification" content="37e898047322c2e4e70968ca2c138f0d" />
+		<meta charset="utf-8" />
+        {block beforeHead}{/block}
+		{var $pagename = '<b>DATE</b>NODE<span>.cz beta</span>'}
+		{ifset #meta}
+			{* inportujou se specialni meta tagy *}
+			{include #meta}
+		{else}
+		<title>Přiznání o sexu</title>
+
+		<meta name="keywords" content="Erotická sociální síť datenode.cz" />
+		<meta name="description" content="Erotická sociální síť datenode.cz" />
+
+		<meta property="og:title" content="Erotická sociální síť datenode.cz" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="http://datenode.cz/images/sign/background-photo.jpg" />
+		<meta property="og:site_name" content="datenode.cz" />
+		<meta property="og:description" content="Chcete se opravdu seznámit, nebo jen pokecat a sdílet fotky? Zaregistrujte se, ostaní tam již na vás čekají." />
+		{/ifset}
+		{control cssMobileLayout}
+		<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
+		{block head}{/block}
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+		{includeblock 'layoutBloks/googleAnalytics.latte'}
+	</head>
+
+	<body>
+		{includeblock 'layoutBloks/menu/menu-pos.latte'}
+        <div id="left-side">
+			{cache}
+				<div id="left-panel">
+					<div id="left-menu">
+						{include #posicons}
+					</div>
+				</div>
+			{/cache}
+        </div>
+	    
+			{include #posmenu}
+		<div id="usermenu">
+			{block usermenu}{/block}
+			{if !$user->isLoggedIn()}
+			<a n:href="DatingRegistration:" class="btn-main registration-btn" title="Registruj se!">REGISTRACE</a>
+			{/if}
+			{ifset $identity}
+				<span n:ifset="$identity->user_name" id="droplink" class="user-btn {*with-text - odkomentovat pokud budeme chtit dovnitr text*}"></span>
+			{else}
+				<div id="line-sign-in-form">
+					{control signInForm}
+				</div>
+			{/ifset}
+			{control userMenu}
+		{if $user->isLoggedIn()}
+			{* skryto pro první verzi přiznání *}
+			{*<a href="#" title="Platby" class="payment-btn user-btn" id="coins-btn"></a>
+			{control payment} *}
+			{control activities}
+			<a href="#" title="Poslední zprávy" class="user-btn" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
+		{/if}
+			<div class="clear"></div>
+		</div>
+		
+		{block orders}{/block}
+		{block nextAdmission}{/block}
+	    {block beforeContent}{/block}
+	    <section class="inner content-section">
+		<div n:foreach="$flashes as $flash" class='flash {$flash->type}'>
+		    {$flash->message}
+		</div>
+		{block content}{/block}
+		<div class="clear"></div>
+	    </section>
+		<footer class="inner">
+		    <div id="footline"></div>
+		    <div class="left">
+			Copyright &copy; 2014 priznaniosexu.cz<br /><br />
+			Designed by <a href="http://www.nejlevnejsiwebstranky.cz/">nejlevnejsiwebstranky.cz</a>
+		    </div>
+		    <div class="right">
+			<nav id="footernav">
+			    {if $user->isLoggedIn()}
+					    {control loggedInMenu}
+			    {else}
+					    {control loggedOutMenu}
+			    {/if}
+			</nav>
+			<br />
+			www.priznaniosexu.cz
+		    </div>
+		    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+		    <div id="fb-root"></div>
+			{control jsMobileLayout}
+
+			{if $user->isLoggedIn()}
+				<script>
+					//inicializace ajaxObserveru - nechat před ostatními skripty
+					var observer = $('body').ajaxObserver({
+						requestUrl: {$ajaxObserverLink}
+					});
+
+				</script>
+				{control jsLayoutLoggedIn}
+				{control chat}
+				<script>
+					$('body').activities();
+				</script>
+			{/if}
+
+
+
+			{control fbLikeAndCommentToDatabase}
+
+			{block foot}{/block}
+			<div class="clear"></div>
+		</footer>
+	</body>
+</html>
