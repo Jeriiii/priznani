@@ -1,3 +1,4 @@
+cron/nbproject/*
 /nbproject/private/
 public/temp/*
 !public/temp/reports
