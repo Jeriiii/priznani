@@ -1,0 +1,60 @@
+{block head}
+	<link rel="stylesheet" href="{$basePath}/css/slimbox/slimbox2.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/css/bootstrap.min.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/css/jquery-ui-autocomplete/jquery-ui.min.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/css/jquery-ui-autocomplete/jquery-ui.structure.min.css" type="text/css">
+	<style>
+	h1 {
+		margin-top: 0;
+	}
+    </style>
+	{control css 'profile/edit.less', 'imgareaselect/default.less', 'imgareaselect/inWindow.less'}
+{/block}
+
+{block foot}
+    <script type="text/javascript">
+		var data = [
+			{foreach $cityData as $item}
+						{$item->city} + ", " + {$item->district} + ", " + {$item->region},
+			{/foreach}
+		];
+    </script>
+	{control js 'jquery-ui-autocomplete/jquery-ui.min.js', 'jquery-ui-autocomplete/initCities.js'}
+
+{* je to zvlast schvalne, nejak si to nerozumi s tou minimalizaci*}
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/jquery.imgareaselect.min.js"></script>
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/inits/profilePhoto.js"></script>
+{/block}
+
+{block content}
+	<div class="edit-content">
+		<h2>Editace údajů</h2>
+		{include 'menu.latte'}
+		<div class="clear"></div>
+
+		<div class="photo-change">
+			{$userData|showProfMin}
+			<a title="Nahrát profilovku" class="uploadProfilePhoto red-link">Upravit profilovku</a>
+			{control cropProfilePhoto}
+		</div>
+		{control secondEditForm}
+		{* v první verzi se změna statusu skrývá *}
+		{*<h2 id="changeStatus">Změna statusu</h2>*}
+		{*control statusChangeForm*}
+		{control firstEditForm}
+		<div class="clear"></div>
+		<h2>Nastavení</h2>
+		{control settingsEditForm}
+		<div class="clear"></div>
+
+		{control editCityForm}
+
+		{control editPlacesPositionsForm}
+
+		{if $userData->property->type != 6}
+			{control thirdEditForm}
+		{/if}
+
+	</div>
+	<div class="clear"></div>
+{/block}

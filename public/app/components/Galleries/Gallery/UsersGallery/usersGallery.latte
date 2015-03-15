@@ -1,0 +1,43 @@
+{layout '../BaseGallery/baseGallery.latte'}
+
+{* competition bloky *}
+
+{define menuButtons}
+<a href="{plink Galleries:listUserGalleryImages galleryID => $gallery->id}"  class="btn-main btn-small">
+	celá galerie
+</a>
+{*<a href="{plink Galleries:}"  class="btn-main btn-small">
+	seznam galerií
+</a>*}
+{*<a href="#" class="btn-main btn-small scroll-to-comments">
+	přidat komentář
+</a>*}
+{/}
+
+{define imageComment}
+{$image->description}
+{/}
+
+{define userProfilLink}
+<a href="{plink :Profil:Show: id => $image->gallery->userID}" class="username">{$image->gallery->user->user_name|upper}</a>
+{/}
+
+{define uploadImage}
+<a href="{plink Galleries:userGalleryNew}" id="add-photo-button" class="btn-main medium right">
+	vytvořit vlastní galerii
+</a>
+{/}
+ 
+{define imageMainScreen}
+	<img src="{$image|getImgScrnPath}" alt="{$image->name}"
+		style = "padding: {!$imgPaddingTopBottom}px {!$imgPaddingLeftRight}px;"
+		width="{$image->widthGalScrn}" height="{$image->heightGalScrn}" />
+{/}
+
+{define likes}
+	{control likes}
+{/}
+
+{define comments}
+	{control comments}
+{/}

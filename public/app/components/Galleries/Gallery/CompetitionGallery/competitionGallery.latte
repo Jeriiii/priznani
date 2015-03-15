@@ -1,0 +1,95 @@
+{layout '../BaseGallery/baseGallery.latte'}
+
+{* competition bloky *}
+
+{define infoAboutOvner}
+<table>
+	<tr>
+		<td>
+			<b>Jméno:</b>
+		</td>
+		<td>
+			{$image->user_name}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>Telefon:</b>
+		</td>
+		<td>
+			{$image->user_phone}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<b>Email:</b>
+		</td>
+		<td>
+			{$image->user_email}
+		</td>
+	</tr>
+</table>
+{/}
+
+{define approvedImage}
+{if $image->approved == 0}
+	<div>
+		<a n:href="approveImage! imageID => $image->id">Schválit</a>
+	</div>
+{/if}
+{/}
+
+{define fbLike}
+<p>hlasujte zde</p>
+<div class="fb-like" data-href="http://www.{if $partymode}priznanizparby{else}priznaniosexu{/if}.cz{$imageLink}"
+	 data-layout="box_count" data-width="74" data-show-faces="true">
+</div>
+{/}
+
+{define menuButtons}
+<a href="{plink Competition:listImages galleryID => $gallery->id}"  class="btn-main btn-small">
+	všechny fotky
+</a>
+<a href="{plink Competition:list}"  class="btn-main btn-small">
+	seznam galerií
+</a>
+<a href="#" class="btn-main btn-small scroll-to-comments">
+	přidat komentář
+</a>
+{/}
+
+{define imageComment}
+{$image->comment}
+{/}
+
+{define uploadImage}
+{if $gallery->current == 1}
+	<a href="{plink Competition:uploadImage galleryID => $gallery->id}" id="add-photo-button" class="btn-main medium right">
+		nahrát fotku
+	</a>
+{/if}
+{/}
+
+{define imageMainScreen}
+{if $image->videoID != 0}
+	<object width="700" height="500" data="http://www.youtube.com/v/{$image->video->code}" type="application/x-shockwave-flash"><param name="src" value="http://www.youtube.com/v/{$image->video->code}" /></object>
+	{else}	{*padding: {$padding}*}
+	<img src="{$image|getImgScrnPath:'g'}" alt="{$image->name}" 
+		style = "padding: {!$imgPaddingTopBottom}px {!$imgPaddingLeftRight}px;"
+		width="{$image->widthGalScrn}" height="{$image->heightGalScrn}" />
+{/if}
+{/}
+
+{define #fbComment}
+	<a href="#" name="scroll-fb-comments"></a>
+	<div id="fb" class="fb-components">
+		<div class="fb-comments-container">
+			<div class="fb-comments" data-href="http://www.{if $partymode}priznanizparby{else}priznaniosexu{/if}.cz{$imageLink}" data-width="600" data-num-posts="10"></div>
+		</div>
+	</div>
+{/}
+
+
+{define isApprovedText}
+{if (($user->isInRole("superadmin") || $user->isInRole("admin")) && $image->approved == 0)}(zatím neschváleno){/if}
+{/}

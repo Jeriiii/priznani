@@ -1,0 +1,7 @@
+{if isset($id_click)}
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("button#click_{!$id_click}").trigger("click");
+		});
+	</script>
+{/if}

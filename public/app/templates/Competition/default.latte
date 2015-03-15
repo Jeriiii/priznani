@@ -1,0 +1,58 @@
+{block head}
+{control css "gallery/component-gallery.less"}
+<!--<link rel="stylesheet" href="{$basePath}/css/component-gallery.css" type="text/css">-->
+<script type="text/javascript" src="{$basePath}/js/confirm_adult.js" ></script>
+<style>
+	a {
+		color: #a70304;
+	}
+</style>
+{/block}
+
+{block foot}
+
+{/}
+
+{block content}
+	
+	{control gallery}
+	{*
+	<div>
+		<a href='{$basePath}/images/galleries/{$gallery->id}/{$image->id}.{$image->suffix}' rel="lightbox[gallery]" title="{$image->name}">
+			<img src="{$basePath}/images/galleries/{$gallery->id}/mini{$image->id}.{$image->suffix}" alt="{$image->name}" height="100">
+		</a>
+	</div>
+
+	{control vp*}
+	<p style="color: #bebebe;font-size:10px;">http://www.graphicsfuel.com/</p>
+{/block}
+	
+{block meta}
+	{if $partymode}
+		{var $special_meta_tags = TRUE}
+		<title>Soutěž - přiznání z pařby</title>
+
+		<meta name="keywords" content="přiznání z pařby" />
+		<meta name="description" content="Nahraj fotku a vyhraj sedmiletý kubánský rum!" />
+
+		<meta property="og:title" content="Soutěž - Přiznání z pařby" />
+		<meta property="og:image" content="{$imageLink}" />
+		<meta property="og:site_name" content="priznanizparby.cz" />
+	{else}
+		{var $special_meta_tags = TRUE}
+		{if !empty($galleryMode)}
+			<title>Přiznání o sexu</title>
+
+			<meta name="keywords" content="přiznání o sexu" />
+			<meta name="description" content="Sexuální a zábavné fotky, videa a přiznání." />
+		{else}
+		<title>Soutěž - přiznání o sexu</title>
+
+		<meta name="keywords" content="přiznání o sexu" />
+		<meta name="description" content="Nahraj erotickou fotku a vyhraj super ceny!" />
+		{/if}
+		<meta property="og:title" content="Přiznání o sexu" />
+		<meta property="og:image" content="{$imageLink}" />
+		<meta property="og:site_name" content="priznaniosexu.cz" />
+	{/if}
+{/block}

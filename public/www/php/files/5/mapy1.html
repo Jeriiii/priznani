@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="http://api4.mapy.cz/loader.js"></script>
+		<script type="text/javascript">Loader.load();</script>
+		<title>Odebírání značek</title>
+		<style type="text/css">
+			#m {
+				height: 300px;
+		  	width: 400px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="m"></div>
+
+
+		<script type="text/javascript">
+			var center = SMap.Coords.fromWGS84(13.38042, 49.74791);
+var m = new SMap(JAK.gel("m"), center, 13);
+m.addDefaultLayer(SMap.DEF_BASE).enable();
+m.addDefaultControls();
+
+var layer = new SMap.Layer.Marker();
+m.addLayer(layer);
+layer.enable();
+
+var card = new SMap.Card();
+card.getHeader().innerHTML = "<strong>Nadpis</strong>";
+card.getBody().innerHTML = "Ahoj, já jsem <em>obsah vizitky</em>!";
+
+var options = { 
+    title: "Dobré ráno"
+};
+var marker = new SMap.Marker(center, "myMarker", options);
+marker.decorate(SMap.Marker.Feature.Card, card);
+layer.addMarker(marker);
+			 
+//      var obrazek = "close.gif";
+//
+//			var m = new SMap(JAK.gel("m"));
+//			m.addControl(new SMap.Control.Sync()); /* Aby mapa reagovala na změnu velikosti průhledu */
+//			m.addDefaultLayer(SMap.DEF_BASE).enable(); /* Turistický podklad */
+//			var mouse = new SMap.Control.Mouse(SMap.MOUSE_PAN | SMap.MOUSE_WHEEL); /* Ovládání myší */
+//			m.addControl(mouse); 
+//
+//			var data = {
+//				"Plzeň Keyweb & JKBusiness": "49°44'52.492\"N,13°22'49.502\"E",    
+//			};
+//			
+//			var vrstva = new SMap.Layer.Marker(); 	/* Vrstva se značkami */
+//			m.addLayer(vrstva);					  	/* Přidat ji do mapy */
+//			vrstva.enable(); 						/* A povolit */
+//
+//			for (var name in data) { /* Vyrobit značky */
+//				var c = SMap.Coords.fromWGS84(data[name]); /* Souřadnice značky, z textového formátu souřadnic */
+//				
+//				var options = {
+//					url:obrazek,
+//					title:name,
+//					anchor: {left:10, bottom: 1}  /* Ukotvení značky za bod uprostřed dole */
+//				}
+//				
+//				var znacka = new SMap.Marker(c, null, options);
+//				vrstva.addMarker(znacka);
+//			}
+//			
+//			var kliknuti = function(e) {
+//				var znacka = e.target;
+//
+//
+//				if (!event.shiftKey) { return; }
+//				
+//				vrstva.removeMarker(znacka);
+//			}
+//			
+///			var signals = m.getSignals();
+//			signals.addListener(window, "marker-click", kliknuti);
+
+		</script>
+
+	</body>
+</html>

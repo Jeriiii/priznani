@@ -1,0 +1,39 @@
+{block head}
+
+{/block}
+
+
+{block content}
+	<table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="centered">Jméno</th>
+                        <th></th>
+                    </tr>
+                </thead>
+			{foreach $forms as $form}
+				{if $form->id == 4 /* pařba */ && ! $user->isInRole("superadmin")}
+					<td> Třídění přiznání z pařby bylo pozastaveno </td><td></td><td></td>
+				{else}
+				<tr>
+					<td class="centered">
+						<div class="btn-group">
+							<a class="name" n:href="Forms:formsX id_form => $form->id, type => $form->type, show_mark => unmark">
+								<button class="btn">
+									{$form->name}
+								</button>
+							</a>
+						</div>
+					</td>
+					<td>
+						<a  n:href="Forms:formsX id_form => $form->id, type => $form->type, show_mark => unmark" class="btn btn-primary">
+							Zobrazit vložené údaje
+						</a>
+					</td>
+				</tr>
+				{/if}
+			{/foreach}
+		</tbody>
+	</table>
+	
+{/block}

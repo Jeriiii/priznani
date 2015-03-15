@@ -1,0 +1,65 @@
+{block head}
+
+{/block}
+
+
+{block content}
+	{control galleryNewForm}
+
+	<table class="table table-striped">
+            <thead>
+              <tr><th class="centered" colspan="2"><h2>Seznam galerií</h2></th></tr>
+              <tr>
+                
+                <th class="centered">Galerie</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+
+
+{foreach $galleries as $gallery}<tr><td class="centered"><div class="btn-group"><a class="name" n:href="Galleries:gallery id_gallery => $gallery->id"><button class="btn">{$gallery->name}</button></a></div></td><td><a class="name" n:href="Galleries:gallery id_gallery => $gallery->id"><button class="btn btn-primary">Upravit</button></a></td><td class="centered"><button data-target="#modal{$iterator->getCounter()}" role="button" class="btn btn-danger" data-toggle="modal">smazat</button><div class="modal hide fade in" id="modal{$iterator->getCounter()}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h5 id="myModalLabel">Smazat {$gallery->name}</h5></div><div class="modal-body"><p>Opravdu chcete smazat {$gallery->name}?</p></div><div class="modal-footer"><a n:href="deleteGallery! id_gallery => $gallery->id" class="btn btn-danger">Ano</a><button class="btn" data-dismiss="modal" aria-hidden="true">Ne</button></div></div><script type="text/javascript">$("#modal{$iterator->getCounter()}").modal({ show: false });</script></td></tr>{/foreach}
+
+
+
+		{*foreach $galleries as $gallery}
+			<tr>
+				<td class="centered">
+                                    <div class="btn-group">
+                                        <a class="name" n:href="Galleries:gallery id_gallery => $gallery->id">
+                                            <button class="btn">{$gallery->name}</button>
+                                        </a>
+                                    </div>
+				</td>
+                                <td>
+                                        <a class="name" n:href="Galleries:gallery id_gallery => $gallery->id">
+                                            <button class="btn btn-primary">Upravit</button>
+                                        </a>
+                                </td>
+                                
+                                <td class="centered">
+					
+                                        <button data-target="#modal{$iterator->getCounter()}" role="button" class="btn btn-danger" data-toggle="modal">smazat</button>
+                                        <div class="modal hide fade in" id="modal{$iterator->getCounter()}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h5 id="myModalLabel">Smazat {$gallery->name}</h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Opravdu chcete smazat {$gallery->name}?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a n:href="deleteGallery! id_gallery => $gallery->id" class="btn btn-danger">
+                                                    Ano
+                                                </a>
+                                                <button class="btn" data-dismiss="modal" aria-hidden="true">Ne</button>
+                                            </div>
+                                        </div>
+                                        <script type="text/javascript">$("#modal{$iterator->getCounter()}").modal({ show: false });</script>
+				</td>
+			</tr>
+		{/foreach*}
+            </tbody>
+	</table>
+{/block}

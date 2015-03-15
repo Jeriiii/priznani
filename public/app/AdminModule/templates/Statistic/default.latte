@@ -1,0 +1,51 @@
+{block head}
+	<style>
+		h2{
+			padding-bottom: 20px;
+		}
+	</style>
+	{control css 'graph/default.less'}
+{/block}
+
+{block content}
+	<h2>Registrovaní uživatelé</h2>
+	<span>Celkový počet uživatelů: <strong>{$totalCount}</strong></span><br /><br />
+	<table class="table">
+		<thead>
+			<th>Mužů</th>
+			<th>Žen</th>
+			<th>Pár</th>
+			<th>Pár mužů</th>
+			<th>Pár žen</th>
+			<th>Skupina</th>
+		</thead>
+		<tbody>
+			<tr>
+				<td><strong>{$countMan}</strong></td>
+				<td><strong>{$countWoman}</strong></td>
+				<td><strong>{$countCouple}</strong></td>
+				<td><strong>{$countCoupleMen}</strong></td>
+				<td><strong>{$countCoupleWomen}</strong></td>
+				<td><strong>{$countGroup}</strong></td>
+			</tr>
+		</tbody>
+	</table>
+	<h2>Návštěvnost</h2>
+	<a class="btn btn-default" href="http://www.google.com/analytics/">google analytisc</a>
+	
+	{control registrationGraph "registrationGraph"}
+	{control activityGraph "activityGraph"}
+	{control peopleBySexGraph "sexGraph"}
+	{control peopleByAgeGraph "ageGraph"}
+	{*control monthlyGraph "monthlyGraph"*}
+{/block}
+
+{block foot}
+{control registrationGraph:js "registrationGraph"}
+{control activityGraph:js "activityGraph"}
+{control peopleBySexGraph:js "sexGraph"}
+{control peopleByAgeGraph:js "ageGraph"}
+{*control monthlyGraph:js "monthlyGraph"*}
+<script src="{$basePath}/js/graphs/highcharts.js"></script>
+<script src="{$basePath}/js/graphs/modules/exporting.js"></script>
+{/block}

@@ -1,0 +1,17 @@
+{block head}
+	{control css 'bootstrap/forms-medium.less', 'user/authentication.less'}
+{/block}
+
+
+{block content}
+<div class="form fullsize">
+	<h2>Registrace</h2>
+	{control registrationForm}
+	<p class="registration">
+		Jste již zaregistrováni? <a n:href="Sign:in" title="přihlášení">Přihlašte se zde</a>.
+	</p>
+	<p class="forgotten-pass">
+		Zapoměli jste heslo? <a n:href="Sign:forgottenPass" title="zapomenuté heslo">Obnovte si heslo zde</a>.
+	</p>
+</div>
+{/block}
