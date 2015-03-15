@@ -71,6 +71,9 @@ class EditPresenter extends ProfilBasePresenter {
 
 	/** @var ActiveRow User kterému se mají editovat data */
 	protected $userData;
+
+	/** @var \Nette\Database\Table\ActiveRow Obrázek */
+	private $image;
 	private $redirect;
 
 	public function startup() {
@@ -96,6 +99,19 @@ class EditPresenter extends ProfilBasePresenter {
 
 	public function renderUserImages() {
 		$this->template->paying = $this->paymentDao->isUserPaying($this->user->id);
+	}
+
+	public function actionInappropriateProfilPhoto($imageID) {
+		$this->image = $this->userImageDao->find($imageID);
+		if (!$this->image) {
+			$this->flashMessage('Obrázek nebyl nalezen.');
+			$this->redirect(':OnePage:');
+		}
+	}
+
+	public function renderInappropriateProfilPhoto($imageID) {
+		$this->template->userData = $this->userData;
+		$this->template->image = $this->image;
 	}
 
 	protected function createComponentFirstEditForm($name) {

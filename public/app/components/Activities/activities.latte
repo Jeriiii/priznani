@@ -44,33 +44,40 @@
 	
 {/}
 {define image $activity}
-	<a href="{plink :Profil:Galleries:image imageID => $activity->imageID, galleryID => $activity->image->galleryID}"
-	   class="activity-link {if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
-		{include #beforeActivity}
-		Uživatel <strong>{$activity->event_creator->user_name}</strong>
-		{if ($activity->type == "comment")}
-			okomentoval váš obrázek {$activity->image->name}
-		{elseif ($activity->type == "approve")}
-			 schválil váš obrázek {$activity->image->name}
-		{elseif ($activity->type == "verification")}
-			 schválil váš ověřovací obrázek {$activity->image->name}
-		{elseif ($activity->type == "invalidate")}
-			 zamítl váš ověřovací obrázek {$activity->image->name}
-		{elseif ($activity->type == "disapprove")}
-			 zamítl váš obrázek {$activity->image->name}
-		{elseif ($activity->type == "reject")}
-			 zamítl váš  ověřovací obrázek {$activity->image->name}
-		{elseif ($activity->type == "verificationPhotoAccepted")}
-			 schválil váši žádost o ověřovací obrázek {$activity->image->name}
-		{elseif ($activity->type == "verificationPhotoRejected")}
-			 zamítl váši žádost o ověřovací obrázek'
-		{elseif ($activity->type == "like")}
-			 lajknul váš obrázek {$activity->image->name}
-		{elseif ($activity->type == "profilImgNoOnFront")}
-			 lajknul váš obrázek {$activity->image->name}
-		{/if}
-		{include #afterActivity}
-	</a>
+	{if ($activity->type == "profilImgNoOnFront")}
+		<a href="{plink :Profil:Edit:inappropriateProfilPhoto imageID => $activity->imageID}"
+			class="activity-link {if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
+			<img src='{$activity->image|getImgPath}' />
+			<strong>Nevhodná profilovka</strong>
+			pro více informací klikni sem
+		</a>
+	{else}
+		<a href="{plink :Profil:Galleries:image imageID => $activity->imageID, galleryID => $activity->image->galleryID}"
+		   class="activity-link {if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
+			{include #beforeActivity}
+			Uživatel <strong>{$activity->event_creator->user_name}</strong>
+			{if ($activity->type == "comment")}
+				okomentoval váš obrázek {$activity->image->name}
+			{elseif ($activity->type == "approve")}
+				 schválil váš obrázek {$activity->image->name}
+			{elseif ($activity->type == "verification")}
+				 schválil váš ověřovací obrázek {$activity->image->name}
+			{elseif ($activity->type == "invalidate")}
+				 zamítl váš ověřovací obrázek {$activity->image->name}
+			{elseif ($activity->type == "disapprove")}
+				 zamítl váš obrázek {$activity->image->name}
+			{elseif ($activity->type == "reject")}
+				 zamítl váš  ověřovací obrázek {$activity->image->name}
+			{elseif ($activity->type == "verificationPhotoAccepted")}
+				 schválil váši žádost o ověřovací obrázek {$activity->image->name}
+			{elseif ($activity->type == "verificationPhotoRejected")}
+				 zamítl váši žádost o ověřovací obrázek'
+			{elseif ($activity->type == "like")}
+				 lajknul váš obrázek {$activity->image->name}
+			{/if}
+			{include #afterActivity}
+		</a>
+	{/if}
 {/}
 {define friendsRequest $activity}
 <!--	<div href="{plink this}" class="{if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">-->

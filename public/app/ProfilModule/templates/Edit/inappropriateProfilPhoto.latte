@@ -1,0 +1,36 @@
+{block head}
+	{control css 'profile/inappropriateProfilPhoto.less', 'imgareaselect/default.less', 'imgareaselect/inWindow.less'}
+{/block}
+
+{block foot}
+{* je to zvlast schvalne, nejak si to nerozumi s tou minimalizaci*}
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/jquery.imgareaselect.min.js"></script>
+<script type="text/javascript" src="{$basePath}/js/imgareaselect/inits/profilePhoto.js"></script>
+{/block}
+
+{block content}
+<div class='container'>
+	<img src="{$image|getImgPath}" alt="{$image->name}" height='150px'/>
+	<h2>Profilovka není vhodná</h2>
+	<p>
+		Kvůli velkému ohlasu uživatelů, jsme sestavili jednoduchá pravidla
+		pro zveřejnění profilové fotky. Kdo tyto pravidla dodrží, bude <strong>zobrazován
+		výše než ostatní uživatelé</strong>.
+	</p>
+	<ol id='rules'>
+		{var info1 = 'Vzhledem k tomu, že profilová fotka slouží k tomu, aby si vás ostaní uživatelé mohli prohlédnout, není vhodné aby na ní bylo z větší části pouze pánské nebo dámské přirození. Tyto fotky si nahrávejte do svých galerií, profilou fotku však zvolte jinou.'}
+		<li>Na profilové fotce nesmí být pouze přirození. {$info1|toolTip:'(více)'}</li>
+		{var info2 = 'Vzhledem k tomu, že profilová fotka slouží k tomu, aby si vás ostaní uživatelé mohli prohlédnout, na profilové fotce nesmí být obrázek stáhnutý z internetu (kočka, známá osobnost a pod.)'}
+		<li>Na profilové fotce musíte být vy. {$info2|toolTip:'(více)'}</li>
+	</ol>
+	
+	<div>
+		<div class="photo-change">
+			<a title="Nahrát profilovku" class="uploadProfilePhoto btn-main">
+				Nahrát jinou profilovku
+			</a>
+			{control cropProfilePhoto}
+		</div>
+	</div>
+</div>
+{/block}
