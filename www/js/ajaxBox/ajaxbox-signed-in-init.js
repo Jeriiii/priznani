@@ -13,15 +13,35 @@ $(document).ready(function () {
 	$.convLimit = 5;
 
 	/**
-	 * Zpracuje číselnou odpověď ajaxObserveru a nastaví ji ke tlačítku
-	 * @param {type} opts nastavení dotyčného okénka
-	 * @param {type} data příchozí data od serveru
+	 * Zpracuje číselnou odpověď ajaxObserveru a nastaví ji ke tlačítku.
+	 * @param {Object} opts nastavení dotyčného okénka
+	 * @param {Object} data příchozí data od serveru
 	 */
 	function handleNumberResponse(opts, data) {//zpracování odpovědi od ajaxObserveru, konkrétně čísla s počtem zpráv. Je-li nenulové, zobrazí se vedle tlačítka.
 		if (data) {
 			$(opts.buttonSelector).find('.ajaxbox-button-info').html(data).css('display', 'block');
 		} else {
 			$(opts.buttonSelector).find('.ajaxbox-button-info').css('display', 'none');
+		}
+	}
+	
+	/**
+	 * Zpracuje číselnou odpověď ajaxObserveru a nastaví ji ke tlačítku. Pokud u tlačítka již bylo takové číslo,
+	 * obnoví celé okénko a tím způsobí aktualizaci jeho dat.
+	 * @param {Object} opts nastavení dotyčného okénka
+	 * @param {Object} data příchozí data od serveru
+	 */
+	function handleRefreshResponse(opts, data) {//zpracování odpovědi od ajaxObserveru, konkrétně čísla s počtem zpráv. Je-li nenulové, zobrazí se vedle tlačítka.
+		var infoElement = $(opts.buttonSelector).find('.ajaxbox-button-info');
+		if (data) {
+			var dataNumber = parseInt(data);
+			var currentNumber = parseInt(infoElement.html());
+			if(dataNumber != currentNumber){
+				$(opts.buttonSelector).trigger('reloadRequest');/* reload okénka */
+			}
+			infoElement.html(data).css('display', 'block');
+		} else {
+			infoElement.css('display', 'none');
 		}
 	}
 
@@ -42,7 +62,7 @@ $(document).ready(function () {
 			startOffset: 0
 		},
 		ajaxObserverId: 'chatConversationWindow', //je použit ajaxObserver a toto id reprezentuje požadavek této komponenty (pod stejným id se požadavek vyřizuje na serveru)
-		observerResponseHandle: handleNumberResponse//použití funkce v initu, která vezme výsledek dotazu na observer a zobrazí jej u tlačítka, pokud je nenulový
+		observerResponseHandle: handleRefreshResponse//použití funkce v initu, která vezme výsledek dotazu na observer a zobrazí jej u tlačítka, pokud je nenulový
 	});
 /////////////////////////
 	$('#snippet-payment-payment').ajaxBox({
