@@ -43,7 +43,7 @@ class StandardConversationList extends BaseChatComponent implements IContactList
 	 * @param type $limit limit konverzací
 	 * @param type $offset offset konverzací
 	 */
-	public function handleLoad($limit, $offset) {
+	public function handleLoad($limit = 5, $offset = 0) {
 		if ($this->getPresenter()->isAjax()) {
 			$userId = $this->getPresenter()->getUser()->getId();
 			$this->template->load = TRUE; //jen pro ifset

@@ -379,14 +379,32 @@
 	}
 	
 	/**
-	 * Přidá možnost triggerem vyvolat obnovení dat
+	 * Přidá možnost triggerem vyvolat obnovení dat.
 	 * @param {Object} opts nastavení
 	 */
 	function addReloadTrigger(opts) {
 		var options = opts;
 		$(options.buttonSelector).bind('reloadRequest', function(){
-			//NOT IMPLEMENTED YET
+			resetSnippets(options);
+			reloadData(opts);
 		});
+	}
+	
+	/**
+	 * Vyprázdní všechny snippety v datech okénka s předaným nastavením. Při použití snippet modulu také vyprádní offset.
+	 * @param {Object} opts nastavení
+	 */
+	function resetSnippets(opts) {
+		var dataElement = $('div[data-related="' + opts.buttonSelector + '"]').find('.ajaxBoxData');
+		var snippets = dataElement.find('*[data-ajax-append], *[data-ajax-prepend]');
+		snippets.each(function(index){
+			$(this).empty();
+		});
+		var params = opts.streamSnippetModule;/* vyprázdnění snippetu */
+		if(params){
+			applyStreamSnippetModuleStart(opts);/* úplný restart modulu */
+			applyStreamSnippetModuleEnd(opts);
+		}
 	}
 	/**
 	 * Nabinduje okénku click listener, který jej otevře/zavře, když se klikne na jeho tlačítko
@@ -502,6 +520,7 @@
 	 * @param {Object} options nastavení okénka
 	 */
 	function applyStreamSnippetModuleEnd(options) {
+		$('div[data-related="' + options.buttonSelector + '"] .ajaxBoxData').find('.noConvMessages').remove();
 		$('div[data-related="' + options.buttonSelector + '"] .loadingGif').css('display', 'block');
 	}
 
