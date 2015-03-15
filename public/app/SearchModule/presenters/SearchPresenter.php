@@ -74,7 +74,6 @@ class SearchPresenter extends SearchBasePresenter {
 
 	public function beforeRender() {
 		parent::beforeRender();
-		$this->setSexMode();
 	}
 
 	public function renderNearMe() {

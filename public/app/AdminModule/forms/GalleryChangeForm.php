@@ -32,27 +32,12 @@ class GalleryChangeForm extends Form {
 		$this->galleryID = $galleryID;
 		$gallery = $this->galleryDao->find($galleryID);
 
-		if ($gallery->sexmode) {
-			$defaultMode = "sex";
-		} else {
-			$defaultMode = "party";
-		}
-
-		$mode = array(
-			"sex" => "Přiznání o sexu",
-			"party" => "Přiznání z pařby"
-		);
-
 		$this->addText("name", "Jméno", 30, 150)
 			->setDefaultValue($gallery->name)
 			->addRule(Form::FILLED, "Musíte zadat jméno galerie.");
 		$this->addText("description", "Popis", 50, 300)
 			->setDefaultValue($gallery->description)
 			->addRule(Form::FILLED, "Musíte zadat popis galerie.");
-		$this->addSelect("mode", "Mód:", $mode)
-			->setPrompt("- vyberte mod -")
-			->addRule(Form::FILLED, "Prosím vyberte mód.")
-			->setDefaultValue($defaultMode);
 		$this->addSubmit("submit", "Změnit");
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
@@ -60,6 +45,7 @@ class GalleryChangeForm extends Form {
 
 	public function submitted(GalleryChangeForm $form) {
 		$values = $form->values;
+		$values['mode'] = 'sex';
 		$presenter = $this->getPresenter();
 
 		$this->galleryDao->updateNameDecripMode($this->galleryID, $values->name, $values->description, $values->mode);

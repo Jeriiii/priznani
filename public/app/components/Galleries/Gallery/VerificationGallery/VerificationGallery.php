@@ -20,8 +20,8 @@ class VerificationGallery extends BaseGallery {
 	//platící uživatel
 	protected $paying;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao, $paying, $parent, $name) {
-		parent::__construct($images, $image, $gallery, $domain, $partymode, $parent, $name);
+	public function __construct($images, $image, $gallery, UserImageDao $userImageDao, ImageLikesDao $imageLikesDao, $paying, $parent, $name) {
+		parent::__construct($images, $image, $gallery, $parent, $name);
 		parent::setUserImageDao($userImageDao);
 
 		$this->imageLikesDao = $imageLikesDao;

@@ -22,19 +22,13 @@ use Nette\Http\FileUpload;
  */
 class UserGalleryImagesBaseForm extends BaseForm {
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 */
+	/** @var \POS\Model\UserGalleryDao */
 	public $userGalleryDao;
 
-	/**
-	 * @var \POS\Model\UserImageDao
-	 */
+	/** @var \POS\Model\UserImageDao */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 */
+	/** @var \POS\Model\StreamDao */
 	public $streamDao;
 
 	const IMAGE_NAME = "ImageName";

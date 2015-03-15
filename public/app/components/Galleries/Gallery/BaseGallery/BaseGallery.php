@@ -20,10 +20,6 @@ class BaseGallery extends BaseProjectControl {
 	protected $image;
 	/* aktualni galerie */
 	protected $gallery;
-	/* aktualni domena */
-	private $domain;
-	/* jsme na priznani z parby */
-	private $partymode;
 	private $beforeImageID;
 	private $afterImageID;
 
@@ -37,17 +33,14 @@ class BaseGallery extends BaseProjectControl {
 	 */
 	public $imageDao;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, $parent, $name) {
+	public function __construct($images, $image, $gallery, $parent, $name) {
 		parent::__construct($parent, $name);
 		$this->images = $images->order("id DESC");
 		$this->image = $image;
 		$this->gallery = $gallery;
-		$this->domain = $domain;
-		$this->partymode = $partymode;
 	}
 
 	public function renderBaseGallery($templateName) {
-		$this->template->partymode = $this->partymode;
 
 		$this->setBeforeAndAfterImage();
 

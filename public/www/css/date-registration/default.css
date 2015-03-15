@@ -1,0 +1,6 @@
+@media (max-width: 600px) {
+	.form-window {
+		width: 100% !important;
+		right: 0 !important;
+	}
+}

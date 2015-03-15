@@ -24,20 +24,11 @@ class GalleryNewForm extends Form {
 		$renderer->wrappers['control']['container'] = NULL;
 		//form
 
-		$mode = array(
-			"sex" => "Přiznání o sexu",
-			"party" => "Přiznání z pařby"
-		);
-
 		$this->galleryDao = $galleryDao;
 		$this->addText("name", "Jméno", 30, 150)
 			->addRule(Form::FILLED, "Musíte zadat jméno galerie.");
 		$this->addText("description", "Popis", 50, 300)
 			->addRule(Form::FILLED, "Musíte zadat popis galerie.");
-		$this->addSelect("mode", "Mód:", $mode)
-			->setPrompt("- vyberte mod -")
-			->addRule(Form::FILLED, "Prosím vyberte mód.");
-
 		$this->addSubmit("submit", "Vytvořit");
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
@@ -45,14 +36,7 @@ class GalleryNewForm extends Form {
 
 	public function submitted(GalleryNewForm $form) {
 		$values = $form->values;
-
-		$mode = $values["mode"];
-		unset($values["mode"]);
-		if ($mode == "sex") {
-			$values["sexmode"] = 1;
-		} else {
-			$values["partymode"] = 1;
-		}
+		$values["sexmode"] = 1;
 
 		$this->galleryDao->insert($values);
 		$this->getPresenter()->flashMessage('Galerie byla vytvořena, nezapomeňte pak v databázi vyplnit zastupující obrázek');
