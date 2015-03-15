@@ -704,7 +704,21 @@ class UserDao extends UserBaseDao {
 		}
 
 		$sel->order(self::COLUMN_PROFIL_PHOTO_ID . " DESC");
-		$sel->order(self::COLUMN_LAST_ACTIVE . " ASC");
+		$sel->order(self::COLUMN_LAST_ACTIVE . " DESC");
+
+		return $sel;
+	}
+
+	/**
+	 * Vrátí uživatele podle IDček, seřazení podle poslední aktivity uživatelů
+	 * @param array $ids Idčka uživatelů, které chcete vyhledat.
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getInIds(array $ids) {
+		$sel = $this->getTable();
+		$sel->where($ids);
+
+		$sel->order(self::COLUMN_LAST_ACTIVE . " DESC");
 
 		return $sel;
 	}
