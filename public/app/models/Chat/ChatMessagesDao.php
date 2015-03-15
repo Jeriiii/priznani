@@ -411,6 +411,11 @@ class ChatMessagesDao extends AbstractDao {
 		$sel->where(self::COLUMN_SEND_NOTIFY, 0);
 		$sel->where(self::COLUMN_READED, 0);
 
+		/* Vybere pouze uživatele, kteří se nepřihlásili déle jak den */
+		$now = new \Nette\DateTime();
+		$now->modify('- 1 day');
+		$sel->where('recipient.last_active < ?', $now);
+
 		return $sel;
 	}
 

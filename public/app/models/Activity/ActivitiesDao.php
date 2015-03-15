@@ -350,6 +350,11 @@ class ActivitiesDao extends AbstractDao {
 		$sel->where(self::COLUMN_SEND_NOTIFY, 0);
 		$sel->where(self::COLUMN_VIEWED, 0);
 
+		/* Vybere pouze uživatele, kteří se nepřihlásili déle jak den */
+		$now = new \Nette\DateTime();
+		$now->modify('- 2 day');
+		$sel->where('event_owner.last_active < ?', $now);
+
 		return $sel;
 	}
 
