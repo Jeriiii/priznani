@@ -356,8 +356,11 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			return cssmin::minify($code);
 		});
 
-//		$files->addFiles(array(
-//		));
+		$files->addFiles(array(
+			'jqueryMobile/posRedTheme/pos-mobile-theme.min.css',
+			'jqueryMobile/posRedTheme/jquery.mobile.icons.min.css',
+			'jqueryMobile/jquery.mobile.structure-1.4.5.min.css'
+		));
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
@@ -432,7 +435,8 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'fbBase.js',
 			'../nette.ajax.js',
 			'initAjax.js',
-			'../ajaxObserver/core.js'
+			'../ajaxObserver/core.js',
+			'../jqueryMobile/jquery.mobile-1.4.5.min.js'
 		));
 
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
