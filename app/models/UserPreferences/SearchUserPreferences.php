@@ -24,7 +24,7 @@ use POS\Model\UserCategoryDao;
 class SearchUserPreferences extends BaseUserPreferences implements IUserPreferences {
 
 	public function __construct($user, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session) {
-		parent::__construct($user, $userDao, $userCategoryDao, $session, $expirationTime = '3 min');
+		parent::__construct($user, $userDao, $userCategoryDao, $session, $expirationTime = '10 min');
 	}
 
 	/**
@@ -39,7 +39,6 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 	}
 
 	public function getBestUsers() {
-//		$this->bestUsers = $this->section->bestUsers;
 		$bestUserIds = $this->section->bestUsers;
 
 		if ($bestUserIds === NULL) {
@@ -56,24 +55,13 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * @param Nette\Database\Table\Selection $users Hledaní uživatelé.
 	 */
 	public function saveBestUsers($users) {
-//		$relProfilPhoto = new Relation("profilFoto");
-//		$relGallery = new Relation("gallery");
-//		$relProperty = new Relation("property");
-//		$relProfilPhoto->addRel($relGallery);
-
+		/* proiteruje uživatele a uloží jejich IDčka */
 		$userIds = array();
-
 		foreach ($users as $user) {
 			$userIds[] = $user->id;
 		}
 
-//		$ser = new Serializer($userIds);
-//		$ser->addRel($relProfilPhoto);
-//		$ser->addRel($relProperty);
-
-
-
-		$this->bestUsers = $userIds; //$ser->toArrayHash();
+		$this->bestUsers = $userIds;
 		$this->section->bestUsers = $this->bestUsers;
 	}
 
