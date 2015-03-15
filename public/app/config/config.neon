@@ -53,6 +53,7 @@ common:
 
 		chatManager: POS\Chat\ChatManager
 		deviceDetector: NetteExt\DeviceDetector
+		templateManager: NetteExt\TemplateManager\TemplateManager
 		statisticManager: POS\Statistics\StatisticManager
 		ajaxObserver: POS\Ajax\AjaxObserver
 		authorizator:

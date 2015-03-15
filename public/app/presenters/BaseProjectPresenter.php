@@ -17,10 +17,17 @@ class BaseProjectPresenter extends Nette\Application\UI\Presenter {
 	/** @var \NetteExt\DeviceDetector @inject */
 	public $deviceDetector;
 
+	/** Třída pro nastavování (mobilních) šablon
+	 * @var \NetteExt\TemplateManager\TemplateManager @inject */
+	public $templateManager;
+
 	protected function startup() {
 		parent::startup();
 		$this->testMode = $this->context->parameters["testMode"];
 		$this->productionMode = $this->context->parameters["productionMode"];
+		if ($this->deviceDetector->isMobile()) {
+			$this->templateManager->setTemplates($this, new Mvl());
+		}
 	}
 
 	/**
