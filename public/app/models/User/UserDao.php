@@ -716,7 +716,7 @@ class UserDao extends UserBaseDao {
 	 */
 	public function getInIds(array $ids) {
 		$sel = $this->getTable();
-		$sel->where($ids);
+		$sel->wherePrimary($ids);
 
 		$sel->order(self::COLUMN_LAST_ACTIVE . " DESC");
 

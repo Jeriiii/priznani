@@ -25,6 +25,7 @@ class BestMatchSearch extends BaseSearch {
 		if (!($loggedInUser instanceof ActiveRow) && !($loggedInUser instanceof \Nette\ArrayHash)) {
 			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
 		}
+
 		$users = $this->getBestUsers($loggedInUser, $userDao, $userCategoryDao, $session);
 		parent::__construct($users, $parent, $name);
 	}
