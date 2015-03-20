@@ -131,6 +131,11 @@ class OnePagePresenter extends BasePresenter {
 		}
 	}
 
+	public function renderMobileDefault() {
+		$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->userID)->count();
+		$this->template->countSexy = $this->youAreSexyDao->countToUser($this->userID);
+	}
+
 	protected function createComponentUserStream() {
 		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeCOnfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao, $this->usersNewsDao, $this->loggedUser);
 	}

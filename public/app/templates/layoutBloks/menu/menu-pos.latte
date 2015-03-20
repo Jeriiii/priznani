@@ -26,7 +26,6 @@
 {/}
 
 {define posmenuMobile}
-<ul data-role="listview">
 	<li class="pagename">DATENODE.cz</li>
 	{if $user->isLoggedIn()}
     <li><a n:href=":OnePage:" class="first">Seznamka</a></li>
@@ -41,5 +40,4 @@
     <li><a n:href=":Competition:list" class="fifth">Soutěže a galerie</a></li>
     <li><a n:href=":Page:metro" class="sixth">Bonusy</a></li>
 	{/if}
-</ul>
 {/}

@@ -1,0 +1,95 @@
+{layout '../BaseStream/baseStream.latte'}
+
+{define addNewPost}
+		<div class="stream-form">
+			<ul id="stream-form-tabs">
+				{if $user->isLoggedIn()}
+					<li><a href="#tabs-1">STATUS</a></li>
+				{/if}
+				<li><a href="#tabs-2">PŘIZNÁNÍ</a></li>
+				<li class="last"><a href="#tabs-3">FOTKY</a></li>
+			</ul>
+			{if $user->isLoggedIn()}
+				<div id="tabs-1">
+					<div class="tab-arrow first"></div>
+					{if $user->isLoggedIn()}
+						{$userData|showProfDiv}
+					{/if}
+					<div class="half-form">
+					{form statusForm}
+						{input message class=>'form-field', placeholder=>'Napiš, co právě děláš...', rows => 3}
+						<div class="submit-container">
+							{input submit class => 'submit-button'}
+						</div>
+					{/form}
+					</div>
+				</div>
+			{/if}
+			<div id="tabs-2">
+				<div class="tab-arrow {if $user->isLoggedIn()}second{else}first{/if}"></div>
+				{if $user->isLoggedIn()}
+				{$userData|showProfDiv}
+				{/if}
+				<div class="half-form">
+				{form addConfessionForm class=>'form-container'}
+					<ul class="error" n:if="$form->hasErrors()">
+						<li n:foreach="$form->errors as $error">{$error}</li>
+					</ul>
+					{input note class=>'form-field', placeholder=>'Přiznej se, vše bude anonymní...', rows => 3}
+					<div class="submit-container">
+						{input submit class => 'submit-button'}
+					</div>
+					{label nick class => 'hidden' /}
+					{input nick class => 'hidden'}
+				{/form}
+				</div>
+			</div>
+			<div id="tabs-3" class="stream-add-images">
+				<div class="tab-arrow {if $user->isLoggedIn()}third{else}second{/if}"></div>
+				{if $user->isLoggedIn()}
+					{$userData|showProfDiv}
+					<div class="half-form">
+					{control newStreamImageForm}
+					</div>
+				{else}
+					Pro přidávání fotek se <a href="{plink :Sign:in}">přihlaš</a> nebo <a href="{plink :Sign:registration}">registruj</a>.
+				{/if}
+			</div>
+		</div>
+{/}
+
+{define addUserInfo}
+	{if $user->isLoggedIn() && empty($profilePhoto)}
+		<div id="activeBackgroundUploadPhoto" style="z-index:10000;position:fixed;top:0;left:0;background: rgba(20, 20, 20, 0.4);"></div>
+		<script>
+			var blackBackground = document.getElementById("activeBackgroundUploadPhoto");
+			var body = document.body,
+    
+			html = document.documentElement;
+			var height = Math.max( body.scrollHeight, body.offsetHeight, 
+                       html.clientHeight, html.scrollHeight, html.offsetHeight );
+					   
+			var width = document.body.clientWidth;
+			blackBackground.style.width = width + "px";
+			blackBackground.style.height = height + "px";
+		</script>
+		<div id="profile-photo-upload">
+			Nahrajte si profilovou fotku, aby si vás ostatní mohli prohlédnout.
+			<a class="highlight uploadProfilePhoto btn-main">Nahrát profilovou fotku</a>
+			{control cropImageUpload}
+		</div>
+	{elseif !empty($newInfo)}
+		<div id="news">
+			<header>{$newInfo->name}</header>
+			<p id="news-short">{$newInfo->text|truncate:100} {if strlen(utf8_decode($newInfo->text)) > 100}<a id="news-more">více</a>{/if}</p>
+			<p id="news-long">{!$newInfo->text|nl2br}</p>
+			<a n:href="newReaded! newID => $newInfo->id" class="btn-main btn-small">PŘEČTENO</a>
+		</div>
+	{elseif $user->isLoggedIn() && !empty($profilePhoto) &&  $place==0  && $position==0 && $placePosSession->count%5==0}
+		<div class="questionnaire-form">
+			<h4 class="question-title">Chcete další téma ke konverzaci? Vyplňte si:</h4>
+			{control placesAndPositionsForm}
+			<div class="clear"></div>
+			</div>
+	{/if}
+{/}

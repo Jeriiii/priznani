@@ -62,10 +62,13 @@
 			<div data-role="panel" id="leftmenu" data-position="left" data-display="overlay" >
 				{block leftMenu}
 					{cache}
+						<ul data-role="listview">
 							{include #posmenuMobile}
+							{block inLeftMenu}{/block}
+						</ul>
 					{/cache}
 				{/block}
-				{block AfterLeftMenu}{/block}
+				
 			</div><!-- /panel -->
 			<div data-role="panel" id="rightmenu" data-position="right" data-display="overlay" >
 				{block rightMenu}
@@ -77,10 +80,10 @@
 						{else}
 							<li>Anonymní</li>
 						{/ifset}
-					</ul>
-					{block usermenu}{/block}
-					{control userMenu}
+						{block userMenu}{/block}
+					</ul>					
 				{/block}
+				{control userMenu}
 				{block AfterRightMenu}{/block}
 			</div><!-- /panel -->			
 			<footer id="foot" class="inner" data-role="footer">
