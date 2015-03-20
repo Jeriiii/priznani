@@ -33,6 +33,31 @@
 
 	<body>
 		<section data-role="page">
+			<div data-role="header">
+				<nav id="topmenu" data-role="navbar" data-grid="d">
+					<ul>
+						<li><a href="#leftmenu" class="" title="DATENODE.cz" data-iconpos="top" data-icon="grid"></a></li>
+						<li><a n:href="OnePage:" class="{ifset $activeHome}ui-btn-active{/ifset}" title="Domů" data-iconpos="top" data-icon="home"></a></li>
+						<li><a n:href="Chat:conversations" class="{ifset $activeChat}ui-btn-active{/ifset}" title="Chat" data-iconpos="top" data-icon="comment"></a></li>
+						<li><a n:href="Activities:" class="ui-btn-icon-top ui-icon-bell {ifset $activeActivities}ui-btn-active{/ifset}" title="title" data-iconpos="top"></a></li>
+						<li><a href="#rightmenu" class="" title="Uživatelské menu" data-iconpos="top" data-icon="user"></a></li>
+					</ul>
+				</nav>
+			</div>
+			<section id="content" role="main" class="ui-content">
+				{block orders}{/block}
+				{block nextAdmission}{/block}
+				{block beforeContent}{/block}
+				<ul data-role="listview">
+					<li n:foreach="$flashes as $flash" class='flash {$flash->type}'>
+						{$flash->message}
+					</li>
+				</ul>
+				{block content}{/block}
+				<div class="clear"></div>
+				
+			</section>
+			{* levý a pravý vyjížděcí panel *}
 			{includeblock 'layoutBloks/menu/menu-pos.latte'}
 			<div data-role="panel" id="leftmenu" data-position="left" data-display="overlay" >
 				{block leftMenu}
@@ -57,94 +82,28 @@
 					{control userMenu}
 				{/block}
 				{block AfterRightMenu}{/block}
-			</div><!-- /panel -->
-			<div data-role="header">
-				<nav data-role="navbar" data-grid="d">
-					<ul>
-						<li><a href="#leftmenu" class="" title="DATENODE.cz" data-iconpos="top" data-icon="grid"></a></li>
-						<li><a n:href="OnePage:" class="{ifset $activeHome}ui-btn-active{/ifset}" title="Domů" data-iconpos="top" data-icon="home"></a></li>
-						<li><a n:href="Chat:conversations" class="{ifset $activeChat}ui-btn-active{/ifset}" title="Chat" data-iconpos="top" data-icon="comment"></a></li>
-						<li><a n:href="Activities:" class="ui-btn-icon-top ui-icon-bell {ifset $activeActivities}ui-btn-active{/ifset}" title="title" data-iconpos="top"></a></li>
-						<li><a href="#rightmenu" class="" title="Uživatelské menu" data-iconpos="top" data-icon="user"></a></li>
-					</ul>
-				</nav>
-			</div>
-			<section role="main" class="ui-content">
-				{block orders}{/block}
-				{block nextAdmission}{/block}
-				{block beforeContent}{/block}
-				<section class="inner content-section">
-				<div n:foreach="$flashes as $flash" class='flash {$flash->type}'>
-					{$flash->message}
-				</div>
-				{block content}{/block}
+			</div><!-- /panel -->			
+			<footer id="foot" class="inner" data-role="footer">
+				Copyright &copy; 2014 priznaniosexu.cz<br /><br />
+				Designed by <a href="http://www.nejlevnejsiwebstranky.cz/">nejlevnejsiwebstranky.cz</a>
+				<div class="right">
+				<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+				<div id="fb-root"></div>
+				{control jsMobileLayout}
+
+				{if $user->isLoggedIn()}
+					<script>
+						//inicializace ajaxObserveru - nechat před ostatními skripty
+						var observer = $('body').ajaxObserver({
+							requestUrl: {$ajaxObserverLink}
+						});
+
+					</script>
+				{/if}
+				{block scripts}{/block}
+				{block foot}{/block}
 				<div class="clear"></div>
-				
-			</section>
-			
+			</footer>
 		</section>
-		
-		
-		
-		
-	    
-			
-		<div id="usermenu">
-			{if !$user->isLoggedIn()}
-			<a n:href="DatingRegistration:" class="btn-main registration-btn" title="Registruj se!">REGISTRACE</a>
-			{/if}
-			{ifset $identity}
-				<span n:ifset="$identity->user_name" id="droplink" class="user-btn {*with-text - odkomentovat pokud budeme chtit dovnitr text*}"></span>
-			{else}
-				<div id="line-sign-in-form">
-					{control signInForm}
-				</div>
-			{/ifset}
-		{if $user->isLoggedIn()}
-			{* skryto pro první verzi přiznání *}
-			{*<a href="#" title="Platby" class="payment-btn user-btn" id="coins-btn"></a>
-			{control payment} *}
-			{control activities}
-			<a href="#" title="Poslední zprávy" class="user-btn" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
-		{/if}
-			<div class="clear"></div>
-		</div>
-		
-		
-	    </section>
-		<footer class="inner">
-		    <div id="footline"></div>
-		    <div class="left">
-			Copyright &copy; 2014 priznaniosexu.cz<br /><br />
-			Designed by <a href="http://www.nejlevnejsiwebstranky.cz/">nejlevnejsiwebstranky.cz</a>
-		    </div>
-		    <div class="right">
-			<nav id="footernav">
-			    {if $user->isLoggedIn()}
-					    {control loggedInMenu}
-			    {else}
-					    {control loggedOutMenu}
-			    {/if}
-			</nav>
-			<br />
-			www.priznaniosexu.cz
-		    </div>
-		    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-		    <div id="fb-root"></div>
-			{control jsMobileLayout}
-
-			{if $user->isLoggedIn()}
-				<script>
-					//inicializace ajaxObserveru - nechat před ostatními skripty
-					var observer = $('body').ajaxObserver({
-						requestUrl: {$ajaxObserverLink}
-					});
-
-				</script>
-			{/if}
-			{block scripts}{/block}
-			{block foot}{/block}
-			<div class="clear"></div>
-		</footer>
 	</body>
 </html>

@@ -8,7 +8,7 @@
 	<div id="best-match">
 		{if $user->isLoggedIn()}
 			{if $loggedUser->propertyID}
-				{control bestMatchSearch 'listFew'}
+				{control bestMatchSearch 'listMobile'}
 			{else} {* vyzve uživatele k dokončení registrace *}
 				Pokud se chcete seznámit, vyplňte o sobě <a n:href="DatingRegistration:" class="btn-main btn-small">další informace</a>.
 			{/if}
