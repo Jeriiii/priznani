@@ -133,6 +133,8 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 		$this->template->domain = $this->domain;
 
+		$this->template->loggedUser = $this->loggedUser;
+
 		$this->template->facebook_html = "";
 		$this->template->facebook_script = "";
 		$this->template->ajaxObserverLink = $this->link('ajaxRefresh!'); //odkaz pro ajaxObserver na pravidelne pozadavky
@@ -207,19 +209,21 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$nav->setMenuTemplate(APP_DIR . '/components/Navigation/usermenu.phtml');
 		$navigation = array();
 
-
 		if ($this->getUser()->isLoggedIn()) {
-//prihlaseny uzivatel
+			//prihlaseny uzivatel
 			if ($user->isInRole('admin') || $user->isInRole('superadmin')) {
 				$navigation["Administrace"] = $this->link(":Admin:Admin:default");
 			}
 
-			$navigation["Editovat profil"] = $this->link(":Profil:Edit:");
-			$navigation["Hledat uživatele"] = $this->link(":Search:Search:");
-			$navigation["Moje galerie"] = $this->link(":Profil:Galleries:");
+			if (!$this->deviceDetector->isMobile()) {
+				$navigation["Editovat profil"] = $this->link(":Profil:Edit:");
+				$navigation["Hledat uživatele"] = $this->link(":Search:Search:");
+				$navigation["Moje galerie"] = $this->link(":Profil:Galleries:");
+			}
 			$navigation["Odhlásit se"] = $this->link(":Sign:out");
 		} else {
 //neprihlaseny uzivatel
+
 			$navigation["Přihlášení"] = $this->link(":Sign:in");
 			$navigation["Registrace"] = $this->link(":Sign:registration");
 		}
@@ -357,6 +361,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		});
 
 		$files->addFiles(array(
+			'mobile/layout.less',
 			'jqueryMobile/posRedTheme/pos-mobile-theme.min.css',
 			'jqueryMobile/posRedTheme/jquery.mobile.icons.min.css',
 			'jqueryMobile/jquery.mobile.structure-1.4.5.min.css'
@@ -434,6 +439,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'baseAjax.js',
 			'fbBase.js',
 			'../nette.ajax.js',
+			'../jqueryMobile/mobile-init.js',
 			'initAjax.js',
 			'../ajaxObserver/core.js',
 			'../jqueryMobile/jquery.mobile-1.4.5.min.js'

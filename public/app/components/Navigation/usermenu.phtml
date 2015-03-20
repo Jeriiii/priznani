@@ -1,5 +1,5 @@
 {block #usermenu}
-<nav id="dropmenu">
+<nav id="dropmenu" data-role="listview">
 	{foreach $children as $item}
 	<li {if $item->isCurrent} class="active"{/if}>
 		<a href="{$item->url}">

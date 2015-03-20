@@ -32,22 +32,64 @@
 	</head>
 
 	<body>
-		<div class="preview ui-shadow swatch"><div class="ui-header ui-bar-c" data-swatch="c" data-theme="c" data-form="ui-bar-c" data-role="header" role="banner"><a class="ui-btn-left ui-btn-corner-all ui-btn ui-icon-home ui-btn-icon-notext ui-shadow" title=" Home " data-form="ui-icon" data-role="button" role="button"> Home </a><h1 class="ui-title" tabindex="0" role="heading" aria-level="1">C</h1><a class="ui-btn-right ui-btn-corner-all ui-btn ui-icon-grid ui-btn-icon-notext ui-shadow" title=" Navigation " data-form="ui-icon" data-role="button" role="button"> Navigation </a></div><div class="ui-content ui-page-theme-c" data-form="ui-page-theme-c" data-theme="c" role="main"><div data-theme="c" data-form="ui-body-c" class="ui-body ui-body-c ui-corner-all"><p>Body</p><p>Sample text and <a href="#" data-theme="c" data-form="ui-link-c" class="ui-link">links</a>.</p></div><ul data-role="listview" data-inset="true" data-theme="c" class="ui-listview ui-listview-inset ui-corner-all ui-shadow ui-group-theme-c"><li data-role="list-divider" data-theme="c" data-swatch="c" data-form="ui-bar-c" role="heading" class="ui-li-divider ui-bar-c ui-first-child">List Header</li><li data-form="ui-body-c" data-swatch="c" data-theme="c" class="ui-li-static ui-body-c">Read-only list item</li><li class="ui-last-child"><a class="ui-btn-c ui-btn ui-btn-icon-right ui-icon-carat-r" data-form="ui-btn-up-c" data-swatch="c" data-theme="c" href="#">Linked list item</a></li></ul><div data-role="fieldcontain" class="ui-field-contain"><fieldset data-role="controlgroup" class="ui-controlgroup ui-controlgroup-vertical ui-corner-all"><div class="ui-controlgroup-controls "><div class="ui-radio"><label for="radio-choice-1-c" data-form="ui-btn-up-c" class="ui-btn ui-corner-all ui-btn-c ui-btn-icon-left ui-radio-on ui-first-child">Radio</label><input type="radio" data-theme="c" name="radio-choice-c" id="radio-choice-1-c" value="choice-1" checked="checked"></div><div class="ui-checkbox"><label for="checkbox-c" data-form="ui-btn-up-c" class="ui-btn ui-corner-all ui-btn-c ui-btn-icon-left ui-checkbox-on ui-last-child">Checkbox</label><input type="checkbox" data-theme="c" name="checkbox-c" id="checkbox-c" checked="checked"></div></div></fieldset></div><div data-role="fieldcontain" class="ui-field-contain"><fieldset data-role="controlgroup" data-type="horizontal" class="ui-controlgroup ui-controlgroup-horizontal ui-corner-all"><div class="ui-controlgroup-controls "><div class="ui-radio"><label for="radio-view-a-c" data-form="ui-btn-up-c" class="ui-btn ui-corner-all ui-btn-c ui-radio-on ui-btn-active ui-first-child">On</label><input type="radio" data-theme="c" name="radio-view-c" id="radio-view-a-c" value="list" checked="checked"></div><div class="ui-radio"><label for="radio-view-b-c" data-form="ui-btn-up-c" class="ui-btn ui-corner-all ui-btn-c ui-radio-off ui-last-child">Off</label><input type="radio" data-theme="c" name="radio-view-c" id="radio-view-b-c" value="grid"></div></div></fieldset></div><div data-role="fieldcontain" class="ui-field-contain"><div class="ui-select"><a href="#" role="button" id="select-choice-c-button" aria-haspopup="true" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-btn-c ui-corner-all ui-shadow" data-theme="c" data-form="ui-btn-up-c"><span>Option 1</span></a><select name="select-choice" data-theme="c" id="select-choice-c" data-native-menu="false" data-form="ui-btn-up-c" tabindex="-1"><option value="standard">Option 1</option><option value="rush">Option 2</option><option value="express">Option 3</option><option value="overnight">Option 4</option></select><div style="display: none;" id="select-choice-c-listbox-placeholder"><!-- placeholder for select-choice-c-listbox --></div></div></div><div class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset"><input type="text" value="Text Input" data-theme="c" class="input" data-form="ui-body-c"></div><div data-role="fieldcontain" class="ui-field-contain"><div class="ui-slider"><input type="number" data-type="range" name="slider" value="50" min="0" max="100" data-form="ui-body-c" data-theme="c" data-highlight="true" class="ui-shadow-inset ui-body-c ui-corner-all ui-slider-input"><div role="application" class="ui-slider-track ui-shadow-inset ui-bar-c ui-corner-all ui-btn-up-c" data-form="ui-btn-up-c" data-theme="c"><div class="ui-slider-bg ui-btn-active" style="width: 50%;"></div><a href="#" class="ui-slider-handle ui-btn ui-btn-c ui-shadow" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50" title="50" aria-labelledby="undefined-label" style="left: 50%;" data-form="ui-btn-up-c" data-theme="c"></a></div></div></div><button data-icon="star" data-theme="c" data-form="ui-btn-up-c" class=" ui-btn ui-btn-c ui-icon-star ui-btn-icon-left ui-shadow ui-corner-all">Button</button></div></div>
-		
-		{includeblock 'layoutBloks/menu/menu-pos.latte'}
-        <div id="left-side">
-			{cache}
-				<div id="left-panel">
-					<div id="left-menu">
-						{include #posicons}
-					</div>
+		<section data-role="page">
+			{includeblock 'layoutBloks/menu/menu-pos.latte'}
+			<div data-role="panel" id="leftmenu" data-position="left" data-display="overlay" >
+				{block leftMenu}
+					{cache}
+							{include #posmenuMobile}
+					{/cache}
+				{/block}
+				{block AfterLeftMenu}{/block}
+			</div><!-- /panel -->
+			<div data-role="panel" id="rightmenu" data-position="right" data-display="overlay" >
+				{block rightMenu}
+					<ul data-role="listview" class="profilelist">
+						{ifset $loggedUser}
+							<li>
+								{$loggedUser|showProfDiv}
+							</li>
+						{else}
+							<li>Anonymní</li>
+						{/ifset}
+					</ul>
+					{block usermenu}{/block}
+					{control userMenu}
+				{/block}
+				{block AfterRightMenu}{/block}
+			</div><!-- /panel -->
+			<div data-role="header">
+				<nav data-role="navbar" data-grid="d">
+					<ul>
+						<li><a href="#leftmenu" class="" title="DATENODE.cz" data-iconpos="top" data-icon="grid"></a></li>
+						<li><a n:href="OnePage:" class="{ifset $activeHome}ui-btn-active{/ifset}" title="Domů" data-iconpos="top" data-icon="home"></a></li>
+						<li><a n:href="Chat:conversations" class="{ifset $activeChat}ui-btn-active{/ifset}" title="Chat" data-iconpos="top" data-icon="comment"></a></li>
+						<li><a n:href="Activities:" class="ui-btn-icon-top ui-icon-bell {ifset $activeActivities}ui-btn-active{/ifset}" title="title" data-iconpos="top"></a></li>
+						<li><a href="#rightmenu" class="" title="Uživatelské menu" data-iconpos="top" data-icon="user"></a></li>
+					</ul>
+				</nav>
+			</div>
+			<section role="main" class="ui-content">
+				{block orders}{/block}
+				{block nextAdmission}{/block}
+				{block beforeContent}{/block}
+				<section class="inner content-section">
+				<div n:foreach="$flashes as $flash" class='flash {$flash->type}'>
+					{$flash->message}
 				</div>
-			{/cache}
-        </div>
+				{block content}{/block}
+				<div class="clear"></div>
+				
+			</section>
+			
+		</section>
+		
+		
+		
+		
 	    
-			{include #posmenu}
+			
 		<div id="usermenu">
-			{block usermenu}{/block}
 			{if !$user->isLoggedIn()}
 			<a n:href="DatingRegistration:" class="btn-main registration-btn" title="Registruj se!">REGISTRACE</a>
 			{/if}
@@ -58,7 +100,6 @@
 					{control signInForm}
 				</div>
 			{/ifset}
-			{control userMenu}
 		{if $user->isLoggedIn()}
 			{* skryto pro první verzi přiznání *}
 			{*<a href="#" title="Platby" class="payment-btn user-btn" id="coins-btn"></a>
@@ -69,15 +110,7 @@
 			<div class="clear"></div>
 		</div>
 		
-		{block orders}{/block}
-		{block nextAdmission}{/block}
-	    {block beforeContent}{/block}
-	    <section class="inner content-section">
-		<div n:foreach="$flashes as $flash" class='flash {$flash->type}'>
-		    {$flash->message}
-		</div>
-		{block content}{/block}
-		<div class="clear"></div>
+		
 	    </section>
 		<footer class="inner">
 		    <div id="footline"></div>
@@ -109,6 +142,7 @@
 
 				</script>
 			{/if}
+			{block scripts}{/block}
 			{block foot}{/block}
 			<div class="clear"></div>
 		</footer>
