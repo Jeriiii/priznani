@@ -1,33 +1,33 @@
 {layout '../BaseStream/baseStream.latte'}
 
 {define addNewPost}
-		<div class="stream-form">
-			<ul id="stream-form-tabs">
+	<div data-role="tabs" id="usertabs">
+		<div data-role="navbar">
+			<ul>
 				{if $user->isLoggedIn()}
-					<li><a href="#tabs-1">STATUS</a></li>
+				<li><a href="#statusForm" data-ajax="false">STATUS</a></li>
 				{/if}
-				<li><a href="#tabs-2">PŘIZNÁNÍ</a></li>
-				<li class="last"><a href="#tabs-3">FOTKY</a></li>
+				<li><a href="#confessionForm" data-ajax="false">PŘIZNÁNÍ</a></li>
+				<li><a href="#photoForm" data-ajax="false">FOTKY</a></li>
 			</ul>
+		</div>
+		{if $user->isLoggedIn()}
+		<div id="statusForm" class="ui-body-d ui-content">
 			{if $user->isLoggedIn()}
-				<div id="tabs-1">
-					<div class="tab-arrow first"></div>
-					{if $user->isLoggedIn()}
-						{$userData|showProfDiv}
-					{/if}
-					<div class="half-form">
-					{form statusForm}
-						{input message class=>'form-field', placeholder=>'Napiš, co právě děláš...', rows => 3}
-						<div class="submit-container">
-							{input submit class => 'submit-button'}
-						</div>
-					{/form}
-					</div>
-				</div>
+				{$userData|showProfDiv}
 			{/if}
-			<div id="tabs-2">
-				<div class="tab-arrow {if $user->isLoggedIn()}second{else}first{/if}"></div>
-				{if $user->isLoggedIn()}
+			<div class="half-form">
+			{form statusForm}
+				{input message class=>'form-field', placeholder=>'Napiš, co právě děláš...', rows => 3}
+				<div class="submit-container">
+					{input submit class => 'submit-button'}
+				</div>
+			{/form}
+			</div>
+		</div>
+		{/if}
+		<div id="confessionForm">
+			{if $user->isLoggedIn()}
 				{$userData|showProfDiv}
 				{/if}
 				<div class="half-form">
@@ -43,40 +43,33 @@
 					{input nick class => 'hidden'}
 				{/form}
 				</div>
-			</div>
-			<div id="tabs-3" class="stream-add-images">
-				<div class="tab-arrow {if $user->isLoggedIn()}third{else}second{/if}"></div>
-				{if $user->isLoggedIn()}
-					{$userData|showProfDiv}
-					<div class="half-form">
-					{control newStreamImageForm}
-					</div>
-				{else}
-					Pro přidávání fotek se <a href="{plink :Sign:in}">přihlaš</a> nebo <a href="{plink :Sign:registration}">registruj</a>.
-				{/if}
-			</div>
 		</div>
+		<div id="photoForm">
+	    	{if $user->isLoggedIn()}
+				{$userData|showProfDiv}
+				<div class="half-form">
+				{control newStreamImageForm}
+				</div>
+			{else}
+				Pro přidávání fotek se <a href="{plink :Sign:in}">přihlaš</a> nebo <a href="{plink :Sign:registration}">registruj</a>.
+			{/if}
+	  </div>
+	</div>
 {/}
 
 {define addUserInfo}
 	{if $user->isLoggedIn() && empty($profilePhoto)}
-		<div id="activeBackgroundUploadPhoto" style="z-index:10000;position:fixed;top:0;left:0;background: rgba(20, 20, 20, 0.4);"></div>
-		<script>
-			var blackBackground = document.getElementById("activeBackgroundUploadPhoto");
-			var body = document.body,
-    
-			html = document.documentElement;
-			var height = Math.max( body.scrollHeight, body.offsetHeight, 
-                       html.clientHeight, html.scrollHeight, html.offsetHeight );
-					   
-			var width = document.body.clientWidth;
-			blackBackground.style.width = width + "px";
-			blackBackground.style.height = height + "px";
-		</script>
-		<div id="profile-photo-upload">
-			Nahrajte si profilovou fotku, aby si vás ostatní mohli prohlédnout.
-			<a class="highlight uploadProfilePhoto btn-main">Nahrát profilovou fotku</a>
-			{control cropImageUpload}
+		<div class="addprofilePhoto">
+			Ostatní si vás nemohou prohlédnout.
+			<a href="#popupAddProfilePhoto" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop">
+				Nahrajte si profilovou fotku
+			</a>
+			<div data-role="popup" id="popupAddProfilePhoto" data-theme="a" class="ui-corner-all">
+		        <div class="addprofilePhotoWindow">
+		            <h3>Nahrát profilovou fotku</h3>
+		            {control cropImageUpload}
+		        </div>
+			</div>
 		</div>
 	{elseif !empty($newInfo)}
 		<div id="news">

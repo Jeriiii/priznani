@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ActivitiesPresenter Description
+ * ActivitiesPresenter presenter pro zobrazování aktivit
  */
 class ActivitiesPresenter extends BasePresenter {
 
