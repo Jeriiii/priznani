@@ -152,6 +152,11 @@ class BaseStream extends BaseProjectControl {
 			// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
 			$this->template->profilePhoto = $userData->profilFotoID;
 		}
+		if ($this->getDeviceDetector()->isMobile()) {
+			$this->template->mobile = TRUE;
+		} else {
+			$this->template->mobile = FALSE;
+		}
 
 		/* pro určování přístupu do public / private galerií */
 		$this->template->userGalleryDao = $this->userGalleryDao;
