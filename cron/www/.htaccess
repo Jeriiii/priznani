@@ -1,27 +1,29 @@
-# Apache configuration file (see httpd.apache.org/docs/current/mod/quickreference.html)
+RewriteEngine On
+# RewriteBase /
 
-# disable directory listing
-<IfModule mod_autoindex.c>
-	Options -Indexes
-</IfModule>
+# front controller
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule !\.(pdf|js|ico|gif|jpg|png|css|rar|zip|tar\.gz)$ index.php [L]
 
-# enable cool URL
-<IfModule mod_rewrite.c>
-	RewriteEngine On
-	# RewriteBase /
+# cele domeny (aliasy)
+RewriteCond %{REQUEST_URI} !^domains/
+RewriteCond %{REQUEST_URI} !^/domains/
+RewriteCond %{HTTP_HOST} ^(www\.)?(.*)$
+RewriteCond %{DOCUMENT_ROOT}/domains/%2 -d
+RewriteRule (.*) domains/%2/$1 [DPI]
 
-	# prevents files starting with dot to be viewed by browser
-	RewriteRule /\.|^\. - [F]
+# subdomeny (s nebo bez www na zacatku)
+RewriteCond %{REQUEST_URI} !^subdom/
+RewriteCond %{REQUEST_URI} !^/subdom/
+RewriteCond %{HTTP_HOST} ^(www\.)?(.*)\.([^\.]*)\.([^\.]*)$
+RewriteCond %{DOCUMENT_ROOT}/subdom/%2 -d
+RewriteRule (.*) subdom/%2/$1 [DPI]
 
-	# front controller
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule !\.(pdf|js|ico|gif|jpg|png|css|rar|zip|tar\.gz|map)$ index.php [L]
-</IfModule>
+# aliasy - spravne presmerovani pri chybejicim /
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^domains/[^/]+/(.+[^/])$ /$1/ [R]
 
-# enable gzip compression
-<IfModule mod_deflate.c>
-	<IfModule mod_filter.c>
-		AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/x-javascript text/javascript application/javascript application/json
-	</IfModule>
-</IfModule>
+# subdomeny - spravne presmerovani pri chybejicim /
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^subdom/[^/]+/(.+[^/])$ /$1/ [R]
