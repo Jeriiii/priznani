@@ -11,9 +11,4 @@ $(document).bind("mobileinit", function () {/* vypnutí automatického ajaxu */
 $(document).ready(function(){
 	/* zobrazení částí až po načtení kvůli problikávání*/
 	$('#leftmenu, #rightmenu, #topmenu').css('display', 'block');
-	
-	$('.comment-button').click(function(){
-		var selector = '#' + $(this).attr('data-comments-open');
-		$(selector).toggle();
-	});
 });
