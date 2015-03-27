@@ -44,3 +44,4 @@ public/app/test/config/behat.local.yml
 
 public/nbproject/licenseheader.txt
 /cron/nbproject/private/
+/ftp-deployment-master/nbproject/private/

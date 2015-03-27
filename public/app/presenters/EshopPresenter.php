@@ -29,15 +29,7 @@ class EshopPresenter extends BasePresenter {
 		parent::startup();
 
 		$httpRequest = $this->context->httpRequest;
-		$this->domain = $httpRequest
-				->getUrl()
-			->host;
-
-		if (strpos($this->domain, "priznanizparby") !== false) {
-			$this->setPartyMode();
-		} else {
-			$this->setSexMode();
-		}
+		$this->domain = $httpRequest->getUrl()->host;
 	}
 
 	public function actionGame() {

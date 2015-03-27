@@ -29,33 +29,24 @@ class GalleryDao extends BaseGalleryDao {
 		return $this->createSelection(self::TABLE_NAME);
 	}
 
-	public function updateNameDecripMode($id, $name, $description, $mode) {
-		if ($mode == "sex") {
-			$column_set_mode = self::COLUMN_SEX_MODE;
-			$column_unset_mode = self::COLUMN_PARTY_MODE;
-		} else {
-			$column_set_mode = self::COLUMN_PARTY_MODE;
-			$column_unset_mode = self::COLUMN_SEX_MODE;
-		}
-
+	public function updateNameDecripMode($id, $name, $description, $mode = "sex") {
 		$sel = $this->getTable();
 		$sel->wherePrimary($id);
 		$sel->update(array(
 			self::COLUMN_NAME => $name,
 			self::COLUMN_DESCRIPTION => $description,
-			$column_set_mode => 1,
-			$column_unset_mode => 0
+			self::COLUMN_SEX_MODE => 1,
+			self::COLUMN_PARTY_MODE => 0
 		));
 	}
 
 	/**
 	 * Vrátí pouze galerii bez soutěží
-	 * @param string mode Mód galerie, použijte konstanty z tohoto DAO
 	 * @return Nette\Database\Table\Selection
 	 */
-	public function getGallery($mode) {
+	public function getGallery() {
 		$sel = $this->getTable();
-		$sel->where($mode, 1);
+		$sel->where(self::COLUMN_SEX_MODE, 1);
 		$sel->where(self::COMULN_COMPETITION, 0);
 		$sel->order(self::COLUMN_ID . " DESC");
 		return $sel;
@@ -63,12 +54,11 @@ class GalleryDao extends BaseGalleryDao {
 
 	/**
 	 * Vrátí pouze soutěže bez ostatních galerií
-	 * @param string mode Mód soutěže, použijte konstanty z tohoto DAO
 	 * @return Nette\Database\Table\Selection
 	 */
-	public function getCompetition($mode) {
+	public function getCompetition() {
 		$sel = $this->getTable();
-		$sel->where($mode, 1);
+		$sel->where(self::COLUMN_SEX_MODE, 1);
 		$sel->where(self::COMULN_COMPETITION, 1);
 		$sel->order(self::COLUMN_ID . " DESC");
 		return $sel;
@@ -76,12 +66,11 @@ class GalleryDao extends BaseGalleryDao {
 
 	/**
 	 * Vrátí galerii v danném módu
-	 * @param string mode Mód soutěže, použijte konstanty z tohoto DAO
 	 * @return Nette\Database\Table\Selection
 	 */
-	public function findByMode($mode) {
+	public function findLast() {
 		$sel = $this->getTable();
-		$sel->where($mode, 1);
+		$sel->where(self::COLUMN_SEX_MODE, 1);
 		$sel->order(self::COLUMN_ID . " DESC");
 		return $sel->fetch();
 	}

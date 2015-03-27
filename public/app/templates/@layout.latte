@@ -23,52 +23,28 @@
         <![endif]-->
 		<meta charset="utf-8" />
         {block beforeHead}{/block}
-		{if $partymode}
-		    {var $pagename = 'přiznání<b>z</b>pařby<span>.cz</span>'}
-			{ifset #meta}
-				{* inportujou se specialni meta tagy *}
-				{include #meta}
-			{else}
-			<title>Přiznání z pařby</title>
-
-			<meta name="keywords" content="Přiznání z pařby" />
-			<meta name="description" content="Přiznání z pařby" />
-
-			<meta property="og:title" content="Přiznání z pařby" />
-			<meta property="og:type" content="article" />
-			<meta property="og:image" content="http://priznanizparby.cz/images/party.jpg" />
-			<meta property="og:site_name" content="priznanizparby.cz" />
-			<meta property="og:description" content="Stala se Vám někdy na pařbě nějaká zajímavá, vtipná či šokující příhoda, ale bojíte se to veřejně říct? Využijte formuláře na http://priznanizparby.cz/ Všechna přiznání jsou 100% anonymní." />
-			{/ifset}
-			<link rel="stylesheet" href="{$basePath}/css/layout.css" type="text/css">
-			<link rel="stylesheet" href="{$basePath}/css/party.css" type="text/css">
-			<link rel="stylesheet" href="{$basePath}/css/default.css" type="text/css">
-			<link rel="shortcut icon" href="{$basePath}/partyicon.ico" type="image/x-icon">
+		{var $pagename = '<b>DATE</b>NODE<span>.cz <span id="beta-label">beta</span></span>'}
+		{ifset #meta}
+			{* inportujou se specialni meta tagy *}
+			{include #meta}
 		{else}
-		    {var $pagename = '<b>DATE</b>NODE<span>.cz beta</span>'}
-			{ifset #meta}
-				{* inportujou se specialni meta tagy *}
-				{include #meta}
-			{else}
-			<title>Přiznání o sexu</title>
+		<title>Přiznání o sexu</title>
 
-			<meta name="keywords" content="Erotická sociální síť datenode.cz" />
-			<meta name="description" content="Erotická sociální síť datenode.cz" />
+		<meta name="keywords" content="Erotická sociální síť datenode.cz" />
+		<meta name="description" content="Erotická sociální síť datenode.cz" />
 
-			<meta property="og:title" content="Erotická sociální síť datenode.cz" />
-			<meta property="og:type" content="article" />
-			<meta property="og:image" content="http://datenode.cz/images/sign/background-photo.jpg" />
-			<meta property="og:site_name" content="datenode.cz" />
-			<meta property="og:description" content="Chcete se opravdu seznámit, nebo jen pokecat a sdílet fotky? Zaregistrujte se, ostaní tam již na vás čekají." />
-			{/ifset}
-			{control cssLayout}
-			<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
+		<meta property="og:title" content="Erotická sociální síť datenode.cz" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="http://datenode.cz/images/sign/background-photo.jpg" />
+		<meta property="og:site_name" content="datenode.cz" />
+		<meta property="og:description" content="Chcete se opravdu seznámit, nebo jen pokecat a sdílet fotky? Zaregistrujte se, ostaní tam již na vás čekají." />
+		{/ifset}
+		{control cssLayout}
+		<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
 
-			{* mobile *}
-			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
-			<link media="handheld, only screen and (max-width: 480px), only screen and (max-device-width: 1000px)" href="{$basePath}/css/mobile-layout.css" type="text/css" rel="stylesheet" />
-
-		{/if}
+		{* mobile *}
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
+		<link media="handheld, only screen and (max-width: 480px), only screen and (max-device-width: 1000px)" href="{$basePath}/css/mobile-layout.css" type="text/css" rel="stylesheet" />
 		{block head}{/block}
 		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		{includeblock 'layoutBloks/googleAnalytics.latte'}
@@ -78,35 +54,19 @@
 	<div id="page-shadow"></div>
 		{includeblock 'layoutBloks/menu/menu-pos.latte'}
         <div id="left-side">
-			{if $partymode}
-			{cache}
-				{includeblock 'layoutBloks/menu/menu-pzp.latte'}
-				<div id="left-panel">
-					<div id="left-menu">
-						{include #pzpicons}
-					</div>
+		{cache}
+			<div id="left-panel">
+				<div id="left-menu">
+					{include #posicons}
 				</div>
-				<div id="left-panel-label">
-					<nav id="title-container">
-						{include #pzpmenu}
-					</nav>
-				</div>
-			{/cache}
-	    {else}
-			{cache}
-				<div id="left-panel">
-					<div id="left-menu">
-						{include #posicons}
-					</div>
-				</div>
-				{* zakomentování v prvním vydání přiznání
-				<div id="left-panel-label">
-					<nav id="title-container">
-						{include #posmenu}
-					</nav>
-				</div>*}
-			{/cache}
-	    {/if}
+			</div>
+			{* zakomentování v prvním vydání přiznání
+			<div id="left-panel-label">
+				<nav id="title-container">
+					{include #posmenu}
+				</nav>
+			</div>*}
+		{/cache}
         </div>
 	    <div id="header" class="partygradient">
 	    <header class="inner">
@@ -140,16 +100,7 @@
 		{/if}
 			<div class="clear"></div>
 		</div>
-		{if $partymode}
-		    {cache}
-				<a n:href=":Page:default url => priznanizparby" title="Přiznání z pářby" id="kiss"></a>
-				<a n:href=":Page:default url => priznanizparby"><h1 id="pagename">{!$pagename}</h1></a>
-			{/cache}
-		{else}
-			{cache}
-				<a n:href=":OnePage:" class="pagenamelink"><h1 id="pagename">{!$pagename}</h1></a>
-			{/cache}
-		{/if}
+		<a n:href=":OnePage:" class="pagenamelink"><h1 id="pagename">{!$pagename}</h1></a>
 		{block orders}{/block}
 		{block nextAdmission}{/block}
 		<div class="clear"></div>
@@ -167,7 +118,7 @@
 		<footer class="inner">
 		    <div id="footline"></div>
 		    <div class="left">
-			Copyright &copy; 2014 priznaniosexu.cz<br /><br />
+			Copyright &copy; 2015 priznaniosexu.cz<br /><br />
 			Designed by <a href="http://www.nejlevnejsiwebstranky.cz/">nejlevnejsiwebstranky.cz</a>
 		    </div>
 		    <div class="right">

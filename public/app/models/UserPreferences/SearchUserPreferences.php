@@ -17,8 +17,15 @@ use Nette\ArrayHash;
 use NetteExt\Serialize\Relation;
 use NetteExt\Serialize\Serializer;
 use POS\Model\UserCategory;
+use POS\Model\UserDao;
+use Nette\Http\Session;
+use POS\Model\UserCategoryDao;
 
 class SearchUserPreferences extends BaseUserPreferences implements IUserPreferences {
+
+	public function __construct($user, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session) {
+		parent::__construct($user, $userDao, $userCategoryDao, $session, $expirationTime = '10 min');
+	}
 
 	/**
 	 * Přepočítá výsledky hledání uložené v cache. Volá se i v případě,
@@ -32,13 +39,16 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 	}
 
 	public function getBestUsers() {
-		$this->bestUsers = $this->section->bestUsers;
+		$bestUserIds = $this->section->bestUsers;
 
-		if ($this->bestUsers === NULL) {
+		if ($bestUserIds === NULL) {
 			$this->calculate();
+			$bestUserIds = $this->bestUsers;
 		}
 
-		return $this->bestUsers;
+		$bestUsers = $this->userDao->getInIds($bestUserIds);
+
+		return $bestUsers;
 	}
 
 	/**
@@ -46,16 +56,13 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * @param Nette\Database\Table\Selection $users Hledaní uživatelé.
 	 */
 	public function saveBestUsers($users) {
-		$relProfilPhoto = new Relation("profilFoto");
-		$relGallery = new Relation("gallery");
-		$relProperty = new Relation("property");
-		$relProfilPhoto->addRel($relGallery);
+		/* proiteruje uživatele a uloží jejich IDčka */
+		$userIds = array();
+		foreach ($users as $user) {
+			$userIds[] = $user->id;
+		}
 
-		$ser = new Serializer($users);
-		$ser->addRel($relProfilPhoto);
-		$ser->addRel($relProperty);
-
-		$this->bestUsers = $ser->toArrayHash();
+		$this->bestUsers = $userIds;
 		$this->section->bestUsers = $this->bestUsers;
 	}
 

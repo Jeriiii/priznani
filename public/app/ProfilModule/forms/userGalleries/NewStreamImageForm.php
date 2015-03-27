@@ -15,19 +15,13 @@ use POS\Model\StreamDao;
  */
 class NewStreamImageForm extends UserGalleryImagesBaseForm {
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 */
+	/** @var \POS\Model\UserGalleryDao */
 	public $userGalleryDao;
 
-	/**
-	 * @var \POS\Model\ImageGalleryDao
-	 */
+	/** @var \POS\Model\ImageGalleryDao */
 	public $userImageDao;
 
-	/**
-	 * počet možných polí pro obrázky při vytvoření galerie
-	 */
+	/** počet možných polí pro obrázky při vytvoření galerie */
 	const NUMBER_OF_IMAGE = 3;
 
 	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, IContainer $parent = NULL, $name = NULL) {

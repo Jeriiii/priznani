@@ -17,33 +17,23 @@ use POSComponent\BaseLikes\ImageLikes;
 
 class UsersCompetitionsGallery extends BaseGallery {
 
-	/**
-	 * @var \POS\Model\ImageLikesDao
-	 */
+	/** @var \POS\Model\ImageLikesDao */
 	public $imageLikesDao;
 
-	/**
-	 * @var \POS\Model\CommentImagesDao
-	 */
+	/** @var \POS\Model\CommentImagesDao */
 	public $commentImagesDao;
 
-	/**
-	 * @var \POS\Model\LikeImageCommentDao
-	 */
+	/** @var \POS\Model\LikeImageCommentDao */
 	public $likeImageCommentDao;
 
-	/**
-	 * @var ActiveRow|ArrayHash $loggedUser
-	 */
+	/** @var ActiveRow|ArrayHash $loggedUser */
 	public $loggedUser;
 
-	/**
-	 * @var int ID uživatele, kterému patří obrázek.
-	 */
+	/** @var int ID uživatele, kterému patří obrázek. */
 	private $ownerID;
 
-	public function __construct($images, $image, $gallery, $domain, $partymode, LikeImageCommentDao $likeImageCommentDao, UserImageDao $userImageDao, CommentImagesDao $commentImagesDao, ImageLikesDao $imageLikesDao, $loggedUser, $parent, $name) {
-		parent::__construct($images, $image, $gallery, $domain, $partymode, $parent, $name);
+	public function __construct($images, $image, $gallery, LikeImageCommentDao $likeImageCommentDao, UserImageDao $userImageDao, CommentImagesDao $commentImagesDao, ImageLikesDao $imageLikesDao, $loggedUser, $parent, $name) {
+		parent::__construct($images, $image, $gallery, $parent, $name);
 		parent::setUserImageDao($userImageDao);
 		$this->image = $image;
 		$this->imageLikesDao = $imageLikesDao;

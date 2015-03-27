@@ -74,15 +74,7 @@ class CompetitionPresenter extends BasePresenter {
 		parent::startup();
 
 		$httpRequest = $this->context->httpRequest;
-		$this->domain = $httpRequest
-				->getUrl()
-			->host;
-
-		if (strpos($this->domain, "priznanizparby") !== false) {
-			$this->setPartyMode();
-		} else {
-			$this->setSexMode();
-		}
+		$this->domain = $httpRequest->getUrl()->host;
 
 		if ($this->action == "uploadCompetitionImage") {
 			$this->checkLoggedIn();
@@ -94,14 +86,8 @@ class CompetitionPresenter extends BasePresenter {
 	}
 
 	public function renderList($justCompetition = FALSE, $withoutCompetition = FALSE) {
-		if ($this->partymode) {
-			$mode = GalleryDao::COLUMN_PARTY_MODE;
-		} else {
-			$mode = GalleryDao::COLUMN_SEX_MODE;
-		}
-
-		$this->template->competitions = $this->galleryDao->getGallery($mode);
-		$this->template->galleries = $this->galleryDao->getCompetition($mode);
+		$this->template->competitions = $this->galleryDao->getGallery();
+		$this->template->galleries = $this->galleryDao->getCompetition();
 		$this->template->userCompetitions = $this->usersCompetitionsDao->getAll();
 	}
 
@@ -213,8 +199,6 @@ class CompetitionPresenter extends BasePresenter {
 
 			$this->image = $this->imageDao->find($this->imageID);
 			$this->gallery = $this->galleryDao->find($this->image->galleryID);
-
-			$this->domain = $this->partymode ? "http://priznanizparby.cz" : "http://priznaniosexu.cz";
 		}
 	}
 
@@ -237,12 +221,7 @@ class CompetitionPresenter extends BasePresenter {
 	 * vrátí poslední galerii podle modu sex/pařba
 	 */
 	public function getLastGallery() {
-		if ($this->partymode) {
-			$mode = GalleryDao::COLUMN_PARTY_MODE;
-		} else {
-			$mode = GalleryDao::COLUMN_SEX_MODE;
-		}
-		return $this->galleryDao->findByMode($mode);
+		return $this->galleryDao->findLast();
 	}
 
 	public function renderDefault($imageID, $galleryID) {
@@ -275,11 +254,6 @@ class CompetitionPresenter extends BasePresenter {
 		$this->template->photo2 = $photos->fetch();
 
 		$this->template->galleryID = $this->getLastGallery()->id;
-		if ($this->partymode) {
-			$this->template->images = array(1, 2, 3);
-		} else {
-			$this->template->images = array(1, 2, 3);
-		}
 	}
 
 	protected function createComponentGallery($name) {
@@ -289,7 +263,7 @@ class CompetitionPresenter extends BasePresenter {
 			$images = $this->imageDao->getApproved($this->gallery->id);
 		}
 
-		return new CompetitionGallery($images, $this->image, $this->gallery, $this->domain, $this->partymode, $this->imageDao, $this->galleryDao, $this->streamDao, $this, $name);
+		return new CompetitionGallery($images, $this->image, $this->gallery, $this->imageDao, $this->galleryDao, $this->streamDao, $this, $name);
 	}
 
 	protected function createComponentImageNew($name) {

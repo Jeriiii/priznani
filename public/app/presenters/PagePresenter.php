@@ -24,52 +24,28 @@ class PagePresenter extends BasePresenter {
 	public $confessions;
 	private $page;
 
-	/**
-	 * @var \POS\Model\PartyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\PartyDao @inject */
 	public $partyDao;
 
-	/**
-	 * @var \POS\Model\ConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ConfessionDao @inject */
 	public $confessionDao;
 
-	/**
-	 * @var \POS\Model\AdviceDao
-	 * @inject
-	 */
+	/** @var \POS\Model\AdviceDao @inject */
 	public $adviceDao;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\GalleryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\GalleryDao @inject */
 	public $galleryDao;
 
-	/**
-	 * @var \POS\Model\LikeConfessionDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeConfessionDao @inject */
 	public $likeConfessionDao;
 
-	/**
-	 * @var \POS\Model\LikeConfessionCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeConfessionCommentDao @inject */
 	public $likeConfessionCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentConfessionsDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentConfessionsDao @inject */
 	public $commentConfessionsDao;
 
 	public function startup() {
@@ -172,7 +148,6 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function actionConfession($id) {
-		$this->setMode("priznani-o-sexu");
 		$this->id_confession = $id;
 		$confession = $this->getDao()->find($id);
 		if (empty($confession)) {
@@ -204,8 +179,6 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function actionPartyConfession($id) {
-		//$this->url = $this->domain;
-		$this->setPartyMode();
 		$this->id_confession = $id;
 		$confession = $this->getDao()->find($id);
 		if (empty($confession)) {
@@ -244,7 +217,6 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function renderAdminScore() {
-		$this->setSexMode();
 		$this->template->admins = $this->userDao->getAdminScore();
 	}
 
@@ -299,15 +271,7 @@ class PagePresenter extends BasePresenter {
 	 * vrati spravnou tabulku bud priznani nebo poradny
 	 */
 	public function getDao() {
-		if ($this->partymode) {
-			return $this->partyDao;
-		} elseif ($this->advicemode) {
-			return $this->adviceDao;
-		} elseif ($this->sexmode) {
-			return $this->confessionDao;
-		} else {
-			new Exception("Mode didn´t choose,");
-		}
+		return $this->confessionDao;
 	}
 
 	/* pro vypsani vice priznani */
