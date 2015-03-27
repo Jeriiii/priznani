@@ -7,6 +7,8 @@ and open the template in the editor.
     Created on : 20.3.2015, 15:34:27
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
+@import "../comments/mobileComments.less";
+
 .addprofilePhoto{
 	padding: 2px 5%;
 	text-align: center;
@@ -15,6 +17,12 @@ and open the template in the editor.
 		padding: 10px 10%;
 	}
 }
+
+#popupAddProfilePhoto{
+	padding: 0 8px;
+	left: -8px;	
+}
+
 #best-match{
 	width: 100%;
 	float: left;
@@ -63,4 +71,29 @@ and open the template in the editor.
 			}
 		}
 	}
+}
+
+#usertabs{
+	.hidden{
+		display: none;
+	}
+	
+	#statusForm, #confessionForm, #photoForm{
+		padding-top: 8px;
+	}
+	
+	#confessionForm{
+		.ui-input-text:not(.form-field){
+			border: none;
+		}
+	}	
+}
+
+.comments-container{
+	display: none;
+}
+
+.isLiked.ui-state-disabled{
+	filter: Alpha(Opacity=70) !important;
+	opacity: 0.7 !important;
 }

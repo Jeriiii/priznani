@@ -1,18 +1,18 @@
-{layout '../BaseStream/baseStream.latte'}
+{layout '../BaseStream/baseStreamMobile.latte'}
 
 {define addNewPost}
 	<div data-role="tabs" id="usertabs">
 		<div data-role="navbar">
 			<ul>
 				{if $user->isLoggedIn()}
-				<li><a href="#statusForm" data-ajax="false">STATUS</a></li>
+				<li><a href="#statusForm" class="ui-btn-active" data-ajax="false">STATUS</a></li>
 				{/if}
 				<li><a href="#confessionForm" data-ajax="false">PŘIZNÁNÍ</a></li>
 				<li><a href="#photoForm" data-ajax="false">FOTKY</a></li>
 			</ul>
 		</div>
 		{if $user->isLoggedIn()}
-		<div id="statusForm" class="ui-body-d ui-content">
+		<div id="statusForm">
 			{if $user->isLoggedIn()}
 				{$userData|showProfDiv}
 			{/if}
@@ -45,7 +45,7 @@
 				</div>
 		</div>
 		<div id="photoForm">
-	    	{if $user->isLoggedIn()}
+			{if $user->isLoggedIn()}
 				{$userData|showProfDiv}
 				<div class="half-form">
 				{control newStreamImageForm}
@@ -55,6 +55,7 @@
 			{/if}
 	  </div>
 	</div>
+	<div class="mobileline"></div>
 {/}
 
 {define addUserInfo}

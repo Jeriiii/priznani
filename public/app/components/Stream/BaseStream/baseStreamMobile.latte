@@ -23,10 +23,16 @@
 									<p>{$dataItem->userGallery->lastImage->description}</p>
 								</a>
 								<div class="react-menu">
-									{control likeImages-$dataItem->id}
+									<div id="navbar-{$dataItem->id}" data-role="navbar">
+										<ul>
+											<li><a href="#navbar-{$dataItem->id}" data-comments-open="comments-{$dataItem->id}" data-ajax="false" class="comment-button">Komentáře</a></li>
+											<li>{control likeImages-$dataItem->id}</li>
+										</ul>
+									</div>
 								</div>
-								<div class="dotline"></div>
-								{control commentImages-$dataItem->id}
+								<div id="comments-{$dataItem->id}" class="comments-container">
+									{control commentImages-$dataItem->id}
+								</div>								
 							{else}
 								{if $dataItem->userGallery->allow_friends}
 									<strong>Tato galerie se zobrazuje pouze přátelům uživatele 
@@ -53,11 +59,17 @@
 						<a href="{plink Page:confession id => $dataItem->confessionID}" title="Přiznání o sexu"><h3>Přiznání</h3></a>
 						<p>{$dataItem->confession->note}</p>
 						<div class="react-menu">
-							{control likeConfession-$dataItem->id}
-							{control pollsControl-$dataItem->id}
+							<div id="navbar-{$dataItem->id}" data-role="navbar">
+							<ul>
+								<li><a href="#navbar-{$dataItem->id}" data-comments-open="comments-{$dataItem->id}" data-ajax="false" class="comment-button">Komentáře</a></li>
+								<li>{control likeConfession-$dataItem->id}</li>
+								<li>{control pollsControl-$dataItem->id}</li>
+							</ul>
+							</div>
 						</div>
-						<div class="dotline"></div>
-						{control commentConfession-$dataItem->id}
+						<div id="comments-{$dataItem->id}" class="comments-container">
+							{control commentConfession-$dataItem->id}
+						</div>
 					{/ifset}
 
 					{ifset $dataItem->adviceID}
@@ -69,13 +81,20 @@
 						{$status->user|showProfDiv}
 						<p>{$status->message}</p>
 						<div class="react-menu">
-							{control likeStatus-$dataItem->id}
+							<div id="navbar-{$dataItem->id}" data-role="navbar">
+							<ul>
+								<li><a href="#navbar-{$dataItem->id}" data-comments-open="comments-{$dataItem->id}" data-ajax="false" class="comment-button">Komentáře</a></li>
+								<li>{control likeStatus-$dataItem->id}</li>
+							</ul>
+							</div>
 						</div>
-						<div class="dotline"></div>
-						{control commentStatus-$dataItem->id}
+						<div id="comments-{$dataItem->id}" class="comments-container">
+							{control commentStatus-$dataItem->id}
+						</div>
 					{/ifset}
 					
 				</div>
+				<div class="mobileline"></div>
 			{/foreach}
 		</div>
 		<div class="loaderbar">
