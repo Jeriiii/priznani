@@ -5,7 +5,7 @@
  */
 
 $.nette.ext('streamAjax', {
-		success: function () {
-			$('.stream-item').trigger("create");
+		success: function () {/* úspěch operace z nette.ajax */
+			$('.stream-item').trigger("create");/* znovuaplikování jQueryMobile na stream */
 		}
 });
