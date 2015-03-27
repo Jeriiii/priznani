@@ -10,6 +10,20 @@ and open the template in the editor.
 @import "../variables.less";
 @import "../generatedProfile.less";
 @import "icons.less";
+@import "../default.css";
+@import "../layout/universal-styles.less"
+
+
+.mobileline{
+	height: 1px;
+	background: #ddd;
+	margin: 5px 0;
+	width: 100%;
+	padding: 0 2em;
+	position: relative;
+	left: -1em;
+	box-shadow: none;
+}
 
 .pagename{
 	display: block;
@@ -54,4 +68,13 @@ and open the template in the editor.
 		text-decoration: underline !important;
 		color: #444;
 	}
+}
+
+.ui-popup{
+	text-align: center;
+	
+	.ui-title{
+		  margin: 0 5% !important;
+	}
+	
 }
