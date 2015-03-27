@@ -135,7 +135,11 @@ class BaseLikes extends BaseProjectControl {
 	 */
 	public function render() {
 		$template = $this->template;
-		$template->setFile(dirname(__FILE__) . '/baseLikes.latte');
+		if ($this->getDeviceDetector()->isMobile()) {
+			$template->setFile(dirname(__FILE__) . '/baseLikesMobile.latte');
+		} else {
+			$template->setFile(dirname(__FILE__) . '/baseLikes.latte');
+		}
 		$template->liked = $this->liked;
 		$template->justLike = $this->justLike;
 		$template->button = $this->nameLikeButton;

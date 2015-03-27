@@ -1,0 +1,32 @@
+{snippet}
+<div class="polls" id="polly-{$confession->id}">
+	{if !empty($polls[$confession->id])}
+		{if ($polls[$confession->id] == "real")}
+			<a n:href="changePolly! id_confession => $confession->id, polly => real, change => real" class="polly" data-polly="real-real">
+				<b><i class="check"></i>Real (<span>{$confession->real}</span>)</b>
+			</a>
+		{else}
+			<a n:href="changePolly! id_confession => $confession->id, polly => real, change => fake" class="polly" data-polly="real-fake">
+				Real (<span>{$confession->real}</span>)
+			</a>
+		{/if}
+		{if ($polls[$confession->id] == "fake")}
+			<a n:href="changePolly! id_confession => $confession->id, polly => fake, change => fake" class="polly" data-polly="fake-fake">
+				<b><i class="check"> </i>Fake (<span>{$confession->fake}</span>)</b>
+			</a>
+		{else}
+			<a n:href="changePolly! id_confession => $confession->id, polly => fake, change => real" class="polly" data-polly="fake-real">
+				Fake (<span>{$confession->fake}</span>)
+			</a>
+		{/if}
+                         
+	{else}
+		<a n:href="changePolly! id_confession => $confession->id, polly => real" class="polly" data-polly="real">
+			Real (<span>{$confession->real}</span>)
+		</a>
+		<a n:href="changePolly! id_confession => $confession->id, polly => fake" class="polly" data-polly="fake">
+			Fake (<span>{$confession->fake}</span>)
+		</a>									
+	{/if}
+</div>
+{/snippet}
