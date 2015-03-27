@@ -61,14 +61,23 @@
 						<div class="react-menu">
 							<div id="navbar-{$dataItem->id}" data-role="navbar">
 							<ul>
-								<li><a href="#navbar-{$dataItem->id}" data-comments-open="comments-{$dataItem->id}" data-ajax="false" class="comment-button">Komentáře</a></li>
-								<li>{control likeConfession-$dataItem->id}</li>
+								<li><a href="#navbar-{$dataItem->id}" data-to-open="comments-{$dataItem->id}" data-ajax="false" class="comment-button">Komentáře</a></li>
+								<li>
+									{if !$user->isLoggedIn()}
+										<a href="#navbar-{$dataItem->id}" data-to-open="likes-{$dataItem->id}" data-ajax="false" class="likes-button">
+									{/if}
+									{control likeConfession-$dataItem->id}
+									{if !$user->isLoggedIn()}</a>{/if}
+								</li>
 								<li>{control pollsControl-$dataItem->id}</li>
 							</ul>
 							</div>
 						</div>
 						<div id="comments-{$dataItem->id}" class="comments-container">
 							{control commentConfession-$dataItem->id}
+						</div>
+						<div id="likes-{$dataItem->id}" class="likes-container">
+							Pro hodnocení se musíte <a href="{plink :Sign:in}" title="Přihlášení">přihlásit</a>.
 						</div>
 					{/ifset}
 
