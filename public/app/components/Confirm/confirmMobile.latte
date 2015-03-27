@@ -1,12 +1,13 @@
-<div>
-	<a href="#" id="confirm-btn-{$id}" class="{$btnClass}" title="{$tittle}">
-		{if $btnSetText}
+<a href="#popupDialog-{$id}" data-rel="popup" data-position-to="window" data-transition="pop"  title="{$tittle}" class="{$btnClass} ui-btn ui-corner-all ui-shadow ui-btn-inline">
+	{if $btnSetText}
 			{if $btnText == ""}{$tittle}{else}{$btnText}{/if}
 		{/if}
-	</a>
-	<div class="confirm-content" data-ajaxbox-btn="#confirm-btn-{$id}" data-ajaxbox-header-html="{$tittle} {$name}">
-		<p>{$message}</p>
-		<a href="{if $plink}{$presenter->link($link[0], $link[1])}{else}{$link}{/if}" class="confirm-send-btn {$confirmBtnClass} btn-main btn-small">Ano</a>
-		<a class="close btn-main btn-small">Ne</a>
+</a>
+<div data-role="popup" id="popupDialog-{$id}" data-dismissible="false" data-overlay-theme="a" data-theme="a">
+	<div data-role="header">
+		<h1>{$tittle} {$name}</h1>
 	</div>
+	<p>{$message}</p>
+	<a href="{if $plink}{$presenter->link($link[0], $link[1])}{else}{$link}{/if}" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">Ano</a>
+	<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Ne</a>
 </div>

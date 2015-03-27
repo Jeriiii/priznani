@@ -1,30 +1,30 @@
 <div class="comments">
-{snippet list}
+	{snippet list}
 
-		{foreach $comments as $comment}
-			<div class="comment">
-				{$comment->user|showProfMin}
-				{if $user->id == $comment->userID}
-					{var $link = $_control->link('deleteComment!', $comment->id )}
-					{control deleteComment $comment->id, '', $link}
-				{/if}
-				<a href="{plink :Profil:Show: id => $comment->userID}" class="red-link">{$comment->user->user_name}</a>
+			{foreach $comments as $comment}
+				<div class="comment">
+					{$comment->user|showProfMin}
+					{if $user->id == $comment->userID}
+						{var $link = $_control->link('deleteComment!', $comment->id )}
+						{control deleteComment $comment->id, '', $link}
+					{/if}
+					<a href="{plink :Profil:Show: id => $comment->userID}" class="red-link">{$comment->user->user_name}</a>
 
-				<p>
-				{$comment->comment}
-				</p>
-				<div class="react-menu">
-				{control likeComment-$comment->id}
+					<p>
+					{$comment->comment}
+					</p>
+					<div class="react-menu">
+					{control likeComment-$comment->id}
+					</div>
+					<div class="clear dotline bright"></div>
 				</div>
-				<div class="clear dotline bright"></div>
-			</div>
-		{/foreach}
-		{if !$showAllComments && $minShowComments < $countComments}
-		<a n:href="showAllComment!" class="ajax red-link underline next-link">Zobrazit další komentáře ({$countComments - $minShowComments})</a>
-		<div class="clear"></div>
-		{/if}
-		<div class="clear"></div>
-{/snippet}
+			{/foreach}
+			{if !$showAllComments && $minShowComments < $countComments}
+			<a n:href="showAllComment!" class="ajax red-link underline next-link">Zobrazit další komentáře ({$countComments - $minShowComments})</a>
+			<div class="clear"></div>
+			{/if}
+			<div class="clear"></div>
+	{/snippet}
 	<div class="add-comment">
 	{if $user->isLoggedIn()}
 		<a href="{plink :Profil:Show: id => $userData->id}" class="red-link">{$userData->user_name|upper}</a>

@@ -5,12 +5,12 @@
 		{if $liked}
 			{* vypíše text podle toho, jestli se jedná o obrázek/status *}
 			{if $label == "obrázku"}
-				<strong>Je sexy ({$likes})</strong>
+				<strong class="mobile-likebutton ui-btn isLiked ui-state-disabled">Je sexy ({$likes})</strong>
 			{else}
-				<strong>Líbí ({$likes})</strong>
+				<strong class="mobile-likebutton ui-btn isLiked ui-state-disabled">Líbí ({$likes})</strong>
 			{/if}
 		{else}
-			<a class="ajax" n:href="Like! $user->id, $item->id">{$button} ({$likes})<a/>
+			<a class="ajax mobile-likebutton ui-btn" n:href="Like! $user->id, $item->id">{$button} ({$likes})</a>
 		{/if}
 	{else}
 		k ohodnocení {$label} se musíte <a href="{plink :Sign:in}">přihlásit</a>
