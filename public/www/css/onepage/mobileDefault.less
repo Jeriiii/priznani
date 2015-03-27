@@ -89,11 +89,24 @@ and open the template in the editor.
 	}	
 }
 
-.comments-container{
+.comments-container, .likes-container{
 	display: none;
+}
+.likes-container{
+	margin: 5px 15px;
+	padding: 5px 5px;
 }
 
 .isLiked.ui-state-disabled{
 	filter: Alpha(Opacity=70) !important;
 	opacity: 0.7 !important;
+}
+
+.tooltip-container{
+	text-align: right;
+	a{
+		background: transparent !important;
+		border: none;
+	}
+
 }
