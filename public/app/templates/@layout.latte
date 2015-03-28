@@ -40,6 +40,7 @@
 		<meta property="og:description" content="Chcete se opravdu seznámit, nebo jen pokecat a sdílet fotky? Zaregistrujte se, ostaní tam již na vás čekají." />
 		{/ifset}
 		{control cssLayout}
+		{if $isNotComponentCssEmpty} {*control cssComponents*} {/if}
 		<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
 
 		{* mobile *}

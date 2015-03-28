@@ -12,27 +12,10 @@
 
 namespace POSComponent\Stream\BaseStream;
 
-use POS\Model\UserGalleryDao;
-use POS\Model\UserImageDao;
-use POS\Model\ConfessionDao;
-use POS\Model\UserDao;
-use POS\Model\ImageLikesDao;
-use POS\Model\LikeStatusDao;
-use POS\Model\UserPositionDao;
-use POS\Model\EnumPositionDao;
-use POS\Model\EnumPlaceDao;
-use POS\Model\UserPlaceDao;
 use POSComponent\BaseProjectControl;
 use Nette\Application\UI\Multiplier;
 use Nette\Application\UI\Form as Frm;
-use POS\Model\StreamDao;
-use POS\Model\LikeImageCommentDao;
-use POS\Model\CommentImagesDao;
-use POS\Model\LikeStatusCommentDao;
-use POS\Model\CommentStatusesDao;
-use POS\Model\LikeConfessionCommentDao;
-use POS\Model\CommentConfessionsDao;
-use POS\Model\LikeConfessionDao;
+use NetteExt\DaoBox;
 use POSComponent\Comments\ConfessionComments;
 use POSComponent\Comments\ImageComments;
 use POSComponent\Comments\StatusComments;
@@ -68,18 +51,6 @@ class BaseStream extends BaseProjectControl {
 	/** @var \POS\Model\StreamDao */
 	public $streamDao;
 
-	/** @var \POS\Model\UserPositionDao */
-	public $userPositionDao;
-
-	/** @var \POS\Model\EnumPositionDao */
-	public $enumPositionDao;
-
-	/** @var \POS\Model\UserPlaceDao */
-	public $userPlaceDao;
-
-	/** @var \POS\Model\EnumPlaceDao */
-	public $enumPlaceDao;
-
 	/** @var \POS\Model\UserDao */
 	public $userDao;
 
@@ -107,28 +78,28 @@ class BaseStream extends BaseProjectControl {
 	/** @var \POS\Model\LikeConfessionDao */
 	public $likeConfessionDao;
 
-	public function __construct($data, LikeStatusDao $likeStatusDao, ImageLikesDao $imageLikesDao, UserDao $userDao, UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, ConfessionDao $confDao, StreamDao $streamDao, UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, LikeImageCommentDao $likeImageCommentDao, CommentImagesDao $commentImagesDao, LikeStatusCommentDao $likeStatusCommentDao, CommentStatusesDao $commentStatusesDao, LikeConfessionCommentDao $likeConfessionCommentDao, CommentConfessionsDao $commentConfessionsDao, LikeConfessionDao $likeConfessionDao, $loggedUser) {
+	public function __construct($data, DaoBox $daoBox, $loggedUser) {
 		parent::__construct();
 		$this->dataForStream = $data;
-		$this->userGalleryDao = $userGalleryDao;
-		$this->userImageDao = $userImageDao;
-		$this->confessionDao = $confDao;
-		$this->imageLikesDao = $imageLikesDao;
-		$this->likeStatusDao = $likeStatusDao;
-		$this->streamDao = $streamDao;
-		$this->userDao = $userDao;
-		$this->userPositionDao = $userPositionDao;
-		$this->enumPositionDao = $enumPositionDao;
-		$this->userPlaceDao = $userPlaceDao;
-		$this->enumPlaceDao = $enumPlaceDao;
-		$this->likeImageCommentDao = $likeImageCommentDao;
-		$this->commentImagesDao = $commentImagesDao;
-		$this->likeStatusCommentDao = $likeStatusCommentDao;
-		$this->commentStatusesDao = $commentStatusesDao;
-		$this->commentConfessionsDao = $commentConfessionsDao;
-		$this->likeConfessionCommentDao = $likeConfessionCommentDao;
-		$this->likeConfessionDao = $likeConfessionDao;
+		$this->setDaos($daoBox);
 		$this->loggedUser = $loggedUser;
+	}
+
+	private function setDaos(DaoBox $daoBox) {
+		$this->userGalleryDao = $daoBox->userGalleryDao;
+		$this->userImageDao = $daoBox->userImageDao;
+		$this->confessionDao = $daoBox->confessionDao;
+		$this->imageLikesDao = $daoBox->imageLikesDao;
+		$this->likeStatusDao = $daoBox->likeStatusDao;
+		$this->streamDao = $daoBox->streamDao;
+		$this->userDao = $daoBox->userDao;
+		$this->likeImageCommentDao = $daoBox->likeImageCommentDao;
+		$this->commentImagesDao = $daoBox->commentImagesDao;
+		$this->likeStatusCommentDao = $daoBox->likeStatusCommentDao;
+		$this->commentStatusesDao = $daoBox->commentStatusesDao;
+		$this->commentConfessionsDao = $daoBox->commentConfessionsDao;
+		$this->likeConfessionCommentDao = $daoBox->likeConfessionCommentDao;
+		$this->likeConfessionDao = $daoBox->likeConfessionDao;
 	}
 
 	/**
@@ -259,10 +230,6 @@ class BaseStream extends BaseProjectControl {
 			$status = $streamItems->offsetGet($streamItem)->status;
 			return new StatusLikes($this->likeStatusDao, $status, $this->loggedUser->id, $status->userID, $this->dataForStream);
 		});
-	}
-
-	protected function createComponentPlacesAndPositionsForm($name) {
-		return new Frm\PlacesAndPositionsForm($this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->userDao, $this, $name);
 	}
 
 	protected function createComponentCommentStatus() {

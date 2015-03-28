@@ -132,8 +132,70 @@ class UserImageDao extends AbstractDao {
 	public function getNotCheckFrontPage() {
 		$sel = $this->getTable();
 
-		$sel->where(self::COLUMN_ON_FRONT_PAGE . ' IS NULL');
+		$sel->where(self::COLUMN_ON_FRONT_PAGE . ' != ?', 1);
 		return $sel;
+	}
+
+	/**
+	 * Vrátí obrázek, který má uživatel ohodnit
+	 * @param int $userId ID uživatele
+	 * @return \Nette\Database\Table\ActiveRow Obrázek, který má uživatel ohodnit.
+	 */
+	public function getFrontPage($userId) {
+		/* načte obrázky, které již byly ohodnoceny */
+		$rateImgIDs = $this->getRateImgIDs($userId);
+		$likeImgIDs = $this->getLikeImgIDs($userId);
+
+		$imgIDs = $rateImgIDs + $likeImgIDs;
+
+		$sel = $this->getTable();
+
+		if (!empty($imgIDs)) {
+			$sel->where(self::TABLE_NAME . '.' . self::COLUMN_ID . ' NOT ', $imgIDs);
+		}
+		$sel->where('.' . self::COLUMN_GALLERY_ID . '.' . UserGalleryDao::COLUMN_USER_ID . ' != ?', $userId);
+		$sel->where(self::COLUMN_ON_FRONT_PAGE . ' = ?', 1);
+		$sel->limit(1);
+
+		return $sel->fetch();
+	}
+
+	/**
+	 * Vrátí všechny ID obrázků, které uživatel ohodnotil.
+	 * @param int $userId ID uživatele
+	 * @return array Pole obrázků, které uživatel ohodnotil.
+	 */
+	private function getRateImgIDs($userId) {
+		/* vybere všechny obrázky, které již uživatel hodnotil */
+		$selRate = $this->createSelection(RateImageDao::TABLE_NAME);
+		$selRate->where(RateImageDao::COLUMN_USER_ID, $userId);
+		$selRate->select(RateImageDao::COLUMN_IMAGE_ID);
+
+		$ratingImgIDs = array();
+		foreach ($selRate as $imgRate) {
+			$ratingImgIDs[] = $imgRate->imageID;
+		}
+
+		return $ratingImgIDs;
+	}
+
+	/**
+	 * Vrátí všechny ID obrázků, které uživatel ohodnotil.
+	 * @param int $userId ID uživatele
+	 * @return array Pole obrázků, které uživatel ohodnotil.
+	 */
+	private function getLikeImgIDs($userId) {
+		/* vybere všechny obrázky, které již uživatel likenul */
+		$selLike = $this->createSelection(ImageLikesDao::TABLE_NAME);
+		$selLike->where(ImageLikesDao::COLUMN_USER_ID, $userId);
+		$selLike->select(ImageLikesDao::COLUMN_IMAGE_ID);
+
+		$likeImgIDs = array();
+		foreach ($selLike as $imgLake) {
+			$likeImgIDs[] = $imgLake->imageID;
+		}
+
+		return $likeImgIDs;
 	}
 
 	/**

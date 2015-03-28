@@ -124,7 +124,7 @@ class GetImgPathHelper {
 	 * @return string
 	 * @throws Exception Nezná daný typ obrázku.
 	 */
-	private function createImgPath($image, $galleryType, $type) {
+	public function createImgPath($image, $galleryType, $type) {
 		$basePath = $this->getBasePath();
 		$image = new Image($image, $galleryType, $type);
 		$galleryFolder = $this->getGalleryPath($image, $galleryType);

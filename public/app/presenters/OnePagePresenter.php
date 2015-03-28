@@ -15,7 +15,6 @@ use POSComponent\UsersList\FriendRequestList;
 use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\BlokedUsersList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
-use POSComponent\Confirm;
 use NetteExt\Helper\ShowUserDataHelper;
 use NetteExt\DaoBox;
 
@@ -88,7 +87,7 @@ class OnePagePresenter extends BasePresenter {
 	public $commentStatusesDao;
 
 	/** @var \POS\Model\LikeConfessionCommentDao @inject */
-	public $likeCOnfessionCommentDao;
+	public $likeConfessionCommentDao;
 
 	/** @var \POS\Model\CommentConfessionsDao @inject */
 	public $commentConfessionsDao;
@@ -107,6 +106,9 @@ class OnePagePresenter extends BasePresenter {
 
 	/** @var \POS\Model\UsersNewsDao @inject */
 	public $usersNewsDao;
+
+	/** @var \POS\Model\RateImageDao @inject */
+	public $rateImageDao;
 
 	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
 	public $dataForStream;
@@ -132,7 +134,45 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		return new UserStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->statusDao, $this->streamDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeCOnfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao, $this->usersNewsDao, $this->loggedUser);
+		$daoBox = $this->getDaoBoxUserStream();
+
+		return new UserStream($this->dataForStream, $daoBox, $this->loggedUser);
+	}
+
+	/**
+	 * Vrátí DaoBox naplněný pro user stream.
+	 */
+	private function getDaoBoxUserStream() {
+		$daoBox = new DaoBox;
+		$daoBox->likeStatusDao = $this->likeStatusDao;
+		$daoBox->imageLikesDao = $this->imageLikesDao;
+		$daoBox->userDao = $this->userDao;
+		$daoBox->statusDao = $this->statusDao;
+
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->userGalleryDao = $this->userGalleryDao;
+		$daoBox->userImageDao = $this->userImageDao;
+		$daoBox->confessionDao = $this->confessionDao;
+
+		$daoBox->userPositionDao = $this->userPositionDao;
+		$daoBox->enumPositionDao = $this->enumPositionDao;
+		$daoBox->userPlaceDao = $this->userPlaceDao;
+		$daoBox->enumPlaceDao = $this->enumPlaceDao;
+
+		$daoBox->likeImageCommentDao = $this->likeImageCommentDao;
+		$daoBox->commentImagesDao = $this->commentImagesDao;
+		$daoBox->likeStatusCommentDao = $this->likeStatusCommentDao;
+		$daoBox->commentStatusesDao = $this->commentStatusesDao;
+
+		$daoBox->likeConfessionCommentDao = $this->likeConfessionCommentDao;
+		$daoBox->commentConfessionsDao = $this->commentConfessionsDao;
+		$daoBox->likeConfessionDao = $this->likeConfessionDao;
+		$daoBox->usersNewsDao = $this->usersNewsDao;
+
+		$daoBox->rateImageDao = $this->rateImageDao;
+		$daoBox->imageLikesDao = $this->imageLikesDao;
+
+		return $daoBox;
 	}
 
 	public function createComponentJs() {

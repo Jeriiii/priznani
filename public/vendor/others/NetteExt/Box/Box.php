@@ -8,7 +8,7 @@
 
 namespace NetteExt;
 
-class Box {
+abstract class Box {
 
 	/** @var array Proměnné templaty */
 	protected $vars = array();
@@ -32,6 +32,37 @@ class Box {
 		}
 
 		return NULL;
+	}
+
+	/**
+	 * Je již toto dao nastavené?
+	 * @param string $name Název Dao
+	 * @return TRUE = pokud je nastavené.
+	 */
+	public function offsetExist($name) {
+		if (array_key_exists($name, $this->vars)) {
+			return TRUE;
+		} elsE {
+			return FALSE;
+		}
+	}
+
+	/**
+	 * Obecný setter pro nastavení proměnných.
+	 * @param string $name Název Dao.
+	 * @param mixes $value Dao.
+	 */
+	public function offsetSet($name, $value) {
+		$this->__set($name, $value);
+	}
+
+	/**
+	 * Obecný getter pro vrácení proměnné
+	 * @param string $name Název Dao.
+	 * @return mixes
+	 */
+	public function offsetGet($name) {
+		return $this->__get($name);
 	}
 
 	/**

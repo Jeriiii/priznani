@@ -29,6 +29,9 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	public $domain;
 	public $partystyle;
 
+	/** @var array Less soubory, co se mají zpracovat */
+	private $lessFiles = array();
+
 	/**
 	 * Proměnná s uživatelskými daty (cachovaný řádek z tabulky users). Obsahuje relace na profilFoto, gallery, property
 	 * @var ArrayHash|ActiveRow řádek z tabulky users
@@ -125,6 +128,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		}
 
 		$this->template->domain = $this->domain;
+		$this->template->isNotComponentCssEmpty = !empty($this->lessFiles);
 
 		$this->template->facebook_html = "";
 		$this->template->facebook_script = "";
@@ -253,15 +257,31 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
+	public function createComponentCssComponents() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
+		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
+		$compiler->addFileFilter(new \Webloader\Filter\LessFilter());
+		$compiler->addFileFilter(function ($code, $compiler, $path) {
+			return cssmin::minify($code);
+		});
+
+		$files->addFiles($this->lessFiles);
+
+		/* nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu */
+		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
+	}
+
+	/**
+	 * Přidá další less file k zpracování. Tyto soubory se vždy vykreslí.
+	 * @param string $lessFile Relatvní cesta k less souboru ze složky css
+	 */
+	public function addLessFile($lessFile) {
+		$this->lessFiles[] = $lessFile;
+	}
+
 	public function createComponentCssLayout() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
 		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
-
-		if (!empty($this->cssVariables)) {
-			$varFilter = new WebLoader\Filter\VariablesFilter($this->cssVariables);
-			$compiler->addFileFilter($varFilter);
-		}
-
 		$compiler->addFileFilter(new \Webloader\Filter\LessFilter());
 		$compiler->addFileFilter(function ($code, $compiler, $path) {
 			return cssmin::minify($code);
@@ -278,7 +298,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'variables.less'
 		));
 
-// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		/* nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu */
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 

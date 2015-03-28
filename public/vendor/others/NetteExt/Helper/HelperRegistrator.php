@@ -26,6 +26,9 @@ class HelperRegistrator {
 	/** @var TooltipHelper */
 	public $toolTipHelper;
 
+	/** @var ImageHelper */
+	public $imageHelper;
+
 	/** @var array Callback na fci link */
 	private $linkCallback;
 
@@ -39,6 +42,7 @@ class HelperRegistrator {
 		$this->showProfHelper = new ShowProfHelper($this->getImgPathHelper, $linkCallback);
 		$this->showUserDataHelper = new ShowUserDataHelper();
 		$this->toolTipHelper = new TooltipHelper;
+		$this->imageHelper = new ImageHelper($this->getImgPathHelper);
 	}
 
 	/**
@@ -50,8 +54,37 @@ class HelperRegistrator {
 		$this->registerShowProfHelpers($template);
 		$this->registerShowUserDataHelpers($template);
 		$this->registerToolTipHelpers($template);
+		$this->registerImageHelpers($template);
 	}
 
+	/**
+	 * Zaregistruje helper na vytváření obrázků.
+	 * @param type $template
+	 */
+	private function registerImageHelpers($template) {
+		$imageHelper = $this->imageHelper;
+
+		$template->registerHelper(ImageHelper::NAME, function($image, $class = '', $style = '') use ($imageHelper) {
+			return $imageHelper->img($image, GetImgPathHelper::TYPE_USER_GALLERY, $class, $style);
+		});
+		$template->registerHelper(ImageHelper::NAME_MIN, function($image, $class = '', $style = '') use ($imageHelper) {
+			return $imageHelper->imgMin($image, GetImgPathHelper::TYPE_USER_GALLERY, $class, $style);
+		});
+		$template->registerHelper(ImageHelper::NAME_MIN_SQR, function($image, $class = '', $style = '') use ($imageHelper) {
+			return $imageHelper->imgSqr($image, GetImgPathHelper::TYPE_USER_GALLERY, $class, $style);
+		});
+		$template->registerHelper(ImageHelper::NAME_SCRN, function($image, $class = '', $style = '') use ($imageHelper) {
+			return $imageHelper->imgScrn($image, GetImgPathHelper::TYPE_USER_GALLERY, $class, $style);
+		});
+		$template->registerHelper(ImageHelper::NAME_STREAM, function($image, $class = '', $style = '') use ($imageHelper) {
+			return $imageHelper->imgStream($image, GetImgPathHelper::TYPE_USER_GALLERY, $class, $style);
+		});
+	}
+
+	/**
+	 * Zaregistruje ShowProf helper
+	 * @param type $template
+	 */
 	private function registerShowProfHelpers($template) {
 		$showProfHelper = $this->showProfHelper;
 		$template->registerHelper(ShowProfHelper::NAME, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {

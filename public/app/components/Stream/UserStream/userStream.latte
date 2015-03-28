@@ -78,7 +78,9 @@
 			<a class="highlight uploadProfilePhoto btn-main">Nahrát profilovou fotku</a>
 			{control cropImageUpload}
 		</div>
-	{elseif !empty($newInfo)}
+	{elseif $user->isLoggedIn() && TRUE}
+		{control photoRating}
+	{elseif $user->isLoggedIn() &&!empty($newInfo)}
 		<div id="news">
 			<header>{$newInfo->name}</header>
 			<p id="news-short">{$newInfo->text|truncate:100} {if strlen(utf8_decode($newInfo->text)) > 100}<a id="news-more">více</a>{/if}</p>
