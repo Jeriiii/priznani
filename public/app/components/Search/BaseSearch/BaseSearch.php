@@ -18,7 +18,7 @@ use Nette\Database\Table\Selection;
 
 class BaseSearch extends BaseProjectControl {
 
-	const LIMIT_LIST_FEW = 7;
+	const LIMIT_LIST_FEW = 8;
 
 	protected $users;
 

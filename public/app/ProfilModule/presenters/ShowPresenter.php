@@ -15,9 +15,8 @@ use POSComponent\AddToList\SendFriendRequest;
 use POSComponent\AddToList\YouAreSexy;
 use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
-use Nette\DateTime;
 use POSComponent\CropImageUpload\CropImageUpload;
-use POS\Model\UserDao;
+use NetteExt\DaoBox;
 use NetteExt\Helper\ShowUserDataHelper;
 
 class ShowPresenter extends ProfilBasePresenter {
@@ -278,7 +277,36 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @return \ProfilStream
 	 */
 	protected function createComponentProfilStream() {
-		return new ProfilStream($this->dataForStream, $this->likeStatusDao, $this->imageLikesDao, $this->userDao, $this->userGalleryDao, $this->userImageDao, $this->confessionDao, $this->streamDao, $this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->likeImageCommentDao, $this->commentImagesDao, $this->likeStatusCommentDao, $this->commentStatusesDao, $this->likeConfessionCommentDao, $this->commentConfessionsDao, $this->likeConfessionDao, $this->loggedUser);
+		$daoBox = $this->getDaoBoxProfilStream();
+
+		return new ProfilStream($this->dataForStream, $daoBox, $this->loggedUser);
+	}
+
+	/**
+	 * Vrátí DaoBox naplněný pro user stream.
+	 */
+	private function getDaoBoxProfilStream() {
+		$daoBox = new DaoBox;
+
+		$daoBox->likeStatusDao = $this->likeStatusDao;
+		$daoBox->imageLikesDao = $this->imageLikesDao;
+		$daoBox->userDao = $this->userDao;
+		$daoBox->likeConfessionDao = $this->likeConfessionDao;
+
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->userGalleryDao = $this->userGalleryDao;
+		$daoBox->userImageDao = $this->userImageDao;
+		$daoBox->confessionDao = $this->confessionDao;
+
+		$daoBox->likeImageCommentDao = $this->likeImageCommentDao;
+		$daoBox->commentImagesDao = $this->commentImagesDao;
+		$daoBox->likeStatusCommentDao = $this->likeStatusCommentDao;
+		$daoBox->commentStatusesDao = $this->commentStatusesDao;
+
+		$daoBox->likeConfessionCommentDao = $this->likeConfessionCommentDao;
+		$daoBox->commentConfessionsDao = $this->commentConfessionsDao;
+
+		return $daoBox;
 	}
 
 	/**
