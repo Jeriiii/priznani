@@ -5,8 +5,8 @@
 			{$image|imgScrn: '', 'padding: 0 ' . $padding . 'px;'}
 		</div>
 		<div class="rating">
-			<a n:href="like! imageID => $image->id" class="ajax btn-main">Líbí</a>
 			<a n:href="next! imageID => $image->id" class="btn-main btn-next">Další</a>
+			<a n:href="like! imageID => $image->id" class="ajax btn-main">Líbí</a>
 			<div id="rating-user">
 				<a href="{plink :Profil:Show: $user->id}">{$user->user_name}</a>, {$age}
 			</div>
