@@ -135,8 +135,9 @@ class OnePagePresenter extends BasePresenter {
 
 	protected function createComponentUserStream() {
 		$daoBox = $this->getDaoBoxUserStream();
+		$session = $this->getSession();
 
-		return new UserStream($this->dataForStream, $daoBox, $this->loggedUser);
+		return new UserStream($this->dataForStream, $daoBox, $session, $this->loggedUser);
 	}
 
 	/**
@@ -171,6 +172,7 @@ class OnePagePresenter extends BasePresenter {
 
 		$daoBox->rateImageDao = $this->rateImageDao;
 		$daoBox->imageLikesDao = $this->imageLikesDao;
+		$daoBox->userCategoryDao = $this->userCategoryDao;
 
 		return $daoBox;
 	}

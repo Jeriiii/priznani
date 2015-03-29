@@ -12,6 +12,7 @@ use Nette\Application\UI\Form as Frm;
 use POSComponent\Stream\BaseStream\BaseStream;
 use POSComponent\PhotoRating;
 use NetteExt\DaoBox;
+use Nette\Http\Session;
 
 class UserStream extends BaseStream {
 
@@ -42,9 +43,16 @@ class UserStream extends BaseStream {
 	/** @var \POS\Model\ImageLikesDao */
 	public $imageLikesDao;
 
-	public function __construct($data, DaoBox $daoBox, $userData) {
+	/** @var \POS\Model\UserCategoryDao */
+	public $userCategoryDao;
+
+	/** @var Session */
+	private $session;
+
+	public function __construct($data, DaoBox $daoBox, Session $session, $userData) {
 		parent::__construct($data, $daoBox, $userData);
 
+		$this->session = $session;
 		$this->setDaos($daoBox);
 	}
 
@@ -58,6 +66,7 @@ class UserStream extends BaseStream {
 		$this->enumPlaceDao = $daoBox->enumPlaceDao;
 		$this->rateImageDao = $daoBox->rateImageDao;
 		$this->imageLikesDao = $daoBox->imageLikesDao;
+		$this->userCategoryDao = $daoBox->userCategoryDao;
 	}
 
 	public function render() {
@@ -132,7 +141,7 @@ class UserStream extends BaseStream {
 	}
 
 	protected function createComponentPhotoRating($name) {
-		return new PhotoRating($this->userImageDao, $this->rateImageDao, $this->imageLikesDao, $this->loggedUser, $this, $name);
+		return new PhotoRating($this->userImageDao, $this->rateImageDao, $this->imageLikesDao, $this->loggedUser, $this->userCategoryDao, $this->session, $this, $name);
 	}
 
 	public function handleNewReaded($newID) {

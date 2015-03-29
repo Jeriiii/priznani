@@ -1,11 +1,11 @@
 {snippet}
 	{if !empty($image)}
 	<div id="rating-container">
-		<div class="rating-image">
+		<a href="{plink :Profil:Galleries:image imageID => $image->id, galleryID => $image->gallery->id}" class="rating-image">
 			{$image|imgScrn: '', 'padding: 0 ' . $padding . 'px;'}
-		</div>
+		</a>
 		<div class="rating">
-			<a n:href="next! imageID => $image->id" class="btn-main btn-next">Další</a>
+			<a n:href="next! imageID => $image->id" class="ajax btn-main btn-next">Další</a>
 			<a n:href="like! imageID => $image->id" class="ajax btn-main">Líbí</a>
 			<div id="rating-user">
 				<a href="{plink :Profil:Show: $user->id}">{$user->user_name}</a>, {$age}

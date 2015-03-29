@@ -165,9 +165,6 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function actionImage($imageID, $galleryID = NULL, $userID = NULL) {
-		$gallery = $this->userGaleryDao->find($galleryID);
-		$this->checkAccess($gallery);
-
 		$this->imageID = $imageID;
 		/* nastaví obrázzky podle uživatele nebo podle galerie */
 		if (!empty($galleryID)) {
@@ -180,6 +177,7 @@ class GalleriesPresenter extends \BasePresenter {
 
 		//vytahnu konkretni vybranou fotku podle imageID - objekt
 		$image = $this->userImageDao->find($this->imageID);
+		$this->checkAccess($image->gallery);
 		if (empty($image)) {
 			$this->flashMessage("Obrázek nebyl nalezen");
 			if ($galleryID) {

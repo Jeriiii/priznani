@@ -18,6 +18,9 @@ use POS\Model\RateImageDao;
 use POS\Model\ImageLikesDao;
 use Nette\DateTime;
 use Nette\Database\Table\ActiveRow;
+use POS\Model\UserCategoryDao;
+use POS\Model\UserCategory;
+use Nette\Http\Session;
 
 class PhotoRating extends BaseProjectControl {
 
@@ -33,12 +36,20 @@ class PhotoRating extends BaseProjectControl {
 	/** @var \POS\Model\ImageLikesDao @inject */
 	public $imageLikesDao;
 
-	public function __construct(UserImageDao $userImageDao, RateImageDao $rateImageDao, ImageLikesDao $imageLikesDao, $loggedUser, $parent, $name) {
+	/** @var \POS\Model\UserCategoryDao @inject */
+	public $userCategoryDao;
+
+	/** @var Session */
+	private $session;
+
+	public function __construct(UserImageDao $userImageDao, RateImageDao $rateImageDao, ImageLikesDao $imageLikesDao, $loggedUser, UserCategoryDao $userCategoryDao, Session $session, $parent, $name) {
 		parent::__construct($parent, $name);
 
 		$this->userImageDao = $userImageDao;
 		$this->rateImageDao = $rateImageDao;
 		$this->imageLikesDao = $imageLikesDao;
+		$this->userCategoryDao = $userCategoryDao;
+		$this->session = $session;
 		$this->loggedUser = $loggedUser;
 	}
 
@@ -46,13 +57,20 @@ class PhotoRating extends BaseProjectControl {
 	 * Vykresli šablonu.
 	 */
 	public function render() {
-		$image = $this->userImageDao->getFrontPage($this->loggedUser->id);
-		$user = $image->gallery->user;
+		$userCategory = new UserCategory($this->loggedUser->property, $this->userCategoryDao, $this->session);
+		$categoryIDs = $userCategory->getCategoryIDs(FALSE);
 
+		$image = $this->userImageDao->getFrontPage($this->loggedUser->id, $categoryIDs);
 		$this->template->image = $image;
-		$this->template->padding = $this->getPadiing($image);
-		$this->template->user = $user;
-		$this->template->age = $this->getAgeYear($user);
+
+		if ($image instanceof ActiveRow) {
+			$user = $image->gallery->user;
+
+			$this->template->image = $image;
+			$this->template->padding = $this->getPadiing($image);
+			$this->template->user = $user;
+			$this->template->age = $this->getAgeYear($user);
+		}
 
 		$this->template->setFile(dirname(__FILE__) . '/photoRating.latte');
 		$this->template->render();

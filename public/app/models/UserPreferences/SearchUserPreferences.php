@@ -16,7 +16,6 @@ use Nette\Caching\Cache;
 use Nette\ArrayHash;
 use NetteExt\Serialize\Relation;
 use NetteExt\Serialize\Serializer;
-use POS\Model\UserCategory;
 use POS\Model\UserDao;
 use Nette\Http\Session;
 use POS\Model\UserCategoryDao;

@@ -70,9 +70,9 @@ class BaseUserPreferences {
 	 * @return array IDs kategorií.
 	 */
 	protected function getUserCategories($recalculate = FALSE) {
-		//if ($this->userCategory === NULL) {
-		$this->userCategory = new UserCategory($this->userProperty, $this->userCategoryDao, $this->session);
-		//}
+		if ($this->userCategory === NULL) {
+			$this->userCategory = new UserCategory($this->userProperty, $this->userCategoryDao, $this->session);
+		}
 		$categoryIDs = $this->userCategory->getCategoryIDs($recalculate);
 		return $categoryIDs;
 	}

@@ -141,7 +141,7 @@ class UserImageDao extends AbstractDao {
 	 * @param int $userId ID uživatele
 	 * @return \Nette\Database\Table\ActiveRow Obrázek, který má uživatel ohodnit.
 	 */
-	public function getFrontPage($userId) {
+	public function getFrontPage($userId, $categoryIDs) {
 		/* načte obrázky, které již byly ohodnoceny */
 		$rateImgIDs = $this->getRateImgIDs($userId);
 		$likeImgIDs = $this->getLikeImgIDs($userId);
@@ -153,7 +153,12 @@ class UserImageDao extends AbstractDao {
 		if (!empty($imgIDs)) {
 			$sel->where(self::TABLE_NAME . '.' . self::COLUMN_ID . ' NOT ', $imgIDs);
 		}
+		$sel->where(
+			'.' . self::COLUMN_GALLERY_ID . '.' . UserGalleryDao::COLUMN_USER_ID . "."
+			. UserDao::COLUMN_PROPERTY_ID . "." . UserPropertyDao::COLUMN_PREFERENCES_ID . " IN"
+			, $categoryIDs);
 		$sel->where('.' . self::COLUMN_GALLERY_ID . '.' . UserGalleryDao::COLUMN_USER_ID . ' != ?', $userId);
+		$sel->where('.' . self::COLUMN_GALLERY_ID . '.' . UserGalleryDao::COLUMN_PRIVATE . ' = ?', 0);
 		$sel->where(self::COLUMN_ON_FRONT_PAGE . ' = ?', 1);
 		$sel->limit(1);
 
