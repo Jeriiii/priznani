@@ -10,7 +10,6 @@ namespace Nette\Database;
 use Nette,
 	PDO;
 
-
 /**
  * Represents a connection between PHP and a database server.
  *
@@ -20,8 +19,8 @@ use Nette,
  * @property-read  string               $dsn
  * @property-read  PDO                  $pdo
  */
-class Connection extends Nette\Object
-{
+class Connection extends Nette\Object {
+
 	/** @var array of function(Connection $connection); Occurs after connection is established */
 	public $onConnect;
 
@@ -46,9 +45,7 @@ class Connection extends Nette\Object
 	/** @var PDO */
 	private $pdo;
 
-
-	public function __construct($dsn, $user = NULL, $password = NULL, array $options = NULL)
-	{
+	public function __construct($dsn, $user = NULL, $password = NULL, array $options = NULL) {
 		if (func_num_args() > 4) { // compatibility
 			$options['driverClass'] = func_get_arg(4);
 		}
@@ -60,100 +57,77 @@ class Connection extends Nette\Object
 		}
 	}
 
-
-	public function connect()
-	{
+	public function connect() {
 		if ($this->pdo) {
 			return;
 		}
+
 		$this->pdo = new PDO($this->params[0], $this->params[1], $this->params[2], $this->options);
 		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		$class = empty($this->options['driverClass'])
-			? 'Nette\Database\Drivers\\' . ucfirst(str_replace('sql', 'Sql', $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME))) . 'Driver'
-			: $this->options['driverClass'];
+		$class = empty($this->options['driverClass']) ? 'Nette\Database\Drivers\\' . ucfirst(str_replace('sql', 'Sql', $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME))) . 'Driver' : $this->options['driverClass'];
 		$this->driver = new $class($this, $this->options);
 		$this->preprocessor = new SqlPreprocessor($this);
 		$this->onConnect($this);
 	}
 
-
 	/** @return string */
-	public function getDsn()
-	{
+	public function getDsn() {
 		return $this->params[0];
 	}
 
-
 	/** @return PDO */
-	public function getPdo()
-	{
+	public function getPdo() {
 		$this->connect();
 		return $this->pdo;
 	}
 
-
 	/** @return ISupplementalDriver */
-	public function getSupplementalDriver()
-	{
+	public function getSupplementalDriver() {
 		$this->connect();
 		return $this->driver;
 	}
-
 
 	/**
 	 * @param  string  sequence object
 	 * @return string
 	 */
-	public function getInsertId($name = NULL)
-	{
+	public function getInsertId($name = NULL) {
 		return $this->getPdo()->lastInsertId($name);
 	}
-
 
 	/**
 	 * @param  string  string to be quoted
 	 * @param  int     data type hint
 	 * @return string
 	 */
-	public function quote($string, $type = PDO::PARAM_STR)
-	{
+	public function quote($string, $type = PDO::PARAM_STR) {
 		return $this->getPdo()->quote($string, $type);
 	}
 
-
 	/** @deprecated */
-	function beginTransaction()
-	{
+	function beginTransaction() {
 		$this->queryArgs('::beginTransaction', array());
 	}
 
-
 	/** @deprecated */
-	function commit()
-	{
+	function commit() {
 		$this->queryArgs('::commit', array());
 	}
 
-
 	/** @deprecated */
-	public function rollBack()
-	{
+	public function rollBack() {
 		$this->queryArgs('::rollBack', array());
 	}
 
-
 	/** @deprecated */
-	public function query($statement)
-	{
+	public function query($statement) {
 		$args = func_get_args();
 		return $this->queryArgs(array_shift($args), $args);
 	}
 
-
 	/** @deprecated */
-	function queryArgs($statement, array $params)
-	{
+	function queryArgs($statement, array $params) {
 		$this->connect();
 		if ($params) {
 			array_unshift($params, $statement);
@@ -171,56 +145,42 @@ class Connection extends Nette\Object
 		return $result;
 	}
 
-
-	/********************* shortcuts ****************d*g**/
-
+	/*	 * ******************* shortcuts ****************d*g* */
 
 	/** @deprecated */
-	function fetch($args)
-	{
+	function fetch($args) {
 		$args = func_get_args();
 		return $this->queryArgs(array_shift($args), $args)->fetch();
 	}
 
-
 	/** @deprecated */
-	function fetchField($args)
-	{
+	function fetchField($args) {
 		$args = func_get_args();
 		return $this->queryArgs(array_shift($args), $args)->fetchField();
 	}
 
-
 	/** @deprecated */
-	function fetchPairs($args)
-	{
+	function fetchPairs($args) {
 		$args = func_get_args();
 		return $this->queryArgs(array_shift($args), $args)->fetchPairs();
 	}
 
-
 	/** @deprecated */
-	function fetchAll($args)
-	{
+	function fetchAll($args) {
 		$args = func_get_args();
 		return $this->queryArgs(array_shift($args), $args)->fetchAll();
 	}
 
-
 	/** @deprecated */
-	static function literal($value)
-	{
+	static function literal($value) {
 		$args = func_get_args();
 		return new SqlLiteral(array_shift($args), $args);
 	}
 
-
-	/********************* Selection ****************d*g**/
-
+	/*	 * ******************* Selection ****************d*g* */
 
 	/** @deprecated */
-	function table($table)
-	{
+	function table($table) {
 		trigger_error(__METHOD__ . '() is deprecated; use Nette\Database\Context::table() instead.', E_USER_DEPRECATED);
 		if (!$this->context) {
 			$this->context = new Context($this);
@@ -228,48 +188,36 @@ class Connection extends Nette\Object
 		return $this->context->table($table);
 	}
 
-
 	/** @deprecated */
-	function setContext(Context $context)
-	{
+	function setContext(Context $context) {
 		$this->context = $context;
 		return $this;
 	}
 
-
 	/** @deprecated */
-	function getContext()
-	{
+	function getContext() {
 		return $this->context;
 	}
 
-
 	/** @deprecated */
-	function setDatabaseReflection()
-	{
+	function setDatabaseReflection() {
 		trigger_error(__METHOD__ . '() is deprecated; use Nette\Database\Context instead.', E_USER_DEPRECATED);
 		return $this;
 	}
 
-
 	/** @deprecated */
-	function setCacheStorage()
-	{
+	function setCacheStorage() {
 		trigger_error(__METHOD__ . '() is deprecated; use Nette\Database\Context instead.', E_USER_DEPRECATED);
 	}
 
-
 	/** @deprecated */
-	function lastInsertId($name = NULL)
-	{
+	function lastInsertId($name = NULL) {
 		trigger_error(__METHOD__ . '() is deprecated; use getInsertId() instead.', E_USER_DEPRECATED);
 		return $this->getInsertId($name);
 	}
 
-
 	/** @deprecated */
-	function exec($statement)
-	{
+	function exec($statement) {
 		trigger_error(__METHOD__ . '() is deprecated; use Nette\Database\Context::query()->getRowCount() instead.', E_USER_DEPRECATED);
 		$args = func_get_args();
 		return $this->queryArgs(array_shift($args), $args)->getRowCount();
