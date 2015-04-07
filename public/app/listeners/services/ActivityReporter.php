@@ -110,7 +110,7 @@ class ActivityReporter extends \Nette\Object {
 				UserDao::COLUMN_LAST_SIGNED_DAY => $section->lastActivity
 			));
 		} else {
-			$section->lastActivity = $user->offsetGet(UserDao::COLUMN_LAST_SIGNED_DAY);
+			$section->lastActivity = new DateTime($user->offsetGet(UserDao::COLUMN_LAST_SIGNED_DAY));
 		}
 	}
 
