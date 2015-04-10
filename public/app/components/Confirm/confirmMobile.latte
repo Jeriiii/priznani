@@ -8,6 +8,8 @@
 		<h1>{$tittle} {$name}</h1>
 	</div>
 	<p>{$message}</p>
-	<a href="{if $plink}{$presenter->link($link[0], $link[1])}{else}{$link}{/if}" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">Ano</a>
-	<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Ne</a>
+	<a href="{if $plink}{$presenter->link($link[0], $link[1])}{else}{$link}{/if}" id="confirmed-{$id}" class="{$confirmBtnClass}"></a>
+	{* link musí odkazovat takto a skriptem se zařídí kliknutí na jiný link, aby nedocházelo ke konfliktu mezi nette.ajax a jQueryMobile *}
+	<a href="#" data-confirm-href="#confirmed-{$id}" class="confirm-send-btn ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">Ano</a>
+	<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b confirm-close-btn" data-rel="back">Ne</a>
 </div>

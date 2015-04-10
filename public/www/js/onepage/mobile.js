@@ -15,5 +15,6 @@ $(document).ready(function(){
 		var selector = '#' + $(this).attr('data-to-open');
 		$(selector).toggle();
 	});
+	
 });
 

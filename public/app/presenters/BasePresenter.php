@@ -437,6 +437,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
 		$files->addFiles(array(
 			'baseAjax.js',
+			'mobile.js',
 			'fbBase.js',
 			'../nette.ajax.js',
 			'../jqueryMobile/mobile-init.js',
