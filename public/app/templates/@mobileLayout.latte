@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="Content-language" content="cs" />
+		<meta name="robots" content="{$robots}" n:ifset="$robots">
+		<meta name="verification" content="37e898047322c2e4e70968ca2c138f0d" />
+		<meta charset="utf-8" />
+        {block beforeHead}{/block}
+		{var $pagename = '<b>DATE</b>NODE<span>.cz beta</span>'}
+		{ifset #meta}
+			{* inportujou se specialni meta tagy *}
+			{include #meta}
+		{else}
+		<title>Přiznání o sexu</title>
+
+		<meta name="keywords" content="Erotická sociální síť datenode.cz" />
+		<meta name="description" content="Erotická sociální síť datenode.cz" />
+
+		<meta property="og:title" content="Erotická sociální síť datenode.cz" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="http://datenode.cz/images/sign/background-photo.jpg" />
+		<meta property="og:site_name" content="datenode.cz" />
+		<meta property="og:description" content="Chcete se opravdu seznámit, nebo jen pokecat a sdílet fotky? Zaregistrujte se, ostaní tam již na vás čekají." />
+		{/ifset}
+		{control cssMobileLayout}
+		<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
+		{block head}{/block}
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+		{includeblock 'layoutBloks/googleAnalytics.latte'}
+	</head>
+
+	<body>
+		<section data-role="page">
+			<div data-role="header">
+				<nav id="topmenu" data-role="navbar" data-iconpos="top" data-grid="d">
+					<ul>
+						<li><a href="#leftmenu" class="" title="DATENODE.cz" data-iconpos="top" data-icon="grid"></a></li>
+						<li><a n:href="OnePage:" class="{ifset $activeHome}ui-btn-active{/ifset}" title="Domů" data-icon="home"></a></li>
+						<li><a n:href="Chat:conversations" id="chat-button" class="{ifset $activeChat}ui-btn-active{/ifset}" title="Chat"data-icon="comment"></a></li>
+						<li><a n:href="Activities:" id="activities-button" class="ui-btn-icon-top ui-icon-bell {ifset $activeActivities}ui-btn-active{/ifset}" title="title"></a></li>
+						<li><a href="#rightmenu" class="" title="Uživatelské menu" data-icon="user"></a></li>
+					</ul>
+				</nav>
+			</div>
+			<section id="content" role="main" class="ui-content">
+				{block orders}{/block}
+				{block nextAdmission}{/block}
+				{block beforeContent}{/block}
+				<ul data-role="listview">
+					<li n:foreach="$flashes as $flash" class='flash {$flash->type}'>
+						{$flash->message}
+					</li>
+				</ul>
+				{block content}{/block}
+				<div class="clear"></div>
+				
+			</section>
+			{* levý a pravý vyjížděcí panel *}
+			{includeblock 'layoutBloks/menu/menu-pos.latte'}
+			<div data-role="panel" id="leftmenu" data-position="left" data-display="overlay" >
+				{block leftMenu}
+					{cache}
+						<ul data-role="listview">
+							{include #posmenuMobile}
+							{block inLeftMenu}{/block}
+						</ul>
+					{/cache}
+				{/block}
+				
+			</div><!-- /panel -->
+			<div data-role="panel" id="rightmenu" data-position="right" data-display="overlay" >
+				{block rightMenu}
+					<ul data-role="listview" class="profilelist">
+						{ifset $loggedUser}
+							<li>
+								{$loggedUser|showProfDiv}
+							</li>
+						{else}
+							<li>Anonymní</li>
+						{/ifset}
+						{block userMenu}{/block}
+					</ul>					
+				{/block}
+				{control userMenu}
+				{block AfterRightMenu}{/block}
+			</div><!-- /panel -->			
+			<footer id="foot" class="inner" data-role="footer">
+				Copyright &copy; 2014 priznaniosexu.cz<br /><br />
+				Designed by <a href="http://www.nejlevnejsiwebstranky.cz/">nejlevnejsiwebstranky.cz</a>
+				<div class="right">
+				<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+				<div id="fb-root"></div>
+				{control jsMobileLayout}
+
+				{if $user->isLoggedIn()}
+					<script>
+						//inicializace ajaxObserveru - nechat před ostatními skripty
+						var observer = $('body').ajaxObserver({
+							requestUrl: {$ajaxObserverLink}
+						});
+					</script>
+					{control jsMobileLayoutLoggedIn}
+				{/if}				
+				{block scripts}{/block}
+				{block foot}{/block}
+				<div class="clear"></div>
+			</footer>
+		</section>
+	</body>
+</html>

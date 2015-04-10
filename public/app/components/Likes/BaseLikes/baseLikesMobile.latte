@@ -1,0 +1,18 @@
+{snippet}
+	{* pokud je uživatel přihlášený, dovolíme mu lajkovat *}
+	{if $user->isLoggedIn()}
+		{* pokud už uživatel tento obrázek lajkl, ukážeme jen text s celkovým počtem lajků *}
+		{if $liked}
+			{* vypíše text podle toho, jestli se jedná o obrázek/status *}
+			{if $label == "obrázku"}
+				<strong class="mobile-likebutton ui-btn isLiked ui-state-disabled">Je sexy ({$likes})</strong>
+			{else}
+				<strong class="mobile-likebutton ui-btn isLiked ui-state-disabled">Líbí ({$likes})</strong>
+			{/if}
+		{else}
+			<a class="ajax mobile-likebutton ui-btn" n:href="Like! $user->id, $item->id">{$button} ({$likes})</a>
+		{/if}
+	{else}
+		{$button} ({$likes})
+	{/if}
+{/snippet}

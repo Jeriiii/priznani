@@ -19,6 +19,7 @@ use Nette\Database\Table\Selection;
 class BaseSearch extends BaseProjectControl {
 
 	const LIMIT_LIST_FEW = 8;
+	const LIMIT_LIST_MOBILE = 5; /* na mobilu */
 
 	protected $users;
 
@@ -36,6 +37,9 @@ class BaseSearch extends BaseProjectControl {
 			} else {
 				$this->users->limit(self::LIMIT_LIST_FEW);
 			}
+		}
+		if ($mode == 'listMobile') {
+			$this->users = array_slice((array) $this->users, 0, self::LIMIT_LIST_MOBILE - 1);
 		}
 
 		$this->template->items = $this->users;

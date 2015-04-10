@@ -1,0 +1,45 @@
+
+{* profilový obrázek, jméno uživatele a tlačítko editovat *}
+{define profile}
+{if $user->isLoggedIn() && $loggedUser->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
+	<div class="user-profile-picture one-page-profile-picture">
+	{$loggedUser|showProfMinDiv}
+	</div>
+	<div class="name-container">
+		<a n:href=":Profil:Show:default" class="user-name">{$loggedUser->user_name|upper}</a>
+		<span class="sexy-label">{$loggedUser|sexyLabel} {$sexyLabelToolTip|toolTip}</span>
+	</div>
+	<div class="delimiter top"></div>
+{/if}
+{/}
+
+{* žádosti o přátelství *}
+
+{define friendRequest}
+<li>
+	<a n:href="Friends:requests" data-rel="popup" data-position-to="window" data-transition="pop" title="Žádosti o přátelství">
+		Žádosti o přátelství
+		<span class="ul-li-count">{$countFriendRequests}</span>
+	</a>
+</li>
+{/}
+
+{* přátelé *}
+{define friends}
+<li>
+	<a n:href="Friends:list" title="Seznam přátel">
+		Seznam přátel
+	</a>
+</li>
+{/}
+
+
+
+{* označili mě jako sexy *}
+{define markedFromOther}
+{if $countSexy != 0}
+<li>
+	<a n:href="Friends:sexyForThem" title="Jsem pro ně sexy"><span class="ul-li-count">{$countSexy}</span>Jsem pro ně sexy</a>
+</li>
+{/if}
+{/}

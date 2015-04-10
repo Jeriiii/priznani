@@ -23,5 +23,21 @@
     <a n:href=":Page:metro" class="sixth">Bonusy</a>
 	<a n:href="signOut!" class="sixth">Odhlášení</a>
 	{/if}
-	<a n:href=":Chat:valentyn" title="Valentýnský chat">Valentýnský chat</a>
+{/}
+
+{define posmenuMobile}
+	<li class="pagename">DATENODE.cz</li>
+	{if $user->isLoggedIn()}
+    <li><a n:href=":OnePage:" class="first">Seznamka</a></li>
+	{else}
+	<li><a n:href=":Sign:in" class="first">Přihlášení</a></li>
+	<li><a n:href=":Sign:registration" class="first">Registrace</a></li>
+	{/if}
+    {*<a n:href=":Page:default url => poradna-o-sexu" class="second">Poradna</a>*}
+    {*<a n:href="this" class="third">Seznamka (připravujeme)</a>*}
+    <li><a n:href=":Eshop:game" class="fourth">Erotické hry</a></li>
+	{if $user->isLoggedIn()}
+    <li><a n:href=":Competition:list" class="fifth">Soutěže a galerie</a></li>
+    <li><a n:href=":Page:metro" class="sixth">Bonusy</a></li>
+	{/if}
 {/}

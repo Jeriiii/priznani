@@ -24,7 +24,11 @@ class Polly extends BaseProjectControl {
 	}
 
 	public function render() {
-		$this->template->setFile(dirname(__FILE__) . '/polly.latte');
+		if ($this->getDeviceDetector()->isMobile()) {
+			$this->template->setFile(dirname(__FILE__) . '/pollyMobile.latte');
+		} else {
+			$this->template->setFile(dirname(__FILE__) . '/polly.latte');
+		}
 		$this->template->confession = $this->confession;
 		$polls = $this->getSession();
 		$this->template->polls = $polls;

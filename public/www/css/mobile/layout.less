@@ -1,0 +1,124 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 20.3.2015, 8:59:40
+    Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
+*/
+@import "../variables.less";
+@import "../generatedProfile.less";
+@import "icons.less";
+@import "../default.css";
+@import "../layout/universal-styles.less"
+
+
+.mobileline{
+	height: 1px;
+	background: #ddd;
+	margin: 5px 0;
+	width: 100%;
+	padding: 0 2em;
+	position: relative;
+	left: -1em;
+	box-shadow: none;
+}
+
+.pagename{
+	display: block;
+  font-family: 'Source Sans Pro', Arial, sans-serif;
+  padding: 5px 0;
+  text-shadow: 0 0 1px white;
+  font-size: 1.2em;
+  color: @main-red !important;
+  font-weight: 400;
+}
+
+.profilelist li {
+	  display: block;
+	margin-bottom: 15px;
+}
+
+#dropmenu{
+	margin-top: 1em;
+}
+.flash{
+	 font-style: italic;
+	white-space: normal !important;
+}
+.error{
+	display: block;
+	background-color: #F2DEDE;
+	border-color: #EED3D7;
+	color: #B94A48;
+	padding: 8px 35px 8px 14px;
+	text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+	border-radius: 4px;
+	margin: 2px 5%;
+	padding: 2px 5%;
+}
+#content{
+	min-height: 200px;
+}
+#leftmenu, #rightmenu, #topmenu{
+	display: none;
+}
+
+#topmenu{
+	span.info{
+		display: block;
+		position: absolute;
+		width: 20px;
+		height: 20px;
+		top: 8px;
+		right: 8px;
+		line-height: 20px;
+		font-size: 14px;
+		z-index: 50;
+		
+		font-weight: bold;
+		font-family: "Source Sans Pro",Arial,sans-serif;
+		background-color: #FE9430;
+		color: #FFF;
+		box-shadow: 0px 2px 4px 0px #8B0302;
+		border-radius: 50%;
+	}
+	
+	.with-info:after{
+		left: 16px !important;
+	}
+	
+}
+#foot, #foot a{
+	border: none;
+	background: transparent;
+	padding: 2px;
+	font-size: 12px;
+	line-height: 12px;
+	text-align: center;
+	font-weight: normal;
+	color: #666;
+	text-shadow: none;
+	box-shadow: none;
+	
+	a{
+		text-decoration: underline !important;
+		color: #444;
+	}
+}
+
+.ui-popup-container{
+	position: fixed !important;
+	top: 30% !important;
+	
+	.ui-popup{
+
+		text-align: center;
+
+		.ui-title{
+			  margin: 0 5% !important;
+		}
+
+	}
+}

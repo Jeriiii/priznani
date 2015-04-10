@@ -133,6 +133,11 @@ class OnePagePresenter extends BasePresenter {
 		}
 	}
 
+	public function renderMobileDefault() {
+		$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->userID)->count();
+		$this->template->countSexy = $this->youAreSexyDao->countToUser($this->userID);
+	}
+
 	protected function createComponentUserStream() {
 		$daoBox = $this->getDaoBoxUserStream();
 		$session = $this->getSession();

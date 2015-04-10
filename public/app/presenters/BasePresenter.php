@@ -130,6 +130,8 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$this->template->domain = $this->domain;
 		$this->template->isNotComponentCssEmpty = !empty($this->lessFiles);
 
+		$this->template->loggedUser = $this->loggedUser;
+
 		$this->template->facebook_html = "";
 		$this->template->facebook_script = "";
 		$this->template->ajaxObserverLink = $this->link('ajaxRefresh!'); //odkaz pro ajaxObserver na pravidelne pozadavky
@@ -204,19 +206,21 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$nav->setMenuTemplate(APP_DIR . '/components/Navigation/usermenu.phtml');
 		$navigation = array();
 
-
 		if ($this->getUser()->isLoggedIn()) {
-//prihlaseny uzivatel
+			//prihlaseny uzivatel
 			if ($user->isInRole('admin') || $user->isInRole('superadmin')) {
 				$navigation["Administrace"] = $this->link(":Admin:Admin:default");
 			}
 
-			$navigation["Editovat profil"] = $this->link(":Profil:Edit:");
-			$navigation["Hledat uživatele"] = $this->link(":Search:Search:");
-			$navigation["Moje galerie"] = $this->link(":Profil:Galleries:");
+			if (!$this->deviceDetector->isMobile()) {
+				$navigation["Editovat profil"] = $this->link(":Profil:Edit:");
+				$navigation["Hledat uživatele"] = $this->link(":Search:Search:");
+				$navigation["Moje galerie"] = $this->link(":Profil:Galleries:");
+			}
 			$navigation["Odhlásit se"] = $this->link(":Sign:out");
 		} else {
 //neprihlaseny uzivatel
+
 			$navigation["Přihlášení"] = $this->link(":Sign:in");
 			$navigation["Registrace"] = $this->link(":Sign:registration");
 		}
@@ -302,6 +306,32 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
+	/**
+	 * Vytvoření komponenty k mimifikaci stylů k mobilní verzi v jQueryMobile
+	 * @return \WebLoader\Nette\CssLoader
+	 */
+	public function createComponentCssMobileLayout() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
+		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
+
+		if (!empty($this->cssVariables)) {
+			$varFilter = new WebLoader\Filter\VariablesFilter($this->cssVariables);
+			$compiler->addFileFilter($varFilter);
+		}
+		$compiler->addFileFilter(new \Webloader\Filter\LessFilter());
+		$compiler->addFileFilter(function ($code, $compiler, $path) {
+			return cssmin::minify($code);
+		});
+
+		$files->addFiles(array(
+			'mobile/layout.less',
+			'jqueryMobile/posRedTheme/pos-mobile-theme.min.css',
+			'jqueryMobile/posRedTheme/jquery.mobile.icons.min.css',
+			'jqueryMobile/jquery.mobile.structure-1.4.5.min.css'
+		));
+		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
+	}
+
 	public function createComponentCssBoostrapModal() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
 		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
@@ -359,6 +389,51 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		});
 
 		/* nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu */
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+
+	/**
+	 * Vytvoření komponenty k mimifikaci skriptů k mobilní verzi v jQueryMobile
+	 * @return \WebLoader\Nette\CssLoader
+	 */
+	public function createComponentJsMobileLayout() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
+		$files->addFiles(array(
+			'baseAjax.js',
+			'mobile.js',
+			'fbBase.js',
+			'../nette.ajax.js',
+			'../jqueryMobile/mobile-init.js',
+			'initAjax.js',
+			'../ajaxObserver/core.js',
+			'../jqueryMobile/jquery.mobile-1.4.5.min.js'
+		));
+
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+		$compiler->addFilter(function ($code) {
+			$packer = new JavaScriptPacker($code, "None");
+			return $packer->pack();
+		});
+
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+
+	/**
+	 * Vytvoření komponenty k mimifikaci skriptů k mobilní verzi v jQueryMobile, když je uživatel přihlášený
+	 * @return \WebLoader\Nette\CssLoader
+	 */
+	public function createComponentJsMobileLayoutLoggedIn() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
+		$files->addFiles(array(
+			'mobileObserver.js'
+		));
+
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+		$compiler->addFilter(function ($code) {
+			$packer = new JavaScriptPacker($code, "None");
+			return $packer->pack();
+		});
+
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 

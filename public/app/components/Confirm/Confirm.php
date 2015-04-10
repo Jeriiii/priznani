@@ -79,7 +79,11 @@ class Confirm extends BaseProjectControl {
 		$this->template->btnClass = $this->btnClass;
 		$this->template->confirmBtnClass = $this->confirmBtnClass;
 		$this->template->btnSetText = $this->btnSetText;
-		$this->renderTemplate(dirname(__FILE__) . '/confirm.latte');
+		if ($this->getDeviceDetector()->isMobile()) {
+			$this->renderTemplate(dirname(__FILE__) . '/confirmMobile.latte');
+		} else {
+			$this->renderTemplate(dirname(__FILE__) . '/confirm.latte');
+		}
 	}
 
 	public function setTittle($tittle) {

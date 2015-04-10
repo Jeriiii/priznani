@@ -71,7 +71,11 @@ class UserStream extends BaseStream {
 
 	public function render() {
 		$mode = 'mainStream';
-		$templateName = "../UserStream/userStream.latte";
+		if ($this->getDeviceDetector()->isMobile()) {
+			$templateName = "../UserStream/userStreamMobile.latte";
+		} else {
+			$templateName = "../UserStream/userStream.latte";
+		}
 		$user = $this->presenter->user;
 
 		if ($user->isLoggedIn()) {

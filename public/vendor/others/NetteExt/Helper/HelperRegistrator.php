@@ -127,6 +127,9 @@ class HelperRegistrator {
 		$template->registerHelper(TooltipHelper::TOOL_TIP, function($infoText, $infoEl = "?") use ($toolTipHelper) {
 			return $toolTipHelper->createToolTip($infoText, $infoEl);
 		});
+		$template->registerHelper(TooltipHelper::TOOL_TIP_MOBILE, function($infoText, $infoEl = "?") use ($toolTipHelper) {
+			return $toolTipHelper->createToolTipMobile($infoText, $infoEl);
+		});
 	}
 
 	/**
