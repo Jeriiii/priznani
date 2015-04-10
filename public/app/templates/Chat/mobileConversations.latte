@@ -1,9 +1,18 @@
+{var $activeChat = TRUE;}
+
 {block head}
 	{control css 'chat/mobile.less', 'chat/conversationsMobile.less'}
 {/block}
 
 {block content}
-
+<div class="chat-header">
+	<h1>Zprávy</h1>
+	<a href="#chatmenu" title="Poslat zprávu..." class="btn-message ui-input-btn ui-btn ui-icon-mail ui-btn-icon-notext ui-corner-all"></a>
+	<div class="clear"></div>
+</div>
+<div data-role="panel" id="chatmenu" data-position="left" data-display="overlay" >
+	
+</div><!-- /panel -->
 {/block}
 
 {block scripts}

@@ -324,6 +324,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		});
 
 		$files->addFiles(array(
+			'default.css',
 			'mobile/layout.less',
 			'jqueryMobile/posRedTheme/pos-mobile-theme.min.css',
 			'jqueryMobile/posRedTheme/jquery.mobile.icons.min.css',
