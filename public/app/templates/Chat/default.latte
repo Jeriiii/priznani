@@ -1,0 +1,24 @@
+{block head}
+	{control css 'chat/chatstream.less'}
+{/}
+
+{block content}
+<h2>Zprávy</h2>
+{control conversation}
+{/block}
+
+{block foot}
+{control js 'stream.js', "chat/stream-chat-init.js"}
+<script>
+	$(document).ready(function () {
+		$("body").stream({
+			addoffset: 30,
+			offsetName: "valChatMessages-offset",
+			msgElement: ".stream-info-message",
+			msgText: "Žádné předchozí zprávy nebyly nalezeny."
+		});
+		$('body').chatConversationPage({});
+	});
+</script>
+
+{/block}

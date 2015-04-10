@@ -14,21 +14,32 @@ class ChatPresenter extends BasePresenter {
 	 */
 	public $chatMessagesDao;
 
-	/** @var Selection */
-	public $messages;
+	/** @var int Id uživatele, se kterým si chci psát */
+	private $userInChatID;
 
-	public function actionValentyn() {
-		$valentinConversationID = 1;
-		$this->messages = $this->chatMessagesDao->getMessagesByConversation($valentinConversationID);
+	public function actionDefault(/* uživatel se kterým si chceme psát. */ $userInChatID) {
+		$this->userInChatID = $userInChatID;
 	}
 
-	public function renderValentyn() {
+	protected function createComponentConversation($name) {
 
+
+		$messages = $this->chatMessagesDao->getLastTextMessagesBetweenUsers($this->loggedUser->id, $this->userInChatID);
+
+		$chatStream = new ChatStream($this->chatMessagesDao, $this->loggedUser, $messages, 30, $this, $name);
+		$chatStream->setUserInChatID($this->userInChatID);
+
+		return $chatStream;
 	}
 
 	protected function createComponentValChatMessages($name) {
 		$valConversationID = 1;
-		return new ChatStream($this->chatMessagesDao, $this->loggedUser, $valConversationID, $this->messages, 30, $this, $name);
+		$messages = $this->chatMessagesDao->getMessagesByConversation($valConversationID);
+
+		$chatStream = new ChatStream($this->chatMessagesDao, $this->loggedUser, $messages, 30, $this, $name);
+		$chatStream->setConversationID($valConversationID);
+
+		return $chatStream;
 	}
 
 }
