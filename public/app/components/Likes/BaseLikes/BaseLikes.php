@@ -146,11 +146,18 @@ class BaseLikes extends BaseProjectControl {
 		$template->label = $this->nameLabel;
 		/* pokud uživatel právě liknul, přičteme +1. Viz komentář u proměnné $justLike */
 		$template->likes = $this->justLike ? $this->likeItem->likes + 1 : $this->likeItem->likes;
-		if ($this->justLike && $this->cachedStreamPreferences) {
-			$this->cachedStreamPreferences->reloadItem($this->name);
-		}
 		$template->item = $this->likeItem;
 		$template->render();
+	}
+
+	/**
+	 * Přenačte prvek ve streamu.
+	 * @param int $itemID
+	 */
+	protected function reloadItem($itemID) {
+		//if ($this->cachedStreamPreferences) {
+		$this->cachedStreamPreferences->reloadItem($itemID);
+		//}
 	}
 
 	/**

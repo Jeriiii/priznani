@@ -254,7 +254,7 @@ class BaseStream extends BaseProjectControl {
 
 		return new Multiplier(function ($streamItem) use ($streamItems, $isUserLoggedIn) {
 			$confession = $streamItems->offsetGet($streamItem)->confession;
-			$confessionComment = new ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $confession, $this->loggedUser);
+			$confessionComment = new ConfessionComments($this->likeConfessionCommentDao, $this->commentConfessionsDao, $confession, $this->loggedUser, $this->dataForStream);
 			$confessionComment->setPresenter($this->getPresenter());
 			return $confessionComment;
 		});

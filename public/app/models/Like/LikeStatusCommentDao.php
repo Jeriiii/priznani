@@ -49,7 +49,7 @@ class LikeStatusCommentDao extends BaseLikeDao implements ILikeDao {
 		));
 		$commentLike = $sel->fetch();
 
-		$this->addActivity($ownerID, $userID, $commentLike->id);
+		//$this->addActivity($ownerID, $userID, $commentLike->id);
 	}
 
 	/**
@@ -127,7 +127,7 @@ class LikeStatusCommentDao extends BaseLikeDao implements ILikeDao {
 		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
 			$sel = $this->getActivityTable();
 			$type = "like";
-			$activity = ActivitiesDao::createImageActivityStatic($creatorID, $ownerID, $commentID, $type, $sel);
+			//? $activity = ActivitiesDao::createImageActivityStatic($creatorID, $ownerID, $commentID, $type, $sel);
 			return $activity;
 		}
 		return NULL;

@@ -31,7 +31,6 @@ class ConfessionLikes extends BaseLikes implements IBaseLikes {
 	 * @param \POS\UserPreferences\StreamUserPreferences $cachedStreamPreferences objekt obsahující položky ve streamu, pokud se používá cachování. Pokud se nepoužívá, pak je NULL
 	 */
 	public function __construct(LikeConfessionDao $likeConfessionDao, $confession, $userID, $cachedStreamPreferences = NULL) {
-
 		if ($cachedStreamPreferences instanceof StreamUserPreferences) {
 			parent::__construct($likeConfessionDao, $confession, $userID, 0, self::STATUS_LABEL, self::DEFAULT_NAME_LIKE_BUTTON, $cachedStreamPreferences);
 		} else {
@@ -49,6 +48,7 @@ class ConfessionLikes extends BaseLikes implements IBaseLikes {
 			$this->justLike = TRUE;
 			$this->liked = TRUE;
 			$this->likeDao->addLiked($confessionID, $userID, $this->ownerID);
+			$this->reloadItem($this->name);
 		}
 
 		$this->redrawControl();
