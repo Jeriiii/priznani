@@ -1,24 +1,24 @@
-<a id="contact-toogle-btn">Chat</a>
-<ul id="contacts">
+<form class="chat-searchform ui-filterable">
+	<input id="rich-autocomplete-input" data-type="search" placeholder="Vyhledávat...">
+</form>
+<ul id="contacts" data-role="listview" data-filter="true" data-inset="true" data-input="#rich-autocomplete-input">
 	{foreach $contacts as $contact}
+		{var $lastActivity = $contactList->getLastActivity($contact->user2)}
 		{var $id = $coder->encodeData($contact->user2->id)}
-		<li id="contact->user2-{$id}" data-id="{$id}" data-title="{$contact->user2->user_name}" class="contact-link">
+		<li data-href="{plink ':Chat:conversations'}" data-filtertext="{$contact->user2->user_name} {$lastActivity}" class="contact-link">
 			{$contact->user2|showProfMin}<span class="chat-username">{$contact->user2->user_name|truncate:15}</span>
 			<span class="online-indicator"></span>
-			<span class="chatLastActivity">{$contactList->getLastActivity($contact->user2)}</span>
+			<span class="chatLastActivity">{$lastActivity}</span>			
 		</li>
 	{/foreach}
-	<li class="support-contact-spacer"></li>
+</ul>
+<div id="support-spacer"></div>
+<ul id="support-list" data-role="listview">
 	{var $adminid = $coder->encodeData($admin->id)}
-	<li id="contact->user2-{$adminid}" data-id="{$adminid}" data-title="Dotazy/podpora" class="contact-link support-contact">
+	<li data-href="{plink ':Chat:conversations'}" data-filtertext="FAQ pomoc help podpora support dotazy ?" id="contact->user2-{$adminid}" data-title="Dotazy/podpora" class="contact-link support-contact">
 		{$admin|showProfMin}<span class="chat-username">Dotazy/podpora</span>
 		<span class="online-indicator"></span>
 		<span class="chatLastActivity">{$contactList->getLastActivity($admin)}</span>
 	</li>
 </ul>
 
-<script>
-		var mydata = {
-			name: {$username}
-		}
-</script>

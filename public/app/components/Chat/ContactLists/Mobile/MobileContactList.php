@@ -13,14 +13,14 @@ use Nette\DateTime;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class StandardContactList extends BaseChatComponent implements IContactList {
+class MobileContactList extends StandardContactList implements IContactList {
 
 	/**
 	 * Vykreslení komponenty
 	 */
 	public function render() {
 		$template = $this->template;
-		$template->setFile(dirname(__FILE__) . '/standard.latte');
+		$template->setFile(dirname(__FILE__) . '/mobile.latte');
 		$user = $this->getPresenter()->getUser();
 		$userIdentity = $user->getIdentity();
 		$template->coder = $this->chatManager->getCoder();
@@ -29,30 +29,6 @@ class StandardContactList extends BaseChatComponent implements IContactList {
 		$template->username = $userIdentity->user_name;
 		$template->contactList = $this;
 		$template->render();
-	}
-
-	/**
-	 * Vrátí čas poslední aktivity
-	 * @param ActiveRow $user
-	 * @return string
-	 */
-	public function getLastActivity($user) {
-		$now = new DateTime();
-		$lastActive = $now->diff(new DateTime($user->last_active));
-		if ($lastActive->m > 0) {
-			$lastActive = " ";
-		} else if ($lastActive->d > 0) {
-			$lastActive = "(" . $lastActive->d . " d" . ")";
-		} else if ($lastActive->h > 0) {
-			$lastActive = "(" . $lastActive->h . " h" . ")";
-		} else {
-			if ($lastActive->m < 5) {
-				$lastActive = "online";
-			} else {
-				$lastActive = "(" . $lastActive->m . " m" . ")";
-			}
-		}
-		return $lastActive;
 	}
 
 }
