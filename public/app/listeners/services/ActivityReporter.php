@@ -105,12 +105,12 @@ class ActivityReporter extends \Nette\Object {
 	public function loadLastActivity($user, $section) {
 		if (!$user->offsetGet(UserDao::COLUMN_LAST_SIGNED_DAY)) {//pokud je v db stále NULL
 			$now = new DateTime();
-			$section->lastActivity = $now->sub(new DateInterval('P2D')); //předevčírem
+			$section->lastActivity = $now->modify('-2 days'); //předevčírem
 			$this->userDao->update($user->id, array(
 				UserDao::COLUMN_LAST_SIGNED_DAY => $section->lastActivity
 			));
 		} else {
-			$section->lastActivity = $user->offsetGet(UserDao::COLUMN_LAST_SIGNED_DAY);
+			$section->lastActivity = new DateTime($user->offsetGet(UserDao::COLUMN_LAST_SIGNED_DAY));
 		}
 	}
 
@@ -144,12 +144,13 @@ class ActivityReporter extends \Nette\Object {
 
 	/**
 	 * Rozhodne, zda je daný čas dnes
-	 * @param DateTime $dateTime daný čas
+	 * @param DateTime $lastActivity Čas poslední aktivity uživatele.
 	 * @return bool
 	 */
-	private function isToday($dateTime) {
+	private function isToday($lastActivity) {
 		$now = new DateTime();
-		$diff = $now->diff($dateTime);
+		$diff = $now->diff($lastActivity);
+
 		return $diff->days == 0;
 	}
 
