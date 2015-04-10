@@ -64,6 +64,32 @@ and open the template in the editor.
 #leftmenu, #rightmenu, #topmenu{
 	display: none;
 }
+
+#topmenu{
+	span.info{
+		display: block;
+		position: absolute;
+		width: 20px;
+		height: 20px;
+		top: 8px;
+		right: 8px;
+		line-height: 20px;
+		font-size: 14px;
+		z-index: 50;
+		
+		font-weight: bold;
+		font-family: "Source Sans Pro",Arial,sans-serif;
+		background-color: #FE9430;
+		color: #FFF;
+		box-shadow: 0px 2px 4px 0px #8B0302;
+		border-radius: 50%;
+	}
+	
+	.with-info:after{
+		left: 16px !important;
+	}
+	
+}
 #foot, #foot a{
 	border: none;
 	background: transparent;

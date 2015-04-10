@@ -455,6 +455,25 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
+	/**
+	 * Vytvoření komponenty k mimifikaci skriptů k mobilní verzi v jQueryMobile, když je uživatel přihlášený
+	 * @return \WebLoader\Nette\CssLoader
+	 */
+	public function createComponentJsMobileLayoutLoggedIn() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
+		$files->addFiles(array(
+			'mobileObserver.js'
+		));
+
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
+		$compiler->addFilter(function ($code) {
+			$packer = new JavaScriptPacker($code, "None");
+			return $packer->pack();
+		});
+
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+
 	public function createComponentJsLayoutLoggedIn() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(

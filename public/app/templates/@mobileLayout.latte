@@ -34,13 +34,13 @@
 	<body>
 		<section data-role="page">
 			<div data-role="header">
-				<nav id="topmenu" data-role="navbar" data-grid="d">
+				<nav id="topmenu" data-role="navbar" data-iconpos="top" data-grid="d">
 					<ul>
 						<li><a href="#leftmenu" class="" title="DATENODE.cz" data-iconpos="top" data-icon="grid"></a></li>
-						<li><a n:href="OnePage:" class="{ifset $activeHome}ui-btn-active{/ifset}" title="Domů" data-iconpos="top" data-icon="home"></a></li>
-						<li><a n:href="Chat:conversations" class="{ifset $activeChat}ui-btn-active{/ifset}" title="Chat" data-iconpos="top" data-icon="comment"></a></li>
-						<li><a n:href="Activities:" class="ui-btn-icon-top ui-icon-bell {ifset $activeActivities}ui-btn-active{/ifset}" title="title" data-iconpos="top"></a></li>
-						<li><a href="#rightmenu" class="" title="Uživatelské menu" data-iconpos="top" data-icon="user"></a></li>
+						<li><a n:href="OnePage:" class="{ifset $activeHome}ui-btn-active{/ifset}" title="Domů" data-icon="home"></a></li>
+						<li><a n:href="Chat:conversations" id="chat-button" class="{ifset $activeChat}ui-btn-active{/ifset}" title="Chat"data-icon="comment"></a></li>
+						<li><a n:href="Activities:" id="activities-button" class="ui-btn-icon-top ui-icon-bell {ifset $activeActivities}ui-btn-active{/ifset}" title="title"></a></li>
+						<li><a href="#rightmenu" class="" title="Uživatelské menu" data-icon="user"></a></li>
 					</ul>
 				</nav>
 			</div>
@@ -100,9 +100,9 @@
 						var observer = $('body').ajaxObserver({
 							requestUrl: {$ajaxObserverLink}
 						});
-
 					</script>
-				{/if}
+					{control jsMobileLayoutLoggedIn}
+				{/if}				
 				{block scripts}{/block}
 				{block foot}{/block}
 				<div class="clear"></div>
