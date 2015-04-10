@@ -44,7 +44,6 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 			$this->calculate();
 			$bestUserIds = $this->bestUsers;
 		}
-
 		$bestUsers = $this->userDao->getInIds($bestUserIds);
 
 		return $bestUsers;

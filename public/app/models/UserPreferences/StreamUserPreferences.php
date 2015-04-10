@@ -74,11 +74,14 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	public function reloadItem($streamItemId) {
 		/* byl již příspěvek načten do sesseion? */
 		$itemId = intval($streamItemId);
+
 		if ($this->data->offsetExists($itemId)) {
 			$streamItem = $this->streamDao->findNoFetch($itemId);
 			if ($streamItem) {
+
 				$newItems = $this->getSerializer($streamItem)->toArrayHash(); /* musí to být takhle, protože Serializer má na vstupu Selection */
 				$newItem = $newItems->offsetGet($itemId);
+
 				$this->data->offsetSet($newItem->id, $newItem);
 				$this->setData($this->data);
 			}

@@ -58,6 +58,7 @@ class ImageLikes extends BaseLikes implements IBaseLikes {
 			$this->justLike = TRUE;
 			$this->liked = TRUE;
 			$this->likeDao->addLiked($imageID, $userID, $this->ownerID);
+			$this->reloadItem($this->name);
 		}
 		$this->redrawControl();
 	}

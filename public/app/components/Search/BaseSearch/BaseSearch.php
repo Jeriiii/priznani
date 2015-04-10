@@ -39,9 +39,12 @@ class BaseSearch extends BaseProjectControl {
 			}
 		}
 		if ($mode == 'listMobile') {
-			$this->users = array_slice((array) $this->users, 0, self::LIMIT_LIST_MOBILE - 1);
+			if (is_array($this->users)) {
+				$this->users = array_slice((array) $this->users, 0, self::LIMIT_LIST_MOBILE - 1);
+			} else {
+				$this->users->limit(self::LIMIT_LIST_MOBILE);
+			}
 		}
-
 		$this->template->items = $this->users;
 		$this->template->mode = $mode;
 		$this->template->render();

@@ -49,6 +49,7 @@ class CommentLikes extends BaseLikes implements IBaseLikes {
 			$this->justLike = TRUE;
 			$this->liked = TRUE;
 			$this->likeDao->addLiked($commentID, $userID, $this->ownerID);
+			$this->reloadItem($this->name);
 		}
 		$this->redrawControl();
 	}
