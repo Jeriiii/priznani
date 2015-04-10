@@ -31,4 +31,8 @@ class ChatPresenter extends BasePresenter {
 		return new ChatStream($this->chatMessagesDao, $this->loggedUser, $valConversationID, $this->messages, 30, $this, $name);
 	}
 
+	public function renderConversationsMobile() {
+		
+	}
+
 }
