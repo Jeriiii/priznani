@@ -1,0 +1,29 @@
+{if $logged}
+	<div id="chat-container">
+	<div id="chat-header"></div>
+	<div id="chat-interface">
+	<div id="chat-search">
+		{*<a href="#" title="" class="chat-message-icon"></a>
+		<a href="#" title="" class="chat-search-icon"></a>
+		<input type="text" id="chat-search-input" />*}
+		<a id="chat-go-to-search" href="{plink ":Search:Search:"}"><span title="" class="chat-search-icon"></span><span class="text">Hledat nové přátele</span></a>
+		<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+	{if $loggedUser->property->sound_effect == 1}
+	<audio id="chat-beep" src="{$basePath}/sounds/recieve_message.mp3"></audio>
+	{/if}
+	{control contactList}
+
+	{control conversationList}
+	</div>
+	{control communicator}
+	<script>
+	var isLoggedIn = true;
+	</script>
+	{else}
+	<script>
+	var isLoggedIn = false;
+	</script>
+	</div>
+{/if}
