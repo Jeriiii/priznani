@@ -30,6 +30,17 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 	 */
 	const NUMBER_OF_IMAGE = 3;
 
+	/**
+	 * počet možných polí pro obrázky při vytvoření galerie na mobilním zařízení
+	 */
+	const NUMBER_OF_MOBILE_IMAGE = 2;
+
+	/**
+	 * Počet nahrávacích polí v tomto požadavku (nastaveno podle vlastností zařízení)
+	 * @var int
+	 */
+	private $actualNumberOfImage = 0;
+
 	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
 
@@ -37,8 +48,14 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 		$this->userImageDao = $userImageDao;
 		$this->streamDao = $streamDao;
 
+		if ($this->deviceDetector->isMobile()) {
+			$this->actualNumberOfImage = self::NUMBER_OF_MOBILE_IMAGE;
+		} else {
+			$this->actualNumberOfImage = self::NUMBER_OF_IMAGE;
+		}
+
 		//form
-		$this->addImageFields(self::NUMBER_OF_IMAGE, TRUE, FALSE);
+		$this->addImageFields($this->actualNumberOfImage, TRUE, FALSE);
 
 		$this->setInputContainer(FALSE);
 		$this->setBootstrapRender();
@@ -53,7 +70,7 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 	public function submitted(NewStreamImageForm $form) {
 		$values = $form->values;
 
-		$images = $this->getArrayWithImages($values, self::NUMBER_OF_IMAGE);
+		$images = $this->getArrayWithImages($values, $this->actualNumberOfImage);
 
 		$isFill = $this->isFillImage($images);
 
