@@ -11,7 +11,7 @@ $(document).ready(function(){
 	});
 	
 	/* zobrazování a schovávání komentářů nebo upozornění, že je uživatel nepřihlášený */
-	$('.comment-button, .likes-button').click(function(){
+	$('#stream').on('click', '.comment-button, .likes-button', function(){
 		var selector = '#' + $(this).attr('data-to-open');
 		$(selector).toggle();
 	});
