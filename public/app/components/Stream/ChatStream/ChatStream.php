@@ -35,18 +35,32 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	private $loggedUser;
 
 	/** @var int ID konverzace */
-	private $conversationID;
+	private $conversationID = null;
 
-	public function __construct(ChatMessagesDao $chatMessagesDao, $loggedUser, $conversationID, Selection $messages = null, $limit = 10, IContainer $parent = NULL, $name = NULL) {
+	/** @var int ID uživatele, se kterým si píši */
+	private $userInChatID = null;
+
+	public function __construct(ChatMessagesDao $chatMessagesDao, $loggedUser, Selection $messages = null, $limit = 10, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->limit = $limit;
 		$this->messages = $messages;
 		$this->chatMessagesDao = $chatMessagesDao;
 		$this->loggedUser = $loggedUser;
+	}
+
+	public function setUserInChatID($userInChatID) {
+		$this->userInChatID = $userInChatID;
+	}
+
+	public function setConversationID($conversationID) {
 		$this->conversationID = $conversationID;
 	}
 
 	public function render() {
+		if (empty($this->userInChatID) && empty($this->conversationID)) {
+			throw new Exception("You must set userInChatID or conversationID variable.");
+		}
+
 		if (!$this->getPresenter()->isAjax()) {
 			$this->setData();
 			$lastMessage = $this->messages->fetch(); //při obnovení stránky, počítá s tím, že messages už nejsou potřeba (převedeny do pole)
@@ -83,12 +97,25 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	 * @param int $lastId dané id
 	 */
 	public function handleGetNewData($lastId) {
-		$newMessages = $this->chatMessagesDao->getNewMessagesFromConversation($this->conversationID, $lastId);
+		$newMessages = $this->getNewMessages($lastId);
 		$this->template->newMessages = $newMessages;
 		if ($this->presenter->isAjax()) {
 			$this->invalidateControl('new-stream-messages');
 		} else {
 			$this->redirect('this');
+		}
+	}
+
+	/**
+	 * Vrátí novější zprávy než je zpráva $lastMessageId
+	 * @param int $lastMessageId Zpráva, od které chci další zprávy.
+	 * @return Selection Zprávy.
+	 */
+	private function getNewMessages($lastMessageId) {
+		if (isset($this->conversationID)) {
+			return $this->chatMessagesDao->getNewMessagesFromConversation($this->conversationID, $lastMessageId);
+		} else {
+			return $this->chatMessagesDao->getAllNewerMessagesBetween($lastMessageId, $this->loggedUser->id, $this->userInChatID);
 		}
 	}
 
@@ -118,7 +145,15 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	}
 
 	protected function createComponentMessageNewForm($name) {
-		return new MessageNewForm($this->chatMessagesDao, $this->loggedUser->id, $this->conversationID, $this, $name);
+		if (isset($this->conversationID)) {
+			$messageNewForm = new MessageNewForm($this->chatMessagesDao, $this->loggedUser->id, $this, $name);
+			$messageNewForm->setConversationID($this->conversationID);
+			return $messageNewForm;
+		} else {
+			$messageNewForm = new MessageNewForm($this->chatMessagesDao, $this->loggedUser->id, $this, $name);
+			$messageNewForm->setRecipientID($this->userInChatID);
+			return $messageNewForm;
+		}
 	}
 
 }

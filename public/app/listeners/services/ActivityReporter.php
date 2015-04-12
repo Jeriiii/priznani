@@ -8,7 +8,7 @@ namespace POS\Listeners\Services;
 
 use POS\Model\UserDao;
 use Nette\Http\Session;
-use Nette\DateTime;
+use Nette\Utils\DateTime;
 use DateInterval;
 use Nette\Http\SessionSection;
 
@@ -32,14 +32,10 @@ class ActivityReporter extends \Nette\Object {
 	 */
 	public $onUserFirstTodayActivity = array();
 
-	/**
-	 * @var SessionSection
-	 */
+	/** @var SessionSection */
 	public $section;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 */
+	/** @var \POS\Model\UserDao */
 	public $userDao;
 
 	/**
@@ -149,6 +145,7 @@ class ActivityReporter extends \Nette\Object {
 	 */
 	private function isToday($lastActivity) {
 		$now = new DateTime();
+
 		$diff = $now->diff($lastActivity);
 
 		return $diff->days == 0;

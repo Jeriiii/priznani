@@ -53,6 +53,7 @@ class BaseUserPreferences {
 		if (!($user instanceof ActiveRow) && !($user instanceof \Nette\ArrayHash)) {
 			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
 		}
+
 		$this->userProperty = $user->property;
 		$this->user = $user;
 		$this->userDao = $userDao;
