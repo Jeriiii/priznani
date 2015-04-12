@@ -12,21 +12,18 @@
 <script src="{$basePath}/js/stream.js"></script>
 <script src="{$basePath}/js/chat/stream-chat-init.js"></script>
 <script>
-	console.log("pred nacitanim");
-	//$(document).ready(function () {
-		console.log("zacina nacitani");
+	$(document).ready(function () {
 		$("body").stream({
 			addoffset: 30,
 			offsetName: "valChatMessages-offset",
 			msgElement: ".stream-info-message",
 			msgText: "Žádné předchozí zprávy nebyly nalezeny."
 		});
-		console.log("stream nacten");
+
 		$('body').chatConversationPage({
 	
 		});
-		console.log("chat nacten");
-	//});
+	});
 	
 </script>
 

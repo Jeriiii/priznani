@@ -57,7 +57,6 @@ class BaseForm extends Form {
 	 */
 	protected function ajax() {
 		$this->getElementPrototype()->addClass('ajax');
-		$this->formClass .= " ajax"; //protoze pri bootstraprenderu by se to prepsalo
 		$this->ajax = TRUE;
 	}
 
@@ -82,7 +81,7 @@ class BaseForm extends Form {
 		$renderer->wrappers['label']['class'] = '';
 
 		// make form and controls compatible with Twitter Bootstrap
-		$this->getElementPrototype()->class($this->formClass);
+		$this->getElementPrototype()->addClass($this->formClass);
 
 		foreach ($this->getControls() as $control) {
 			if ($control instanceof Controls\Button) {

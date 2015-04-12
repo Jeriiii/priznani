@@ -41,7 +41,8 @@ class MessageNewForm extends BaseForm {
 		$this->chatStream = $chatStream;
 		$this->senderID = $senderID;
 
-		$this->ajax();
+		$this->getElementPrototype()->addClass('send-msg-form');
+		//$this->ajax(); - ajax zajištěn ručně ve scriptu
 
 		/* formulář */
 		$this->addText("message", "", 400, 400)

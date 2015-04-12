@@ -60,7 +60,8 @@
 					if (data.snippets['snippet-profilStream-posts'] == "") {//pokud snippet už neobnovuje data
 						$.fn.stream.run = false;//zastaví dotazování
 					}
-					if (data.snippets['snippet-valChatMessages-stream-messages'] == "") {//pokud snippet už neobnovuje data
+					if (data.snippets['snippet-valChatMessages-stream-messages'] == "" || 
+							data.snippets['snippet-conversation-stream-messages'] == "") {//pokud snippet už neobnovuje data
 						$.fn.stream.run = false;//zastaví dotazování
 					} else {
 						$("#chat-stream #stream").scrollTop(30 * 50);/* posunutí chat streamu o kus níž, když se načtou data */
