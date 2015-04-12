@@ -30,50 +30,32 @@
 	$.fn.chatConversationPage.defaults = {
 		valSettingsOn : false, //zapne val. chat
 		msgSettingsOn : false, //zapne klasické pos. zpráv mezi dvěma uživateli
-		settings: null
+		settings: null,
+		timeMessageCheck: 3000, //čas jak dlouho trvá, než se zeptá na nové zprávy
+		addTimeMessageCheck: 500 //přírůstek k času, když nezachytí žádnou zprávu
 	};
 	
 	/**
 	 * Navázání akce na odeslání formuláře.
 	 * @param {Object} opts Nastavení pluginu.
 	 */
-	$.fn.chatConversationPage.submitMessageForm = function(opts) {
-		console.log("first start bind");
-		var id = $('.send-msg-form').attr("id");
-		console.log(id);
+	function submitMessageForm (opts) {
 		$('.send-msg-form').submit(function(e) {
-			console.log("start");
 			$.nette.ajax({
 				complete:function(data) {
-					$.fn.chatConversationPage.submitMessageForm(opts);
-					(function() {
-					var pushFn = function(){
-						return pushOnEnd();
-					};
+					submitMessageForm(opts);
 					$.nette.ajax({
 						url: $("#refresh-conversation").attr('href') + "&" + opts.settings.lastId + "=" + lastId,
 						success: function () {},
 						error: function () {},
-						complete: pushFn
+						complete: pushOnEnd
 					});
-					}());
 				}
 			}, this, e);
-			console.log("prevent default");
+
 			e.preventDefault();		
 		});
-		console.log("last end bind");
-	};
-	
-	//				complete: function () {
-//					console.log(opts);
-//					$.fn.chatConversationPage.submitMessageForm(opts);
-//					console.log("bind submit");
-//					$.nette.ajax({
-//						url: $("#refresh-conversation").attr('href') + "&" + opts.settings.lastId + "=" + lastId
-//					});
-//					console.log("end bind");
-//				}
+	}
 	
 	/**
 	 * Vrátí správné nastavení pluginu.
@@ -97,24 +79,38 @@
 	function init(opts) {
 		$(document).ready(function () {
 			pushOnEnd();
-			//getNewMessages(opts, 4000);
+			getNewMessages(opts, opts.timeMessageCheck);
 		});
-		$.fn.chatConversationPage.submitMessageForm(opts);
+		submitMessageForm(opts);
 	}
 
 	/**
 	 * Načte nové zprávy do snippetu s novými zprávami - to posléze opakuje
-	 * @param { int } timeout čas opakování [ms]
 	 */
 	function getNewMessages(opts, timeout) {
 		setTimeout(function () {
 			$.nette.ajax({
 				url: $("#refresh-conversation").attr('href') + "&" + opts.settings.lastId + "=" + lastId,
-				success: function () {
-					getNewMessages(opts,timeout);
+				success: function (data) {
+					if (data.snippets['snippet-conversation-new-stream-messages'] == "") {//pokud snippet už neobnovuje data
+						if(timeout > 60000) {
+							timeout = 60000;
+						}
+						console.log(timeout);
+						getNewMessages(opts, timeout + opts.addTimeMessageCheck); //zvýší se čas
+					} else {
+						getNewMessages(opts, opts.timeMessageCheck); //vynuluje se čas
+					}
+					
+				},
+				complete: function(data) {
+					if (data.snippets['snippet-conversation-new-stream-messages'] != "") {
+						/* pokud přišla nová data, skoč dolu */
+						pushOnEnd();
+					}
 				},
 				error: function () {
-					getNewMessages(opts, timeout + 200);
+					getNewMessages(opts, opts.timeMessageCheck + opts.addTimeMessageCheck);
 				}
 			});
 			;

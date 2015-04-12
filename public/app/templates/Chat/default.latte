@@ -8,9 +8,8 @@
 {/block}
 
 {block foot}
-{*control js 'stream.js'*}
-<script src="{$basePath}/js/stream.js"></script>
-<script src="{$basePath}/js/chat/stream-chat-init.js"></script>
+{control js 'stream.js', 'chat/stream-chat-init.js'}
+
 <script>
 	$(document).ready(function () {
 		$("body").stream({

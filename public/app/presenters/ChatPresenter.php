@@ -17,6 +17,11 @@ class ChatPresenter extends BasePresenter {
 	/** @var int Id uživatele, se kterým si chci psát */
 	private $userInChatID;
 
+	public function startup() {
+		parent::startup();
+		$this->checkLoggedIn();
+	}
+
 	public function actionDefault(/* uživatel se kterým si chceme psát. */ $userInChatID) {
 		$this->userInChatID = $userInChatID;
 	}
