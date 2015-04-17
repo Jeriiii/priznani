@@ -210,6 +210,8 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		}
 		unset($messageArray[ChatMessagesDao::COLUMN_ID_SENDER]); //id odesilatele je uz v prvnim klici pole
 		unset($messageArray[ChatMessagesDao::COLUMN_ID_RECIPIENT]);  //neposila uzivateli jeho vlastni id
+		$sendedDate = $messageArray[ChatMessagesDao::COLUMN_SENDED_DATE]->format('Y-m-d H:i:s');
+		$messageArray[ChatMessagesDao::COLUMN_SENDED_DATE] = $sendedDate;
 		return $messageArray;
 	}
 

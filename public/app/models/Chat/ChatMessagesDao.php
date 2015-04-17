@@ -26,6 +26,7 @@ class ChatMessagesDao extends AbstractDao {
 	const COLUMN_CHECKED_BY_CRON = "checked_by_cron";
 	const COLUMN_SEND_NOTIFY = "sendNotify";
 	const COLUMN_CONVERSATION_ID = "id_conversation";
+	const COLUMN_SENDED_DATE = 'sendedDate';
 
 
 	/* priznakove konstanty */
