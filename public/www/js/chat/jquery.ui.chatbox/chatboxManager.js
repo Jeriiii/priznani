@@ -106,9 +106,10 @@ var chatboxManager = function () {
 	 * @param int|String id id okna
 	 * @param String name popisek zpravy (typicky odesilatel)
 	 * @param String msg text zpravy
+	 * @param {date} sendedDate Čas a den poslání zprávy.
 	 */
-	var addMessage = function (id, name, msg) {
-		$("#" + id).chatbox("option", "boxManager").addMsg(name, msg);
+	var addMessage = function (id, name, msg, sendedDate) {
+		$("#" + id).chatbox("option", "boxManager").addMsg(name, msg, sendedDate);
 	};
 
 	return {

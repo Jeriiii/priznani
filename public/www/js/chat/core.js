@@ -209,9 +209,25 @@
 		/* hláška, co se objeví při pokusu obnovit/zavřít okno, zatímco se čeká na odpověď při odeslání zprávy */
 		sendDataByPost(sendMessageLink, requestData);
 		clearInfoMessages(id);
-		this.boxManager.addMsg(mydata.name, msg);//pridani zpravy do okna
+
+		var sendedTime = getNow();
+		this.boxManager.addMsg(mydata.name, msg, sendedTime);//pridani zpravy do okna
 		messageSent = true;
 		actualizeMessageInConversationList(id, data.title, msg);
+	}
+	
+	/**
+	 * Vrátí aktuální naformátovaný čas.
+	 * @returns {string} Naformátovaný čas.
+	 */
+	function getNow() {
+		var d = new Date();
+		var day = d.getDate();
+		var month = d.getMonth() + 1; //Months are zero based
+		var year = d.getFullYear();
+		var hrs = d.getHours();
+		var min = d.getMinutes();
+		return day + "." + month + ". " + year + " " + hrs + ":" + min;
 	}
 
 	/**
@@ -248,7 +264,8 @@
 			var href = values.href;
 			var messages = values.messages;
 			$.each(messages, function (messageKey, message) {//vsechny zpravy od kazdeho uzivatele
-				addMessage(iduser, name, href, message.name, message.id, message.text, message.type);
+				console.log(message.sendedDate);
+				addMessage(iduser, name, href, message.name, message.id, message.text, message.type, message.sendedDate);
 				if (message.type == 0) {//textové zprávy se aktualizují v seznamu konverzací
 					actualizeMessageInConversationList(iduser, name, message.text);
 					if (message.readed == 0 && message.fromMe == 0) {
@@ -371,17 +388,18 @@
 	 * @param {int} messid id zpravy
 	 * @param {String} text text zpravy
 	 * @param {int} type typ zpravy
+	 * @param {date} sendedDate Čas a den poslání zprávy.
 	 */
-	function addMessage(id, boxname, href, name, messid, text, type) {
+	function addMessage(id, boxname, href, name, messid, text, type, sendedDate) {
 		var newbox = addBox(id, boxname, href);//vytvori/zobrazi dotycne okno
 		clearInfoMessages(id);
 		if (type == 0) {//textova zprava
 			if (!newbox) {//pokud je vytvoren box nove, bude zpravami naplnen automaticky vcetne teto posledni
-				chatboxManager.addMessage(id, name, text);
+				chatboxManager.addMessage(id, name, text, sendedDate);
 			}
 			setReaded(messid);
 		} else {//infozprava
-			chatboxManager.addMessage(id, '', text);
+			chatboxManager.addMessage(id, '', text, sendedDate);
 		}
 	}
 

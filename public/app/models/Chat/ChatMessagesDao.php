@@ -218,6 +218,7 @@ class ChatMessagesDao extends AbstractDao {
 		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
 		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
+
 		return $sel;
 	}
 

@@ -330,6 +330,7 @@ class FeatureContext extends MinkContext {
 		if (empty($myId)) {
 			throw new PendingException('This works only when user is signed in.');
 		}
+
 		$isPaying = $this->paymentDao->isUserPaying($myId);
 		if ($isPaying) {
 			$this->assertSession()->responseContains($this->fixStepArgument($text));

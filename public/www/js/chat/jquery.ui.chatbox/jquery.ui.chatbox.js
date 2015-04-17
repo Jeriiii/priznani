@@ -38,8 +38,7 @@ if (!Array.indexOf) {
 			href: '#',
 			offset: 0, // relative to right edge of the browser window
 			width: 300, // width of the chatbox
-			messageSent: function (id, user, msg) {
-				// override this
+			messageSent: function (id, user, msg, sendedDate) {
 				this.boxManager.addMsg(user.first_name, msg);
 			},
 			boxClosed: function (id) {
@@ -50,7 +49,7 @@ if (!Array.indexOf) {
 				init: function (elem) {
 					this.elem = elem;
 				},
-				addMsg: function (peer, msg) {
+				addMsg: function (peer, msg, sendedDate) {
 					var self = this;
 					var box = self.elem.uiChatboxLog;
 					var e = document.createElement('div');
@@ -70,7 +69,10 @@ if (!Array.indexOf) {
 					var msgElement = document.createElement(
 							systemMessage ? "i" : "span");
 					$(msgElement).text(msg);
+					var sended = document.createElement("time");
+					$(sended).text(sendedDate);
 					e.appendChild(msgElement);
+					e.appendChild(sended);
 					$(e).addClass("ui-chatbox-msg");
 					if (!peer) {
 						$(e).addClass("ui-chatbox-nopeer");
@@ -218,6 +220,7 @@ if (!Array.indexOf) {
 					.keydown(function (event) {
 						if (event.keyCode && event.keyCode == $.ui.keyCode.ENTER) {
 							msg = $.trim($(this).val());
+							
 							if (msg.length > 0) {
 								self.options.messageSent(self.options.id, self.options.user, msg);
 							}
