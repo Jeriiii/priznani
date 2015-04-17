@@ -4,11 +4,12 @@
 				{var $id = $userfinder->getCorrectCodedId($conversation->id_sender, $conversation->id_recipient)}
 				{var $user = $userfinder->getCorrectUser($conversation->id_sender, $conversation->id_recipient)}
 				{var $unreaded = $conversation->readed == 0 && $userId != $conversation->id_sender}
-				<li data-id="{$id}" data-title="{$user->user_name}" class="conversation-link {if $unreaded}unreaded{/if}">
-				{$user|showProfMin}
-				<strong>{$user->user_name}</strong>
-				<p class="lastmessage">{$conversation->text|truncate:35}</p>
-				<div class="clear"></div>
+				<li class="{if $unreaded}unreaded{/if}">
+					<a href="{plink Chat:conversations}" class="conversation-link"></a>{* volán javascriptem *}
+					{$user|showProfMinDiv}
+						<strong>{$user->user_name}</strong>
+						<p class="lastmessage">{$conversation->text|truncate:35}</p>
+					<div class="clear"></div>
 				</li>
 			{/foreach}
 	</ul>
@@ -16,6 +17,6 @@
 		<a id="next-data-item-btn" n:href="load!" class="ajaxn"></a>
 	</div>
 	<div class="conversations-info-message"></div>
-	<div id="stream-loader"><img src="{$basePath}/img/ajax-loader.gif"></div>	
+	<div id="stream-loader"><img src="{$basePath}/images/loadingGifs/skypelike.GIF"></div>	
 </div>
 

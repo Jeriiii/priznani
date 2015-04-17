@@ -7,3 +7,44 @@
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
 
+#conversations{
+	
+	li{
+		color: #333;
+		border-bottom: 1px solid #ddd;
+		margin: 0 -1em;
+		padding: 0.2em 0.8em;
+		padding-top: 0.4em;
+		
+		&:active{
+			background-color: #ddd;
+		}
+		
+		.generatedProfile{
+			float: left;
+		}
+		strong{
+			color: #333;
+			font-size: 14px;
+			padding: 0.2em;
+		}
+		p.lastmessage{
+			color: #444;
+			font-size: 12px;
+			padding: 0.2em;
+			padding-left: 42px;
+		}
+		
+		.conversation-link{
+			display: none;
+		}
+	}
+	
+	#stream-loader, .conversations-info-message{
+		text-align: center;
+		padding: 0.5em;
+		color: #555;
+		font-size: 12px;
+	}
+	
+}

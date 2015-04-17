@@ -7,4 +7,9 @@
 	$('#chatmenu li[data-href]').click(function(){
 		window.location = $(this).attr('data-href');		
 	});
+	
+	/* kliknutí do konverzací - přesměrování na příslušný odkaz ve specifických případech */
+	$('#conversations li').click(function(){
+		window.location = $(this).find('.conversation-link').attr('href');		
+	});
 });
