@@ -17,6 +17,7 @@ use Nette\Utils\Html;
 use Nette\Utils\Strings;
 use Nette\DateTime;
 use POS\Model\UserDao;
+use POS\Ext\LastActive;
 
 class ShowProfHelper {
 	/* názvy helperů */
@@ -81,18 +82,7 @@ class ShowProfHelper {
 				$elName = Html::el($el, Strings::upper($user->user_name));
 				$elName->addAttributes(array('class' => 'generatedTitle'));
 				$elLink->add($elName);
-				$now = new DateTime();
-				$lastActive = $now->diff(new DateTime($user->last_active));
-				if ($lastActive->m > 0) {
-					$lastActive = " ";
-				} else if ($lastActive->d > 0) {
-					$lastActive = "(" . $lastActive->d . " d" . ")";
-				} else if ($lastActive->h > 0) {
-					$lastActive = "(" . $lastActive->h . " h" . ")";
-				} else {
-					$lastActive = "(" . $lastActive->m . " m" . ")";
-				}
-				$elLastActive = Html::el($el, $lastActive);
+				$elLastActive = Html::el($el, LastActive::format($user->last_active));
 				$elLastActive->addAttributes(array('class' => 'lastActive'));
 				$elLink->add($elLastActive);
 

@@ -7,6 +7,7 @@
 namespace POSComponent\Chat;
 
 use Nette\DateTime;
+use POS\Ext\LastActive;
 
 /**
  * Reprezentuje seznam kontaktů a vykresluje jej
@@ -37,21 +38,7 @@ class StandardContactList extends BaseChatComponent implements IContactList {
 	 * @return string
 	 */
 	public function getLastActivity($user) {
-		$now = new DateTime();
-		$lastActive = $now->diff(new DateTime($user->last_active));
-		if ($lastActive->m > 0) {
-			$lastActive = " ";
-		} else if ($lastActive->d > 0) {
-			$lastActive = "(" . $lastActive->d . " d" . ")";
-		} else if ($lastActive->h > 0) {
-			$lastActive = "(" . $lastActive->h . " h" . ")";
-		} else {
-			if ($lastActive->m < 5) {
-				$lastActive = "online";
-			} else {
-				$lastActive = "(" . $lastActive->m . " m" . ")";
-			}
-		}
+		$lastActive = LastActive::format($user->last_active);
 		return $lastActive;
 	}
 
