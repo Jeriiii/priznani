@@ -11,33 +11,19 @@ use POSComponent\Comments\StatusComments;
  */
 class StatusPresenter extends BasePresenter {
 
-	/**
-	 * @var \POS\Model\StatusDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StatusDao @inject */
 	public $statusDao;
 
-	/**
-	 * @var \POS\Model\LikeStatusDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeStatusDao @inject */
 	public $likeStatusDao;
 
-	/**
-	 * @var \POS\Model\LikeStatusCommentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\LikeStatusCommentDao @inject */
 	public $likeStatusCommentDao;
 
-	/**
-	 * @var \POS\Model\CommentStatusesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CommentStatusesDao @inject */
 	public $commentStatusesDao;
 
-	/**
-	 * @var ActiveRow|bool Status
-	 */
+	/** @var ActiveRow|bool Status */
 	private $status;
 
 	public function startup() {

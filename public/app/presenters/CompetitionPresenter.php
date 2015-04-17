@@ -28,46 +28,25 @@ class CompetitionPresenter extends BasePresenter {
 	public $galleryID;
 	public $domain;
 
-	/**
-	 * @var \POS\Model\ImageDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ImageDao @inject */
 	public $imageDao;
 
-	/**
-	 * @var \POS\Model\GalleryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\GalleryDao @inject */
 	public $galleryDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 * @inject
-	 */
+	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/**
-	 * @var POS\Model\UsersCompetitionsDao
-	 * @inject
-	 */
+	/** @var POS\Model\UsersCompetitionsDao @inject */
 	public $usersCompetitionsDao;
 
-	/**
-	 * @var POS\Model\UserGalleryDao
-	 * @inject
-	 */
+	/** @var POS\Model\UserGalleryDao @inject */
 	public $userGalleryDao;
 
-	/**
-	 * @var POS\Model\UserImageDao
-	 * @inject
-	 */
+	/** @var POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
-	/**
-	 * @var POS\Model\CompetitionsImagesDao
-	 * @inject
-	 */
+	/** @var POS\Model\CompetitionsImagesDao @inject */
 	public $competitionsImagesDao;
 
 	public function startup() {

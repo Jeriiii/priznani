@@ -15,7 +15,7 @@ use Nette\Utils\Strings;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class MobileViewList extends ArrayHash implements IViewList {
+abstract class MobileViewList extends ArrayHash implements IViewList {
 
 	/**
 	 * Implicitní název použitého layoutu (použije se, pokud není specifikován layout)
@@ -119,7 +119,7 @@ class MobileViewList extends ArrayHash implements IViewList {
 	private function getViewRepresentation($presenter, $view, $layoutName, $templateName) {
 		$representation = new ArrayHash();
 		$representation->presenter = $presenter;
-		$representation->view = $presenter;
+		$representation->view = $view;
 		if (!empty($layoutName)) {
 			$representation->layoutName = $layoutName;
 		}

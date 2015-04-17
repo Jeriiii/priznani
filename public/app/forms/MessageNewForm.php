@@ -7,9 +7,6 @@
 namespace Nette\Application\UI\Form;
 
 use Nette\Application\UI\Form;
-use Nette\Utils\Html;
-use Nette\ComponentModel\IContainer;
-use POSComponent\Comments\BaseComments;
 use POS\Model\ChatMessagesDao;
 use POSComponent\Stream\ChatStream;
 
