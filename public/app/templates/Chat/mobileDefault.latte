@@ -1,7 +1,7 @@
 {var $activeChat = TRUE;}
 
 {block head}
-	{control css 'chat/chatstream.less'}
+	{control css 'chat/mobileChatstream.less'}
 {/}
 
 {block content}
@@ -10,16 +10,10 @@
 {/block}
 
 {block foot}
-{control js 'stream.js', 'chat/stream-chat-init.js'}
+{control js 'stream.js', 'chat/stream-chat-init.js', 'chat/mobileChatStream.js'}
 
 <script>
 	$(document).ready(function () {
-		$("body").stream({
-			addoffset: 30,
-			offsetName: "conversation-offset",
-			msgElement: ".stream-info-message",
-			msgText: "Žádné předchozí zprávy nebyly nalezeny."
-		});
 		$('body').chatConversationPage({
 			msgSettingsOn: true //zapnutí nastavení pro zprávy
 		});

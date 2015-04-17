@@ -162,6 +162,21 @@ class ChatMessagesDao extends AbstractDao {
 	}
 
 	/**
+	 * Nastaví všechny zprávy mezi uživateli jako přečtené/nepřečtené
+	 * @param int $idSender id odesílatele
+	 * @param int $idRecipient id příjemce
+	 * @param bool $readed přečtené/nepřečtené
+	 * @return \Nette\Database\Table\Selection změněné řádky
+	 */
+	public function setAllMessagesReaded($idSender, $idRecipient, $readed) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID_SENDER, $idSender);
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
+		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
+		return $this->setSelectionReaded($sel, $readed);
+	}
+
+	/**
 	 * Nastaví všechny zprávy s id v poli jako přečtené/nepřečtené
 	 * @param array $ids neasociativni pole idček zpráv
 	 * @param boolean $readed přečtená/nepřečtená

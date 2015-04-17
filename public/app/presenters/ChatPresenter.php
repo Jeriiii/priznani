@@ -30,10 +30,7 @@ class ChatPresenter extends BasePresenter {
 
 	public function actionDefault(/* uživatel se kterým si chceme psát. */ $userInChatID) {
 		$this->userInChatID = $userInChatID;
-	}
-
-	public function actionMobileDefault(/* uživatel se kterým si chceme psát. */ $userInChatID) {
-		$this->userInChatID = $userInChatID;
+		$this->chatMessagesDao->setAllMessagesReaded($userInChatID, $this->getUser()->id, TRUE); //nastavení zpráv jako přečtených
 	}
 
 	public function renderMobileDefault($userInChatID) {
@@ -41,8 +38,6 @@ class ChatPresenter extends BasePresenter {
 	}
 
 	protected function createComponentConversation($name) {
-
-
 		$messages = $this->chatMessagesDao->getLastTextMessagesBetweenUsers($this->loggedUser->id, $this->userInChatID);
 
 		$chatStream = new ChatStream($this->chatMessagesDao, $this->loggedUser, $messages, 30, $this, $name);
