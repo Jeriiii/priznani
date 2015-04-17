@@ -2,6 +2,7 @@
 
 use POSComponent\Chat\MobileChat;
 use POSComponent\Stream\ChatStream;
+use POSComponent\Chat\MobileContactList;
 
 /**
  * Pro práci se zprávami přes celoou stránku
@@ -72,6 +73,14 @@ class ChatPresenter extends BasePresenter {
 	 */
 	public function createComponentMobileChat($name) {
 		return new MobileChat($this->chatManager, $this->loggedUser, $this, $name);
+	}
+
+	/**
+	 * Vytvoření komponenty zprostředkovávající seznam kontaktů
+	 * @return \POSComponent\Chat\MobileContactList
+	 */
+	protected function createComponentMobileContactList() {
+		return new MobileContactList($this->chatManager);
 	}
 
 }
