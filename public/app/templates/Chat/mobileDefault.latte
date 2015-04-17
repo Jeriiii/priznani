@@ -1,0 +1,32 @@
+{var $activeChat = TRUE;}
+
+{block head}
+	{control css 'chat/mobile.less', 'chat/mobileChatstream.less'}
+{/}
+
+{block content}
+<div class="chat-header">
+	{$userInChat|showProfDiv}
+	<a href="#chatmenu" title="Poslat zprávu..." class="btn-message ui-input-btn ui-btn ui-icon-mail ui-btn-icon-notext ui-corner-all"></a>
+	<div class="clear"></div>
+</div>
+
+<div data-role="panel" id="chatmenu" data-position="left" data-display="overlay" >
+	{control mobileContactList}
+</div><!-- /panel -->	
+
+{control conversation}
+{/block}
+
+{block foot}
+{control js 'stream.js', 'chat/stream-chat-init.js', 'chat/mobileChatStream.js', 'chat/mobile-init.js'}
+
+<script>
+	$(document).ready(function () {
+		$('body').chatConversationPage({
+			msgSettingsOn: true //zapnutí nastavení pro zprávy
+		});
+	});
+</script>
+
+{/block}

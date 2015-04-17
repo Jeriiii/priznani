@@ -5,7 +5,7 @@
 				{var $user = $userfinder->getCorrectUser($conversation->id_sender, $conversation->id_recipient)}
 				{var $unreaded = $conversation->readed == 0 && $userId != $conversation->id_sender}
 				<li class="{if $unreaded}unreaded{/if}">
-					<a href="{plink Chat:conversations}" class="conversation-link"></a>{* volán javascriptem *}
+					<a href="{plink ':Chat:default', 'userInChatID' => $user->id}" class="conversation-link"></a>{* volán javascriptem *}
 					{$user|showProfMinDiv}
 						<strong>{$user->user_name}</strong>
 						<p class="lastmessage">{$conversation->text|truncate:35}</p>
