@@ -26,21 +26,13 @@ use POS\UserPreferences\StreamUserPreferences;
  */
 class BaseComments extends BaseProjectControl {
 
-	/**
-	 * @var ICommentDao
-	 */
+	/** @var ICommentDao */
 	private $commentDao;
 
-	/**
-	 *
-	 * @var ActiveRow $item Objekt, který komentujeme
-	 */
+	/** @var ActiveRow $item Objekt, který komentujeme */
 	private $item;
 
-	/**
-	 *
-	 * @var type \POS\Model\LikeImageCommentDao
-	 */
+	/** @var type \POS\Model\LikeImageCommentDao */
 	private $likeImageCommentDao;
 
 	/**
@@ -49,14 +41,10 @@ class BaseComments extends BaseProjectControl {
 	 */
 	public $comments = null;
 
-	/**
-	 * @var int počet komentářů
-	 */
+	/** @var int počet komentářů */
 	public $countComments = null;
 
-	/**
-	 * @const počet zobrazovaných komentářů
-	 */
+	/** @const počet zobrazovaných komentářů */
 	const MIN_OF_SHOWED_COMMENTS = 2;
 
 	/**
@@ -68,14 +56,10 @@ class BaseComments extends BaseProjectControl {
 	/** @var boolean TRUE = zobrazí všechny komentáře */
 	private $showAllComments = FALSE;
 
-	/**
-	 * @var booblean Mají se vykreslit js scripty, který převytvoří confirm okénka
-	 */
+	/** @var booblean Mají se vykreslit js scripty, který převytvoří confirm okénka */
 	private $redrawConfirm = FALSE;
 
-	/**
-	 * @var int $ownerID ID uživatele, kterýmu obrázek patří.
-	 */
+	/** @var int $ownerID ID uživatele, kterýmu obrázek patří. */
 	private $ownerID;
 
 	/** @var \POS\UserPreferences\StreamUserPreferences objekt dat, který obsahuje prvky souvisejícího streamu */

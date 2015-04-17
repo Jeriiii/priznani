@@ -151,13 +151,13 @@ class BaseLikes extends BaseProjectControl {
 	}
 
 	/**
-	 * Přenačte prvek ve streamu.
+	 * Přenačte nacachovaný prvek ve streamu.
 	 * @param int $itemID
 	 */
 	protected function reloadItem($itemID) {
-		//if ($this->cachedStreamPreferences) {
-		$this->cachedStreamPreferences->reloadItem($itemID);
-		//}
+		if ($this->cachedStreamPreferences) {
+			$this->cachedStreamPreferences->reloadItem($itemID);
+		}
 	}
 
 	/**
