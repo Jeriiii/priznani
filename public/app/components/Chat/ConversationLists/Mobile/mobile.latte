@@ -1,0 +1,22 @@
+<script>
+	var loadConversationsLink = {$loadLink};
+</script>
+<div id="conversations">
+
+	<ul n:snippet="conversations" data-ajax-append="true">
+		{ifset $load}
+			{foreach $conversations as $conversation}
+				{var $id = $userfinder->getCorrectCodedId($conversation->id_sender, $conversation->id_recipient)}
+				{var $user = $userfinder->getCorrectUser($conversation->id_sender, $conversation->id_recipient)}
+				{var $unreaded = $conversation->readed == 0 && $userId != $conversation->id_sender}
+				<li data-id="{$id}" data-title="{$user->user_name}" class="conversation-link {if $unreaded}unreaded{/if}">
+				{$user|showProfMin}
+				<strong>{$user->user_name}</strong>
+				<p class="lastmessage">{$conversation->text|truncate:35}</p>
+				<div class="clear"></div>
+				</li>
+			{/foreach}
+		{/ifset}
+	</ul>
+</div>
+
