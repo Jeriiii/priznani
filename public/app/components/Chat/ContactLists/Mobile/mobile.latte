@@ -5,7 +5,7 @@
 	{foreach $contacts as $contact}
 		{var $lastActivity = $contactList->getLastActivity($contact->user2)}
 		{var $id = $coder->encodeData($contact->user2->id)}
-		<li data-href="{plink ':Chat:conversations'}" data-filtertext="{$contact->user2->user_name} {$lastActivity}" class="contact-link">
+		<li data-href="{plink ':Chat:default', 'userInChatID' => $contact->user2->id}" data-filtertext="{$contact->user2->user_name} {$lastActivity}" class="contact-link">
 			{$contact->user2|showProfMin}<span class="chat-username">{$contact->user2->user_name|truncate:15}</span>
 			<span class="online-indicator"></span>
 			<span class="chatLastActivity">{$lastActivity}</span>			
