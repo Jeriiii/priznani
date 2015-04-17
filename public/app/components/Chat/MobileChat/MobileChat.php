@@ -33,4 +33,12 @@ class MobileChat extends PosChat {
 		return new MobileContactList($this->chatManager);
 	}
 
+	/**
+	 * Vytvoření komponenty zprostředkovávající seznam konverzací
+	 * @return \POSComponent\Chat\MobileContactList
+	 */
+	protected function createComponentMobileConversationList() {
+		return new MobileConversationList($this->chatManager);
+	}
+
 }

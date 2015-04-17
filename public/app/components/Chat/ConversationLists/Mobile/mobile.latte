@@ -1,6 +1,3 @@
-<script>
-	var loadConversationsLink = {$loadLink};
-</script>
 <div id="conversations">
 
 	<ul n:snippet="conversations" data-ajax-append="true">
@@ -18,5 +15,6 @@
 			{/foreach}
 		{/ifset}
 	</ul>
+	<a n:href="load!" id="next-conversations-btn" title="Načíst další konverzace">Načíst další konverzace</a>
 </div>
 
