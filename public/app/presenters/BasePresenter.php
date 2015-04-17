@@ -68,9 +68,9 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		if ($this->getUser()->isLoggedIn()) {
 			$this->activityReporter->handleUsersActivity($this->getUser());
 			$section = $this->getSectionLoggedUser();
-			if (empty($section->loggedUser)) {
-				$this->calculateLoggedUser();
-			}
+			//if (empty($section->loggedUser)) {
+			$this->calculateLoggedUser();
+			//}
 			$this->loggedUser = $section->loggedUser;
 			$this->userDao->setActive($this->loggedUser->id);
 		}
@@ -102,6 +102,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public function calculateLoggedUser() {
 		$user = $this->userDao->getUser($this->getUser()->getId());
+
 		$section = $this->getSectionLoggedUser();
 		$section->setExpiration('20 minutes');
 

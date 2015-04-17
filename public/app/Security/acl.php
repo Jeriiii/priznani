@@ -30,6 +30,7 @@ class Acl extends Permission {
 		$this->addResource('Admin:Contacts');
 		$this->addResource('Admin:Statistic');
 		$this->addResource('Competition');
+		$this->addResource('Chat');
 		$this->addResource('Admin:Cities');
 		$this->addResource('Search:Search');
 		$this->addResource('Admin:News');
@@ -50,6 +51,7 @@ class Acl extends Permission {
 		$this->allow('user', 'Profil:ShowProfil');
 		$this->allow('user', 'Profil:Galleries');
 		$this->allow('user', 'Search:Search');
+		$this->allow('user', 'Chat');
 	}
 
 }

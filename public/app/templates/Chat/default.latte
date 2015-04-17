@@ -3,28 +3,25 @@
 {/}
 
 {block content}
-<h2>Valentýnský chat</h2>
-{control valChatMessages}
+<h2>Zprávy</h2>
+{control conversation}
 {/block}
 
 {block foot}
+{control js 'stream.js', 'chat/stream-chat-init.js'}
 
-<script src="{$basePath}/js/stream.js"></script>
-<script src="{$basePath}/js/chat/stream-chat-init.js"></script>
 <script>
 	$(document).ready(function () {
 		$("body").stream({
 			addoffset: 30,
-			offsetName: "valChatMessages-offset",
+			offsetName: "conversation-offset",
 			msgElement: ".stream-info-message",
 			msgText: "Žádné předchozí zprávy nebyly nalezeny."
 		});
-
 		$('body').chatConversationPage({
-	
+			msgSettingsOn: true //zapnutí nastavení pro zprávy
 		});
 	});
-	
 </script>
 
 {/block}

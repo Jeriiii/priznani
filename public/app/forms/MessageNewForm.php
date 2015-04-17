@@ -27,19 +27,22 @@ class MessageNewForm extends BaseForm {
 	private $chatStream;
 
 	/** @var int ID konverzace */
-	private $conversationID;
+	private $conversationID = null;
+
+	/** @var int ID uživatele, se kterým si píši */
+	private $recipientID = null;
 
 	/** @var int ID odesílatele zprávy */
 	private $senderID;
 
-	public function __construct(ChatMessagesDao $chatMessagesDao, $senderID, $conversationID, ChatStream $chatStream, $name = NULL) {
+	public function __construct(ChatMessagesDao $chatMessagesDao, $senderID, ChatStream $chatStream, $name = NULL) {
 		parent::__construct($chatStream, $name);
 		$this->chatMessagesDao = $chatMessagesDao;
 		$this->chatStream = $chatStream;
-		$this->conversationID = $conversationID;
 		$this->senderID = $senderID;
 
-		$this->ajax();
+		$this->getElementPrototype()->addClass('send-msg-form');
+		//$this->ajax(); - ajax zajištěn ručně ve scriptu
 
 		/* formulář */
 		$this->addText("message", "", 400, 400)
@@ -53,12 +56,18 @@ class MessageNewForm extends BaseForm {
 		return $this;
 	}
 
+	public function setRecipientID($recipientID) {
+		$this->recipientID = $recipientID;
+	}
+
+	public function setConversationID($conversationID) {
+		$this->conversationID = $conversationID;
+	}
+
 	public function submitted(MessageNewForm $form) {
 		$values = $form->getValues();
-		$this->chatMessagesDao->addConversationMessage(
-			$this->senderID, $this->conversationID, $values->message
-		);
 
+		$this->sendTextMsg($values->message);
 
 		if ($this->presenter->isAjax()) {
 			$form->clearFields();
@@ -66,6 +75,22 @@ class MessageNewForm extends BaseForm {
 			/* nepřekreslovat nové zprávy - smaže to předchozí nové zprávy */
 		} else {
 			$this->presenter->redirect('this');
+		}
+	}
+
+	/**
+	 * Pošle textovou zprávu uživateli.
+	 * @param string $message Zpráva, co se má poslat.
+	 */
+	private function sendTextMsg($message) {
+		if (isset($this->conversationID)) {
+			$this->chatMessagesDao->addConversationMessage(
+				$this->senderID, $this->conversationID, $message
+			);
+		} else {
+			$this->chatMessagesDao->addTextMessage(
+				$this->senderID, $this->recipientID, $message
+			);
 		}
 	}
 
