@@ -2,6 +2,7 @@ Feature: Testing chat on valentyn
 	
 	
 	Scenario: Test initializing page
+		Given I am signed in as "user@test.cz"
 		When I am on "/chat/valentyn"
 		Then I should see "Valentýnský chat"
 
