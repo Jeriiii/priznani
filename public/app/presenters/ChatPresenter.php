@@ -1,6 +1,6 @@
 <?php
 
-use Nette\Application\UI\Form as Frm;
+use POSComponent\Chat\MobileChat;
 use POSComponent\Stream\ChatStream;
 
 /**
@@ -37,6 +37,15 @@ class ChatPresenter extends BasePresenter {
 		return $chatStream;
 	}
 
+	public function renderMobileConversations() {
+		$this->template->logged = $this->getUser()->isLoggedIn();
+	}
+
+	/**
+	 * Vytvoření komponenty valentýnského chatu
+	 * @param string $name jméno komponenty
+	 * @return ChatStream komponenta
+	 */
 	protected function createComponentValChatMessages($name) {
 		$valConversationID = 1;
 		$messages = $this->chatMessagesDao->getMessagesByConversation($valConversationID);
@@ -45,6 +54,15 @@ class ChatPresenter extends BasePresenter {
 		$chatStream->setConversationID($valConversationID);
 
 		return $chatStream;
+	}
+
+	/**
+	 * Vytvoření mobilního chatu
+	 * @param string $name jméno komponenty
+	 * @return MobileChat komponenta
+	 */
+	public function createComponentMobileChat($name) {
+		return new MobileChat($this->chatManager, $this->loggedUser, $this, $name);
 	}
 
 }
