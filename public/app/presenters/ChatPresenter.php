@@ -14,6 +14,12 @@ class ChatPresenter extends BasePresenter {
 	 */
 	public $chatMessagesDao;
 
+	/**
+	 * @var \POS\Model\UserDao
+	 * @inject
+	 */
+	public $userDao;
+
 	/** @var int Id uživatele, se kterým si chci psát */
 	private $userInChatID;
 
@@ -24,6 +30,14 @@ class ChatPresenter extends BasePresenter {
 
 	public function actionDefault(/* uživatel se kterým si chceme psát. */ $userInChatID) {
 		$this->userInChatID = $userInChatID;
+	}
+
+	public function actionMobileDefault(/* uživatel se kterým si chceme psát. */ $userInChatID) {
+		$this->userInChatID = $userInChatID;
+	}
+
+	public function renderMobileDefault($userInChatID) {
+		$this->template->userInChat = $this->userDao->find($userInChatID);
 	}
 
 	protected function createComponentConversation($name) {
