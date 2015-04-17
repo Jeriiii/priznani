@@ -1,21 +1,20 @@
 <?php
 
 /*
- * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
- *
+ * @copyright Copyright (c) 2013-2015 Kukral COMPANY s.r.o.
+ * created on 17.4.2015
  */
 
-namespace POS\Chat;
+namespace NetteExt;
 
 /**
  * Třída sloužící ke kódování a dekódování vložených dat,
- * navržená pro potřeby chatu.
  * !!! kodovani by melo byt deterministicke - zakodovani stejne hodnoty jsou take stejna
  *  (kdyz zakoduji treba 87, vyhodi to vzdy stejnou kodovanou hodnotu) !!!
  *
- * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
+ * @author Petr Kukrál <p.kukral@kukral.eu> a Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class ChatCoder extends \NetteExt\DataCoder {
+class DataCoder extends \Nette\Object {
 
 	/**
 	 * Zakoduje vlozena data do stringu kvuli bezpecnosti (prevede je na retezec)
@@ -23,8 +22,9 @@ class ChatCoder extends \NetteExt\DataCoder {
 	 * @param mixed $data data ke kodovani
 	 * @return String zakodovana data
 	 */
-	public function encodeData($data) {
-		return parent::encode($data);
+	public static function encode($data) {
+		srand($data); //seed pro deterministmus
+		return rand(100000, 999999) . '' . $data; //prida na zacatek sest cisel
 	}
 
 	/**
@@ -32,8 +32,8 @@ class ChatCoder extends \NetteExt\DataCoder {
 	 * @param String $data zakodovana data
 	 * @return String dekodovana data jako retezec
 	 */
-	public function decodeData($data) {
-		return parent::decode($data);
+	public static function decode($data) {
+		return substr($data, 6);
 	}
 
 }
