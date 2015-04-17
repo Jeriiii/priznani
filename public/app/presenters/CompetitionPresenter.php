@@ -9,13 +9,10 @@
  * @package    jkbusiness
  */
 use Nette\Application\UI\Form as Frm;
-use Nette\Http\Request;
 use NetteExt\Image;
 use POSComponent\Galleries\Images\CompetitionGallery;
-use POS\Model\GalleryDao;
 use NetteExt\Path\ImagePathCreator;
 use NetteExt\Path\GalleryPathCreator;
-use NetteExt\Form\Upload\UploadImage;
 use WebLoader\Nette\JavaScriptLoader;
 use WebLoader\FileCollection;
 use WebLoader\Compiler;

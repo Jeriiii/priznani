@@ -38,6 +38,11 @@ class UserDao extends UserBaseDao {
 	const COLUMN_PROFIL_PHOTO_ID = "profilFotoID";
 	const COLUMN_LAST_SIGNED_DAY = "last_signed_in";
 	const COLUMN_FIRST_SIGNED_DAY_STREAK = "first_signed_day_streak";
+	const COLUMN_EMAIL_PERIOD = 'email_period'; //jak často se mu má posílat newsletter
+
+	/* jak často se mají posílat newslettery */
+	const EMAIL_PERIOD_DAILY = 'd'; //denně
+	const EMAIL_PERIOD_WEEKLY = 'w'; //denně
 
 	/**
 	 * w - women
