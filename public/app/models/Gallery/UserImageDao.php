@@ -132,7 +132,7 @@ class UserImageDao extends AbstractDao {
 	public function getNotCheckFrontPage() {
 		$sel = $this->getTable();
 
-		$sel->where(self::COLUMN_ON_FRONT_PAGE . ' != ?', 1);
+		$sel->where(self::COLUMN_ON_FRONT_PAGE . ' IS NULL');
 		return $sel;
 	}
 
@@ -261,8 +261,8 @@ class UserImageDao extends AbstractDao {
 		$unapprovedCount = $sel->count();
 
 
-		$notCheckImagesCount = $this->getNotCheck()->count(self::COLUMN_ID);
-		$notCheckFrontPageImagesCount = $this->getNotCheckFrontPage()->count(self::COLUMN_ID);
+		$notCheckImagesCount = $this->getNotCheck()->count(self::TABLE_NAME . "." . self::COLUMN_ID);
+		$notCheckFrontPageImagesCount = $this->getNotCheckFrontPage()->count(self::TABLE_NAME . "." . self::COLUMN_ID);
 
 		return $unapprovedCount + $notCheckImagesCount + $notCheckFrontPageImagesCount;
 	}
