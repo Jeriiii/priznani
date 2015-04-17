@@ -17,7 +17,8 @@ class Mvl extends MobileViewList {
 		parent::__construct();
 
 		$this->addView("OnePage", "default");
-		$this->addLayout("Chat", "conversations");
+		$this->addView("Chat", "conversations");
+		$this->addView("Chat", "default");
 		$this->addLayout("Activities", "default");
 	}
 

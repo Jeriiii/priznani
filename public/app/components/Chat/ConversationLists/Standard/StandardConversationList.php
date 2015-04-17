@@ -13,7 +13,7 @@ namespace POSComponent\Chat;
  */
 class StandardConversationList extends BaseChatComponent implements IContactList {
 
-	private $handledConversations = FALSE;
+	protected $handledConversations = FALSE;
 
 	/**
 	 * Vykreslení komponenty

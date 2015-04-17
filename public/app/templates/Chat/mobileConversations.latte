@@ -1,0 +1,44 @@
+{var $activeChat = TRUE;}
+
+{block head}
+	{control css 'chat/mobile.less', 'chat/conversationsMobile.less'}
+{/block}
+
+{block loggedChat}
+	<div class="chat-header">
+		<h1>Zprávy</h1>
+		<a href="#chatmenu" title="Poslat zprávu..." class="btn-message ui-input-btn ui-btn ui-icon-mail ui-btn-icon-notext ui-corner-all"></a>
+		<div class="clear"></div>
+	</div>
+	{control mobileChat}
+{/block}
+
+
+{block content}
+{if $logged}
+	{include #loggedChat}
+{else}
+	<p class="error">
+		Pro využití chatu musíte být <a n:href="Sign:in" title="Přihlásit se" class="redlink">přihlášen/a</a>.
+	</p>
+{/if}
+
+{/block}
+
+{block scripts}
+	{control js 'chat/mobile-init.js', 'stream.js'}
+
+	<script>
+		$(document).ready(function () {
+			$("body").stream({
+				addoffset: 10,
+				msgElement: ".conversations-info-message",
+				msgText: "Žádné další konverzace nebyly nalezeny.",
+				offsetName: "mobileChat-mobileConversationList-offset",
+				snippetName: "snippet-mobileChat-mobileConversationList-conversations"
+			});
+		});
+	</script>
+{/block}
+
+{block foot}

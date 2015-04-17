@@ -10,7 +10,6 @@ and open the template in the editor.
 @import "../variables.less";
 @import "../generatedProfile.less";
 @import "icons.less";
-@import "../default.css";
 @import "../layout/universal-styles.less"
 
 
@@ -61,7 +60,7 @@ and open the template in the editor.
 #content{
 	min-height: 200px;
 }
-#leftmenu, #rightmenu, #topmenu{
+#leftmenu, #rightmenu, #topmenu, #chatmenu{
 	display: none;
 }
 
@@ -121,4 +120,11 @@ and open the template in the editor.
 		}
 
 	}
+}
+
+#stream-loader, .conversations-info-message, .stream-info-message{
+	text-align: center;
+	padding: 0.5em;
+	color: #555;
+	font-size: 12px;
 }

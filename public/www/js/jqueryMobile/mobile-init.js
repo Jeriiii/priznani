@@ -8,5 +8,5 @@ $(document).bind("mobileinit", function () {/* vypnutí automatického ajaxu */
 /* zobrazení částí až po načtení kvůli problikávání*/
 $(document).ready(function(){
 	/* zobrazení částí až po načtení kvůli problikávání*/
-	$('#leftmenu, #rightmenu, #topmenu').css('display', 'block');
+	$('#leftmenu, #rightmenu, #topmenu, #chatmenu').css('display', 'block');
 });
