@@ -31,14 +31,10 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 	/** @var \POS\Model\ContactDao @inject */
 	public $contactDao;
 
-	/**
-	 * Storage pro cache
-	 */
+	/** Storage pro cache */
 	private $storage;
 
-	/**
-	 * Cache
-	 */
+	/** Cache */
 	private $cache;
 
 	public function startup() {

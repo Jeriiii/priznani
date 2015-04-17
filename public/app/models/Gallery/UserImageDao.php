@@ -258,7 +258,13 @@ class UserImageDao extends AbstractDao {
 		$sel = $this->getTable();
 		$sel->select('id');
 		$sel->where(self::COLUMN_APPROVED, 0);
-		return $sel->count();
+		$unapprovedCount = $sel->count();
+
+
+		$notCheckImagesCount = $this->getNotCheck()->count(self::COLUMN_ID);
+		$notCheckFrontPageImagesCount = $this->getNotCheckFrontPage()->count(self::COLUMN_ID);
+
+		return $unapprovedCount + $notCheckImagesCount + $notCheckFrontPageImagesCount;
 	}
 
 	/**
