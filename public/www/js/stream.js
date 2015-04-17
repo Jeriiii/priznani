@@ -29,7 +29,9 @@
 		/* text zprávy, který se zobrazí když už nejsou k dispozici další data */
 		msgText: "Žádné starší příspěvky nebyly nalezeny", //Žádné starší příspěvky nebyly nalezeny
 		/* název parametru v URL, který nastavuje vždy aktuální offset hodnotu při každém ajaxovém požadavku */
-		offsetName: 'userStream-offset'
+		offsetName: 'userStream-offset',
+		/* název snippetu, který zastaví dotazování, je-li prázdný */
+		snippetName: ''
 	};
 
 	/**
@@ -49,7 +51,8 @@
 			var ajaxUrl = this.ajaxLocation + "&" + this.opts.offsetName + "=" + this.opts.offset;
 
 			$(this.opts.ajaxLocation).attr("href", ajaxUrl);
-
+			
+			var snippetName = this.opts.snippetName;
 			$.nette.ajax({
 				url: ajaxUrl,
 				async: false,
@@ -58,6 +61,9 @@
 						$.fn.stream.run = false;//zastaví dotazování
 					}
 					if (data.snippets['snippet-profilStream-posts'] == "") {//pokud snippet už neobnovuje data
+						$.fn.stream.run = false;//zastaví dotazování
+					}
+					if (data.snippets[snippetName] == "") {//pokud snippet už neobnovuje data
 						$.fn.stream.run = false;//zastaví dotazování
 					}
 					if (data.snippets['snippet-valChatMessages-stream-messages'] == "" || 

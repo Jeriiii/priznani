@@ -1,7 +1,5 @@
 <div id="conversations">
-
 	<ul n:snippet="conversations" data-ajax-append="true">
-		{ifset $load}
 			{foreach $conversations as $conversation}
 				{var $id = $userfinder->getCorrectCodedId($conversation->id_sender, $conversation->id_recipient)}
 				{var $user = $userfinder->getCorrectUser($conversation->id_sender, $conversation->id_recipient)}
@@ -13,8 +11,11 @@
 				<div class="clear"></div>
 				</li>
 			{/foreach}
-		{/ifset}
 	</ul>
-	<a n:href="load!" id="next-conversations-btn" title="Načíst další konverzace">Načíst další konverzace</a>
+	<div class="stream-btn-next">
+		<a id="next-data-item-btn" n:href="load!" class="ajaxn"></a>
+	</div>
+	<div class="conversations-info-message"></div>
+	<div id="stream-loader"><img src="{$basePath}/img/ajax-loader.gif"></div>	
 </div>
 

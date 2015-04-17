@@ -12,6 +12,8 @@
 	</div>
 	{control mobileChat}
 {/block}
+
+
 {block content}
 {if $logged}
 	{include #loggedChat}
@@ -24,7 +26,19 @@
 {/block}
 
 {block scripts}
-	{control js 'chat/mobile-init.js', 'stream.js', 'chat/conversations-stream-init.js'}
+	{control js 'chat/mobile-init.js', 'stream.js'}
+
+	<script>
+		$(document).ready(function () {
+			$("body").stream({
+				addoffset: 10,
+				msgElement: ".conversations-info-message",
+				msgText: "Žádné předchozí zprávy nebyly nalezeny.",
+				offsetName: "mobileChat-mobileConversationList-offset",
+				snippetName: "snippet-mobileChat-mobileConversationList-conversations"
+			});
+		});
+	</script>
 {/block}
 
 {block foot}

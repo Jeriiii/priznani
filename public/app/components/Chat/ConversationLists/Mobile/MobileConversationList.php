@@ -12,8 +12,13 @@ namespace POSComponent\Chat;
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
 class MobileConversationList extends StandardConversationList implements IContactList {
+	/* počáteční limit */
 
-	private $handledConversations = FALSE;
+	const LIMIT_OF_NEW_CONVERSATIONS = 10;
+
+	/* aktuální offset */
+
+	private $offset = 0;
 
 	/**
 	 * Vykreslení komponenty
@@ -22,19 +27,25 @@ class MobileConversationList extends StandardConversationList implements IContac
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/mobile.latte');
 
-
 		$template->userfinder = $this;
-
-
 		$userId = $this->getPresenter()->getUser()->getId();
-		if ($this->handledConversations) {
-			$template->conversations = $this->chatManager->getConversations($userId);
-		} else {
-			$template->conversations = $this->handledConversations;
-		}
+
+		$template->conversations = $this->chatManager->getConversations($userId, self::LIMIT_OF_NEW_CONVERSATIONS, $this->offset, TRUE);
 		$template->userId = $userId;
 
 		$template->render();
+	}
+
+	/**
+	 * Zpracování požadavku na načtení specifických konverzací
+	 * @param type $limit limit konverzací
+	 * @param type $offset offset konverzací
+	 */
+	public function handleLoad($limit = self::LIMIT_OF_NEW_CONVERSATIONS, $offset = 0) {
+		if ($this->getPresenter()->isAjax()) {
+			$this->offset = $offset;
+			$this->redrawControl('conversations');
+		}
 	}
 
 }
