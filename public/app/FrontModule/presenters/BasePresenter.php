@@ -533,6 +533,13 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$this->redirect('this');
 	}
 
+	public function handlePanic() {
+		$this->getSession('allow')->remove();
+		$this->getUser()->logout();
+
+		$this->redirectUrl("https://www.youtube.com/watch?v=rp8hvyjZWHs");
+	}
+
 	/**
 	 * Zpracování požadavku ajaxObserveru viz dokumentace "ajaxObserver"
 	 */
