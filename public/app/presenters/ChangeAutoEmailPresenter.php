@@ -16,11 +16,11 @@ class ChangeAutoEmailPresenter extends BasePresenter {
 	private $user;
 
 	public function actionSetWeekly($id) {
-		$userID = DataCoder::encode($id);
+		$userID = DataCoder::decode($id);
 		$user = $this->userDao->find($userID);
 		if ($user instanceof ActiveRow) {
 			$user->update(array(
-				UserDao::COLUMN_EMAIL_PERIOD => UserDao::EMAIL_PERIOD_WEEKLY
+				UserDao::COLUMN_EMAIL_NEWS_PERIOD => UserDao::EMAIL_PERIOD_WEEKLY
 			));
 		}
 

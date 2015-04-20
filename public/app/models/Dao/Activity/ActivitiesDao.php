@@ -30,6 +30,7 @@ class ActivitiesDao extends AbstractDao {
 	const COLUMN_FRIEND_REQUEST_ID = "friendRequestID";
 	const COLUMN_VIEWED = "viewed";
 	const COLUMN_SEND_NOTIFY = "sendNotify";
+	const REF_EVENT_OWNER = 'event_owner';
 
 	private function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -353,7 +354,7 @@ class ActivitiesDao extends AbstractDao {
 		/* Vybere pouze uživatele, kteří se nepřihlásili déle jak den */
 		$now = new \Nette\DateTime();
 		$now->modify('- 2 day');
-		$sel->where(self::COLUMN_EVENT_OWNER_ID . '.last_active < ?', $now);
+		$sel->where(self::REF_EVENT_OWNER . '.' . UserDao::COLUMN_LAST_ACTIVE . ' < ?', $now);
 
 		$sel = $this->getAfterPeriod($sel);
 
@@ -369,11 +370,11 @@ class ActivitiesDao extends AbstractDao {
 	 */
 	private function getAfterPeriod($activities) {
 		/* Vybere uživatele, kteří si přejí zasílat denně. */
-		$emailPeriodDaily = self::COLUMN_EVENT_OWNER_ID . '.' . UserDao::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
+		$emailPeriodDaily = self::REF_EVENT_OWNER . '.' . UserDao::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
 
 		/* Vybere uživatele, kteří si přejí zasílat týdně. */
-		$emailPeriodWeekly = self::COLUMN_EVENT_OWNER_ID . '.' . UserDao::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
-		$lastWeekSended = self::COLUMN_EVENT_OWNER_ID . '.' . UserDao::COLUMN_EMAIL_NEWS_LAST_SENDED . ' <= ? ';
+		$emailPeriodWeekly = self::REF_EVENT_OWNER . '.' . UserDao::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
+		$lastWeekSended = self::REF_EVENT_OWNER . '.' . UserDao::COLUMN_EMAIL_NEWS_LAST_SENDED . ' <= ? ';
 		$date = new \Nette\DateTime();
 		$date->modify('- 7 day');
 
