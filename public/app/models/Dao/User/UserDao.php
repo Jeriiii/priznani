@@ -442,6 +442,7 @@ class UserDao extends UserBaseDao {
 		$user[self::COLUMN_USER_NAME] = $data->user_name;
 		$user[self::COLUMN_PASSWORD] = $data->passwordHash;
 		$user{self::COLUMN_CONFIRMED} = $data[self::COLUMN_CONFIRMED];
+		$user[self::COLUMN_EMAIL_NEWS_LAST_SENDED] = new DateTime;
 
 		$newUser = $sel->insert($user);
 
