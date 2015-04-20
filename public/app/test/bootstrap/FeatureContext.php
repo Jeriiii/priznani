@@ -17,6 +17,7 @@ namespace Test;
 use Behat\MinkExtension\Context\MinkContext;
 use Nette\DI\Container;
 use \Behat\Behat\Exception\PendingException;
+use Behat\Behat\Exception\HtmlWarningException;
 use \Behat\Behat\Event\StepEvent;
 use POS\Model\TestDao;
 use Exception;
@@ -303,15 +304,12 @@ class FeatureContext extends MinkContext {
 	/**
 	 * @Then /^Is in JSON$/
 	 */
-	public function isInJson($link) {
+	public function isInJson() {
 		$response = $this->getSession()->getDriver()->getContent();
-		//Json::decode($response);
-
-		throw new \Behat\Behat\Exception\HtmlWarningException('<a href="http://localhost/nette/pos/public/www/change-auto-email/set-weekly?id=16215586">abc</a>');
-
+		Json::decode($response);
 
 		if (json_last_error() != JSON_ERROR_NONE) {
-			throw new Exception();
+			throw new Exception('Response must return JSON, but it returned: ' . $response);
 		}
 	}
 
