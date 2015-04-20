@@ -6,6 +6,8 @@
 
 namespace Notify;
 
+use Nette\Mail\IMailer;
+
 /**
  * Pro práci s emaily v cronu.
  *

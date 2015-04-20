@@ -33,8 +33,13 @@ class EmailNotify extends Email {
 	 */
 	private $countOthersActivities;
 
-	public function __construct($user) {
+	/** @var string Odkaz na týdenní změnu odesílání info emailu */
+	private $setWeeklyLink;
+
+	public function __construct($user, $setWeeklyLink) {
 		parent::__construct($user);
+
+		$this->setWeeklyLink = $setWeeklyLink;
 	}
 
 	/**
@@ -77,6 +82,7 @@ class EmailNotify extends Email {
 		$title = $this->getTittle();
 
 		$body = "Ahoj, \n\nmáš " . $title . " na http://datenode.cz/. Neváhej a ozvi se.\nTvé Datenode";
+		$body = $body . '\n\n Změna posílání informací na týdenní ' . $this->setWeeklyLink;
 		return $body;
 	}
 

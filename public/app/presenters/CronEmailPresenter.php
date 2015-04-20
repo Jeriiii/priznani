@@ -40,8 +40,9 @@ class CronEmailPresenter extends BasePresenter {
 	 */
 	public function actionMailToJSON($userName, $userPassword) {
 		$this->checkAccess($userName, $userPassword);
+		$setWeeklyLink = $this->getLinkNotifySetWeekly();
 
-		$cronNotifies = new CronNotifies($this->activitiesDao, $this->chatMessagesDao);
+		$cronNotifies = new CronNotifies($this->activitiesDao, $this->chatMessagesDao, $setWeeklyLink);
 		$messages = $cronNotifies->getEmails();
 
 		$json = new JsonResponse($messages, "application/json; charset=utf-8");
@@ -50,22 +51,32 @@ class CronEmailPresenter extends BasePresenter {
 
 	public function actionMailIsSended($userName, $userPassword) {
 		$this->checkAccess($userName, $userPassword);
+		$setWeeklyLink = $this->getLinkNotifySetWeekly();
 
-		$cronNotifies = new CronNotifies($this->activitiesDao, $this->chatMessagesDao);
-		$cronNotifies->markEmailsLikeSended();
+		$cronNotifies = new CronNotifies($this->activitiesDao, $this->chatMessagesDao, $setWeeklyLink);
+		$cronNotifies->markEmailsLikeSended($this->userDao);
 	}
 
 	/**
 	 * Odesílá emaily o nedávné aktivitě uživatelů.
 	 */
 	public function actionSendNotifies() {
-		$cronNotifies = new CronNotifies($this->activitiesDao, $this->chatMessagesDao);
+		$setWeeklyLink = $this->getLinkNotifySetWeekly();
+		$cronNotifies = new CronNotifies($this->activitiesDao, $this->chatMessagesDao, $setWeeklyLink);
 
-		$cronNotifies->sendEmails();
-		$cronNotifies->markEmailsLikeSended();
+		$cronNotifies->sendEmails($this->mailer);
+		$cronNotifies->markEmailsLikeSended($this->userDao);
 
 		echo "Oznámení byly odeslány";
 		die();
+	}
+
+	/**
+	 * Vrátí neúplný link kterým se dá změnit posílání informačních emailů na týdenní. Neúplný je o dokódované
+	 * id uživatele.
+	 */
+	private function getLinkNotifySetWeekly() {
+		return $this->link('//ChangeAutoEmail:setWeekly');
 	}
 
 	/**

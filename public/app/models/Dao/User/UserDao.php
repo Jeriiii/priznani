@@ -38,7 +38,8 @@ class UserDao extends UserBaseDao {
 	const COLUMN_PROFIL_PHOTO_ID = "profilFotoID";
 	const COLUMN_LAST_SIGNED_DAY = "last_signed_in";
 	const COLUMN_FIRST_SIGNED_DAY_STREAK = "first_signed_day_streak";
-	const COLUMN_EMAIL_PERIOD = 'email_period'; //jak často se mu má posílat newsletter
+	const COLUMN_EMAIL_NEWS_PERIOD = 'email_news_period'; //jak často se mu má posílat newsletter
+	const COLUMN_EMAIL_NEWS_LAST_SENDED = 'email_news_last_sended'; //poslední odeslání newsletteru
 
 	/* jak často se mají posílat newslettery */
 	const EMAIL_PERIOD_DAILY = 'd'; //denně
@@ -236,6 +237,27 @@ class UserDao extends UserBaseDao {
 		$sel->where(self::COLUMN_TYPE . '!=?', 0);
 		$sel->group(self::COLUMN_TYPE);
 		return $sel;
+	}
+
+	/**
+	 * Označí uživatele, kterým se právě zaslal informační email.
+	 */
+	public function setNotifyAsSended() {
+		/* Vybere uživatele, kteří si přejí zasílat denně. */
+		$periodDaily = self::COLUMN_ID_RECIPIENT . '.' . UserDao::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
+
+		/* Vybere uživatele, kteří si přejí zasílat týdně. */
+		$periodWeekly = self::COLUMN_ID_RECIPIENT . '.' . UserDao::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
+		$lastWeekSended = self::COLUMN_ID_RECIPIENT . '.' . UserDao::COLUMN_EMAIL_NEWS_LAST_SENDED . ' <= ? ';
+		$date = new \Nette\DateTime();
+		$date->modify('- 7 day');
+
+		$sel = $this->getTable();
+		$sel->where('(' . $periodDaily . ' OR (' . $periodWeekly . ' AND ' . $lastWeekSended . '))', UserDao::EMAIL_PERIOD_DAILY, UserDao::EMAIL_PERIOD_WEEKLY, $date);
+
+		$sel->update(array(
+			self::COLUMN_EMAIL_NEWS_LAST_SENDED => new DateTime()
+		));
 	}
 
 	/**

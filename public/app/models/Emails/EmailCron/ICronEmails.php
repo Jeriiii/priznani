@@ -21,5 +21,5 @@ interface ICronEmails {
 	/**
 	 * Oznámí, že všechny emaily co mohli být do teď odeslány, opravdu odeslány jsou
 	 */
-	public function markEmailsLikeSended();
+	public function markEmailsLikeSended($userDao);
 }

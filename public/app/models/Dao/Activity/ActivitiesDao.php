@@ -353,17 +353,40 @@ class ActivitiesDao extends AbstractDao {
 		/* Vybere pouze uživatele, kteří se nepřihlásili déle jak den */
 		$now = new \Nette\DateTime();
 		$now->modify('- 2 day');
-		$sel->where('event_owner.last_active < ?', $now);
+		$sel->where(self::COLUMN_EVENT_OWNER_ID . '.last_active < ?', $now);
+
+		$sel = $this->getAfterPeriod($sel);
 
 		return $sel;
 	}
 
 	/**
-	 * Označí nepřečtené aktivity o kterých ještě neodešel email s upozorněním jako odeslané upozorněné
+	 * Vrátí aktivity podle toho, jak často o nich uživatel chce posílat oznámení. Pokud je chce posílat
+	 * denně, nebo týdně. Pokud týdně, zkontroluje jestli se mu poslední zprávy poslala
+	 * před týdnem.
+	 * @param \Nette\Database\Table\Selection $activities Aktivity k profiltorvání.
+	 * @return \Nette\Database\Table\Selection Profiltrované zprávy.
 	 */
-	public function updateSendNotify() {
-		$sel = $this->getNotViewedNotSendNotify();
-		$sel->update(array(
+	private function getAfterPeriod($activities) {
+		/* Vybere uživatele, kteří si přejí zasílat denně. */
+		$emailPeriodDaily = self::COLUMN_EVENT_OWNER_ID . '.' . UserDao::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
+
+		/* Vybere uživatele, kteří si přejí zasílat týdně. */
+		$emailPeriodWeekly = self::COLUMN_EVENT_OWNER_ID . '.' . UserDao::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
+		$lastWeekSended = self::COLUMN_EVENT_OWNER_ID . '.' . UserDao::COLUMN_EMAIL_NEWS_LAST_SENDED . ' <= ? ';
+		$date = new \Nette\DateTime();
+		$date->modify('- 7 day');
+
+		$activities->where('(' . $emailPeriodDaily . ' OR (' . $emailPeriodWeekly . ' AND ' . $lastWeekSended . '))', UserDao::EMAIL_PERIOD_DAILY, UserDao::EMAIL_PERIOD_WEEKLY, $date);
+
+		return $activities;
+	}
+
+	/**
+	 * Označí tyto aktivity jako aktivity s odeslaným oznámením emailem.
+	 */
+	public function updateSendNotify($activities) {
+		$activities->update(array(
 			self::COLUMN_SEND_NOTIFY => 1
 		));
 	}

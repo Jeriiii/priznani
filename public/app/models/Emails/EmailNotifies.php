@@ -13,8 +13,16 @@
 namespace Notify;
 
 use Nette\Database\Table\ActiveRow;
+use NetteExt\DataCoder;
 
 class EmailNotifies extends Emails {
+
+	/** @var string Odkaz na týdenní změnu odesílání info emailu */
+	private $setWeeklyLink;
+
+	public function __construct($setWeeklyLink) {
+		$this->setWeeklyLink = $setWeeklyLink;
+	}
 
 	/**
 	 * Přidá aktivitu mezi upozornění k odeslání
@@ -41,7 +49,8 @@ class EmailNotifies extends Emails {
 	 */
 	protected function getUserNotify($user) {
 		if (!array_key_exists($user->id, $this->emailNotifies)) {
-			$this->emailNotifies[$user->id] = new EmailNotify($user);
+			$setWeeklyLink = $this->setWeeklyLink . '?id=' . DataCoder::encode($user->id);
+			$this->emailNotifies[$user->id] = new EmailNotify($user, $setWeeklyLink);
 		}
 
 		return $this->emailNotifies[$user->id];

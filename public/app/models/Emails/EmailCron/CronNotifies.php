@@ -13,15 +13,25 @@ namespace Notify;
  */
 class CronNotifies extends CronEmails {
 
-	/** @var \POS\Model\ActivitiesDao @inject */
+	/** @var \POS\Model\ActivitiesDao */
 	public $activitiesDao;
 
-	/** @var \POS\Model\ChatMessagesDao @inject */
+	/** @var \POS\Model\ChatMessagesDao */
 	public $chatMessagesDao;
 
-	public function __construct($activitiesDao, $chatMessagesDao) {
+	/** @var \Nette\Database\Table\Selection Aktivity, které se mají odeslat v emailu. */
+	private $activities;
+
+	/** @var \Nette\Database\Table\Selection Zprávy, které se mají odeslat v emailu */
+	private $messages;
+
+	/** @var string Odkaz na týdenní změnu odesílání info emailu */
+	private $setWeeklyLink;
+
+	public function __construct($activitiesDao, $chatMessagesDao, $setWeeklyLink) {
 		$this->activitiesDao = $activitiesDao;
 		$this->chatMessagesDao = $chatMessagesDao;
+		$this->setWeeklyLink = $setWeeklyLink;
 	}
 
 	/**
@@ -32,7 +42,7 @@ class CronNotifies extends CronEmails {
 		$activities = $this->activitiesDao->getNotViewedNotSendNotify();
 		$messages = $this->chatMessagesDao->getNotReadedNotSendNotify();
 
-		$emailNotifies = new EmailNotifies();
+		$emailNotifies = new EmailNotifies($this->setWeeklyLink);
 		/* upozornění na aktivity */
 		foreach ($activities as $activity) {
 			$emailNotifies->addActivity($activity->event_owner, $activity);
@@ -45,15 +55,19 @@ class CronNotifies extends CronEmails {
 			}
 		}
 
+		$this->activities = $activities;
+		$this->messages = $messages;
+
 		return $emailNotifies;
 	}
 
 	/**
 	 * Oznámí, že všechny emaily co mohli být do teď odeslány, opravdu odeslány jsou
 	 */
-	public function markEmailsLikeSended() {
-		$this->activitiesDao->updateSendNotify();
-		$this->chatMessagesDao->updateSendNotify();
+	public function markEmailsLikeSended($userDao) {
+		$this->activitiesDao->updateSendNotify($this->activities);
+		$this->chatMessagesDao->updateSendNotify($this->messages);
+		$userDao->setNotifyAsSended();
 	}
 
 }
