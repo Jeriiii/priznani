@@ -8,40 +8,22 @@ use Nette\DateTime;
 
 class DatingRegistrationPresenter extends BasePresenter {
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
-	/**
-	 * @var \POS\Model\UserPropertyDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserPropertyDao @inject */
 	public $userPropertyDao;
 
-	/**
-	 * @var \POS\Model\CoupleDao
-	 * @inject
-	 */
+	/** @var \POS\Model\CoupleDao @inject */
 	public $coupleDao;
 
-	/**
-	 * @var \Nette\Mail\IMailer
-	 * @inject
-	 */
+	/** @var \Nette\Mail\IMailer @inject */
 	public $mailer;
 
-	/**
-	 * @var \POS\Model\UserCategoryDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserCategoryDao @inject */
 	public $userCategoryDao;
 
-	/**
-	 * @var \POS\Model\PaymentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\PaymentDao @inject */
 	public $paymentDao;
 
 	public function startup() {
