@@ -301,6 +301,21 @@ class FeatureContext extends MinkContext {
 	}
 
 	/**
+	 * @Then /^Is in JSON$/
+	 */
+	public function isInJson($link) {
+		$response = $this->getSession()->getDriver()->getContent();
+		//Json::decode($response);
+
+		throw new \Behat\Behat\Exception\HtmlWarningException('<a href="http://localhost/nette/pos/public/www/change-auto-email/set-weekly?id=16215586">abc</a>');
+
+
+		if (json_last_error() != JSON_ERROR_NONE) {
+			throw new Exception();
+		}
+	}
+
+	/**
 	 * @Then /^I read messages in response$/
 	 */
 	public function iReadMessagesInResponse() {
