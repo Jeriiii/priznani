@@ -75,7 +75,6 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			$this->userDao->setActive($this->loggedUser->id);
 		}
 
-		$this->setLayout('layout');
 		$this->viewedActivity();
 	}
 
@@ -209,7 +208,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$navigation = array();
 
 		if ($this->getUser()->isLoggedIn()) {
-			//prihlaseny uzivatel
+			/* prihlaseny uzivatel */
 			if ($user->isInRole('admin') || $user->isInRole('superadmin')) {
 				$navigation["Administrace"] = $this->link(":Admin:Admin:default");
 			}
@@ -221,7 +220,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			}
 			$navigation["Odhlásit se"] = $this->link(":Sign:out");
 		} else {
-//neprihlaseny uzivatel
+			/* neprihlaseny uzivatel */
 
 			$navigation["Přihlášení"] = $this->link(":Sign:in");
 			$navigation["Registrace"] = $this->link(":Sign:registration");
@@ -346,7 +345,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 		$files->addFiles(array('bootstrap/helpNew/bootstrap.less'));
 
-// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		/* nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu */
 		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
@@ -359,7 +358,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			return $packer->pack();
 		});
 
-// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+		/* nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu */
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
@@ -537,7 +536,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$this->getSession('allow')->remove();
 		$this->getUser()->logout();
 
-		$this->redirectUrl("https://www.youtube.com/watch?v=rp8hvyjZWHs");
+		$this->redirectUrl("https://www.google.cz/search?q=gmail");
 	}
 
 	/**
