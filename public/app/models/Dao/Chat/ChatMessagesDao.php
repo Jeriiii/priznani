@@ -442,49 +442,26 @@ class ChatMessagesDao extends AbstractDao {
 
 	/**
 	 * Vrátí nepřečtené zprávy o kterých ještě neodešel email s upozorněním.
+	 * @param \Nette\Database\Table\Selection $usersForNewsletters Uživatelé, kteří by měli dostat informační email.
 	 * @return Nepřečtené zprávy o kterých ještě neodešel email s upozorněním.
 	 */
-	public function getNotReadedNotSendNotify() {
+	public function getNotReadedNotSendNotify($usersForNewsletters) {
 		$sel = $this->getTable();
+
 		$sel->where(self::COLUMN_SEND_NOTIFY, 0);
 		$sel->where(self::COLUMN_READED, 0);
-
-		/* Vybere pouze uživatele, kteří se nepřihlásili déle jak den */
-		$now = new \Nette\DateTime();
-		$now->modify('- 1 day');
-		$sel->where(self::COLUMN_ID_RECIPIENT . '.last_active < ?', $now);
-
-		$sel = $this->getAfterPeriod($sel);
+		$sel->where(self::COLUMN_ID_RECIPIENT, $usersForNewsletters);
 
 		return $sel;
 	}
 
 	/**
-	 * Vrátí zprávy podle toho, jak často o nich uživatel chce posílat oznámení. Pokud je chce posílat
-	 * denně, nebo týdně. Pokud týdně, zkontroluje jestli se mu poslední zprávy poslala
-	 * před týdnem.
-	 * @param \Nette\Database\Table\Selection $messages Zprávy k profiltorvání.
-	 * @return \Nette\Database\Table\Selection Profiltrované zprávy.
-	 */
-	private function getAfterPeriod($messages) {
-		/* Vybere uživatele, kteří si přejí zasílat denně. */
-		$emailPeriodDaily = self::COLUMN_ID_RECIPIENT . '.' . UserDao::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
-
-		/* Vybere uživatele, kteří si přejí zasílat týdně. */
-		$emailPeriodWeekly = self::COLUMN_ID_RECIPIENT . '.' . UserDao::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
-		$lastWeekSended = self::COLUMN_ID_RECIPIENT . '.' . UserDao::COLUMN_EMAIL_NEWS_LAST_SENDED . ' <= ? ';
-		$date = new \Nette\DateTime();
-		$date->modify('- 7 day');
-
-		$messages->where('(' . $emailPeriodDaily . ' OR (' . $emailPeriodWeekly . ' AND ' . $lastWeekSended . '))', UserDao::EMAIL_PERIOD_DAILY, UserDao::EMAIL_PERIOD_WEEKLY, $date);
-
-		return $messages;
-	}
-
-	/**
 	 * Označí tyto zprávy jako zprávy s odeslaným oznámením emailem.
+	 * @param \Nette\Database\Table\Selection $usersForNewsletters Uživatelé, kteří by měli dostat informační email.
 	 */
-	public function updateSendNotify($messages) {
+	public function updateSendNotify($usersForNewsletters) {
+		$messages = $this->getNotReadedNotSendNotify($usersForNewsletters);
+
 		$messages->update(array(
 			self::COLUMN_SEND_NOTIFY => 1
 		));

@@ -344,49 +344,24 @@ class ActivitiesDao extends AbstractDao {
 
 	/**
 	 * Vrátí nepřečtené aktivity o kterých ještě neodešel email s upozorněním.
+	 * @param \Nette\Database\Table\Selection $usersForNewsletters Uživatelé, kteří by měli dostat informační email.
 	 * @return Nepřečtené aktivity o kterých ještě neodešel email s upozorněním.
 	 */
-	public function getNotViewedNotSendNotify() {
+	public function getNotViewedNotSendNotify($usersForNewsletters) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_SEND_NOTIFY, 0);
 		$sel->where(self::COLUMN_VIEWED, 0);
-
-		/* Vybere pouze uživatele, kteří se nepřihlásili déle jak den */
-		$now = new \Nette\DateTime();
-		$now->modify('- 2 day');
-		$sel->where(self::REF_EVENT_OWNER . '.' . UserDao::COLUMN_LAST_ACTIVE . ' < ?', $now);
-
-		$sel = $this->getAfterPeriod($sel);
+		$sel->where(self::COLUMN_EVENT_OWNER_ID, $usersForNewsletters);
 
 		return $sel;
 	}
 
 	/**
-	 * Vrátí aktivity podle toho, jak často o nich uživatel chce posílat oznámení. Pokud je chce posílat
-	 * denně, nebo týdně. Pokud týdně, zkontroluje jestli se mu poslední zprávy poslala
-	 * před týdnem.
-	 * @param \Nette\Database\Table\Selection $activities Aktivity k profiltorvání.
-	 * @return \Nette\Database\Table\Selection Profiltrované zprávy.
-	 */
-	private function getAfterPeriod($activities) {
-		/* Vybere uživatele, kteří si přejí zasílat denně. */
-		$emailPeriodDaily = self::REF_EVENT_OWNER . '.' . UserDao::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
-
-		/* Vybere uživatele, kteří si přejí zasílat týdně. */
-		$emailPeriodWeekly = self::REF_EVENT_OWNER . '.' . UserDao::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
-		$lastWeekSended = self::REF_EVENT_OWNER . '.' . UserDao::COLUMN_EMAIL_NEWS_LAST_SENDED . ' <= ? ';
-		$date = new \Nette\DateTime();
-		$date->modify('- 7 day');
-
-		$activities->where('(' . $emailPeriodDaily . ' OR (' . $emailPeriodWeekly . ' AND ' . $lastWeekSended . '))', UserDao::EMAIL_PERIOD_DAILY, UserDao::EMAIL_PERIOD_WEEKLY, $date);
-
-		return $activities;
-	}
-
-	/**
 	 * Označí tyto aktivity jako aktivity s odeslaným oznámením emailem.
+	 * @param \Nette\Database\Table\Selection $usersForNewsletters Uživatelé, kteří by měli dostat informační email.
 	 */
-	public function updateSendNotify($activities) {
+	public function updateSendNotify($usersForNewsletters) {
+		$activities = $this->getNotViewedNotSendNotify($usersForNewsletters);
 		$activities->update(array(
 			self::COLUMN_SEND_NOTIFY => 1
 		));

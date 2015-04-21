@@ -19,18 +19,16 @@ class CronNotifies extends CronEmails {
 	/** @var \POS\Model\ChatMessagesDao */
 	public $chatMessagesDao;
 
-	/** @var \Nette\Database\Table\Selection Aktivity, které se mají odeslat v emailu. */
-	private $activities;
-
-	/** @var \Nette\Database\Table\Selection Zprávy, které se mají odeslat v emailu */
-	private $messages;
+	/** @var \Nette\Database\Table\Selection Uživatelé, kteří by měli dostat informační email. */
+	public $usersForNewsletters;
 
 	/** @var string Odkaz na týdenní změnu odesílání info emailu */
 	private $setWeeklyLink;
 
-	public function __construct($activitiesDao, $chatMessagesDao, $setWeeklyLink) {
+	public function __construct($activitiesDao, $chatMessagesDao, $userDao, $setWeeklyLink) {
 		$this->activitiesDao = $activitiesDao;
 		$this->chatMessagesDao = $chatMessagesDao;
+		$this->usersForNewsletters = $userDao->getForNeswletters();
 		$this->setWeeklyLink = $setWeeklyLink;
 	}
 
@@ -39,8 +37,8 @@ class CronNotifies extends CronEmails {
 	 * @return EmailNotifies Objekt pro práci s oznámeními uživatelům.
 	 */
 	public function createEmails() {
-		$activities = $this->activitiesDao->getNotViewedNotSendNotify();
-		$messages = $this->chatMessagesDao->getNotReadedNotSendNotify();
+		$activities = $this->activitiesDao->getNotViewedNotSendNotify($this->usersForNewsletters);
+		$messages = $this->chatMessagesDao->getNotReadedNotSendNotify($this->usersForNewsletters);
 
 		$emailNotifies = new EmailNotifies($this->setWeeklyLink);
 		/* upozornění na aktivity */
@@ -55,19 +53,15 @@ class CronNotifies extends CronEmails {
 			}
 		}
 
-		$this->activities = $activities;
-		$this->messages = $messages;
-
 		return $emailNotifies;
 	}
 
 	/**
 	 * Oznámí, že všechny emaily co mohli být do teď odeslány, opravdu odeslány jsou
 	 */
-	public function markEmailsLikeSended($userDao) {
-		$this->activitiesDao->updateSendNotify($this->activities);
-		$this->chatMessagesDao->updateSendNotify($this->messages);
-		$userDao->setNotifyAsSended();
+	public function markEmailsLikeSended() {
+		$this->activitiesDao->updateSendNotify($this->usersForNewsletters);
+		$this->chatMessagesDao->updateSendNotify($this->usersForNewsletters);
 	}
 
 }

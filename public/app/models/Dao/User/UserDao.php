@@ -117,6 +117,32 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Vrátí uživatele, kteří by měli dostat informační email.
+	 * @return Nette\Database\Table\Selection Uživatelé, kteří by měli dostat email.
+	 */
+	public function getForNeswletters() {
+		$sel = $this->getTable();
+
+		$date = new \Nette\DateTime();
+		$date->modify('- 2 day');
+		$sel->where(self::COLUMN_LAST_ACTIVE . ' < ?', $date);
+
+		/* Vybere uživatele, kteří si přejí zasílat denně. */
+		$emailPeriodDaily = self::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
+
+		/* Vybere uživatele, kteří si přejí zasílat týdně. */
+		$emailPeriodWeekly = self::COLUMN_EMAIL_NEWS_PERIOD . ' = ?';
+		$lastWeekSended = self::COLUMN_EMAIL_NEWS_LAST_SENDED . ' <= ? ';
+
+		$inEmailPeriod = $emailPeriodDaily . ' OR (' . $emailPeriodWeekly . ' AND ' . $lastWeekSended . ')';
+
+		$date->modify('- 5 day'); //-2 - 5 = -7 tedy minulý týden
+		$sel->where($inEmailPeriod, self::EMAIL_PERIOD_DAILY, self::EMAIL_PERIOD_WEEKLY, $date);
+
+		return $sel;
+	}
+
+	/**
 	 * Najde uživatele podle jeho nicku
 	 * @param string $userName Nick uživatele.
 	 * @return bool|Database\Table\IRow

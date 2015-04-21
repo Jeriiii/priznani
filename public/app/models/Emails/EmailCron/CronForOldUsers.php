@@ -43,7 +43,7 @@ class CronForOldUsers extends CronEmails {
 	/**
 	 * Oznámí, že všechny emaily co mohli být do teď odeslány, opravdu odeslány jsou
 	 */
-	public function markEmailsLikeSended($userDao = NULL) {
+	public function markEmailsLikeSended() {
 		$users = $this->oldUserDao->getNoNotify($this->limit);
 		$this->oldUserDao->updateLimitNotify($users);
 	}
