@@ -214,6 +214,37 @@ class FeatureContext extends MinkContext {
 	}
 
 	/**
+	 * Odpověď dekóduje z formátu JSON
+	 * @return JSON
+	 */
+	private function getResponseJSON() {
+		$response = $this->getSession()->getDriver()->getContent();
+		return Json::decode($response);
+	}
+
+	/**
+	 * @Given /^Is not empty JSON$/
+	 */
+	public function isNotEmptyJson() {
+		$json = $this->getResponseJSON();
+
+		if (empty($json)) {
+			throw new Exception("JSON is empty.");
+		}
+	}
+
+	/**
+	 * @Then /^Is empty JSON$/
+	 */
+	public function isEmptyJson() {
+		$json = $this->getResponseJSON();
+
+		if (!empty($json)) {
+			throw new Exception("JSON is not empty.");
+		}
+	}
+
+	/**
 	 * When last arrived email should contains something
 	 * @Then /^I should see "([^"]*)" in last email$/
 	 */
@@ -306,8 +337,7 @@ class FeatureContext extends MinkContext {
 	 * @Then /^Is in JSON$/
 	 */
 	public function isInJson() {
-		$response = $this->getSession()->getDriver()->getContent();
-		Json::decode($response);
+		$this->getResponseJSON();
 
 		if (json_last_error() != JSON_ERROR_NONE) {
 			throw new Exception('Response must return JSON, but it returned: ' . $response);
@@ -318,9 +348,8 @@ class FeatureContext extends MinkContext {
 	 * @Then /^I read messages in response$/
 	 */
 	public function iReadMessagesInResponse() {
-		$response = $this->getSession()->getDriver()->getContent();
 		$readRequestString = '&chat-communicator-readedmessages='; //sestavení proměnné v url
-		$responseArray = Json::decode($response);
+		$responseArray = $this->getResponseJSON();
 		if (empty($responseArray)) {//ošetření prázdné odpovědi
 			return;
 		}

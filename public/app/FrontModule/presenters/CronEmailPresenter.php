@@ -55,6 +55,9 @@ class CronEmailPresenter extends BasePresenter {
 
 		$cronNotifies = new CronNotifies($this->activitiesDao, $this->chatMessagesDao, $this->userDao, $setWeeklyLink);
 		$cronNotifies->markEmailsLikeSended();
+
+		echo "Oznámení byly označeny jako odeslané";
+		die();
 	}
 
 	/**
