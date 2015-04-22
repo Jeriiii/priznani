@@ -7,7 +7,8 @@
 use NetteExt\TemplateManager\MobileTemplates\MobileViewList;
 
 /**
- * Třída dědící od seznamu mobilních šablon použitých v presenterech. Slouží jako seznam presenterů a viewů, které se mají přepnout na mobilní
+ * Třída dědící od seznamu mobilních šablon použitých v presenterech.
+ * Slouží jako seznam presenterů a viewů, které se mají přepnout na mobilní.
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
@@ -16,10 +17,10 @@ class Mvl extends MobileViewList {
 	function __construct() {
 		parent::__construct();
 
-		$this->addView("OnePage", "default");
-		$this->addView("Chat", "conversations");
-		$this->addView("Chat", "default");
-		$this->addLayout("Activities", "default");
+//		$this->addView("OnePage", "default");
+//		$this->addView("Chat", "conversations");
+//		$this->addView("Chat", "default");
+//		$this->addLayout("Activities", "default");
 	}
 
 }
