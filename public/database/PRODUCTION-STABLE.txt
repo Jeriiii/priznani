@@ -1,1 +1,1 @@
-patch-2014-09-26 uz neni na produkci
+08-email-period uz je na produkci
