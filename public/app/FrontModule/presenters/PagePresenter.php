@@ -198,7 +198,7 @@ class PagePresenter extends BasePresenter {
 
 	public function actionAdvice($id) {
 		$this->url = "poradna-o-sexu";
-		$this->setAdviceMode();
+//		$this->setAdviceMode();
 		$this->id_advice = $id;
 		$advice = $this->adviceDao->find($id);
 		if (empty($advice)) {
