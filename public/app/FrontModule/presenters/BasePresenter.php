@@ -536,7 +536,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$this->getSession('allow')->remove();
 		$this->getUser()->logout();
 
-		$this->redirectUrl("https://www.google.cz/search?q=gmail");
+		$this->redirectUrl("http://www.gmail.com");
 	}
 
 	/**
