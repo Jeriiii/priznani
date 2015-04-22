@@ -116,7 +116,7 @@ class LikeImageCommentDao extends BaseLikeDao implements ILikeDao {
 		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
 			$sel = $this->getActivityTable();
 			$type = "like";
-			$activity = ActivitiesDao::createCommentActivityStatic($creatorID, $ownerID, $commentID, $type, $sel);
+			//? like komentáře obrázku $activity = ActivitiesDao::createCommentActivityStatic($creatorID, $ownerID, $commentID, $type, $sel);
 			return $activity;
 		}
 		return NULL;

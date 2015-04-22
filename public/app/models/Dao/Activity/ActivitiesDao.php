@@ -65,20 +65,20 @@ class ActivitiesDao extends AbstractDao {
 	/**
 	 * Přidá aktivitu pro status comment.
 	 * @param int $creatorID ID uživatele, který aktivitu provádí
-	 * @param int $ownerID ID uživatele vlastnícího obrázek
+	 * @param int $ownerID ID uživatele vlastnící status
 	 * @param int $commentID ID obrázku
 	 * @param string $type Typ aktivity (like, comment, ...)
 	 * @return Nette\Database\Table\Selection
 	 */
 	public function createStatusCommentActivity($creatorID, $ownerID, $commentID, $type) {
 		$sel = $this->getTable();
-		return self::createStatusCommentActivityStatic($creatorID, $ownerID, $imageID, $type, $sel);
+		return self::createStatusCommentActivityStatic($creatorID, $ownerID, $commentID, $type, $sel);
 	}
 
 	/**
 	 * Přidá aktivitu pro obrázek.
 	 * @param int $creatorID ID uživatele, který aktivitu provádí
-	 * @param int $ownerID ID uživatele vlastnícího obrázek
+	 * @param int $ownerID ID uživatele vlastnící obrázek
 	 * @param int $imageID ID obrázku
 	 * @param string $type Typ aktivity (like, comment, ...)
 	 * @param Nette\Database\Table\Selection $sel Čistá tabulka aktivity.
