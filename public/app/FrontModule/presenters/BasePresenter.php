@@ -136,8 +136,6 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$this->template->facebook_html = "";
 		$this->template->facebook_script = "";
 		$this->template->ajaxObserverLink = $this->link('ajaxRefresh!'); //odkaz pro ajaxObserver na pravidelne pozadavky
-
-		$this->fillJsVariablesWithLinks();
 	}
 
 	protected function createComponentOrders($name) {
@@ -369,7 +367,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'iedebug.js',
 			'baseAjax.js',
 			/* 'order.js', */
-			'fbBase.js',
+			/* 'fbBase.js', */
 			/* 'leftMenu.js', */
 			'../nette.ajax.js',
 			'initAjax.js',
@@ -403,7 +401,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$files->addFiles(array(
 			'baseAjax.js',
 			'mobile.js',
-			'fbBase.js',
+			/* 'fbBase.js', */
 			'../nette.ajax.js',
 			'../jqueryMobile/mobile-init.js',
 			'initAjax.js',
@@ -461,55 +459,12 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
-	public function createComponentFbLikeAndCommentToDatabase() {
-		$files = new \WebLoader\FileCollection(WWW_DIR . '/js/layout');
-		$files->addFiles(array('fbLikeAndCommentToDatabase.js'));
-		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
-
-		if (!empty($this->jsVariables)) {
-			$varFilter = new WebLoader\Filter\VariablesFilter($this->jsVariables);
-			$compiler->addFileFilter($varFilter);
-		}
-		$compiler->addFilter(function ($code) {
-			$packer = new JavaScriptPacker($code, "None");
-			return $packer->pack();
-		});
-
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
-		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
-	}
-
-	/**
-	 * Funkce naplni potrebne odkazy do jsVariables, kterou nasledne pouziva WebLoader
-	 */
-	private function fillJsVariablesWithLinks() {
-		$linkIncLike = $this->link('incLike!');
-		$linkDecLike = $this->link('decLike!');
-		$linkIncComment = $this->link('incComment!');
-		$linkDecComment = $this->link('decComment!');
-
-		$this->addToJsVariables(array(
-			"inc-like" => $linkIncLike,
-			"dec-like" => $linkDecLike,
-			"inc-comment" => $linkIncComment,
-			"dec-comment" => $linkDecComment
-		));
-	}
-
 	protected function getCssVariables() {
 		return $this->cssVariables;
 	}
 
 	protected function addToCssVariables(array $css) {
 		$this->cssVariables = $this->cssVariables + $css;
-	}
-
-	protected function getJsVariables() {
-		return $this->jsVariables;
-	}
-
-	protected function addToJsVariables(array $js) {
-		$this->jsVariables = $this->jsVariables + $js;
 	}
 
 	protected function createComponentLoggedInMenu($name) {

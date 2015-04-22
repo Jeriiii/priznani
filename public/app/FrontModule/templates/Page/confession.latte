@@ -45,6 +45,8 @@
 		</div>
 		{*include #adverb*}
 		<div class="fb-components">
+			<div class="fb-like" data-href="http://www.priznaniosexu.cz/page/advice?id={$confession->id}"
+					 data-send="true" data-width="300" data-show-faces="true"></div>
 			{control likes}
 			{*control comments*}
 		</div>
@@ -67,4 +69,8 @@
 	{/if}
 	
 	<div style="clear:both"></div>
+{/}
+
+{block pageFoot}
+{control js 'fbbase.js'}
 {/}
