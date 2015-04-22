@@ -1,4 +1,5 @@
 cron/nbproject/*
+ftp-deployment-master/nbproject/*
 /nbproject/private/
 public/temp/*
 !public/temp/reports

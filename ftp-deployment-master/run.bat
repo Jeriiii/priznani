@@ -1,0 +1,1 @@
+php deployment.php deployment.ini
