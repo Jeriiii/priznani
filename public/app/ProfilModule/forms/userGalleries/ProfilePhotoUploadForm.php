@@ -7,25 +7,20 @@ use POS\Model\UserGalleryDao,
 	POS\Model\StreamDao;
 use POS\Model\UserDao;
 use NetteExt\Form\Upload\UploadImage;
+use Nette\Application\UI\Form;
 
 /**
  * Formulář pro nahrávání profilových fotek.
  */
 class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 
-	/**
-	 * @var \POS\Model\UserGalleryDao
-	 */
+	/** @var \POS\Model\UserGalleryDao */
 	public $userGalleryDao;
 
-	/**
-	 * @var \POS\Model\UserImageDao
-	 */
+	/** @var \POS\Model\UserImageDao */
 	public $userImageDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 */
+	/** @var \POS\Model\StreamDao */
 	public $streamDao;
 
 	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $parent = NULL, $name = NULL) {
@@ -36,10 +31,10 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 		$this->streamDao = $streamDao;
 
 		$this->addText('imageName')->setAttribute('class', 'imgCropInput');
-		$this->addText('imageX1')->setAttribute('class', 'imgCropInput');
-		$this->addText('imageX2')->setAttribute('class', 'imgCropInput');
-		$this->addText('imageY1')->setAttribute('class', 'imgCropInput');
-		$this->addText('imageY2')->setAttribute('class', 'imgCropInput');
+		$imageX1 = $this->addText('imageX1')->setAttribute('class', 'imgCropInput');
+		$imageX2 = $this->addText('imageX2')->setAttribute('class', 'imgCropInput');
+		$imageY1 = $this->addText('imageY1')->setAttribute('class', 'imgCropInput');
+		$imageY2 = $this->addText('imageY2')->setAttribute('class', 'imgCropInput');
 
 
 		$this->addSubmit('uploadProfilPhoto', 'Nahrát');
