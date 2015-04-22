@@ -3,20 +3,18 @@
 namespace Behat\Behat\Tester;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\EventDispatcher\Event;
-
+	Symfony\Component\EventDispatcher\Event;
 use Behat\Gherkin\Node\NodeVisitorInterface,
-    Behat\Gherkin\Node\AbstractNode,
-    Behat\Gherkin\Node\StepNode,
-    Behat\Gherkin\Node\ScenarioNode;
-
+	Behat\Gherkin\Node\AbstractNode,
+	Behat\Gherkin\Node\StepNode,
+	Behat\Gherkin\Node\ScenarioNode;
 use Behat\Behat\Context\ContextInterface,
-    Behat\Behat\Context\Step\SubstepInterface,
-    Behat\Behat\Definition\DefinitionInterface,
-    Behat\Behat\Exception\AmbiguousException,
-    Behat\Behat\Exception\UndefinedException,
-    Behat\Behat\Exception\PendingException,
-    Behat\Behat\Event\StepEvent;
+	Behat\Behat\Context\Step\SubstepInterface,
+	Behat\Behat\Definition\DefinitionInterface,
+	Behat\Behat\Exception\AmbiguousException,
+	Behat\Behat\Exception\UndefinedException,
+	Behat\Behat\Exception\PendingException,
+	Behat\Behat\Event\StepEvent;
 
 /*
  * This file is part of the Behat.
@@ -31,159 +29,155 @@ use Behat\Behat\Context\ContextInterface,
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class StepTester implements NodeVisitorInterface
-{
-    private $logicalParent;
-    private $dispatcher;
-    private $context;
-    private $definitions;
-    private $skip = false;
+class StepTester implements NodeVisitorInterface {
 
-    /**
-     * Initializes tester.
-     *
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->dispatcher  = $container->get('behat.event_dispatcher');
-        $this->definitions = $container->get('behat.definition.dispatcher');
-    }
+	private $logicalParent;
+	private $dispatcher;
+	private $context;
+	private $definitions;
+	private $skip = false;
 
-    /**
-     * Sets logical parent of the step, which is always a ScenarioNode.
-     *
-     * @param ScenarioNode $parent
-     */
-    public function setLogicalParent(ScenarioNode $parent)
-    {
-        $this->logicalParent = $parent;
-    }
+	/**
+	 * Initializes tester.
+	 *
+	 * @param ContainerInterface $container
+	 */
+	public function __construct(ContainerInterface $container) {
+		$this->dispatcher = $container->get('behat.event_dispatcher');
+		$this->definitions = $container->get('behat.definition.dispatcher');
+	}
 
-    /**
-     * Sets run context.
-     *
-     * @param ContextInterface $context
-     */
-    public function setContext(ContextInterface $context)
-    {
-        $this->context = $context;
-    }
+	/**
+	 * Sets logical parent of the step, which is always a ScenarioNode.
+	 *
+	 * @param ScenarioNode $parent
+	 */
+	public function setLogicalParent(ScenarioNode $parent) {
+		$this->logicalParent = $parent;
+	}
 
-    /**
-     * Marks test as skipped.
-     *
-     * @param Boolean $skip skip test?
-     */
-    public function skip($skip = true)
-    {
-        $this->skip = $skip;
-    }
+	/**
+	 * Sets run context.
+	 *
+	 * @param ContextInterface $context
+	 */
+	public function setContext(ContextInterface $context) {
+		$this->context = $context;
+	}
 
-    /**
-     * Visits & tests StepNode.
-     *
-     * @param AbstractNode $step
-     *
-     * @return integer
-     */
-    public function visit(AbstractNode $step)
-    {
-        $this->dispatcher->dispatch('beforeStep', new StepEvent(
-            $step, $this->logicalParent, $this->context
-        ));
-        $afterEvent = $this->executeStep($step);
-        $this->dispatcher->dispatch('afterStep', $afterEvent);
+	/**
+	 * Marks test as skipped.
+	 *
+	 * @param Boolean $skip skip test?
+	 */
+	public function skip($skip = true) {
+		$this->skip = $skip;
+	}
 
-        return $afterEvent->getResult();
-    }
+	/**
+	 * Visits & tests StepNode.
+	 *
+	 * @param AbstractNode $step
+	 *
+	 * @return integer
+	 */
+	public function visit(AbstractNode $step) {
+		$this->dispatcher->dispatch('beforeStep', new StepEvent(
+			$step, $this->logicalParent, $this->context
+		));
+		$afterEvent = $this->executeStep($step);
+		$this->dispatcher->dispatch('afterStep', $afterEvent);
 
-    /**
-     * Searches and runs provided step with DefinitionDispatcher.
-     *
-     * @param StepNode $step step node
-     *
-     * @return StepEvent
-     */
-    protected function executeStep(StepNode $step)
-    {
-        $context    = $this->context;
-        $result     = null;
-        $definition = null;
-        $exception  = null;
-        $snippet    = null;
+		return $afterEvent->getResult();
+	}
 
-        try {
-            $definition = $this->definitions->findDefinition($this->context, $step, $this->skip);
+	/**
+	 * Searches and runs provided step with DefinitionDispatcher.
+	 *
+	 * @param StepNode $step step node
+	 *
+	 * @return StepEvent
+	 */
+	protected function executeStep(StepNode $step) {
+		$context = $this->context;
+		$result = null;
+		$definition = null;
+		$exception = null;
+		$snippet = null;
 
-            if ($this->skip) {
-                return new StepEvent(
-                    $step, $this->logicalParent, $context, StepEvent::SKIPPED, $definition
-                );
-            }
+		try {
+			$definition = $this->definitions->findDefinition($this->context, $step, $this->skip);
 
-            try {
-                $this->executeStepDefinition($step, $definition);
-                $result = StepEvent::PASSED;
-            } catch (PendingException $e) {
-                $result    = StepEvent::PENDING;
-                $exception = $e;
-            } catch (\Exception $e) {
-                $result    = StepEvent::FAILED;
-                $exception = $e;
-            }
-        } catch (UndefinedException $e) {
-            $result    = StepEvent::UNDEFINED;
-            $snippet   = $this->definitions->proposeDefinition($this->context, $step);
-            $exception = $e;
-        } catch (\Exception $e) {
-            $result    = StepEvent::FAILED;
-            $exception = $e;
-        }
+			if ($this->skip) {
+				return new StepEvent(
+					$step, $this->logicalParent, $context, StepEvent::SKIPPED, $definition
+				);
+			}
 
-        return new StepEvent(
-            $step, $this->logicalParent, $context, $result, $definition, $exception, $snippet
-        );
-    }
+			try {
+				$this->executeStepDefinition($step, $definition);
+				$result = StepEvent::PASSED;
+			} catch (PendingException $e) {
+				$result = StepEvent::PENDING;
+				$exception = $e;
+			} catch (\Behat\Behat\Exception\HtmlWarningException $e) {
+				$result = StepEvent::PENDING;
+				$exception = $e;
+			} catch (\Exception $e) {
+				$result = StepEvent::FAILED;
+				$exception = $e;
+			}
+		} catch (UndefinedException $e) {
+			$result = StepEvent::UNDEFINED;
+			$snippet = $this->definitions->proposeDefinition($this->context, $step);
+			$exception = $e;
+		} catch (\Exception $e) {
+			$result = StepEvent::FAILED;
+			$exception = $e;
+		}
 
-    /**
-     * Executes provided step definition.
-     *
-     * @param StepNode            $step       step node
-     * @param DefinitionInterface $definition step definition
-     */
-    protected function executeStepDefinition(StepNode $step, DefinitionInterface $definition)
-    {
-        $this->executeStepsChain($step, $definition->run($this->context));
-    }
+		return new StepEvent(
+			$step, $this->logicalParent, $context, $result, $definition, $exception, $snippet
+		);
+	}
 
-    /**
-     * Executes steps chain (if there's one).
-     *
-     * @param StepNode $step  step node
-     * @param mixed    $chain chain
-     *
-     * @throws \Exception
-     */
-    private function executeStepsChain(StepNode $step, $chain = null)
-    {
-        if (null === $chain) {
-            return;
-        }
+	/**
+	 * Executes provided step definition.
+	 *
+	 * @param StepNode            $step       step node
+	 * @param DefinitionInterface $definition step definition
+	 */
+	protected function executeStepDefinition(StepNode $step, DefinitionInterface $definition) {
+		$this->executeStepsChain($step, $definition->run($this->context));
+	}
 
-        $chain = is_array($chain) ? $chain : array($chain);
-        foreach ($chain as $chainItem) {
-            if ($chainItem instanceof SubstepInterface) {
-                $substepNode = $chainItem->getStepNode();
-                $substepNode->setParent($step->getParent());
-                $substepEvent = $this->executeStep($substepNode);
+	/**
+	 * Executes steps chain (if there's one).
+	 *
+	 * @param StepNode $step  step node
+	 * @param mixed    $chain chain
+	 *
+	 * @throws \Exception
+	 */
+	private function executeStepsChain(StepNode $step, $chain = null) {
+		if (null === $chain) {
+			return;
+		}
 
-                if (StepEvent::PASSED !== $substepEvent->getResult()) {
-                    throw $substepEvent->getException();
-                }
-            } elseif (is_callable($chainItem)) {
-                $this->executeStepsChain($step, call_user_func($chainItem));
-            }
-        }
-    }
+		$chain = is_array($chain) ? $chain : array($chain);
+		foreach ($chain as $chainItem) {
+			if ($chainItem instanceof SubstepInterface) {
+				$substepNode = $chainItem->getStepNode();
+				$substepNode->setParent($step->getParent());
+				$substepEvent = $this->executeStep($substepNode);
+
+				if (StepEvent::PASSED !== $substepEvent->getResult()) {
+					throw $substepEvent->getException();
+				}
+			} elseif (is_callable($chainItem)) {
+				$this->executeStepsChain($step, call_user_func($chainItem));
+			}
+		}
+	}
+
 }

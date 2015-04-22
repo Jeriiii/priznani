@@ -244,7 +244,13 @@ class HtmlFormatter extends PrettyFormatter {
 
 				$this->writeln('<tr class="failed exception">');
 				$this->writeln('<td colspan="' . $colCount . '">');
-				$this->writeln('<pre class="backtrace">' . htmlspecialchars($error) . '</pre>');
+
+				if ($exception instanceof \Behat\Behat\Exception\HtmlWarningException) {
+					$this->writeln('<div class="backtrace">' . $error . '</div>');
+				} else {
+					$this->writeln('<pre class="backtrace">' . htmlspecialchars($error) . '</pre>');
+				}
+
 				$this->writeln('</td>');
 				$this->writeln('</tr>');
 			}
