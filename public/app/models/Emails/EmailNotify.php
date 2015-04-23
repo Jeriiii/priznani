@@ -13,30 +13,23 @@
 namespace Notify;
 
 use Nette\Database\Table\ActiveRow;
-use Nette\Mail\IMailer;
-use Nette\Mail\Message;
+use POS\Model\UserDao;
 
 class EmailNotify extends Email {
 
-	/**
-	 * @var int Počet zpráv pro uživatele.
-	 */
+	/** @var int Počet zpráv pro uživatele. */
 	private $countMessages = 0;
 
-	/**
-	 * @var int Počet JSI SEXY
-	 */
+	/** @var int Počet JSI SEXY */
 	private $countYouAreSexy = 0;
 
-	/**
-	 * @var int Další upozornění
-	 */
+	/** @var int Další upozornění */
 	private $countOthersActivities;
 
 	/** @var string Odkaz na týdenní změnu odesílání info emailu */
 	private $setWeeklyLink;
 
-	public function __construct($user, $setWeeklyLink) {
+	public function __construct(ActiveRow $user, $setWeeklyLink) {
 		parent::__construct($user);
 
 		$this->setWeeklyLink = $setWeeklyLink;
@@ -82,7 +75,12 @@ class EmailNotify extends Email {
 		$title = $this->getTittle();
 
 		$body = "Ahoj, \n\nmáš " . $title . " na http://datenode.cz/. Neváhej a ozvi se.\nTvé Datenode";
-		$body = $body . '\n\n Změna posílání informací na týdenní ' . $this->setWeeklyLink;
+
+		$userPeriod = $this->user->offsetGet(UserDao::COLUMN_EMAIL_NEWS_PERIOD);
+		if ($userPeriod == UserDao::EMAIL_PERIOD_DAILY) {
+			$body = $body . '\n\n\n\n\n\n Změna posílání informací na týdenní ' . $this->setWeeklyLink;
+		}
+
 		return $body;
 	}
 

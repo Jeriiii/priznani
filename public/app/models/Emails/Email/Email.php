@@ -39,7 +39,7 @@ abstract class Email extends Object implements IEmail {
 	 */
 	const EMAIL_ADDRESS_SENDER = "info@priznaniosexu.cz";
 
-	public function __construct($user, $htmlBody = false, $imgsBasePath = null) {
+	public function __construct(ActiveRow $user, $htmlBody = false, $imgsBasePath = null) {
 		$this->user = $user;
 		$this->htmlBody = $htmlBody;
 		$this->imgsBasePath = $imgsBasePath;
