@@ -189,7 +189,7 @@ class OnePagePresenter extends BasePresenter {
 			'stream.js',
 			'lists/initFriendRequest.js',
 			'lists/initFriends.js',
-			/* 'lists/initBlokedUsers.js', */ //zakomentováno do první verze přiznání
+			'lists/initBlokedUsers.js', //zakomentováno do první verze přiznání
 			'lists/initMarkedFromOther.js',
 			'onepage/default.js'
 		));

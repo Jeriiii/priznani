@@ -354,8 +354,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	public function createComponentJs() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
-			'stream.js',
-			'slimbox2.js'
+			'stream.js'
 		));
 		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {
