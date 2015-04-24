@@ -29,7 +29,6 @@
 <section id="onepage">
 	<div id="content">
 		<div id="stream-menu">
-
 				<div class="user-profile-picture">
 					{$userData|showProfMinDiv: NULL, FALSE}
 					{if $isMyProfile}
@@ -70,10 +69,17 @@
 
 			{/if}
 
-			{if !$isMyProfile && !$isFriends}
-			<div class="profile-btn long-btn">
-				{control sendFriendRequest}
-			</div>
+			{if !$isMyProfile}
+				{if !$isBlocked}
+					{if !$isFriends}
+						<div class="profile-btn long-btn">
+							{control sendFriendRequest}
+						</div>
+					{/if}
+					<a href="#" tittle="Blokovat uživatele" id="blockUserBtn" class="profile-btn">Blokovat uživatele</a>
+				{else}
+					<a href="#" tittle="Blokovat uživatele" id="blockUserBtn" class="profile-btn">Odblokovat</a>					
+				{/if}
 			{/if}
 			<div class="spacer"></div>
 			<div class="delimiter red"></div>

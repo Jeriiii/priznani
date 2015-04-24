@@ -18,9 +18,24 @@ class UserBlokedDao extends AbstractDao {
 	/* Column name */
 	const COLUMN_ID = "id";
 	const COLUMN_OWNER_ID = "ownerID";
+	const COLUMN_BLOKED_ID = "blokedID";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
+	}
+
+	/**
+	 * Blokoval uživatel $ownerId uživatele $blokedId?
+	 * @param int $ownerId Id uživatele, který někoho blokuje.
+	 * @param int $blokedId Id uživatele, který je blokován.
+	 * @return TRUE = uživatel je blokován, jinak FALSE.
+	 */
+	public function isBlocked($ownerId, $blokedId) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_OWNER_ID, $ownerId);
+		$sel->where(self::COLUMN_BLOKED_ID, $blokedId);
+
+		return $this->exist($sel->fetch());
 	}
 
 	/**

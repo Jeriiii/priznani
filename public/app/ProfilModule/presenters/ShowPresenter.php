@@ -105,6 +105,9 @@ class ShowPresenter extends ProfilBasePresenter {
 
 	/** @var \POS\Model\UserPropertyDao @inject */
 	public $userPropertyDao;
+
+	/** @var \POS\Model\UserBlokedDao @inject */
+	public $userBlokedDao;
 	public $dataForStream;
 
 	/** @var \Nette\Database\Table\ActiveRow|\Nette\ArrayHash */
@@ -116,6 +119,12 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @param type $id
 	 */
 	public function actionDefault($id) {
+		/* Zjistí, zda uživatel nenavštěvuje profil uživatele, který ho zablokoval. */
+		$isBlocked = $this->userBlokedDao->isBlocked($id, $this->loggedUser->id);
+		if ($isBlocked) {
+			$this->flashMessage('Tento uživatel Vás zablokoval.');
+			$this->redirect(':OnePage:');
+		}
 
 		if (empty($id)) {
 			/* kontrola, zda se nesnaží nepřihlášený uživatel zobrazit svůj profil */
@@ -161,7 +170,7 @@ class ShowPresenter extends ProfilBasePresenter {
 			}
 		}
 		$this->template->isMyProfile = $isMyProfile;
-
+		$this->template->isBlocked = $this->userBlokedDao->isBlocked($this->loggedUser->id, $id);
 
 		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->userID);
 
