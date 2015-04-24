@@ -29,7 +29,7 @@ class PeopleBySexStatistics extends Statistics {
 	 * @param DateTime $fromDate Počáteční datum, od kdy chci vědět registrace.
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function countRegByInterval() {
+	public function countItemsByInterval() {
 		$sexs = $this->userDao->getUsersBySex();
 		$sexsContainer = array();
 		$sexsTemp = new \Nette\ArrayHash;
@@ -48,7 +48,7 @@ class PeopleBySexStatistics extends Statistics {
 	}
 
 	protected function getByIntervals(DateTime $fromDate, $countDates, $typeOfInterval = self::DAY) {
-		$data = $this->countRegByInterval();
+		$data = $this->countItemsByInterval();
 		return $data;
 	}
 
