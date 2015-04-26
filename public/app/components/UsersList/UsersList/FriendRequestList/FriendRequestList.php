@@ -20,10 +20,14 @@ class FriendRequestList extends UsersList {
 	/** @var int ID přihlášeného uživatele */
 	private $loggedUserID;
 
-	public function __construct($friendRequestDao, $loggedUserID, $parent, $name) {
+	/* info o tom, zda se obsah donačítá (když true, obsah je zobrazen vždy všechen) */
+	private $listAll = FALSE;
+
+	public function __construct($friendRequestDao, $loggedUserID, $parent, $name, $listAll = FALSE) {
 		parent::__construct($parent, $name);
 		$this->friendRequestDao = $friendRequestDao;
 		$this->loggedUserID = $loggedUserID;
+		$this->listAll = $listAll;
 	}
 
 	/**
@@ -31,7 +35,14 @@ class FriendRequestList extends UsersList {
 	 */
 	public function render() {
 		parent::render();
-		$this->renderTemplate(dirname(__FILE__) . '/' . 'friendRequestList.latte');
+		if ($this->listAll) {
+			$this->template->friendRequests = $this->friendRequestDao->getAllToUser($this->loggedUserID);
+		}
+		if ($this->getDeviceDetector()->isMobile()) {
+			$this->renderTemplate(dirname(__FILE__) . '/' . 'mobileFriendRequestList.latte');
+		} else {
+			$this->renderTemplate(dirname(__FILE__) . '/' . 'friendRequestList.latte');
+		}
 	}
 
 	/**
