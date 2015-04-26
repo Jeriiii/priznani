@@ -53,58 +53,18 @@
 	{if $isMyProfile}<a n:href="Edit:" class="btn-edit-info ui-input-btn ui-btn ui-icon-edit ui-btn-icon-notext ui-corner-all"></a>{/if}
 	<div class="clear"></div>
 </div>
-			
+	
+<div class="square-list">
+	{control userGalleries 'listFew', $userID}
+</div>			
 
-<br /><br /><br /><br />
+<div class="square-list">
+	{control friendsList}
+</div>
 
-				
-				
+{include 'mobileMenu.latte' $userID => 'id'}
 
-
-
-
-
-
-
-
-
-
-
-			
-
-			
-			<div class="spacer"></div>
-			<div class="delimiter red"></div>
-			<span class="red-title with-button">O MNĚ </span>
-			<div class="delimiter red clear"></div>
-
-			
-
-			<div class="delimiter red"></div>
-			<span class="red-title">GALERIE</span>
-			<div class="delimiter red"></div>
-			<div class="square-list">
-				{control userGalleries 'listFew', $userID}
-			</div>
-
-
-			<div class="delimiter red"></div>
-			<span class="red-title">PŘÁTELÉ</span>
-			<div class="delimiter red"></div>
-			<div class="square-list">
-				{control friendsList}
-			</div>
-
-			{*control sexyListMarkedFromOther*}{* importovana a nastavena komponenta, prozatim nevykreslena *}
-
-		</div>
-
-		{include 'menu.latte' $userID => 'id'}
-
-		{control profilStream}
-	</div>
-	<div class="clear"></div>
-</section>
-
+{control profilStream}
+<div class="clear"></div>
 
 {/block}

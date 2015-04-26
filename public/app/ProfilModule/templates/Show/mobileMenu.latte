@@ -1,0 +1,17 @@
+{* Latte template *}
+
+{block menu}
+
+<nav class="ui-grid-b profile-middlemenu">
+	<a n:href="default $userID" class="ui-block-a ui-btn ui-shadow">ZEĎ</a>
+	<a n:href="userImages $userID" class="ui-block-b ui-btn ui-shadow {if isset($active) && $active == "images"}ui-btn-active{/if}">FOTKY</a>
+	<a n:href="userInfo $userID" class="ui-block-c ui-btn ui-shadow {if isset($active) && $active == "info"}ui-btn-active{/if}">INFO</a>
+	{if $userData->verified}
+		{if $asked}
+			<span>Žádost o ověřovací fotku podána</span>
+		{else}
+			<span><a n:href="requestConfirmPhoto! $userID, $user->id">Zádost o ověřovací fotku</a></span>
+		{/if}
+	{/if}
+	</nav>
+{/block}
