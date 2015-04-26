@@ -17,7 +17,7 @@ use POS\Model\PaymentDao;
  * @author Daniel Holubář
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class Activities extends \POSComponent\UsersList\AjaxList {
+class Activities extends \POSComponent\UsersList\AjaxList implements IStream {
 
 	/**
 	 * @var \POS\Model\ActivitiesDao
