@@ -14,6 +14,17 @@ abstract class Box {
 	protected $vars = array();
 
 	/**
+	 * @var bool TRUE = provede se automatická kontrola při __get. Pokud
+	 * objekt nebyl nalezen, vyhodí se vyjímka. FALSE = __get při nenalezení
+	 * pouze vrátí null
+	 */
+	private $autoControl;
+
+	public function __construct($autoControl = FALSE) {
+		$this->autoControl = $autoControl;
+	}
+
+	/**
 	 * Obecný setter pro nastavení proměnných.
 	 * @param string $name Název proměnné.
 	 * @param mixed $value Hodnota proměnné.
@@ -29,6 +40,10 @@ abstract class Box {
 	public function __get($name) {
 		if (array_key_exists($name, $this->vars)) {
 			return $this->vars[$name];
+		}
+		/* objekt nebyl nalezen */
+		if ($this->autoControl) {
+			throw NetteExt\NotFoundException('Objekt ' . $name . ' wasnt found');
 		}
 
 		return NULL;
