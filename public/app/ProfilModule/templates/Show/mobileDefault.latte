@@ -25,7 +25,6 @@
 		<p class="first-sentence">{$userData->property->first_sentence}</p>
 	</div>
 	<div class="clear"></div>
-	
 </header>
 {if $user->isLoggedIn()}
 	<nav class="profile-navigation ui-grid-a">
@@ -51,7 +50,11 @@
 		{/if}
 	</nav>
 {/if}
-
+<div class="user-info-container">
+	{control userInfo "listFew", $userID}
+	{if $isMyProfile}<a n:href="Edit:" class="btn-edit-info ui-input-btn ui-btn ui-icon-edit ui-btn-icon-notext ui-corner-all"></a>{/if}
+	<div class="clear"></div>
+</div>
 			
 
 <br /><br /><br /><br />
@@ -94,10 +97,10 @@
 			{/if}
 			<div class="spacer"></div>
 			<div class="delimiter red"></div>
-			<span class="red-title with-button">O MNĚ {if $isMyProfile}<a n:href="Edit:">upravit</a>{/if}</span>
+			<span class="red-title with-button">O MNĚ </span>
 			<div class="delimiter red clear"></div>
 
-			{control userInfo "listFew", $userID}
+			
 
 			<div class="delimiter red"></div>
 			<span class="red-title">GALERIE</span>
