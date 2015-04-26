@@ -22,9 +22,9 @@
 		<h2 href="#">{$userData->user_name|upper}</h2>
 		<time class="last-active">{$lastActive}</time>
 		<span class="sexy-label">{$userData|sexyLabel}</span>
+		<p class="first-sentence">{$userData->property->first_sentence}</p>
 	</div>
 	<div class="clear"></div>
-	<p class="first-sentence">{$userData->property->first_sentence}</p>
 	
 </header>
 {if $user->isLoggedIn()}
