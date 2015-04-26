@@ -5,5 +5,8 @@
 		{$friend->user2|showProfDiv}
 		</div>
 	{/foreach}
+	{if !$iterations}
+		<p class="nofriends">Zatím nemáte žádné přátele. Použijte vyhledávání a nějaké nalezněte :) .</p>
+	{/if}
 {/ifset}
 </div>
