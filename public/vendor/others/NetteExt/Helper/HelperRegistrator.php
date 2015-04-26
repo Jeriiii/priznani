@@ -102,6 +102,9 @@ class HelperRegistrator {
 		$template->registerHelper(ShowProfHelper::NAME_NO_LINK, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
 			return $showProfHelper->showProf($user, $href, TRUE, $minSize, "span", TRUE);
 		});
+		$template->registerHelper(ShowProfHelper::NAME_DIV_NO_LINK, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
+			return $showProfHelper->showProf($user, $href, TRUE, $minSize, "div", TRUE);
+		});
 		$template->registerHelper(ShowProfHelper::NAME_SEARCH, function($user, $href = null, $minSize = TRUE) use ($showProfHelper) {
 			return $showProfHelper->showProf($user, $href, FALSE, $minSize, "div", FALSE, TRUE);
 		});
