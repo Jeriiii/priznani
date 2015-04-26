@@ -1,0 +1,19 @@
+<div n:snippet="requests">
+{ifset $friendRequests}
+	<ul id="friend-request-list">
+	{foreach $friendRequests as $friendRequest}
+		<li>
+			{$friendRequest->userFrom|showProfDiv}
+			<p>{$friendRequest->message}</p>
+			<div class="ui-grid-a">
+				<a n:href="accept! id => $friendRequest->id" class="ajax ui-block-a ui-btn ui-icon-check ui-btn-icon-left">Přijmout</a>
+				<a n:href="reject! id => $friendRequest->id" class="ajax ui-block-b ui-btn ui-icon-delete ui-btn-icon-left">Odmítnout</a>
+			</div>
+		</li>
+	{/foreach}
+	</ul>
+	{if !$iterations}
+		<p class="norequests">Nemáte žádné žádosti o přátelství.</p>
+	{/if}
+{/ifset}
+</div>
