@@ -59,8 +59,6 @@
 		if ($.fn.stream.run) {
 			setOffset(this.opts);
 			var ajaxUrl = getAjaxUrl(this.opts, this.ajaxLocation);
-			var buttonUrl = getNextAjaxUrl(this.opts, this.ajaxLocation);
-			setNextBtn(this.opts, buttonUrl);
 			
 			ajax(ajaxUrl, this.opts);
 			
@@ -152,26 +150,7 @@
 	 */
 	function getAjaxUrl(opts, ajaxLocation) {
 		return ajaxLocation + "&" + opts.offsetName + "=" + opts.offset;
-	}
-	
-	/**
-	 * Vrátí url k načtení dalších dat do streamu - ale až tu, co bude následovat po té aktuální.
-	 * @param {Object} opts
-	 * @param {string} ajaxLocation Url k načtení dalších dat do streamu bez offsetu a limitu.
-	 * @returns {String} Url k načtení dalších dat do streamu
-	 */
-	function getNextAjaxUrl(opts, ajaxLocation) {
-		return ajaxLocation + "&" + opts.offsetName + "=" + (opts.offset + opts.addoffset);
-	}
-	
-	/**
-	 * Nastaví správné url u tlačítka na poslání dalších dat do streamu.
-	 * @param {Object} opts
-	 * @param {string} ajaxUrl Url k načtení dalších dat do streamu
-	 */
-	function setNextBtn(opts, ajaxUrl) {
-		$(opts.linkElement).attr("href", ajaxUrl);
-	}
+	}	
 	
 	/**
 	 * Nastaví nový offset.
@@ -188,8 +167,6 @@
 	 * @returns {undefined}
 	 */
 	function initNextBtn(opts, ajaxLocation) {
-		var ajaxUrl = getAjaxUrl(opts, ajaxLocation);
-		setNextBtn(opts, ajaxUrl);
 		
 		$(opts.linkElement).click(function(e) {
 			e.preventDefault();
