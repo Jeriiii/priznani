@@ -7,17 +7,12 @@
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
 
-#stream{
+#activity-stream{
 	
 	li{
 		margin: 0 -1em;
 		position: relative;
 		border-bottom: 1px solid #ddd;
-		background-color: #eee;
-		
-		&.viewed{
-			background-color: transparent;
-		}
 		
 		a{
 			display: block;
@@ -30,6 +25,10 @@
 			color: #444;
 			text-decoration: none;
 			font-weight: normal;
+			
+			&.new-activity{
+				background-color: #eee;
+			}
 		}
 		.generatedProfile{
 			position: absolute;
