@@ -35,7 +35,11 @@ class YouAreSexy extends AddToList {
 	 * Vykresli šablonu.
 	 */
 	public function render() {
-		$this->template->setFile(dirname(__FILE__) . '/youAreSexy.latte');
+		if ($this->getDeviceDetector()->isMobile()) {
+			$this->template->setFile(dirname(__FILE__) . '/mobileYouAreSexy.latte');
+		} else {
+			$this->template->setFile(dirname(__FILE__) . '/youAreSexy.latte');
+		}
 		$this->template->sexy = $this->youAreSexyDao->findByUsers($this->userIDFrom, $this->userIDTo);
 		$this->template->render();
 	}

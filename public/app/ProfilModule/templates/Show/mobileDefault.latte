@@ -18,13 +18,46 @@
 {block content}
 <header id="profile-header">
 	{$userData|showProfMinDiv: NULL, FALSE}
+	<div class="base-info">
+		<h2 href="#">{$userData->user_name|upper}</h2>
+		<time class="last-active">{$lastActive}</time>
+		<span class="sexy-label">{$userData|sexyLabel}</span>
+	</div>
+	<div class="clear"></div>
+	<p class="first-sentence">{$userData->property->first_sentence}</p>
+	
 </header>
+{if $user->isLoggedIn()}
+	<nav class="profile-navigation ui-grid-a">
+		{if $isMyProfile}
+			<a n:href=":Profil:Edit:default" class="ui-block-a ui-btn ui-shadow">Editovat</a>
+			<a title="Nahrát profilovku" class="ui-block-b ui-btn ui-shadow" href="#popupAddProfilePhoto" data-rel="popup" data-position-to="window" data-transition="pop">Nahrát profilovku</a>
+			<div data-role="popup" id="popupAddProfilePhoto" data-theme="a" class="ui-corner-all">
+		        <div class="addprofilePhotoWindow">
+		            <h3>Nahrát profilovou fotku</h3>
+		            {control uploadPhoto}
+		        </div>
+			</div>			
+		{else}
+			{control youAreSexy}
+			<a title="Napsat zprávu" class="ui-block-b ui-btn ui-shadow" href="#popupSendMessage" data-rel="popup" data-position-to="window" data-transition="pop">Napsat zprávu</a>
+			<div data-role="popup" id="popupSendMessage" data-theme="a" class="ui-corner-all">
+		        <div class="addprofilePhotoWindow">
+		            <h3>Poslat zprávu</h3>
+		            {control sendMessageForm}
+		        </div>
+			</div>	
+			
+		{/if}
+	</nav>
+{/if}
 
+			
 
+<br /><br /><br /><br />
 
-
-
-
+				
+				
 
 
 
@@ -50,35 +83,9 @@
 					{/if}
 				</div>
 
-				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
-				<time class="last-active">{$lastActive}</time>
-				<span class="sexy-label">{$userData|sexyLabel} {$sexyLabelToolTip|toolTip}</span>
-				<span class="first-sentence">{$userData->property->first_sentence}</span>
+				
 				<div class="clear spacer"></div>
-			{if $user->isLoggedIn()}
-
-				{if $isMyProfile}
-					<a n:href=":Profil:Edit:default" class="profile-btn long-btn">Editovat</a>
-					<a title="Nahrát profilovku" class="profile-btn uploadProfilePhoto btn-main btn-small long-btn">Nahrát profilovku</a>
-					{* skrytí žádostí o ověření pro první verzi přiznání *}
-					{*<a n:href="Galleries:verificationImageNew" class="profile-btn long-btn">Být ověřený uživatel</a>*}
-					<div class="clear"></div>
-				{else}
-				<div class="profile-btn like-action-panel">
-					<div class="sexybutton">
-						{control youAreSexy}
-					</div>
-					<a href="#" title="Poslat zprávu" id="sendmessage-button" class="profile-btn btn-main btn-small right send-message-btn">
-					</a>
-					<div class="ajaxbox-popUp" data-ajaxbox-btn="#sendmessage-button" data-ajaxbox-header-html="Poslat zprávu">
-						{control sendMessageForm}
-					</div>
-					<div class="clear"></div>
-				</div>
-
-				{/if}
-
-			{/if}
+			
 
 			{if !$isMyProfile && !$isFriends}
 			<div class="profile-btn long-btn">
