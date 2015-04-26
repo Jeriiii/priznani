@@ -27,6 +27,7 @@ class ShowProfHelper {
 	const NAME_MIN_DIV = "showProfMinDiv";
 	const NAME_DIV = "showProfDiv";
 	const NAME_NO_LINK = "showProfMinNoLink";
+	const NAME_DIV_NO_LINK = "showProfMinDivNoLink";
 	const NAME_SEARCH = "showProfSearch";
 
 	/* typy nastavení */
@@ -93,19 +94,26 @@ class ShowProfHelper {
 					$elLink->add($userAge);
 				}
 			}
-
-			/* element, co obalí profil */
-			$elContainer = Html::el($el, array('class' => 'generatedProfile'));
-			$elContainer->add($elLink);
-
-			return $elContainer;
+			return $this->createContainer($el, $elLink);
 		} else {
 
 			$elPhoto = $this->createPhoto($el, $user, $minSize);
 			$elPhoto->addAttributes(array('class' => 'generatedTitle'));
 
-			return $elPhoto;
+			return $this->createContainer($el, $elPhoto);
 		}
+	}
+
+	/**
+	 * Obalí element kontejnerem se standardní třídou
+	 * @param string typ elementu (div, span etc...)
+	 * @param Html $element co se má obalit
+	 * @return obalený element
+	 */
+	private function createContainer($el, $element) {
+		$elContainer = Html::el($el, array('class' => 'generatedProfile'));
+		$elContainer->add($element);
+		return $elContainer;
 	}
 
 	/**
