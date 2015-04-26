@@ -1,14 +1,15 @@
+{var $activeActivities = TRUE;}
+
 {block head}
-	{control css 'chat/chatstream.less'}
+	{control css 'activities/mobileDefault.less', 'activities/mobileStream.less'}
 {/}
 
 {block content}
-<h2>Zprávy</h2>
-{control conversation}
+	{control activities}
 {/block}
 
 {block foot}
-{control js 'stream.js', 'chat/stream-chat-init.js'}
+{control js 'stream.js'}
 
 <script>
 	$(document).ready(function () {
