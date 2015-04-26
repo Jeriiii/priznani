@@ -1,0 +1,126 @@
+{block activities}
+	{ifset $activities}
+		{foreach $activities as $activity}
+			<li class="{if $activity->viewed == 1}viewed{/if}">
+					{if ($activity->statusID != NULL)}
+						{include status activity => $activity}
+					{elseif ($activity->imageID != NULL)}
+						{include image activity => $activity}
+					{elseif ($activity->friendRequestID != NULL)}
+						{include friendsRequest activity => $activity}
+					{else}
+						{include user activity => $activity}
+					{/if}
+					<div class="clear"></div>
+			</li>
+		{/foreach}
+	{/ifset}
+{/}
+
+{define beforeActivity}
+	{$activity->event_creator|showProfMinNoLink }
+{/}
+{define afterActivity}
+	
+{/}
+{define status $activity}
+	{* doplnit odkaz! *}
+	<a href="{plink :Status: $activity->status->id}"
+	   class="activity-link {if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
+		{include #beforeActivity}
+		Uživatel <strong>{$activity->event_creator->user_name}</strong>
+		{if $activity->type == "comment"}
+			okomentoval váš status {$activity->status->message|truncate:8}
+
+		{elseif $activity->type == "like"}
+			lajknul váš status {$activity->status->message|truncate:8}
+		{/if}
+		{include #afterActivity}
+	</a>
+	
+{/}
+{define image $activity}
+	{if ($activity->type == "profilImgNoOnFront")}
+		<a href="{plink :Profil:Edit:inappropriateProfilPhoto imageID => $activity->imageID}"
+			class="activity-link {if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
+			<img src='{$activity->image|getImgPath}' />
+			<strong>Nevhodná profilovka</strong>
+			pro více informací klikni sem
+		</a>
+	{else}
+		<a href="{plink :Profil:Galleries:image imageID => $activity->imageID, galleryID => $activity->image->galleryID}"
+		   class="activity-link {if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
+			{include #beforeActivity}
+			Uživatel <strong>{$activity->event_creator->user_name}</strong>
+			{if ($activity->type == "comment")}
+				okomentoval váš obrázek {$activity->image->name}
+			{elseif ($activity->type == "approve")}
+				 schválil váš obrázek {$activity->image->name}
+			{elseif ($activity->type == "verification")}
+				 schválil váš ověřovací obrázek {$activity->image->name}
+			{elseif ($activity->type == "invalidate")}
+				 zamítl váš ověřovací obrázek {$activity->image->name}
+			{elseif ($activity->type == "disapprove")}
+				 zamítl váš obrázek {$activity->image->name}
+			{elseif ($activity->type == "reject")}
+				 zamítl váš  ověřovací obrázek {$activity->image->name}
+			{elseif ($activity->type == "verificationPhotoAccepted")}
+				 schválil váši žádost o ověřovací obrázek {$activity->image->name}
+			{elseif ($activity->type == "verificationPhotoRejected")}
+				 zamítl váši žádost o ověřovací obrázek'
+			{elseif ($activity->type == "like")}
+				 lajknul váš obrázek {$activity->image->name}
+			{/if}
+			{include #afterActivity}
+		</a>
+	{/if}
+{/}
+{define friendsRequest $activity}
+<!--	<div href="{plink this}" class="{if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">-->
+	<span class="activity-span {if $activity->viewed == 0}new-activity{/if}">
+		{include #beforeActivity}
+		Uživatel <strong>{$activity->event_creator->user_name}</strong> 
+		{if ($activity->type == "new-request")}
+			vás žádá o přátelství
+			<div>
+				<a data-activity-viewed-id="{$activity->id}" href="{$basePath}/?friendRequest-id={$activity->friendRequestID}&do=friendRequest-accept" class="request-button btn-main btn-small">Přijmout</a>
+				<a data-activity-viewed-id="{$activity->id}" href="{$basePath}/?friendRequest-id={$activity->friendRequestID}&do=friendRequest-reject" class="request-button btn-main btn-small">Odmítnout</a>
+			</div>
+		{/if}
+		{include #afterActivity}
+	</span>
+{/}
+{define user $activity}
+	{* doplnit odkaz! *}
+	{if ($activity->type == "sexy")}
+		{if $userIsPaying}
+			<a href="{plink :Profil:Show: id => $activity->event_creator->id}" class="activity-link {if $activity->viewed == 0}new-activity{/if}"
+			   data-activity-viewed-id="{$activity->id}">
+				{include #beforeActivity}
+				Uživatel <strong>{$activity->event_creator->user_name}</strong>
+					vás označil jako sexy!
+				{include #afterActivity}
+			</a>
+		{else}
+			<a href="" class="activity-link payment-btn">
+				{include #beforeActivity}
+				Někdo vás označil že jste <strong>sexy</strong>!
+				{include #afterActivity}
+			</a>
+		{/if}
+	{/if}
+{/}
+{*snippet activities}
+	<div id="activities">
+			<a class="activities-btn user-btn"></a>
+		<div id="activities-droplink">
+			<div class="arrow-up"></div>
+			<div class="messages">
+				<div id="loadingDiv">
+					<img src="{$basePath}/images/ajax-loader.gif">
+				</div>
+				<a class="ajax marker" n:href="allViewed!">Označit jako přečtené</a>
+			</div>
+		</div>
+	</div>
+{/snippet*}

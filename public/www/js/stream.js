@@ -10,11 +10,20 @@
 	$.fn.stream = function (options) {
 		var opts = $.extend({}, $.fn.stream.defaults, options);
 		setOpts(opts);
-		setAjaxLocation(opts);
-		timeCheckStream();
+		this.ajaxLocation = getAjaxLocation(opts);
+		
+		initNextBtn(opts, this.ajaxLocation);
+		
+		/* rozhodne, zda se má používat automatické donačítání dat */
+		if(opts.autoLoadData) {
+			timeCheckStream();
+		} else {
+			$(opts.streamLoader).hide();
+		}
 	};
 
 	$.fn.stream.defaults = {
+		/* aktuální offset */
 		offset: 0,
 		/* kolik dalších příspěvků (dat) má plugin načíst při najetí na konec */
 		addoffset: 4,
@@ -31,7 +40,9 @@
 		/* název parametru v URL, který nastavuje vždy aktuální offset hodnotu při každém ajaxovém požadavku */
 		offsetName: 'userStream-offset',
 		/* název snippetu, který zastaví dotazování, je-li prázdný */
-		snippetName: ''
+		snippetName: '',
+		/* automatické načtení dalších dat při srolování na konec stránky */
+		autoLoadData: true
 	};
 
 	/**
@@ -41,42 +52,17 @@
 
 	/* prodlouží stream */
 	function changeStream() {
-		$(this.opts.btnNext).hide();
+		var $btnNext = $(this.opts.btnNext);
+		$btnNext.hide();
 
 		/* přidá další příspěvky */
 		if ($.fn.stream.run) {
-
-			this.opts.offset = this.opts.offset + this.opts.addoffset;
-
-			var ajaxUrl = this.ajaxLocation + "&" + this.opts.offsetName + "=" + this.opts.offset;
-
-			$(this.opts.ajaxLocation).attr("href", ajaxUrl);
+			var ajaxUrl = getAjaxUrl(this.opts, this.ajaxLocation);
+			setNextBtn(this.opts, ajaxUrl);
 			
-			var snippetName = this.opts.snippetName;
-			$.nette.ajax({
-				url: ajaxUrl,
-				async: false,
-				success: function (data, status, jqXHR) {
-					if (data.snippets['snippet-userStream-posts'] == "") {//pokud snippet už neobnovuje data
-						$.fn.stream.run = false;//zastaví dotazování
-					}
-					if (data.snippets['snippet-profilStream-posts'] == "") {//pokud snippet už neobnovuje data
-						$.fn.stream.run = false;//zastaví dotazování
-					}
-					if (data.snippets[snippetName] == "") {//pokud snippet už neobnovuje data
-						$.fn.stream.run = false;//zastaví dotazování
-					}
-					if (data.snippets['snippet-valChatMessages-stream-messages'] == "" || 
-							data.snippets['snippet-conversation-stream-messages'] == "") {//pokud snippet už neobnovuje data
-						$.fn.stream.run = false;//zastaví dotazování
-					} else {
-						$("#chat-stream #stream").scrollTop(30 * 50);/* posunutí chat streamu o kus níž, když se načtou data */
-					}
-				},
-				error: function (jqXHR, status, errorThrown) {
-					$.fn.stream.run = false;
-				}
-			});
+			ajax(ajaxUrl, this.opts);
+			
+			$btnNext.show();
 		} else {
 			/* Nejsou-li žádné další příspěvky, vypíše hlášku, že už nejsou */
 			$(this.opts.msgElement).text(this.opts.msgText);
@@ -113,8 +99,83 @@
 		this.opts = opts;
 	}
 
-	function setAjaxLocation(opts) {
-		this.ajaxLocation = $(opts.linkElement).attr('href');
+	/**
+	 * Vrátí základní odkaz (bez offsetu a limitu) na načtení dalších dat do streamu.
+	 * @param {Object} opts
+	 * @return {string} Základní odkaz (bez offsetu a limitu) na načtení dalších dat do streamu.
+	 */
+	function getAjaxLocation(opts) {
+		return this.ajaxLocation = $(opts.linkElement).attr('href');
+	}
+	
+	/**
+	 * Načte další položky do streamu.
+	 * @param {string} ajaxUrl Url, která se zavolá pro načtení dalších položek. 
+	 * Má limit i offset a vrací výsledky.
+	 * @param {Object} opts
+	 */
+	function ajax(ajaxUrl, opts) {
+		var snippetName = opts.snippetName;
+		$.nette.ajax({
+			url: ajaxUrl,
+			async: false,
+			success: function (data, status, jqXHR) {
+				if (data.snippets['snippet-userStream-posts'] == "") {//pokud snippet už neobnovuje data
+					$.fn.stream.run = false;//zastaví dotazování
+				}
+				if (data.snippets['snippet-profilStream-posts'] == "") {//pokud snippet už neobnovuje data
+					$.fn.stream.run = false;//zastaví dotazování
+				}
+				if (data.snippets[snippetName] == "") {//pokud snippet už neobnovuje data
+					$.fn.stream.run = false;//zastaví dotazování
+				}
+				if (data.snippets['snippet-valChatMessages-stream-messages'] == "" || 
+						data.snippets['snippet-conversation-stream-messages'] == "") {//pokud snippet už neobnovuje data
+					$.fn.stream.run = false;//zastaví dotazování
+				} else {
+					$("#chat-stream #stream").scrollTop(30 * 50);/* posunutí chat streamu o kus níž, když se načtou data */
+				}
+			},
+			error: function (jqXHR, status, errorThrown) {
+				$.fn.stream.run = false;
+			}
+		});
+	}
+	
+	/**
+	 * Vrátí url k načtení dalších dat do streamu.
+	 * @param {Object} opts
+	 * @param {string} ajaxLocation Url k načtení dalších dat do streamu bez offsetu a limitu.
+	 * @returns {String} Url k načtení dalších dat do streamu
+	 */
+	function getAjaxUrl(opts, ajaxLocation) {
+		opts.offset = opts.offset + opts.addoffset;
+		return ajaxLocation + "&" + opts.offsetName + "=" + opts.offset;
+	}
+	
+	/**
+	 * Nastaví správné url u tlačítka na poslání dalších dat do streamu.
+	 * @param {Object} opts
+	 * @param {string} ajaxUrl Url k načtení dalších dat do streamu
+	 */
+	function setNextBtn(opts, ajaxUrl) {
+		$(opts.linkElement).attr("href", ajaxUrl);
+	}
+	
+	/**
+	 * 
+	 * @param {type} opts
+	 * @param {type} ajaxLocation
+	 * @returns {undefined}
+	 */
+	function initNextBtn(opts, ajaxLocation) {
+		var ajaxUrl = getAjaxUrl(opts, ajaxLocation);
+		setNextBtn(opts, ajaxUrl);
+		
+		$(opts.linkElement).click(function(e) {
+			e.preventDefault();
+			changeStream();
+		});
 	}
 
 })(jQuery);
