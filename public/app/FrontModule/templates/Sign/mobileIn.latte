@@ -1,0 +1,25 @@
+{block head}
+	{control css 'sign/mobileIn.less'}
+{/block}
+
+{block usermenu}
+{/}
+
+
+{block content}
+<div class="form-window">
+	<h2 class="window-title">PŘIHLÁSIT SE</h2>
+	<div class="window-content">
+	{control signInForm}
+	<p class="registration ui-corner-all">
+		Nejste ještě zaregistrováni? <a n:href="DatingRegistration:" class="ui-btn ui-btn-inline ui-corner-all" title="Registrace">Zaregistrujte se</a>
+	</p>
+	<p class="forgotten-pass ui-corner-all">
+		Zapoměli jste heslo? <a n:href="Sign:forgottenPass" class="ui-btn ui-btn-inline ui-corner-all" title="zapomenuté heslo">Obnovte si heslo</a>
+	</p>
+	</div>
+</div>
+{/block}
+
+{block foot}
+{/block}
