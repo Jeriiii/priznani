@@ -149,7 +149,6 @@
 	 * @returns {String} Url k načtení dalších dat do streamu
 	 */
 	function getAjaxUrl(opts, ajaxLocation) {
-		opts.offset = opts.offset + opts.addoffset;
 		return ajaxLocation + "&" + opts.offsetName + "=" + opts.offset;
 	}
 	
@@ -163,12 +162,21 @@
 	}
 	
 	/**
+	 * Nastaví nový offset.
+	 * @param {Object} opts
+	 */	
+	function setOffset(opts) {
+		opts.offset = opts.offset + opts.addoffset;
+	}
+	
+	/**
 	 * 
 	 * @param {type} opts
 	 * @param {type} ajaxLocation
 	 * @returns {undefined}
 	 */
 	function initNextBtn(opts, ajaxLocation) {
+		setOffset(opts);
 		var ajaxUrl = getAjaxUrl(opts, ajaxLocation);
 		setNextBtn(opts, ajaxUrl);
 		
