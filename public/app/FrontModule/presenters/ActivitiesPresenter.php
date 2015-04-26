@@ -11,8 +11,17 @@ class ActivitiesPresenter extends BasePresenter {
 		}
 	}
 
-	public function renderDefault() {
+	public function renderMobileDefault() {
+		$this->template->addOffset = MobileActivities::LIMIT_OF_ACTIVITIES;
+	}
 
+	/**
+	 * Vytovří komponentu pro aktivity
+	 * @return \Activities Komponenta aktivit
+	 */
+	protected function createComponentMobileActivities() {
+		$activities = new MobileActivities($this->activitiesDao, $this->loggedUser, $this->paymentDao);
+		return $activities;
 	}
 
 }

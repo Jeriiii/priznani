@@ -5,7 +5,7 @@
 {/}
 
 {block content}
-	{control activities}
+	{control mobileActivities}
 {/block}
 
 {block foot}
@@ -14,10 +14,12 @@
 <script>
 	$(document).ready(function () {
 		$("body").stream({
-			addoffset: 30,
-			offsetName: "conversation-offset",
+			addoffset: {$addOffset},
+			autoLoadData: false,
+			offsetName: "mobileActivities-offset",
 			msgElement: ".stream-info-message",
-			msgText: "Žádné další konverzace nebyly nalezeny."
+			msgText: "Žádné další aktivity nebyly nalezeny.",
+			snippetName: "snippet-mobileActivities-activities-list"
 		});
 	});
 </script>
