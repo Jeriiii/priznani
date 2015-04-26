@@ -1,0 +1,8 @@
+{if !$isSendRequest}
+<a n:href="sendFriendRequest!" class="ui-btn ui-shadow" href="#popupFriendRequest" data-rel="popup" data-position-to="window" data-transition="pop">Požádat o přátelství</a>
+
+<div data-role="popup" id="popupFriendRequest" data-theme="a" class="ui-corner-all">
+		<h3>Požádat o přátelství</h3>
+		{control requestMessageForm}
+</div>
+{/if}

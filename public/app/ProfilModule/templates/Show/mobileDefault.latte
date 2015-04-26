@@ -32,21 +32,19 @@
 			<a n:href=":Profil:Edit:default" class="ui-block-a ui-btn ui-shadow">Editovat</a>
 			<a title="Nahrát profilovku" class="ui-block-b ui-btn ui-shadow" href="#popupAddProfilePhoto" data-rel="popup" data-position-to="window" data-transition="pop">Nahrát profilovku</a>
 			<div data-role="popup" id="popupAddProfilePhoto" data-theme="a" class="ui-corner-all">
-		        <div class="addprofilePhotoWindow">
 		            <h3>Nahrát profilovou fotku</h3>
 		            {control uploadPhoto}
-		        </div>
 			</div>			
 		{else}
 			{control youAreSexy}
 			<a title="Napsat zprávu" class="ui-block-b ui-btn ui-shadow" href="#popupSendMessage" data-rel="popup" data-position-to="window" data-transition="pop">Napsat zprávu</a>
 			<div data-role="popup" id="popupSendMessage" data-theme="a" class="ui-corner-all">
-		        <div class="addprofilePhotoWindow">
 		            <h3>Poslat zprávu</h3>
 		            {control sendMessageForm}
-		        </div>
-			</div>	
-			
+			</div>
+			{if !$isFriends}
+				{control sendFriendRequest}
+			{/if}			
 		{/if}
 	</nav>
 {/if}
@@ -72,29 +70,9 @@
 
 
 
-<section id="onepage">
-	<div id="content">
-		<div id="stream-menu">
-
-				<div class="user-profile-picture">
-					
-					{if $isMyProfile}
-						<div class="photoLinkContainer">
-							<a class="photoLink uploadProfilePhoto" id="addProfilePhoto" title="Nahrát profilovku">Nahrát profilovku</a>
-						</div>
-						{control uploadPhoto}
-					{/if}
-				</div>
-
-				
-				<div class="clear spacer"></div>
 			
 
-			{if !$isMyProfile && !$isFriends}
-			<div class="profile-btn long-btn">
-				{control sendFriendRequest}
-			</div>
-			{/if}
+			
 			<div class="spacer"></div>
 			<div class="delimiter red"></div>
 			<span class="red-title with-button">O MNĚ </span>
