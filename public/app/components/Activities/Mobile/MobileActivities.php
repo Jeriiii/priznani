@@ -4,20 +4,23 @@
  * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  */
 
-use POSComponent\BaseProjectControl;
 use POS\Model\ActivitiesDao;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Database\Table\ActiveRow;
 use Nette\ArrayHash;
 use POS\Model\PaymentDao;
+use POSComponent\BaseProjectControl;
 
 /**
- * Komponenta pro vykreslení aktivit uživatele.
+ * Komponenta pro vykreslení aktivit uživatele na mobilu.
  *
  * @author Daniel Holubář
  * @author Petr Kukrál <p.kukral@kukral.eu>
+ * @author Jan Kotalík
  */
-class Activities extends \POSComponent\UsersList\AjaxList {
+class MobileActivities extends BaseProjectControl implements IStream {
+
+	const LIMIT_OF_ACTIVITIES = 8;
 
 	/**
 	 * @var \POS\Model\ActivitiesDao
@@ -56,6 +59,7 @@ class Activities extends \POSComponent\UsersList\AjaxList {
 		$this->activitiesDao = $activitiesDao;
 		$this->loggedUser = $loggedUser;
 		$this->paymentDao = $paymentDao;
+		$this->setData(0); //Naplní komponentu počátečními daty
 	}
 
 	/**
@@ -66,7 +70,7 @@ class Activities extends \POSComponent\UsersList\AjaxList {
 		$this->template->activities = $this->activities;
 		$this->template->loggedUser = $this->loggedUser;
 		$this->template->userIsPaying = $this->paymentDao->isUserPaying($this->userID);
-		$template->setFile(dirname(__FILE__) . '/activities.latte');
+		$template->setFile(dirname(__FILE__) . '/mobileActivities.latte');
 		$template->render();
 	}
 
@@ -107,12 +111,20 @@ class Activities extends \POSComponent\UsersList\AjaxList {
 	}
 
 	public function getSnippetName() {
-		return "list";
+		return "activities-list";
 	}
 
 	public function setData($offset) {
-		$activities = $this->activitiesDao->getByUserId($this->userID, $this->limit, $offset);
-		$this->activities = $activities;
+		$this->activities = $this->activitiesDao->getByUserId($this->userID, self::LIMIT_OF_ACTIVITIES, $offset);
+	}
+
+	public function handleGetMoreData($offset) {
+		$this->setData($offset);
+		if ($this->presenter->isAjax()) {
+			$this->invalidateControl($this->getSnippetName());
+		} else {
+			$this->redirect('this');
+		}
 	}
 
 }
