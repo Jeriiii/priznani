@@ -48,7 +48,7 @@
 				{block orders}{/block}
 				{block nextAdmission}{/block}
 				{block beforeContent}{/block}
-				<ul data-role="listview">
+				<ul data-role="listview" class="flashlist">
 					<li n:foreach="$flashes as $flash" class='flash {$flash->type}'>
 						{$flash->message}
 					</li>
