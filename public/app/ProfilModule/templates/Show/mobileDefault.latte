@@ -1,0 +1,122 @@
+{block head}
+    {control css 'profile/mobileShow.less'}
+{/block}
+
+
+{block foot}
+
+<script>
+	$(document).ready(function () {
+		$("body").stream({
+			rows: {$count},
+			addoffset: 4,
+			offsetName: 'profilStream-offset'
+		});
+	});
+</script>
+{/block}
+{block content}
+<header id="profile-header">
+	{$userData|showProfMinDiv: NULL, FALSE}
+</header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="onepage">
+	<div id="content">
+		<div id="stream-menu">
+
+				<div class="user-profile-picture">
+					
+					{if $isMyProfile}
+						<div class="photoLinkContainer">
+							<a class="photoLink uploadProfilePhoto" id="addProfilePhoto" title="Nahrát profilovku">Nahrát profilovku</a>
+						</div>
+						{control uploadPhoto}
+					{/if}
+				</div>
+
+				<a class="big-user-name" n:block="title" href="#">{$userData->user_name|upper}</a>
+				<time class="last-active">{$lastActive}</time>
+				<span class="sexy-label">{$userData|sexyLabel} {$sexyLabelToolTip|toolTip}</span>
+				<span class="first-sentence">{$userData->property->first_sentence}</span>
+				<div class="clear spacer"></div>
+			{if $user->isLoggedIn()}
+
+				{if $isMyProfile}
+					<a n:href=":Profil:Edit:default" class="profile-btn long-btn">Editovat</a>
+					<a title="Nahrát profilovku" class="profile-btn uploadProfilePhoto btn-main btn-small long-btn">Nahrát profilovku</a>
+					{* skrytí žádostí o ověření pro první verzi přiznání *}
+					{*<a n:href="Galleries:verificationImageNew" class="profile-btn long-btn">Být ověřený uživatel</a>*}
+					<div class="clear"></div>
+				{else}
+				<div class="profile-btn like-action-panel">
+					<div class="sexybutton">
+						{control youAreSexy}
+					</div>
+					<a href="#" title="Poslat zprávu" id="sendmessage-button" class="profile-btn btn-main btn-small right send-message-btn">
+					</a>
+					<div class="ajaxbox-popUp" data-ajaxbox-btn="#sendmessage-button" data-ajaxbox-header-html="Poslat zprávu">
+						{control sendMessageForm}
+					</div>
+					<div class="clear"></div>
+				</div>
+
+				{/if}
+
+			{/if}
+
+			{if !$isMyProfile && !$isFriends}
+			<div class="profile-btn long-btn">
+				{control sendFriendRequest}
+			</div>
+			{/if}
+			<div class="spacer"></div>
+			<div class="delimiter red"></div>
+			<span class="red-title with-button">O MNĚ {if $isMyProfile}<a n:href="Edit:">upravit</a>{/if}</span>
+			<div class="delimiter red clear"></div>
+
+			{control userInfo "listFew", $userID}
+
+			<div class="delimiter red"></div>
+			<span class="red-title">GALERIE</span>
+			<div class="delimiter red"></div>
+			<div class="square-list">
+				{control userGalleries 'listFew', $userID}
+			</div>
+
+
+			<div class="delimiter red"></div>
+			<span class="red-title">PŘÁTELÉ</span>
+			<div class="delimiter red"></div>
+			<div class="square-list">
+				{control friendsList}
+			</div>
+
+			{*control sexyListMarkedFromOther*}{* importovana a nastavena komponenta, prozatim nevykreslena *}
+
+		</div>
+
+		{include 'menu.latte' $userID => 'id'}
+
+		{control profilStream}
+	</div>
+	<div class="clear"></div>
+</section>
+
+
+{/block}

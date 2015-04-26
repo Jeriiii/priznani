@@ -195,6 +195,53 @@ class ShowPresenter extends ProfilBasePresenter {
 		$this->template->vigor = $this->getVigor($user->property->age);
 	}
 
+	/**
+	 * vykresluje  uzivatelsky stream (zed s vlastnimi prispevky)
+	 * @param type $id
+	 */
+	public function renderMobileDefault($id) {
+		/* kontrola zda jde o muj profil */
+		$isMyProfile = FALSE;
+		if ($this->user->isLoggedIn()) {
+			if ($this->userID == $this->getPresenter()->getUser()->id) {
+				$isMyProfile = TRUE;
+			}
+		}
+		$this->template->isMyProfile = $isMyProfile;
+
+
+		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->userID);
+
+		if ($verificationAsked->fetch()) {
+			$this->template->asked = TRUE;
+		} else {
+			$this->template->asked = FALSE;
+		}
+		if (!empty($id)) {
+			$user = $this->userDao->find($id);
+		} else {
+			$user = $this->userData;
+		}
+
+		$this->template->userData = $user;
+		$this->template->userID = $this->userID;
+		$lastActive = LastActive::format($user->last_active);
+		$this->template->lastActive = $lastActive;
+		$this->template->count = $this->dataForStream->count("id");
+		$this->template->isFriends = $this->friendDao->isFriend($id, $this->getUser()->id);
+		$this->template->sexyLabelToolTip = "Hodnost podle počtu - JE SEXY <br />" . ShowUserDataHelper::getLabelInfoText($user->property->type);
+
+		$profileGalleryID = $this->userGalleryDao->findProfileGallery($this->userID);
+		$profilePhoto = $this->userImageDao->getInGallery($profileGalleryID)->fetch();
+		if ($profilePhoto) {
+			$this->template->hasProfilePhoto = true;
+			$this->template->profilePhoto = $profilePhoto;
+		} else {
+			$this->template->hasProfilePhoto = false;
+		}
+		$this->template->vigor = $this->getVigor($user->property->age);
+	}
+
 	private function getVigor($age) {
 		Frm\DatingRegistrationBaseForm::getVigor($age);
 	}

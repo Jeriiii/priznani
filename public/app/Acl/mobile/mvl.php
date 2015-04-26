@@ -30,7 +30,7 @@ class Mvl extends MobileViewList {
 		$this->addView("Sign", "in");
 
 		//profilModule
-		$this->addLayout("Profil:Show", "default");
+		$this->addView("Profil:Show", "default");
 	}
 
 }
