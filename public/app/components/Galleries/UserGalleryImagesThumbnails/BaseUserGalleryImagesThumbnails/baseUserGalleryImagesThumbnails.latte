@@ -13,7 +13,7 @@
 	{/ifset}
 	{foreach $images as $image}        
 		<div class="img-container">                           
-			<img src="{$image|getImgSqrPath}" width="100%" height="100%"/>
+			<img src="{$image|getImgSqrPath}"/>
 			{* link, na který se odkáže po kliknutí *}
 			{include #imageLink "image" => $image}
 

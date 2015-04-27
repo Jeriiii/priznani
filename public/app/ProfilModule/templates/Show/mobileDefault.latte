@@ -1,0 +1,75 @@
+{block head}
+    {control css 'profile/mobileShow.less'}
+{/block}
+
+{block scripts}
+	{control js 'streamMobile/nette.mobile.ext.js', 'stream.js', 'streamMobile/support.js'}
+	<script>
+		/* stream */
+		$(document).ready(function(){
+			$("body").stream({
+				addoffset: 4,
+				offsetName: 'profilStream-offset'
+			});
+		});
+	</script>
+{/block}
+
+{block foot}
+
+{/block}
+
+
+{block content}
+<header id="profile-header">
+	{$userData|showProfMinDiv: NULL, FALSE}
+	<div class="base-info">
+		<h2 href="#">{$userData->user_name|upper}</h2>
+		<time class="last-active">{$lastActive}</time>
+		<span class="sexy-label">{$userData|sexyLabel}</span>
+		<p class="first-sentence">{$userData->property->first_sentence}</p>
+	</div>
+	<div class="clear"></div>
+</header>
+{if $user->isLoggedIn()}
+	<nav class="profile-navigation ui-grid-a">
+		{if $isMyProfile}
+			<a n:href=":Profil:Edit:default" class="ui-block-a ui-btn ui-shadow">Editovat</a>
+			<a title="Nahrát profilovku" class="ui-block-b ui-btn ui-shadow" href="#popupAddProfilePhoto" data-rel="popup" data-position-to="window" data-transition="pop">Nahrát profilovku</a>
+			<div data-role="popup" id="popupAddProfilePhoto" data-theme="a" class="ui-corner-all">
+		            <h3>Nahrát profilovou fotku</h3>
+		            {control uploadPhoto}
+			</div>			
+		{else}
+			{control youAreSexy}
+			<a title="Napsat zprávu" class="ui-block-b ui-btn ui-shadow" href="#popupSendMessage" data-rel="popup" data-position-to="window" data-transition="pop">Napsat zprávu</a>
+			<div data-role="popup" id="popupSendMessage" data-theme="a" class="ui-corner-all">
+		            <h3>Poslat zprávu</h3>
+		            {control sendMessageForm}
+			</div>
+			{if !$isFriends}
+				{control sendFriendRequest}
+			{/if}			
+		{/if}
+	</nav>
+{/if}
+<div class="user-info-container">
+	{control userInfo "listFew", $userID}
+	{if $isMyProfile}<a n:href="Edit:" class="btn-edit-info ui-input-btn ui-btn ui-icon-edit ui-btn-icon-notext ui-corner-all"></a>{/if}
+	<div class="clear"></div>
+</div>
+	
+<div class="square-list">
+	{control userGalleries 'listFew', $userID}
+</div>			
+
+<div class="square-list">
+	{control friendsList}
+</div>
+
+{include 'mobileMenu.latte' $userID => 'id'}
+
+{control profilStream}
+<div class="clear"></div>
+
+{/block}

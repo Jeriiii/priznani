@@ -4,12 +4,7 @@
  * and open the template in the editor.
  */
 
-$(document).ready(function(){
-	/* stream */
-	$("body").stream({
-		addoffset: 4
-	});
-	
+$(document).ready(function(){	
 	/* zobrazování a schovávání komentářů nebo upozornění, že je uživatel nepřihlášený */
 	$('#stream').on('click', '.comment-button, .likes-button', function(){
 		var selector = '#' + $(this).attr('data-to-open');

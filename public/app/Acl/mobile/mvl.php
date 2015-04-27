@@ -28,6 +28,9 @@ class Mvl extends MobileViewList {
 		$this->addView("Friends", "list");
 
 		$this->addView("Sign", "in");
+
+		//profilModule
+		$this->addView("Profil:Show", "default");
 	}
 
 }
