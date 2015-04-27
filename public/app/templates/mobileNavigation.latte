@@ -1,18 +1,3 @@
-
-{* profilový obrázek, jméno uživatele a tlačítko editovat *}
-{define profile}
-{if $user->isLoggedIn() && $loggedUser->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
-	<div class="user-profile-picture one-page-profile-picture">
-	{$loggedUser|showProfMinDiv}
-	</div>
-	<div class="name-container">
-		<a n:href=":Profil:Show:default" class="user-name">{$loggedUser->user_name|upper}</a>
-		<span class="sexy-label">{$loggedUser|sexyLabel} {$sexyLabelToolTip|toolTip}</span>
-	</div>
-	<div class="delimiter top"></div>
-{/if}
-{/}
-
 {* žádosti o přátelství *}
 
 {define friendRequest}
