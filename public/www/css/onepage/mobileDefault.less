@@ -8,6 +8,7 @@ and open the template in the editor.
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
 @import "../comments/mobileComments.less";
+@import "../stream/mobile.less";
 
 .addprofilePhoto{
 	padding: 2px 5%;
@@ -92,26 +93,4 @@ and open the template in the editor.
 			border: none;
 		}
 	}	
-}
-
-.comments-container, .likes-container{
-	display: none;
-}
-.likes-container{
-	margin: 5px 15px;
-	padding: 5px 5px;
-}
-
-.isLiked.ui-state-disabled{
-	filter: Alpha(Opacity=70) !important;
-	opacity: 0.7 !important;
-}
-
-.tooltip-container{
-	text-align: right;
-	a{
-		background: transparent !important;
-		border: none;
-	}
-
 }
