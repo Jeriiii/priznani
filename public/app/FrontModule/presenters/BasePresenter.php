@@ -133,7 +133,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		if ($this->getUser()->isLoggedIn()) {
 			$this->template->identity = $this->getUser()->getIdentity();
 		}
-		if ($this->deviceDetector->isMobile() && $this->getUser()->isLoggedIn()) {/* údaje pro pravé menu na mobilu */
+		if ($this->environment->isMobile() && $this->getUser()->isLoggedIn()) {/* údaje pro pravé menu na mobilu */
 			$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->getUser()->id)->count();
 			$this->template->countSexy = $this->youAreSexyDao->countToUser($this->getUser()->id);
 		}
