@@ -14,7 +14,7 @@ namespace POSComponent\Chat;
 class MobileConversationList extends StandardConversationList implements IContactList {
 	/* počáteční limit */
 
-	const LIMIT_OF_NEW_CONVERSATIONS = 10;
+	const LIMIT_OF_NEW_CONVERSATIONS = 4;
 
 	/* aktuální offset */
 
