@@ -71,7 +71,7 @@ class UserStream extends BaseStream {
 
 	public function render() {
 		$mode = 'mainStream';
-		if ($this->getDeviceDetector()->isMobile()) {
+		if ($this->getEnvironment()->isMobile()) {
 			$templateName = "../UserStream/userStreamMobile.latte";
 		} else {
 			$templateName = "../UserStream/userStream.latte";

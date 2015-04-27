@@ -123,7 +123,7 @@ class BaseStream extends BaseProjectControl {
 			// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
 			$this->template->profilePhoto = $userData->profilFotoID;
 		}
-		if ($this->getDeviceDetector()->isMobile()) {
+		if ($this->getEnvironment()->isMobile()) {
 			$this->template->mobile = TRUE;
 		} else {
 			$this->template->mobile = FALSE;
