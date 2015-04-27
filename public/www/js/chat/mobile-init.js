@@ -9,7 +9,7 @@
 	});
 	
 	/* kliknutí do konverzací - přesměrování na příslušný odkaz ve specifických případech */
-	$('#conversations li').click(function(){
+	$('#conversations').on('click', 'li', function(){
 		window.location = $(this).find('.conversation-link').attr('href');		
 	});
 });
