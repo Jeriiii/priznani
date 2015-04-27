@@ -31,7 +31,9 @@
 		/* název parametru v URL, který nastavuje vždy aktuální offset hodnotu při každém ajaxovém požadavku */
 		offsetName: 'userStream-offset',
 		/* název snippetu, který zastaví dotazování, je-li prázdný */
-		snippetName: ''
+		snippetName: '',
+		/* funkce která se zavolá po doběhnutí ajaxového požadavku */
+		fnAjaxSuccess: function(data, status){}
 	};
 
 	/**
@@ -52,27 +54,11 @@
 
 			$(this.opts.ajaxLocation).attr("href", ajaxUrl);
 			
-			var snippetName = this.opts.snippetName;
+			
 			$.nette.ajax({
 				url: ajaxUrl,
 				async: false,
-				success: function (data, status, jqXHR) {
-					if (data.snippets['snippet-userStream-posts'] == "") {//pokud snippet už neobnovuje data
-						$.fn.stream.run = false;//zastaví dotazování
-					}
-					if (data.snippets['snippet-profilStream-posts'] == "") {//pokud snippet už neobnovuje data
-						$.fn.stream.run = false;//zastaví dotazování
-					}
-					if (data.snippets[snippetName] == "") {//pokud snippet už neobnovuje data
-						$.fn.stream.run = false;//zastaví dotazování
-					}
-					if (data.snippets['snippet-valChatMessages-stream-messages'] == "" || 
-							data.snippets['snippet-conversation-stream-messages'] == "") {//pokud snippet už neobnovuje data
-						$.fn.stream.run = false;//zastaví dotazování
-					} else {
-						$("#chat-stream #stream").scrollTop(30 * 50);/* posunutí chat streamu o kus níž, když se načtou data */
-					}
-				},
+				success: fnAjaxSuccess(this.opts),
 				error: function (jqXHR, status, errorThrown) {
 					$.fn.stream.run = false;
 				}
@@ -82,6 +68,17 @@
 			$(this.opts.msgElement).text(this.opts.msgText);
 			$(this.opts.streamLoader).hide();
 			$(this.opts.btnNext).hide();
+		}
+	}
+	
+	function fnAjaxSuccess(opts) {
+		return function(data, status, jqXHR) {
+			var snippetName = opts.snippetName;
+			if (snippetName != '' && data.snippets[snippetName] == "") {//pokud snippet už neobnovuje data
+				$.fn.stream.run = false;//zastaví dotazování
+			}
+
+			opts.fnAjaxSuccess(data, status);
 		}
 	}
 

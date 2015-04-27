@@ -16,7 +16,13 @@
 			addoffset: 30,
 			offsetName: "conversation-offset",
 			msgElement: ".stream-info-message",
-			msgText: "Žádné další konverzace nebyly nalezeny."
+			snippetName: "snippet-conversation-stream-messages",
+			msgText: "Žádné další konverzace nebyly nalezeny.",
+			fnAjaxSuccess: function(data, status) {
+				if (data.snippets['snippet-conversation-stream-messages'] != "") {
+					$("#chat-stream #stream").scrollTop(30 * 50);/* posunutí chat streamu o kus níž, když se načtou data */
+				}
+			}
 		});
 		$('body').chatConversationPage({
 			msgSettingsOn: true //zapnutí nastavení pro zprávy
