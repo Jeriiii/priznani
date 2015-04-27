@@ -35,7 +35,7 @@ class YouAreSexy extends AddToList {
 	 * Vykresli šablonu.
 	 */
 	public function render() {
-		if ($this->getDeviceDetector()->isMobile()) {
+		if ($this->getEnvironment()->isMobile()) {
 			$this->template->setFile(dirname(__FILE__) . '/mobileYouAreSexy.latte');
 		} else {
 			$this->template->setFile(dirname(__FILE__) . '/youAreSexy.latte');

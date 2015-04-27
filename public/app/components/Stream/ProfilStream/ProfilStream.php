@@ -18,7 +18,7 @@ class ProfilStream extends BaseStream {
 
 	public function render() {
 		$mode = 'profilStream';
-		if ($this->getDeviceDetector()->isMobile()) {
+		if ($this->getEnvironment()->isMobile()) {
 			$templateName = "../ProfilStream/profilStreamMobile.latte";
 		} else {
 			$templateName = "../ProfilStream/profilStream.latte";

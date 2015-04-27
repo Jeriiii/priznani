@@ -38,7 +38,7 @@ class FriendRequestList extends UsersList {
 		if ($this->listAll) {
 			$this->template->friendRequests = $this->friendRequestDao->getAllToUser($this->loggedUserID);
 		}
-		if ($this->getDeviceDetector()->isMobile()) {
+		if ($this->getEnvironment()->isMobile()) {
 			$this->renderTemplate(dirname(__FILE__) . '/' . 'mobileFriendRequestList.latte');
 		} else {
 			$this->renderTemplate(dirname(__FILE__) . '/' . 'friendRequestList.latte');

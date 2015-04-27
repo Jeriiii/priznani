@@ -2,6 +2,7 @@
 
 use NetteExt\Helper\HelperRegistrator;
 use Nette\Security\User;
+use NetteExt\EnvironmentDetector;
 
 /**
  * BaseHelperPresenter Description
@@ -21,10 +22,15 @@ class BaseProjectPresenter extends Nette\Application\UI\Presenter {
 	 * @var \NetteExt\TemplateManager\TemplateManager @inject */
 	public $templateManager;
 
+	/** @var EnvironmentDetector Detekuje, zda aplikace běží na mobilní verzi */
+	public $environment;
+
 	protected function startup() {
 		parent::startup();
 		$this->testMode = $this->context->parameters["testMode"];
 		$this->productionMode = $this->context->parameters["productionMode"];
+		/* musí se deklarovat předtím, než mu templateManager změní view */
+		$this->environment = new EnvironmentDetector($this->name, $this->view, $this->deviceDetector, new Mvl());
 		if ($this->deviceDetector->isMobile()) {
 			$this->templateManager->setTemplates($this, new Mvl());
 		}
