@@ -12,4 +12,13 @@
 	$('#conversations').on('click', 'li', function(){
 		window.location = $(this).find('.conversation-link').attr('href');		
 	});
+	
+	/**
+	 * fix rozbití stylů při odeslání zprávy
+	 */
+	$.nette.ext('messageSend', {
+		success: function () {/* úspěch operace z nette.ajax */
+			$('.message-new-form').trigger("create");/* znovuaplikování jQueryMobile na stream */
+		}
+	});
 });
