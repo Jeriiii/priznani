@@ -61,12 +61,10 @@
 			{includeblock 'layoutBloks/menu/menu-pos.latte'}
 			<div data-role="panel" id="leftmenu" data-position="left" data-display="overlay" >
 				{block leftMenu}
-					{cache}
 						<ul data-role="listview">
 							{include #posmenuMobile}
 							{block inLeftMenu}{/block}
 						</ul>
-					{/cache}
 				{/block}
 				
 			</div><!-- /panel -->
