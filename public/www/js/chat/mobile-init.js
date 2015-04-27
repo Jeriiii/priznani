@@ -13,12 +13,10 @@
 		window.location = $(this).find('.conversation-link').attr('href');		
 	});
 	
-	/**
-	 * fix rozbití stylů při odeslání zprávy
-	 */
-	$.nette.ext('messageSend', {
+	/* přenačtení stylů, když jde nette ajax*/
+	$.nette.ext('chatStreamAjax', {
 		success: function () {/* úspěch operace z nette.ajax */
-			$('.message-new-form').trigger("create");/* znovuaplikování jQueryMobile na stream */
+			$('#chat-stream form').trigger("create");/* znovuaplikování jQueryMobile na stream */
 		}
 	});
 });
