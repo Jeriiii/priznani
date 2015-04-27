@@ -22,24 +22,7 @@
 {/block}
 	
 {block userMenu}
-	<li><a n:href=":Search:Search:" class="add-friend" title="Hledat přátele">Hledat přátele</a></li>
-	{if $user->isLoggedIn()}
-		<li><a n:href=":Profil:Edit:default" class="edit" title="Editovat profil">Editovat profil</a></li>
-		<li><a n:href=":Profil:Show:default" class="profile" title="Muj profil">Můj profil</a></li>
-	{/if}
-	<li><a n:href=":Profil:Galleries:userGalleryNew" class="add-gallery" title="Profil">Vytvořit galerii</a></li>
-	{if $user->isLoggedIn()}
-		<li><a n:href=":Profil:Galleries:default" title="Editovat profil">Moje galerie</a></li>
-		{if $loggedUser->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
-			{includeblock 'mobileNavigation.latte'}
-			{include #friendRequest}
-			{include #friends}
-			{include #markedFromOther}
-		{else}
-			<li><a n:href="DatingRegistration:" class="btn-main btn-small">Doplnit info o sobě</a></li>
-		{/if}
-	{/if}
-	
+
 {/block}
 
 {block content}

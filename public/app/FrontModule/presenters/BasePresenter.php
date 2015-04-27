@@ -62,6 +62,12 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	/** @var \POS\Model\PaymentDao @inject */
 	public $paymentDao;
 
+	/** @var \POS\Model\FriendRequestDao @inject */
+	public $friendRequestDao;
+
+	/** @var \POS\Model\YouAreSexyDao @inject */
+	public $youAreSexyDao;
+
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
@@ -126,6 +132,10 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	public function beforeRender() {
 		if ($this->getUser()->isLoggedIn()) {
 			$this->template->identity = $this->getUser()->getIdentity();
+		}
+		if ($this->deviceDetector->isMobile() && $this->getUser()->isLoggedIn()) {/* údaje pro pravé menu na mobilu */
+			$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->getUser()->id)->count();
+			$this->template->countSexy = $this->youAreSexyDao->countToUser($this->getUser()->id);
 		}
 
 		$this->template->domain = $this->domain;

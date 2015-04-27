@@ -124,8 +124,6 @@ class OnePagePresenter extends BasePresenter {
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
 		$this->template->loggedUser = $this->loggedUser;
 
-		$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->userID)->count();
-		$this->template->countSexy = $this->youAreSexyDao->countToUser($this->userID);
 		$this->template->isUserPaying = $this->paymentDao->isUserPaying($this->userID);
 		$this->template->countVerificationRequests = $this->verificationPhotoDao->findByUserID($this->user->id)->count();
 		if ($this->getUser()->isLoggedIn()) {
