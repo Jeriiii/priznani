@@ -2,19 +2,24 @@
     {control css 'profile/mobileShow.less'}
 {/block}
 
+{block scripts}
+	{control js 'streamMobile/nette.mobile.ext.js', 'stream.js', 'streamMobile/support.js'}
+	<script>
+		/* stream */
+		$(document).ready(function(){
+			$("body").stream({
+				addoffset: 4,
+				offsetName: 'profilStream-offset'
+			});
+		});
+	</script>
+{/block}
 
 {block foot}
 
-<script>
-	$(document).ready(function () {
-		$("body").stream({
-			rows: {$count},
-			addoffset: 4,
-			offsetName: 'profilStream-offset'
-		});
-	});
-</script>
 {/block}
+
+
 {block content}
 <header id="profile-header">
 	{$userData|showProfMinDiv: NULL, FALSE}

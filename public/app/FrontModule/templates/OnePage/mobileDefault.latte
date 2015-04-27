@@ -5,7 +5,15 @@
 {/block}
 
 {block scripts}
-	{control js 'onepage/nette.mobile.ext.js', 'onepage/default.js', 'stream.js', 'onepage/mobile.js'}
+	{control js 'streamMobile/nette.mobile.ext.js', 'onepage/default.js', 'stream.js', 'streamMobile/support.js'}
+	<script>
+		/* stream */
+		$(document).ready(function(){
+			$("body").stream({
+				addoffset: 4
+			});
+		});		
+	</script>
 {/block}
 
 {* doplnění položek do levého menu *}

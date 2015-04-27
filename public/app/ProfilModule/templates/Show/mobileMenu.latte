@@ -3,7 +3,7 @@
 {block menu}
 
 <nav class="ui-grid-b profile-middlemenu">
-	<a n:href="default $userID" class="ui-block-a ui-btn ui-shadow">ZEĎ</a>
+	<a n:href="default $userID" class="ui-block-a ui-btn ui-shadow ui-btn-active">ZEĎ</a>
 	<a n:href="userImages $userID" class="ui-block-b ui-btn ui-shadow {if isset($active) && $active == "images"}ui-btn-active{/if}">FOTKY</a>
 	<a n:href="userInfo $userID" class="ui-block-c ui-btn ui-shadow {if isset($active) && $active == "info"}ui-btn-active{/if}">INFO</a>
 	{if $userData->verified}
