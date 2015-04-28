@@ -93,8 +93,8 @@
 
 	/* zkontroluje, zda je uživatel na konci seznamu. Když ano, zavolá prodloužení */
 	function visibleCheckStream() {
-		var documentScrollTop = jQuery(document).scrollTop();
-		var viewportHeight = jQuery(window).height();
+		var documentScrollTop = $(document).scrollTop();
+		var viewportHeight = $(window).height();
 
 		var minTop = documentScrollTop;
 		var maxTop = documentScrollTop + viewportHeight;
