@@ -42,7 +42,9 @@
 		/* název snippetu, který zastaví dotazování, je-li prázdný */
 		snippetName: '',
 		/* automatické načtení dalších dat při srolování na konec stránky */
-		autoLoadData: true
+		autoLoadData: true,
+		/* funkce která se zavolá po doběhnutí ajaxového požadavku */
+		fnAjaxSuccess: function(data, status){}
 	};
 
 	/**
@@ -59,7 +61,6 @@
 		if ($.fn.stream.run) {
 			setOffset(this.opts);
 			var ajaxUrl = getAjaxUrl(this.opts, this.ajaxLocation);
-			
 			ajax(ajaxUrl, this.opts);
 			
 			$btnNext.show();
@@ -68,6 +69,17 @@
 			$(this.opts.msgElement).text(this.opts.msgText);
 			$(this.opts.streamLoader).hide();
 			$(this.opts.btnNext).hide();
+		}
+	}
+	
+	function fnAjaxSuccess(opts) {
+		return function(data, status, jqXHR) {
+			var snippetName = opts.snippetName;
+			if (snippetName != '' && data.snippets[snippetName] == "") {//pokud snippet už neobnovuje data
+				$.fn.stream.run = false;//zastaví dotazování
+			}
+
+			opts.fnAjaxSuccess(data, status);
 		}
 	}
 
@@ -114,28 +126,11 @@
 	 * Má limit i offset a vrací výsledky.
 	 * @param {Object} opts
 	 */
-	function ajax(ajaxUrl, opts) {
-		var snippetName = opts.snippetName;
+	function ajax(ajaxUrl, opts) {		
 		$.nette.ajax({
 			url: ajaxUrl,
 			async: false,
-			success: function (data, status, jqXHR) {
-				if (data.snippets['snippet-userStream-posts'] == "") {//pokud snippet už neobnovuje data
-					$.fn.stream.run = false;//zastaví dotazování
-				}
-				if (data.snippets['snippet-profilStream-posts'] == "") {//pokud snippet už neobnovuje data
-					$.fn.stream.run = false;//zastaví dotazování
-				}
-				if (data.snippets[snippetName] == "") {//pokud snippet už neobnovuje data
-					$.fn.stream.run = false;//zastaví dotazování
-				}
-				if (data.snippets['snippet-valChatMessages-stream-messages'] == "" || 
-						data.snippets['snippet-conversation-stream-messages'] == "") {//pokud snippet už neobnovuje data
-					$.fn.stream.run = false;//zastaví dotazování
-				} else {
-					$("#chat-stream #stream").scrollTop(30 * 50);/* posunutí chat streamu o kus níž, když se načtou data */
-				}
-			},
+			success: fnAjaxSuccess(opts),
 			error: function (jqXHR, status, errorThrown) {
 				$.fn.stream.run = false;
 			}

@@ -31,30 +31,12 @@ class PeopleByAgeStatistics extends Statistics {
 	 */
 	public function countByInterval() {
 		$ages = array(
-			array(
-				'from' => 18,
-				'to' => 25
-			),
-			array(
-				'from' => 26,
-				'to' => 30
-			),
-			array(
-				'from' => 31,
-				'to' => 35
-			),
-			array(
-				'from' => 36,
-				'to' => 40
-			),
-			array(
-				'from' => 40,
-				'to' => 50
-			),
-			array(
-				'from' => 50,
-				'to' => 200
-			),
+			array('from' => 18, 'to' => 25),
+			array('from' => 26, 'to' => 30),
+			array('from' => 31, 'to' => 35),
+			array('from' => 36, 'to' => 40),
+			array('from' => 40, 'to' => 50),
+			array('from' => 50, 'to' => 200),
 		);
 		$agesContainer = array();
 

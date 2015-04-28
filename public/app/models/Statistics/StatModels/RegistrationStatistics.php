@@ -16,7 +16,7 @@ use POS\Model\UserDao;
  */
 class RegistrationStatistics extends Statistics {
 
-	/** @var \POS\Model\UserDao @inject */
+	/** @var \POS\Model\UserDao */
 	private $userDao;
 
 	public function __construct(UserDao $userDao) {
@@ -29,7 +29,7 @@ class RegistrationStatistics extends Statistics {
 	 * @param DateTime $fromDate Počáteční datum, od kdy chci vědět registrace.
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function countRegByInterval($typeOfInterval, $fromDate) {
+	public function countItemsByInterval($typeOfInterval, $fromDate) {
 		switch ($typeOfInterval) {
 			case self::DAY:
 				return $this->userDao->countRegByDay($fromDate);

@@ -29,7 +29,7 @@ class StreamStatusStatistics extends Statistics {
 	 * @param DateTime $fromDate Počáteční datum, od kdy chci vědět registrace.
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function countRegByInterval($typeOfInterval, $fromDate) {
+	public function countItemsByInterval($typeOfInterval, $fromDate) {
 		switch ($typeOfInterval) {
 			case self::DAY:
 				return $this->streamDao->countStatusByDay($fromDate);
