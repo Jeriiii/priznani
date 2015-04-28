@@ -26,6 +26,7 @@
 					</div>
 				{/foreach}
 			{/ifset}
+			{*if $isLast}<span class='isLast'><!-- isLast --></span>{/if*}
 		</div>
 		<div n:snippet="new-stream-messages" data-ajax-append="true">
 			{ifset $newMessages}

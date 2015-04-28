@@ -66,10 +66,18 @@
 			$btnNext.show();
 		} else {
 			/* Nejsou-li žádné další příspěvky, vypíše hlášku, že už nejsou */
-			$(this.opts.msgElement).text(this.opts.msgText);
-			$(this.opts.streamLoader).hide();
-			$(this.opts.btnNext).hide();
+			hideBtn(this.opts);
 		}
+	}
+	
+	/**
+	 * Schová tlačítko a všechno co s tím souvisí.
+	 * @param {Object} opts
+	 */
+	function hideBtn(opts) {
+		$(opts.msgElement).text(opts.msgText);
+		$(opts.streamLoader).hide();
+		$(opts.btnNext).remove();
 	}
 	
 	/**
@@ -82,8 +90,9 @@
 			var snippetName = opts.snippetName;
 			if (snippetName != '' && data.snippets[snippetName] == "") {//pokud snippet už neobnovuje data
 				$.fn.stream.run = false;//zastaví dotazování
+				hideBtn(opts);
+				
 			}
-
 			opts.fnAjaxSuccess(data, status);
 		};
 	}
