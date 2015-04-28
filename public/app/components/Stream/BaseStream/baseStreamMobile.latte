@@ -56,7 +56,7 @@
 						{/if}
 					{/ifset}
 					{ifset $dataItem->confessionID}
-						<a href="{plink Page:confession id => $dataItem->confessionID}" title="Přiznání o sexu"><h3>Přiznání</h3></a>
+						<a href="{plink :Page:confession id => $dataItem->confessionID}" title="Přiznání o sexu"><h3>Přiznání</h3></a>
 						<p>{$dataItem->confession->note}</p>
 						<div class="react-menu">
 							<div id="navbar-{$dataItem->id}" data-role="navbar">
@@ -82,7 +82,7 @@
 					{/ifset}
 
 					{ifset $dataItem->adviceID}
-						<a href="{plink Page:advice id => $dataItem->adviceID}" title="Poradna o sexu"><h3>Poradna</h3></a>
+						<a href="{plink :Page:advice id => $dataItem->adviceID}" title="Poradna o sexu"><h3>Poradna</h3></a>
 						<p>{$dataItem->advice->note}</p>
 					{/ifset}
 					{ifset $dataItem->statusID}

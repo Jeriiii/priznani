@@ -10,7 +10,6 @@
  */
 use Nette\Application\UI\Form as Frm;
 use POSComponent\Stream\UserStream\UserStream;
-use POS\UserPreferences\StreamUserPreferences;
 use POSComponent\UsersList\FriendRequestList;
 use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\BlokedUsersList;
@@ -20,12 +19,6 @@ use NetteExt\DaoBox;
 use POSComponent\Stream\StreamInicializator;
 
 class OnePagePresenter extends BasePresenter {
-
-	/**
-	 * Vybere do streamu nejvhodnější data vzhledem k preferencím daného uživatele
-	 * @var \POS\UserPreferences\StreamUserPreferences
-	 */
-	public $streamUserPreferences;
 
 	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
@@ -110,9 +103,6 @@ class OnePagePresenter extends BasePresenter {
 
 	/** @var \POS\Model\RateImageDao @inject */
 	public $rateImageDao;
-
-	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
-	public $dataForStream;
 	private $userID;
 
 	public function actionDefault() {
@@ -144,7 +134,7 @@ class OnePagePresenter extends BasePresenter {
 		$session = $this->getSession();
 		$streamInicializator = new StreamInicializator();
 
-		return $streamInicializator->createUserStream($this, $session, $this->loggedUser);
+		return $streamInicializator->createUserStream($this, $session, $this->user, $this->loggedUser);
 	}
 
 	public function createComponentJs() {

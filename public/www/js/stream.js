@@ -12,7 +12,7 @@
 		setOpts(opts);
 		this.ajaxLocation = getAjaxLocation(opts);
 		
-		initNextBtn(opts, this.ajaxLocation);
+		initNextBtn(opts);
 		
 		/* rozhodne, zda se má používat automatické donačítání dat */
 		if(opts.autoLoadData) {
@@ -72,6 +72,11 @@
 		}
 	}
 	
+	/**
+	 * Funkce která se spustí po úspěšném provedení AJAX požadavku.
+	 * @param {Object} opts
+	 * @returns {Function}
+	 */
 	function fnAjaxSuccess(opts) {
 		return function(data, status, jqXHR) {
 			var snippetName = opts.snippetName;
@@ -80,7 +85,7 @@
 			}
 
 			opts.fnAjaxSuccess(data, status);
-		}
+		};
 	}
 
 	/* naplánuje další kontrolu za daný časový interval(půl vteřinu) */
@@ -158,11 +163,9 @@
 	/**
 	 * 
 	 * @param {type} opts
-	 * @param {type} ajaxLocation
 	 * @returns {undefined}
 	 */
-	function initNextBtn(opts, ajaxLocation) {
-		
+	function initNextBtn(opts) {
 		$(opts.linkElement).click(function(e) {
 			e.preventDefault();
 			changeStream();

@@ -13,6 +13,7 @@ use POSComponent\Stream\BaseStream\BaseStream;
 use POSComponent\PhotoRating;
 use NetteExt\DaoBox;
 use Nette\Http\Session;
+use Nette\Security\User;
 
 class UserStream extends BaseStream {
 
@@ -49,9 +50,15 @@ class UserStream extends BaseStream {
 	/** @var Session */
 	private $session;
 
-	public function __construct($data, DaoBox $daoBox, Session $session, $userData) {
+	/** @var User Přihlášený/odhlášený uživatel */
+	private $user;
+
+	public function __construct($data, DaoBox $daoBox, Session $session, $userData, $user = null) {
 		parent::__construct($data, $daoBox, $userData);
 
+		if (!empty($user)) {
+			$this->user = $user;
+		}
 		$this->session = $session;
 		$this->setDaos($daoBox);
 	}
@@ -76,12 +83,17 @@ class UserStream extends BaseStream {
 		} else {
 			$templateName = "../UserStream/userStream.latte";
 		}
-		$user = $this->presenter->user;
+		if (!empty($this->user)) {
+			$user = $this->user;
+		} else {
+			$user = $this->presenter->user;
+		}
 
 		if ($user->isLoggedIn()) {
 			$this->showQuestion();
 		}
 
+		$this->template->user = $user;
 		$this->renderBase($mode, $templateName);
 	}
 

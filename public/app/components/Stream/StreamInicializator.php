@@ -10,6 +10,7 @@ namespace POSComponent\Stream;
 use NetteExt\DaoBox;
 use POSComponent\Stream\UserStream\UserStream;
 use POS\UserPreferences\StreamUserPreferences;
+use Nette\Security\User;
 
 /**
  * Správně nastaví komponentu streamu.
@@ -22,14 +23,16 @@ class StreamInicializator {
 	 * Vytvoří a vrátí user stream.
 	 * @param \Nette\Application\UI\Presenter $presenter Presenter, ze kterého se čtou dao.
 	 * @param \Nette\Http\Session $session
+	 * @param \Nette\Security\User $user Přihlášený uživatel
+	 * @param bool $isLoggedIn Je uživatel přihlášen?
 	 * @param \Nette\Database\Table\ActiveRow|\Nette\ArrayHash $loggedUser Přihlášený uživatel.
 	 * @return UserStream
 	 */
-	public function createUserStream($presenter, $session, $loggedUser = null) {
-		$dataForStream = $this->getCorrectDataForStream($presenter, $session, $loggedUser);
+	public function createUserStream($presenter, $session, User $user, $loggedUser = null) {
+		$dataForStream = $this->getCorrectDataForStream($presenter, $session, $user, $loggedUser);
 		$daoBox = $this->getDaoBoxUserStream($presenter);
 
-		return new UserStream($dataForStream, $daoBox, $session, $loggedUser);
+		return new UserStream($dataForStream, $daoBox, $session, $loggedUser, $user);
 	}
 
 	/**
@@ -42,8 +45,8 @@ class StreamInicializator {
 	/**
 	 * Vrátí preferované příspěvky uživatele do streamu.
 	 */
-	private function getCorrectDataForStream($presenter, $session, $loggedUser) {
-		if ($presenter->getUser()->isLoggedIn() && isset($loggedUser->property)) {
+	private function getCorrectDataForStream($presenter, $session, User $user, $loggedUser) {
+		if ($user->isLoggedIn() && isset($loggedUser->property)) {
 			$streamPreferences = $this->createStreamUserPreferences($presenter, $session, $loggedUser);
 			return $streamPreferences->getBestStreamItems();
 		} else {
