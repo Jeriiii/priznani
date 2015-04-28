@@ -10,8 +10,8 @@ namespace SafeModule;
  */
 class TestsPresenter extends BasePresenter {
 
-	public function renderDefault($param) {
-		$this->template->qTestPath = WWW_DIR . '/../tester/QUnits';
+	public function renderDefault() {
+		$this->template->qTestPath = $this->template->basePath . '/tests/qunits';
 	}
 
 }
