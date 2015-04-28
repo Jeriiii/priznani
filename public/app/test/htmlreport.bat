@@ -1,3 +1,6 @@
+START http://localhost/nette/pos/public/www/safe.tests/
+
+
 @echo "Vytvareni html vystupu..."
 set CONFIG_FILE="%~dp0config\behat.yml"
 set BEHAT="%~dp0..\..\bin\behat.bat"
