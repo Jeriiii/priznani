@@ -17,6 +17,7 @@ use POSComponent\UsersList\BlokedUsersList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
 use NetteExt\Helper\ShowUserDataHelper;
 use NetteExt\DaoBox;
+use POSComponent\Stream\StreamInicializator;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -116,7 +117,6 @@ class OnePagePresenter extends BasePresenter {
 
 	public function actionDefault() {
 		$this->userID = $this->getUser()->getId();
-		$this->fillCorrectDataForStream();
 	}
 
 	public function renderDefault() {
@@ -141,47 +141,10 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentUserStream() {
-		$daoBox = $this->getDaoBoxUserStream();
 		$session = $this->getSession();
+		$streamInicializator = new StreamInicializator();
 
-		return new UserStream($this->dataForStream, $daoBox, $session, $this->loggedUser);
-	}
-
-	/**
-	 * Vrátí DaoBox naplněný pro user stream.
-	 */
-	private function getDaoBoxUserStream() {
-		$daoBox = new DaoBox;
-		$daoBox->likeStatusDao = $this->likeStatusDao;
-		$daoBox->imageLikesDao = $this->imageLikesDao;
-		$daoBox->userDao = $this->userDao;
-		$daoBox->statusDao = $this->statusDao;
-
-		$daoBox->streamDao = $this->streamDao;
-		$daoBox->userGalleryDao = $this->userGalleryDao;
-		$daoBox->userImageDao = $this->userImageDao;
-		$daoBox->confessionDao = $this->confessionDao;
-
-		$daoBox->userPositionDao = $this->userPositionDao;
-		$daoBox->enumPositionDao = $this->enumPositionDao;
-		$daoBox->userPlaceDao = $this->userPlaceDao;
-		$daoBox->enumPlaceDao = $this->enumPlaceDao;
-
-		$daoBox->likeImageCommentDao = $this->likeImageCommentDao;
-		$daoBox->commentImagesDao = $this->commentImagesDao;
-		$daoBox->likeStatusCommentDao = $this->likeStatusCommentDao;
-		$daoBox->commentStatusesDao = $this->commentStatusesDao;
-
-		$daoBox->likeConfessionCommentDao = $this->likeConfessionCommentDao;
-		$daoBox->commentConfessionsDao = $this->commentConfessionsDao;
-		$daoBox->likeConfessionDao = $this->likeConfessionDao;
-		$daoBox->usersNewsDao = $this->usersNewsDao;
-
-		$daoBox->rateImageDao = $this->rateImageDao;
-		$daoBox->imageLikesDao = $this->imageLikesDao;
-		$daoBox->userCategoryDao = $this->userCategoryDao;
-
-		return $daoBox;
+		return $streamInicializator->createUserStream($this, $session, $this->loggedUser);
 	}
 
 	public function createComponentJs() {
@@ -232,26 +195,6 @@ class OnePagePresenter extends BasePresenter {
 
 	protected function createComponentMarkedFromOther($name) {
 		return new MarkedFromOther($this->paymentDao, $this->youAreSexyDao, $this->getUser()->id, $this, $name);
-	}
-
-	/**
-	 * Uloží preferované příspěvky uživatele do streamu.
-	 */
-	private function fillCorrectDataForStream() {
-		if ($this->getUser()->isLoggedIn() && isset($this->loggedUser->property)) {
-			$this->initializeStreamUserPreferences();
-			$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
-		} else {
-			$this->dataForStream = $this->streamDao->getForUnloggedUser("DESC");
-		}
-	}
-
-	/**
-	 * Nastavý preferované příspěvky uživatele.
-	 */
-	private function initializeStreamUserPreferences() {
-		$session = $this->getSession();
-		$this->streamUserPreferences = new StreamUserPreferences($this->loggedUser, $this->userDao, $this->streamDao, $this->userCategoryDao, $session);
 	}
 
 }
