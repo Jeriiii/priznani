@@ -1,5 +1,7 @@
 <?php
 
+namespace SafeModule;
+
 /**
  * Slouží pro instalaci ostatních složek, které git necomituje.
  *
@@ -13,7 +15,7 @@ use NetteExt\Install\ClearCasch;
 use POS\Model\UserPropertyDao;
 use NetteExt\DBMover\DBMover;
 
-class InstallPresenter extends BaseProjectPresenter {
+class InstallPresenter extends BasePresenter {
 
 	/** @var \POS\Model\DatabaseDao @inject */
 	public $dbDao;
@@ -35,18 +37,6 @@ class InstallPresenter extends BaseProjectPresenter {
 
 	/** @var \POS\Model\ConfessionDao @inject */
 	public $confessionDao;
-
-	public function startup() {
-		parent::startup();
-		// ochrana proti spuštění instalace na ostrém serveru
-		if ($this->productionMode) {
-			$this->redirect("OnePage:");
-		}
-
-		$this->setLayout("layoutInstall");
-
-		//$this->recalculateUserCategories();
-	}
 
 	/**
 	 * Vloží všechny kombinace kategorií
