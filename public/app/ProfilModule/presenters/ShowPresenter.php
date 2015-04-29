@@ -19,6 +19,9 @@ use POSComponent\CropImageUpload\CropImageUpload;
 use NetteExt\DaoBox;
 use NetteExt\Helper\ShowUserDataHelper;
 use POS\Ext\LastActive;
+use POSComponent\Confirm;
+use POS\UserPreferences\StreamUserPreferences;
+use POS\UserPreferences\SearchUserPreferences;
 
 class ShowPresenter extends ProfilBasePresenter {
 
@@ -108,6 +111,9 @@ class ShowPresenter extends ProfilBasePresenter {
 
 	/** @var \POS\Model\UserBlokedDao @inject */
 	public $userBlokedDao;
+
+	/** @var \POS\Model\UserCategoryDao @inject */
+	public $userCategoryDao;
 	public $dataForStream;
 
 	/** @var \Nette\Database\Table\ActiveRow|\Nette\ArrayHash */
@@ -204,6 +210,32 @@ class ShowPresenter extends ProfilBasePresenter {
 		$this->template->vigor = $this->getVigor($user->property->age);
 	}
 
+	/**
+	 * Zablokuje uživatele.
+	 * @param int $blockUserID Id uživatele, který se má blokovat.
+	 */
+	public function handleBlockUser($blockUserID) {
+		/* zablokuje uživatele */
+		$this->userBlokedDao->addBlocking($this->user->id, $blockUserID);
+
+		/* vyčistí stream */
+		$streamUserPref = new StreamUserPreferences($this->loggedUser, $this->userDao, $this->streamDao, $this->userCategoryDao, $this->session);
+		$streamUserPref->calculate();
+
+		/* vyčistí vyhledávání */
+		$searchUserPref = new SearchUserPreferences($this->loggedUser, $this->userDao, $this->userCategoryDao, $this->session);
+		$searchUserPref->calculate();
+
+		$this->flashMessage("Uživatel byl zablokován");
+		$this->redirect("this");
+	}
+
+	public function handleUnblockUser($unblockUserID) {
+		$this->userBlokedDao->removeBloking($this->user->id, $unblockUserID);
+		$this->flashMessage("Uživatel byl odblokován");
+		$this->redirect("this");
+	}
+
 	private function getVigor($age) {
 		Frm\DatingRegistrationBaseForm::getVigor($age);
 	}
@@ -292,6 +324,15 @@ class ShowPresenter extends ProfilBasePresenter {
 		$daoBox = $this->getDaoBoxProfilStream();
 
 		return new ProfilStream($this->dataForStream, $daoBox, $this->loggedUser);
+	}
+
+	protected function createComponentBlockUser($name) {
+		$blockUser = new Confirm($this, $name);
+		$blockUser->setTittle("Blokovat uživatele");
+		$blockUser->setMessage("Opravdu chcete zablokovat tohoto uživatele?");
+		$blockUser->setBtnText("BLOKOVAT UŽIVATELE");
+		$blockUser->setBtnClass('profile-btn blockUserBtn');
+		return $blockUser;
 	}
 
 	/**

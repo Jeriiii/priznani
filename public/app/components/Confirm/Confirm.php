@@ -13,44 +13,28 @@ namespace POSComponent;
 
 class Confirm extends BaseProjectControl {
 
-	/**
-	 * @var boolean TRUE = odkaz se přegeneruje plinkem, FALSE = odkaz se nechá tak jak je.
-	 */
+	/** @var boolean TRUE = odkaz se přegeneruje plinkem, FALSE = odkaz se nechá tak jak je. */
 	private $plink;
 
-	/**
-	 * @var boolean TRUE = do tlačítka bude přidán text z prom. $tittle, FALSE = tlačítko bude bez textu - např. pro obrázky.
-	 */
+	/** @var boolean TRUE = do tlačítka bude přidán text z prom. $tittle, FALSE = tlačítko bude bez textu - např. pro obrázky. */
 	private $btnSetText;
 
-	/**
-	 * @var string Titulek tlačítka
-	 */
+	/** @var string Titulek tlačítka */
 	private $tittle;
 
-	/**
-	 * @var string Zpráva, která má uživatele vyzvat k akci např. "Opravdu chcete smazat obrázek?"
-	 */
+	/** @var string Zpráva, která má uživatele vyzvat k akci např. "Opravdu chcete smazat obrázek?" */
 	private $message;
 
-	/**
-	 * @var string Zpráva, která má uživatele vyzvat k akci např. "Opravdu chcete smazat obrázek?"
-	 */
+	/** @var string Zpráva, která má uživatele vyzvat k akci např. "Opravdu chcete smazat obrázek?" */
 	private $link;
 
-	/**
-	 * @var string Text tlačítka, když má být jiný než $tittle
-	 */
+	/** @var string Text tlačítka, když má být jiný než $tittle */
 	private $btnText = "";
 
-	/**
-	 * @var string Třída tlačítka, pokud ho chcete třeba nastylovat
-	 */
+	/** @var string Třída tlačítka, pokud ho chcete třeba nastylovat */
 	private $btnClass = "";
 
-	/**
-	 * @var string Třída potvryovac9ho tlačítka, pokud ho chcete třeba nastylovat
-	 */
+	/** @var string Třída potvryovac9ho tlačítka, pokud ho chcete třeba nastylovat */
 	private $confirmBtnClass = "";
 
 	public function __construct($parent, $name, $btnSetText = TRUE, $plink = TRUE) {

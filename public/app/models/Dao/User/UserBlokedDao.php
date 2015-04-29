@@ -54,4 +54,41 @@ class UserBlokedDao extends AbstractDao {
 		return $sel;
 	}
 
+	/**
+	 * Zablokuje uživatele.
+	 * @param int $ownerId Id uživatele, který někoho blokuje.
+	 * @param int $blokedId Id uživatele, který je blokován.
+	 */
+	public function addBlocking($ownerId, $blokedId) {
+		/* zruší přátelství */
+		$sel = $this->createSelection(FriendDao::TABLE_NAME);
+		$sel->where(FriendDao::COLUMN_USER_ID_1, $ownerId);
+		$sel->where(FriendDao::COLUMN_USER_ID_2, $blokedId);
+		$sel->delete();
+
+		$sel = $this->createSelection(FriendDao::TABLE_NAME);
+		$sel->where(FriendDao::COLUMN_USER_ID_1, $blokedId);
+		$sel->where(FriendDao::COLUMN_USER_ID_2, $ownerId);
+		$sel->delete();
+
+		/* zablokuje uživatele */
+		$sel = $this->getTable();
+		return $sel->insert(array(
+				self::COLUMN_OWNER_ID => $ownerId,
+				self::COLUMN_BLOKED_ID => $blokedId
+		));
+	}
+
+	/**
+	 * Odstraní blokování od uživatele $ownerId k uživateli $blokedId
+	 * @param int $ownerId Id toho, kdo blokuje.
+	 * @param int $blokedId Id toho, kdo je blokován.
+	 */
+	public function removeBloking($ownerId, $blokedId) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_OWNER_ID, $ownerId);
+		$sel->where(self::COLUMN_BLOKED_ID, $blokedId);
+		$sel->delete();
+	}
+
 }

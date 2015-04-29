@@ -76,9 +76,10 @@
 							{control sendFriendRequest}
 						</div>
 					{/if}
-					<a href="#" tittle="Blokovat uživatele" id="blockUserBtn" class="profile-btn">Blokovat uživatele</a>
+					{var $link = array('blockUser!', array(blockUserID => $userData->id) )}
+					{control blockUser $userData->id, $userData->user_name, $link}
 				{else}
-					<a href="#" tittle="Blokovat uživatele" id="blockUserBtn" class="profile-btn">Odblokovat</a>					
+					<a n:href="unblockUser! unblockUserID => $userData->id" tittle="Odblokovat uživatele" class="profile-btn unblockUserBtn">Odblokovat</a>					
 				{/if}
 			{/if}
 			<div class="spacer"></div>
