@@ -59,4 +59,11 @@ class UserCategory {
 		return $this->section->categories;
 	}
 
+	/**
+	 * Přepočítá výsledky.
+	 */
+	public function calculate() {
+		$this->section->categories = null;
+	}
+
 }

@@ -66,6 +66,17 @@ class BaseUserPreferences {
 	}
 
 	/**
+	 * Přepočítá uživ. kategorie.
+	 */
+	protected function calculate() {
+		if (empty($this->userCategory)) {
+			$this->userCategory = new UserCategory($this->userProperty, $this->userCategoryDao, $this->session);
+		}
+
+		$this->userCategory->calculate();
+	}
+
+	/**
 	 * Vrátí kategorie, o které se přihlášený uživatel zajímá.
 	 * @param boolean $recalculate Přepočítá kategorie.
 	 * @return array IDs kategorií.

@@ -31,6 +31,7 @@ class SearchUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * kdy je cache prázdná.
 	 */
 	public function calculate() {
+		parent::calculate();
 		$categoryIDs = $this->getUserCategories(TRUE);
 		$users = $this->userDao->getByCategories($categoryIDs, $this->user->id);
 
