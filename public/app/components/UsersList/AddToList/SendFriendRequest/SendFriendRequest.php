@@ -38,7 +38,11 @@ class SendFriendRequest extends AddToList {
 	 */
 	public function render() {
 		$this->template->showForm = $this->showForm;
-		$this->template->setFile(dirname(__FILE__) . '/sendFriendRequest.latte');
+		if ($this->getEnvironment()->isMobile()) {
+			$this->template->setFile(dirname(__FILE__) . '/mobileSendFriendRequest.latte');
+		} else {
+			$this->template->setFile(dirname(__FILE__) . '/sendFriendRequest.latte');
+		}
 		$this->template->isSendRequest = $this->friendRequestDao->isRequestSend($this->userIDFrom, $this->userIDTo);
 		$this->template->render();
 	}

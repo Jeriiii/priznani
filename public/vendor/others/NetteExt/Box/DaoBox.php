@@ -16,6 +16,10 @@ use POS\Model\AbstractDao;
  */
 class DaoBox extends Box {
 
+	public function __construct($autoControl = TRUE) {
+		parent::__construct($autoControl);
+	}
+
 	/**
 	 * Obecný setter pro nastavení proměnných.
 	 * @param string $name Název proměnné.

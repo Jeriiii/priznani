@@ -1,0 +1,27 @@
+{var $activeActivities = TRUE;}
+
+{block head}
+	{control css 'activities/mobileDefault.less', 'activities/mobileStream.less'}
+{/}
+
+{block content}
+	{control mobileActivities}
+{/block}
+
+{block foot}
+{control js 'stream.js', 'activities/mobile.js'}
+
+<script>
+	$(document).ready(function () {
+		$("body").stream({
+			addoffset: {$addOffset},
+			autoLoadData: false,
+			offsetName: "mobileActivities-offset",
+			msgElement: ".stream-info-message",
+			msgText: "Žádné další aktivity nebyly nalezeny.",
+			snippetName: "snippet-mobileActivities-activities-list"
+		});
+	});
+</script>
+
+{/block}

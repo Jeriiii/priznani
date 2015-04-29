@@ -22,11 +22,15 @@ class FriendsList extends UsersList {
 	/** @var int ID uživatele - zobrazují se jeho přátelé */
 	private $userID;
 
-	public function __construct(FriendDao $friendDao, $userID, $parent, $name) {
+	/* info o tom, zda se obsah donačítá (když true, obsah je zobrazen vždy všechen) */
+	private $listAll = FALSE;
+
+	public function __construct(FriendDao $friendDao, $userID, $parent, $name, $listAll = FALSE) {
 		parent::__construct($parent, $name);
 
 		$this->userID = $userID;
 		$this->friendDao = $friendDao;
+		$this->listAll = $listAll;
 	}
 
 	/**
@@ -34,7 +38,14 @@ class FriendsList extends UsersList {
 	 */
 	public function render() {
 		parent::render();
-		$this->renderTemplate(dirname(__FILE__) . '/' . 'friendsList.latte');
+		if ($this->listAll) {
+			$this->template->friends = $this->friendDao->getList($this->userID);
+		}
+		if ($this->getEnvironment()->isMobile()) {
+			$this->renderTemplate(dirname(__FILE__) . '/' . 'mobileFriendsList.latte');
+		} else {
+			$this->renderTemplate(dirname(__FILE__) . '/' . 'friendsList.latte');
+		}
 	}
 
 	/**

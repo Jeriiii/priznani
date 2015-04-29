@@ -4,21 +4,18 @@
  * @copyright Copyright (c) 2014 Kukral COMPANY s.r.o.
  */
 
+namespace POS\Statistics;
+
+use POS\Model\UserDao;
+use POS\Model\StreamDao;
+use POS\Model\UserImageDao;
+
 /**
- * Stará se o správu statistik. Je možn= ho požádat o libovolnou statistiku. Počítání
+ * Stará se o správu statistik. Je možné ho požádat o libovolnou statistiku. Počítání
  * probíhá lazy až v momentě dotazu.
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-
-namespace POS\Statistics;
-
-use Nette\Database\Table\Selection;
-use POS\Model\UserDao;
-use POS\Model\StreamDao;
-use POS\Model\UserImageDao;
-use Nette\DateTime;
-
 class StatisticManager {
 
 	/** @var UserDao */

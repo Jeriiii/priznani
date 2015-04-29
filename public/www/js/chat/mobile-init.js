@@ -9,7 +9,14 @@
 	});
 	
 	/* kliknutí do konverzací - přesměrování na příslušný odkaz ve specifických případech */
-	$('#conversations li').click(function(){
+	$('#conversations').on('click', 'li', function(){
 		window.location = $(this).find('.conversation-link').attr('href');		
+	});
+	
+	/* přenačtení stylů, když jde nette ajax*/
+	$.nette.ext('chatStreamAjax', {
+		success: function () {/* úspěch operace z nette.ajax */
+			$('#chat-stream form').trigger("create");/* znovuaplikování jQueryMobile na stream */
+		}
 	});
 });

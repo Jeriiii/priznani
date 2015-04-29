@@ -1,0 +1,28 @@
+{block head}
+<link rel="stylesheet" href="//code.jquery.com/qunit/qunit-1.18.0.css">
+{/block}
+
+{block content}
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+<div id='container'></div>
+{/block}
+
+{block scripts}
+<script src="//code.jquery.com/qunit/qunit-1.18.0.js"></script>
+<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+<script>
+	var basePath = {$basePath};
+	var clear = function() {
+		clearTimeout();
+
+		$('#container').children().each(function(i, v) {
+			$(this).remove();
+		});
+	};
+</script>
+{include 'helloTest.latte'}
+{include 'streamJs.latte'}
+{/block}
+
+{block foot}

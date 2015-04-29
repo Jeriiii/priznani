@@ -129,6 +129,10 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 		} else {
 			$messages = $this->messages->limit($this->limit);
 		}
+
+		/* spočítá počet položek ve streamu */
+		$countItems = count($messages);
+		$this->template->isLast = $this->limit > $countItems ? true : false;
 		/* přetočení prvků, aby byla nejnovější zpráva poslední ze zpráv omezených limitem */
 		$this->template->messages = $this->reverseSelection($messages);
 	}

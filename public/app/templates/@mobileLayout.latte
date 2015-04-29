@@ -37,9 +37,9 @@
 				<nav id="topmenu" data-role="navbar" data-iconpos="top" data-grid="d">
 					<ul>
 						<li><a href="#leftmenu" class="" title="DATENODE.cz" data-iconpos="top" data-icon="grid"></a></li>
-						<li><a n:href="OnePage:" class="{ifset $activeHome}ui-btn-active{/ifset}" title="Domů" data-icon="home"></a></li>
-						<li><a n:href="Chat:conversations" id="chat-button" class="{ifset $activeChat}ui-btn-active{/ifset}" title="Chat"data-icon="comment"></a></li>
-						<li><a n:href="Activities:" id="activities-button" class="ui-btn-icon-top ui-icon-bell {ifset $activeActivities}ui-btn-active{/ifset}" title="title"></a></li>
+						<li><a n:href=":OnePage:" class="{ifset $activeHome}ui-btn-active{/ifset}" title="Domů" data-icon="home"></a></li>
+						<li><a n:href=":Chat:conversations" id="chat-button" class="{ifset $activeChat}ui-btn-active{/ifset}" title="Chat"data-icon="comment"></a></li>
+						<li><a n:href=":Activities:" id="activities-button" class="ui-btn-icon-top ui-icon-bell {ifset $activeActivities}ui-btn-active{/ifset}" title="title"></a></li>
 						<li><a href="#rightmenu" class="" title="Uživatelské menu" data-icon="user"></a></li>
 					</ul>
 				</nav>
@@ -48,7 +48,7 @@
 				{block orders}{/block}
 				{block nextAdmission}{/block}
 				{block beforeContent}{/block}
-				<ul data-role="listview">
+				<ul data-role="listview" class="flashlist">
 					<li n:foreach="$flashes as $flash" class='flash {$flash->type}'>
 						{$flash->message}
 					</li>
@@ -61,12 +61,10 @@
 			{includeblock 'layoutBloks/menu/menu-pos.latte'}
 			<div data-role="panel" id="leftmenu" data-position="left" data-display="overlay" >
 				{block leftMenu}
-					{cache}
 						<ul data-role="listview">
 							{include #posmenuMobile}
 							{block inLeftMenu}{/block}
 						</ul>
-					{/cache}
 				{/block}
 				
 			</div><!-- /panel -->
@@ -81,6 +79,23 @@
 							<li>Anonymní</li>
 						{/ifset}
 						{block userMenu}{/block}
+						<li><a n:href=":Search:Search:" class="add-friend" title="Hledat přátele">Hledat přátele</a></li>
+						{if $user->isLoggedIn()}
+							<li><a n:href=":Profil:Edit:default" class="edit" title="Editovat profil">Editovat profil</a></li>
+							<li><a n:href=":Profil:Show:default" class="profile" title="Muj profil">Můj profil</a></li>
+						{/if}
+						<li><a n:href=":Profil:Galleries:userGalleryNew" class="add-gallery" title="Profil">Vytvořit galerii</a></li>
+						{if $user->isLoggedIn()}
+							<li><a n:href=":Profil:Galleries:default" title="Editovat profil">Moje galerie</a></li>
+							{if $loggedUser->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
+								{includeblock 'mobileNavigation.latte'}
+								{include #friendRequest}
+								{include #friends}
+								{include #markedFromOther}
+							{else}
+								<li><a n:href="DatingRegistration:" class="btn-main btn-small">Doplnit info o sobě</a></li>
+							{/if}
+						{/if}
 					</ul>					
 				{/block}
 				{control userMenu}

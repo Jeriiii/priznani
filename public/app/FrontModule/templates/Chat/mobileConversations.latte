@@ -31,11 +31,12 @@
 	<script>
 		$(document).ready(function () {
 			$("body").stream({
-				addoffset: 10,
+				addoffset: 4,
 				msgElement: ".conversations-info-message",
 				msgText: "Žádné další konverzace nebyly nalezeny.",
 				offsetName: "mobileChat-mobileConversationList-offset",
-				snippetName: "snippet-mobileChat-mobileConversationList-conversations"
+				snippetName: "snippet-mobileChat-mobileConversationList-conversations",
+				autoLoadData: false
 			});
 		});
 	</script>

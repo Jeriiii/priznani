@@ -94,10 +94,27 @@ class BaseProjectControl extends Control {
 	 * @return DeviceDetector
 	 */
 	public function getDeviceDetector() {
+		if (!$this->getPresenter()) {
+			throw new Exception('Cannot detect device without presenter attached to control.');
+		}
 		if (empty($this->deviceDetector)) {
 			$this->deviceDetector = new DeviceDetector($this->getPresenter()->getSession());
 		}
 		return $this->deviceDetector;
+	}
+
+	/**
+	 * Vrátí prostředí, na němž aplikace právě běží
+	 * @return \NetteExt\EnvironmentDetector
+	 */
+	public function getEnvironment() {
+		if (!$this->getPresenter()) {
+			throw new Exception('Cannot detect environment without presenter attached to control.');
+		}
+		if (empty($this->getPresenter()->environment)) {
+			throw new Exception('The presenter has to have initialized environment detector variable.');
+		}
+		return $this->getPresenter()->environment;
 	}
 
 }

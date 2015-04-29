@@ -22,6 +22,9 @@ class BaseForm extends Form {
 	/** @var \NetteExt\DeviceDetector detektor zařízení */
 	public $deviceDetector;
 
+	/** @var \NetteExt\EnvironmentDetector detektor prostředí */
+	public $environment;
+
 	/*	 * ** BOOTSTRAP PROMĚNNÉ - použijí se jen při zavolání metody na boostrap vykreslení ** * */
 
 	/** @var string Třída celého formuláře */
@@ -49,6 +52,9 @@ class BaseForm extends Form {
 			$this->testMode = $this->getPresenter()->testMode;
 			$this->productionMode = $this->getPresenter()->productionMode;
 			$this->deviceDetector = new DeviceDetector($this->getPresenter()->getSession());
+			if (!empty($this->getPresenter()->environment)) {
+				$this->environment = $this->getPresenter()->environment;
+			}
 		}
 	}
 

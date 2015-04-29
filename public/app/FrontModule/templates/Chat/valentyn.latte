@@ -16,8 +16,14 @@
 		$("body").stream({
 			addoffset: 30,
 			offsetName: "valChatMessages-offset",
+			snippetName: "snippet-valChatMessages-stream-messages",
 			msgElement: ".stream-info-message",
-			msgText: "Žádné předchozí zprávy nebyly nalezeny."
+			msgText: "Žádné předchozí zprávy nebyly nalezeny.",
+			fnAjaxSuccess: function(data, status) {
+				if (data.snippets['snippet-valChatMessages-stream-messages'] != "") {
+					$("#chat-stream #stream").scrollTop(30 * 50);/* posunutí chat streamu o kus níž, když se načtou data */
+				}
+			}
 		});
 
 		$('body').chatConversationPage({

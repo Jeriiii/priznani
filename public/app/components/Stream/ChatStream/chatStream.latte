@@ -2,7 +2,7 @@
 	<div id="stream">
 		<div class="loaderbar">
 			<div class="stream-btn-next">
-				<a id="next-data-item-btn" n:href="getMoreData!" class="btn-main loadingbutton">Zobrazit předchozí zprávy</a>
+				<a id="next-data-item-btn" n:href="getMoreData!" class="btn-main loadingbutton ui-btn">Zobrazit předchozí zprávy</a>
 			</div>
 			<div class="stream-message loading-message"></div>
 			<div id="stream-loader"><img src="{$basePath}/images/loadingGifs/skypelike.GIF"></div>
@@ -26,6 +26,7 @@
 					</div>
 				{/foreach}
 			{/ifset}
+			{*if $isLast}<span class='isLast'><!-- isLast --></span>{/if*}
 		</div>
 		<div n:snippet="new-stream-messages" data-ajax-append="true">
 			{ifset $newMessages}

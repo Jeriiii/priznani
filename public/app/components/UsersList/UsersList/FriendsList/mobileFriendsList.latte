@@ -1,0 +1,12 @@
+<div n:snippet="friends" class="friendlist">
+{ifset $friends}
+	{foreach $friends as $friend}
+		<div class="friend-item-container{if $iterator->getCounter() % 3 == 0} third-multiple{/if}">
+		{$friend->user2|showProfDiv}
+		</div>
+	{/foreach}
+	{if !$iterations}
+		<p class="nofriends">Zatím nemáte žádné přátele. Použijte vyhledávání a nějaké nalezněte :) .</p>
+	{/if}
+{/ifset}
+</div>

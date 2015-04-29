@@ -18,7 +18,12 @@ class ProfilStream extends BaseStream {
 
 	public function render() {
 		$mode = 'profilStream';
-		$templateName = "../ProfilStream/profilStream.latte";
+		if ($this->getEnvironment()->isMobile()) {
+			$templateName = "../ProfilStream/profilStreamMobile.latte";
+		} else {
+			$templateName = "../ProfilStream/profilStream.latte";
+		}
+
 
 		$this->renderBase($mode, $templateName);
 	}

@@ -9,16 +9,10 @@ use POSComponent\Chat\MobileContactList;
  */
 class ChatPresenter extends BasePresenter {
 
-	/**
-	 * @var \POS\Model\ChatMessagesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ChatMessagesDao @inject */
 	public $chatMessagesDao;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
 
 	/** @var int Id uživatele, se kterým si chci psát */

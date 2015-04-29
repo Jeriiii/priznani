@@ -10,21 +10,15 @@
  */
 use Nette\Application\UI\Form as Frm;
 use POSComponent\Stream\UserStream\UserStream;
-use POS\UserPreferences\StreamUserPreferences;
 use POSComponent\UsersList\FriendRequestList;
 use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\BlokedUsersList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
 use NetteExt\Helper\ShowUserDataHelper;
 use NetteExt\DaoBox;
+use POSComponent\Stream\StreamInicializator;
 
 class OnePagePresenter extends BasePresenter {
-
-	/**
-	 * Vybere do streamu nejvhodnější data vzhledem k preferencím daného uživatele
-	 * @var \POS\UserPreferences\StreamUserPreferences
-	 */
-	public $streamUserPreferences;
 
 	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
@@ -109,14 +103,10 @@ class OnePagePresenter extends BasePresenter {
 
 	/** @var \POS\Model\RateImageDao @inject */
 	public $rateImageDao;
-
-	/** @var \Nette\Database\Table\Selection Všechny příspěvky streamu. */
-	public $dataForStream;
 	private $userID;
 
 	public function actionDefault() {
 		$this->userID = $this->getUser()->getId();
-		$this->fillCorrectDataForStream();
 	}
 
 	public function renderDefault() {
@@ -124,8 +114,11 @@ class OnePagePresenter extends BasePresenter {
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
 		$this->template->loggedUser = $this->loggedUser;
 
-		$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->userID)->count();
-		$this->template->countSexy = $this->youAreSexyDao->countToUser($this->userID);
+		if (!$this->deviceDetector->isMobile() && $this->getUser()->isLoggedIn()) {/* pokud nejsem na mobilu, údaje se nepředají z presenteru */
+			$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->getUser()->id)->count();
+			$this->template->countSexy = $this->youAreSexyDao->countToUser($this->getUser()->id);
+		}
+
 		$this->template->isUserPaying = $this->paymentDao->isUserPaying($this->userID);
 		$this->template->countVerificationRequests = $this->verificationPhotoDao->findByUserID($this->user->id)->count();
 		if ($this->getUser()->isLoggedIn()) {
@@ -134,52 +127,14 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	public function renderMobileDefault() {
-		$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->userID)->count();
-		$this->template->countSexy = $this->youAreSexyDao->countToUser($this->userID);
+
 	}
 
 	protected function createComponentUserStream() {
-		$daoBox = $this->getDaoBoxUserStream();
 		$session = $this->getSession();
+		$streamInicializator = new StreamInicializator();
 
-		return new UserStream($this->dataForStream, $daoBox, $session, $this->loggedUser);
-	}
-
-	/**
-	 * Vrátí DaoBox naplněný pro user stream.
-	 */
-	private function getDaoBoxUserStream() {
-		$daoBox = new DaoBox;
-		$daoBox->likeStatusDao = $this->likeStatusDao;
-		$daoBox->imageLikesDao = $this->imageLikesDao;
-		$daoBox->userDao = $this->userDao;
-		$daoBox->statusDao = $this->statusDao;
-
-		$daoBox->streamDao = $this->streamDao;
-		$daoBox->userGalleryDao = $this->userGalleryDao;
-		$daoBox->userImageDao = $this->userImageDao;
-		$daoBox->confessionDao = $this->confessionDao;
-
-		$daoBox->userPositionDao = $this->userPositionDao;
-		$daoBox->enumPositionDao = $this->enumPositionDao;
-		$daoBox->userPlaceDao = $this->userPlaceDao;
-		$daoBox->enumPlaceDao = $this->enumPlaceDao;
-
-		$daoBox->likeImageCommentDao = $this->likeImageCommentDao;
-		$daoBox->commentImagesDao = $this->commentImagesDao;
-		$daoBox->likeStatusCommentDao = $this->likeStatusCommentDao;
-		$daoBox->commentStatusesDao = $this->commentStatusesDao;
-
-		$daoBox->likeConfessionCommentDao = $this->likeConfessionCommentDao;
-		$daoBox->commentConfessionsDao = $this->commentConfessionsDao;
-		$daoBox->likeConfessionDao = $this->likeConfessionDao;
-		$daoBox->usersNewsDao = $this->usersNewsDao;
-
-		$daoBox->rateImageDao = $this->rateImageDao;
-		$daoBox->imageLikesDao = $this->imageLikesDao;
-		$daoBox->userCategoryDao = $this->userCategoryDao;
-
-		return $daoBox;
+		return $streamInicializator->createUserStream($this, $session, $this->user, $this->loggedUser);
 	}
 
 	public function createComponentJs() {
@@ -230,26 +185,6 @@ class OnePagePresenter extends BasePresenter {
 
 	protected function createComponentMarkedFromOther($name) {
 		return new MarkedFromOther($this->paymentDao, $this->youAreSexyDao, $this->getUser()->id, $this, $name);
-	}
-
-	/**
-	 * Uloží preferované příspěvky uživatele do streamu.
-	 */
-	private function fillCorrectDataForStream() {
-		if ($this->getUser()->isLoggedIn() && isset($this->loggedUser->property)) {
-			$this->initializeStreamUserPreferences();
-			$this->dataForStream = $this->streamUserPreferences->getBestStreamItems();
-		} else {
-			$this->dataForStream = $this->streamDao->getForUnloggedUser("DESC");
-		}
-	}
-
-	/**
-	 * Nastavý preferované příspěvky uživatele.
-	 */
-	private function initializeStreamUserPreferences() {
-		$session = $this->getSession();
-		$this->streamUserPreferences = new StreamUserPreferences($this->loggedUser, $this->userDao, $this->streamDao, $this->userCategoryDao, $session);
 	}
 
 }

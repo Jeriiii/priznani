@@ -35,6 +35,9 @@
 		addTimeMessageCheck: 500 //přírůstek k času, když nezachytí žádnou zprávu
 	};
 	
+	/* nastavuje se když přišli nové zprávy */
+	$.fn.chatConversationPage.newMsg = false;
+	
 	/**
 	 * Navázání akce na odeslání formuláře.
 	 * @param {Object} opts Nastavení pluginu.
@@ -93,19 +96,24 @@
 				url: $("#refresh-conversation").attr('href') + "&" + opts.settings.lastId + "=" + lastId,
 				success: function (data) {
 					if (data.snippets['snippet-conversation-new-stream-messages'] == "") {//pokud snippet už neobnovuje data
+						/* nepřišli žádné nové zprávy */
 						if(timeout > 60000) {
 							timeout = 60000;
 						}
-						console.log(timeout);
 						getNewMessages(opts, timeout + opts.addTimeMessageCheck); //zvýší se čas
+						console.log("nepřišli žádné nové zprávy");
 					} else {
+						/* přišli nové zprávy */
 						getNewMessages(opts, opts.timeMessageCheck); //vynuluje se čas
+						$.fn.chatConversationPage.newMsg = true;
+						console.log("přišli nové zprávy");
 					}
 					
 				},
 				complete: function(data) {
-					if (data.snippets['snippet-conversation-new-stream-messages'] != "") {
-						/* pokud přišla nová data, skoč dolu */
+					console.log($.fn.chatConversationPage.newMsg);
+					if ($.fn.chatConversationPage.newMsg) {
+						$.fn.chatConversationPage.newMsg = false;
 						pushOnEnd();
 					}
 				},
