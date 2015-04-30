@@ -1,6 +1,16 @@
 @import "../bootstrap/help/mixins.less";
-@import "rozdelit.less";
+@import "../stream/stream-menu-standard.less";
+@import "../stream/stream-standard.less";
+@import "../menu/right-dock.less";
 @import "../colors.less";
+
+.inner {
+    width: 960px;
+    
+}
+#entire-page{
+    position: relative;
+}
 
 #friendRequests{
 	.generatedProfile{
@@ -29,6 +39,13 @@
 			
 		}		
 	}
+}
+
+.ajaxBox[data-related="#friendRequestsBtn"] .noConvMessages{
+		padding: 3px 5px;
+		color: #666;
+		text-align: center;
+		font-size: 12px;
 }
 
 #best-match{
@@ -83,6 +100,11 @@
 			}
 		}
 	}
+}
+
+input[type="submit"]{
+	text-transform: uppercase;
+	font-weight: normal;
 }
 
 /*************************** zmenšený layout **********************************/
