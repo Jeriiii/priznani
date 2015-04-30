@@ -1,0 +1,17 @@
+<div n:snippet="sexyList" data-ajax-append="true">
+{if $isUserPaying}
+	{ifset $sexyUsers}
+		{foreach $sexyUsers as $sexyUser}
+			<div class="sexy-item">{$sexyUser->userFrom|showProfDiv}</div>
+		{/foreach}
+		{if !$iterations}
+			<p class="sexy-message">Prozatím vás nikdo neoznačil jako sexy. Přidejte pár pěkných fotek a uvidíte, že přibudou :) .</p>
+		{/if}
+	{/ifset}
+{else}
+	<p class="sexy-message">
+		{$countSexy} lidí Vás označilo jako sexy. Aby jste mohli vidět, kdo Vás označil
+		jako sexy, pořiďte si <a class='payment-btn'>premium</a> nebo <a class='payment-btn'>eXclusive</a> účet.
+	</p>
+{/if}
+</div>
