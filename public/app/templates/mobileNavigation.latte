@@ -2,9 +2,8 @@
 
 {define friendRequest}
 <li>
-	<a n:href="Friends:requests" data-rel="popup" data-position-to="window" data-transition="pop" title="Žádosti o přátelství">
-		Žádosti o přátelství
-		<span class="ul-li-count">{$countFriendRequests}</span>
+	<a n:href="Friends:requests" title="Žádosti o přátelství">
+		Žádosti o přátelství <span class="ui-li-count bubble-left">{$countFriendRequests}</span>
 	</a>
 </li>
 {/}
@@ -24,7 +23,9 @@
 {define markedFromOther}
 {if $countSexy != 0}
 <li>
-	<a n:href="Friends:sexyForThem" title="Jsem pro ně sexy"><span class="ul-li-count">{$countSexy}</span>Jsem pro ně sexy</a>
+	<a n:href="Friends:sexyForThem" title="Jsem pro ně sexy">
+		Jsem pro ně sexy <span class="ui-li-count">{$countSexy}</span>
+	</a>
 </li>
 {/if}
 {/}
