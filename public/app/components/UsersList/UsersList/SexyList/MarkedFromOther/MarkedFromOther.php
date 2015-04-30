@@ -32,7 +32,12 @@ class MarkedFromOther extends BaseSexyList {
 		parent::render();
 		$this->template->isUserPaying = $this->paymentDao->isUserPaying($this->userID);
 		$this->template->countSexy = $this->youAreSexyDao->countToUser($this->userID);
-		$this->renderTemplate(dirname(__FILE__) . "/markedFromOther.latte");
+		if ($this->getEnvironment()->isMobile()) {
+			$this->template->sexyUsers = $this->youAreSexyDao->getAllToUser($this->userID); /* na mobilu má svoji stránku takže načte všechno */
+			$this->renderTemplate(dirname(__FILE__) . "/mobileMarkedFromOther.latte");
+		} else {
+			$this->renderTemplate(dirname(__FILE__) . "/markedFromOther.latte");
+		}
 	}
 
 	public function getSnippetName() {

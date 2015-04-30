@@ -5,6 +5,7 @@
  */
 use POSComponent\UsersList\FriendRequestList;
 use POSComponent\UsersList\FriendsList;
+use POSComponent\UsersList\SexyList\MarkedFromOther;
 
 class FriendsPresenter extends BasePresenter {
 
@@ -13,6 +14,12 @@ class FriendsPresenter extends BasePresenter {
 
 	/** @var \POS\Model\FriendDao @inject */
 	public $friendDao;
+
+	/** @var \POS\Model\PaymentDao @inject */
+	public $paymentDao;
+
+	/** @var \POS\Model\YouAreSexyDao @inject */
+	public $youAreSexyDao;
 
 	public function actionDefault() {
 
@@ -44,6 +51,10 @@ class FriendsPresenter extends BasePresenter {
 
 	protected function createComponentFriendList($name) {
 		return new FriendsList($this->friendDao, $this->getUser()->id, $this, $name, TRUE);
+	}
+
+	protected function createComponentSexyForThemList($name) {
+		return new MarkedFromOther($this->paymentDao, $this->youAreSexyDao, $this->getUser()->id, $this, $name, TRUE);
 	}
 
 }
