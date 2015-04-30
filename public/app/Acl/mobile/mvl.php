@@ -26,6 +26,7 @@ class Mvl extends MobileViewList {
 
 		$this->addView("Friends", "requests");
 		$this->addView("Friends", "list");
+		$this->addView("Friends", "sexyForThem");
 
 		$this->addView("Sign", "in");
 
