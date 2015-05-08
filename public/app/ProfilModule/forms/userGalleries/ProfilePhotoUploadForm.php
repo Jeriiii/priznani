@@ -14,6 +14,8 @@ use Nette\Application\UI\Form;
  */
 class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 
+	const MINIMUM_CROP_SIZE = 20;
+
 	/** @var \POS\Model\UserGalleryDao */
 	public $userGalleryDao;
 
@@ -31,10 +33,14 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 		$this->streamDao = $streamDao;
 
 		$this->addText('imageName')->setAttribute('class', 'imgCropInput');
-		$imageX1 = $this->addText('imageX1')->setAttribute('class', 'imgCropInput');
-		$imageX2 = $this->addText('imageX2')->setAttribute('class', 'imgCropInput');
-		$imageY1 = $this->addText('imageY1')->setAttribute('class', 'imgCropInput');
-		$imageY2 = $this->addText('imageY2')->setAttribute('class', 'imgCropInput');
+		$imageX1 = $this->addText('imageX1')->setAttribute('class', 'imgCropInput')
+			->addRule(Form::INTEGER, 'Souřadnice musí být číselná.');
+		$imageX2 = $this->addText('imageX2')->setAttribute('class', 'imgCropInput')
+			->addRule(Form::INTEGER, 'Souřadnice musí být číselná.');
+		$imageY1 = $this->addText('imageY1')->setAttribute('class', 'imgCropInput')
+			->addRule(Form::INTEGER, 'Souřadnice musí být číselná.');
+		$imageY2 = $this->addText('imageY2')->setAttribute('class', 'imgCropInput')
+			->addRule(Form::INTEGER, 'Souřadnice musí být číselná.');
 
 
 		$this->addSubmit('uploadProfilPhoto', 'Nahrát');
@@ -48,6 +54,17 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 		$values = $form->getValues();
 		$filename = $values->imageName;
 		$presenter = $this->getPresenter();
+
+		if (!$this->isValuesOk($values)) {
+			$presenter->flashMessage('Špatné souřadnice výřezu obrázku. Zkontrolujte prosím, že máte zapnutý javascript.', 'danger');
+			$presenter->redirect('this');
+		}
+		$minSize = self::MINIMUM_CROP_SIZE;
+		if (($values->imageX2 - $values->imageX1) < $minSize ||
+			($values->imageY2 - $values->imageY1) < $minSize) {/* výřez nemá minimální velikost */
+			$presenter->flashMessage("Výřez je příliš malý. Minimální velikost je $minSize px x $minSize px. Ořízněte prosím větší obrázek.", 'danger');
+			$presenter->redirect('this');
+		}
 
 		$image = UploadImage::getImageFromTemp($filename);
 
@@ -76,6 +93,15 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 		$presenter->flashMessage('Profilové foto bylo uloženo.');
 
 		$presenter->redirect('this');
+	}
+
+	/**
+	 * Zkontroluje hodnoty ve formuláři
+	 * @param array $values hodnoty formuláře
+	 * @return bool true pokud je vše v pořádku, false pokud ne
+	 */
+	public function isValuesOk($values) {
+		return !(empty($values->imageX1) || empty($values->imageX2) || empty($values->imageY1) || empty($values->imageY2));
 	}
 
 }
