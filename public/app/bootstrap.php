@@ -38,7 +38,15 @@ if ($testing) {
 	$configurator->addConfig(__DIR__ . '/config/test.config.neon', FALSE);
 }
 
-//Kdyby\Events\DI\EventsExtension::register($configurator);
+if (strpos($_SERVER["REQUEST_URI"], 'install') !== false) {/* zjištění, jestli url obsahuje řetězec install */
+	$installUrl = TRUE;
+} else {
+	$installUrl = FALSE;
+}
+$productionMode = !$configurator->isDebugMode();
+if ($productionMode || !$installUrl) {/* zapnutí eventů v závislosti na prostředí */
+	Kdyby\Events\DI\EventsExtension::register($configurator);
+}
 $container = $configurator->createContainer();
 
 // Setup router

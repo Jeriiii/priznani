@@ -44,11 +44,16 @@ class InstallPresenter extends BasePresenter {
 	public function actionAllCategories() {
 		$messages = new Messages;
 
+		/* vyčistí cache */
+		$clearCache = new ClearCasch($messages);
+		$clearCache->clearCache();
+
 		$this->insertEnumCatProp();
 		$this->insertUserCategories();
 
 		$messages->addMessage("Kategorie byly úspěšně vloženy.");
 		$messages->flash($this);
+		$clearCache->clearCache();
 		$this->redirect("Install:");
 	}
 
@@ -72,6 +77,7 @@ class InstallPresenter extends BasePresenter {
 		$dirCheker->check();
 
 		$messages->flash($this);
+		$clearCache->clearCache();
 		$this->redirect("Install:");
 	}
 
@@ -88,12 +94,17 @@ class InstallPresenter extends BasePresenter {
 		$instalDB->installDBStruct();
 
 		$messages->flash($this);
+		$clearCache->clearCache();
 		$this->redirect("Install:");
 	}
 
 	public function actionMoveDb() {
 		ini_set('max_execution_time', 600);
 		$messages = new Messages;
+
+		/* vyčistí cache */
+		$clearCache = new ClearCasch($messages);
+		$clearCache->clearCache();
 
 		$dbMover = new DBMover($this->dbDao);
 		//$dbMover->saveToCache();
@@ -103,6 +114,7 @@ class InstallPresenter extends BasePresenter {
 		$messages->addMessage('Data byla načtena z DB');
 
 		$messages->flash($this);
+		$clearCache->clearCache();
 		$this->redirect("Install:");
 	}
 
@@ -113,6 +125,7 @@ class InstallPresenter extends BasePresenter {
 		$clearCache->clearCache();
 
 		$messages->flash($this);
+		$clearCache->clearCache();
 		$this->redirect("Install:");
 	}
 
@@ -120,10 +133,15 @@ class InstallPresenter extends BasePresenter {
 		ini_set('max_execution_time', 60);
 		$messages = new Messages;
 
+		/* vyčistí cache */
+		$clearCache = new ClearCasch($messages);
+		$clearCache->clearCache();
+
 		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
 		$instalDB->dataTestDb();
 
 		$messages->flash($this);
+		$clearCache->clearCache();
 		$this->redirect("Install:");
 	}
 
@@ -131,11 +149,16 @@ class InstallPresenter extends BasePresenter {
 		ini_set('max_execution_time', 60);
 		$messages = new Messages;
 
+		/* vyčistí cache */
+		$clearCache = new ClearCasch($messages);
+		$clearCache->clearCache();
+
 		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
 		$instalDB->dataDb();
 		$instalDB->dataTestDb();
 
 		$messages->flash($this);
+		$clearCache->clearCache();
 		$this->redirect("Install:");
 	}
 
@@ -143,11 +166,16 @@ class InstallPresenter extends BasePresenter {
 		ini_set('max_execution_time', 90);
 		$messages = new Messages;
 
+		/* vyčistí cache */
+		$clearCache = new ClearCasch($messages);
+		$clearCache->clearCache();
+
 		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
 		$instalDB->dataDb();
 		$instalDB->dataTestDb();
 
 		$messages->flash($this);
+		$clearCache->clearCache();
 		$this->redirect("Install:");
 	}
 
@@ -155,20 +183,30 @@ class InstallPresenter extends BasePresenter {
 		ini_set('max_execution_time', 90);
 		$messages = new Messages;
 
+		/* vyčistí cache */
+		$clearCache = new ClearCasch($messages);
+		$clearCache->clearCache();
+
 		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
 		$instalDB->dataDbMore();
 
 		$messages->flash($this);
+		$clearCache->clearCache();
 		$this->redirect("Install:");
 	}
 
 	public function actionCreateDBPatch() {
 		$messages = new Messages;
 
+		/* vyčistí cache */
+		$clearCache = new ClearCasch($messages);
+		$clearCache->clearCache();
+
 		$instalDB = new InstallDB($this->dbDao, $this->testMode, $messages);
 		$instalDB->createPath();
 
 		$messages->flash($this);
+		$clearCache->clearCache();
 		$this->redirect("Install:");
 	}
 
