@@ -11,7 +11,7 @@ var baseSettings = {//inicializuje se nad daty, která mají být v okénku
 };
 var ajaxSettings = {};
 
-if (isUserPaying) {
+if (typeof isUserPaying !== 'undefined' && isUserPaying) {
 	/* má li uživatel placený účet, zobrazí se mu seznam uživatelů, kteří ho označili že je sexi */
 	/* vyskakovací okénko pro to, kolik lidí mě označilo jako sexi */
 	var ajaxSettings = {
