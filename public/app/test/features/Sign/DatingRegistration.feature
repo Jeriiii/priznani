@@ -19,6 +19,7 @@ Feature: Dating registration
 		And I fill in "<password>" for "password"
 		And I fill in "<passwordVerify>" for "passwordVerify"
 		And I fill in "<first_sentence>" for "first_sentence"
+		And I check "agreement"
 		And I press "send"
 
 		Then I should see "Partnerka"

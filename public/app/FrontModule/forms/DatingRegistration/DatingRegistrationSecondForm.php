@@ -7,6 +7,7 @@ use Nette\Application\UI\Form,
 	Nette\ComponentModel\IContainer;
 use POS\Model\UserDao;
 use Nette\Http\SessionSection;
+use Nette\Utils\Html;
 
 class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 
@@ -54,6 +55,11 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 //			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300)
 //			->setAttribute('placeholder', 'max 300 znaků');
 
+		$agreement = Html::el('span');
+		$agreement->setHtml('Souhlasím s <a href="http://datenode.cz/docs/vsp.pdf" style="text-decoration:underline">obchodními podmínkami</a>');
+		$this->addCheckbox('agreement', $agreement)
+			->addRule(Form::FILLED, 'Pro pokračování musíte souhlasit s našemi obchodními podmínkami.');
+
 		if (isset($regSession)) {
 			$this->setDefaults(array(
 				'email' => $regSession->email,
@@ -75,6 +81,8 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 	public function submitted($form) {
 		$values = $form->values;
 		$presenter = $this->getPresenter();
+
+		unset($values['agreement']);
 
 		$authenticator = $presenter->context->authenticator;
 		$pass = $authenticator->calculateHash($values->password);
