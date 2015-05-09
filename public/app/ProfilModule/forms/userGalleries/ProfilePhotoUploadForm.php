@@ -101,7 +101,14 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 	 * @return bool true pokud je vše v pořádku, false pokud ne
 	 */
 	public function isValuesOk($values) {
-		return !(empty($values->imageX1) || empty($values->imageX2) || empty($values->imageY1) || empty($values->imageY2));
+		if (empty($values->imageX2) || (empty($values->imageX1) && $values->imageX1 != 0)) {
+			return FALSE;
+		}
+		if (empty($values->imageY2) || (empty($values->imageY1) && $values->imageY1 != 0)) {
+			return FALSE;
+		}
+
+		return TRUE;
 	}
 
 }
