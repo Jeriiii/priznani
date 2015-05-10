@@ -166,6 +166,17 @@ class UserImageDao extends AbstractDao {
 	}
 
 	/**
+	 * Vrátí všechny obrázky, které mají jít na hl. stránku.
+	 */
+	public function getImagesOnFrontPage() {
+		$sel = $this->getTable();
+
+		$sel->where(self::COLUMN_ON_FRONT_PAGE . ' = ?', 1);
+
+		return $sel;
+	}
+
+	/**
 	 * Vrátí všechny ID obrázků, které uživatel ohodnotil.
 	 * @param int $userId ID uživatele
 	 * @return array Pole obrázků, které uživatel ohodnotil.

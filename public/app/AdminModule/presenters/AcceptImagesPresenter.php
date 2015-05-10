@@ -122,7 +122,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		));
 
 		/* pokud jde o profilovou fotku, upozorní na to uživatele */
-		if ($this->userImageDao->isProfile($imageId)) { //jde o profilovou fotku?
+		if (!$isOnFrontPage && $this->userImageDao->isProfile($imageId)) { //jde o profilovou fotku?
 			$image = $this->userImageDao->find($imageId);
 			$this->activitiesDao->createImageActivity(NULL, $image->gallery->userID, $imageId, 'profilImgNoOnFront');
 		}

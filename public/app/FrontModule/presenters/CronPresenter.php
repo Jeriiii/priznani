@@ -24,10 +24,30 @@ class CronPresenter extends BasePresenter {
 	/** @var \POS\Model\UserPropertyDao @inject */
 	public $userPropertyDao;
 
+	/** @var \POS\Model\UserImageDao @inject */
+	public $userImageDao;
+
+	/** @var \POS\Model\ActivitiesDao @inject */
+	public $activitiesDao;
+
 	public function startup() {
 		parent::startup();
 
 		$this->setLayout("simpleLayout");
+	}
+
+	public function actionOnFront() {
+		$images = $this->userImageDao->getImagesOnFrontPage();
+
+		foreach ($images as $image) {
+			/* pokud jde o profilovou fotku, upozorní na to uživatele */
+			if ($this->userImageDao->isProfile($image->id)) { //jde o profilovou fotku?
+				$this->activitiesDao->createImageActivity(NULL, $image->gallery->userID, $image->id, 'profilImgOnFront');
+			}
+		}
+
+		echo "Bylo schváleno " . $images->count() . " profilovek.";
+		die();
 	}
 
 	public function actionRecalculateUsersMarks() {

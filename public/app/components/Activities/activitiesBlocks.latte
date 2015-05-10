@@ -39,12 +39,17 @@
 	
 {/}
 {define image $activity}
-	{if ($activity->type == "profilImgNoOnFront")}
+	{if ($activity->type == "profilImgNoOnFront")} {* není *}
 		<a href="{plink :Profil:Edit:inappropriateProfilPhoto imageID => $activity->imageID}"
 			class="activity-link {if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
 			<img src='{$activity->image|getImgPath}' />
 			<strong>Nevhodná profilovka</strong>
 			pro více informací klikni sem
+		</a>
+	{elseif ($activity->type == "profilImgOnFront")} {* je *}
+		<a href="{plink :Profil:Galleries:image imageID => $activity->imageID, galleryID => $activity->image->galleryID}"
+		   class="activity-link {if $activity->viewed == 0}new-activity{/if}" data-activity-viewed-id="{$activity->id}">
+			Gratulujeme, vaše profilová fotka byla schválena.
 		</a>
 	{else}
 		<a href="{plink :Profil:Galleries:image imageID => $activity->imageID, galleryID => $activity->image->galleryID}"
