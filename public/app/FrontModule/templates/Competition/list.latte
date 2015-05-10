@@ -51,7 +51,7 @@
 
 {block beforeContent}
 <div id="metrocontainer">
-	{foreach $userCompetitions as $com}
+	{*foreach $userCompetitions as $com}
 		{if $iterator->isFirst()}
 			<h2>Valentýnská soutěž</h2>
 		{/if}
@@ -61,7 +61,7 @@
 			{/if}
 			<a n:href="UsersCompetitions: galleryID => $com->id">{$com->name}</a>
 		</div>
-	{/foreach}
+	{/foreach*}
 	<div class="clear"></div>
 	{foreach $galleries as $gallery}
 		{if $iterator->isFirst()}
@@ -73,7 +73,7 @@
 		</div> 
 	{/foreach}
 	<div class="clear"></div>
-    {foreach $competitions as $com}
+    {*oreach $competitions as $com}
 		{if $iterator->isFirst()}
 			<h2>Uživatelské galerie</h2>
 		{/if}
@@ -81,7 +81,7 @@
 			<img src="{$basePath}/{$com->imageUrl}" width="100%" height="100%"/>
 			<a n:href="Competition: galleryID => $com->id">{$com->name}</a>
 		</div>
-	{/foreach}
+	{/foreach*}
 	<div class="clear"></div>
 </div>
 {/}

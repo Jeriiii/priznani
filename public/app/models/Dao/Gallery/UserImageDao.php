@@ -423,6 +423,7 @@ class UserImageDao extends AbstractDao {
 		$sel->wherePrimary($id);
 		$sel->update(array(
 			self::COLUMN_APPROVED => 1,
+			self::COLUMN_CHECK_APPROVED => 0,
 			self::COLUMN_INTIM => 1
 		));
 

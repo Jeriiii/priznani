@@ -10,7 +10,7 @@
 		<div n:snippet="posts" data-ajax-append="true">
 			{foreach $stream as $dataItem}
 				<div class="stream-item">
-					{ifset $dataItem->userGalleryID}
+					{if isset($dataItem->userGalleryID) && isset($dataItem->userGallery->lastImageID)}
 						{if $user->isLoggedIn()}
 							{if $userGalleryDao->haveAccessIntoGallery($dataItem->userGallery, $user->id, $dataItem->userGallery->userID)}
 								<a href="{plink :Profil:Show: id => $dataItem->user->id}" title="{$dataItem->user->user_name}"><h3>{$dataItem->user->user_name}</h3></a>
@@ -19,7 +19,7 @@
 									<h3>{$dataItem->userGallery->name}</h3>
 								</a>
 								<a href="{plink :Profil:Galleries:image imageID => $dataItem->userGallery->lastImage->id, galleryID => $dataItem->userGallery->id}" class="imagehref">
-									<img src="{$dataItem|getStrmImgPath}" alt="{$dataItem->userGallery->name}" />
+									<img src="{$dataItem|getStrmImgPath}" alt="{$dataItem->userGallery->name}" width="100%" />
 									<p>{$dataItem->userGallery->lastImage->description}</p>
 								</a>
 								<div class="react-menu">
@@ -43,12 +43,12 @@
 						{else}
 							<strong>Obrázky se zobrazují pouze registrovaným uživatelům. <a href="{plink :Sign:registration}">Registrujte se</a>.</strong>
 						{/if}
-					{/ifset}
+					{/if}
 					{ifset $dataItem->galleryID}
 						{if $user->isLoggedIn()}
 							<a href="{plink :Competition: imageID => $dataItem->gallery->lastImageID}" title="{$dataItem->gallery->name}"><h3>{$dataItem->gallery->name}</h3></a>
 							<a href="{plink :Competition: imageID => $dataItem->gallery->lastImageID}" class="imagehref">
-								<img src="{$dataItem|getStrmImgPath:'g'}" alt="{$dataItem->gallery->name}" />
+								<img src="{$dataItem|getStrmImgPath:'g'}" alt="{$dataItem->gallery->name}" width="100%" />
 								<p>{$dataItem->gallery->lastImage->comment}</p>
 							</a>
 						{else}
