@@ -10,7 +10,7 @@
 		<div n:snippet="posts" data-ajax-append="true">
 			{foreach $stream as $dataItem}
 				<div class="stream-item">
-					{ifset $dataItem->userGalleryID}
+					{if isset($dataItem->userGalleryID) && isset($dataItem->userGallery->lastImageID)}
 						{if $user->isLoggedIn()}
 							{if $userGalleryDao->haveAccessIntoGallery($dataItem->userGallery, $user->id, $dataItem->userGallery->userID)}
 								<a href="{plink :Profil:Show: id => $dataItem->user->id}" title="{$dataItem->user->user_name}"><h3>{$dataItem->user->user_name}</h3></a>
@@ -37,7 +37,7 @@
 						{else}
 							<strong>Obrázky se zobrazují pouze registrovaným uživatelům. <a href="{plink :Sign:registration}">Registrujte se</a>.</strong>
 						{/if}
-					{/ifset}
+					{/if}
 					{ifset $dataItem->galleryID}
 						{if $user->isLoggedIn()}
 							<a href="{plink :Competition: imageID => $dataItem->gallery->lastImageID}" title="{$dataItem->gallery->name}"><h3>{$dataItem->gallery->name}</h3></a>

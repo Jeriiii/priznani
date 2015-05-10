@@ -165,7 +165,13 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	public function actionImage($imageID, $galleryID = NULL, $userID = NULL) {
+		if (empty($imageID)) {
+			$this->flashMessage('Obrázek nebyl nalezen, nebo byl smazán.');
+			$this->redirect(':OnePage:');
+		}
+
 		$this->imageID = $imageID;
+
 		/* nastaví obrázzky podle uživatele nebo podle galerie */
 		if (!empty($galleryID)) {
 			$this->images = $this->userImageDao->getInGallery($galleryID);
