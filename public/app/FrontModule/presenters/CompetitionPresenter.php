@@ -253,7 +253,7 @@ class CompetitionPresenter extends BasePresenter {
 	public function createComponentJs() {
 		$files = new FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
-			'netteForms.js'
+			'forms/netteForms.js'
 		));
 
 		$compiler = Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
