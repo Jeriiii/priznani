@@ -68,7 +68,7 @@ class BaseComments extends BaseProjectControl {
 	public function __construct(ILikeDao $likeImageCommentDao, ICommentDao $commentDao, $item, $userData, $ownerID, StreamUserPreferences $cachedStreamPreferences = NULL) {
 		parent::__construct();
 		if (!($item instanceof ActiveRow) && !($item instanceof \Nette\ArrayHash)) {
-			throw new \Exception("variable $item must be instance of ActiveRow or ArrayHash");
+			throw new \Exception("variable $item must be instance of ActiveRow or ArrayHash for owner " . $ownerID);
 		}
 		//zakomentováno z důvodu, že zatím neumím při vytváření přes multiper dostat presenter
 //		if (!($userData instanceof ActiveRow) && !($userData instanceof \Nette\ArrayHash) && $this->getPresenter()->getUser()->isLoggedIn()
