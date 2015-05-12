@@ -338,6 +338,14 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	}
 
 	/**
+	 * Vrátí data ve streamu.
+	 * @return \Nette\ArrayHash
+	 */
+	public function getData() {
+		return $this->data;
+	}
+
+	/**
 	 * Vrátí položku aktivních dat podle klíče
 	 * @param int $key klíče
 	 * @return ArrayHash položka

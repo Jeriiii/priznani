@@ -37,6 +37,7 @@ class StreamInicializator {
 
 	/**
 	 * Nastavý preferované příspěvky uživatele.
+	 * @return StreamUserPreferences
 	 */
 	private function createStreamUserPreferences($presenter, $session, $loggedUser) {
 		return new StreamUserPreferences($loggedUser, $presenter->userDao, $presenter->streamDao, $presenter->userCategoryDao, $session);
@@ -44,6 +45,7 @@ class StreamInicializator {
 
 	/**
 	 * Vrátí preferované příspěvky uživatele do streamu.
+	 * @return StreamUserPreferences
 	 */
 	private function getCorrectDataForStream($presenter, $session, User $user, $loggedUser) {
 		if ($user->isLoggedIn() && isset($loggedUser->property)) {

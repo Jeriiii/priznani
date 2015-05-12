@@ -24,6 +24,7 @@ use POSComponent\BaseLikes\ConfessionLikes;
 use POSComponent\BaseLikes\StatusLikes;
 use POSComponent\CropImageUpload\CropImageUpload;
 use Polly;
+use Nette\Database\Table\Selection;
 
 class BaseStream extends BaseProjectControl {
 
@@ -139,7 +140,7 @@ class BaseStream extends BaseProjectControl {
 	 * @param string $templateName Jméno šablony.
 	 */
 	private function renderMainStream($templateName) {
-		$this->setNewOffset();
+		$this->template->stream = $this->getStreamData();
 
 		$this->template->setFile(dirname(__FILE__) . '/' . $templateName);
 	}
@@ -149,7 +150,7 @@ class BaseStream extends BaseProjectControl {
 	 * @param string $templateName Jméno šablony.
 	 */
 	private function renderProfileStream($templateName) {
-		$this->setNewOffset();
+		$this->template->stream = $this->getStreamData();
 
 		$this->template->setFile(dirname(__FILE__) . '/' . $templateName);
 	}
@@ -157,14 +158,33 @@ class BaseStream extends BaseProjectControl {
 	/**
 	 * Metoda nastavuje novy offset pro nacitani dalsich prispevku uzivatele
 	 */
-	public function setNewOffset() {
+	public function getStreamData() {
 		/* musí se nastavit i v jQuery pluginu */
 		$limit = 4;
 		if (!empty($this->offset)) {
-			$this->template->stream = $this->dataForStream->limit($limit, $this->offset);
+			$stream = $this->dataForStream->limit($limit, $this->offset);
 		} else {
-			$this->template->stream = $this->dataForStream->limit($limit);
+			$stream = $this->dataForStream->limit($limit);
 		}
+
+		return $stream;
+	}
+
+	/**
+	 * Vrací data ze streamu ve formátu JSON.
+	 * @param int $offset Posun od začátku streamu.
+	 * @return ArrayHash
+	 * @throws Exception
+	 */
+	public function getDataInArray($offset) {
+		$this->offset = $offset;
+		$streamData = $this->getStreamData();
+
+		if ($streamData instanceof Selection) {
+			throw new Exception('You must implemet convert Selection to ArrayHash. You can use Serializator.');
+		}
+
+		return $streamData;
 	}
 
 	/**

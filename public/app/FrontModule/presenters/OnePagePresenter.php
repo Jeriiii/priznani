@@ -17,6 +17,7 @@ use POSComponent\UsersList\SexyList\MarkedFromOther;
 use NetteExt\Helper\ShowUserDataHelper;
 use NetteExt\DaoBox;
 use POSComponent\Stream\StreamInicializator;
+use Nette\Application\Responses\JsonResponse;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -130,11 +131,28 @@ class OnePagePresenter extends BasePresenter {
 
 	}
 
+	/**
+	 * Vrátí stream ve formátu JSON
+	 */
+	public function actionStreamInJson($offset = 0) {
+		$userStream = $this->createComponentUserStream();
+		$data = $userStream->getDataInArray($offset);
+
+		$json = new JsonResponse($data, "application/json; charset=utf-8");
+		$this->sendResponse($json);
+	}
+
+	/**
+	 * Vytvoří a vrátí komponentu na hlavní uživatelký stream.
+	 * @return UserStream Hlavní uživatelský stream.
+	 */
 	protected function createComponentUserStream() {
 		$session = $this->getSession();
 		$streamInicializator = new StreamInicializator();
 
-		return $streamInicializator->createUserStream($this, $session, $this->user, $this->loggedUser);
+		$userStream = $streamInicializator->createUserStream($this, $session, $this->user, $this->loggedUser);
+
+		return $userStream;
 	}
 
 	public function createComponentJs() {
