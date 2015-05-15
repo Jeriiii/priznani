@@ -150,6 +150,10 @@ class EditPresenter extends ProfilBasePresenter {
 		return new Frm\EditPlacesPositionsForm($this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->userDao, $this, $name);
 	}
 
+	protected function createComponentChangePasswordForm($name) {
+		return new Frm\ProfileChangePasswordForm($this->userDao, $this, $name);
+	}
+
 	/**
 	 * WebLoader pro minifikace skriptu
 	 * @return \WebLoader\Nette\JavaScriptLoader
