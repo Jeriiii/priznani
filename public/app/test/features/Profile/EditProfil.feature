@@ -84,5 +84,55 @@ Feature: Edit user profile
 		And I press "frm-editPlacesPositionsForm-send"
 		Then I should see "Údaje byly změněny"
 
+	Scenario: User can not change his password without old password
+	    Given I am signed in as "user@test.cz"
+		And I am on "/profil.edit/"		
+		And I should see "Změnit heslo"
+		And I fill in "nenimojeheslo" for "oldPassword"
+		And I fill in "dalsiheslo" for "password"
+		And I fill in "dalsiheslo" for "passwordVerify"
+		And I press "changePasswordSend" 
+		Then I should see "Špatné heslo."
+		When I fill in "dalsiheslo" for "oldPassword"
+		And I fill in "dalsiheslo2" for "password"
+		And I fill in "dalsiheslo2" for "passwordVerify" 
+		Then I should see "Špatné heslo."
+
+	Scenario: User can not change his password without verification new password
+	    Given I am signed in as "user@test.cz"
+		And I am on "/profil.edit/"		
+		And I should see "Změnit heslo"
+		And I fill in "testtest" for "oldPassword"
+		And I fill in "noveheslo" for "password"
+		And I fill in "noveheslo2" for "passwordVerify"
+		And I press "changePasswordSend" 
+		Then I should not see "Vaše heslo bylo změněno."
+		When I fill in "noveheslo" for "oldPassword"
+		And I fill in "noveheslo2" for "password"
+		And I fill in "noveheslo2" for "passwordVerify"
+		And I press "changePasswordSend" 
+		Then I should see "Špatné heslo."
+
+	Scenario: User can change his password
+	    Given I am signed in as "user@test.cz"
+		And I am on "/profil.edit/"		
+		And I should see "Změnit heslo"
+		And I fill in "testtest" for "oldPassword"
+		And I fill in "noveheslo" for "password"
+		And I fill in "noveheslo" for "passwordVerify"
+		And I press "changePasswordSend" 
+		Then I should see "Vaše heslo bylo změněno."
+		When I fill in "testtest" for "oldPassword"
+		And I fill in "noveheslo2" for "password"
+		And I fill in "noveheslo2" for "passwordVerify"
+		And I press "changePasswordSend" 
+		Then I should see "Špatné heslo."
+		And I fill in "noveheslo" for "oldPassword"
+		And I fill in "testtest" for "password"
+		And I fill in "testtest" for "passwordVerify"
+		And I press "changePasswordSend" 
+		Then I should see "Vaše heslo bylo změněno."
+	
+
 
 
