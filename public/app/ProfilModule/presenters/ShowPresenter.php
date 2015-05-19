@@ -265,6 +265,7 @@ class ShowPresenter extends ProfilBasePresenter {
 			}
 		}
 		$this->template->isMyProfile = $isMyProfile;
+		$this->template->isBlocked = $this->userBlockedDao->isBlocked($this->loggedUser->id, $id);
 
 
 		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->userID);
@@ -394,7 +395,11 @@ class ShowPresenter extends ProfilBasePresenter {
 		$blockUser->setTittle("Blokovat uživatele");
 		$blockUser->setMessage("Opravdu chcete zablokovat tohoto uživatele?");
 		$blockUser->setBtnText("BLOKOVAT UŽIVATELE");
-		$blockUser->setBtnClass('profile-btn blockUserBtn');
+		if (!$this->deviceDetector->isMobile()) {
+			$blockUser->setBtnClass('profile-btn blockUserBtn');
+		} else {
+			$blockUser->setBtnClass('ui-btn');
+		}
 		return $blockUser;
 	}
 
