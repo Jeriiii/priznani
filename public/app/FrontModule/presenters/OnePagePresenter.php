@@ -138,7 +138,12 @@ class OnePagePresenter extends BasePresenter {
 		$userStream = $this->createComponentUserStream();
 		$data = $userStream->getDataInArray($offset);
 
-		$json = new JsonResponse($data, "application/json; charset=utf-8");
+		$dataToSend = array();
+		foreach ($data as $item) {
+			$dataToSend[] = $item;
+		}
+
+		$json = new JsonResponse(array("data" => $dataToSend), "application/json; charset=utf-8");
 		$this->sendResponse($json);
 	}
 
