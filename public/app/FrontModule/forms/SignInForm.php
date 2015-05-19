@@ -10,19 +10,23 @@ use Nette\Application\UI\Form;
 use Nette\Security as NS;
 use Nette\ComponentModel\IContainer;
 use Nette\Utils\Html;
+use Nette\Application\Responses\JsonResponse;
+use POS\Model\UserDao;
 
 class SignInForm extends BaseForm {
 
 	const SECTION_BACKLINK_NAME = "backlink";
 
-	/**
-	 * @var boolean Cesta zpět odkud uživatel přišel
-	 */
+	/** @var boolean Cesta zpět odkud uživatel přišel */
 	private $backlink;
 
-	public function __construct($banklink, IContainer $parent = NULL, $name = NULL) {
+	/** @var \POS\Model\UserDao @inject */
+	public $userDao;
+
+	public function __construct($banklink, UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->backlink = $banklink;
+		$this->userDao = $userDao;
 
 		$this->addText('signEmail', 'E-mail:', 30, 200)
 			->addRule(Form::FILLED, "Zadejte svůj email")
@@ -55,9 +59,50 @@ class SignInForm extends BaseForm {
 			}
 			$user->login($values->signEmail, $values->signPassword);
 			//toto se provede při úspěšném zpracování přihlašovacího formuláře
-			//if (!empty($presenter->backlink)) {
+
+			$this->sendSuccessLogin();
+		} catch (NS\AuthenticationException $e) {
+			$this->sendErrorLogin($form, $e);
+		}
+	}
+
+	/**
+	 * Pošle uživateli zprávu o tom, že přihlášení bylo špatné.
+	 */
+	private function sendErrorLogin($form, NS\AuthenticationException $e) {
+		$presenter = $this->getPresenter();
+		$data = $this->getHttpData();
+
+		if (array_key_exists("mobile", $data)) {
+			$sendData["success"] = 0;
+			$sendData['errorMessage'] = $e->getMessage();
+
+			$json = new JsonResponse($sendData, "application/json; charset=utf-8");
+			$presenter->sendResponse($json);
+		} else {
+			$form->addError($e->getMessage());
+		}
+	}
+
+	/**
+	 * Pošle uživateli, že byl úspěšně přihlášen - reaguje na json.
+	 */
+	private function sendSuccessLogin() {
+		$presenter = $this->getPresenter();
+		$data = $this->getHttpData();
+
+		if (array_key_exists("mobile", $data)) {
+			$userID = $presenter->getUser()->id;
+			$userData = $this->userDao->find($userID);
+
+			$sendData["success"] = 1;
+			$sendData["userName"] = $userData->user_name;
+
+			$json = new JsonResponse($sendData, "application/json; charset=utf-8");
+			$presenter->sendResponse($json);
+		} else {
 			$presenter->flashMessage("Byl jste úspěšně přihlášen");
-			//}
+
 			if ($this->backlink == TRUE) {
 				$this->redirectBacklink();
 			} elseif ($presenter->user->isInRole("admin") || $presenter->user->isInRole("superadmin")) {
@@ -65,8 +110,6 @@ class SignInForm extends BaseForm {
 			} else {
 				$presenter->redirect(':OnePage:');
 			}
-		} catch (NS\AuthenticationException $e) {
-			$form->addError(Html::el('div')->setText($e->getMessage())->setClass('alert alert-danger'));
 		}
 	}
 
