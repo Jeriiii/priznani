@@ -8,6 +8,8 @@
 namespace UserBlock;
 
 use NetteExt\DaoBox;
+use POS\UserPreferences\StreamUserPreferences;
+use POS\UserPreferences\SearchUserPreferences;
 
 /**
  * Stará se o zablokování / odblokování uživatele
@@ -26,13 +28,13 @@ class UserBlocker {
 	public $streamDao;
 
 	/** @var \POS\Model\UserCategoryDao @inject */
-	public $userCategoryDaoDao;
+	public $userCategoryDao;
 
 	public function __construct(DaoBox $daoBox) {
 		$this->userBlockedDao = $daoBox->userBlockedDao;
 		$this->userDao = $daoBox->userDao;
 		$this->streamDao = $daoBox->streamDao;
-		$this->userCategoryDaoDao = $daoBox->userCategoryDao;
+		$this->userCategoryDao = $daoBox->userCategoryDao;
 	}
 
 	/**

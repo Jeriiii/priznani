@@ -407,8 +407,14 @@ class StreamDao extends AbstractDao {
 		/* blokovaní uživatelé tohoto uživatele */
 		$blokedUsers = $this->createSelection(UserBlockedDao::TABLE_NAME);
 		$blokedUsers->where(UserBlockedDao::COLUMN_OWNER_ID, $meUserID);
+
 		if ($blokedUsers->count(UserBlockedDao::COLUMN_ID)) {
-			$sel->where(self::COLUMN_USER_ID . " NOT IN ? OR " . self::COLUMN_USER_ID . " IS NULL", $blokedUsers);
+			$blokedUserIDs = array();
+			foreach ($blokedUsers as $blokedUser) {
+				$blokedUserIDs[] = $blokedUser->offsetGet(UserBlockedDao::COLUMN_BLOKED_ID);
+			}
+
+			$sel->where(self::COLUMN_USER_ID . " NOT IN ? OR " . self::COLUMN_USER_ID . " IS NULL", $blokedUserIDs);
 		}
 		return $sel;
 	}

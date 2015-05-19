@@ -71,6 +71,16 @@ class UserBlockedDao extends AbstractDao {
 		$sel->where(FriendDao::COLUMN_USER_ID_2, $ownerId);
 		$sel->delete();
 
+		/* zjistí, zda už uživatel není blokován */
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_OWNER_ID, $ownerId);
+		$sel->where(self::COLUMN_BLOKED_ID, $blokedId);
+		$blocking = $sel->fetch();
+
+		if ($this->exist($blocking)) {
+			return $blocking;
+		}
+
 		/* zablokuje uživatele */
 		$sel = $this->getTable();
 		return $sel->insert(array(
