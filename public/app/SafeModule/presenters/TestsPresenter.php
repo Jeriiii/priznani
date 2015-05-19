@@ -16,8 +16,8 @@ class TestsPresenter extends BasePresenter {
 	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/** @var \POS\Model\UserBlokedDao @inject */
-	public $userBlokedDao;
+	/** @var \POS\Model\UserBlockedDao @inject */
+	public $userBlockedDao;
 
 	/** @var \POS\Model\UserDao @inject */
 	public $userDao;

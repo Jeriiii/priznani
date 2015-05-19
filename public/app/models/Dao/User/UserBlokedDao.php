@@ -11,7 +11,7 @@ namespace POS\Model;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class UserBlokedDao extends AbstractDao {
+class UserBlockedDao extends AbstractDao {
 
 	const TABLE_NAME = "users_bloked";
 

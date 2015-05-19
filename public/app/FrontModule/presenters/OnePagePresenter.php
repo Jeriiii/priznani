@@ -24,8 +24,8 @@ class OnePagePresenter extends BasePresenter {
 	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/** @var \POS\Model\UserBlokedDao @inject */
-	public $userBlokedDao;
+	/** @var \POS\Model\UserBlockedDao @inject */
+	public $userBlockedDao;
 
 	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
@@ -184,7 +184,7 @@ class OnePagePresenter extends BasePresenter {
 		$daoBox->userDao = $this->userDao;
 		$daoBox->streamDao = $this->streamDao;
 		$daoBox->userCategoryDao = $this->userCategoryDao;
-		$daoBox->userBlokedDao = $this->userBlokedDao;
+		$daoBox->userBlockedDao = $this->userBlockedDao;
 
 		$blocker = new UserBlocker($daoBox);
 
@@ -222,7 +222,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentBlokedUsers($name) {
-		return new BlokedUsersList($this->userBlokedDao, $this->getUser()->id, $this, $name);
+		return new BlokedUsersList($this->userBlockedDao, $this->getUser()->id, $this, $name);
 	}
 
 	protected function createComponentMarkedFromOther($name) {

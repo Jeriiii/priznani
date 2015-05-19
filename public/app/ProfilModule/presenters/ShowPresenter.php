@@ -110,8 +110,8 @@ class ShowPresenter extends ProfilBasePresenter {
 	/** @var \POS\Model\UserPropertyDao @inject */
 	public $userPropertyDao;
 
-	/** @var \POS\Model\UserBlokedDao @inject */
-	public $userBlokedDao;
+	/** @var \POS\Model\UserBlockedDao @inject */
+	public $userBlockedDao;
 
 	/** @var \POS\Model\UserCategoryDao @inject */
 	public $userCategoryDao;
@@ -127,7 +127,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	 */
 	public function actionDefault($id) {
 		/* Zjistí, zda uživatel nenavštěvuje profil uživatele, který ho zablokoval. */
-		$isBlocked = $this->userBlokedDao->isBlocked($id, $this->loggedUser->id);
+		$isBlocked = $this->userBlockedDao->isBlocked($id, $this->loggedUser->id);
 		if ($isBlocked) {
 			$this->flashMessage('Tento uživatel Vás zablokoval.');
 			$this->redirect(':OnePage:');
@@ -177,7 +177,7 @@ class ShowPresenter extends ProfilBasePresenter {
 			}
 		}
 		$this->template->isMyProfile = $isMyProfile;
-		$this->template->isBlocked = $this->userBlokedDao->isBlocked($this->loggedUser->id, $id);
+		$this->template->isBlocked = $this->userBlockedDao->isBlocked($this->loggedUser->id, $id);
 
 		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->userID);
 
@@ -233,7 +233,7 @@ class ShowPresenter extends ProfilBasePresenter {
 		$daoBox->userDao = $this->userDao;
 		$daoBox->streamDao = $this->streamDao;
 		$daoBox->userCategoryDao = $this->userCategoryDao;
-		$daoBox->userBlokedDao = $this->userBlokedDao;
+		$daoBox->userBlockedDao = $this->userBlockedDao;
 
 		$blocker = new UserBlocker($daoBox);
 

@@ -16,8 +16,8 @@ use NetteExt\DaoBox;
  */
 class UserBlocker {
 
-	/** @var \POS\Model\UserBlokedDao */
-	public $userBlokedDao;
+	/** @var \POS\Model\UserBlockedDao */
+	public $userBlockedDao;
 
 	/** @var \POS\Model\UserDao */
 	public $userDao;
@@ -29,7 +29,7 @@ class UserBlocker {
 	public $userCategoryDaoDao;
 
 	public function __construct(DaoBox $daoBox) {
-		$this->userBlokedDao = $daoBox->userBlokedDao;
+		$this->userBlockedDao = $daoBox->userBlockedDao;
 		$this->userDao = $daoBox->userDao;
 		$this->streamDao = $daoBox->streamDao;
 		$this->userCategoryDaoDao = $daoBox->userCategoryDao;
@@ -43,7 +43,7 @@ class UserBlocker {
 	 */
 	public function blockUser($blockUserID, $loggedUser, $session) {
 		/* zablokuje uživatele */
-		$this->userBlokedDao->addBlocking($loggedUser->id, $blockUserID);
+		$this->userBlockedDao->addBlocking($loggedUser->id, $blockUserID);
 
 		$this->cleanCache($loggedUser, $session);
 	}
@@ -56,7 +56,7 @@ class UserBlocker {
 	 */
 	public function unblockUser($blockUserID, $loggedUser, $session) {
 		/* zablokuje uživatele */
-		$this->userBlokedDao->removeBloking($loggedUser->id, $blockUserID);
+		$this->userBlockedDao->removeBloking($loggedUser->id, $blockUserID);
 
 		$this->cleanCache($loggedUser, $session);
 	}
