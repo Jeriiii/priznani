@@ -19,6 +19,10 @@ use POSComponent\CropImageUpload\CropImageUpload;
 use NetteExt\DaoBox;
 use NetteExt\Helper\ShowUserDataHelper;
 use POS\Ext\LastActive;
+use POSComponent\Confirm;
+use POS\UserPreferences\StreamUserPreferences;
+use POS\UserPreferences\SearchUserPreferences;
+use UserBlock\UserBlocker;
 
 class ShowPresenter extends ProfilBasePresenter {
 
@@ -105,6 +109,12 @@ class ShowPresenter extends ProfilBasePresenter {
 
 	/** @var \POS\Model\UserPropertyDao @inject */
 	public $userPropertyDao;
+
+	/** @var \POS\Model\UserBlockedDao @inject */
+	public $userBlockedDao;
+
+	/** @var \POS\Model\UserCategoryDao @inject */
+	public $userCategoryDao;
 	public $dataForStream;
 
 	/** @var \Nette\Database\Table\ActiveRow|\Nette\ArrayHash */
@@ -116,6 +126,12 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @param type $id
 	 */
 	public function actionDefault($id) {
+		/* Zjistí, zda uživatel nenavštěvuje profil uživatele, který ho zablokoval. */
+		$isBlocked = $this->userBlockedDao->isBlocked($id, $this->loggedUser->id);
+		if ($isBlocked) {
+			$this->flashMessage('Tento uživatel Vás zablokoval.');
+			$this->redirect(':OnePage:');
+		}
 
 		if (empty($id)) {
 			/* kontrola, zda se nesnaží nepřihlášený uživatel zobrazit svůj profil */
@@ -161,7 +177,7 @@ class ShowPresenter extends ProfilBasePresenter {
 			}
 		}
 		$this->template->isMyProfile = $isMyProfile;
-
+		$this->template->isBlocked = $this->userBlockedDao->isBlocked($this->loggedUser->id, $id);
 
 		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->userID);
 
@@ -196,6 +212,47 @@ class ShowPresenter extends ProfilBasePresenter {
 	}
 
 	/**
+	 * Zablokuje uživatele.
+	 * @param int $blockUserID Id uživatele, který se má blokovat.
+	 */
+	public function handleBlockUser($blockUserID) {
+		$blocker = $this->createUserBloker(); /* zablokuje uživatele */
+
+		$blocker->blockUser($blockUserID, $this->loggedUser, $this->session);
+
+		$this->flashMessage("Uživatel byl zablokován");
+		$this->redirect("this");
+	}
+
+	/**
+	 * Továrnička na třídu pro blokování/odblokování uživatele
+	 */
+	private function createUserBloker() {
+		$daoBox = new DaoBox();
+
+		$daoBox->userDao = $this->userDao;
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->userCategoryDao = $this->userCategoryDao;
+		$daoBox->userBlockedDao = $this->userBlockedDao;
+
+		$blocker = new UserBlocker($daoBox);
+
+		return $blocker;
+	}
+
+	/**
+	 * Odblokuje uživatele.
+	 */
+	public function handleUnblockUser($unblockUserID) {
+		$blocker = $this->createUserBloker();
+
+		$blocker->unblockUser($unblockUserID, $this->loggedUser, $this->session);
+
+		$this->flashMessage("Uživatel byl odblokován");
+		$this->redirect("this");
+	}
+
+	/**
 	 * vykresluje  uzivatelsky stream (zed s vlastnimi prispevky)
 	 * @param type $id
 	 */
@@ -208,6 +265,7 @@ class ShowPresenter extends ProfilBasePresenter {
 			}
 		}
 		$this->template->isMyProfile = $isMyProfile;
+		$this->template->isBlocked = $this->userBlockedDao->isBlocked($this->loggedUser->id, $id);
 
 
 		$verificationAsked = $this->verificationPhotoRequestDao->findByUserID2($this->userID);
@@ -330,6 +388,19 @@ class ShowPresenter extends ProfilBasePresenter {
 		$daoBox = $this->getDaoBoxProfilStream();
 
 		return new ProfilStream($this->dataForStream, $daoBox, $this->loggedUser);
+	}
+
+	protected function createComponentBlockUser($name) {
+		$blockUser = new Confirm($this, $name);
+		$blockUser->setTittle("Blokovat uživatele");
+		$blockUser->setMessage("Opravdu chcete zablokovat tohoto uživatele?");
+		$blockUser->setBtnText("BLOKOVAT UŽIVATELE");
+		if (!$this->deviceDetector->isMobile()) {
+			$blockUser->setBtnClass('profile-btn blockUserBtn');
+		} else {
+			$blockUser->setBtnClass('ui-btn');
+		}
+		return $blockUser;
 	}
 
 	/**

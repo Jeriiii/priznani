@@ -751,9 +751,9 @@ class UserDao extends UserBaseDao {
 		/* nevezme sam sebe */
 		$sel->where(self::TABLE_NAME . "." . self::COLUMN_ID . " != ?", $meID);
 		/* blokovaní uživatelé tohoto uživatele */
-		$blokedUsers = $this->createSelection(UserBlokedDao::TABLE_NAME);
-		$blokedUsers->where(UserBlokedDao::COLUMN_OWNER_ID, $meID);
-		if ($blokedUsers->count(UserBlokedDao::COLUMN_ID)) {
+		$blokedUsers = $this->createSelection(UserBlockedDao::TABLE_NAME);
+		$blokedUsers->where(UserBlockedDao::COLUMN_OWNER_ID, $meID);
+		if ($blokedUsers->count(UserBlockedDao::COLUMN_ID)) {
 			$sel->where(self::TABLE_NAME . "." . self::COLUMN_ID . " NOT IN", $blokedUsers);
 		}
 
@@ -783,8 +783,8 @@ class UserDao extends UserBaseDao {
 	 * @return Nette\Database\Table\Selection
 	 */
 	private function getBlokedUsers($ownerID) {
-		$sel = $this->createSelection(UserBlokedDao::TABLE_NAME);
-		$sel->where(UserBlokedDao::COLUMN_OWNER_ID, $ownerID);
+		$sel = $this->createSelection(UserBlockedDao::TABLE_NAME);
+		$sel->where(UserBlockedDao::COLUMN_OWNER_ID, $ownerID);
 		return $sel;
 	}
 

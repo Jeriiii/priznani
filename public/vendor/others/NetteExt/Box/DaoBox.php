@@ -8,6 +8,7 @@
 namespace NetteExt;
 
 use POS\Model\AbstractDao;
+use Exception;
 
 /**
  * Přepravka pro DAO
@@ -27,7 +28,7 @@ class DaoBox extends Box {
 	 */
 	public function __set($name, $value) {
 		if (!($value instanceof AbstractDao)) {
-			throw "Value must be instance of AbstractDao";
+			throw new Exception("Value must be instance of AbstractDao");
 		}
 
 		parent::__set($name, $value);
@@ -49,7 +50,7 @@ class DaoBox extends Box {
 	 */
 	public function offsetSet($name, $value) {
 		if (!($value instanceof AbstractDao)) {
-			throw "Value must be instance of AbstractDao";
+			throw new Exception("Value must be instance of AbstractDao");
 		}
 
 		parent::offsetSet($name, $value);

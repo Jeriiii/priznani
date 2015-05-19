@@ -1,5 +1,7 @@
 <?php
 
+namespace NetteExt;
+
 /**
  * Vyjímka, která se vyvolá při nenalezení prvku.
  *

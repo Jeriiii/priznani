@@ -30,7 +30,6 @@
 <section id="entire-page">
 	<div id="content">
 		<div id="stream-menu">
-
 				<div class="user-profile-picture">
 					{$userData|showProfMinDiv: NULL, FALSE}
 					{if $isMyProfile}
@@ -55,26 +54,36 @@
 					{*<a n:href="Galleries:verificationImageNew" class="profile-btn long-btn">Být ověřený uživatel</a>*}
 					<div class="clear"></div>
 				{else}
-				<div class="profile-btn like-action-panel">
-					<div class="sexybutton">
-						{control youAreSexy}
-					</div>
-					<a href="#" title="Poslat zprávu" id="sendmessage-button" class="profile-btn btn-main btn-small right send-message-btn">
-					</a>
-					<div class="ajaxbox-popUp" data-ajaxbox-btn="#sendmessage-button" data-ajaxbox-header-html="Poslat zprávu">
-						{control sendMessageForm}
-					</div>
-					<div class="clear"></div>
-				</div>
+					{if !$isBlocked}
+						<div class="profile-btn like-action-panel">
+							<div class="sexybutton">
+								{control youAreSexy}
+							</div>
+							<a href="#" title="Poslat zprávu" id="sendmessage-button" class="profile-btn btn-main btn-small right send-message-btn">
+							</a>
+							<div class="ajaxbox-popUp" data-ajaxbox-btn="#sendmessage-button" data-ajaxbox-header-html="Poslat zprávu">
+								{control sendMessageForm}
+							</div>
+							<div class="clear"></div>
+						</div>
+					{/if}
 
 				{/if}
 
 			{/if}
 
-			{if !$isMyProfile && !$isFriends}
-			<div class="profile-btn long-btn">
-				{control sendFriendRequest}
-			</div>
+			{if !$isMyProfile}
+				{if !$isBlocked}
+					{if !$isFriends}
+						<div class="profile-btn long-btn">
+							{control sendFriendRequest}
+						</div>
+					{/if}
+					{var $link = array('blockUser!', array(blockUserID => $userData->id) )}
+					{control blockUser $userData->id, $userData->user_name, $link}
+				{else}
+					<a n:href="unblockUser! unblockUserID => $userData->id" tittle="Odblokovat uživatele" class="profile-btn unblockUserBtn">Odblokovat</a>					
+				{/if}
 			{/if}
 			<div class="spacer"></div>
 			<div class="delimiter red"></div>

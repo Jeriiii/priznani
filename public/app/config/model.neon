@@ -44,7 +44,7 @@ services:
 	enumPositionDao:	POS\Model\EnumPositionDao
 	enumPlaceDao:	POS\Model\EnumPlaceDao
 	userPlaceDao:	POS\Model\UserPlaceDao
-	userBlokedDao:	POS\Model\UserBlokedDao
+	userBlockedDao:	POS\Model\UserBlockedDao
 	userAllowedDao:	POS\Model\UserAllowedDao
 	enumBraSizeDao:	POS\Model\EnumBraSizeDao
 	enumDrinkDao:	POS\Model\EnumDrinkDao
