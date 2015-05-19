@@ -162,6 +162,47 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	/**
+	 * Zablokuje uživatele.
+	 * @param int $blockUserID Id uživatele, který se má blokovat.
+	 */
+	public function handleBlockUser($blockUserID) {
+		$blocker = $this->createUserBloker(); /* zablokuje uživatele */
+
+		$blocker->blockUser($blockUserID, $this->loggedUser, $this->session);
+
+		$this->flashMessage("Uživatel byl zablokován");
+		$this->redirect("this");
+	}
+
+	/**
+	 * Továrnička na třídu pro blokování/odblokování uživatele
+	 */
+	private function createUserBloker() {
+		$daoBox = new DaoBox();
+
+		$daoBox->userDao = $this->userDao;
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->userCategoryDao = $this->userCategoryDao;
+		$daoBox->userBlokedDao = $this->userBlokedDao;
+
+		$blocker = new UserBlocker($daoBox);
+
+		return $blocker;
+	}
+
+	/**
+	 * Odblokuje uživatele.
+	 */
+	public function handleUnblockUser($unblockUserID) {
+		$blocker = $this->createUserBloker();
+
+		$blocker->unblockUser($unblockUserID, $this->loggedUser, $this->session);
+
+		$this->flashMessage("Uživatel byl odblokován");
+		$this->redirect("this");
+	}
+
+	/**
 	 * vrací nejlepší osoby pro seznámení s uživatelem
 	 * @param type $name
 	 * @return \POSComponent\Search\BestMatchSearch

@@ -1,5 +1,10 @@
 {layout '../BaseStream/baseStream.latte'}
 
+{define blockedUser}
+	{var $link = array('blockUser!', array(blockUserID => $dataItem->userID) )}
+	{control blockUser-$dataItem->id $dataItem->id, $dataItem->user->user_name, $link}
+{/}
+
 {define addNewPost}
 		<div class="stream-form">
 			<ul id="stream-form-tabs">

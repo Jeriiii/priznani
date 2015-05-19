@@ -22,6 +22,7 @@ use POS\Ext\LastActive;
 use POSComponent\Confirm;
 use POS\UserPreferences\StreamUserPreferences;
 use POS\UserPreferences\SearchUserPreferences;
+use UserBlock\UserBlocker;
 
 class ShowPresenter extends ProfilBasePresenter {
 
@@ -215,23 +216,38 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @param int $blockUserID Id uživatele, který se má blokovat.
 	 */
 	public function handleBlockUser($blockUserID) {
-		/* zablokuje uživatele */
-		$this->userBlokedDao->addBlocking($this->user->id, $blockUserID);
+		$blocker = $this->createUserBloker(); /* zablokuje uživatele */
 
-		/* vyčistí stream */
-		$streamUserPref = new StreamUserPreferences($this->loggedUser, $this->userDao, $this->streamDao, $this->userCategoryDao, $this->session);
-		$streamUserPref->calculate();
-
-		/* vyčistí vyhledávání */
-		$searchUserPref = new SearchUserPreferences($this->loggedUser, $this->userDao, $this->userCategoryDao, $this->session);
-		$searchUserPref->calculate();
+		$blocker->blockUser($blockUserID, $this->loggedUser, $this->session);
 
 		$this->flashMessage("Uživatel byl zablokován");
 		$this->redirect("this");
 	}
 
+	/**
+	 * Továrnička na třídu pro blokování/odblokování uživatele
+	 */
+	private function createUserBloker() {
+		$daoBox = new DaoBox();
+
+		$daoBox->userDao = $this->userDao;
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->userCategoryDao = $this->userCategoryDao;
+		$daoBox->userBlokedDao = $this->userBlokedDao;
+
+		$blocker = new UserBlocker($daoBox);
+
+		return $blocker;
+	}
+
+	/**
+	 * Odblokuje uživatele.
+	 */
 	public function handleUnblockUser($unblockUserID) {
-		$this->userBlokedDao->removeBloking($this->user->id, $unblockUserID);
+		$blocker = $this->createUserBloker();
+
+		$blocker->unblockUser($unblockUserID, $this->loggedUser, $this->session);
+
 		$this->flashMessage("Uživatel byl odblokován");
 		$this->redirect("this");
 	}

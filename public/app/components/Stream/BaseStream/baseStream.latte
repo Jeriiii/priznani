@@ -13,6 +13,9 @@
 					{ifset $dataItem->userGalleryID}
 						{if $user->isLoggedIn()}
 							{if $userGalleryDao->haveAccessIntoGallery($dataItem->userGallery, $user->id, $dataItem->userGallery->userID)}
+								{ifset #blockedUser}
+									{include #blockedUser dataItem => $dataItem}
+								{/ifset}
 								<a href="{plink :Profil:Show: id => $dataItem->user->id}" title="{$dataItem->user->user_name}"><h3>{$dataItem->user->user_name}</h3></a>
 								<span class="divider">></span>
 								<a href="{plink :Profil:Galleries:listUserGalleryImages galleryID => $dataItem->userGallery->id}" title="{$dataItem->userGallery->name}">
@@ -65,6 +68,9 @@
 						<p>{$dataItem->advice->note}</p>
 					{/ifset}
 					{ifset $dataItem->statusID}
+						{ifset #blockedUser}
+							{include #blockedUser dataItem => $dataItem}
+						{/ifset}
 						{var $status = $dataItem->status}
 						{$status->user|showProfDiv}
 						<p>{$status->message}</p>

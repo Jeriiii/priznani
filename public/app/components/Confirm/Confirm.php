@@ -37,7 +37,7 @@ class Confirm extends BaseProjectControl {
 	/** @var string Třída potvryovac9ho tlačítka, pokud ho chcete třeba nastylovat */
 	private $confirmBtnClass = "";
 
-	public function __construct($parent, $name, $btnSetText = TRUE, $plink = TRUE) {
+	public function __construct($parent = NULL, $name = NULL, $btnSetText = TRUE, $plink = TRUE) {
 		parent::__construct($parent, $name);
 		$this->plink = $plink;
 		$this->btnSetText = $btnSetText;
@@ -68,6 +68,12 @@ class Confirm extends BaseProjectControl {
 		} else {
 			$this->renderTemplate(dirname(__FILE__) . '/confirm.latte');
 		}
+	}
+
+	public function setPresenter($presenter) {
+		parent::setPresenter($presenter);
+
+		$this->template->presenter = $presenter;
 	}
 
 	public function setTittle($tittle) {
