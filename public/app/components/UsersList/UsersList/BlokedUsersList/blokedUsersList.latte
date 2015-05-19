@@ -9,7 +9,11 @@
 			<tbody>
 		{/if}
 		<tr>
-			<td>{$blokedUser->bloked|showProf}</td>
+			<td>
+				{$blokedUser->bloked|showProf} 
+				<a class="btn-main btn-small btn-link" href="{plink unblockUser! $blokedUser->blokedID}">Odblokovat</a>
+				<span class="clear"></span>
+			</td>
 		</tr>
 		{if $iterator->isLast()}
 			</tbody>
