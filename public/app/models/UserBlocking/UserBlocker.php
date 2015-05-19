@@ -17,7 +17,7 @@ use NetteExt\DaoBox;
 class UserBlocker {
 
 	/** @var \POS\Model\UserBlokedDao */
-	public $userBlockedDao;
+	public $userBlokedDao;
 
 	/** @var \POS\Model\UserDao */
 	public $userDao;
@@ -29,7 +29,7 @@ class UserBlocker {
 	public $userCategoryDaoDao;
 
 	public function __construct(DaoBox $daoBox) {
-		$this->userBlockedDao = $daoBox->userBlockedDao;
+		$this->userBlokedDao = $daoBox->userBlokedDao;
 		$this->userDao = $daoBox->userDao;
 		$this->streamDao = $daoBox->streamDao;
 		$this->userCategoryDaoDao = $daoBox->userCategoryDao;

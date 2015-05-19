@@ -17,6 +17,7 @@ use POSComponent\UsersList\SexyList\MarkedFromOther;
 use NetteExt\Helper\ShowUserDataHelper;
 use NetteExt\DaoBox;
 use POSComponent\Stream\StreamInicializator;
+use UserBlock\UserBlocker;
 
 class OnePagePresenter extends BasePresenter {
 
