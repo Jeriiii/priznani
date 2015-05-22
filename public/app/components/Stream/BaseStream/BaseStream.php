@@ -157,10 +157,10 @@ class BaseStream extends BaseProjectControl {
 
 	/**
 	 * Metoda nastavuje novy offset pro nacitani dalsich prispevku uzivatele
+	 * @param int $limit Musí se nastavit i v jQuery pluginu
+	 * @return ArrayHash|Selection Data ze streamu.
 	 */
-	public function getStreamData() {
-		/* musí se nastavit i v jQuery pluginu */
-		$limit = 4;
+	public function getStreamData($limit = 4) {
 		if (!empty($this->offset)) {
 			$stream = $this->dataForStream->limit($limit, $this->offset);
 		} else {
@@ -178,7 +178,7 @@ class BaseStream extends BaseProjectControl {
 	 */
 	public function getDataInArray($offset) {
 		$this->offset = $offset;
-		$streamData = $this->getStreamData();
+		$streamData = $this->getStreamData(8);
 
 		if ($streamData instanceof Selection) {
 			throw new Exception('You must implemet convert Selection to ArrayHash. You can use Serializator.');
