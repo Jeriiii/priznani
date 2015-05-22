@@ -8,7 +8,7 @@
 	 * Tak je možné použít nette.ajax a zároveň zavřít okno (nette.ajax totiž pochopitelně musí použít PreventDefault)*/
 	$('body').on('click', '.confirm-send-btn', function(){
 		var selector = $(this).attr('data-confirm-href');
-		$(selector).trigger('click');
+		$(selector)[0].click();
 	});
 });
 
