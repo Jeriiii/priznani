@@ -43,7 +43,7 @@ abstract class Box {
 		}
 		/* objekt nebyl nalezen */
 		if ($this->autoControl) {
-			throw NetteExt\NotFoundException('Objekt ' . $name . ' wasnt found');
+			throw new NotFoundException('Objekt ' . $name . ' wasnt found');
 		}
 
 		return NULL;

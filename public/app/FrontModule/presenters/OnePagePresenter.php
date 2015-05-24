@@ -17,14 +17,16 @@ use POSComponent\UsersList\SexyList\MarkedFromOther;
 use NetteExt\Helper\ShowUserDataHelper;
 use NetteExt\DaoBox;
 use POSComponent\Stream\StreamInicializator;
+use Nette\Application\Responses\JsonResponse;
+use UserBlock\UserBlocker;
 
 class OnePagePresenter extends BasePresenter {
 
 	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
-	/** @var \POS\Model\UserBlokedDao @inject */
-	public $userBlokedDao;
+	/** @var \POS\Model\UserBlockedDao @inject */
+	public $userBlockedDao;
 
 	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
@@ -130,11 +132,33 @@ class OnePagePresenter extends BasePresenter {
 
 	}
 
+	/**
+	 * Vrátí stream ve formátu JSON
+	 */
+	public function actionStreamInJson($offset = 0) {
+		$userStream = $this->createComponentUserStream();
+		$data = $userStream->getDataInArray($offset);
+
+		$dataToSend = array();
+		foreach ($data as $item) {
+			$dataToSend[] = $item;
+		}
+
+		$json = new JsonResponse(array("data" => $dataToSend), "application/json; charset=utf-8");
+		$this->sendResponse($json);
+	}
+
+	/**
+	 * Vytvoří a vrátí komponentu na hlavní uživatelký stream.
+	 * @return UserStream Hlavní uživatelský stream.
+	 */
 	protected function createComponentUserStream() {
 		$session = $this->getSession();
 		$streamInicializator = new StreamInicializator();
 
-		return $streamInicializator->createUserStream($this, $session, $this->user, $this->loggedUser);
+		$userStream = $streamInicializator->createUserStream($this, $session, $this->user, $this->loggedUser);
+
+		return $userStream;
 	}
 
 	public function createComponentJs() {
@@ -162,6 +186,47 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	/**
+	 * Zablokuje uživatele.
+	 * @param int $blockUserID Id uživatele, který se má blokovat.
+	 */
+	public function handleBlockUser($blockUserID) {
+		$blocker = $this->createUserBloker(); /* zablokuje uživatele */
+
+		$blocker->blockUser($blockUserID, $this->loggedUser, $this->session);
+
+		$this->flashMessage("Uživatel byl zablokován");
+		$this->redirect("this");
+	}
+
+	/**
+	 * Továrnička na třídu pro blokování/odblokování uživatele
+	 */
+	private function createUserBloker() {
+		$daoBox = new DaoBox();
+
+		$daoBox->userDao = $this->userDao;
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->userCategoryDao = $this->userCategoryDao;
+		$daoBox->userBlockedDao = $this->userBlockedDao;
+
+		$blocker = new UserBlocker($daoBox);
+
+		return $blocker;
+	}
+
+	/**
+	 * Odblokuje uživatele.
+	 */
+	public function handleUnblockUser($unblockUserID) {
+		$blocker = $this->createUserBloker();
+
+		$blocker->unblockUser($unblockUserID, $this->loggedUser, $this->session);
+
+		$this->flashMessage("Uživatel byl odblokován");
+		$this->redirect("this");
+	}
+
+	/**
 	 * vrací nejlepší osoby pro seznámení s uživatelem
 	 * @param type $name
 	 * @return \POSComponent\Search\BestMatchSearch
@@ -180,7 +245,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentBlokedUsers($name) {
-		return new BlokedUsersList($this->userBlokedDao, $this->getUser()->id, $this, $name);
+		return new BlokedUsersList($this->userBlockedDao, $this->getUser()->id, $this, $name);
 	}
 
 	protected function createComponentMarkedFromOther($name) {

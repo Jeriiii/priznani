@@ -523,7 +523,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 * @return Nette\Application\UI\Form
 	 */
 	protected function createComponentSignInForm($name) {
-		return new Frm\signInForm($this->backlink, $this, $name);
+		return new Frm\signInForm($this->backlink, $this->userDao, $this, $name);
 	}
 
 	protected function createComponentPayment($name) {

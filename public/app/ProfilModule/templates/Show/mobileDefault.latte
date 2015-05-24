@@ -41,15 +41,21 @@
 		            {control uploadPhoto}
 			</div>			
 		{else}
-			{control youAreSexy}
-			<a title="Napsat zprávu" class="ui-block-b ui-btn ui-shadow" href="#popupSendMessage" data-rel="popup" data-position-to="window" data-transition="pop">Napsat zprávu</a>
-			<div data-role="popup" id="popupSendMessage" data-theme="a" class="ui-corner-all">
-		            <h3>Poslat zprávu</h3>
-		            {control sendMessageForm}
-			</div>
-			{if !$isFriends}
-				{control sendFriendRequest}
-			{/if}			
+			{if !$isBlocked}
+				{control youAreSexy}
+				<a title="Napsat zprávu" class="ui-block-b ui-btn ui-shadow" href="#popupSendMessage" data-rel="popup" data-position-to="window" data-transition="pop">Napsat zprávu</a>
+				<div data-role="popup" id="popupSendMessage" data-theme="a" class="ui-corner-all">
+			            <h3>Poslat zprávu</h3>
+			            {control sendMessageForm}
+				</div>
+				{if !$isFriends}
+					{control sendFriendRequest}
+				{/if}
+				{var $link = array('blockUser!', array(blockUserID => $userData->id) )}
+				{control blockUser $userData->id, $userData->user_name, $link}
+			{else}
+				<a n:href="unblockUser! unblockUserID => $userData->id" tittle="Odblokovat uživatele" class="ui-btn">Odblokovat</a>
+			{/if}
 		{/if}
 	</nav>
 {/if}

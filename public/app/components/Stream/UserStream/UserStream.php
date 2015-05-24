@@ -14,6 +14,8 @@ use POSComponent\PhotoRating;
 use NetteExt\DaoBox;
 use Nette\Http\Session;
 use Nette\Security\User;
+use Nette\Application\UI\Multiplier;
+use POSComponent\Confirm;
 
 class UserStream extends BaseStream {
 
@@ -126,6 +128,25 @@ class UserStream extends BaseStream {
 	 */
 	protected function createComponentNewStreamImageForm($name) {
 		return new Frm\NewStreamImageForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+	}
+
+	/**
+	 * možnost lajknutí uživatelské fotky na streamu
+	 * @return \Nette\Application\UI\Multiplier multiplier pro dynamické vykreslení více komponent
+	 */
+	protected function createComponentBlockUser() {
+		$presenter = $this->getPresenter();
+
+		return new Multiplier(function ($dataItemId) use ($presenter) {
+			$blockUser = new Confirm;
+			$blockUser->setPresenter($presenter);
+			$blockUser->setTittle("Blokovat uživatele");
+			$blockUser->setMessage("Opravdu chcete zablokovat tohoto uživatele?");
+			$blockUser->setBtnText("×");
+			$blockUser->setBtnClass('blockUserStreamBtn');
+
+			return $blockUser;
+		});
 	}
 
 	/**

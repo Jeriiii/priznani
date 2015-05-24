@@ -12,21 +12,21 @@
 
 namespace POSComponent\UsersList;
 
-use POS\Model\UserBlokedDao;
+use POS\Model\UserBlockedDao;
 
 class BlokedUsersList extends UsersList {
 
-	/** @var \POS\Model\UserBlokedDao */
-	public $userBlokedDao;
+	/** @var \POS\Model\UserBlockedDao */
+	public $userBlockedDao;
 
 	/** @var int ID uživatele - zobrazují se jeho blokovaní uživatelé */
 	private $userID;
 
-	public function __construct(UserBlokedDao $userBlokedDao, $userID, $parent, $name) {
+	public function __construct(UserBlockedDao $userBlockedDao, $userID, $parent, $name) {
 		parent::__construct($parent, $name);
 
 		$this->userID = $userID;
-		$this->userBlokedDao = $userBlokedDao;
+		$this->userBlockedDao = $userBlockedDao;
 	}
 
 	/**
@@ -42,7 +42,7 @@ class BlokedUsersList extends UsersList {
 	 * @param int $offset O kolik příspěvků se mám při načítání dalších příspěvků z DB posunout.
 	 */
 	public function setData($offset) {
-		$blokedUsers = $this->userBlokedDao->getBlokedUsers($this->userID, $this->limit, $offset);
+		$blokedUsers = $this->userBlockedDao->getBlokedUsers($this->userID, $this->limit, $offset);
 		$this->template->blokedUsers = $blokedUsers;
 	}
 

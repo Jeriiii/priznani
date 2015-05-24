@@ -62,6 +62,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * @return StreamUserPreferences tento iterovatelný objekt schopný nahradit Selection
 	 */
 	public function calculate() {
+		parent::calculate();
 		$this->streamSection->cachedStreamItems = NULL;
 		$this->data = NULL;
 		return $this;
@@ -227,7 +228,6 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 * Naplní nejlepší vhodná data do sešny. Použití pouze pro inicializaci
 	 */
 	private function initializeStreamItems() {
-
 		$streamItems = $this->streamDao->getAllItemsWhatFits($this->getUserCategories(), $this->user->id, self::INIT_ITEMS_COUNT);
 		$serializer = $this->getSerializer($streamItems);
 		$this->setData($serializer->toArrayHash());
@@ -335,6 +335,14 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	 */
 	public function getIterator() {
 		return $this->data->getIterator();
+	}
+
+	/**
+	 * Vrátí data ve streamu.
+	 * @return \Nette\ArrayHash
+	 */
+	public function getData() {
+		return $this->data;
 	}
 
 	/**
