@@ -18,6 +18,10 @@ use Nette\Database\Table\IRow;
  */
 class AndroidCommunicator extends BaseChatComponent implements ICommunicator {
 
+	/** Maximální počet konverzací odeslaných do mobilu */
+	const LIMIT_OF_CONVERSATIONS = 10;
+	const TAG_CONVERSATIONS = 'conversations';
+
 	/**
 	 * Jmeno session, kam se ukladaji jmena uzivatelu
 	 */
@@ -38,6 +42,62 @@ class AndroidCommunicator extends BaseChatComponent implements ICommunicator {
 	 */
 	public function render() {
 		//norender
+	}
+
+	public function handleGetConversations() {
+		$userId = $this->getPresenter()->getUser()->getId();
+		$conversations = $this->chatManager->getConversations($userId, self::LIMIT_OF_CONVERSATIONS);
+		$this->getPresenter()->sendJson($this->convertConversationsToJson($conversations));
+	}
+
+	/**
+	 * Překonvertuje pole ActiveRows konverzací do obyčejného pole s potřebnými daty
+	 * @param array $conversations pole konverzací
+	 */
+	private function convertConversationsToJson($conversations) {
+		$json = array();
+		foreach ($conversations as $conversation) {
+			array_push($json, array(
+				'from' => $this->getCorrectUsername($conversation->id_sender, $conversation->id_recipient),
+				'fromId' => $this->getCorrectCodedId($conversation->id_sender, $conversation->id_recipient),
+				'readed' => $conversation->readed != 0 ? 'true' : 'false',
+				'lastMessage' => $conversation->text
+			));
+		}
+		return array(self::TAG_CONVERSATIONS => $json);
+	}
+
+	/**
+	 * Vrátí přihlašovací jméno, které souvisí s uživatelem, s nímž si píše
+	 * přihlášený uživatel
+	 * @param int $idSender id odesílatele
+	 * @param int $idRecipient
+	 * @return string jméno příjemce
+	 */
+	private function getCorrectUsername($idSender, $idRecipient) {
+		$session = $this->getPresenter()->getSession(self::USERNAMES_SESSION_NAME);
+		$loggedUserId = $this->getPresenter()->getUser()->getId();
+		if ($idSender == $loggedUserId) {
+			return $this->chatManager->getUsername($idRecipient, $session);
+		} else {
+			return $this->chatManager->getUsername($idSender, $session);
+		}
+	}
+
+	/**
+	 * Vrátí ze dvou id to správné uživatelské ID, které není přihlášený uživatel
+	 * @param type $idSender první id
+	 * @param type $idRecipient druhé id
+	 * @return type
+	 */
+	private function getCorrectCodedId($idSender, $idRecipient) {
+		$loggedUserId = $this->getPresenter()->getUser()->getId();
+		$coder = $this->chatManager->getCoder();
+		if ($idSender == $loggedUserId) {
+			return $coder->encodeData($idRecipient);
+		} else {
+			return $coder->encodeData($idSender);
+		}
 	}
 
 	/**
