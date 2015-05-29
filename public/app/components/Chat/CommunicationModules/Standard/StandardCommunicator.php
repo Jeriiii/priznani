@@ -9,6 +9,7 @@ namespace POSComponent\Chat;
 use \Nette\Utils\Json;
 use POS\Model\ChatMessagesDao;
 use Nette\Database\Table\IRow;
+use POS\Chat\ChatManager;
 
 /**
  * Slouží přímo ke komunikaci mezi serverem a prohlížečem, zpracovává
@@ -33,6 +34,15 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 */
 	const DELIVERY_MESSAGE = 'Doručeno.';
 
+	/** pokus poslat zprávu byl zastaven na blokaci */
+	private $blocked = false;
+
+	/** id uživatele, kterému nebyla odeslána zpráva kvůli blokování  */
+	private $blockedId = 0;
+
+	/** Zpráva o neúspěchu pro uživatele */
+	private $blockedMessage = '';
+
 	/**
 	 * Vykreslení komponenty
 	 */
@@ -56,7 +66,10 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 			$senderId = $user->getId();
 			$data->to = (int) $this->chatManager->getCoder()->decodeData($data->to); //dekodovani id
 			$message = $this->chatManager->sendTextMessage($senderId, $data->to, $data->text); //ulozeni zpravy
-			if ($this->isActualUserPaying()) {//pokud je uzivatel platici
+
+			if (!$this->checkBlockingStatement($message)) {/* ověření, že poslání zprávy není blokováno */
+				$this->blockedId = $data->to;
+			} else if ($this->isActualUserPaying()) {//pokud je uzivatel platici
 				$this->registerInfoAboutDelivery($data->to, $message->offsetGet(ChatMessagesDao::COLUMN_ID));
 			}
 			$this->sendRefreshResponse($data->lastid);
@@ -139,7 +152,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		}
 
 		$response = $this->prepareResponseArray($newMessages);
-
+		$response = $this->addInfoAboutBlocking($response);
 		if ($this->isActualUserPaying()) {
 			$response = $this->addInfoAboutDeliveredMessages($response);
 		}
@@ -264,6 +277,22 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	}
 
 	/**
+	 * Do pole předepsaného formátu (response array) přidá informaci o blokování uživatele
+	 * @param array $responseArray
+	 * @return array response array s případnou přidanou zprávou
+	 */
+	private function addInfoAboutBlocking($responseArray) {
+		if ($this->blocked) {
+			$userIdCoded = $this->chatManager->getCoder()->encodeData($this->blockedId);
+			$responseArray[$userIdCoded]['messages'][] = array(
+				ChatMessagesDao::COLUMN_TEXT => $this->blockedMessage,
+				ChatMessagesDao::COLUMN_TYPE => ChatMessagesDao::TYPE_INFO_MESSAGE
+			);
+		}
+		return $responseArray;
+	}
+
+	/**
 	 * Vrati session s zadostmi o info o doruceni podle aktualniho uzivatele
 	 * @return \Nette\Http\SessionSection session uzivatele
 	 */
@@ -323,6 +352,24 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 			ChatMessagesDao::COLUMN_TEXT => self::DELIVERY_MESSAGE,
 			ChatMessagesDao::COLUMN_TYPE => ChatMessagesDao::TYPE_INFO_MESSAGE
 		);
+	}
+
+	/**
+	 * Zkontroluje, zda proměnná není návratovým kódem signalizujícím blokování uživatele
+	 * @param mixed $variable
+	 * @return bool true když je vše ok, false když ne
+	 */
+	private function checkBlockingStatement($variable) {
+		if ($variable === ChatManager::USER_IS_BLOCKED_RETCODE) {
+			$this->blockedMessage = ChatManager::USER_IS_BLOCKED_MESSAGE;
+			$this->blocked = true;
+			return false;
+		} else if ($variable === ChatManager::USER_IS_BLOCKING_RETCODE) {
+			$this->blockedMessage = ChatManager::USER_IS_BLOCKING_MESSAGE;
+			$this->blocked = true;
+			return false;
+		}
+		return true;
 	}
 
 }
