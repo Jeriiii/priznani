@@ -82,7 +82,7 @@ class MessageNewForm extends BaseForm {
 	 */
 	private function sendTextMsg($message) {
 		if (isset($this->conversationID)) {
-			$this->chatManager->addConversationMessage(
+			$this->chatManager->sendConversationMessage(
 				$this->senderID, $this->conversationID, $message
 			);
 		} else {
