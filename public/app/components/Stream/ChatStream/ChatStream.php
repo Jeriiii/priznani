@@ -16,6 +16,7 @@ use Nette\ComponentModel\IContainer;
 use Nette\Database\Table\Selection;
 use Nette\Application\UI\Form\MessageNewForm;
 use POS\Model\ChatMessagesDao;
+use POS\Chat\ChatManager;
 
 class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 
@@ -31,6 +32,9 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	/** @var ChatMessageDao */
 	private $chatMessagesDao;
 
+	/** @var ChatManager */
+	private $chatManager;
+
 	/** @var ActiveRow|ArrayHash */
 	private $loggedUser;
 
@@ -40,12 +44,13 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 	/** @var int ID uživatele, se kterým si píši */
 	private $userInChatID = null;
 
-	public function __construct(ChatMessagesDao $chatMessagesDao, $loggedUser, Selection $messages = null, $limit = 10, IContainer $parent = NULL, $name = NULL) {
+	public function __construct(ChatManager $manager, ChatMessagesDao $chatMessagesDao, $loggedUser, Selection $messages = null, $limit = 10, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->limit = $limit;
 		$this->messages = $messages;
 		$this->chatMessagesDao = $chatMessagesDao;
 		$this->loggedUser = $loggedUser;
+		$this->chatManager = $manager;
 	}
 
 	public function setUserInChatID($userInChatID) {
@@ -150,11 +155,11 @@ class ChatStream extends \POSComponent\BaseProjectControl implements \IStream {
 
 	protected function createComponentMessageNewForm($name) {
 		if (isset($this->conversationID)) {
-			$messageNewForm = new MessageNewForm($this->chatMessagesDao, $this->loggedUser->id, $this, $name);
+			$messageNewForm = new MessageNewForm($this->chatManager, $this->loggedUser->id, $this, $name);
 			$messageNewForm->setConversationID($this->conversationID);
 			return $messageNewForm;
 		} else {
-			$messageNewForm = new MessageNewForm($this->chatMessagesDao, $this->loggedUser->id, $this, $name);
+			$messageNewForm = new MessageNewForm($this->chatManager, $this->loggedUser->id, $this, $name);
 			$messageNewForm->setRecipientID($this->userInChatID);
 			return $messageNewForm;
 		}

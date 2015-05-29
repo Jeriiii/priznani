@@ -41,7 +41,15 @@ class SendMessageForm extends BaseForm {
 		$values = $form->getValues();
 		$presenter = $this->getPresenter();
 
-		$this->chatManager->sendTextMessage($presenter->getUser()->getId(), $this->idRecipient, $values->text);
+		$result = $this->chatManager->sendTextMessage($presenter->getUser()->getId(), $this->idRecipient, $values->text);
+		if ($result === ChatManager::USER_IS_BLOCKED_RETCODE) {
+			$this->presenter->flashMessage(ChatManager::USER_IS_BLOCKED_MESSAGE);
+			$this->presenter->redirect('this');
+		}
+		if ($result === ChatManager::USER_IS_BLOCKING_RETCODE) {
+			$this->presenter->flashMessage(ChatManager::USER_IS_BLOCKING_MESSAGE);
+			$this->presenter->redirect('this');
+		}
 
 		$presenter->flashMessage('Zpráva byla odeslána.');
 		$presenter->redirect('this');
