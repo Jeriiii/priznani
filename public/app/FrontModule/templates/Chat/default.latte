@@ -3,7 +3,10 @@
 {/}
 
 {block content}
-<h2>Zprávy</h2>
+<h2>Zprávy s {$userInChat->user_name}</h2>
+{ifset $blockedMessage}
+<div class="blockedMessage flash error">{$blockedMessage}</div>
+{/ifset}
 {control conversation}
 {/block}
 
