@@ -100,7 +100,13 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		$messages = $this->chatManager->getLastMessagesBetween($userId, $realId);
 		$response = $this->prepareResponseArray($messages);
 
-		$this->registerInfoToLastMessage($realId, $fromId, $response);
+		$blocking = $this->chatManager->canCommunicate($userId, $realId);
+		if (!$this->checkBlockingStatement($blocking)) {
+			$this->blockedId = $realId;
+			$response = $this->addInfoAboutBlocking($response);
+		} else {
+			$this->registerInfoToLastMessage($realId, $fromId, $response);
+		}
 
 		$this->getPresenter()->sendJson($response);
 	}
