@@ -9,6 +9,7 @@ namespace Nette\Application\UI\Form;
 use Nette\Application\UI\Form;
 use POS\Model\ChatMessagesDao;
 use POSComponent\Stream\ChatStream;
+use POS\Chat\ChatManager;
 
 /**
  * Přidá novou zprávu. Volá se ze streamu zpráv z vlastního presenteru.
@@ -17,11 +18,11 @@ use POSComponent\Stream\ChatStream;
  */
 class MessageNewForm extends BaseForm {
 
-	/** @var ChatMessagesDao */
-	private $chatMessagesDao;
-
 	/** @var ChatStream */
 	private $chatStream;
+
+	/** @var ChatManager */
+	private $chatManager;
 
 	/** @var int ID konverzace */
 	private $conversationID = null;
@@ -32,11 +33,11 @@ class MessageNewForm extends BaseForm {
 	/** @var int ID odesílatele zprávy */
 	private $senderID;
 
-	public function __construct(ChatMessagesDao $chatMessagesDao, $senderID, ChatStream $chatStream, $name = NULL) {
+	public function __construct(ChatManager $manager, $senderID, ChatStream $chatStream, $name = NULL) {
 		parent::__construct($chatStream, $name);
-		$this->chatMessagesDao = $chatMessagesDao;
 		$this->chatStream = $chatStream;
 		$this->senderID = $senderID;
+		$this->chatManager = $manager;
 
 		$this->getElementPrototype()->addClass('send-msg-form');
 		//$this->ajax(); - ajax zajištěn ručně ve scriptu
@@ -81,13 +82,21 @@ class MessageNewForm extends BaseForm {
 	 */
 	private function sendTextMsg($message) {
 		if (isset($this->conversationID)) {
-			$this->chatMessagesDao->addConversationMessage(
+			$this->chatManager->addConversationMessage(
 				$this->senderID, $this->conversationID, $message
 			);
 		} else {
-			$this->chatMessagesDao->addTextMessage(
+			$result = $this->chatManager->sendTextMessage(
 				$this->senderID, $this->recipientID, $message
 			);
+			if ($result === ChatManager::USER_IS_BLOCKED_RETCODE) {
+				$this->presenter->flashMessage(ChatManager::USER_IS_BLOCKED_MESSAGE);
+				$this->presenter->redirect('this');
+			}
+			if ($result === ChatManager::USER_IS_BLOCKING_RETCODE) {
+				$this->presenter->flashMessage(ChatManager::USER_IS_BLOCKING_MESSAGE);
+				$this->presenter->redirect('this');
+			}
 		}
 	}
 
