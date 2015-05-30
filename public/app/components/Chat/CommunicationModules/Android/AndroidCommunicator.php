@@ -9,6 +9,7 @@ namespace POSComponent\Chat;
 use \Nette\Utils\Json;
 use POS\Model\ChatMessagesDao;
 use Nette\Database\Table\IRow;
+use POS\Ext\LastActive;
 
 /**
  * Slouží přímo ke komunikaci mezi serverem a prohlížečem, zpracovává
@@ -16,11 +17,13 @@ use Nette\Database\Table\IRow;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-class AndroidCommunicator extends BaseChatComponent implements ICommunicator {
+class AndroidCommunicator extends BaseChatComponent implements IRemoteCommunicator {
 
 	/** Maximální počet konverzací odeslaných do mobilu */
 	const LIMIT_OF_CONVERSATIONS = 10;
 	const TAG_CONVERSATIONS = 'conversations';
+	const TAG_CONVERSATION = 'conversation';
+	const TAG_USER = 'user';
 
 	/**
 	 * Jmeno session, kam se ukladaji jmena uzivatelu
@@ -48,6 +51,27 @@ class AndroidCommunicator extends BaseChatComponent implements ICommunicator {
 		$userId = $this->getPresenter()->getUser()->getId();
 		$conversations = $this->chatManager->getConversations($userId, self::LIMIT_OF_CONVERSATIONS);
 		$this->getPresenter()->sendJson($this->convertConversationsToJson($conversations));
+	}
+
+	/**
+	 * Vrátí informace o konverzaci jednoho uživatele s přihlášeným uživatelem a poslední zprávy
+	 * @param int $fromId druhý uživatel
+	 */
+	public function handleGetSingleConversation($fromId) {
+		$realId = $this->chatManager->getCoder()->decodeData($fromId);
+		$userId = $this->getPresenter()->getUser()->getId();
+		$userDb = $this->chatManager->getUserWithId($realId);
+		$messages = $this->chatManager->getLastMessagesBetween($userId, $realId);
+		$user = array(
+			'id' => $fromId,
+			'name' => $userDb->user_name,
+			'lastActive' => LastActive::format($userDb->last_active)
+		);
+		$response = array(
+			self::TAG_CONVERSATION => $this->convertMessagesToJson($messages),
+			self::TAG_USER => $user
+		);
+		$this->getPresenter()->sendJson($response);
 	}
 
 	/**
@@ -101,6 +125,39 @@ class AndroidCommunicator extends BaseChatComponent implements ICommunicator {
 	}
 
 	/**
+	 * Převede výběr z tabulky zpráv na pole, které bude možné odeslat zpět prohlížeči
+	 * @param Selection $messages vyber z tabulky chat_messages
+	 * @return array pole ve formatu pro JSON ve tvaru dokumentace chatu
+	 */
+	private function convertMessagesToJson($messages) {
+		$responseArray = array();
+		foreach ($messages as $message) {
+			$userId = $this->getRelatedUserId($message);
+			$userIdCoded = $this->chatManager->getCoder()->encodeData($userId);
+			if (!array_key_exists($userIdCoded, $responseArray)) {//pokud je tohle prvni zprava od tohoto uzivatele
+				$name = $this->getUsername($userId); //pribaleni uzivatelskeho jmena uzivatele, s kterym komunikuji
+				$href = $this->getPresenter()->link(':Profil:Show:', array('id' => $userId));
+				$responseArray[$userIdCoded] = array('name' => $name, 'href' => $href, 'messages' => array()); //pak vytvori pole na zpravy od tohoto uzivatele
+			}
+			$responseArray[$userIdCoded]['messages'][] = $this->modifyResponseRowToArray($message); //do pole pod klicem odesilatele v poli $responseArray vlozi pole se zpravou
+			usort($responseArray[$userIdCoded]['messages'], array($this, 'messageSort')); //seřadí zprávy
+		}
+		return $responseArray;
+	}
+
+	/**
+	 * Porovnání dvou zpráv pro usort
+	 * @param mixed $a první zpráva
+	 * @param mixed $b druhá zpráva
+	 */
+	private function messageSort($a, $b) {
+		if ($a[ChatMessagesDao::COLUMN_ID] == $b[ChatMessagesDao::COLUMN_ID]) {
+			return 0;
+		}
+		return ($a[ChatMessagesDao::COLUMN_ID] < $b[ChatMessagesDao::COLUMN_ID]) ? -1 : 1;
+	}
+
+	/**
 	 * Zpracuje poslani zpravy zaslane prohlizecem ve formatu JSON
 	 */
 	public function handleSendMessage() {
@@ -130,21 +187,6 @@ class AndroidCommunicator extends BaseChatComponent implements ICommunicator {
 			$this->chatManager->setOlderMessagesReaded($readedArray, $user->getId(), TRUE); //oznaceni zprav za prectene
 			$this->sendRefreshResponse($lastid);
 		}
-	}
-
-	/**
-	 * Vrátí zprávy z konverzace jednoho uživatele s přihlášeným uživatelem
-	 * @param int $fromId druhý uživatel
-	 */
-	public function handleLoadMessages($fromId) {
-		$realId = $this->chatManager->getCoder()->decodeData($fromId);
-		$userId = $this->getPresenter()->getUser()->getId();
-		$messages = $this->chatManager->getLastMessagesBetween($userId, $realId);
-		$response = $this->prepareResponseArray($messages);
-
-		$this->registerInfoToLastMessage($realId, $fromId, $response);
-
-		$this->getPresenter()->sendJson($response);
 	}
 
 	/**
@@ -200,39 +242,6 @@ class AndroidCommunicator extends BaseChatComponent implements ICommunicator {
 		}
 
 		$this->getPresenter()->sendJson($response);
-	}
-
-	/**
-	 * Převede výběr z tabulky zpráv na pole, které bude možné odeslat zpět prohlížeči
-	 * @param Selection $messages vyber z tabulky chat_messages
-	 * @return array pole ve formatu pro JSON ve tvaru dokumentace chatu
-	 */
-	private function prepareResponseArray($messages) {
-		$responseArray = array();
-		foreach ($messages as $message) {
-			$userId = $this->getRelatedUserId($message);
-			$userIdCoded = $this->chatManager->getCoder()->encodeData($userId);
-			if (!array_key_exists($userIdCoded, $responseArray)) {//pokud je tohle prvni zprava od tohoto uzivatele
-				$name = $this->getUsername($userId); //pribaleni uzivatelskeho jmena uzivatele, s kterym komunikuji
-				$href = $this->getPresenter()->link(':Profil:Show:', array('id' => $userId));
-				$responseArray[$userIdCoded] = array('name' => $name, 'href' => $href, 'messages' => array()); //pak vytvori pole na zpravy od tohoto uzivatele
-			}
-			$responseArray[$userIdCoded]['messages'][] = $this->modifyResponseRowToArray($message); //do pole pod klicem odesilatele v poli $responseArray vlozi pole se zpravou
-			usort($responseArray[$userIdCoded]['messages'], array($this, 'messageSort')); //seřadí zprávy
-		}
-		return $responseArray;
-	}
-
-	/**
-	 * Porovnání dvou zpráv pro usort
-	 * @param mixed $a první zpráva
-	 * @param mixed $b druhá zpráva
-	 */
-	private function messageSort($a, $b) {
-		if ($a[ChatMessagesDao::COLUMN_ID] == $b[ChatMessagesDao::COLUMN_ID]) {
-			return 0;
-		}
-		return ($a[ChatMessagesDao::COLUMN_ID] < $b[ChatMessagesDao::COLUMN_ID]) ? -1 : 1;
 	}
 
 	/**
