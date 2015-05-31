@@ -427,7 +427,16 @@ class UserImageDao extends AbstractDao {
 			self::COLUMN_INTIM => 1
 		));
 
-		return $sel->fetch();
+		$image = $sel->fetch();
+		$gallery = $image->gallery;
+
+		if ($gallery->intim == 0) { //když není galerie intimní, schávlí ji
+			$gallery->update(array(
+				UserGalleryDao::COLUMN_INTIM => 1
+			));
+		}
+
+		return $image;
 	}
 
 	/**

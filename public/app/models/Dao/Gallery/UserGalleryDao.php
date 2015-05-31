@@ -34,6 +34,7 @@ class UserGalleryDao extends BaseGalleryDao {
 	const COLUMN_PROFILE = "profil_gallery";
 	const COLUMN_VERIFICATION = "verification_gallery";
 	const COLUMN_PRIVATE = "private";
+	const COLUMN_INTIM = "intim";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
