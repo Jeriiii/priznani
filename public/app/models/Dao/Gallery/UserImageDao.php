@@ -428,15 +428,38 @@ class UserImageDao extends AbstractDao {
 		));
 
 		$image = $sel->fetch();
-		$gallery = $image->gallery;
 
+		/* nastaví intimní galerii a příspěvek ve streamu */
+		$this->setIntimGall($image->gallery);
+		$this->setIntimStremItem($image->galleryID);
+
+		return $image;
+	}
+
+	/**
+	 * Nastaví galerii jako intimní.
+	 * @param \Nette\Database\Table\ActiveRow $gallery
+	 */
+	private function setIntimGall($gallery) {
 		if ($gallery->intim == 0) { //když není galerie intimní, schávlí ji
 			$gallery->update(array(
 				UserGalleryDao::COLUMN_INTIM => 1
 			));
 		}
+	}
 
-		return $image;
+	/**
+	 * Nastaví příspěvek jako intimní.
+	 * @param int $galleryID
+	 */
+	private function setIntimStremItem($galleryID) {
+		$sel = $this->createSelection(StreamDao::TABLE_NAME);
+		$sel->where(array(
+			StreamDao::COLUMN_USER_GALLERY_ID => $galleryID
+		));
+		$sel->update(array(
+			StreamDao::COLUMN_INTIM => 1
+		));
 	}
 
 	/**
