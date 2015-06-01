@@ -390,4 +390,24 @@ class UserGalleryDao extends BaseGalleryDao {
 		));
 	}
 
+	/**
+	 * PRO CRON
+	 * Přepočítá všechny galerie, jestli se v nich nenachází intimní fotka.
+	 */
+	public function recalIntims() {
+		$sel = $this->getTable();
+
+		foreach ($sel as $gallery) {
+			$images = $this->createSelection(UserImageDao::TABLE_NAME);
+			$images->where(UserImageDao::COLUMN_GALLERY_ID, $gallery->id);
+			$images->where(UserImageDao::COLUMN_INTIM, 1);
+
+			if ($images->fetch()) { //pokud je v ní alespoň jeden intimní obrázek
+				$gallery->update(array(
+					self::COLUMN_INTIM => 1
+				));
+			}
+		}
+	}
+
 }

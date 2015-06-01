@@ -10140,13 +10140,13 @@ INSERT INTO `user_galleries` (`id`, `name`, `description`, `userID`, `bestImageI
 
 -- Exportování dat pro tabulku pos.user_images: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `user_images` DISABLE KEYS */;
-INSERT INTO `user_images` (`id`, `suffix`, `name`, `description`, `galleryID`, `approved`, `widthGalScrn`, `heightGalScrn`, `likes`, `comments`) VALUES
-	(2, 'jpg', 'Test', '', 2, 1, 700, 500, 0, 0),
-	(3, 'jpg', 'Test', '', 2, 1, 700, 500, 0, 0),
-	(4, 'jpg', '', '', 2, 0, 700, 500, 0, 0),
-	(5, 'jpg', 'Test jména', '', 3, 0, 700, 500, 0, 0),
-	(6, 'png', 'Foto 1', 'Foto 1 uživatele Test User', 4, 0, 700, 500, 0, 0),
-	(7, 'jpg', 'Foto 2', 'Foto 2 uživatele Test User', 4, 0, 700, 500, 0, 0);
+INSERT INTO `user_images` (`id`, `suffix`, `name`, `description`, `galleryID`, `approved`, `widthGalScrn`, `heightGalScrn`, `likes`, `comments`, `intim`) VALUES
+	(2, 'jpg', 'Test', '', 2, 1, 700, 500, 0, 0, 0),
+	(3, 'jpg', 'Test', '', 2, 1, 700, 500, 0, 0, 0),
+	(4, 'jpg', '', '', 2, 0, 700, 500, 0, 0, 0),
+	(5, 'jpg', 'Test jména', '', 3, 0, 700, 500, 0, 0, 0),
+	(6, 'png', 'Foto 1', 'Foto 1 uživatele Test User', 4, 0, 700, 500, 0, 0, 0),
+	(7, 'jpg', 'Foto 2', 'Foto 2 uživatele Test User', 4, 0, 700, 500, 0, 0, 1);
 /*!40000 ALTER TABLE `user_images` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.user_place: ~0 rows (přibližně)

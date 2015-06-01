@@ -501,4 +501,21 @@ class StreamDao extends AbstractDao {
 		));
 	}
 
+	/**
+	 * PRO CRON
+	 * Přepočítá všechny galerie, jestli se v nich nenachází intimní fotka.
+	 */
+	public function recalIntims() {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_GALLERY_ID . ' IS NOT NULL');
+
+		foreach ($sel as $item) {
+			if ($item->userGallery->intim == 1) { //pokud je galerie intimní
+				$item->update(array(
+					self::COLUMN_INTIM => 1
+				));
+			}
+		}
+	}
+
 }

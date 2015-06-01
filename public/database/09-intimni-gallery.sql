@@ -10,3 +10,8 @@ ALTER TABLE `users_properties`
 ALTER TABLE `stream_items`
 	ADD COLUMN `intim` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER `type`;
 
+ALTER TABLE `users_properties`
+	CHANGE COLUMN `showIntim` `showIntim` TINYINT(1) UNSIGNED NULL DEFAULT '0' AFTER `type`;
+
+ALTER TABLE `users_properties`
+	CHANGE COLUMN `showIntim` `showIntim` TINYINT(1) UNSIGNED NULL DEFAULT NULL AFTER `type`;
