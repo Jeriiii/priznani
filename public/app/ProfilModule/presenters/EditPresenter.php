@@ -11,6 +11,8 @@ use POS\Model\UserPositionDao;
 use POS\Model\EnumPositionDao;
 use POS\Model\EnumPlaceDao;
 use POS\Model\UserPlaceDao;
+use NetteExt\DaoBox;
+use Nette\Database\Table\ActiveRow;
 use POSComponent\CropImageUpload\CropImageUpload;
 
 class EditPresenter extends ProfilBasePresenter {
@@ -144,6 +146,21 @@ class EditPresenter extends ProfilBasePresenter {
 
 	protected function createComponentFriendRequest($name) {
 		return new FriendRequestList($this->friendRequestDao, $this->getUser()->id, $this, $name);
+	}
+
+	protected function createComponentSetInitimityForm($name) {
+		$loggedUser = $this->loggedUser;
+		if (!($loggedUser instanceof ActiveRow)) {
+			$loggedUser = $this->userDao->find($loggedUser->id);
+		}
+
+		$daoBox = new DaoBox();
+		$daoBox->userDao = $this->userDao;
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->userCategoryDao = $this->userCategoryDao;
+
+		$sm = $this->getSessionManager();
+		return new Frm \ SetInitimityForm($loggedUser, $sm, $daoBox, $this, $name);
 	}
 
 	protected function createComponentEditPlacesPositionsForm($name) {

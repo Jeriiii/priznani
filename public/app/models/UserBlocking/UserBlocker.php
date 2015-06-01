@@ -8,8 +8,7 @@
 namespace UserBlock;
 
 use NetteExt\DaoBox;
-use POS\UserPreferences\StreamUserPreferences;
-use POS\UserPreferences\SearchUserPreferences;
+use NetteExt\Session\SessionManager;
 
 /**
  * Stará se o zablokování / odblokování uživatele
@@ -69,13 +68,8 @@ class UserBlocker {
 	 * @param \Nette\Http\Session $session
 	 */
 	private function cleanCache($loggedUser, $session) {
-		/* vyčistí stream */
-		$streamUserPref = new StreamUserPreferences($loggedUser, $this->userDao, $this->streamDao, $this->userCategoryDao, $session);
-		$streamUserPref->calculate();
-
-		/* vyčistí vyhledávání */
-		$searchUserPref = new SearchUserPreferences($loggedUser, $this->userDao, $this->userCategoryDao, $session);
-		$searchUserPref->calculate();
+		$sm = new SessionManager($session, $loggedUser);
+		$sm->cleanAllPreferences($this->userDao, $this->streamDao, $this->userCategoryDao);
 	}
 
 }

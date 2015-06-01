@@ -103,14 +103,16 @@ class StreamDao extends AbstractDao {
 	 * @param int $userGalleryID ID galerie
 	 * @param int $userID ID uživatele
 	 * @param int $categoryID ID kategorie
+	 * @param int $isIntimGall 1 = Je galerie intimní, jinak 0.
 	 */
-	public function addNewGallery($userGalleryID, $userID, $categoryID) {
+	public function addNewGallery($userGalleryID, $userID, $categoryID, $isIntimGall) {
 		$sel = $this->getTable();
 		$sel->insert(array(
 			"userGalleryID" => $userGalleryID,
 			"userID" => $userID,
 			"type" => 1,
 			"create" => new DateTime(),
+			self::COLUMN_INTIM => $isIntimGall,
 			self::COLUMN_CATEGORY_ID => $categoryID,
 		));
 	}
@@ -217,7 +219,23 @@ class StreamDao extends AbstractDao {
 	 * @param int $categoryID ID kategorie
 	 */
 	public function aliveGallery($userGalleryID, $userID, $categoryID = null) {
-//smazání starého řádku
+		$this->deleteDeadGallery($userGalleryID, $categoryID);
+
+		$sel = $this->createSelection(UserGalleryDao::TABLE_NAME);
+		$sel->wherePrimary($userGalleryID);
+		$gallery = $sel->fetch();
+
+		$this->addNewGallery($userGalleryID, $userID, $categoryID, $gallery->intim);
+	}
+
+	/**
+	 * Smazání starého příspěvku ve streamu (poté by mělo následovat vložení nového příspěvku).
+	 * @param int $userGalleryID
+	 * @param int $categoryID
+	 * @throws Exception
+	 */
+	private function deleteDeadGallery($userGalleryID, $categoryID) {
+		/* smazání starého řádku */
 		$sel = $this->getTable();
 		$sel->where("userGalleryID", $userGalleryID);
 		if (empty($categoryID)) {
@@ -228,8 +246,6 @@ class StreamDao extends AbstractDao {
 			$categoryID = $streamItem->offsetGet(self::COLUMN_CATEGORY_ID);
 		}
 		$sel->delete();
-
-		$this->addNewGallery($userGalleryID, $userID, $categoryID);
 	}
 
 	/**

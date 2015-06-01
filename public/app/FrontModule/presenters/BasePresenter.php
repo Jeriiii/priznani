@@ -22,6 +22,8 @@ use NetteExt\Serialize\Serializer;
 use NetteExt\Serialize\Relation;
 use POS\Model\PaymentDao;
 use Nette\Http\SessionSection;
+use NetteExt\Session\SessionManager;
+use NetteExt\Session\UserSession;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -36,7 +38,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 * Proměnná s uživatelskými daty (cachovaný řádek z tabulky users). Obsahuje relace na profilFoto, gallery, property
 	 * @var ArrayHash|ActiveRow řádek z tabulky users
 	 */
-	protected $loggedUser;
+	protected $loggedUser = null;
 
 	/** @var array proměnné pro css překlad */
 	protected $cssVariables = array();
@@ -68,12 +70,15 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	/** @var \POS\Model\YouAreSexyDao @inject */
 	public $youAreSexyDao;
 
+	/** @var \NetteExt\Session\SessionManager Stará se o správu dat v session. */
+	private $sessionManager = null;
+
 	public function startup() {
 		AntispamControl::register();
 		parent::startup();
 		if ($this->getUser()->isLoggedIn()) {
 			$this->activityReporter->handleUsersActivity($this->getUser());
-			$section = $this->getSectionLoggedUser();
+			$section = UserSession::getSectionLoggedUser($this->session);
 			if (empty($section->loggedUser)) {
 				$this->calculateLoggedUser();
 			}
@@ -82,6 +87,22 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		}
 
 		$this->viewedActivity();
+	}
+
+	/**
+	 * Vrátí session manager, který se stará o session.
+	 * @return SessionManager
+	 */
+	public function getSessionManager() {
+		if ($this->sessionManager == null) {
+			if ($this->loggedUser == null) {
+				$this->loggedUser = $this->userDao->find($this->user->id);
+			}
+
+			$this->sessionManager = new SessionManager($this->session, $this->loggedUser);
+		}
+
+		return $this->sessionManager;
 	}
 
 	/**
@@ -96,37 +117,11 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	}
 
 	/**
-	 * @return Nette\Http\Session|Nette\Http\SessionSection
-	 */
-	protected function getSectionLoggedUser() {
-		$sectionLoggedUser = $this->getSession('loggedUser');
-		return $sectionLoggedUser;
-	}
-
-	/**
 	 * Uloží do sečny aktuální data o přihlášeném uživateli.
 	 */
 	public function calculateLoggedUser() {
-		$user = $this->userDao->getUser($this->getUser()->getId());
-
-		$section = $this->getSectionLoggedUser();
-		$section->setExpiration('20 minutes');
-
-		$relProfilPhoto = new Relation("profilFoto");
-		$relGallery = new Relation("gallery");
-		$relProperty = new Relation("property");
-		$relCouple = new Relation("couple");
-		$relProfilPhoto->addRel($relGallery);
-
-		$ser = new Serializer($user);
-		$ser->addRel($relProfilPhoto);
-		$ser->addRel($relProperty);
-		$ser->addRel($relCouple);
-
-		$sel = (array) $ser->toArrayHash();
-		/* vytazeni jen jednoho radku */
-		$userRow = array_shift($sel);
-		$section->loggedUser = $userRow;
+		$sm = $this->getSessionManager();
+		$sm->calculateLoggedUser($this->userDao);
 	}
 
 	public function beforeRender() {
