@@ -112,8 +112,11 @@
 		</div>
 
 		{include 'menu.latte' $userID => 'id'}
-
-		{control profilStream}
+		
+		<section class="content">
+			<div id="stream"> {control profilStream} </div>
+			<div class="clear"></div>
+		</section>
 	</div>
 	<div class="clear"></div>
 

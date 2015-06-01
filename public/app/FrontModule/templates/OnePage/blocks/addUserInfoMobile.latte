@@ -1,0 +1,29 @@
+{block addUserInfo}
+	{if $user->isLoggedIn() && empty($profilePhoto)}
+		<div class="addprofilePhoto">
+			Ostatní si vás nemohou prohlédnout.
+			<a href="#popupAddProfilePhoto" data-rel="popup" data-position-to="window" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-check ui-btn-icon-left ui-btn-a" data-transition="pop">
+				Nahrajte si profilovou fotku
+			</a>
+			<div data-role="popup" id="popupAddProfilePhoto" data-theme="a" class="ui-corner-all">
+		        <div class="addprofilePhotoWindow">
+		            <h3>Nahrát profilovou fotku</h3>
+		            {control cropImageUpload}
+		        </div>
+			</div>
+		</div>
+	{elseif !empty($newInfo)}
+		<div id="news">
+			<header>{$newInfo->name}</header>
+			<p id="news-short">{$newInfo->text|truncate:100} {if strlen(utf8_decode($newInfo->text)) > 100}<a id="news-more">více</a>{/if}</p>
+			<p id="news-long">{!$newInfo->text|nl2br}</p>
+			<a n:href="newReaded! newID => $newInfo->id" class="btn-main btn-small">PŘEČTENO</a>
+		</div>
+	{elseif $user->isLoggedIn() && !empty($profilePhoto) &&  $place==0  && $position==0 && $placePosSession->count%5==0}
+		<div class="questionnaire-form">
+			<h4 class="question-title">Chcete další téma ke konverzaci? Vyplňte si:</h4>
+			{control placesAndPositionsForm}
+			<div class="clear"></div>
+			</div>
+	{/if}
+{/}

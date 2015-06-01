@@ -19,6 +19,7 @@ use NetteExt\DaoBox;
 use POSComponent\Stream\StreamInicializator;
 use Nette\Application\Responses\JsonResponse;
 use UserBlock\UserBlocker;
+use POSComponent\CropImageUpload\CropImageUpload;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -126,10 +127,16 @@ class OnePagePresenter extends BasePresenter {
 		if ($this->getUser()->isLoggedIn()) {
 			$this->template->sexyLabelToolTip = "Hodnost podle počtu - JE SEXY <br />" . ShowUserDataHelper::getLabelInfoText($this->loggedUser->property->type);
 		}
+
+		if ($this->user->isLoggedIn()) {
+			$this->showQuestion();
+		}
 	}
 
 	public function renderMobileDefault() {
-
+		if ($this->user->isLoggedIn()) {
+			$this->showQuestion();
+		}
 	}
 
 	/**
@@ -183,6 +190,15 @@ class OnePagePresenter extends BasePresenter {
 	public function createComponentSearch() {
 		$component = new Search();
 		return $component;
+	}
+
+	/**
+	 * formulář pro nahrávání profilových fotografií
+	 * @param type $name
+	 * @return \Nette\Application\UI\Form\ProfilePhotoUploadForm
+	 */
+	protected function createComponentCropImageUpload($name) {
+		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
 	}
 
 	/**
@@ -250,6 +266,69 @@ class OnePagePresenter extends BasePresenter {
 
 	protected function createComponentMarkedFromOther($name) {
 		return new MarkedFromOther($this->paymentDao, $this->youAreSexyDao, $this->getUser()->id, $this, $name);
+	}
+
+	/**
+	 * Zobrazit dotaz na oblíbenou polohu nebo pozici.
+	 */
+	private function showQuestion() {
+		$userData = $this->loggedUser;
+		$userProperty = $userData->property;
+		if ($userProperty) { // ochrana proti uživatelům, co nemají vyplněné user property
+			$placePosSession = $this->presenter->getSession('placePosSession');
+			$placePosSession->count++;
+			$this->template->placePosSession = $placePosSession;
+			$placePosSession->setExpiration(0, 'password');
+
+			$place = $this->userPlaceDao->isFilled($userProperty->id);
+			$position = $this->userPositionDao->isFilled($userProperty->id);
+
+			$this->template->place = $place;
+			$this->template->position = $position;
+		}
+		$this->template->userData = $userData;
+		$this->template->newInfo = $this->usersNewsDao->getActual($this->loggedUser->id);
+	}
+
+	/**
+	 * Přidá fotky do defaultní galerie.
+	 * @param string $name
+	 * @return \Nette\Application\UI\Form\NewStreamImageForm
+	 */
+	protected function createComponentNewStreamImageForm($name) {
+		return new Frm\NewStreamImageForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+	}
+
+	/**
+	 * Formulář na výběr pozice a místa sexu.
+	 * @param string $name
+	 * @return \Nette\Application\UI\Form\PlacesAndPositionsForm
+	 */
+	protected function createComponentPlacesAndPositionsForm($name) {
+		return new Frm\PlacesAndPositionsForm($this->userPositionDao, $this->enumPositionDao, $this->userPlaceDao, $this->enumPlaceDao, $this->userDao, $this, $name);
+	}
+
+	/**
+	 * Přidání přiznání do streamu
+	 * @param string $name
+	 * @return \Nette\Application\UI\Form\AddItemForm
+	 */
+	protected function createComponentAddConfessionForm($name) {
+		$addItem = new Frm\AddItemForm($this, $name);
+		$addItem->setConfession($this->confessionDao);
+		return $addItem;
+	}
+
+	protected function createComponentFilterForm($name) {
+		return new Frm\FilterStreamForm($this, $name);
+	}
+
+	protected function createComponentStatusForm($name) {
+		return new Frm\AddStatusForm($this->streamDao, $this->statusDao, $this->loggedUser->property, $this, $name);
+	}
+
+	protected function createComponentPhotoRating($name) {
+		return new PhotoRating($this->userImageDao, $this->rateImageDao, $this->imageLikesDao, $this->loggedUser, $this->userCategoryDao, $this->session, $this, $name);
 	}
 
 }

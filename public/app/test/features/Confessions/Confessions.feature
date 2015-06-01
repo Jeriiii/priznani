@@ -4,7 +4,7 @@ Feature: Confessions form
 		Given I am on "/"
 		And I should see "Přiznání"
 		When I fill in "note" with "<text>"
-		And I press "frm-userStream-addConfessionForm-submit"
+		And I press "frm-addConfessionForm-submit"
 		Then I should see "<flash_message>"
 
 		Examples:
@@ -17,7 +17,7 @@ Feature: Confessions form
 		And I am on "/"
 		And I should see "Přiznání"
 		When I fill in "note" with "<text>"
-		And I press "frm-userStream-addConfessionForm-submit"					
+		And I press "frm-addConfessionForm-submit"					
 		Then I should see "<flash_message>"
 		When I go to "/admin.forms/forms-x?show_mark=unmark&type=1"
 		Then I should see "<text>"

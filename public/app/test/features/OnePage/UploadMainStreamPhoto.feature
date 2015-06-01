@@ -7,7 +7,7 @@ Feature: Uploading photo on main page
 		And I attach to "newStreamImageFormImageFile0" the file "<image0>"
 		And I attach to "newStreamImageFormImageFile1" the file "<image1>"
 		And I attach to "newStreamImageFormImageFile2" the file "<image2>"
-		And I press "frm-userStream-newStreamImageForm-submit"
+		And I press "frm-newStreamImageForm-submit"
 		Then I should not see "Musíte vybrat alespoň 1 soubor"
 		And I should see "<message>"
 		And Approve last image
@@ -25,7 +25,7 @@ Feature: Uploading photo on main page
 		And I am on "/"
 		And I should see "Fotky"
 		When I attach to "newStreamImageFormImageFile0" the file "<image0>"
-		And I press "frm-userStream-newStreamImageForm-submit"
+		And I press "frm-newStreamImageForm-submit"
 		Then I should not see "Musíte vybrat alespoň 1 soubor"
 		Then I should see "<message>"
 		Then I should not see "<message2>"
@@ -41,6 +41,6 @@ Feature: Uploading photo on main page
 		And I am on "/"
 		And I should see "Fotky"
 		And I attach to "newStreamImageFormImageFile0" the file "profile_photo_woman.jpg"
-		And I press "frm-userStream-newStreamImageForm-submit"
+		And I press "frm-newStreamImageForm-submit"
 		Then I should not see "Musíte vybrat alespoň 1 soubor"
 		
