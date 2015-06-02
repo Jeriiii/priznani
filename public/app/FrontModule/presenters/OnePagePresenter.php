@@ -317,4 +317,19 @@ class OnePagePresenter extends BasePresenter {
 		return new PhotoRating($this->userImageDao, $this->rateImageDao, $this->imageLikesDao, $this->loggedUser, $this->userCategoryDao, $this->session, $this, $name);
 	}
 
+	protected function createComponentSetInitimityForm($name) {
+		$loggedUser = $this->loggedUser;
+		if (!($loggedUser instanceof ActiveRow)) {
+			$loggedUser = $this->userDao->find($loggedUser->id);
+		}
+
+		$daoBox = new DaoBox();
+		$daoBox->userDao = $this->userDao;
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->userCategoryDao = $this->userCategoryDao;
+
+		$sm = $this->getSessionManager();
+		return new Frm \ SetInitimityForm($loggedUser, $sm, $daoBox, $this, $name);
+	}
+
 }
