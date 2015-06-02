@@ -170,7 +170,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	public function createComponentJs() {
-		return OnePageWebloader::js($this->template->basePath);
+		return OnePageWebloader::js($this->template);
 	}
 
 	public function createComponentSearch() {

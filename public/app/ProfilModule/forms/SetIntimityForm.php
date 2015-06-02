@@ -36,8 +36,6 @@ class SetInitimityForm extends BaseForm {
 		$this->sessionManager = $sessionManager;
 		$this->daoBox = $daoBox;
 
-		$this->addGroup('Nastavení INTIMITY');
-
 		$yesNo = array(1 => 'Ano', 0 => 'Ne');
 		$intimity = $this->addRadioList('intimity', 'Chci vidět intimní fotky', $yesNo);
 
@@ -48,8 +46,10 @@ class SetInitimityForm extends BaseForm {
 			$intimity->setDefaultValue($showIntim);
 		}
 
-		$this->addSubmit('send', 'Změnit')->setAttribute("class", "btn-main medium button button");
+		$this->addSubmit('send', 'Uložit')->setAttribute("class", "btn-main btn-small button button");
 		$this->onSuccess[] = callback($this, 'submitted');
+		$this->setBootstrapRender();
+		$this->getElementPrototype()->addClass('intimityForm');
 		return $this;
 	}
 

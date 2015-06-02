@@ -9,6 +9,7 @@ namespace POS\Webloaders;
 
 use WebLoader\FileCollection;
 use WebLoader\Compiler;
+use JavaScriptPacker;
 use WebLoader\Nette\JavaScriptLoader;
 use Nette\Templating\Template;
 
@@ -23,7 +24,7 @@ class OnePageWebloader {
 	private static $JS_CACHE_DIR = WWW_DIR . '/cache/js';
 
 	public static function js(Template $template) {
-		$files = new FileCollection($this->JS_FOLDER);
+		$files = new FileCollection(self::$JS_FOLDER);
 		$files->addFiles(array(
 			'profilePhotoBackground.js',
 			'stream.js',
@@ -33,7 +34,7 @@ class OnePageWebloader {
 			'lists/initMarkedFromOther.js',
 			'onepage/default.js'
 		));
-		$compiler = Compiler::createJsCompiler($files, $this->JS_CACHE_DIR);
+		$compiler = Compiler::createJsCompiler($files, self::$JS_CACHE_DIR);
 		$compiler->addFilter(function ($code) {
 			$packer = new JavaScriptPacker($code, "None");
 			return $packer->pack();

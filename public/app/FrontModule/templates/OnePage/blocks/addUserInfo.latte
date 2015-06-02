@@ -8,7 +8,9 @@
 		</div>
 	{/if}
 	{if $user->isLoggedIn() && $loggedUser->property->showIntim == null && $loggedUser->property->type == 2} {* žena *}
+		<div style="background-color: white;">
 		{control setInitimityForm}
+		</div>
 	{elseif $user->isLoggedIn() && empty($profilePhoto)}
 		<div id="activeBackgroundUploadPhoto" style="z-index:10000;position:fixed;top:0;left:0;background: rgba(20, 20, 20, 0.4);"></div>
 		<script>
