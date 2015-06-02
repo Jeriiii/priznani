@@ -20,6 +20,7 @@ use POSComponent\Stream\StreamInicializator;
 use Nette\Application\Responses\JsonResponse;
 use UserBlock\UserBlocker;
 use POSComponent\CropImageUpload\CropImageUpload;
+use POS\Webloaders\OnePageWebloader;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -169,22 +170,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	public function createComponentJs() {
-		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
-		$files->addFiles(array(
-			'profilePhotoBackground.js',
-			'stream.js',
-			'lists/initFriendRequest.js',
-			'lists/initFriends.js',
-			'lists/initBlokedUsers.js', //zakomentováno do první verze přiznání
-			'lists/initMarkedFromOther.js',
-			'onepage/default.js'
-		));
-		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
-		$compiler->addFilter(function ($code) {
-			$packer = new JavaScriptPacker($code, "None");
-			return $packer->pack();
-		});
-		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+		return OnePageWebloader::js($this->template->basePath);
 	}
 
 	public function createComponentSearch() {
