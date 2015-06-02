@@ -14,6 +14,7 @@ use POS\Model\UserPlaceDao;
 use NetteExt\DaoBox;
 use Nette\Database\Table\ActiveRow;
 use POSComponent\CropImageUpload\CropImageUpload;
+use POS\Ext\ImageRules;
 
 class EditPresenter extends ProfilBasePresenter {
 
@@ -114,6 +115,7 @@ class EditPresenter extends ProfilBasePresenter {
 	public function renderInappropriateProfilPhoto($imageID) {
 		$this->template->userData = $this->userData;
 		$this->template->image = $this->image;
+		$this->template->rules = ImageRules::$rules;
 	}
 
 	protected function createComponentFirstEditForm($name) {

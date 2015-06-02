@@ -16,4 +16,9 @@
 	<a class="btn" n:href="AcceptImages:checkFrontPageUserImages">Na hl. stránku {$notCheckFrontPageCount}</a>
 	{/if}
 </div>
+<ol>
+	{foreach $rules as $rule}
+		<li>{$rule['info']} <i class="text-info">{$rule['more']}</i></li>
+	{/foreach}
+</ol>
 {/block}
