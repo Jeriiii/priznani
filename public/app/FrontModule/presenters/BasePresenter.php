@@ -95,7 +95,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public function getSessionManager() {
 		if ($this->sessionManager == null) {
-			if ($this->loggedUser == null) {
+			if (empty($this->loggedUser)) {
 				$this->loggedUser = $this->userDao->find($this->user->id);
 			}
 

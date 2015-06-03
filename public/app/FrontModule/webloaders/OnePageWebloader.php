@@ -20,11 +20,8 @@ use Nette\Templating\Template;
  */
 class OnePageWebloader {
 
-	private static $JS_FOLDER = WWW_DIR . '/js';
-	private static $JS_CACHE_DIR = WWW_DIR . '/cache/js';
-
 	public static function js(Template $template) {
-		$files = new FileCollection(self::$JS_FOLDER);
+		$files = new FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
 			'profilePhotoBackground.js',
 			'stream.js',
@@ -34,7 +31,7 @@ class OnePageWebloader {
 			'lists/initMarkedFromOther.js',
 			'onepage/default.js'
 		));
-		$compiler = Compiler::createJsCompiler($files, self::$JS_CACHE_DIR);
+		$compiler = Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {
 			$packer = new JavaScriptPacker($code, "None");
 			return $packer->pack();

@@ -21,6 +21,7 @@ use Nette\Application\Responses\JsonResponse;
 use UserBlock\UserBlocker;
 use POSComponent\CropImageUpload\CropImageUpload;
 use POS\Webloaders\OnePageWebloader;
+use POSComponent\PhotoRating;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -116,6 +117,7 @@ class OnePagePresenter extends BasePresenter {
 	public function renderDefault() {
 		$this->template->userID = $this->userID;
 		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
+		$this->template->profilePhoto = $this->loggedUser->profilFotoID;
 		$this->template->loggedUser = $this->loggedUser;
 
 		if (!$this->deviceDetector->isMobile() && $this->getUser()->isLoggedIn()) {/* pokud nejsem na mobilu, údaje se nepředají z presenteru */
@@ -135,6 +137,10 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	public function renderMobileDefault() {
+		$this->template->userID = $this->userID;
+		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
+		$this->template->loggedUser = $this->loggedUser;
+
 		if ($this->user->isLoggedIn()) {
 			$this->showQuestion();
 		}
