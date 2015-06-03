@@ -36,8 +36,11 @@ class HttpOnePagePresenter extends BasePresenter {
 	/** @var \POS\Model\CommentConfessionsDao @inject */
 	public $commentConfessionsDao;
 
-	/** @var \POS\Model\StatusDao */
+	/** @var \POS\Model\StatusDao @inject */
 	public $statusDao;
+
+	/** @var \POS\Model\StreamDao @inject */
+	public $streamDao;
 
 	public function startup() {
 		parent::startup();
@@ -118,10 +121,15 @@ class HttpOnePagePresenter extends BasePresenter {
 	 * @param string $status Text statusu.
 	 */
 	public function handleAddStatus($status) {
-		$this->statusDao->insert(array(
+		$stat = $this->statusDao->insert(array(
 			StatusDao::COLUMN_TEXT => $status,
 			StatusDao::COLUMN_USER_ID => $this->loggedUser->id
 		));
+
+		$loggedUserID = $this->loggedUser->id;
+		$categoryID = $this->loggedUser->property->preferencesID;
+
+		$this->streamDao->addNewStatus($stat->id, $loggedUserID, $categoryID);
 
 		$this->sendSuccessJSON('statusAdded');
 	}

@@ -25,6 +25,7 @@ use POSComponent\BaseLikes\StatusLikes;
 use POSComponent\CropImageUpload\CropImageUpload;
 use Polly;
 use Nette\Database\Table\Selection;
+use Exception;
 
 class BaseStream extends BaseProjectControl {
 
