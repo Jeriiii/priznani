@@ -9,19 +9,13 @@ use POS\Model\StreamDao;
 
 class AddStatusForm extends BaseForm {
 
-	/**
-	 * @var \POS\Model\StatusDao
-	 */
+	/** @var \POS\Model\StatusDao */
 	public $statusDao;
 
-	/**
-	 * @var \POS\Model\StreamDao
-	 */
+	/** @var \POS\Model\StreamDao */
 	public $streamDao;
 
-	/**
-	 * @var ActiveRow|ArrayHash
-	 */
+	/** @var ActiveRow|ArrayHash */
 	private $userProperty;
 
 	public function __construct(StreamDao $streamDao, StatusDao $statusDao, $userProperty, IContainer $parent = NULL, $name = NULL) {

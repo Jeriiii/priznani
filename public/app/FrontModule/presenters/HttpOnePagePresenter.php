@@ -9,6 +9,7 @@ use Nette\Application\Responses\JsonResponse;
 use POS\Model\CommentImagesDao;
 use POS\Model\CommentStatusesDao;
 use POS\Model\CommentConfessionsDao;
+use POS\Model\StatusDao;
 
 /**
  * Slouží pro rychlou komunikaci s dalšími zařízeními (např. mobilními).
@@ -34,6 +35,9 @@ class HttpOnePagePresenter extends BasePresenter {
 
 	/** @var \POS\Model\CommentConfessionsDao @inject */
 	public $commentConfessionsDao;
+
+	/** @var \POS\Model\StatusDao */
+	public $statusDao;
 
 	public function startup() {
 		parent::startup();
@@ -107,6 +111,19 @@ class HttpOnePagePresenter extends BasePresenter {
 		$json = array('msg' => $msg);
 		$rsp = new JsonResponse($json);
 		$this->sendResponse($rsp);
+	}
+
+	/**
+	 * Přidá status do stránky.
+	 * @param string $status Text statusu.
+	 */
+	public function handleAddStatus($status) {
+		$this->statusDao->insert(array(
+			StatusDao::COLUMN_TEXT => $status,
+			StatusDao::COLUMN_USER_ID => $this->loggedUser->id
+		));
+
+		$this->sendSuccessJSON('statusAdded');
 	}
 
 	/*	 * ************************************************************** */
