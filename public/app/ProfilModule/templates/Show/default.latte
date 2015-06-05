@@ -26,6 +26,16 @@
 	});
 </script>
 {/block}
+
+{block sorryMessage}
+	{ifset $showSorryMessage}
+		{if $showSorryMessage}
+		<div class="ajaxbox-popUp" data-ajaxbox-header-html="To je nemilé :(" data-ajaxbox-open-on-start="true" data-ajaxbox-close-after="4000">
+			Omlouváme se, že máte takovou zkušenost.
+		</div>
+		{/if}
+	{/ifset}
+{/}
 {block content}
 <section id="entire-page">
 	<div id="content">
@@ -116,11 +126,7 @@
 		{control profilStream}
 	</div>
 	<div class="clear"></div>
-
-
-
-
-
+	{include #sorryMessage}
 
 <div id="right-dock">
 	    {*reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama reklama *}
