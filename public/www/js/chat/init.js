@@ -8,7 +8,7 @@ $(function () {
 			$('body').chat();
 
 			$("#contacts").slimScroll({
-				height: ($("#contacts").height() - 2 * $("#contacts .support-contact-spacer").outerHeight()) + 'px'//nechává si místo na tlačítko pro podporu
+				height: ($("#contacts").outerHeight() - 2 * $("#contacts .support-contact-spacer").outerHeight()) + 'px'//nechává si místo na tlačítko pro podporu
 			});
 		});
 	}

@@ -450,6 +450,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			'chat/jquery.ui.chatbox/jquery.ui.chatbox.js',
 			'chat/jquery.ui.chatbox/chatboxManager.js',
 			'chat/toogleContacts.js',
+			'chat/search/standard.js',
 			'ajaxBox/ajaxbox-signed-in-init.js',
 			'ajaxBox/activities/activities.js',
 		));
