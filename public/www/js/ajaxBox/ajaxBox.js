@@ -125,7 +125,9 @@
 		/* zpráva v headeru okénka */
 		headerHtml: "",
 		/* objekt definující zapnutí a nastavení modulu pro obnovování snippetu a kontroly jeho příchozího obsahu */
-		streamSnippetModule: false
+		streamSnippetModule: false,
+		/* čas [ms] po kterém se okénko samo zavře, když je 0, nezavře se */
+		closeAfter: 0
 	};
 
 
@@ -143,6 +145,11 @@
 		$(button).addClass('active');
 		if (opts.hideOthers) {//vyvolani pozadi
 			showBlackBackground(opts, boxSelector);
+		}
+		if(opts.closeAfter !== 0){/* zavření po určitém čase */
+			setTimeout(function(){
+				$('body').trigger('click');/* klikne se na body, aby to fungovalo i s okénky bez zavíracího křížku */
+			}, opts.closeAfter);
 		}
 	};
 
@@ -220,6 +227,9 @@
 
 		if ($box.data("ajaxbox-info-message") !== undefined) {
 			opts.infoMessage = $box.data("ajaxbox-info-message");
+		}
+		if ($box.data("ajaxbox-close-after") !== undefined) {
+			opts.closeAfter = $box.data("ajaxbox-close-after");
 		}
 		return opts;
 	}
