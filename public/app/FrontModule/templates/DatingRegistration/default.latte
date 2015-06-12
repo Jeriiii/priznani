@@ -91,6 +91,18 @@
 </div>
 {/block}
 
+{block lastSlide}
+<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/1">
+	<div id="last-slide" class="inner relative">
+		<div class="form-window">
+			{include #datingContent}
+		</div>
+		<div class="clear"></div>
+	</div>
+	<a class="scroll-to-btn" href="#registration-form" data-anchor="#registration-form"></a>
+</div>
+{/}
+
 {block datingFoot}
 {control js 'registration/second-birthdate.js'}
 {/}
