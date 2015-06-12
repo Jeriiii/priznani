@@ -68,7 +68,7 @@ if (!Array.indexOf) {
 
 					var msgElement = document.createElement(
 							systemMessage ? "i" : "span");
-					$(msgElement).text(msg);
+					$(msgElement).html(Autolinker.link(msg));
 					var sended = document.createElement("time");
 					$(sended).text(sendedDate);
 					e.appendChild(msgElement);

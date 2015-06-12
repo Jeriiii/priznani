@@ -445,6 +445,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	public function createComponentJsLayoutLoggedIn() {
 		$files = new \WebLoader\FileCollection(WWW_DIR . '/js');
 		$files->addFiles(array(
+			'Autolinker.js',
 			'chat/core.js',
 			'chat/init.js',
 			'chat/jquery.ui.chatbox/jquery.ui.chatbox.js',
