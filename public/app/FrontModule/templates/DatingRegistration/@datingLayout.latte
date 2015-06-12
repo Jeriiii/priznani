@@ -44,18 +44,22 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             margin-top: 0;
         }
     </style>
+	
 {/block}
 
-{block content}
-<div class="form-window">
-	{include #datingContent}
+{block afterContent}
+<div class="paralax-slide" data-parallax="scroll" data-image-src="http://lorempixel.com/output/fashion-q-c-1920-1044-4.jpg">
+	<div class="form-window">
+		{include #datingContent}
+	</div>
+	<div class="clear"></div>
 </div>
 {/block}
 
 {block head}
 	<link rel="stylesheet" href="{$basePath}/css/bar.css" type="text/css">
 
-	{control css 'sign/universal.less', 'sign/registration.less'}
+	{control css 'sign/universal.less', 'sign/registration.less', 'paralax/paralax.less'}
 
 	{ifset #datingHead}
 		{include #datingHead}
@@ -63,9 +67,10 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 {/block}
 
 {block foot}
-<script type="text/javascript" src="{$basePath}/js/infobar.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/infobar.js"></script>
 	{ifset #datingFoot}
 		{include #datingFoot}
 	{/ifset}
 	{control js 'features/body-image-fitter.js'}
+	<script src="{$basePath}/js/registration/paralax/parallax.min.js"></script>
 {/block}
