@@ -4,6 +4,7 @@ use POSComponent\Chat\MobileChat;
 use POSComponent\Stream\ChatStream;
 use POSComponent\Chat\MobileContactList;
 use POS\Chat\ChatManager;
+use POSComponent\Chat\StandardCommunicator;
 
 /**
  * Pro práci se zprávami přes celoou stránku
@@ -46,12 +47,20 @@ class ChatPresenter extends BasePresenter {
 	/** Metoda volaná v obou renderech (mobilní i desktopový) */
 	private function defaultRenderDefault($userInChatID) {
 		$this->template->userInChat = $this->userDao->find($userInChatID);
+		$this->template->userInChatCodedID = $this->chatManager->getCoder()->encode($userInChatID);
+		$this->template->sendMessageLink = $this->link('sendMessage!');
 		if ($this->blockedDao->isBlocked($this->getUser()->getId(), $userInChatID)) {
 			$this->template->blockedMessage = ChatManager::USER_IS_BLOCKING_MESSAGE;
 		}
 		if ($this->blockedDao->isBlocked($userInChatID, $this->getUser()->getId())) {
 			$this->template->blockedMessage = ChatManager::USER_IS_BLOCKED_MESSAGE;
 		}
+	}
+
+	/** handler pro posílání zpráv z presenteru */
+	public function handleSendMessage() {
+		$chatCommunicator = new StandardCommunicator($this->chatManager);
+		$chatCommunicator->handleSendMessage(); /* !!! data jsou v POSTu !!! */
 	}
 
 	protected function createComponentConversation($name) {

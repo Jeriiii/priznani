@@ -28,6 +28,8 @@
 	};
 	
 	$.fn.chatConversationPage.defaults = {
+		sendMessageLink: '',
+		recipientId: null,
 		valSettingsOn : false, //zapne val. chat
 		msgSettingsOn : false, //zapne klasické pos. zpráv mezi dvěma uživateli
 		settings: null,
@@ -44,19 +46,41 @@
 	 */
 	function submitMessageForm (opts) {
 		$('.send-msg-form').submit(function(e) {
-			$.nette.ajax({
-				complete:function(data) {
-					submitMessageForm(opts);
-					$.nette.ajax({
-						url: $("#refresh-conversation").attr('href') + "&" + opts.settings.lastId + "=" + lastId,
-						success: function () {},
-						error: function () {},
-						complete: pushOnEnd
-					});
-				}
-			}, this, e);
-
-			e.preventDefault();		
+			e.preventDefault();
+			var requestData = {
+				to: opts.recipientId,
+				type: 'textMessage',
+				text: $(this).find('input[name="message"]').val(),
+				lastid: lastId
+			};
+//			
+//			var json = JSON.stringify(data);
+//
+//			$.ajax({
+//				dataType: "json",
+//				type: 'POST',
+//				url: url,
+//				data: json,
+//				contentType: 'application/json; charset=utf-8',
+//				success: handleResponse,
+//				error: function () {
+//					reloadWindowUnload();
+//				}
+//			});
+			
+//			$.nette.ajax({
+////				complete:function(data, status) {
+////					if(status === 'success'){
+////						submitMessageForm(opts);
+////						$.nette.ajax({
+////							url: $("#refresh-conversation").attr('href') + "&" + opts.settings.lastId + "=" + lastId,
+////							success: function () {},
+////							error: function () {},
+////							complete: pushOnEnd
+////						});
+////					}
+////				}
+//			}, this, e);		
 		});
 	}
 	

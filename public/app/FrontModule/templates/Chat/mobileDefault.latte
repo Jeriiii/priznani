@@ -35,7 +35,9 @@
 			autoLoadData: false
 		});		
 		$('body').chatConversationPage({
-			msgSettingsOn: true //zapnutí nastavení pro zprávy
+			msgSettingsOn: true, //zapnutí nastavení pro zprávy
+			recipientId: {$userInChatCodedID},
+			sendMessageLink: {$sendMessageLink}
 		});
 	});
 </script>
