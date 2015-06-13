@@ -43,7 +43,6 @@ class UserGalleryImagesBaseForm extends BaseForm {
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
 		$this->streamDao = $streamDao;
-		$this->imageUploader = new ImageUploader($userImageDao);
 	}
 
 	public function suffix($filename) {

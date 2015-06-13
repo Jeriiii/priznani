@@ -59,10 +59,10 @@ class ImageToUpload {
 		if (empty($this->suffix)) {
 
 			if ($this->file instanceof Image) {
-				$suffix = self::suffix($this->name);
+				$this->suffix = self::suffix($this->name);
 				$this->name = '';
 			} else {
-				$suffix = self::suffix($this->file->getName());
+				$this->suffix = self::suffix($this->file->getName());
 			}
 		}
 

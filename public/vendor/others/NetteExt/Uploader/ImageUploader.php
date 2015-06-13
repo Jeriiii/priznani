@@ -14,6 +14,11 @@ use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
 use NetteExt\Form\Upload\UploadImage;
+use NetteExt\Path\GalleryPathCreator;
+use NetteExt\Watermarks;
+use NetteExt\File;
+use Nette\Http\FileUpload;
+use NetteExt\Path\ImagePathCreator;
 
 /**
  * Třída sloužící pro nahrávání obrázků.
@@ -48,14 +53,14 @@ class ImageUploader {
 	 */
 	public function saveImages(ImagesToUpload $imagesToUpload) {
 		//získání počtu user obrázků, které mají allow 1
-		$allowedImagesCount = $this->userImageDao->countAllowedImages($imagesToUpload->userID);
+		$allowedImagesCount = $this->userImageDao->countAllowedImages($imagesToUpload->getUserID());
 
 		//pokud je 1 a více schválených, schválí i nově přidávanou
 		$allow = $allowedImagesCount >= self::AllowLimitForImages ? TRUE : FALSE;
 
 		$images = $imagesToUpload->getImages();
 		foreach ($images as $image) {
-			$allow = $this->saveImage($image, $allow, $imagesToUpload->userID, $imagesToUpload->galleryID);
+			$allow = $this->saveImage($image, $allow, $imagesToUpload->getUserID(), $imagesToUpload->getGalleryID());
 		}
 
 		return $allow;
@@ -78,7 +83,7 @@ class ImageUploader {
 			//Uloží obrázek do databáze
 			$imageRow = $this->saveImageToDB($image, $galleryID, $allow);
 
-			$this->upload($image->file, $imageRow->id, $galleryID, $userID, 525, 700, 100, 130);
+			$this->upload($image, $imageRow->id, $galleryID, $userID, 525, 700, 100, 130);
 
 			//zaznamenání velikosti screnu do proměných width/heightGalScrn
 			$this->changeSizeGalScrnDB($galleryID, $userID, $imageRow->id, $image->suffix);
@@ -138,10 +143,11 @@ class ImageUploader {
 			/* uložení souboru a renačtení */
 			$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryID, $userID);
 
+			$paths;
 			if ($image->file instanceof FileUpload) {
 				$paths = UploadImage::upload(
 						$image->file, $id, $image->suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
-			} else if ($image instanceof Image) {
+			} else if ($image->file instanceof Image) {
 				$paths = UploadImage::moveImage(
 						$image->file, $id, $image->suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
 			}

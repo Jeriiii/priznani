@@ -55,4 +55,12 @@ class ImagesToUpload {
 		return $this->images;
 	}
 
+	function getUserID() {
+		return $this->userID;
+	}
+
+	function getGalleryID() {
+		return $this->galleryID;
+	}
+
 }
