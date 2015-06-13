@@ -34,6 +34,7 @@ class UserGalleryDao extends BaseGalleryDao {
 	const COLUMN_PROFILE = "profil_gallery";
 	const COLUMN_VERIFICATION = "verification_gallery";
 	const COLUMN_PRIVATE = "private";
+	const COLUMN_INTIM = "intim";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -387,6 +388,26 @@ class UserGalleryDao extends BaseGalleryDao {
 			self::COLUMN_COUPLE => $couple,
 			self::COLUMN_MORE => $more
 		));
+	}
+
+	/**
+	 * PRO CRON
+	 * Přepočítá všechny galerie, jestli se v nich nenachází intimní fotka.
+	 */
+	public function recalIntims() {
+		$sel = $this->getTable();
+
+		foreach ($sel as $gallery) {
+			$images = $this->createSelection(UserImageDao::TABLE_NAME);
+			$images->where(UserImageDao::COLUMN_GALLERY_ID, $gallery->id);
+			$images->where(UserImageDao::COLUMN_INTIM, 1);
+
+			if ($images->fetch()) { //pokud je v ní alespoň jeden intimní obrázek
+				$gallery->update(array(
+					self::COLUMN_INTIM => 1
+				));
+			}
+		}
 	}
 
 }

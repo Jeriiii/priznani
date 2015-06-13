@@ -24,6 +24,9 @@ class CronPresenter extends BasePresenter {
 	/** @var \POS\Model\UserPropertyDao @inject */
 	public $userPropertyDao;
 
+	/** @var \POS\Model\UserGalleryDao @inject */
+	public $userGalleryDao;
+
 	/** @var \POS\Model\UserImageDao @inject */
 	public $userImageDao;
 
@@ -95,6 +98,14 @@ class CronPresenter extends BasePresenter {
 //		echo("Nahrávání proběhlo úspěšně, bylo nahráno " . --$counter . " přiznání z " . $allConCount);
 		die();
 //		$this->redirect("this");
+	}
+
+	public function actionIntimImages() {
+		$this->userGalleryDao->recalIntims();
+		$this->streamDao->recalIntims();
+
+		echo 'Intimní galerie byly přepočítány.';
+		die();
 	}
 
 }

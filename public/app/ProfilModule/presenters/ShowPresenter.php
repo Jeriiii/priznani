@@ -168,13 +168,16 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * vykresluje  uzivatelsky stream (zed s vlastnimi prispevky)
 	 * @param type $id
 	 */
-	public function renderDefault($id) {
+	public function renderDefault($id, $weAreSorry = FALSE) {
 		/* kontrola zda jde o muj profil */
 		$isMyProfile = FALSE;
 		if ($this->user->isLoggedIn()) {
 			if ($this->userID == $this->getPresenter()->getUser()->id) {
 				$isMyProfile = TRUE;
 			}
+		}
+		if ($weAreSorry) {
+			$this->template->showSorryMessage = TRUE;
 		}
 		$this->template->isMyProfile = $isMyProfile;
 		$this->template->isBlocked = $this->userBlockedDao->isBlocked($this->loggedUser->id, $id);
@@ -217,11 +220,10 @@ class ShowPresenter extends ProfilBasePresenter {
 	 */
 	public function handleBlockUser($blockUserID) {
 		$blocker = $this->createUserBloker(); /* zablokuje uživatele */
-
 		$blocker->blockUser($blockUserID, $this->loggedUser, $this->session);
 
 		$this->flashMessage("Uživatel byl zablokován");
-		$this->redirect("this");
+		$this->redirect("this", array('weAreSorry' => TRUE));
 	}
 
 	/**

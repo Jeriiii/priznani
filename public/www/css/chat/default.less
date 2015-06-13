@@ -72,7 +72,7 @@
 			}
 			
 			#chat-search-input{
-				width: 64%;
+				width: 96%;
 				display: block;
 				float: left;
 				height: 24px;
@@ -81,6 +81,27 @@
 				color: @text-color;
 				border: 0;
 				border-bottom: 1px solid #737373;
+				&.with-one-icon{
+					width: 80%;
+				}
+				&.with-two-icons{
+					width: 64%;
+				}
+				
+				&::-webkit-input-placeholder { /* WebKit browsers */
+					color: darken(@text-color, 20%);
+				}
+				&:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+				   color: darken(@text-color, 20%);
+				   opacity:  1;
+				}
+				&::-moz-placeholder { /* Mozilla Firefox 19+ */
+				   color: darken(@text-color, 20%);
+				   opacity:  1;
+				}
+				&:-ms-input-placeholder { /* Internet Explorer 10+ */
+				   color: darken(@text-color, 20%);
+				}
 				
 			}
 			
@@ -339,6 +360,10 @@
 					display: block;
 					font-size: 11px;
 					padding-top: 1px;
+				}
+				a {
+					color: #cf0707;
+					text-decoration: underline;
 				}
 			}			 
 		 }

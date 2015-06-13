@@ -13,29 +13,19 @@ use POS\Model\EnumPlaceDao;
 
 class EditPlacesPositionsForm extends PlacesAndPositionsForm {
 
-	/**
-	 * @var \POS\Model\UserPositionDao
-	 */
+	/** @var \POS\Model\UserPositionDao */
 	public $userPositionDao;
 
-	/**
-	 * @var \POS\Model\EnumPositionDao
-	 */
+	/** @var \POS\Model\EnumPositionDao */
 	public $enumPositionDao;
 
-	/**
-	 * @var \POS\Model\UserPlaceDao
-	 */
+	/** @var \POS\Model\UserPlaceDao */
 	public $userPlaceDao;
 
-	/**
-	 * @var \POS\Model\EnumPlaceDao
-	 */
+	/** @var \POS\Model\EnumPlaceDao */
 	public $enumPlaceDao;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 */
+	/** @var \POS\Model\UserDao */
 	public $userDao;
 
 	public function __construct(UserPositionDao $userPositionDao, EnumPositionDao $enumPositionDao, UserPlaceDao $userPlaceDao, EnumPlaceDao $enumPlaceDao, Userdao $userDao, IContainer $parent = NULL, $name = NULL) {

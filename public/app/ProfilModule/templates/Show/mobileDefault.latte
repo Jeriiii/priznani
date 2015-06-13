@@ -48,13 +48,18 @@
 			            <h3>Poslat zprávu</h3>
 			            {control sendMessageForm}
 				</div>
-				{if !$isFriends}
-					{control sendFriendRequest}
-				{/if}
-				{var $link = array('blockUser!', array(blockUserID => $userData->id) )}
-				{control blockUser $userData->id, $userData->user_name, $link}
+				{include #userOptionsMenuHead}
+					{if !$isFriends}
+						{control sendFriendRequest}
+					{/if}
+					{var $link = array('blockUser!', array(blockUserID => $userData->id) )}
+					{control blockUser $userData->id, $userData->user_name, $link}
+				{include #userOptionsMenuFoot}
+				</div>
 			{else}
-				<a n:href="unblockUser! unblockUserID => $userData->id" tittle="Odblokovat uživatele" class="ui-btn">Odblokovat</a>
+				{include #userOptionsMenuHead}
+					<a n:href="unblockUser! unblockUserID => $userData->id" tittle="Odblokovat uživatele" class="ui-btn">Odblokovat</a>
+				{include #userOptionsMenuFoot}
 			{/if}
 		{/if}
 	</nav>
@@ -75,7 +80,20 @@
 
 {include 'mobileMenu.latte' $userID => 'id'}
 
-{control profilStream}
+<section class="content">
+	<div id="stream"> {control profilStream} </div>
+	<div class="clear"></div>
+</section>
 <div class="clear"></div>
 
 {/block}
+
+
+{block userOptionsMenuHead}
+	<div id="user-settings-menu" class="collapsable-menu" data-role="collapsible" data-theme="a" data-content-theme="a">
+		<h3>Více možností...</h3>
+{/}
+
+{block userOptionsMenuFoot}
+	</div>
+{/}
