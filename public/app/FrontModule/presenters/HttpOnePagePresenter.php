@@ -10,6 +10,11 @@ use POS\Model\CommentImagesDao;
 use POS\Model\CommentStatusesDao;
 use POS\Model\CommentConfessionsDao;
 use POS\Model\StatusDao;
+use NetteExt\Uploader\ImageUploader;
+use NetteExt\Uploader\ImagesToUpload;
+use NetteExt\Uploader\ImageToUpload;
+use NetteExt\Image;
+use Nette\Http\FileUpload;
 
 /**
  * Slouží pro rychlou komunikaci s dalšími zařízeními (např. mobilními).
@@ -41,6 +46,12 @@ class HttpOnePagePresenter extends BasePresenter {
 
 	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
+
+	/** @var \POS\Model\UserGalleryDao @inject */
+	public $userGalleryDao;
+
+	/** @var \POS\Model\UserImageDao @inject */
+	public $userImageDao;
 
 	public function startup() {
 		parent::startup();
@@ -135,34 +146,33 @@ class HttpOnePagePresenter extends BasePresenter {
 	}
 
 	public function handleUploadImage() {
-		if (isset($_FILES['image']['name'])) {
-			$target_path = $target_path . basename($_FILES['image']['name']);
+		$imgName = $_FILES['image']['name'];
 
-			// reading other post parameters
+		if (isset($imgName)) { //byl obrázek nahrán?
+			$userID = $this->loggedUser->id;
 			$email = isset($_POST['email']) ? $_POST['email'] : '';
-			$website = isset($_POST['website']) ? $_POST['website'] : '';
 
 			$response['file_name'] = basename($_FILES['image']['name']);
 			$response['email'] = $email;
-			$response['website'] = $website;
 
-			try {
-				// Throws exception incase file is not being moved
-				if (!move_uploaded_file($_FILES['image']['tmp_name'], $target_path)) {
-					// make error flag true
-					$response['error'] = true;
-					$response['message'] = 'Could not move the file!';
-				}
-
-				// File successfully uploaded
-				$response['message'] = 'File uploaded successfully!';
-				$response['error'] = false;
-				$response['file_path'] = $file_upload_url . basename($_FILES['image']['name']);
-			} catch (Exception $e) {
-				// Exception occurred. Make error flag true
-				$response['error'] = true;
-				$response['message'] = $e->getMessage();
+			$defaultGallery = $this->userGalleryDao->findDefaultGallery($userID);
+			if (empty($defaultGallery)) {
+				$galleryID = $this->userGalleryDao->createDefaultGallery($userID)->id;
+			} else {
+				$galleryID = $defaultGallery->id;
 			}
+
+			$file = new FileUpload($_FILES['image']);
+			$image = new ImageToUpload($file);
+			$imagesToUpload = new ImagesToUpload($userID, $galleryID);
+			$imagesToUpload->addImage($image);
+
+			$uploader = new ImageUploader($this->userGalleryDao, $this->userImageDao, $this->streamDao);
+			$uploader->saveImages($imagesToUpload);
+
+			// File successfully uploaded
+			$response['message'] = 'File uploaded successfully!';
+			$response['error'] = false;
 		} else {
 			// File parameter is missing
 			$response['error'] = true;
@@ -170,11 +180,8 @@ class HttpOnePagePresenter extends BasePresenter {
 		}
 
 		// Echo final json response to client
-		echo json_encode($response);
-
-
-		$this->flashMessage("");
-		$this->redirect("this");
+		$rsp = new JsonResponse($response);
+		$this->sendResponse($rsp);
 	}
 
 	/*	 * ************************************************************** */
