@@ -259,6 +259,27 @@ class ChatMessagesDao extends AbstractDao {
 	}
 
 	/**
+	 * Vrátí určitý počet zpráv mezi dvěma uživateli starší než daná zpráva.
+	 * @param int $lastMessageId id dané zprávy
+	 * @param int $idUser1 odesílatel/příjemce zpráv
+	 * @param int $idUser2 odesílatel/příjemce zpráv
+	 * @param int $limit kolik maximálně zpráv bude vráceno
+	 * @return Nette\Database\Table\Selection zprávy
+	 */
+	public function getOlderMessagesBetween($lastMessageId, $idUser1, $idUser2, $limit) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID . ' < ?', $lastMessageId);
+		/* vybere zprávy mezi dvěma uživateli */
+		$sel->where(self::COLUMN_ID_SENDER . ' = ? AND ' . self::COLUMN_ID_RECIPIENT . ' = ? OR ' .
+			self::COLUMN_ID_RECIPIENT . ' = ? AND ' . self::COLUMN_ID_SENDER . ' = ? ', $idUser1, $idUser2, $idUser1, $idUser2);
+
+		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
+		$sel->order(self::COLUMN_ID . ' DESC');
+		$sel->limit($limit);
+		return $sel;
+	}
+
+	/**
 	 * Vrátí úplně všechny nepřečtené ODCHOZÍ zprávy daného uživatele
 	 * @param int $idSender id uživatele, který zprávy poslal
 	 * @return Nette\Database\Table\Selection odchozí zprávy

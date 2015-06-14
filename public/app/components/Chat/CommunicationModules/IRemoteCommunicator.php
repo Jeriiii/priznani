@@ -16,7 +16,7 @@ interface IRemoteCommunicator {
 	 * Zpracovani prichozi zpravy
 	 * data prichazeji POSTem
 	 */
-	public function handleSendMessage();
+	public function handleSendMessage($toId, $text, $type);
 
 	/**
 	 * Vyřízení žádosti o poslání nových zpráv

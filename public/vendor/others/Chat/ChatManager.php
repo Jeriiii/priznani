@@ -142,6 +142,18 @@ class ChatManager extends \Nette\Object {
 	}
 
 	/**
+	 * Vrátí zprávy starší než ta s daným id
+	 * @param int $lastId id nejstarší známé zprávy
+	 * @param int $limit maximální počet vrácených zpráv
+	 * @param int $idUser1 id prvního uživatele
+	 * @param int idUser2 id druhého uživatele
+	 * @return \Nette\Database\Table\Selection zprávy
+	 */
+	public function getOlderMessagesBetween($lastId, $limit, $idUser1, $idUser2) {
+		return $this->messagesDao->getOlderMessagesBetween($lastId, $idUser1, $idUser2, $limit);
+	}
+
+	/**
 	 * Vrátí instanci Coderu k použití
 	 * @return ChatCoder
 	 */

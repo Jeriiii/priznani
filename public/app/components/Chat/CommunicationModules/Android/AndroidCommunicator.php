@@ -30,21 +30,8 @@ class AndroidCommunicator extends BaseChatComponent implements IRemoteCommunicat
 	 */
 	const USERNAMES_SESSION_NAME = 'chat_usernames';
 
-	/**
-	 * Prefix session, kde se registruji pozadavky na zpravu o doruceni zpravy
-	 */
-	const DELIVERY_SESSION_NAME = 'chat_delivery_requests';
-
-	/**
-	 * co se pošle uživateli za text v případě, že byla jeho zpráva doručena
-	 */
-	const DELIVERY_MESSAGE = 'Doručeno.';
-
-	/**
-	 * Vykreslení komponenty
-	 */
 	public function render() {
-		//norender
+		/* no render */
 	}
 
 	public function handleGetConversations() {
@@ -160,19 +147,25 @@ class AndroidCommunicator extends BaseChatComponent implements IRemoteCommunicat
 	/**
 	 * Zpracuje poslani zpravy zaslane prohlizecem ve formatu JSON
 	 */
-	public function handleSendMessage() {
-		$json = file_get_contents("php://input"); //vytánutí všech dat z POST požadavku - data ve formátu JSON
-		$data = Json::decode($json); //prijata zprava dekodovana z JSONu
+	public function handleSendMessage($toId, $text, $type) {
 		$user = $this->getPresenter()->getUser();
-		if (!empty($data) && $data->type == 'textMessage' && $user->isLoggedIn()) {//ulozeni zpravy do DB
+		if ($type == 'textMessage' && $user->isLoggedIn()) {//ulozeni zpravy do DB
 			$senderId = $user->getId();
-			$data->to = (int) $this->chatManager->getCoder()->decodeData($data->to); //dekodovani id
-			$message = $this->chatManager->sendTextMessage($senderId, $data->to, $data->text); //ulozeni zpravy
-			if ($this->isActualUserPaying()) {//pokud je uzivatel platici
-				$this->registerInfoAboutDelivery($data->to, $message->offsetGet(ChatMessagesDao::COLUMN_ID));
-			}
-			$this->sendRefreshResponse($data->lastid);
+			$toId = (int) $this->chatManager->getCoder()->decodeData($toId); //dekodovani id
+			$message = $this->chatManager->sendTextMessage($senderId, $toId, $text); //ulozeni zpravy
+			$this->getPresenter()->sendJson(array(
+				'id' => $message->id,
+				'senderName' => $this->getUsername($user->getId()),
+				'sendedDate' => $message->sendedDate->format('d.m.Y H:i')
+			));
 		}
+	}
+
+	public function handleGetOlderMessages($lastId, $limit, $withUserId) {
+		$toId = (int) $this->chatManager->getCoder()->decodeData($withUserId); //dekodovani id
+		$messages = $this->chatManager->getOlderMessagesBetween($lastId, $limit, $this->getPresenter()->getUser()->getId(), $toId);
+		$jsonMessages = $this->convertMessagesToJson($messages);
+		$this->getPresenter()->sendJson(array('oldermessages' => empty($jsonMessages) ? NULL : $jsonMessages));
 	}
 
 	/**
@@ -186,39 +179,6 @@ class AndroidCommunicator extends BaseChatComponent implements IRemoteCommunicat
 			$readedArray = (array) Json::decode($readedmessages);
 			$this->chatManager->setOlderMessagesReaded($readedArray, $user->getId(), TRUE); //oznaceni zprav za prectene
 			$this->sendRefreshResponse($lastid);
-		}
-	}
-
-	/**
-	 * Vezme pole odpovědi a k danému uživateli, se kterým si píšu, zaregistruje žádost
-	 * o potvrzení přijetí poslední zprávy, pokud je tato zpráva odeslána přihlášeným uživatelem
-	 * @param int $userId id uživatele, se kterým si píšu
-	 * @param int $codedId kódované id uživatele, se kterým si píšu
-	 * @param array $response pole odpovědi viz dokumentace
-	 */
-	private function registerInfoToLastMessage($userId, $codedId, $response) {
-		if ($this->isActualUserPaying() && !empty($response)) {//pokud je uzivatel platici
-			$lastMessage = end($response[$codedId]['messages']); //posledni zprava z posilanych
-			if ($lastMessage['fromMe'] == 1) {//zprava je ode me
-				$this->registerInfoAboutDelivery($userId, $lastMessage[ChatMessagesDao::COLUMN_ID]);
-			}
-		}
-	}
-
-	/**
-	 * Zjistí, jestli je aktuální uživatel platící
-	 * @return bool platící/neplatící
-	 */
-	private function isActualUserPaying() {
-		$userId = $this->getPresenter()->getUser()->getId();
-		$session = $this->getPresenter()->getSession(\SignPresenter::USER_INFO_SESSION_NAME);
-		$session->setExpiration(0);
-		if (!empty($session->isPaying)) { //kdyz je v session
-			return $session->isPaying; //vrati hodnotu
-		} else {   //kdyz ne
-			$paying = $this->chatManager->isUserPaying($userId); //podiva se do db
-			$session->isPaying = $paying;   //ulozi do session
-			return $paying; //a vrati hodnotu
 		}
 	}
 
@@ -294,99 +254,6 @@ class AndroidCommunicator extends BaseChatComponent implements IRemoteCommunicat
 		$session = $this->getPresenter()->getSession(self::USERNAMES_SESSION_NAME);
 		$session->setExpiration(0);
 		return $this->chatManager->getUsername($id, $session);
-	}
-
-	/**
-	 * Přidá zprávu odeslanou určitému uživateli do seznamu zpráv, u kterých
-	 * chceme sledovat, zda byly doručeny. Přepisuje dříve zaregistrované
-	 * zprávy adresované stejnému uživateli. Pozn. ID se zde nesifruji.
-	 * @param int $idRecipient id příjemce
-	 * @param int $idMessage id sledované zprávy
-	 */
-	private function registerInfoAboutDelivery($idRecipient, $idMessage) {
-		$session = $this->getDeliverySession();
-		$session->offsetSet($idRecipient, $idMessage);
-	}
-
-	/**
-	 * Přidá do pole odpovědi také informační zprávu o tom, že poslední
-	 * zpráva odeslaná danému uživateli byla přečtena (pokud byla). Pokud
-	 * je již uživatel v poli (tj. posílá zprávu), informační zpráva se nepřidá.
-	 * V případě, že daný uživatel poslal zprávu nebo ji přečetl, se smaže požadavek
-	 * na zjišťování stavu zprávy, registrovaný pomocí registerInfoAboutDelivery
-	 * @param array $responseArray pole odpovědi, kam se má informace přidat
-	 * @return array doplnene pole
-	 */
-	private function addInfoAboutDeliveredMessages($responseArray) {
-		$session = $this->getDeliverySession();
-		$userId = $this->getPresenter()->getUser()->getId();
-		$undeliveredMessages = $this->chatManager->getAllUnreadedMessagesFromUser($userId);
-		foreach ($session as $idRecipient => $idMessage) {//vsechny registrovane pozadavky o precteni
-			$responseArray = $this->resolveSingleRegisteredInfoRequest($idRecipient, $idMessage, $undeliveredMessages, $session, $responseArray);
-		}
-		return $responseArray;
-	}
-
-	/**
-	 * Vrati session s zadostmi o info o doruceni podle aktualniho uzivatele
-	 * @return \Nette\Http\SessionSection session uzivatele
-	 */
-	private function getDeliverySession() {
-		$userId = $this->getPresenter()->getUser()->getId();
-		return $this->getPresenter()->getSession(self::DELIVERY_SESSION_NAME . $userId);
-	}
-
-	/**
-	 * Zjistí, zda má smysl předávat uživateli zprávu o doručení a pokud
-	 * ano, zavolá příslušnou metodu
-	 * @param int $idRecipient skutečné id příjemce
-	 * @param int $idMessage id zprávy
-	 * @param array $undeliveredMessages seznam nedoručených zpráv
-	 * @param \Nette\Http\SessionSection $session session pro seznam žádostí
-	 * @param array $responseArray pole na data prohlížeči
-	 * @return array doplnene pole
-	 */
-	private function resolveSingleRegisteredInfoRequest($idRecipient, $idMessage, $undeliveredMessages, $session, $responseArray) {
-		$recipientCoded = $this->chatManager->getCoder()->encodeData($idRecipient); //data v poli jsou jiz zakodovana
-		if (array_key_exists($recipientCoded, $responseArray)) {//v poli je uzivatel, u nejz cekame na precteni - tj. posila zpravu
-			$session->offsetUnset($idRecipient); //nepotrebujeme tedy navic informovat o precteni
-		} else {//uzivatel novou zpravu neposlal
-			$responseArray = $this->addInfoIfMessageWasReaded($session, $idMessage, $idRecipient, $recipientCoded, $undeliveredMessages, $responseArray);
-		}
-		return $responseArray;
-	}
-
-	/**
-	 * Porovná žádost o info o doručení a seznam
-	 * nedoručených zpráv. Podle toho pak aktualizuje session seznamu a pole s daty.
-	 * @param \Nette\Http\SessionSection $session session pro seznam žádostí
-	 * @param int $idMessage id zprávy
-	 * @param int $idRecipient skutečné id příjemce
-	 * @param int $recipientCoded kódované id příjemce v datech pro prohlížeč
-	 * @param array $undeliveredMessages seznam nedoručených zpráv
-	 * @param array $responseArray pole na data prohlížeči
-	 * @return array doplnene pole
-	 */
-	private function addInfoIfMessageWasReaded($session, $idMessage, $idRecipient, $recipientCoded, $undeliveredMessages, $responseArray) {
-		if (array_key_exists($idMessage, $undeliveredMessages)) {//zprava nebyla prectena
-			//nedela nic
-		} else {//zprava byla prectena
-			$responseArray[$recipientCoded]['messages'] = array($this->createDeliveryInfoMessage());
-			$responseArray[$recipientCoded]['name'] = $this->getUsername($idRecipient);
-			$session->offsetUnset($idRecipient);
-		}
-		return $responseArray;
-	}
-
-	/**
-	 * Vytvori zpravicku o tom, ze zprava byla prectena
-	 * @return array zpravicka
-	 */
-	private function createDeliveryInfoMessage() {
-		return array(
-			ChatMessagesDao::COLUMN_TEXT => self::DELIVERY_MESSAGE,
-			ChatMessagesDao::COLUMN_TYPE => ChatMessagesDao::TYPE_INFO_MESSAGE
-		);
 	}
 
 }
