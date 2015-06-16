@@ -207,6 +207,18 @@ class ChatManager extends \Nette\Object {
 	}
 
 	/**
+	 * Nastaví všechny zprávy starší než dané id (včetně) od daného uživatele jako přečtené
+	 * @param int $idFrom id uživatele, se kterým si píšu
+	 * @param int $idRecipient id přihlášeného uživatele (pro jistotu)
+	 * @param int $lastId id nejnovější přečtené zprávy
+	 * @param int $readed  přečtená/nepřečtená
+	 * @return Nette\Database\Table\Selection upravené zprávy
+	 */
+	public function setOlderMessagesFromUserReaded($idFrom, $idRecipient, $lastId, $readed) {
+		return $this->messagesDao->setOlderMessagesFromUserReaded($idFrom, $idRecipient, $lastId, $readed);
+	}
+
+	/**
 	 * Vrati vsechny neprectene zpravy, ktere uzivatel ODESLAL
 	 * @param int $idSender odesilatel zprav
 	 * @return array pole ve tvaru id_zpravy => id_prijemce

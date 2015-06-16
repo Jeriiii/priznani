@@ -208,6 +208,23 @@ class ChatMessagesDao extends AbstractDao {
 	}
 
 	/**
+	 * Nastaví všechny zprávy starší než dané id (včetně) od daného uživatele jako přečtené
+	 * @param int $idFrom id uživatele, se kterým si píšu
+	 * @param int $idRecipient id přihlášeného uživatele (pro jistotu)
+	 * @param int $lastId id nejnovější přečtené zprávy
+	 * @param int $readed  přečtená/nepřečtená
+	 * @return Nette\Database\Table\Selection upravené zprávy
+	 */
+	public function setOlderMessagesFromUserReaded($idFrom, $idRecipient, $lastId, $readed) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID_SENDER, $idFrom);
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
+		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
+		$sel->where(self::COLUMN_ID . " <= ?", $lastId);
+		return $this->setSelectionReaded($sel, $readed);
+	}
+
+	/**
 	 * Vrátí úplně všechny nepřečtené příchozí zprávy daného uživatele
 	 * @param int $idRecipient id uživatele, kterému mají zprávy přijít
 	 * @return Nette\Database\Table\Selection příchozí zprávy

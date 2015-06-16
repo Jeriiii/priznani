@@ -10,6 +10,7 @@ use \Nette\Utils\Json;
 use POS\Model\ChatMessagesDao;
 use Nette\Database\Table\IRow;
 use POS\Ext\LastActive;
+use POS\Chat\ChatCoder;
 
 /**
  * Slouží přímo ke komunikaci mezi serverem a prohlížečem, zpracovává
@@ -170,12 +171,15 @@ class AndroidCommunicator extends BaseChatComponent implements IRemoteCommunicat
 
 	/**
 	 * Vyřízení žádosti o poslání nových zpráv (prohlížeč se ptá serveru, zda nejsou nějaké nové zprávy)
-	 * @param int $lastid posledni zname id
-	 * @param json $readedmessages pole idcek prectenych zprav
+	 * @param int $lastId posledni zname id
+	 * @param json $readedMessages pole idcek prectenych zprav
 	 */
-	public function handleRefreshMessages($lastId) {
+	public function handleRefreshMessages($lastId, array $readedMessages = array()) {
 		$user = $this->getPresenter()->getUser();
 		if ($user->isLoggedIn()) {
+			foreach ($readedMessages as $senderCodedId => $lastReadedId) {
+				$this->chatManager->setOlderMessagesFromUserReaded(ChatCoder::decode($senderCodedId), $user->getId(), $lastReadedId, TRUE);
+			}
 			$this->sendRefreshResponse($lastId);
 		}
 	}

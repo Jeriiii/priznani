@@ -21,8 +21,9 @@ interface IRemoteCommunicator {
 	/**
 	 * Vyřízení žádosti o poslání nových zpráv
 	 * @param int $lastId Posledni zname id
+	 * @param array $readedMessages Pole přečtených zpráv ve tvaru kódovanéId => id nejnovější přečtené zprávy
 	 */
-	public function handleRefreshMessages($lastId);
+	public function handleRefreshMessages($lastId, array $readedMessages);
 
 	/**
 	 * Vrati informace o konverzaci s jedním uživatelem
