@@ -173,12 +173,10 @@ class AndroidCommunicator extends BaseChatComponent implements IRemoteCommunicat
 	 * @param int $lastid posledni zname id
 	 * @param json $readedmessages pole idcek prectenych zprav
 	 */
-	public function handleRefreshMessages($lastid, $readedmessages) {
+	public function handleRefreshMessages($lastId) {
 		$user = $this->getPresenter()->getUser();
 		if ($user->isLoggedIn()) {
-			$readedArray = (array) Json::decode($readedmessages);
-			$this->chatManager->setOlderMessagesReaded($readedArray, $user->getId(), TRUE); //oznaceni zprav za prectene
-			$this->sendRefreshResponse($lastid);
+			$this->sendRefreshResponse($lastId);
 		}
 	}
 
@@ -194,14 +192,11 @@ class AndroidCommunicator extends BaseChatComponent implements IRemoteCommunicat
 		} else {
 			$newMessages = $this->chatManager->getAllNewMessages($lastId, $userId);
 		}
-
 		$response = $this->prepareResponseArray($newMessages);
-
-		if ($this->isActualUserPaying()) {
-			$response = $this->addInfoAboutDeliveredMessages($response);
-		}
-
-		$this->getPresenter()->sendJson($response);
+		$this->getPresenter()->sendJson(array(
+			'newMessages' => empty($response) ? NULL : $response,
+			'unreadedMessages' => $this->chatManager->getAllUnreadedMessages($userId)->count()
+		));
 	}
 
 	/**
@@ -242,6 +237,27 @@ class AndroidCommunicator extends BaseChatComponent implements IRemoteCommunicat
 		$messageArray[ChatMessagesDao::COLUMN_SENDED_DATE] = $sendedDate;
 
 		return $messageArray;
+	}
+
+	/**
+	 * Převede výběr z tabulky zpráv na pole, které bude možné odeslat zpět prohlížeči
+	 * @param Selection $messages vyber z tabulky chat_messages
+	 * @return array pole ve formatu pro JSON ve tvaru dokumentace chatu
+	 */
+	private function prepareResponseArray($messages) {
+		$responseArray = array();
+		foreach ($messages as $message) {
+			$userId = $this->getRelatedUserId($message);
+			$userIdCoded = $this->chatManager->getCoder()->encodeData($userId);
+			if (!array_key_exists($userIdCoded, $responseArray)) {//pokud je tohle prvni zprava od tohoto uzivatele
+				$name = $this->getUsername($userId); //pribaleni uzivatelskeho jmena uzivatele, s kterym komunikuji
+				$href = $this->getPresenter()->link(':Profil:Show:', array('id' => $userId));
+				$responseArray[$userIdCoded] = array('name' => $name, 'href' => $href, 'messages' => array()); //pak vytvori pole na zpravy od tohoto uzivatele
+			}
+			$responseArray[$userIdCoded]['messages'][] = $this->modifyResponseRowToArray($message); //do pole pod klicem odesilatele v poli $responseArray vlozi pole se zpravou
+			usort($responseArray[$userIdCoded]['messages'], array($this, 'messageSort')); //seřadí zprávy
+		}
+		return $responseArray;
 	}
 
 	/**
