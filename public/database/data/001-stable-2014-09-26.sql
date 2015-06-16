@@ -10072,6 +10072,8 @@ INSERT INTO `stream_items` (`id`, `videoID`, `galleryID`, `statusID`, `userGalle
 	(16668, NULL, 9, NULL, NULL, NULL, NULL, 3, 1, 1, '19:16:49', NULL, 0);
 /*!40000 ALTER TABLE `stream_items` ENABLE KEYS */;
 
+INSERT INTO `stream_items` (`userGalleryID`, `userID`, `categoryID`, `intim`, `create`) VALUES (4, 3, 9241, 1, '2015-06-01 11:36:20');
+
 -- Exportování dat pro tabulku pos.users: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `propertyID`, `coupleID`, `profilFotoID`, `wasCategoryChanged`, `confirmed`, `admin_score`, `role`, `last_active`, `created`, `email`, `user_name`, `password`) VALUES
@@ -10130,21 +10132,21 @@ INSERT INTO `users_properties` (`id`, `coins`, `score`, `age`, `statusID`, `type
 
 -- Exportování dat pro tabulku pos.user_galleries: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `user_galleries` DISABLE KEYS */;
-INSERT INTO `user_galleries` (`id`, `name`, `description`, `userID`, `bestImageID`, `lastImageID`, `man`, `women`, `couple`, `more`, `default`, `profil_gallery`) VALUES
-	(2, 'Test', '', 87, 4, 4, 0, 0, 1, 0, 0, 0),
-	(3, 'Test jména', '', 1, 5, 5, 0, 1, 0, 0, 0, 0),
-	(4, 'Super fotky', 'Toto je galerie uživatele Test User', 3, 6, 7, 0, 0, 1, 0, 0, 1);
+INSERT INTO `user_galleries` (`id`, `name`, `description`, `userID`, `bestImageID`, `lastImageID`, `man`, `women`, `couple`, `more`, `default`, `profil_gallery`, `intim`) VALUES
+	(2, 'Test', '', 87, 4, 4, 0, 0, 1, 0, 0, 0, 0),
+	(3, 'Test jména', '', 1, 5, 5, 0, 1, 0, 0, 0, 0, 0),
+	(4, 'Super fotky', 'Toto je galerie uživatele Test User', 3, 6, 7, 0, 0, 1, 0, 0, 1, 1);
 /*!40000 ALTER TABLE `user_galleries` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.user_images: ~0 rows (přibližně)
 /*!40000 ALTER TABLE `user_images` DISABLE KEYS */;
-INSERT INTO `user_images` (`id`, `suffix`, `name`, `description`, `galleryID`, `approved`, `widthGalScrn`, `heightGalScrn`, `likes`, `comments`) VALUES
-	(2, 'jpg', 'Test', '', 2, 1, 700, 500, 0, 0),
-	(3, 'jpg', 'Test', '', 2, 1, 700, 500, 0, 0),
-	(4, 'jpg', '', '', 2, 0, 700, 500, 0, 0),
-	(5, 'jpg', 'Test jména', '', 3, 0, 700, 500, 0, 0),
-	(6, 'png', 'Foto 1', 'Foto 1 uživatele Test User', 4, 0, 700, 500, 0, 0),
-	(7, 'jpg', 'Foto 2', 'Foto 2 uživatele Test User', 4, 0, 700, 500, 0, 0);
+INSERT INTO `user_images` (`id`, `suffix`, `name`, `description`, `galleryID`, `approved`, `widthGalScrn`, `heightGalScrn`, `likes`, `comments`, `intim`) VALUES
+	(2, 'jpg', 'Test', '', 2, 1, 700, 500, 0, 0, 0),
+	(3, 'jpg', 'Test', '', 2, 1, 700, 500, 0, 0, 0),
+	(4, 'jpg', '', '', 2, 0, 700, 500, 0, 0, 0),
+	(5, 'jpg', 'Test jména', '', 3, 0, 700, 500, 0, 0, 0),
+	(6, 'png', 'Foto 1', 'Foto 1 uživatele Test User', 4, 0, 700, 500, 0, 0, 0),
+	(7, 'jpg', 'Foto 2', 'Foto 2 uživatele Test User', 4, 0, 700, 500, 0, 0, 1);
 /*!40000 ALTER TABLE `user_images` ENABLE KEYS */;
 
 -- Exportování dat pro tabulku pos.user_place: ~0 rows (přibližně)

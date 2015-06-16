@@ -1,0 +1,42 @@
+{block addUserInfo}
+	{if $user->isLoggedIn() &&!empty($newInfo)}
+		<div id="news">
+			<header>{$newInfo->name}</header>
+			<p id="news-short">{$newInfo->text|truncate:100} {if strlen(utf8_decode($newInfo->text)) > 100}<a id="news-more">více</a>{/if}</p>
+			<p id="news-long">{!$newInfo->text|nl2br}</p>
+			<a n:href="newReaded! newID => $newInfo->id" class="btn-main btn-small">PŘEČTENO</a>
+		</div>
+	{/if}
+	{if $user->isLoggedIn() && $loggedUser->property->showIntim == null && $loggedUser->property->type == 2} {* žena *}
+		<div style="background-color: white;">
+		{control setInitimityForm}
+		</div>
+	{elseif $user->isLoggedIn() && empty($profilePhoto)}
+		<div id="activeBackgroundUploadPhoto" style="z-index:10000;position:fixed;top:0;left:0;background: rgba(20, 20, 20, 0.4);"></div>
+		<script>
+			var blackBackground = document.getElementById("activeBackgroundUploadPhoto");
+			var body = document.body,
+    
+			html = document.documentElement;
+			var height = Math.max( body.scrollHeight, body.offsetHeight, 
+                       html.clientHeight, html.scrollHeight, html.offsetHeight );
+					   
+			var width = document.body.clientWidth;
+			blackBackground.style.width = width + "px";
+			blackBackground.style.height = height + "px";
+		</script>
+		<div id="profile-photo-upload">
+			Nahrajte si profilovou fotku, aby si vás ostatní mohli prohlédnout.
+			<a class="highlight uploadProfilePhoto btn-main">Nahrát profilovou fotku</a>
+			{control cropImageUpload}
+		</div>
+	{elseif $user->isLoggedIn() && TRUE}
+		{control photoRating}
+	{elseif $user->isLoggedIn() && !empty($profilePhoto) &&  $place==0  && $position==0 && $placePosSession->count%5==0}
+		<div class="questionnaire-form">
+			<h4 class="question-title">Chcete další téma ke konverzaci? Vyplňte si:</h4>
+			{control placesAndPositionsForm}
+			<div class="clear"></div>
+			</div>
+	{/if}
+{/}

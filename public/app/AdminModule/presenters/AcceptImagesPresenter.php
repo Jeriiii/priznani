@@ -17,6 +17,7 @@ use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
 use NetteExt\File;
 use NetteExt\Path\GalleryPathCreator;
+use POS\Ext\ImageRules;
 
 class AcceptImagesPresenter extends AdminSpacePresenter {
 
@@ -55,6 +56,11 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 
 	/** @var Nette\Database\Table\Selection Obrázky u kterých ještě nebylo rozhodnuto, zda mohou jít na hlavní stranu přiznání o sexu. */
 	public $userNotCheckFrontPageImages;
+
+	public function beforeRender() {
+		parent::beforeRender();
+		$this->template->rules = ImageRules::$rules;
+	}
 
 	/** Načte neschválené obrázky z DB */
 	private function setImages() {

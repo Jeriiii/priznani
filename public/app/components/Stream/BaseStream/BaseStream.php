@@ -202,15 +202,6 @@ class BaseStream extends BaseProjectControl {
 	}
 
 	/**
-	 * formulář pro nahrávání profilových fotografií
-	 * @param type $name
-	 * @return \Nette\Application\UI\Form\ProfilePhotoUploadForm
-	 */
-	protected function createComponentCropImageUpload($name) {
-		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
-	}
-
-	/**
 	 * možnost lajknutí uživatelské fotky na streamu
 	 * @return \Nette\Application\UI\Multiplier multiplier pro dynamické vykreslení více komponent
 	 */

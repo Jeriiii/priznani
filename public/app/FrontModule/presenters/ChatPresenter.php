@@ -4,11 +4,18 @@ use POSComponent\Chat\MobileChat;
 use POSComponent\Stream\ChatStream;
 use POSComponent\Chat\MobileContactList;
 use POSComponent\Chat\AndroidChat;
+use POS\Chat\ChatManager;
 
 /**
  * Pro práci se zprávami přes celoou stránku
  */
 class ChatPresenter extends BasePresenter {
+
+	/** @var \POS\Chat\ChatManager @inject */
+	public $chatManager;
+
+	/** @var \POS\Model\UserBlockedDao @inject */
+	public $blockedDao;
 
 	/** @var \POS\Model\ChatMessagesDao @inject */
 	public $chatMessagesDao;
@@ -30,13 +37,28 @@ class ChatPresenter extends BasePresenter {
 	}
 
 	public function renderMobileDefault($userInChatID) {
+		$this->defaultRenderDefault($userInChatID);
+	}
+
+	public function renderDefault($userInChatID) {
+		$this->defaultRenderDefault($userInChatID);
+	}
+
+	/** Metoda volaná v obou renderech (mobilní i desktopový) */
+	private function defaultRenderDefault($userInChatID) {
 		$this->template->userInChat = $this->userDao->find($userInChatID);
+		if ($this->blockedDao->isBlocked($this->getUser()->getId(), $userInChatID)) {
+			$this->template->blockedMessage = ChatManager::USER_IS_BLOCKING_MESSAGE;
+		}
+		if ($this->blockedDao->isBlocked($userInChatID, $this->getUser()->getId())) {
+			$this->template->blockedMessage = ChatManager::USER_IS_BLOCKED_MESSAGE;
+		}
 	}
 
 	protected function createComponentConversation($name) {
 		$messages = $this->chatMessagesDao->getLastTextMessagesBetweenUsers($this->loggedUser->id, $this->userInChatID);
 
-		$chatStream = new ChatStream($this->chatMessagesDao, $this->loggedUser, $messages, 30, $this, $name);
+		$chatStream = new ChatStream($this->chatManager, $this->chatMessagesDao, $this->loggedUser, $messages, 30, $this, $name);
 		$chatStream->setUserInChatID($this->userInChatID);
 
 		return $chatStream;
@@ -55,7 +77,7 @@ class ChatPresenter extends BasePresenter {
 		$valConversationID = 1;
 		$messages = $this->chatMessagesDao->getMessagesByConversation($valConversationID);
 
-		$chatStream = new ChatStream($this->chatMessagesDao, $this->loggedUser, $messages, 30, $this, $name);
+		$chatStream = new ChatStream($this->chatManager, $this->chatMessagesDao, $this->loggedUser, $messages, 30, $this, $name);
 		$chatStream->setConversationID($valConversationID);
 
 		return $chatStream;

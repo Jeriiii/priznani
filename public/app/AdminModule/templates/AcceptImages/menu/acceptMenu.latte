@@ -1,9 +1,24 @@
 {block acceptMenu}
 <div class="btn-group btn-group-justified">
-	<a class="btn" n:href="AcceptImages:">Schválení uživatelské fotky {$usrCount}</a>
+	{if $usrCount != 0}
+		<a class="btn" n:href="AcceptImages:">Schválení uživatelské fotky {$usrCount}</a>
+	{/if}
+	{if $compCount != 0}
 	<a class="btn" n:href="AcceptImages:acceptCompetitionImages">Soutěžní fotky {$compCount}</a>
+	{/if}
+	{if $verCount != 0}
 	<a class="btn" n:href="AcceptImages:acceptVerificationImages">Ověřovací fotky {$verCount}</a>
+	{/if}
+	{if $notCheckCount != 0}
 	<a class="btn" n:href="AcceptImages:checkUserImages">Potvrzení uživatelské fotky {$notCheckCount}</a>
+	{/if}
+	{if $notCheckFrontPageCount != 0}
 	<a class="btn" n:href="AcceptImages:checkFrontPageUserImages">Na hl. stránku {$notCheckFrontPageCount}</a>
+	{/if}
 </div>
+<ol>
+	{foreach $rules as $rule}
+		<li>{$rule['info']} <i class="text-info">{$rule['more']}</i></li>
+	{/foreach}
+</ol>
 {/block}

@@ -9,6 +9,7 @@
 		</li>
 	{/foreach}
 	<li class="support-contact-spacer"></li>
+	<li class="support-contact-spacer"></li>
 	{var $adminid = $coder->encodeData($admin->id)}
 	<li id="contact->user2-{$adminid}" data-id="{$adminid}" data-title="Dotazy/podpora" class="contact-link support-contact">
 		{$admin|showProfMin}<span class="chat-username">Dotazy/podpora</span>
@@ -16,6 +17,7 @@
 		<span class="chatLastActivity">{$contactList->getLastActivity($admin)}</span>
 	</li>
 </ul>
+	
 
 <script>
 		var mydata = {

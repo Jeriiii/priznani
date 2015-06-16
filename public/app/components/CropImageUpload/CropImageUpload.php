@@ -12,6 +12,7 @@ use Nette\Application\UI\Form as Frm;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
+use POS\Ext\ImageRules;
 
 /**
  * Zprostředkovává upload obrázku, který posléze umožňuje oříznout
@@ -65,6 +66,7 @@ class CropImageUpload extends BaseProjectControl {
 			$template->uploadedImageName = $this->cropImageName;
 		}
 
+		$template->rules = ImageRules::$rules;
 		$template->render();
 	}
 

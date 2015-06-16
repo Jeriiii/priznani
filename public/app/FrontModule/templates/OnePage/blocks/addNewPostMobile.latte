@@ -1,0 +1,57 @@
+{define addNewPost}
+	<div data-role="tabs" id="usertabs">
+		<div data-role="navbar">
+			<ul>
+				{if $user->isLoggedIn()}
+				<li><a href="#statusForm" class="ui-btn-active" data-ajax="false">STATUS</a></li>
+				{/if}
+				<li><a href="#confessionForm" data-ajax="false">PŘIZNÁNÍ</a></li>
+				<li><a href="#photoForm" data-ajax="false">FOTKY</a></li>
+			</ul>
+		</div>
+		{if $user->isLoggedIn()}
+		<div id="statusForm">
+			{if $user->isLoggedIn()}
+				{$userData|showProfDiv}
+			{/if}
+			<div class="half-form">
+			{form statusForm}
+				{input message class=>'form-field', placeholder=>'Napiš, co právě děláš...', rows => 3}
+				<div class="submit-container">
+					{input submit class => 'submit-button'}
+				</div>
+			{/form}
+			</div>
+		</div>
+		{/if}
+		<div id="confessionForm">
+			{if $user->isLoggedIn()}
+				{$userData|showProfDiv}
+				{/if}
+				<div class="half-form">
+				{form addConfessionForm class=>'form-container'}
+					<ul class="error" n:if="$form->hasErrors()">
+						<li n:foreach="$form->errors as $error">{$error}</li>
+					</ul>
+					{input note class=>'form-field', placeholder=>'Přiznej se, vše bude anonymní...', rows => 3}
+					<div class="submit-container">
+						{input submit class => 'submit-button'}
+					</div>
+					{label nick class => 'hidden' /}
+					{input nick class => 'hidden'}
+				{/form}
+				</div>
+		</div>
+		<div id="photoForm">
+			{if $user->isLoggedIn()}
+				{$userData|showProfDiv}
+				<div class="half-form">
+				{control newStreamImageForm}
+				</div>
+			{else}
+				Pro přidávání fotek se <a href="{plink :Sign:in}">přihlaš</a> nebo <a href="{plink :Sign:registration}">registruj</a>.
+			{/if}
+	  </div>
+	</div>
+	<div class="mobileline"></div>
+{/}

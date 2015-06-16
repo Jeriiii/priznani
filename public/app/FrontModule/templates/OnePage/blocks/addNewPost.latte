@@ -1,0 +1,57 @@
+{block addNewPost}
+	<div class="stream-form">
+		<ul id="stream-form-tabs">
+			{if $user->isLoggedIn()}
+				<li><a href="#tabs-1">STATUS</a></li>
+			{/if}
+			<li><a href="#tabs-2">PŘIZNÁNÍ</a></li>
+			<li class="last"><a href="#tabs-3">FOTKY</a></li>
+		</ul>
+		{if $user->isLoggedIn()}
+			<div id="tabs-1">
+				<div class="tab-arrow first"></div>
+				{if $user->isLoggedIn()}
+					{$userData|showProfDiv}
+				{/if}
+				<div class="half-form">
+				{form statusForm}
+					{input message class=>'form-field', placeholder=>'Napiš, co právě děláš...', rows => 3}
+					<div class="submit-container">
+						{input submit class => 'submit-button'}
+					</div>
+				{/form}
+				</div>
+			</div>
+		{/if}
+		<div id="tabs-2">
+			<div class="tab-arrow {if $user->isLoggedIn()}second{else}first{/if}"></div>
+			{if $user->isLoggedIn()}
+			{$userData|showProfDiv}
+			{/if}
+			<div class="half-form">
+			{form addConfessionForm class=>'form-container'}
+				<ul class="error" n:if="$form->hasErrors()">
+					<li n:foreach="$form->errors as $error">{$error}</li>
+				</ul>
+				{input note class=>'form-field', placeholder=>'Přiznej se, vše bude anonymní...', rows => 3}
+				<div class="submit-container">
+					{input submit class => 'submit-button'}
+				</div>
+				{label nick class => 'hidden' /}
+				{input nick class => 'hidden'}
+			{/form}
+			</div>
+		</div>
+		<div id="tabs-3" class="stream-add-images">
+			<div class="tab-arrow {if $user->isLoggedIn()}third{else}second{/if}"></div>
+			{if $user->isLoggedIn()}
+				{$userData|showProfDiv}
+				<div class="half-form">
+				{control newStreamImageForm}
+				</div>
+			{else}
+				Pro přidávání fotek se <a href="{plink :Sign:in}">přihlaš</a> nebo <a href="{plink :Sign:registration}">registruj</a>.
+			{/if}
+		</div>
+	</div>
+{/}

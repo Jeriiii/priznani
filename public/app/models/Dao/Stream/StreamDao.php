@@ -27,6 +27,7 @@ class StreamDao extends AbstractDao {
 	const COLUMN_TALLNESS = "tallness";
 	const COLUMN_CONFESSION_ID = "confessionID";
 	const COLUMN_STATUS_ID = "statusID";
+	const COLUMN_INTIM = "intim";
 
 	/**
 	 * Vrací tuto tabulku
@@ -102,14 +103,16 @@ class StreamDao extends AbstractDao {
 	 * @param int $userGalleryID ID galerie
 	 * @param int $userID ID uživatele
 	 * @param int $categoryID ID kategorie
+	 * @param int $isIntimGall 1 = Je galerie intimní, jinak 0.
 	 */
-	public function addNewGallery($userGalleryID, $userID, $categoryID) {
+	public function addNewGallery($userGalleryID, $userID, $categoryID, $isIntimGall) {
 		$sel = $this->getTable();
 		$sel->insert(array(
 			"userGalleryID" => $userGalleryID,
 			"userID" => $userID,
 			"type" => 1,
 			"create" => new DateTime(),
+			self::COLUMN_INTIM => $isIntimGall,
 			self::COLUMN_CATEGORY_ID => $categoryID,
 		));
 	}
@@ -216,7 +219,23 @@ class StreamDao extends AbstractDao {
 	 * @param int $categoryID ID kategorie
 	 */
 	public function aliveGallery($userGalleryID, $userID, $categoryID = null) {
-//smazání starého řádku
+		$this->deleteDeadGallery($userGalleryID, $categoryID);
+
+		$sel = $this->createSelection(UserGalleryDao::TABLE_NAME);
+		$sel->wherePrimary($userGalleryID);
+		$gallery = $sel->fetch();
+
+		$this->addNewGallery($userGalleryID, $userID, $categoryID, $gallery->intim);
+	}
+
+	/**
+	 * Smazání starého příspěvku ve streamu (poté by mělo následovat vložení nového příspěvku).
+	 * @param int $userGalleryID
+	 * @param int $categoryID
+	 * @throws Exception
+	 */
+	private function deleteDeadGallery($userGalleryID, $categoryID) {
+		/* smazání starého řádku */
 		$sel = $this->getTable();
 		$sel->where("userGalleryID", $userGalleryID);
 		if (empty($categoryID)) {
@@ -227,8 +246,6 @@ class StreamDao extends AbstractDao {
 			$categoryID = $streamItem->offsetGet(self::COLUMN_CATEGORY_ID);
 		}
 		$sel->delete();
-
-		$this->addNewGallery($userGalleryID, $userID, $categoryID);
 	}
 
 	/**
@@ -262,14 +279,14 @@ class StreamDao extends AbstractDao {
 	 * (tj. které splňují podmínky některé z kategorií)
 	 * Položky jsou vraceny od konce.
 	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
-	 * @param int $meUserID Moje ID uživatele.
+	 * @param int $meUser Přihlášený uživatel.
 	 * @param int $limit maximální počet vrácených položek (vrací všechny když je limit 0)
 	 * @param int $offset offset limitu položek
 	 * @return \Nette\Database\Table\Selection všechny vyhovující položky
 	 */
-	public function getAllItemsWhatFits(array $categoryIDs, $meUserID, $limit = 0, $offset = 0) {
+	public function getAllItemsWhatFits(array $categoryIDs, $meUser, $limit = 0, $offset = 0) {
 		$sel = $this->getTable();
-		$this->sortOutItems($categoryIDs, $meUserID, $sel);
+		$this->sortOutItems($categoryIDs, $meUser, $sel);
 
 		$sel->order('id DESC');
 		if ($limit != 0) {
@@ -283,14 +300,14 @@ class StreamDao extends AbstractDao {
 	 * (tj. které splňují podmínky některé z kategorií) a jsou novější než zadané ID
 	 * (jejich ID je vyšší). Jsou seřazené sestupně.
 	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
-	 * @param int $meUserID Moje ID uživatele.
+	 * @param \Nette\Database\Table\ActiveRow|\Nette\ArrayHash $meUser Moje ID uživatele.
 	 * @param int $lastId id poslední předchozí položky
 	 * @return \Nette\Database\Table\Selection všechny vyhovující položky
 	 */
-	public function getAllItemsWhatFitsSince(array $categoryIDs, $meUserID, $lastId) {
+	public function getAllItemsWhatFitsSince(array $categoryIDs, $meUser, $lastId) {
 		$sel = $this->getTable();
 		$sel->where('id > ?', $lastId);
-		$this->sortOutItems($categoryIDs, $meUserID, $sel);
+		$this->sortOutItems($categoryIDs, $meUser, $sel);
 		$sel->order('id DESC');
 
 		return $sel;
@@ -299,14 +316,15 @@ class StreamDao extends AbstractDao {
 	/**
 	 * Vytřídí/přidá příspěvky
 	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
-	 * @param int $meUserID Moje ID uživatele.
+	 * @param \Nette\Database\Table\ActiveRow|\Nette\ArrayHash $meUser Moje ID uživatele.
 	 * @param \Nette\Database\Table\Selection $sel Nevytříděné příspěvky.
 	 * @return \Nette\Database\Table\Selection Vytříděné příspěvky.
 	 */
-	private function sortOutItems(array $categoryIDs, $meUserID, $sel) {
+	private function sortOutItems(array $categoryIDs, $meUser, $sel) {
 		/* musí to jít v tomto pořadí */
-		$sel = $this->sortOut($sel, $categoryIDs, $meUserID);
-		$sel = $this->sortOutUsers($sel, $meUserID);
+		$sel = $this->sortOut($sel, $categoryIDs, $meUser);
+		$sel = $this->sortOutIntim($sel, $meUser);
+		$sel = $this->sortOutUsers($sel, $meUser->id);
 
 		return $sel;
 	}
@@ -315,18 +333,18 @@ class StreamDao extends AbstractDao {
 	 * Vytřídění příspvěků podle preferencí
 	 * @param \Nette\Database\Table\Selection $sel Nevytříděné příspěvky.
 	 * @param array $categoryIDs pole ID kategorií z tabulky stream_categories
-	 * @param int $meUserID Moje ID uživatele.
+	 * @param \Nette\Database\Table\ActiveRow|\Nette\ArrayHash $meUser Moje ID uživatele.
 	 * @return \Nette\Database\Table\Selection Vytříděné příspěvky.
 	 */
-	private function sortOut($sel, array $categoryIDs, $meUserID) {
+	private function sortOut($sel, array $categoryIDs, $meUser) {
 		$where = $params = array();
 
 		/* přidání přátel */
 		$where[] = self::COLUMN_USER_ID . " IN (?)";
-		$params[] = $this->getFriendIDs($meUserID);
+		$params[] = $this->getFriendIDs($meUser->id);
 		/* přidání lidí co jsem označil jako sexy */
 		$where[] = self::COLUMN_USER_ID . " IN (?)";
-		$params[] = $this->getUsersIMarkSexy($meUserID);
+		$params[] = $this->getUsersIMarkSexy($meUser->id);
 		/* přidání příspěvků v kategoriích, které hledám */
 		$where[] = self::COLUMN_CATEGORY_ID . " IN (?)";
 		$params[] = $categoryIDs;
@@ -349,6 +367,23 @@ class StreamDao extends AbstractDao {
 		/* vytřídění uživatelů */
 		$sel = $this->sortOutMe($sel, $meUserID);
 		$sel = $this->sortOutBlokedUsers($sel, $meUserID);
+
+		return $sel;
+	}
+
+	/**
+	 * Vytřídí příspěvky, které jsou intimní, pokud je uživatel nechce vidět.
+	 * @param \Nette\Database\Table\Selection $sel Nevytříděné příspěvky.
+	 * @param \Nette\Database\Table\ActiveRow|\Nette\ArrayHash $meUser Přihlášený uživatel.
+	 * @return \Nette\Database\Table\Selection Vytříděné příspěvky.
+	 */
+	private function sortOutIntim($sel, $meUser) {
+		if ($meUser->property->showIntim == 0) { //uživatel nechce vidět intimní fotky
+			/* vytřídí intimní příspěvky */
+			$sel->where(array(
+				self::COLUMN_INTIM => 0
+			));
+		}
 
 		return $sel;
 	}
@@ -464,6 +499,23 @@ class StreamDao extends AbstractDao {
 		$sel->update(array(
 			self::COLUMN_CATEGORY_ID => $categoryID
 		));
+	}
+
+	/**
+	 * PRO CRON
+	 * Přepočítá všechny galerie, jestli se v nich nenachází intimní fotka.
+	 */
+	public function recalIntims() {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_USER_GALLERY_ID . ' IS NOT NULL');
+
+		foreach ($sel as $item) {
+			if ($item->userGallery->intim == 1) { //pokud je galerie intimní
+				$item->update(array(
+					self::COLUMN_INTIM => 1
+				));
+			}
+		}
 	}
 
 }

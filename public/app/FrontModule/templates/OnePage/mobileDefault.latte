@@ -36,7 +36,14 @@
 			{/if}
 		{/if}
 	</div>
-	{control userStream}
+	<section class="content">
+		<div id="stream"> 
+			{include 'blocks/addUserInfoMobile.latte'}
+			{include 'blocks/addNewPostMobile.latte'}
+			{control userStream}
+		</div>
+		<div class="clear"></div>
+	</section>
 {/block}
 
 

@@ -11,6 +11,7 @@ use \POS\Model\UserDao;
 use POS\Model\FriendDao;
 use POS\Model\PaymentDao;
 use Nette\Http\Session;
+use POS\Model\UserBlockedDao;
 
 /**
  * Správce chatu, používaný pro obecné operace chatu, které se týkají přístupu k modelům
@@ -19,6 +20,21 @@ use Nette\Http\Session;
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
 class ChatManager extends \Nette\Object {
+
+	/** Hodnota, kterou manager vrátí v metodě, pokud akce nemůže být provedena z důvodu blokování uživatele.
+	 * Důvod existence této hodnoty je, že nemůžu vrátit NULL ani false, protože to může způsobit i běžná chyba databáze */
+	const USER_IS_BLOCKED_RETCODE = 5846; /* náhodně zvolené číslo */
+	const USER_IS_BLOCKED_MESSAGE = 'Tento uživatel vás blokuje.';
+
+	/** Vrátí se, když uživatel blokuje toho, komu chce poslat zprávu (tj. nemůže s ním komunikovat, jelikož jej sám blokuje) */
+	const USER_IS_BLOCKING_RETCODE = 6543; /* náhodně zvolené číslo */
+	const USER_IS_BLOCKING_MESSAGE = 'Tohoto uživatele blokujete. Chcete-li mu poslat zprávu, musíte jej odblokovat.';
+
+	/**
+	 * DAO pro blokované uživatele
+	 * @var UserBlockedDao
+	 */
+	private $userBlockedDao;
 
 	/**
 	 * DAO pro kontakty
@@ -61,11 +77,12 @@ class ChatManager extends \Nette\Object {
 	/**
 	 * Standardni konstruktor, predani potrebnych DAO z presenteru
 	 */
-	function __construct(FriendDao $contactsDao, ChatMessagesDao $messagesDao, UserDao $userDao, PaymentDao $paymentDao, Session $session) {
+	function __construct(FriendDao $contactsDao, ChatMessagesDao $messagesDao, UserDao $userDao, PaymentDao $paymentDao, UserBlockedDao $userBlockedDao, Session $session) {
 		$this->contactsDao = $contactsDao;
 		$this->messagesDao = $messagesDao;
 		$this->userDao = $userDao;
 		$this->paymentDao = $paymentDao;
+		$this->userBlockedDao = $userBlockedDao;
 		$this->session = $session;
 		$this->coder = new ChatCoder();
 	}
@@ -100,7 +117,21 @@ class ChatManager extends \Nette\Object {
 	 * @return Nette\Database\Table\IRow | int | bool vytvořená zpráva
 	 */
 	public function sendTextMessage($idSender, $idRecipient, $text) {
+		$unblocked = $this->canCommunicate($idSender, $idRecipient);
+		if ($unblocked !== true) {
+			return $unblocked;
+		}
 		return $this->messagesDao->addTextMessage($idSender, $idRecipient, $text);
+	}
+
+	/**
+	 * Pošle zprávu do konverzace
+	 * @param type $senderId id odesílatele
+	 * @param type $conversationId id konverzace
+	 * @param type $text text zprávy
+	 */
+	public function sendConversationMessage($senderId, $conversationId, $text) {
+		$this->messagesDao->addConversationMessage($senderId, $conversationId, $text);
 	}
 
 	/**
@@ -308,6 +339,23 @@ class ChatManager extends \Nette\Object {
 	 */
 	public function getUserWithId($id) {
 		return $this->userDao->find($id);
+	}
+
+	/**
+	 * Zjistí, zda spolu dotyční mohou komunikovat. Pokud ano, vrátí true, pokud ne, vrátí kód proč nemohou.
+	 * @param int $idSender id odesílatele
+	 * @param int $idRecipient id příjemce
+	 * @return bool|int $param true nebo kód
+	 */
+	public function canCommunicate($idSender, $idRecipient) {
+		if ($this->userBlockedDao->isBlocked($idRecipient, $idSender)) {
+			return self::USER_IS_BLOCKED_RETCODE; /* příjemce mě blokuje */
+		} else {
+			if ($this->userBlockedDao->isBlocked($idSender, $idRecipient)) {
+				return self::USER_IS_BLOCKING_RETCODE;
+			}
+		}
+		return true;
 	}
 
 }

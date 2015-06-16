@@ -125,7 +125,9 @@
 		/* zpráva v headeru okénka */
 		headerHtml: "",
 		/* objekt definující zapnutí a nastavení modulu pro obnovování snippetu a kontroly jeho příchozího obsahu */
-		streamSnippetModule: false
+		streamSnippetModule: false,
+		/* čas [ms] po kterém se okénko samo zavře, když je 0, nezavře se */
+		closeAfter: 0
 	};
 
 
@@ -143,6 +145,11 @@
 		$(button).addClass('active');
 		if (opts.hideOthers) {//vyvolani pozadi
 			showBlackBackground(opts, boxSelector);
+		}
+		if(opts.closeAfter !== 0){/* zavření po určitém čase */
+			setTimeout(function(){
+				$('body').trigger('click');/* klikne se na body, aby to fungovalo i s okénky bez zavíracího křížku */
+			}, opts.closeAfter);
 		}
 	};
 
@@ -220,6 +227,9 @@
 
 		if ($box.data("ajaxbox-info-message") !== undefined) {
 			opts.infoMessage = $box.data("ajaxbox-info-message");
+		}
+		if ($box.data("ajaxbox-close-after") !== undefined) {
+			opts.closeAfter = $box.data("ajaxbox-close-after");
 		}
 		return opts;
 	}
@@ -415,13 +425,14 @@
 			if ($(e.target).is('.ajaxBox *, .ajaxBox')) {
 				return;
 			}
+			var button = $(opts.buttonSelector);
 			e.preventDefault();
 			var close = isThisWindowVisible(opts);
 			$('.ajaxBox').css('display', 'none');
-			$(this).removeClass('active');
+			button.removeClass('active');
 			$('.activeBackground').remove();
 			if (!close) {
-				$.fn.ajaxBox.openWindow(opts, this);
+				$.fn.ajaxBox.openWindow(opts, button);
 			}
 		});
 	}
@@ -432,7 +443,7 @@
 	 */
 	function bindCloseOnClick(opts, boxSelector) {
 		$('*').click(function (event) {//zavření při kliknutí mimo okénka
-			if (!$(event.target).is(opts.buttonSelector, '.ajaxBox')) {
+			if (!$(event.target).is(opts.buttonSelector +',' + opts.buttonSelector + ' .ajaxbox-button-info', '.ajaxBox')) {
 				if (!$(event.target).is('.ajaxBox *, .ajaxBox')) {
 					$(boxSelector).css('display', 'none');
 					$(opts.buttonSelector).removeClass('active');

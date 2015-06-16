@@ -65,17 +65,11 @@ class StreamInicializator {
 		$daoBox->likeStatusDao = $presenter->likeStatusDao;
 		$daoBox->imageLikesDao = $presenter->imageLikesDao;
 		$daoBox->userDao = $presenter->userDao;
-		$daoBox->statusDao = $presenter->statusDao;
 
 		$daoBox->streamDao = $presenter->streamDao;
 		$daoBox->userGalleryDao = $presenter->userGalleryDao;
 		$daoBox->userImageDao = $presenter->userImageDao;
 		$daoBox->confessionDao = $presenter->confessionDao;
-
-		$daoBox->userPositionDao = $presenter->userPositionDao;
-		$daoBox->enumPositionDao = $presenter->enumPositionDao;
-		$daoBox->userPlaceDao = $presenter->userPlaceDao;
-		$daoBox->enumPlaceDao = $presenter->enumPlaceDao;
 
 		$daoBox->likeImageCommentDao = $presenter->likeImageCommentDao;
 		$daoBox->commentImagesDao = $presenter->commentImagesDao;
@@ -86,10 +80,6 @@ class StreamInicializator {
 		$daoBox->commentConfessionsDao = $presenter->commentConfessionsDao;
 		$daoBox->likeConfessionDao = $presenter->likeConfessionDao;
 		$daoBox->usersNewsDao = $presenter->usersNewsDao;
-
-		$daoBox->rateImageDao = $presenter->rateImageDao;
-		$daoBox->imageLikesDao = $presenter->imageLikesDao;
-		$daoBox->userCategoryDao = $presenter->userCategoryDao;
 
 		return $daoBox;
 	}
