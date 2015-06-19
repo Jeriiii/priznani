@@ -4,6 +4,7 @@
     Created on : 16.11.2014, 13:36:39
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
+@import "../variables.less";
 
 #header{
 	position: fixed;
@@ -17,15 +18,44 @@
 
 .scroll-to-btn.first-slide{
 	position: absolute;
-	bottom: 40px;
-	left: 50%;
+	top: 530px;
+	right: 60px;
+
+}
+.form-window{
+	width: 300px;
+	
+	&.fourth-window{
+		width: 400px;
+	}
+	
+	#form-logo{
+		padding: 10px 0 0 0;
+		margin: 0;
+		font-size: 38px;
+		font-weight: bold;
+		margin-bottom: 2px;
+		span{
+			font-weight: 300;
+		}
+	}
+	#form-logo-title{
+		padding: 2px 0 25px 0;
+		margin: 0;
+		line-height: 12px;
+		font-size: 0.7em;
+		font-family: "Arial Black", Arial;
+		font-weight: bold;
+		color: #555;
+	}
 }
 
 .window-content{
 	input[type='submit']{
-		margin: 0;
+		margin: 0 auto;
 		line-height: 24px;
-		font-size: 18px;
+		font-size: 14px;
+		font-weight: bold;
 		padding: 0px 13px;
 		margin-top: 15px;
 		
@@ -34,9 +64,20 @@
 		}
 	}
 	
+	label{
+		display: block;
+		font-family: "Arial Black", Arial;
+		font-weight: bold;
+		font-size: 12px;
+	}
+	
 	form{
 		table{
+			width: 100%;
 			tr{
+				select{
+					width: 65%;
+				}
 				select.date{
 					width: 32% !important;
 				}
@@ -93,5 +134,162 @@
 
 			}
 		}
+	}
+}
+
+h2.slideTitle{
+	text-align: center;
+	font-size: 36px;
+	padding: 30px;
+	font-weight: 200;
+}
+
+.featureListSlide{
+	
+	.featureItem{
+		float: left;
+		width: 40%;
+		padding: 10px 5%;
+		
+		.image{
+			float: left;
+			width: 90px;
+			height: 90px;
+			background: #666;
+		}
+
+		h3{
+			display: block;
+			width: 270px;
+			float: left;
+			line-height: 20px;
+			margin: 0;
+			padding: 0 10px 10px 10px;
+			color: black;
+			font-size: 20px;
+			
+		}
+		p{
+			width: 270px;
+			padding: 5px 10px;
+			display: block;
+			float: left;
+			text-align: justify;
+		}
+		
+	}
+	.scroll-to-btn{
+		margin: 30px auto;
+		width: 200px;
+		position: relative;
+		left: 50px;
+	}
+}
+
+.writtenAboutUs{
+	padding: 80px 0;
+	
+	.writtenItem{
+		float: left;
+		width: 27%;
+		padding: 0 3%;
+		
+		&.onTheLeft{
+			border-right: 1px solid #aaa;
+		}
+		&.onTheRight{
+			border-left: 1px solid #aaa;
+		}
+		
+		img{
+			width: 180px;
+			height: 180px;
+			border-radius: 50%;
+			position: relative;
+			top: -15px;
+			display: block;
+			margin: 0 auto;
+		}
+		.username{
+			display: block;
+			font-family: @special-font;
+			color: @main-red;
+			font-size: 28px;
+			font-weight: 200;
+			text-align: center;
+		}
+		p{
+			text-align: center;
+			font-style: italic;
+		}
+	}
+}
+
+.datenodeInMobile{
+	padding-bottom: 50px;
+	
+	.half{
+		float: left;
+		width: 40%;
+		padding: 5px 5%;
+		padding-top: 120px;
+		
+		.scroll-to-btn{
+			margin-top: 60px;
+		}
+	}
+	.mobileImage{
+		float: left;
+		width: 50%;
+		height: 500px;
+		background: gray;
+	}
+}
+.fullHeight{
+	height: 100%;
+	height: 1vm;
+}
+.confessionSlide{
+	height: 100%;
+	position: relative;
+	
+	.slideTitle{
+		margin: 0;
+		position: relative;
+		left: -150px;
+	}
+	
+	img{
+		position: absolute;
+		top: 0;
+		left: -150px;
+		height: 100%;
+	}
+	.rightHalf{
+		float: right;
+		width: 50%;
+		padding: 0 2%;
+		
+		.description{
+			margin-bottom: 25px;
+		}
+		
+		.confession{
+			padding: 20px 0;
+			border-top: 1px dashed #aaa;
+			font-style: italic;
+		}
+	}
+}
+
+#last-slide{
+	.form-window{
+		position: relative;
+		margin: 0 auto;
+	}
+	.scroll-to-btn{
+		position: absolute;
+		bottom: 30px;
+		right: 30px;
 	}
 }

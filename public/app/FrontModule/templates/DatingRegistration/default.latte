@@ -1,58 +1,53 @@
 
 {block datingContent}
+<div class="form-window">
+	<h2 class="window-title">REGISTRACE</h2>
+	<div class="window-content">
+		{form firstRegForm}
+			<ul class="error" n:if="$form->hasErrors()">
+					<li n:foreach="$form->errors as $error">{$error}</li>
+			</ul>
+			<h2 id="form-logo">DATE<span>NODE</span></h2>
+			<h3 id="form-logo-title">SOCIÁLNÍ SÍŤ PRO DOSPĚLÉ</h3>
+			<table>
+				<tr>
+					<td>{label type /}	{input type}</td>
+				</tr>
 
-<h2 class="window-title">REGISTRACE</h2>
-<div class="window-content">
-	{form firstRegForm}
-		<ul class="error" n:if="$form->hasErrors()">
-				<li n:foreach="$form->errors as $error">{$error}</li>
-		</ul>
-		<table>
-			<tr>
-				<td>
-				<legend>Základní údaje: </legend>
-				</td>
-			</tr>
+				<tr>
+					<td>
+						<label for="frm-firstRegForm" id="label-datebirth-first">DATUM NAROZENÍ</label>
+						{input day class => date} {input month class => date} {input year class => date}
+					</td>
+				</tr>
 
-			<tr>
-				<td>{label type /}	{input type}</td>
-			</tr>
-			
-			<tr>
-				<td>
-					<label for="frm-firstRegForm" id="label-datebirth-first">Datum narození:</label>
-					{input day class => date} {input month class => date} {input year class => date}
-				</td>
-			</tr>
-			
-			<tr id="second-birdhdate" {if empty($type) || $type == 1 || $type == 2 || $type == 6}style="display: none;"{/if}>
-				<td>
-					<label for="frm-firstRegForm" id="label-datebirth-second">Datum narození - partnera:</label>
-					{input daySecond class => date} {input monthSecond class => date} {input yearSecond class => date}
-				</td>
-			</tr>
+				<tr id="second-birdhdate" {if empty($type) || $type == 1 || $type == 2 || $type == 6}style="display: none;"{/if}>
+					<td>
+						<label for="frm-firstRegForm" id="label-datebirth-second">DATUM NAROZENÍ - PARTNERA</label>
+						{input daySecond class => date} {input monthSecond class => date} {input yearSecond class => date}
+					</td>
+				</tr>
 
-			<tr>
-				<td>
-					{input send}
+				<tr>
+					<td>
+						{input send}
 
-				<td>
-			</tr>
-		</table>
-	{/form}
-
+					<td>
+				</tr>
+			</table>
+		{/form}
+	</div>
 </div>
 {/block}
 
 {block lastSlide}
 <div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/1">
+	<h2 class="slideTitle">ZKUSTE DATENODE JEŠTĚ DNES!</h2>
 	<div id="last-slide" class="inner relative">
-		<div class="form-window">
-			{include #datingContent}
-		</div>
+		{include #datingContent}
 		<div class="clear"></div>
 	</div>
-	<a class="scroll-to-btn" href="#registration-form" data-anchor="#registration-form"></a>
+	
 </div>
 {/}
 

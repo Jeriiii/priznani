@@ -31,22 +31,22 @@ class DatingRegistrationThirdForm extends DatingRegistrationBaseForm {
 		$renderer->wrappers['label']['container'] = NULL;
 		$renderer->wrappers['control']['container'] = NULL;
 
-		$this->addText('email', 'Email')
+		$this->addText('email', 'EMAIL')
 			->addRule(Form::FILLED, 'Email není vyplněn.')
 			->addRule(Form::EMAIL, 'Vyplněný email není platného formátu.')
 			->addRule(Form::MAX_LENGTH, 'Email je příliž dlouhý.', 50);
-		$this->addText('user_name', 'Uživatelské jméno')
+		$this->addText('user_name', 'UŽIVATELSKÉ JMÉNO')
 			->addRule(Form::FILLED, 'Uživatelské jméno není vyplněno')
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Uživatelské jméno\" je 100 znaků.', 20);
-		$this->addPassword('password', 'Heslo')
+		$this->addPassword('password', 'HESLO')
 			->addRule(Form::FILLED, 'Heslo není vyplněno.')
 			->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaky', 4)
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Heslo\" je 100 znaků.', 100);
-		$this->addPassword('passwordVerify', 'Heslo znovu')
+		$this->addPassword('passwordVerify', 'HESLO ZNOVU')
 			->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu')
 			->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password'])
 			->setAttribute('placeholder', 'pro kontrolu...');
-		$this->addText('first_sentence', 'O mně')
+		$this->addText('first_sentence', 'O MNĚ')
 			->addRule(Form::FILLED, 'Úvodní věta není vyplněna.')
 			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Úvodní věta\" je 100 znaků.', 100)
 			->setAttribute('placeholder', 'max 100 znaků');
@@ -72,7 +72,7 @@ class DatingRegistrationThirdForm extends DatingRegistrationBaseForm {
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->onValidate[] = callback($this, "uniqueUserName");
 		$this->onValidate[] = callback($this, "uniqueEmail");
-		$this->addSubmit('send', 'Do čtvrté části registrace')
+		$this->addSubmit('send', 'DO ČTVRTÉ ČÁSTI REGISTRACE')
 			->setAttribute("class", "btn btn-main");
 
 		return $this;

@@ -37,7 +37,7 @@ class DatingRegistrationFourthForm extends DatingRegistrationBaseForm {
 		$this->regSession = $regSession;
 		$this->regCoupleSession = $regCoupleSession;
 
-		$this->addGroup("Další údaje");
+		$this->addGroup("DALŠÍ ÚDAJE");
 
 		/* first person */
 		$this->addFirstPerson($type);
@@ -48,7 +48,7 @@ class DatingRegistrationFourthForm extends DatingRegistrationBaseForm {
 		}
 
 		$this->onSuccess[] = callback($this, 'submitted');
-		$submitBtn = $this->addSubmit('send', 'Dokončit registraci');
+		$submitBtn = $this->addSubmit('send', 'DOKONČIT REGISTRACI');
 		$submitBtn->setAttribute("class", "btn btn-main");
 	}
 

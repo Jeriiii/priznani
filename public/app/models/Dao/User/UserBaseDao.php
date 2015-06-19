@@ -311,12 +311,12 @@ abstract class UserBaseDao extends AbstractDao {
 
 	public static function getArrWantToMeet() {
 		return array(
-			"want_to_meet_men" => "muže",
-			"want_to_meet_women" => "ženu",
-			"want_to_meet_couple" => "pár",
-			"want_to_meet_couple_men" => "pár mužů",
-			"want_to_meet_couple_women" => "pár žen",
-			"want_to_meet_group" => "skupinu"
+			"want_to_meet_men" => "MUŽE",
+			"want_to_meet_women" => "ŽENU",
+			"want_to_meet_couple" => "PÁR",
+			"want_to_meet_couple_men" => "PÁR MUŽŮ",
+			"want_to_meet_couple_women" => "PÁR ŽEN",
+			"want_to_meet_group" => "SKUPINU"
 		);
 	}
 

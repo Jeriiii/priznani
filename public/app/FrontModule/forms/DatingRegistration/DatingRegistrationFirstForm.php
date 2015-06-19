@@ -31,16 +31,14 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 		$this->regSession = $regSession;
 		$this->regCoupleSession = $regCoupleSession;
 
-		$this->addGroup('Základní údaje:');
-
 		$secondAge = !empty($regCoupleSession) ? $regCoupleSession->age : NULL;
 		$this->addAge($regSession->age, $secondAge, $regSession->type, $isRegistration);
 
-		$this->addSelect('type', 'Jsem:', $this->userDao->getUserPropertyOption());
+		$this->addSelect('type', 'JSEM', $this->userDao->getUserPropertyOption());
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->onValidate[] = callback($this, 'validateAge');
-		$this->addSubmit('send', 'Do druhé části registrace')
+		$this->addSubmit('send', 'DO DRUHÉ ČÁSTI REGISTRACE')
 			->setAttribute("class", "btn btn-main");
 
 		return $this;
