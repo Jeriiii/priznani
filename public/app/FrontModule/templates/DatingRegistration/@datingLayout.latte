@@ -32,14 +32,15 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 	{*paralax slide start*}
 	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/8">
 		<div id="registration-form" class="inner relative">
-			<div class="form-window">
-				{include #datingContent}
-			</div>
+			{include #datingContent}
 			<div class="clear"></div>
-		</div>
-		{ifset #lastSlide}
-			<a class="scroll-to-btn first-slide" href="#second-slide" data-anchor="#second-slide" data-scroll-to="middle"></a>
+			{ifset #lastSlide}
+			<a class="scroll-to-btn first-slide" href="#second-slide" data-anchor="#second-slide" data-scroll-to="middle">
+				Co tě na datenode čeká?
+			</a>
 		{/ifset}
+		</div>
+		
 	</div>
 	{*paralax slide end*}
 	{ifset #lastSlide}
@@ -70,42 +71,87 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
 {* slidy paralaxu mezi prvním a posledním slidem *}
 {define middleSlides}
-	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/2">
-		<div id="second-slide" class="paralax-white-content">
-			<p class="inner">
-			Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Nunc auctor. Pellentesque ipsum. Fusce tellus odio, dapibus id fermentum quis, suscipit id erat. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. In laoreet, magna id viverra tincidunt, sem odio bibendum justo, vel imperdiet sapien wisi sed libero. Nullam rhoncus aliquam metus. Nam quis nulla. Vivamus luctus egestas leo. Donec ipsum massa, ullamcorper in, auctor et, scelerisque sed, est. Aliquam in lorem sit amet leo accumsan lacinia. Vestibulum fermentum tortor id mi. Etiam dui sem, fermentum vitae, sagittis id, malesuada in, quam.
-
-	Integer imperdiet lectus quis justo. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Fusce aliquam vestibulum ipsum. Duis bibendum, lectus ut viverra rhoncus, dolor nunc faucibus libero, eget facilisis enim ipsum id lacus. Vestibulum erat nulla, ullamcorper nec, rutrum non, nonummy ac, erat. Vivamus porttitor turpis ac leo. Nulla turpis magna, cursus sit amet, suscipit a, interdum id, felis. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Fusce aliquam vestibulum ipsum. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. Vestibulum fermentum tortor id mi. Nunc auctor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Maecenas lorem. Nullam feugiat, turpis at pulvinar vulputate, erat libero tristique tellus, nec bibendum odio risus sit amet ante. Vestibulum erat nulla, ullamcorper nec, rutrum non, nonummy ac, erat. Nullam rhoncus aliquam metus.
-
-	Proin pede metus, vulputate nec, fermentum fringilla, vehicula vitae, justo. Vivamus ac leo pretium faucibus. Quisque porta. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Fusce suscipit libero eget elit. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Pellentesque ipsum. Nullam rhoncus aliquam metus. Etiam bibendum elit eget erat. Aliquam erat volutpat. Fusce dui leo, imperdiet in, aliquam sit amet, feugiat eu, orci. Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? Etiam ligula pede, sagittis quis, interdum ultricies, scelerisque eu. In enim a arcu imperdiet malesuada. Morbi scelerisque luctus velit. Nunc auctor. Proin in tellus sit amet nibh dignissim sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam faucibus mi quis velit.
-			</p>
-		</div>
-		<a class="scroll-to-btn" href="#third-slide" data-anchor="#third-slide" data-scroll-to="top"></a>
-	</div>
-	
-	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/6">
-		<div id="third-slide" class="paralax-white-content">
-			<p class="inner">
-			Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-			</p>
-		</div>
-		<a class="scroll-to-btn" href="#fourth-slide" data-anchor="#fourth-slide" data-scroll-to="middle"></a>
-	</div>
-	
-	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/7">
-		<div id="fourth-slide" class="paralax-white-content">
-			<div class="inner">
-				<img src="http://lorempixel.com/120/120/fashion" />
-				<img src="http://lorempixel.com/120/120/fashion" />
-				<img src="http://lorempixel.com/120/120/fashion" />
-				<img src="http://lorempixel.com/120/120/fashion" />
+	<div id="second-slide" class="paralax-white-content featureListSlide">
+		<div class="inner">
+			<h2 class="slideTitle">CO TĚ NA DATENODE ČEKÁ?</h2>
+			{foreach $features as $feature}
+			<div class="featureItem">
+				<span class="image {$feature['image']}"></span>
+				<h3>{$feature['name']}</h3>
+				<p>{!$feature['text']}</p>
+				<div class="clear"></div>
 			</div>
-			<p class="inner">
-
-			TEXT tetst tgdertekte rtkrjert eirtertjkelrjkerj ert etrkl ejrkl
-			</p>
+			{/foreach}
+			<div class="clear"></div>
+			<a class="scroll-to-btn imageOnTheLeft" href="#third-slide" data-anchor="#third-slide" data-scroll-to="middle">Napsali o nás</a>
+		</div>
+	</div>
+	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/2"></div>
+		
+	
+	<div id="third-slide" class="paralax-white-content">
+		<div class="inner">
+			<h2 class="slideTitle">NAPSALI O NÁS</h2>
+			<div class="writtenAboutUs">
+				<div class="writtenItem onTheLeft">
+					<img src="http://lorempixel.com/output/people-q-c-180-180-6.jpg" />
+					<span class="username">MATYLDA</span>
+					<p class="text">
+						úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr
+					</p>
+				</div>
+				<div class="writtenItem">
+					<img src="http://lorempixel.com/output/people-q-c-180-180-5.jpg" />
+					<span class="username">JOŽINI Z BAŽINY</span>
+					<p class="text">
+						úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr
+					</p>
+				</div>
+				<div class="writtenItem onTheRight">
+					<img src="http://lorempixel.com/output/people-q-c-180-180-4.jpg" />
+					<span class="username">LÍZALKY</span>
+					<p class="text">
+						úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr
+					</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<a class="scroll-to-btn noText centered" href="#fourth-slide" data-anchor="#fourth-slide" data-scroll-to="middle"></a>
+		</div>
+	</div>
+	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/6"></div>
+	
+	
+	
+	<div id="fourth-slide" class="paralax-white-content">
+		<div class="inner datenodeInMobile">
+			<h2 class="slideTitle">DATENODE V MOBILU NEBO TABLETU</h2>
+			<div class="half">
+				<h3>Datenode si užijete na jakémkoli zařízení</h3>
+				<p>čupr web úžo supr čupr web úžo supr čupr webčupr web úžo supr čupr web úžo supr čupr webčupr web úžo supr čupr</p>
+				<a class="scroll-to-btn noText centered" href="#fifth-slide" data-anchor="#fifth-slide"></a>
+			</div>
+			<div class="mobileImage"></div>
+			<div class="clear"></div>
+		</div>			
+	</div>
+	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/7"></div>
+		
+	<div id="fifth-slide" class="paralax-white-content fullHeight">
+		<div class="inner confessionSlide">
+			<img src="http://lorempixel.com/600/1080/fashion/7" />
+			<div class="rightHalf">
+				<h2 class="slideTitle">PŘIZNÁNÍ O SEXU</h2>
+				<p class="description"><strong>Máte nějakou zajímavou historku o sexu? Podělte se!</strong><br />Všechna přiznání jsou na 100% anonymní.</p>
+				<p class="confession topOne">Když se mě můj přítel ptá jestli se s ním vyspím, říkám většinou ne a přitom jsem šíleně nadržená, chtěla bych aby se na mě prostě vrhl a já se mu mohla podvolit.</p>
+				<p class="confession">Chtěla bych krásného chlapa, kterého bych mohla uspokojovat jak pusou, tak i rukou nebo i sexem, ale také tím, že miluji vaření a pečení a správný chlap si zaslouží po náročním dni klid. Tkž krásná večeře, dezert, dezert v podání sexu a s úsměvem na rtech spát:)</p>
+				<p class="confession">Jednou ve tmě jsem místo přitelovy košile začala rozepínat knoflíčky u peřiny.</p>
+				<p class="confession botOne">Jsem nejšťastnější chlap na světě! Mě i mé přítelkyni je 20 a máme ten nejparádnější vztah. Umí parádně vařit i péct, naslouchá mi, miluje mě, nikdy by mě nepodvedla, pustí mě do hospody, chodí se dívat na mé zápasy, prdíme před sebou a ten sex (vždy mě nějak překvapí :P). Já bych jí nikdy nedokázal nijak ublížit. Už se těším až budeme spolu bydlet, mít velký dům, psa a děti :)</p>
+				<a class="scroll-to-btn centered noText" href="#last-slide" data-anchor="#last-slide"></a>
+			</div>
 			<div class="clear"></div>
 		</div>
-		<a class="scroll-to-btn" href="#last-slide" data-anchor="#last-slide"></a>
+		<div class="clear"></div>
 	</div>
+	
 {/}

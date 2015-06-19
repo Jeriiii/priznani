@@ -16,19 +16,42 @@
 	
 	.paralax-white-content{
 		width: 100%;
-		background: rgba(255,255,255,0.8);
+		background: rgba(255,255,255,1);
 		padding: 20px 0;
 	}
 	
 }
+@image-size: 60px;
+
 .scroll-to-btn{
 	display: block;
 	margin: 0 auto;
+	color: black;
+	font-weight: bold;
+	font-size: 12px;
 	background-image: url(http://loremicon.com/files/uploads/flat/png/64/arrow-down.png);
-	background-position: center center;
+	background-position: right center;
 	background-color: transparent;
 	background-repeat: no-repeat;
-	background-size: 60px 60px;
-	width: 60px;
-	height: 60px;
+	background-size: @image-size @image-size;
+	width: 250px;
+	height: @image-size;
+	text-align: right;
+	padding-right: @image-size + 20;
+	line-height: @image-size;
+	
+	&.imageOnTheLeft{
+		text-align: left;
+		padding-left: @image-size + 20;
+		padding-right: 0;
+		background-position: left center;
+	}
+	
+	&.noText{
+		width: @image-size;
+		padding: 0;
+	}
+	&.centered{
+		margin: 20px auto;
+	}
 }
