@@ -2,293 +2,136 @@
 
 namespace Nette\Application\UI\Form;
 
-use Nette\Application\UI\Form;
-use Nette\ComponentModel\IContainer;
+use Nette\Application\UI\Form,
+	Nette\Security as NS,
+	Nette\ComponentModel\IContainer;
 use POS\Model\UserDao;
-use Nette\ArrayHash;
 use Nette\Http\SessionSection;
+use Nette\Utils\Html;
 
-/*
- * Zaregistruje muže, ženu či celý pár.
- */
+class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 
-class DatingRegistrationThirdForm extends DatingRegistrationBaseForm {
-
-	/** @var \POS\Model\UserDao */
-	protected $userDao;
-
-	/** @var int Typ uživatele */
-	protected $type;
+	/**
+	 * @var \POS\Model\UserDao
+	 */
+	public $userDao;
 
 	/** @var \Nette\Http\SessionSection */
 	private $regSession;
 
-	/** @var \Nette\Http\SessionSection */
-	private $regCoupleSession;
-
-	/** prefix k roznání, že jde o druhého uživatele z páru */
-	const SECOND_MAN_SUFFIX = "Second";
-
-	public function __construct(UserDao $userDao, $regSession = NULL, $regCoupleSession = NULL, IContainer $parent = NULL, $name = NULL) {
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, SessionSection $regSession = NULL) {
 		parent::__construct($parent, $name);
 		$this->userDao = $userDao;
-		$type = $regSession->type;
-		$this->type = $type;
 		$this->regSession = $regSession;
-		$this->regCoupleSession = $regCoupleSession;
 
-		$this->addGroup("Další údaje");
+		//graphics
+		$renderer = $this->getRenderer();
+		$renderer->wrappers['controls']['container'] = 'div';
+		$renderer->wrappers['pair']['container'] = 'div';
+		$renderer->wrappers['label']['container'] = NULL;
+		$renderer->wrappers['control']['container'] = NULL;
 
-		/* first person */
-		$this->addFirstPerson($type);
+		$this->addText('email', 'Email')
+			->addRule(Form::FILLED, 'Email není vyplněn.')
+			->addRule(Form::EMAIL, 'Vyplněný email není platného formátu.')
+			->addRule(Form::MAX_LENGTH, 'Email je příliž dlouhý.', 50);
+		$this->addText('user_name', 'Uživatelské jméno')
+			->addRule(Form::FILLED, 'Uživatelské jméno není vyplněno')
+			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Uživatelské jméno\" je 100 znaků.', 20);
+		$this->addPassword('password', 'Heslo')
+			->addRule(Form::FILLED, 'Heslo není vyplněno.')
+			->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaky', 4)
+			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Heslo\" je 100 znaků.', 100);
+		$this->addPassword('passwordVerify', 'Heslo znovu')
+			->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu')
+			->addRule(Form::EQUAL, 'Hesla se neshodují', $this['password'])
+			->setAttribute('placeholder', 'pro kontrolu...');
+		$this->addText('first_sentence', 'O mně')
+			->addRule(Form::FILLED, 'Úvodní věta není vyplněna.')
+			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Úvodní věta\" je 100 znaků.', 100)
+			->setAttribute('placeholder', 'max 100 znaků');
+//		$this->addTextArea('about_me', 'O mně', 40, 3)
+//			->addRule(Form::FILLED, 'O mně není vyplněno.')
+//			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300)
+//			->setAttribute('placeholder', 'max 300 znaků');
 
-		/* second person */
-		if (self::isCouple($type)) {
-			$this->addSecondPerson($type);
+		$agreement = Html::el('span');
+		$agreement->setHtml('Souhlasím s <a href="http://datenode.cz/docs/vsp.pdf" style="text-decoration:underline">obchodními podmínkami</a>');
+		$this->addCheckbox('agreement', $agreement)
+			->addRule(Form::FILLED, 'Pro pokračování musíte souhlasit s našemi obchodními podmínkami.');
+
+		if (isset($regSession)) {
+			$this->setDefaults(array(
+				'email' => $regSession->email,
+				'user_name' => $regSession->user_name,
+				'first_sentence' => $regSession->first_sentence,
+				/* 'about_me' => $regSession->about_me, */
+			));
 		}
 
 		$this->onSuccess[] = callback($this, 'submitted');
-		$submitBtn = $this->addSubmit('send', 'Dokončit registraci');
-		$submitBtn->setAttribute("class", "btn btn-main");
+		$this->onValidate[] = callback($this, "uniqueUserName");
+		$this->onValidate[] = callback($this, "uniqueEmail");
+		$this->addSubmit('send', 'Do třetí části registrace')
+			->setAttribute("class", "btn btn-main");
+
+		return $this;
 	}
 
 	public function submitted($form) {
 		$values = $form->values;
 		$presenter = $this->getPresenter();
 
-		$this->setFirstPersonData($this->type, $this->regSession, $values);
+		unset($values['agreement']);
 
-		if (self::isCouple($this->type)) {
-			$this->setSecondPersonData($this->type, $this->regCoupleSession, $values);
+		$authenticator = $presenter->context->authenticator;
+		$pass = $authenticator->calculateHash($values->password);
+
+		$this->regSession->email = $values->email;
+		$this->regSession->user_name = $values->user_name;
+		$this->regSession->password = $values->password;
+		$this->regSession->passwordHash = $pass;
+		$this->regSession->first_sentence = $values->first_sentence;
+		$this->regSession->about_me = ""; //$values->about_me;
+		$this->checkOldUser($this->regSession, $values);
+
+		$presenter->redirect('DatingRegistration:ThirdRegForm');
+	}
+
+	public function checkOldUser($regSession, $values) {
+		$email = $this->userDao->findByOldEmail($values->email);
+		$oldUser = FALSE;
+		if ($email) {
+			$this->getPresenter()->flashMessage("Účet byl propojen se starším účtem. Děkujeme, že jste s námi.");
+			$oldUser = TRUE;
 		}
-
-		$presenter->redirect('Datingregistration:register');
+		$regSession->oldUser = $oldUser;
 	}
 
 	/**
-	 * Uloží data do sečny
-	 * @param \Nette\ArrayHash $values
-	 * @param type $suffix
+	 * Zkontroluje, zda je user_name unikátní
+	 * @param Nette\Application\UI\Form $form
 	 */
-	protected function setBaseData($section, ArrayHash $values, $suffix = "") {
-		$section->marital_state = $values->offsetGet("marital_state" . $suffix);
-		$section->orientation = $values->offsetGet("orientation" . $suffix);
-		$section->tallness = $values->offsetGet("tallness" . $suffix);
-		$section->shape = $values->offsetGet("shape" . $suffix);
+	public function uniqueUserName($form) {
+		$values = $form->values;
+
+		$user_name = $this->userDao->findByUserName($values->user_name);
+		if ($user_name) {
+			$form->addError('Toto jméno je již obsazeno.');
+		}
 	}
 
 	/**
-	 * Uloží data o ženě do sečny
-	 * @param \Nette\ArrayHash $values
-	 * @param type $suffix
+	 * Zkontroluje, zda je email unikátní
+	 * @param Nette\Application\UI\Form $form
 	 */
-	protected function setWomanData($section, ArrayHash $values, $suffix = "") {
-		$section->bra_size = $values->offsetGet("bra_size" . $suffix);
-		$section->hair_colour = $values->offsetGet("hair_colour" . $suffix);
-		$section->penis_length = NULL;
-		$section->penis_width = NULL;
-	}
+	public function uniqueEmail($form) {
+		$values = $form->values;
 
-	/**
-	 * Uloží data o muži do sečny
-	 * @param \Nette\ArrayHash $values
-	 * @param type $suffix
-	 */
-	protected function setManData($section, ArrayHash $values, $suffix = "") {
-		$section->bra_size = NULL;
-		$section->hair_colour = NULL;
-		$section->penis_length = $values->offsetGet("penis_length" . $suffix);
-		$section->penis_width = $values->offsetGet("penis_width" . $suffix);
-	}
-
-	/**
-	 * Uloží data o prvním uživateli.
-	 * @param int $type Typ uživatele.
-	 */
-	protected function setFirstPersonData($type, $section, ArrayHash $values) {
-		if (self::isFirstWoman($type)) {
-			$this->setWomanData($section, $values);
+		$email = $this->userDao->findByEmail($values->email);
+		if ($email) {
+			$form->addError('Tento mail již někdo používá.');
 		}
-		if (self::isFirstMan($type)) {
-			$this->setManData($section, $values);
-		}
-		$this->setBaseData($section, $values);
-	}
-
-	/**
-	 * Uloží data o druhém uživateli z páru.
-	 * @param int $type Typ uživatele.
-	 */
-	protected function setSecondPersonData($type, $section, ArrayHash $values) {
-		$section->vigor = $this->getVigor($section->age);
-
-		if (self::isSecondWoman($type)) {
-			$this->setWomanData($section, $values, self::SECOND_MAN_SUFFIX);
-		}
-		if (self::isSecondMan($type)) {
-			$this->setManData($section, $values, self::SECOND_MAN_SUFFIX);
-		}
-		$this->setBaseData($section, $values, self::SECOND_MAN_SUFFIX);
-	}
-
-	/**
-	 * Přidá inputy pro prvního uživatele.
-	 * @param int $type Typ uživatele.
-	 */
-	public function addFirstPerson($type) {
-		$this->addGroup(self::getFirstManName($type));
-		if (self::isFirstWoman($type)) {
-			$this->addWoman();
-		}
-		if (self::isFirstMan($type)) {
-			$this->addMan();
-		}
-		$this->addBaseSelect();
-	}
-
-	/**
-	 * Přidá inputy pro prvního uživatele.
-	 * @param int $type Typ uživatele.
-	 */
-	public function addSecondPerson($type) {
-		$this->addGroup(self::getSecondManName($type));
-		if (self::isSecondWoman($type)) {
-			$this->addWoman(self::SECOND_MAN_SUFFIX);
-		}
-		if (self::isSecondMan($type)) {
-			$this->addMan(self::SECOND_MAN_SUFFIX);
-		}
-		$this->addBaseSelect(self::SECOND_MAN_SUFFIX);
-	}
-
-	/**
-	 * Vrátí název prvního z registrovaných
-	 * @param int $type Typ uživatele.
-	 * @return string Název prvního z registrovaných
-	 */
-	public static function getFirstManName($type) {
-		if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_WOMAN) {
-			return "Partnerka";
-		}
-		if ($type == UserDao::PROPERTY_COUPLE_MAN) {
-			return "Partner";
-		}
-		return "";
-	}
-
-	/**
-	 * Vrátí název druhého z registrovaných
-	 * @param int $type Typ uživatele.
-	 * @return string Název druhého z registrovaných
-	 */
-	public static function getSecondManName($type) {
-		if ($type == UserDao::PROPERTY_COUPLE_WOMAN) {
-			return "Partnerka";
-		}
-		if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_MAN) {
-			return "Partner";
-		}
-		return "";
-	}
-
-	protected function addBaseSelect($suffix = "") {
-		$this->addSelect('marital_state' . $suffix, 'Stav:', $this->userDao->getUserStateOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte Váš stav");
-		$this->addSelect('orientation' . $suffix, 'Orientace:', $this->userDao->getUserOrientationOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte váší orientaci");
-		$this->addSelect('tallness' . $suffix, 'Výška:', $this->userDao->getUserTallnessOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte váši výšku");
-		$this->addSelect('shape' . $suffix, 'Postava:', $this->userDao->getUserShapeOption())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte váší postavu");
-	}
-
-	/**
-	 * Přidá specifické inputy pro ženu.
-	 * @param string $suffix Rozlišuje jestli jde o prvního nebo o druhého (druhého z páru) uživatele
-	 */
-	protected function addWoman($suffix = "") {
-		$this->addSelect('bra_size' . $suffix, 'Velikost košíčků:', $this->userDao->getUserBraSizeOption());
-
-		$this->addSelect('hair_colour' . $suffix, 'Barva vlasů:', $this->userDao->getUserHairs())
-			->setPrompt("- vyberte -")
-			->addRule(Form::FILLED, "Vyberte prosím barvu vlasů");
-	}
-
-	/**
-	 * Přidá specifické inputy pro muže.
-	 * @param string $suffix Rozlišuje jestli jde o prvního nebo o druhého (druhého z páru) uživatele
-	 */
-	protected function addMan($suffix = "") {
-		$this->addText('penis_length' . $suffix, 'Délka penisu:')
-			->setType('number')
-			->addRule(Form::INTEGER, 'Délka musí být číslo.')
-			->addRule(Form::RANGE, 'Délka je mezi 2 - 40 cm', array(2, 40));
-
-		$this->addSelect('penis_width' . $suffix, 'Obvod penisu:', $this->userDao->getUserPenisWidthOption());
-	}
-
-	/**
-	 * Pokud je uživatel nějaký druh páru, vrátí TRUE
-	 * @param int $type Typ uživatele.
-	 * @return boolean TRUE pokud jde o pár, jinak FALSE
-	 */
-	public static function isCouple($type) {
-		if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_MAN || $type == UserDao::PROPERTY_COUPLE_WOMAN) {
-			return TRUE;
-		}
-		return FALSE;
-	}
-
-	/**
-	 * Pokud je první z páru žena | nebo jde o ženu, vrátí TRUE
-	 * @param int $type Typ uživatele.
-	 * @return boolean TRUE pokud je první z páru žena | nebo jde o ženu
-	 */
-	public static function isFirstWoman($type) {
-		if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_WOMAN || $type == UserDao::PROPERTY_COUPLE_WOMAN) {
-			return TRUE;
-		}
-		return FALSE;
-	}
-
-	/**
-	 * Pokud je první z páru muž | nebo jde o muže, vrátí TRUE
-	 * @param int $type Typ uživatele.
-	 * @return boolean TRUE pokud je první z páru muž | nebo jde o muže
-	 */
-	public static function isFirstMan($type) {
-		if ($type == UserDao::PROPERTY_MAN || $type == UserDao::PROPERTY_COUPLE_MAN) {
-			return TRUE;
-		}
-		return FALSE;
-	}
-
-	/**
-	 * Pokud je druhý z páru žena | nebo jde o ženu, vrátí TRUE
-	 * @param int $type Typ uživatele.
-	 * @return boolean TRUE pokud je druhý z páru žena | nebo jde o ženu
-	 */
-	public static function isSecondWoman($type) {
-		if ($type == UserDao::PROPERTY_COUPLE_WOMAN) {
-			return TRUE;
-		}
-		return FALSE;
-	}
-
-	/**
-	 * Pokud je druhý z páru muž | nebo jde o muže, vrátí TRUE
-	 * @param int $type Typ uživatele.
-	 * @return boolean TRUE pokud je druhý z páru muž | nebo jde o muže
-	 */
-	public static function isSecondMan($type) {
-		if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_MAN) {
-			return TRUE;
-		}
-		return FALSE;
 	}
 
 }
