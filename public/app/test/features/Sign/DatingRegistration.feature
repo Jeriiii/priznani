@@ -10,10 +10,12 @@ Feature: Dating registration
 		And I select "<month>" from "monthSecond"
 		And I select "<year>" from "yearSecond"
 		And I select "Pár" from "type"
-		And I fill in "<want_to_meet_men>" for "frm-firstRegForm-want_to_meet_men-1"
+		And I press "send"
+		
+		Then I should be on "/dating-registration/second-reg-form"
+		When I fill in "<want_to_meet_men>" for "frm-secondRegForm-want_to_meet_men-1"
 		And I press "send"
 
-		Then I should be on "/dating-registration/second-reg-form"
 		When I fill in "<email>" for "email"
 		And I fill in "<user_name>" for "user_name"
 		And I fill in "<password>" for "password"
@@ -23,7 +25,7 @@ Feature: Dating registration
 		And I press "send"
 
 		Then I should see "Partnerka"
-		And I should be on "/dating-registration/third-reg-form"
+		And I should be on "/dating-registration/fourth-reg-form"
 		When I select "ženatý / vdaná" from "marital_state"
 		And I select "bi" from "orientation"
 		And I select "160 - 170 cm" from "tallness"
