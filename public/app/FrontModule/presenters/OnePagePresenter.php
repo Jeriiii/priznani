@@ -115,23 +115,23 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	public function renderDefault() {
-		$this->template->userID = $this->userID;
-		$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
-		$this->template->profilePhoto = $this->loggedUser->profilFotoID;
-		$this->template->loggedUser = $this->loggedUser;
-
-		if (!$this->deviceDetector->isMobile() && $this->getUser()->isLoggedIn()) {/* pokud nejsem na mobilu, údaje se nepředají z presenteru */
-			$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->getUser()->id)->count();
-			$this->template->countSexy = $this->youAreSexyDao->countToUser($this->getUser()->id);
-		}
-
-		$this->template->isUserPaying = $this->paymentDao->isUserPaying($this->userID);
-		$this->template->countVerificationRequests = $this->verificationPhotoDao->findByUserID($this->user->id)->count();
-		if ($this->getUser()->isLoggedIn()) {
-			$this->template->sexyLabelToolTip = "Hodnost podle počtu - JE SEXY <br />" . ShowUserDataHelper::getLabelInfoText($this->loggedUser->property->type);
-		}
-
 		if ($this->user->isLoggedIn()) {
+			$this->template->userID = $this->userID;
+			$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
+			$this->template->profilePhoto = $this->loggedUser->profilFotoID;
+			$this->template->loggedUser = $this->loggedUser;
+
+			if (!$this->deviceDetector->isMobile() && $this->getUser()->isLoggedIn()) {/* pokud nejsem na mobilu, údaje se nepředají z presenteru */
+				$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->getUser()->id)->count();
+				$this->template->countSexy = $this->youAreSexyDao->countToUser($this->getUser()->id);
+			}
+
+			$this->template->isUserPaying = $this->paymentDao->isUserPaying($this->userID);
+			$this->template->countVerificationRequests = $this->verificationPhotoDao->findByUserID($this->user->id)->count();
+			if ($this->getUser()->isLoggedIn()) {
+				$this->template->sexyLabelToolTip = "Hodnost podle počtu - JE SEXY <br />" . ShowUserDataHelper::getLabelInfoText($this->loggedUser->property->type);
+			}
+
 			$this->showQuestion();
 		}
 	}
