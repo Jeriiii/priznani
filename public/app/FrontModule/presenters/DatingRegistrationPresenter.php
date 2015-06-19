@@ -68,24 +68,24 @@ class DatingRegistrationPresenter extends BasePresenter {
 		$regForm->sendMail($email, $password, $code);
 	}
 
-	public function actionThirdRegForm() {
+	public function actionFourthRegForm() {
 		$type = $this->getRegSession()->type; // typ uživatele
 		if ($type == UserDao::PROPERTY_GROUP) {
 			$this->redirect("DatingRegistration:register");
 		}
 	}
 
-	public function renderThirdRegForm() {
+	public function renderFourthRegForm() {
 		$type = $this->getRegSession()->type; // typ uživatele
-		$this->template->firstManLabel = Frm\DatingRegistrationThirdForm::getFirstManName($type);
-		$this->template->secondManLabel = Frm\DatingRegistrationThirdForm::getSecondManName($type);
+		$this->template->firstManLabel = Frm\DatingRegistrationFourthForm::getFirstManName($type);
+		$this->template->secondManLabel = Frm\DatingRegistrationFourthForm::getSecondManName($type);
 		$this->template->type = $type;
 
-		$this->template->isCouple = Frm\DatingRegistrationThirdForm::isCouple($type);
-		$this->template->isFirstMan = Frm\DatingRegistrationThirdForm::isFirstMan($type);
-		$this->template->isFirstWoman = Frm\DatingRegistrationThirdForm::isFirstWoman($type);
-		$this->template->isSecondMan = Frm\DatingRegistrationThirdForm::isSecondMan($type);
-		$this->template->isSecondWoman = Frm\DatingRegistrationThirdForm::isSecondWoman($type);
+		$this->template->isCouple = Frm\DatingRegistrationFourthForm::isCouple($type);
+		$this->template->isFirstMan = Frm\DatingRegistrationFourthForm::isFirstMan($type);
+		$this->template->isFirstWoman = Frm\DatingRegistrationFourthForm::isFirstWoman($type);
+		$this->template->isSecondMan = Frm\DatingRegistrationFourthForm::isSecondMan($type);
+		$this->template->isSecondWoman = Frm\DatingRegistrationFourthForm::isSecondWoman($type);
 	}
 
 	public function renderRegistered() {
@@ -157,11 +157,15 @@ class DatingRegistrationPresenter extends BasePresenter {
 	}
 
 	protected function createComponentSecondRegForm($name) {
-		return new Frm\DatingRegistrationSecondForm($this->userDao, $this, $name, $this->getRegSession());
+		return new Frm\DatingRegistrationSecondForm($this->userDao, $this, $name, $this->getRegSession(), $this->getRegSessionForCouple());
 	}
 
 	protected function createComponentThirdRegForm($name) {
-		return new Frm\DatingRegistrationThirdForm($this->userDao, $this->getRegSession(), $this->getRegSessionForCouple(), $this, $name);
+		return new Frm\DatingRegistrationThirdForm($this->userDao, $this, $name, $this->getRegSession());
+	}
+
+	protected function createComponentFourthRegForm($name) {
+		return new Frm\DatingRegistrationFourthForm($this->userDao, $this->getRegSession(), $this->getRegSessionForCouple(), $this, $name);
 	}
 
 	/**

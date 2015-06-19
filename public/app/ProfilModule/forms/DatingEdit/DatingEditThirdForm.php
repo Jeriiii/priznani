@@ -2,58 +2,68 @@
 
 namespace Nette\Application\UI\Form;
 
-use Nette\ComponentModel\IContainer,
-	POS\Model\CoupleDao,
-	POS\Model\UserDao;
+use Nette\Application\UI\Form,
+	Nette\ComponentModel\IContainer,
+	POS\Model\UserDao,
+	POS\Model\UserPropertyDao;
 use Nette\Database\Table\ActiveRow;
-use Nette\ArrayHash;
 use POS\Model\UserCategoryDao;
-use POS\Model\UserPropertyDao;
-use Nette\ObjectMixin;
 
-/**
- * Editace dalších nastavení pro muže, ženu a pár.
- */
-class DatingEditThirdForm extends DatingRegistrationThirdForm {
+class DatingEditThirdForm extends BaseForm {
 
 	/** @var \POS\Model\UserDao */
 	public $userDao;
 
-	/** @var \POS\Model\CoupleDao */
-	public $coupleDao;
-
-	/** @var ActiveRow|\Nette\ArrayHash\ */
-	private $userProperty;
-
-	/** @var ActiveRow|\Nette\ArrayHash" */
-	private $couple;
-
 	/** @var \POS\Model\UserPropertyDao */
 	public $userPropertyDao;
+
+	/** @var \Nette\Database\Table\ActiveRow */
+	private $user;
 
 	/**
 	 * @var \POS\Model\UserCategoryDao
 	 */
 	public $userCategoryDao;
 
-	public function __construct(UserCategoryDao $userCategoryDao, UserPropertyDao $userPropertyDao, CoupleDao $coupleDao, UserDao $userDao, $userProperty, $couple, IContainer $parent = NULL, $name = NULL) {
-		$this->userDao = $userDao;
-		$this->coupleDao = $coupleDao;
-		$this->userProperty = $userProperty;
-		$this->couple = $couple;
-		$this->userCategoryDao = $userCategoryDao;
+	public function __construct(UserCategoryDao $userCategoryDao, UserPropertyDao $userPropertyDao, UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($parent, $name);
+
 		$this->userPropertyDao = $userPropertyDao;
+		$presenter = $this->getPresenter();
+		$userID = $presenter->getUser()->getId();
+		$this->userCategoryDao = $userCategoryDao;
 
-		parent::__construct($userDao, $userProperty, $couple, $parent, $name);
+		$this->user = $userDao->find($userID);
 
-		$this->setFirstManDefaults($this->type, $userProperty);
+		$this->addGroup('Identifikační údaje');
 
-		if ($this->isCouple($this->type)) {
-			$this->setCoupleDefaults($this->type, $couple);
-		}
+		$this->addText('email', 'Email')
+			->addRule(Form::FILLED, 'Email není vyplněn.')
+			->addRule(Form::EMAIL, 'Vyplněný email není platného formátu.')
+			->addRule(Form::MAX_LENGTH, 'Email je příliž dlouhý.', 50)
+			->setDisabled();
+		$this->addText('user_name', 'Uživatelské jméno')
+			->addRule(Form::FILLED, 'Uživatelské jméno není vyplněno')
+			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Uživatelské jméno\" je 100 znaků.', 20)
+			->setDisabled();
+		$this->addText('first_sentence', 'Úvodní věta (max 100 znaků)')
+			->addRule(Form::FILLED, 'Úvodní věta není vyplněna.')
+			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"Úvodní věta\" je 100 znaků.', 100);
+		$this->addTextArea('about_me', 'O mě (max 300 znaků)', 40, 3)
+			->addRule(Form::FILLED, 'O mě není vyplněno.')
+			->addRule(Form::MAX_LENGTH, 'Maximální délka pole \"O mě\" je 300 znaků.', 300);
 
-		$this["send"]->setAttribute("class", "btn-main medium button");
-		$this['send']->caption = "Uložit";
+		$this->setDefaults(array(
+			"email" => $this->user->email,
+			"user_name" => $this->user->user_name,
+			"first_sentence" => $this->user->property->first_sentence,
+			"about_me" => $this->user->property->about_me
+		));
+
+		$this->onSuccess[] = callback($this, 'submitted');
+		$this->addSubmit('send', 'Uložit')
+			->setAttribute("class", "btn-main medium button");
+
 		return $this;
 	}
 
@@ -61,75 +71,15 @@ class DatingEditThirdForm extends DatingRegistrationThirdForm {
 		$values = $form->values;
 		$presenter = $this->getPresenter();
 
-		$userData = new ArrayHash();
-		$this->setFirstPersonData($this->type, $userData, $values);
-		$this->userPropertyDao->update($this->userProperty->id, $userData);
+		unset($values["email"]);
+		unset($values["user_name"]);
+		$this->userPropertyDao->update($this->user->propertyID, $values);
 
-		if ($this->isCouple($this->type)) {
-			$coupleData = new ArrayHash();
-			$this->setSecondPersonData($this->type, $coupleData, $values);
-			$this->coupleDao->update($this->couple->id, $coupleData);
-		}
-
-
-		$this->userPropertyDao->updatePreferencesID($this->userProperty, $this->userCategoryDao);
+		$this->userPropertyDao->updatePreferencesID($this->user->property, $this->userCategoryDao);
 
 		$presenter->calculateLoggedUser();
-		$presenter->flashMessage('Změna osobních údajů byla úspěšná');
+		$presenter->flashMessage('Změna identifikačních údajů byla úspěšná');
 		$presenter->redirect("this");
-	}
-
-	/**
-	 * Vyplní hodnoty z DB do formuláře pro muže, ženu nebo prvního z páru.
-	 * @param int $type Typ uživatele.
-	 * @param \Nette\Database\Table\ActiveRow|\Nette\ArrayHash $user Uživatel nebo pár
-	 */
-	private function setFirstManDefaults($type, $user) {
-		if (self::isFirstWoman($type)) {
-			$this->setWomanDefaults($user);
-		}
-		if (self::isFirstMan($type)) {
-			$this->setManDefaults($user);
-		}
-		$this->setBaseDefaults($user);
-	}
-
-	/**
-	 * Vyplní hodnoty z DB do formuláře pro druhého z páru.
-	 * @param int $type Typ uživatele.
-	 * @param \Nette\Database\Table\ActiveRow|\Nette\ArrayHash $user Uživatel nebo pár
-	 */
-	private function setCoupleDefaults($type, $user) {
-		if (self::isSecondWoman($type)) {
-			$this->setWomanDefaults($user, self::SECOND_MAN_SUFFIX);
-		}
-		if (self::isSecondMan($type)) {
-			$this->setManDefaults($user, self::SECOND_MAN_SUFFIX);
-		}
-		$this->setBaseDefaults($user, self::SECOND_MAN_SUFFIX);
-	}
-
-	private function setBaseDefaults($user, $suffixName = "") {
-		$this->setDefaults(array(
-			'marital_state' . $suffixName => $user->marital_state,
-			'orientation' . $suffixName => $user->orientation,
-			'tallness' . $suffixName => $user->tallness,
-			'shape' . $suffixName => $user->shape,
-		));
-	}
-
-	private function setWomanDefaults($user, $suffixName = "") {
-		$this->setDefaults(array(
-			'bra_size' . $suffixName => $user->bra_size,
-			'hair_colour' . $suffixName => $user->hair_colour,
-		));
-	}
-
-	private function setManDefaults($user, $suffixName = "") {
-		$this->setDefaults(array(
-			'penis_length' . $suffixName => $user->penis_length,
-			'penis_width' . $suffixName => $user->penis_width,
-		));
 	}
 
 }
