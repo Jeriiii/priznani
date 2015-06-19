@@ -12,7 +12,7 @@ use Nette\Http\SessionSection;
  * Zaregistruje muže, ženu či celý pár.
  */
 
-class DatingRegistrationThirdForm extends DatingRegistrationBaseForm {
+class DatingRegistrationFourthForm extends DatingRegistrationBaseForm {
 
 	/** @var \POS\Model\UserDao */
 	protected $userDao;

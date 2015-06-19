@@ -1,37 +1,13 @@
 
 {block datingContent}
 
-<h2 class="window-title">REGISTRACE</h2>
+<h2 class="window-title">KROK 2 ze 4</h2>
 <div class="window-content">
-	{form firstRegForm}
+	{form secondRegForm}
 		<ul class="error" n:if="$form->hasErrors()">
 				<li n:foreach="$form->errors as $error">{$error}</li>
 		</ul>
 		<table>
-			<tr>
-				<td>
-				<legend>Základní údaje: </legend>
-				</td>
-			</tr>
-
-			<tr>
-				<td>{label type /}	{input type}</td>
-			</tr>
-			
-			<tr>
-				<td>
-					<label for="frm-firstRegForm" id="label-datebirth-first">Datum narození:</label>
-					{input day class => date} {input month class => date} {input year class => date}
-				</td>
-			</tr>
-			
-			<tr id="second-birdhdate" {if empty($type) || $type == 1 || $type == 2 || $type == 6}style="display: none;"{/if}>
-				<td>
-					<label for="frm-firstRegForm" id="label-datebirth-second">Datum narození - partnera:</label>
-					{input daySecond class => date} {input monthSecond class => date} {input yearSecond class => date}
-				</td>
-			</tr>
-
 			<tr>
 				<td>
 				<legend>Zajímám se o: </legend>
@@ -63,11 +39,13 @@
 							<td class="option-label">{label want_to_meet_couple /}</td>
 							<td class="options">{input want_to_meet_couple}</td>
 						</tr>
-						<tr>
+						{* skryto kvůli velikosti, nelze zakomentovat úplně, protože databáze vyžaduje hodnoty 
+						 pro odkrytí odeberte classu notdisplayed *}
+						<tr class="notdisplayed">
 							<td class="option-label">{label want_to_meet_couple_men /}</td>
 							<td class="options">{input want_to_meet_couple_men}</td>
 						</tr>
-						<tr>
+						<tr class="notdisplayed">
 							<td class="option-label">{label want_to_meet_couple_women /}</td>
 							<td class="options">{input want_to_meet_couple_women}</td>
 						</tr>
@@ -78,7 +56,6 @@
 					</table>
 				</td>
 			</tr>
-
 			<tr>
 				<td>
 					{input send}

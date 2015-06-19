@@ -11,7 +11,7 @@ use Nette\DateTime;
 /**
  * První formulář registrace
  */
-class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
+class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 
 	/**
 	 * @var \POS\Model\UserDao
@@ -21,25 +21,14 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 	/** @var \Nette\Http\SessionSection */
 	private $regSession;
 
-	/** @var \Nette\Http\SessionSection */
-	private $regCoupleSession;
-
 	/** @var array Možnosti pro zaškrtnutí s kým se chci potkat. */
 	private $wantToMeetOption = array(1 => "ano", 2 => "nezáleží", 0 => "ne");
 
-	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, $regSession = NULL, $regCoupleSession = NULL, $isRegistration = TRUE) {
+	public function __construct(UserDao $userDao, IContainer $parent = NULL, $name = NULL, $regSession = NULL) {
 		parent::__construct($parent, $name);
 
 		$this->userDao = $userDao;
 		$this->regSession = $regSession;
-		$this->regCoupleSession = $regCoupleSession;
-
-		$this->addGroup('Základní údaje:');
-
-		$secondAge = !empty($regCoupleSession) ? $regCoupleSession->age : NULL;
-		$this->addAge($regSession->age, $secondAge, $regSession->type, $isRegistration);
-
-		$this->addSelect('type', 'Jsem:', $this->userDao->getUserPropertyOption());
 
 		$this->addGroup('Zajímám se o:');
 
@@ -53,8 +42,7 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->onValidate[] = callback($this, 'validateWantToMeet');
-		$this->onValidate[] = callback($this, 'validateAge');
-		$this->addSubmit('send', 'Do druhé části registrace')
+		$this->addSubmit('send', 'Do třetí části registrace')
 			->setAttribute("class", "btn btn-main");
 
 		return $this;
@@ -64,17 +52,11 @@ class DatingRegistrationFirstForm extends DatingRegistrationBaseForm {
 		$values = $form->getValues();
 		$presenter = $this->getPresenter();
 
-		$this->regSession->role = 'unconfirmed_user';
-		$this->regSession->age = $this->getAge($values);
-		$this->regCoupleSession->age = $this->getSecondAge($values);
-		$this->regSession->vigor = $this->getVigor($this->regSession->age);
-		$this->regSession->type = $values->type;
-
 		foreach ($this->userDao->getArrWantToMeet() as $key => $want) {
 			$this->regSession[$key] = $values[$key];
 		}
 
-		$presenter->redirect('Datingregistration:SecondRegForm');
+		$presenter->redirect('Datingregistration:ThirdRegForm');
 	}
 
 	/**

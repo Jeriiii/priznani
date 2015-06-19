@@ -9,7 +9,7 @@ use POS\Model\UserDao;
 use Nette\Http\SessionSection;
 use Nette\Utils\Html;
 
-class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
+class DatingRegistrationThirdForm extends DatingRegistrationBaseForm {
 
 	/**
 	 * @var \POS\Model\UserDao
@@ -72,7 +72,7 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 		$this->onSuccess[] = callback($this, 'submitted');
 		$this->onValidate[] = callback($this, "uniqueUserName");
 		$this->onValidate[] = callback($this, "uniqueEmail");
-		$this->addSubmit('send', 'Do třetí části registrace')
+		$this->addSubmit('send', 'Do čtvrté části registrace')
 			->setAttribute("class", "btn btn-main");
 
 		return $this;
@@ -95,7 +95,7 @@ class DatingRegistrationSecondForm extends DatingRegistrationBaseForm {
 		$this->regSession->about_me = ""; //$values->about_me;
 		$this->checkOldUser($this->regSession, $values);
 
-		$presenter->redirect('DatingRegistration:ThirdRegForm');
+		$presenter->redirect('DatingRegistration:FourthRegForm');
 	}
 
 	public function checkOldUser($regSession, $values) {
