@@ -34,6 +34,16 @@ class DatingRegistrationPresenter extends BasePresenter {
 
 	public function renderDefault() {
 		$this->template->type = $this->getRegSession()->type;
+		$this->template->features = array(
+			array('image' => '', 'name' => '0 KČ ZA SEZNÁMENÍ', 'text' => 'seznámení je u nás neomezené a <strong>zdarma</strong> - pro ženy i muže!'),
+			array('image' => '', 'name' => 'PŘIZNÁNÍ O SEXU', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
+			array('image' => '', 'name' => 'BLOKACE', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
+			array('image' => '', 'name' => 'TLAČÍTKO PANIKA', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
+			array('image' => '', 'name' => 'SOUKROMÉ GALERIE', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
+			array('image' => '', 'name' => 'JAK MOC JSI SEXY?', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
+			array('image' => '', 'name' => 'VĚŘÍŠ NA HOROSKOP?', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
+			array('image' => '', 'name' => 'VYSTUPUJTE ZA PÁR', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
+		);
 	}
 
 	public function registred() {

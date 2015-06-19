@@ -66,10 +66,10 @@ class DatingRegistrationBaseForm extends BaseForm {
 	private function addGroupFirstAge($type) {
 		if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_MAN || $type == UserDao::PROPERTY_COUPLE_WOMAN) {
 			if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_WOMAN) {
-				$this->addGroup("Datum narození Partnerky");
+				$this->addGroup("DATUM NAROZENÍ PARTNERKY");
 			}
 			if ($type == UserDao::PROPERTY_COUPLE_MAN) {
-				$this->addGroup("Datum narození Partnera");
+				$this->addGroup("DATUM NAROZENÍ PARTNERA");
 			}
 		}
 	}
@@ -77,28 +77,28 @@ class DatingRegistrationBaseForm extends BaseForm {
 	private function addGroupSecondAge($type) {
 		if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_MAN || $type == UserDao::PROPERTY_COUPLE_WOMAN) {
 			if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_MAN) {
-				$this->addGroup("Datum narození Partnera");
+				$this->addGroup("DATUM NAROZENÍ PARTNERA");
 			}
 			if ($type == UserDao::PROPERTY_COUPLE_WOMAN) {
-				$this->addGroup("Datum narození Partnerky");
+				$this->addGroup("DATUM NAROZENÍ PARTNERKY");
 			}
 		}
 	}
 
 	private function addSelectAge($days, $months, $years, $filled = TRUE, $suffixName = "") {
-		$day = $this->addSelect('day' . $suffixName, 'Den narození: ', $days);
+		$day = $this->addSelect('day' . $suffixName, 'DEN NAROZENÍ', $days);
 		$day->setPrompt('Den');
 		if ($filled) {
 			$day->addRule(Form::FILLED, "Prosím vyplňte den Vašeho narození.");
 		}
 
-		$month = $this->addSelect('month' . $suffixName, 'Měsíc narození:  ', $months);
+		$month = $this->addSelect('month' . $suffixName, 'MĚSÍC NAROZENÍ', $months);
 		$month->setPrompt('Měsíc');
 		if ($filled) {
 			$month->addRule(Form::FILLED, "Prosím vyplňte měsíc Vašeho narození.");
 		}
 
-		$year = $this->addSelect('year' . $suffixName, 'Rok narození: ', $years);
+		$year = $this->addSelect('year' . $suffixName, 'ROK NAROZENÍ', $years);
 		$year->setPrompt('Rok');
 		if ($filled) {
 			$year->addRule(Form::FILLED, "Prosím vyplňte rok Vašeho narození.");
