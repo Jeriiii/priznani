@@ -1,8 +1,73 @@
 
 {block datingContent}
-<h2 class="window-title">KROK 2 z 3</h2>
-<div class="window-content second-form">
-{control secondRegForm}
+
+<h2 class="window-title">KROK 2 ze 4</h2>
+<div class="window-content">
+	{form secondRegForm}
+		<ul class="error" n:if="$form->hasErrors()">
+				<li n:foreach="$form->errors as $error">{$error}</li>
+		</ul>
+		<table>
+			<tr>
+				<td>
+				<legend>Zajímám se o: </legend>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<table class="radio-table">
+						<tr>
+							<th>
+
+							</th>
+							<th>
+								<span class="options-legend-item">ANO</span>
+								<span class="options-legend-item">nezáleží</span>
+								<span class="options-legend-item">NE</span>
+							</th>
+						</tr>
+						<tr>
+							<td class="option-label">{label want_to_meet_men /}</td>
+							<td class="options">{input want_to_meet_men}</td>
+						</tr>
+						<tr>
+							<td class="option-label">{label want_to_meet_women /}</td>
+							<td class="options">{input want_to_meet_women}</td>
+						</tr>
+						<tr>
+							<td class="option-label">{label want_to_meet_couple /}</td>
+							<td class="options">{input want_to_meet_couple}</td>
+						</tr>
+						{* skryto kvůli velikosti, nelze zakomentovat úplně, protože databáze vyžaduje hodnoty 
+						 pro odkrytí odeberte classu notdisplayed *}
+						<tr class="notdisplayed">
+							<td class="option-label">{label want_to_meet_couple_men /}</td>
+							<td class="options">{input want_to_meet_couple_men}</td>
+						</tr>
+						<tr class="notdisplayed">
+							<td class="option-label">{label want_to_meet_couple_women /}</td>
+							<td class="options">{input want_to_meet_couple_women}</td>
+						</tr>
+						<tr>
+							<td class="option-label">{label want_to_meet_group /}</td>
+							<td class="options">{input want_to_meet_group}</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					{input send}
+
+				<td>
+			</tr>
+		</table>
+	{/form}
+
 </div>
 {/block}
 
+{block foot}
+{control js 'registration/second-birthdate.js'}
+{/block foot}

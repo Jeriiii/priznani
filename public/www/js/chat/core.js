@@ -259,6 +259,7 @@
 	 */
 	function handleResponse(json) {
 		reloadWindowUnload();//odblokovani prevence proti predcasnemu opusteni stranky
+
 		$.each(json, function (iduser, values) {//projde vsechny uzivatele, od kterych neco prislo
 			var name = values.name;
 			var href = values.href;
