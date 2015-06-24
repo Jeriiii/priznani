@@ -19,20 +19,13 @@ use POS\Model\PaymentDao;
  */
 class Activities extends \POSComponent\UsersList\AjaxList {
 
-	/**
-	 * @var \POS\Model\ActivitiesDao
-	 * @inject
-	 */
+	/** @var \POS\Model\ActivitiesDao @inject */
 	public $activitiesDao;
 
-	/*
-	 * ID vlastníka aktivit
-	 */
+	/* ID vlastníka aktivit */
 	protected $userID;
 
-	/**
-	 * @var Selection Aktivity uřivatele.
-	 */
+	/** @var Selection Aktivity uřivatele. */
 	private $activities;
 
 	/**
@@ -41,10 +34,7 @@ class Activities extends \POSComponent\UsersList\AjaxList {
 	 */
 	protected $loggedUser;
 
-	/**
-	 * @var \POS\Model\PaymentDao
-	 * @inject
-	 */
+	/** @var \POS\Model\PaymentDao @inject */
 	public $paymentDao;
 
 	public function __construct(ActivitiesDao $activitiesDao, $loggedUser, PaymentDao $paymentDao) {

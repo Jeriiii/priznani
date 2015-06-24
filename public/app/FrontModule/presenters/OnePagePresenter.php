@@ -245,7 +245,13 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentFriendRequest($name) {
-		return new FriendRequestList($this->friendRequestDao, $this->getUser()->id, $this, $name);
+		$sessionManager = $this->getSessionManager();
+		$smDaoBox = new DaoBox();
+		$smDaoBox->userDao = $this->userDao;
+		$smDaoBox->streamDao = $this->streamDao;
+		$smDaoBox->userCategoryDao = $this->userCategoryDao;
+
+		return new FriendRequestList($this->friendRequestDao, $this->getUser()->id, $sessionManager, $smDaoBox, $this, $name);
 	}
 
 	protected function createComponentFriends($name) {

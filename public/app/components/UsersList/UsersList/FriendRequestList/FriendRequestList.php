@@ -12,6 +12,9 @@
 
 namespace POSComponent\UsersList;
 
+use NetteExt\Session\SessionManager;
+use NetteExt\DaoBox;
+
 class FriendRequestList extends UsersList {
 
 	/** @var \POS\Model\FriendRequestDao */
@@ -23,11 +26,19 @@ class FriendRequestList extends UsersList {
 	/* info o tom, zda se obsah donačítá (když true, obsah je zobrazen vždy všechen) */
 	private $listAll = FALSE;
 
-	public function __construct($friendRequestDao, $loggedUserID, $parent, $name, $listAll = FALSE) {
+	/** @var SessionManager Pro přepočítání nacachovaných dat. */
+	private $sessionManager;
+
+	/** @var DaoBox Dao pro Session manager. */
+	private $smDaoBox;
+
+	public function __construct($friendRequestDao, $loggedUserID, SessionManager $sessionManager, DaoBox $smDaoBox, $parent, $name, $listAll = FALSE) {
 		parent::__construct($parent, $name);
 		$this->friendRequestDao = $friendRequestDao;
 		$this->loggedUserID = $loggedUserID;
 		$this->listAll = $listAll;
+		$this->sessionManager = $sessionManager;
+		$this->smDaoBox = $smDaoBox;
 	}
 
 	/**
@@ -51,6 +62,9 @@ class FriendRequestList extends UsersList {
 	 */
 	public function handleAccept($id) {
 		$this->friendRequestDao->accept($id);
+		$this->sessionManager->cleanAllPreferences(
+			$this->smDaoBox->userDao, $this->smDaoBox->streamDao, $this->smDaoBox->userCategoryDao
+		);
 		if ($this->presenter->isAjax()) {
 			$this->redrawControl();
 		} else {

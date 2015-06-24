@@ -21,6 +21,15 @@ class FriendsPresenter extends BasePresenter {
 	/** @var \POS\Model\YouAreSexyDao @inject */
 	public $youAreSexyDao;
 
+	/** @var \POS\Model\UserDao @inject */
+	public $userDao;
+
+	/** @var \POS\Model\StreamDao @inject */
+	public $streamDao;
+
+	/** @var \POS\Model\UserCategoryDao @inject */
+	public $userCategoryDao;
+
 	public function actionDefault() {
 
 	}
@@ -46,7 +55,13 @@ class FriendsPresenter extends BasePresenter {
 	}
 
 	protected function createComponentFriendRequest($name) {
-		return new FriendRequestList($this->friendRequestDao, $this->getUser()->id, $this, $name, TRUE);
+		$sessionManager = $this->getSessionManager();
+		$smDaoBox = new DaoBox();
+		$smDaoBox->userDao = $this->userDao;
+		$smDaoBox->streamDao = $this->streamDao;
+		$smDaoBox->userCategoryDao = $this->userCategoryDao;
+
+		return new FriendRequestList($this->friendRequestDao, $this->getUser()->id, $sessionManager, $smDaoBox, $this, $name, TRUE);
 	}
 
 	protected function createComponentFriendList($name) {
