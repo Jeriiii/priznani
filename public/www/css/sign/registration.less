@@ -16,12 +16,6 @@
 	display: none;
 }
 
-.scroll-to-btn.first-slide{
-	position: absolute;
-	top: 530px;
-	right: 60px;
-
-}
 .form-window{
 	width: 300px;
 	
@@ -308,10 +302,73 @@ h2.slideTitle{
 	}
 }
 
+@arrow-size: 71px;
+
+.scroll-to-btn.first-slide{
+	position: absolute;
+	top: 530px;
+	right: 60px;
+}
+
+.scroll-to-btn{
+	display: block;
+	position: relative;
+	margin: 0 auto;
+	color: black;
+	font-weight: bold;
+	font-size: 13px;
+	width: 250px;
+	height: @arrow-size;
+	text-align: right;
+	padding-right: @arrow-size + 20;
+	line-height: @arrow-size;
+	
+	&:before {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		right: 0;
+		top: 0;
+		width: @arrow-size;
+		height: @arrow-size;
+		background-image: url(../../images/sign/registration/sprites.png);
+		background-position: 0 0;		
+	}
+	
+	&.arrowUp:before{
+		background-position: -71px 0;
+	}
+		
+	&.imageOnTheLeft{
+		text-align: left;
+		padding-left: @arrow-size + 20;
+		padding-right: 0;
+		background-position: left center;
+		
+		&:before{
+			left: 0;
+		}		
+	}	
+	
+	&.noText{
+		width: @arrow-size;
+		padding: 0;
+	}
+	&.centered{
+		margin: 20px auto;
+	}
+}
+
+.next-scroll-to-btn{
+	display: block;
+	margin: 0 auto;
+	opacity: 0.8;
+}
+
 
 /******************* SPRITES *****************/
 
-.arrow_down, .arrow_down_half, .arrow_up, .features1, .features2, .features4, .features5, .features6, .features7, .features8, .features3{
+.arrow_down, .arrow_down_half, .next-scroll-to-btn, .arrow_up, .features1, .features2, .features4, .features5, .features6, .features7, .features8, .features3{
 	background: url(../../images/sign/registration/sprites.png) no-repeat;
 }
 
@@ -321,7 +378,7 @@ h2.slideTitle{
 	height: 71px;
 }
 
-.arrow_down_half{
+.arrow_down_half, .next-scroll-to-btn{
 	background-position: -142px 0;
 	width: 71px;
 	height: 36px;

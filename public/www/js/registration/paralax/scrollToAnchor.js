@@ -19,7 +19,7 @@
 		$("html,body").animate({ scrollTop:scrollTo},800);
 	}
 	
-	$('.scroll-to-btn').each(function(){
+	$('.scroll-to-btn, .next-scroll-to-btn').each(function(){
 		$(this).click(function(e){
 			e.preventDefault();
 			var element = $(this);
