@@ -134,13 +134,21 @@
 	}
 }
 
-.first-slide{
-	width: 55% !important;
+.registration-slide{
+	width: auto;
+	height: 100%;
+	background: url(../../images/sign/backgrounds/main-photo.jpg) white no-repeat -400px top; 
 	
 	.form-window{
 		right: -200px;
 		top: 103px;
 	}
+}
+
+.second-registration-slide{
+	width: auto;
+	height: 95%;
+	background: url(../../images/sign/backgrounds/bg2.jpg) white no-repeat center 60px;
 }
 
 h2.slideTitle{
@@ -321,11 +329,12 @@ h2.slideTitle{
 }
 
 @arrow-size: 71px;
-
-.scroll-to-btn.first-slide{
-	position: absolute;
-	top: 580px;
-	right: -180px;
+.first-slide{
+	.scroll-to-btn{
+		position: absolute;
+		top: 580px;
+		right: -180px;
+	}
 }
 .title-sentence{
 	position: absolute;
@@ -357,7 +366,7 @@ h2.slideTitle{
 	&:before {
 		content: '';
 		position: absolute;
-		z-index: -1;
+		z-index: 50;
 		right: 0;
 		top: 0;
 		width: @arrow-size;
@@ -473,11 +482,14 @@ h2.slideTitle{
 
 @media screen and (max-width: 1600px){
 	.first-slide{
-		width: 65% !important;
+		background-position: -300px top;
 	}
 }
 
 @media screen and (max-width: 1366px){
+	.first-slide{
+		background-position: -450px top;
+	}
 	.first-slide{
 		.form-window, .title-sentence, .scroll-to-btn{
 			right: 0;
@@ -485,9 +497,15 @@ h2.slideTitle{
 	}
 }
 
+@media screen and (max-width: 1200px){
+	.first-slide{
+		background-position: -400px top;
+	}
+}
+
 @media screen and (max-width: 1080px){
 	.first-slide{
-		width: 70% !important;
+		background-position: -250px top;
 	}
 	
 	.featureListSlide{
@@ -507,7 +525,7 @@ h2.slideTitle{
 
 @media screen and (max-width: 980px){
 	.first-slide{
-		width: 70% !important;
+		background-position: -400px top;
 	}
 	
 	.featureListSlide{
@@ -525,14 +543,6 @@ h2.slideTitle{
 		.mobileImage{
 			width: 300px;
 			background-size: 300px auto;
-		}
-	}
-}
-
-@media screen and (max-width: 900px){
-	.first-slide{
-		.form-window, .title-sentence, .scroll-to-btn{
-			right: -210px;
 		}
 	}
 }

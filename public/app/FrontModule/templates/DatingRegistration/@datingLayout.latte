@@ -29,21 +29,19 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 {/block}
 
 {block afterContent}
-	{*paralax slide start*}
-	<div class="paralax-slide first-slide" data-parallax="scroll" data-position-x="right" data-position-y="top" data-image-src="{$basePath}/images/sign/backgrounds/main-photo.jpg">
+	<div class="registration-slide first-slide">
 		<div id="registration-form" class="inner relative">
 			{include #datingContent}
 			<div class="clear"></div>
 			{ifset #lastSlide}
 			<p class="title-sentence">"Bav se, chatuj, sdílej fotky<br /> a poznávej nové přátele"</p>
-			<a class="scroll-to-btn first-slide" href="#second-slide" data-anchor="#second-slide" data-scroll-to="middle">
+			<a class="scroll-to-btn" href="#second-slide" data-anchor="#second-slide" data-scroll-to="middle">
 				Co Tě na datenode čeká?
 			</a>
 		{/ifset}
 		</div>
 		
 	</div>
-	{*paralax slide end*}
 	{ifset #lastSlide}
 		{include #middleSlides}
 		{include #lastSlide}
@@ -66,8 +64,20 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 	{ifset #datingFoot}
 		{include #datingFoot}
 	{/ifset}
-	{control js 'registration/paralax/scrollToAnchor.js'}
+	{control js 'registration/paralax/scrollToAnchor.js', 'features/body-image-fitter.js'}
 	<script src="{$basePath}/js/registration/paralax/parallax.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			fitBgToElement('.first-slide', 1734, 1154);
+			fitBgToElement('.second-registration-slide', 1735, 1155);
+			
+
+			$(window).resize(function () {
+				fitBgToElement('.first-slide', 1732, 1155);
+				fitBgToElement('.second-registration-slide', 1735, 1155);
+			});
+		});		
+	</script>
 {/block}
 
 {* slidy paralaxu mezi prvním a posledním slidem *}
