@@ -148,33 +148,36 @@ h2.slideTitle{
 	
 	.featureItem{
 		float: left;
-		width: 40%;
-		padding: 10px 5%;
+		width: 42%;
+		padding: 15px 4%;
 		
 		.image{
 			float: left;
-			width: 90px;
-			height: 90px;
-			background: #666;
+			display: block;
 		}
 
 		h3{
 			display: block;
-			width: 270px;
+			width: 235px;
 			float: left;
 			line-height: 20px;
 			margin: 0;
-			padding: 0 10px 10px 10px;
+			padding: 0 10px 10px 54px;
 			color: black;
 			font-size: 20px;
+			font-weight: 300;
+			font-family: Helvetica, Arial;
 			
 		}
 		p{
-			width: 270px;
-			padding: 5px 10px;
+			width: 245px;
+			padding: 5px 0px 5px 54px;
+			font-size: 13px;
 			display: block;
 			float: left;
-			text-align: justify;
+			text-align: left;
+			font-family: Helvetica, Arial;
+			color: #666;
 		}
 		
 	}
@@ -292,4 +295,77 @@ h2.slideTitle{
 		bottom: 30px;
 		right: 30px;
 	}
+}
+
+
+/******************* SPRITES *****************/
+
+.arrow_down, .arrow_down_half, .arrow_up, .features1, .features2, .features4, .features5, .features6, .features7, .features8, .features3{
+	background: url(../../images/sign/registration/sprites.png) no-repeat;
+}
+
+.arrow_down{
+	background-position: 0 0;
+	width: 71px;
+	height: 71px;
+}
+
+.arrow_down_half{
+	background-position: -142px 0;
+	width: 71px;
+	height: 36px;
+}
+
+.arrow_up{
+	background-position: -71px 0;
+	width: 71px;
+	height: 71px;
+}
+
+.features1{
+	background-position: 0 -71px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features2{
+	background-position: -96px -71px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features4{
+	background-position: 0 -167px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features5{
+	background-position: -96px -167px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features6{
+	background-position: -192px -167px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features7{
+	background-position: 0 -263px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features8{
+	background-position: -96px -263px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features3{
+	background-position: -192px -71px ;
+	width: 96px;
+	height: 96px;
 }

@@ -35,14 +35,14 @@ class DatingRegistrationPresenter extends BasePresenter {
 	public function renderDefault() {
 		$this->template->type = $this->getRegSession()->type;
 		$this->template->features = array(
-			array('image' => '', 'name' => '0 KČ ZA SEZNÁMENÍ', 'text' => 'seznámení je u nás neomezené a <strong>zdarma</strong> - pro ženy i muže!'),
-			array('image' => '', 'name' => 'PŘIZNÁNÍ O SEXU', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
-			array('image' => '', 'name' => 'BLOKACE', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
-			array('image' => '', 'name' => 'TLAČÍTKO PANIKA', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
-			array('image' => '', 'name' => 'SOUKROMÉ GALERIE', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
-			array('image' => '', 'name' => 'JAK MOC JSI SEXY?', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
-			array('image' => '', 'name' => 'VĚŘÍŠ NA HOROSKOP?', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
-			array('image' => '', 'name' => 'VYSTUPUJTE ZA PÁR', 'text' => 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'),
+			array('image' => 'features1', 'name' => '0 KČ ZA SEZNÁMENÍ', 'text' => 'Unavuje tě všude za vše platit? U nás se seznamujeme <strong>zdarma</strong>.'),
+			array('image' => 'features2', 'name' => 'PŘIZNÁNÍ O SEXU', 'text' => 'Přes 10 000 pikantních postelových přiznání k pobavení i poučení na Datenode.cz'),
+			array('image' => 'features3', 'name' => 'BLOKACE', 'text' => 'Chceme, aby se u nás každý cítil dobře. V případě, že Tě někdo obtěžuje, jednoduše ho zablokuj.'),
+			array('image' => 'features4', 'name' => 'TLAČÍTKO PANIKA', 'text' => 'Blíží se šéf? Žárlivý partner? U nás Tě nenachytají! Jedním tlačítkem Tě okamžitě odhlásíme a přehodíme na neškodnou stránku.'),
+			array('image' => 'features5', 'name' => 'SOUKROMÉ GALERIE', 'text' => 'Vyber si, komu chceš ukázat své lechtivější fotky!'),
+			array('image' => 'features6', 'name' => 'JAK MOC JSI SEXY?', 'text' => 'Jsi zajíček, kanec, Casanova, dračice nebo bohyně? Zjistíš podle hodnocení jiných uživatelů!'),
+			array('image' => 'features7', 'name' => 'VĚŘÍŠ NA HOROSKOP?', 'text' => 'Najděte se dle oblíbeného znamení zvěrokruhu, jen na Datenode.cz!'),
+			array('image' => 'features8', 'name' => 'VYSTUPUJTE ZA PÁR', 'text' => 'Jste dva a nechcete mít dva profily? U nás máte možnost PÁR, pro lepší seznamování!'),
 		);
 	}
 
