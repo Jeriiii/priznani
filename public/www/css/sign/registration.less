@@ -133,9 +133,10 @@
 
 h2.slideTitle{
 	text-align: center;
-	font-size: 36px;
+	font-size: 42px;
 	padding: 30px;
 	font-weight: 200;
+	margin: 0;
 }
 
 .featureListSlide{
@@ -260,6 +261,7 @@ h2.slideTitle{
 .confessionSlide{
 	height: 100%;
 	position: relative;
+	padding-bottom: 0;
 	
 	.slideTitle{
 		margin: 0;
@@ -270,11 +272,13 @@ h2.slideTitle{
 	img{
 		position: absolute;
 		top: 0;
-		left: -150px;
+		right: 45%;
 		height: 100%;
+		z-index: -1;
 	}
 	.rightHalf{
-		float: right;
+		position: absolute;
+		right: 0;
 		width: 50%;
 		padding: 0 2%;
 		
@@ -286,6 +290,8 @@ h2.slideTitle{
 			padding: 20px 0;
 			border-top: 1px dashed #aaa;
 			font-style: italic;
+			font-family: "Times New Roman", serif;
+			font-weight: 500;
 		}
 	}
 }

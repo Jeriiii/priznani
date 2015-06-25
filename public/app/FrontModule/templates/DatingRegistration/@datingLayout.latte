@@ -65,7 +65,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 	{ifset #datingFoot}
 		{include #datingFoot}
 	{/ifset}
-	{control js 'features/body-image-fitter.js', 'registration/paralax/scrollToAnchor.js'}
+	{control js 'registration/paralax/scrollToAnchor.js'}
 	<script src="{$basePath}/js/registration/paralax/parallax.min.js"></script>
 {/block}
 
@@ -145,7 +145,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 		
 	<div id="fifth-slide" class="paralax-white-content fullHeight">
 		<div class="inner confessionSlide">
-			<img src="http://lorempixel.com/600/1080/fashion/7" />
+			<img src="{$basePath}/images/sign/backgrounds/slidebg.jpg" />
 			<div class="rightHalf">
 				<h2 class="slideTitle">PŘIZNÁNÍ O SEXU</h2>
 				<p class="description"><strong>Máte nějakou zajímavou historku o sexu? Podělte se!</strong><br />Všechna přiznání jsou na 100% anonymní.</p>
