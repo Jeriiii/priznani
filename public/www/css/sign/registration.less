@@ -468,3 +468,71 @@ h2.slideTitle{
 	width: 96px;
 	height: 96px;
 }
+
+/** MOBILNÍ STYLY **/
+
+@media screen and (max-width: 1600px){
+	.first-slide{
+		width: 65% !important;
+	}
+}
+
+@media screen and (max-width: 1366px){
+	.first-slide{
+		.form-window, .title-sentence, .scroll-to-btn{
+			right: 0;
+		}
+	}
+}
+
+@media screen and (max-width: 1080px){
+	.first-slide{
+		width: 70% !important;
+	}
+	
+	.featureListSlide{
+		.featureItem{
+			h3, p {
+				padding-left: 20px;
+				width: 250px;
+			}
+		}
+	}
+	.confessionSlide{
+		img{
+			right: 30%;
+		}
+	}
+}
+
+@media screen and (max-width: 980px){
+	.first-slide{
+		width: 70% !important;
+	}
+	
+	.featureListSlide{
+		.featureItem{
+			padding-left: 0;
+			padding-right: 0;
+			width: 500px;
+			margin-left: 20%;
+		}
+	}
+	.datenodeInMobile{
+		.half{
+			width: 350px;
+		}
+		.mobileImage{
+			width: 300px;
+			background-size: 300px auto;
+		}
+	}
+}
+
+@media screen and (max-width: 900px){
+	.first-slide{
+		.form-window, .title-sentence, .scroll-to-btn{
+			right: -210px;
+		}
+	}
+}
