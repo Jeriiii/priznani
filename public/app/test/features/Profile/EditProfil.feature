@@ -35,7 +35,7 @@ Feature: Edit user profile
 		And I should see "Identifikační údaje"
 		And I fill in "<first>" for "first_sentence"
 		And I fill in "<about>" for "about_me"
-		And I press "frm-secondEditForm-send" 
+		And I press "frm-thirdEditForm-send" 
 		Then I should see "Změna identifikačních údajů byla úspěšná"
 
 		Examples:

@@ -29,16 +29,16 @@
 				secondBirthdate.show();
 				/* změna labelů věku narození */
 				if(typeVal == couple) {
-					labelBDFirst.text("Datum narození Partnerky");
-					labelBDSecond.text("Datum narození Partnera");
+					labelBDFirst.text("DATUM NAROZENÍ PARTNERKY");
+					labelBDSecond.text("DATUM NAROZENÍ PARTNERA");
 				}
 				if(typeVal == coupleMen) {
-					labelBDFirst.text("Datum narození");
-					labelBDSecond.text("Datum narození Partnera");
+					labelBDFirst.text("DATUM NAROZENÍ");
+					labelBDSecond.text("DATUM NAROZENÍ PARTNERA");
 				}
 				if(typeVal == coupleWonem) {
-					labelBDFirst.text("Datum narození");
-					labelBDSecond.text("Datum narození Partnerky");
+					labelBDFirst.text("DATUM NAROZENÍ");
+					labelBDSecond.text("DATUM NAROZENÍ PARTNERKY");
 				}
 			}
 			

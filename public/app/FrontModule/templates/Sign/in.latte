@@ -1,5 +1,8 @@
 {block head}
 	{control css 'sign/universal.less', 'sign/in.less','bootstrap/forms-medium.less', 'user/authentication.less'}
+	<style>{* přidání obrázku na pozadí *}
+		body{ background-image: url(../images/sign/backgrounds/main-photo.jpg); background-color: white; background-repeat: no-repeat; background-position: center center; background-size: 100% auto; background-attachment: fixed;}
+	</style>
 {/block}
 
 {block usermenu}
@@ -24,4 +27,15 @@
 
 {block foot}
 	{control js 'features/body-image-fitter.js'}
+	<script>
+		{*srovnání obrázku na pozadí*}
+		$(document).ready(function(){
+			fitBgToElement('body', 1735, 1155);
+
+			$(window).resize(function () {
+				fitBgToElement('body', 1732, 1155);
+			});
+		});
+		
+	</script>
 {/block}

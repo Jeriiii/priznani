@@ -14,24 +14,6 @@ google_ad_height = 600;
 <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
-{*
-	<a href="http://www.nejlevnejsiwebstranky.cz/">
-		<img src="{$basePath}/images/bars/nejlevnejsiwebstranky.jpg" width="140"/>
-		<p class="line">
-			Shání <b>kvalitní stránky</b> s rozsáhlým administračním systémem a nechce se Vám za
-			to nechávat majlant. Stačí nás kontaktovat a my se už o vše postaráme.
-			Nové technologie, <b>revoluční ceny</b>, kvalitní zákaznický servis, spokojení zákazníci, mladá flexibilní firma.
-		</p>
-	</a>
-
-	<a href="http://akcnidrinky.cz/">
-		<img src="{$basePath}/images/bars/akcnidrinky.jpg" width="140"/>
-		<p>
-			<b>ŠETŘETE!</b> Využijte přehledu <b>ZDARMA</b> různých akčních nápojů ve Vašem městě na netu i mobilu! Podpořte
-			nás svou návštěvou na www.akcnidrinky.cz a ušetřete tisíce ročně!
-		</p>
-	</a>
-*}
 </div>
 {/block}
 
@@ -46,16 +28,31 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     </style>
 {/block}
 
-{block content}
-<div class="form-window">
-	{include #datingContent}
-</div>
+{block afterContent}
+	<div class="registration-slide first-slide">
+		<div id="registration-form" class="inner relative">
+			{include #datingContent}
+			<div class="clear"></div>
+			{ifset #lastSlide}
+			<p class="title-sentence">"Bav se, chatuj, sdílej fotky<br /> a poznávej nové přátele"</p>
+			<a class="scroll-to-btn" href="#second-slide" data-anchor="#second-slide" data-scroll-to="middle">
+				Co Tě na datenode čeká?
+			</a>
+		{/ifset}
+		</div>
+		
+	</div>
+	{ifset #lastSlide}
+		{include #middleSlides}
+		{include #lastSlide}
+	{/ifset}
+	
 {/block}
 
 {block head}
 	<link rel="stylesheet" href="{$basePath}/css/bar.css" type="text/css">
 
-	{control css 'sign/universal.less', 'sign/registration.less'}
+	{control css 'sign/universal.less', 'sign/registration.less', 'paralax/paralax.less'}
 
 	{ifset #datingHead}
 		{include #datingHead}
@@ -63,9 +60,114 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 {/block}
 
 {block foot}
-<script type="text/javascript" src="{$basePath}/js/infobar.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/infobar.js"></script>
 	{ifset #datingFoot}
 		{include #datingFoot}
 	{/ifset}
-	{control js 'features/body-image-fitter.js'}
+	{control js 'registration/paralax/scrollToAnchor.js', 'features/body-image-fitter.js'}
+	<script src="{$basePath}/js/registration/paralax/parallax.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			fitBgToElement('.first-slide', 1734, 1154);
+			fitBgToElement('.second-registration-slide', 1735, 1155);
+			
+
+			$(window).resize(function () {
+				fitBgToElement('.first-slide', 1732, 1155);
+				fitBgToElement('.second-registration-slide', 1735, 1155);
+			});
+		});		
+	</script>
 {/block}
+
+{* slidy paralaxu mezi prvním a posledním slidem *}
+{define middleSlides}
+	<div id="second-slide" class="paralax-white-content featureListSlide">
+		<div class="inner">
+			<h2 class="slideTitle">CO TĚ NA DATENODE ČEKÁ?</h2>
+			{foreach $features as $feature}
+			<div class="featureItem">
+				<span class="image {$feature['image']}"></span>
+				<h3>{$feature['name']}</h3>
+				<p>{!$feature['text']}</p>
+				<div class="clear"></div>
+			</div>
+			{/foreach}
+			<div class="clear"></div>
+			<a class="scroll-to-btn imageOnTheLeft arrowUp" href="#" data-anchor="body" data-scroll-to="top">K registraci!</a>
+		</div>
+	</div>
+	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="{$basePath}/images/sign/backgrounds/1smazat.jpg">
+		<a class="next-scroll-to-btn" href="#third-slide" data-anchor="#third-slide" data-scroll-to="middle"></a>
+	</div>
+		
+	
+	<div id="third-slide" class="paralax-white-content">
+		<div class="inner">
+			<h2 class="slideTitle">NAPSALI O NÁS</h2>
+			<div class="writtenAboutUs">
+				<div class="writtenItem onTheLeft">
+					<img src="{$basePath}/images/sign/registration/users/1.jpg" />
+					<span class="username">JANA</span>
+					<p class="text">
+						Kamarádka mi tuto stránku poslala. Potkala jsem ho tady. Možná osud, možná Datenode. Teď už spolu žijeme a sem si chodime pouze zalaškovat jako pár.
+					</p>
+				</div>
+				<div class="writtenItem">
+					<img src="{$basePath}/images/sign/registration/users/2.jpg" />
+					<span class="username">PAVEL</span>
+					<p class="text">
+						Líbí se mi hlavně, jak jednoduše se Datenode.cz ovládá. Přihlásím se, hned vidím, kdo je zrovna teď online, napíšu první zprávu a pak se uvidí. :)
+					</p>
+				</div>
+				<div class="writtenItem onTheRight">
+					<img src="{$basePath}/images/sign/registration/users/3.jpg" />
+					<span class="username">ŠTEPÁNKA</span>
+					<p class="text">
+						Když jsem se na Datenode.cz zaregistrovala, nečekala jsem víc než seznamku. Jenže Datenode.cz je víc než seznamka, protože dává dohromady lidi, kteří se chtějí bavit, a je jen na nich jak a s kým. Žádné zbytečné formality.
+					</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<a class="scroll-to-btn centered arrowUp" href="#" data-anchor="body" data-scroll-to="top">K registraci!</a>
+		</div>
+	</div>
+	<div class="paralax-slide" data-parallax="scroll" data-position-y="center" data-image-src="{$basePath}/images/sign/backgrounds/2smazat.jpg">
+		<a class="next-scroll-to-btn" href="#fourth-slide" data-anchor="#fourth-slide" data-scroll-to="middle"></a>
+	</div>
+	
+	
+	
+	<div id="fourth-slide" class="paralax-white-content">
+		<div class="inner datenodeInMobile">
+			<h2 class="slideTitle">DATENODE V MOBILU NEBO TABLETU</h2>
+			<div class="half">
+				<h3>Datenode si užijete na jakémkoli zařízení</h3>
+				<p>Už se nemusíš bát, že Ti uniknou nové zprávy a nová seznámení. Datenode.cz je totiž dostupné i v mobilní verzi, takže můžeš mít všechny svoje Datenode kontakty vždy s sebou – na dovolené, v práci, nebo večer na gauči u televize.</p>
+				<a class="scroll-to-btn arrowUp" href="#" data-anchor="body">K registraci!</a>
+			</div>
+			<div class="mobileImage"></div>
+			<div class="clear"></div>
+		</div>			
+	</div>
+	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="{$basePath}/images/sign/backgrounds/bg1.jpg">
+		<a class="next-scroll-to-btn" href="#fifth-slide" data-anchor="#fifth-slide"></a>
+	</div>
+		
+	<div id="fifth-slide" class="paralax-white-content fullHeight">
+		<div class="inner confessionSlide">
+			<img src="{$basePath}/images/sign/backgrounds/slidebg.jpg" />
+			<div class="rightHalf">
+				<h2 class="slideTitle">PŘIZNÁNÍ O SEXU</h2>
+				<p class="description"><strong>Máte nějakou zajímavou historku o sexu? Podělte se!</strong><br />Všechna přiznání jsou na 100% anonymní.</p>
+				<p class="confession topOne">Když se mě můj přítel ptá jestli se s ním vyspím, říkám většinou ne a přitom jsem šíleně nadržená, chtěla bych aby se na mě prostě vrhl a já se mu mohla podvolit.</p>
+				<p class="confession">Chtěla bych krásného chlapa, kterého bych mohla uspokojovat jak pusou, tak i rukou nebo i sexem, ale také tím, že miluji vaření a pečení a správný chlap si zaslouží po náročním dni klid. Tkž krásná večeře, dezert, dezert v podání sexu a s úsměvem na rtech spát:)</p>
+				<p class="confession">Jednou ve tmě jsem místo přitelovy košile začala rozepínat knoflíčky u peřiny.</p>
+				<a class="scroll-to-btn imageOnTheLeft arrowUp" href="#" data-anchor="body">K registraci!</a>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	
+{/}
