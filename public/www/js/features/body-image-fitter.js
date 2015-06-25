@@ -6,8 +6,6 @@
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-$(document).ready(function () {
-
 	/**
 	 * Zajistí, aby obrázek v pozadí zakrýval celý element
 	 * @param String selector selektor elementu, o který se jedná.
@@ -27,12 +25,3 @@ $(document).ready(function () {
 			element.css('background-size', '100% auto');
 		}
 	};
-
-	fitBgToElement('body', 1735, 1155);
-
-	$(window).resize(function () {
-		fitBgToElement('body', 1732, 1155);
-	});
-
-
-});
