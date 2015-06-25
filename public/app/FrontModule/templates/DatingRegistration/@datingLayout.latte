@@ -30,13 +30,14 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
 {block afterContent}
 	{*paralax slide start*}
-	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/8">
+	<div class="paralax-slide first-slide" data-parallax="scroll" data-position-x="right" data-position-y="top" data-image-src="{$basePath}/images/sign/backgrounds/main-photo.jpg">
 		<div id="registration-form" class="inner relative">
 			{include #datingContent}
 			<div class="clear"></div>
 			{ifset #lastSlide}
+			<p class="title-sentence">"Bav se, chatuj, sdílej fotky<br /> a poznávej nové přátele"</p>
 			<a class="scroll-to-btn first-slide" href="#second-slide" data-anchor="#second-slide" data-scroll-to="middle">
-				Co tě na datenode čeká?
+				Co Tě na datenode čeká?
 			</a>
 		{/ifset}
 		</div>
@@ -65,7 +66,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 	{ifset #datingFoot}
 		{include #datingFoot}
 	{/ifset}
-	{control js 'features/body-image-fitter.js', 'registration/paralax/scrollToAnchor.js'}
+	{control js 'registration/paralax/scrollToAnchor.js'}
 	<script src="{$basePath}/js/registration/paralax/parallax.min.js"></script>
 {/block}
 
@@ -83,10 +84,12 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 			</div>
 			{/foreach}
 			<div class="clear"></div>
-			<a class="scroll-to-btn imageOnTheLeft" href="#third-slide" data-anchor="#third-slide" data-scroll-to="middle">Napsali o nás</a>
+			<a class="scroll-to-btn imageOnTheLeft arrowUp" href="#" data-anchor="body" data-scroll-to="top">K registraci!</a>
 		</div>
 	</div>
-	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/2"></div>
+	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/2">
+		<a class="next-scroll-to-btn" href="#third-slide" data-anchor="#third-slide" data-scroll-to="middle"></a>
+	</div>
 		
 	
 	<div id="third-slide" class="paralax-white-content">
@@ -95,31 +98,33 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 			<div class="writtenAboutUs">
 				<div class="writtenItem onTheLeft">
 					<img src="http://lorempixel.com/output/people-q-c-180-180-6.jpg" />
-					<span class="username">MATYLDA</span>
+					<span class="username">JANA</span>
 					<p class="text">
-						úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr
+						Na datenode funguji už od doby, kdy se jmenovalo ještě přiznání o sexu. Za tu dobu jsem tu potkala desítky lidí a s některými z nich si píši do teď. Na datenode jsou nejlepší právě lidi, potkala jsem jich hodně hlavně v komentářích různých statusů a fotek.
 					</p>
 				</div>
 				<div class="writtenItem">
 					<img src="http://lorempixel.com/output/people-q-c-180-180-5.jpg" />
-					<span class="username">JOŽINI Z BAŽINY</span>
+					<span class="username">PAVEL</span>
 					<p class="text">
-						úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr
+						Líbí se mi hlavně, jak jednoduše se Datenode.cz ovládá. Přihlásím se, hned vidím, kdo je zrovna teď online, napíšu první zprávu a pak se uvidí. :)
 					</p>
 				</div>
 				<div class="writtenItem onTheRight">
 					<img src="http://lorempixel.com/output/people-q-c-180-180-4.jpg" />
-					<span class="username">LÍZALKY</span>
+					<span class="username">ŠTEPÁNKA</span>
 					<p class="text">
-						úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr čupr web úžo supr
+						Když jsem se na Datenode.cz zaregistrovala, nečekala jsem víc než seznamku. Jenže Datenode.cz je víc než seznamka, protože dává dohromady lidi, kteří se chtějí bavit, a je jen na nich jak a s kým. Žádné zbytečné formality.
 					</p>
 				</div>
 				<div class="clear"></div>
 			</div>
-			<a class="scroll-to-btn noText centered" href="#fourth-slide" data-anchor="#fourth-slide" data-scroll-to="middle"></a>
+			<a class="scroll-to-btn centered arrowUp" href="#" data-anchor="body" data-scroll-to="top">K registraci!</a>
 		</div>
 	</div>
-	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/6"></div>
+	<div class="paralax-slide" data-parallax="scroll" data-position-y="center" data-image-src="{$basePath}/images/sign/backgrounds/bg1.jpg">
+		<a class="next-scroll-to-btn" href="#fourth-slide" data-anchor="#fourth-slide" data-scroll-to="middle"></a>
+	</div>
 	
 	
 	
@@ -128,26 +133,27 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 			<h2 class="slideTitle">DATENODE V MOBILU NEBO TABLETU</h2>
 			<div class="half">
 				<h3>Datenode si užijete na jakémkoli zařízení</h3>
-				<p>čupr web úžo supr čupr web úžo supr čupr webčupr web úžo supr čupr web úžo supr čupr webčupr web úžo supr čupr</p>
-				<a class="scroll-to-btn noText centered" href="#fifth-slide" data-anchor="#fifth-slide"></a>
+				<p>Už se nemusíš bát, že Ti uniknou nové zprávy a nová seznámení. Datenode.cz je totiž dostupné i v mobilní verzi, takže můžeš mít všechny svoje Datenode kontakty vždy s sebou – na dovolené, v práci, nebo večer na gauči u televize.</p>
+				<a class="scroll-to-btn arrowUp" href="#" data-anchor="body">K registraci!</a>
 			</div>
 			<div class="mobileImage"></div>
 			<div class="clear"></div>
 		</div>			
 	</div>
-	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="http://lorempixel.com/1920/1080/fashion/7"></div>
+	<div class="paralax-slide" data-parallax="scroll" data-position-y="top" data-image-src="{$basePath}/images/sign/backgrounds/bg1.jpg">
+		<a class="next-scroll-to-btn" href="#fifth-slide" data-anchor="#fifth-slide"></a>
+	</div>
 		
 	<div id="fifth-slide" class="paralax-white-content fullHeight">
 		<div class="inner confessionSlide">
-			<img src="http://lorempixel.com/600/1080/fashion/7" />
+			<img src="{$basePath}/images/sign/backgrounds/slidebg.jpg" />
 			<div class="rightHalf">
 				<h2 class="slideTitle">PŘIZNÁNÍ O SEXU</h2>
 				<p class="description"><strong>Máte nějakou zajímavou historku o sexu? Podělte se!</strong><br />Všechna přiznání jsou na 100% anonymní.</p>
 				<p class="confession topOne">Když se mě můj přítel ptá jestli se s ním vyspím, říkám většinou ne a přitom jsem šíleně nadržená, chtěla bych aby se na mě prostě vrhl a já se mu mohla podvolit.</p>
 				<p class="confession">Chtěla bych krásného chlapa, kterého bych mohla uspokojovat jak pusou, tak i rukou nebo i sexem, ale také tím, že miluji vaření a pečení a správný chlap si zaslouží po náročním dni klid. Tkž krásná večeře, dezert, dezert v podání sexu a s úsměvem na rtech spát:)</p>
 				<p class="confession">Jednou ve tmě jsem místo přitelovy košile začala rozepínat knoflíčky u peřiny.</p>
-				<p class="confession botOne">Jsem nejšťastnější chlap na světě! Mě i mé přítelkyni je 20 a máme ten nejparádnější vztah. Umí parádně vařit i péct, naslouchá mi, miluje mě, nikdy by mě nepodvedla, pustí mě do hospody, chodí se dívat na mé zápasy, prdíme před sebou a ten sex (vždy mě nějak překvapí :P). Já bych jí nikdy nedokázal nijak ublížit. Už se těším až budeme spolu bydlet, mít velký dům, psa a děti :)</p>
-				<a class="scroll-to-btn centered noText" href="#last-slide" data-anchor="#last-slide"></a>
+				<a class="scroll-to-btn imageOnTheLeft arrowUp" href="#" data-anchor="body">K registraci!</a>
 			</div>
 			<div class="clear"></div>
 		</div>

@@ -16,14 +16,11 @@
 	display: none;
 }
 
-.scroll-to-btn.first-slide{
-	position: absolute;
-	top: 530px;
-	right: 60px;
-
-}
 .form-window{
 	width: 300px;
+	
+	box-shadow: 2px 2px 20px #666;
+	-moz-box-shadow: 2px 2px 20px #666;
 	
 	&.fourth-window{
 		width: 400px;
@@ -137,44 +134,57 @@
 	}
 }
 
+.first-slide{
+	width: 55% !important;
+	
+	.form-window{
+		right: -200px;
+		top: 103px;
+	}
+}
+
 h2.slideTitle{
 	text-align: center;
-	font-size: 36px;
+	font-size: 42px;
 	padding: 30px;
 	font-weight: 200;
+	margin: 0;
 }
 
 .featureListSlide{
 	
 	.featureItem{
 		float: left;
-		width: 40%;
-		padding: 10px 5%;
+		width: 42%;
+		padding: 15px 4%;
 		
 		.image{
 			float: left;
-			width: 90px;
-			height: 90px;
-			background: #666;
+			display: block;
 		}
 
 		h3{
 			display: block;
-			width: 270px;
+			width: 235px;
 			float: left;
 			line-height: 20px;
 			margin: 0;
-			padding: 0 10px 10px 10px;
+			padding: 0 10px 10px 54px;
 			color: black;
 			font-size: 20px;
+			font-weight: 300;
+			font-family: Helvetica, Arial;
 			
 		}
 		p{
-			width: 270px;
-			padding: 5px 10px;
+			width: 245px;
+			padding: 5px 0px 5px 54px;
+			font-size: 13px;
 			display: block;
 			float: left;
-			text-align: justify;
+			text-align: left;
+			font-family: Helvetica, Arial;
+			color: #666;
 		}
 		
 	}
@@ -221,18 +231,29 @@ h2.slideTitle{
 		p{
 			text-align: center;
 			font-style: italic;
+			font-family: Helvetica, Arial;
+			font-size: 16px;
+			color: #555;
+			padding: 8px 4px;
 		}
 	}
 }
 
 .datenodeInMobile{
 	padding-bottom: 50px;
+	font-family: Helvetica, Arial;
 	
 	.half{
+		h3{
+			font-size: 28px;
+			color: @main-red;
+			font-family: Helvetica Bold, Helvetica, Arial;
+		}
 		float: left;
-		width: 40%;
-		padding: 5px 5%;
+		width: 425px;
+		padding: 5px 35px;
 		padding-top: 120px;
+		color: #555;
 		
 		.scroll-to-btn{
 			margin-top: 60px;
@@ -240,9 +261,9 @@ h2.slideTitle{
 	}
 	.mobileImage{
 		float: left;
-		width: 50%;
-		height: 500px;
-		background: gray;
+		width: 465px;
+		height: 574px;
+		background: url(../../images/sign/registration/mobile_devices.png) transparent no-repeat center center;
 	}
 }
 .fullHeight{
@@ -252,6 +273,7 @@ h2.slideTitle{
 .confessionSlide{
 	height: 100%;
 	position: relative;
+	padding-bottom: 0;
 	
 	.slideTitle{
 		margin: 0;
@@ -262,11 +284,13 @@ h2.slideTitle{
 	img{
 		position: absolute;
 		top: 0;
-		left: -150px;
+		right: 45%;
 		height: 100%;
+		z-index: -1;
 	}
 	.rightHalf{
-		float: right;
+		position: absolute;
+		right: 0;
 		width: 50%;
 		padding: 0 2%;
 		
@@ -278,6 +302,8 @@ h2.slideTitle{
 			padding: 20px 0;
 			border-top: 1px dashed #aaa;
 			font-style: italic;
+			font-family: "Times New Roman", serif;
+			font-weight: 500;
 		}
 	}
 }
@@ -291,5 +317,222 @@ h2.slideTitle{
 		position: absolute;
 		bottom: 30px;
 		right: 30px;
+	}
+}
+
+@arrow-size: 71px;
+
+.scroll-to-btn.first-slide{
+	position: absolute;
+	top: 580px;
+	right: -180px;
+}
+.title-sentence{
+	position: absolute;
+	top: 500px;
+	right: -210px;
+	font-style: italic;
+	color: @main-red;
+	text-align: center;
+	width: 300px;
+	padding: 0 20px;
+	font-size: 24px;
+	font-weight: 600;
+	font-family: "Times New Roman", serif;
+}
+
+.scroll-to-btn{
+	display: block;
+	position: relative;
+	margin: 0 auto;
+	color: black;
+	font-weight: bold;
+	font-size: 13px;
+	width: 250px;
+	height: @arrow-size;
+	text-align: right;
+	padding-right: @arrow-size + 20;
+	line-height: @arrow-size;
+	
+	&:before {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		right: 0;
+		top: 0;
+		width: @arrow-size;
+		height: @arrow-size;
+		background-image: url(../../images/sign/registration/sprites.png);
+		background-position: 0 0;		
+	}
+	
+	&.arrowUp:before{
+		background-position: -71px 0;
+	}
+		
+	&.imageOnTheLeft{
+		text-align: left;
+		padding-left: @arrow-size + 20;
+		padding-right: 0;
+		background-position: left center;
+		
+		&:before{
+			left: 0;
+		}		
+	}	
+	
+	&.noText{
+		width: @arrow-size;
+		padding: 0;
+	}
+	&.centered{
+		margin: 20px auto;
+	}
+}
+
+.next-scroll-to-btn{
+	display: block;
+	margin: 0 auto;
+	opacity: 0.8;
+}
+
+
+/******************* SPRITES *****************/
+
+.arrow_down, .arrow_down_half, .next-scroll-to-btn, .arrow_up, .features1, .features2, .features4, .features5, .features6, .features7, .features8, .features3{
+	background: url(../../images/sign/registration/sprites.png) no-repeat;
+}
+
+.arrow_down{
+	background-position: 0 0;
+	width: 71px;
+	height: 71px;
+}
+
+.arrow_down_half, .next-scroll-to-btn{
+	background-position: -142px 0;
+	width: 71px;
+	height: 36px;
+}
+
+.arrow_up{
+	background-position: -71px 0;
+	width: 71px;
+	height: 71px;
+}
+
+.features1{
+	background-position: 0 -71px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features2{
+	background-position: -96px -71px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features4{
+	background-position: 0 -167px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features5{
+	background-position: -96px -167px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features6{
+	background-position: -192px -167px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features7{
+	background-position: 0 -263px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features8{
+	background-position: -96px -263px ;
+	width: 96px;
+	height: 96px;
+}
+
+.features3{
+	background-position: -192px -71px ;
+	width: 96px;
+	height: 96px;
+}
+
+/** MOBILNÍ STYLY **/
+
+@media screen and (max-width: 1600px){
+	.first-slide{
+		width: 65% !important;
+	}
+}
+
+@media screen and (max-width: 1366px){
+	.first-slide{
+		.form-window, .title-sentence, .scroll-to-btn{
+			right: 0;
+		}
+	}
+}
+
+@media screen and (max-width: 1080px){
+	.first-slide{
+		width: 70% !important;
+	}
+	
+	.featureListSlide{
+		.featureItem{
+			h3, p {
+				padding-left: 20px;
+				width: 250px;
+			}
+		}
+	}
+	.confessionSlide{
+		img{
+			right: 30%;
+		}
+	}
+}
+
+@media screen and (max-width: 980px){
+	.first-slide{
+		width: 70% !important;
+	}
+	
+	.featureListSlide{
+		.featureItem{
+			padding-left: 0;
+			padding-right: 0;
+			width: 500px;
+			margin-left: 20%;
+		}
+	}
+	.datenodeInMobile{
+		.half{
+			width: 350px;
+		}
+		.mobileImage{
+			width: 300px;
+			background-size: 300px auto;
+		}
+	}
+}
+
+@media screen and (max-width: 900px){
+	.first-slide{
+		.form-window, .title-sentence, .scroll-to-btn{
+			right: -210px;
+		}
 	}
 }
