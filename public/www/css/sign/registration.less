@@ -327,28 +327,34 @@ h2.slideTitle{
 		right: 30px;
 	}
 }
+.first-slide .form-window{
+	overflow: visible;
+}
+.under-registration{
+	position: absolute;
+	width: 300px;
+	height: 200px;
+	left: 0;
+	bottom: -220px;
+}
 
-@arrow-size: 71px;
 .first-slide{
 	.scroll-to-btn{
-		position: absolute;
-		top: 580px;
-		right: -180px;
+		margin-top: 20px;
+		width: 280px - @arrow-size;
 	}
 }
 .title-sentence{
-	position: absolute;
-	top: 500px;
-	right: -210px;
 	font-style: italic;
 	color: @main-red;
 	text-align: center;
-	width: 300px;
 	padding: 0 20px;
-	font-size: 24px;
+	font-size: 22px;
 	font-weight: 600;
 	font-family: "Times New Roman", serif;
 }
+
+@arrow-size: 71px;
 
 .scroll-to-btn{
 	display: block;
@@ -489,11 +495,6 @@ h2.slideTitle{
 @media screen and (max-width: 1366px){
 	.first-slide{
 		background-position: -450px top;
-	}
-	.first-slide{
-		.form-window, .title-sentence, .scroll-to-btn{
-			right: 0;
-		}
 	}
 }
 

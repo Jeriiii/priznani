@@ -36,6 +36,15 @@
 				</tr>
 			</table>
 		{/form}
+		{ifset $dontRenderUnderRegistration}
+			{else}
+			<div class="under-registration">
+				<p class="title-sentence">"Bav se, chatuj, sdílej fotky<br /> a poznávej nové přátele"</p>
+				<a class="scroll-to-btn" href="#second-slide" data-anchor="#second-slide" data-scroll-to="middle">
+					Co Tě na datenode čeká?
+				</a>
+			</div>
+		{/ifset}
 	</div>
 </div>
 {/block}
@@ -44,6 +53,7 @@
 <div class="second-registration-slide">
 	<h2 class="slideTitle">ZKUSTE DATENODE JEŠTĚ DNES!</h2>
 	<div id="last-slide" class="inner relative">
+		{var $dontRenderUnderRegistration = TRUE;}
 		{include #datingContent}
 		<div class="clear"></div>
 	</div>
