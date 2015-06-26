@@ -19,6 +19,7 @@ use NetteExt\Watermarks;
 use NetteExt\File;
 use Nette\Http\FileUpload;
 use NetteExt\Path\ImagePathCreator;
+use POS\Model\UserDao;
 
 /**
  * Třída sloužící pro nahrávání obrázků.

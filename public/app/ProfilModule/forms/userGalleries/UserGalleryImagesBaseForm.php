@@ -95,7 +95,10 @@ class UserGalleryImagesBaseForm extends BaseForm {
 		$imagesToUpload = new ImagesToUpload($userID, $galleryID);
 
 		foreach ($images as $image) {
-			$imageToUpload = new ImageToUpload($image[self::IMAGE_FILE], $image[self::IMAGE_NAME], $image[self::IMAGE_DESCRIPTION]);
+			$name = array_key_exists(self::IMAGE_NAME, $image) ? $image[self::IMAGE_NAME] : '';
+			$description = array_key_exists(self::IMAGE_DESCRIPTION, $image) ? $image[self::IMAGE_DESCRIPTION] : '';
+
+			$imageToUpload = new ImageToUpload($image[self::IMAGE_FILE], $name, $description);
 
 			if ($profilePhoto) {
 				$imageToUpload->setProfileType();
