@@ -306,8 +306,6 @@ class UserDao extends UserBaseDao {
 	 */
 	public function getBySearchData($data) {
 		$sel = $this->getTable();
-		$timeOne = new \Nette\DateTime();
-		$timeTwo = new \Nette\DateTime();
 
 		$sel->where(self::COLUMN_PROPERTY_ID . " IS NOT NULL");
 
@@ -321,10 +319,19 @@ class UserDao extends UserBaseDao {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".penis_length <= ?", $data['penis_length_to']);
 		}
 		if (!empty($data['age_from'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".age <= ?", $timeOne->modify('-' . $data['age_from'] . 'years')->format('Y-12-31'));
+			$timeOne = new \Nette\DateTime();
+			/* OD : dnešní datum - věk [roky] */
+			$timeOne->modify('-' . ($data['age_from']) . 'years');
+
+			$sel->where(self::COLUMN_PROPERTY_ID . ".age <= ?", $timeOne->format('Y-m-d'));
 		}
 		if (!empty($data['age_to'])) {
-			$sel->where(self::COLUMN_PROPERTY_ID . ".age >= ?", $timeTwo->modify('-' . $data['age_to'] . 'years')->format('Y-1-1'));
+			$timeTwo = new \Nette\DateTime();
+			/* DO : dnešní datum - (věk [roky] + 1) tedy o rok později + 1 den, aby mu byl pořád stanovený věk */
+			$timeTwo->modify('-' . ($data['age_to'] + 1) . 'years');
+			$timeTwo->modify('+ 1 days');
+
+			$sel->where(self::COLUMN_PROPERTY_ID . ".age >= ?", $timeTwo->format('Y-m-d'));
 		}
 		if (!empty($data['tallness_from'])) {
 			$sel->where(self::COLUMN_PROPERTY_ID . ".tallness >= ?", $data['tallness_from']);

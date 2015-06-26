@@ -188,7 +188,7 @@ class AdvancedForm extends BaseForm {
 	}
 
 	private function addAgeFields() {
-//skupina pro políčka s věkem
+		/* skupina pro políčka s věkem */
 		$this->addGroup('Věk');
 
 		$this->addText('age_from', 'od:')
