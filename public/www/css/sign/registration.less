@@ -207,6 +207,10 @@ h2.slideTitle{
 .writtenAboutUs{
 	padding: 80px 0;
 	
+	& + .scroll-to-btn{
+		width: 110px;
+	}
+	
 	.writtenItem{
 		float: left;
 		width: 27%;
@@ -327,28 +331,34 @@ h2.slideTitle{
 		right: 30px;
 	}
 }
+.first-slide .form-window{
+	overflow: visible;
+}
+.under-registration{
+	position: absolute;
+	width: 300px;
+	height: 200px;
+	left: 0;
+	bottom: -220px;
+}
 
-@arrow-size: 71px;
 .first-slide{
 	.scroll-to-btn{
-		position: absolute;
-		top: 580px;
-		right: -180px;
+		margin-top: 20px;
+		width: 280px - @arrow-size;
 	}
 }
 .title-sentence{
-	position: absolute;
-	top: 500px;
-	right: -210px;
 	font-style: italic;
 	color: @main-red;
 	text-align: center;
-	width: 300px;
 	padding: 0 20px;
-	font-size: 24px;
+	font-size: 22px;
 	font-weight: 600;
 	font-family: "Times New Roman", serif;
 }
+
+@arrow-size: 71px;
 
 .scroll-to-btn{
 	display: block;
@@ -366,7 +376,7 @@ h2.slideTitle{
 	&:before {
 		content: '';
 		position: absolute;
-		z-index: 50;
+		z-index: 5;
 		right: 0;
 		top: 0;
 		width: @arrow-size;
@@ -480,33 +490,14 @@ h2.slideTitle{
 
 /** MOBILNÍ STYLY **/
 
-@media screen and (max-width: 1600px){
-	.first-slide{
-		background-position: -300px top;
-	}
-}
-
 @media screen and (max-width: 1366px){
-	.first-slide{
-		background-position: -450px top;
-	}
-	.first-slide{
-		.form-window, .title-sentence, .scroll-to-btn{
-			right: 0;
-		}
+	.form-window{
+		right: 0 !important;
 	}
 }
 
-@media screen and (max-width: 1200px){
-	.first-slide{
-		background-position: -400px top;
-	}
-}
 
 @media screen and (max-width: 1080px){
-	.first-slide{
-		background-position: -250px top;
-	}
 	
 	.featureListSlide{
 		.featureItem{
@@ -523,11 +514,7 @@ h2.slideTitle{
 	}
 }
 
-@media screen and (max-width: 980px){
-	.first-slide{
-		background-position: -400px top;
-	}
-	
+@media screen and (max-width: 980px){	
 	.featureListSlide{
 		.featureItem{
 			padding-left: 0;

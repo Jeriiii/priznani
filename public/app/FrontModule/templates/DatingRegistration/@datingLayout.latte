@@ -33,12 +33,15 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 		<div id="registration-form" class="inner relative">
 			{include #datingContent}
 			<div class="clear"></div>
+<<<<<<< HEAD
 			{ifset #lastSlide}
 			<p class="title-sentence">"Bav se, chatuj, sdílej fotky<br /> a poznávej nové přátele"</p>
 			<a class="scroll-to-btn" href="#second-slide" data-anchor="#second-slide" data-scroll-to="middle">
 				Klikni a dozvíš se víc!
 			</a>
 		{/ifset}
+=======
+>>>>>>> POS-640-bugfiy_vzhledu_registrace
 		</div>
 		
 	</div>
@@ -70,10 +73,11 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 		$(document).ready(function(){
 			fitBgToElement('.first-slide', 1734, 1154);
 			fitBgToElement('.second-registration-slide', 1735, 1155);
-			
+			moveRightCornerOn($('.first-slide'), $('.first-slide .form-window').offset().left, 1734, 1154);
 
 			$(window).resize(function () {
 				fitBgToElement('.first-slide', 1732, 1155);
+				moveRightCornerOn($('.first-slide'), $('.first-slide .form-window').offset().left, 1734, 1154);
 				fitBgToElement('.second-registration-slide', 1735, 1155);
 			});
 		});		
@@ -129,7 +133,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 				</div>
 				<div class="clear"></div>
 			</div>
-			<a class="scroll-to-btn centered arrowUp" href="#" data-anchor="body" data-scroll-to="top">K registraci!</a>
+			<a class="scroll-to-btn centered arrowUp imageOnTheLeft" href="#" data-anchor="body" data-scroll-to="top">K registraci!</a>
 		</div>
 	</div>
 	<div class="paralax-slide" data-parallax="scroll" data-position-y="center" data-image-src="{$basePath}/images/sign/backgrounds/2smazat.jpg">

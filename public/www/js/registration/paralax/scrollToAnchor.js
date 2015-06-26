@@ -11,12 +11,12 @@
 	function scrollToAnchor(selector, centering){
 		var element = $(selector);
 		var scrollTo = element.offset().top;
-		if(centering === 'middle'){/*scrollování tak, aby element byl uprostřed okna*/
+		if(centering === 'middle' && $(window).outerHeight() > element.outerHeight()){/*scrollování tak, aby element byl uprostřed okna*/
 			scrollTo -= ($(window).outerHeight() - element.outerHeight()) / 2;
 		}else{
 			scrollTo -= 53;/* to odečtené číslo je tam zatím natvrdo - je to výška headeru. Chování headeru se bude pravděpodobně ještě měnit */
 		}
-		$("html,body").animate({ scrollTop:scrollTo},800);
+		$("html,body").animate({ scrollTop:scrollTo}, 800);
 	}
 	
 	$('.scroll-to-btn, .next-scroll-to-btn').each(function(){
