@@ -64,10 +64,11 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 		$(document).ready(function(){
 			fitBgToElement('.first-slide', 1734, 1154);
 			fitBgToElement('.second-registration-slide', 1735, 1155);
-			
+			moveRightCornerOn($('.first-slide'), $('.first-slide .form-window').offset().left, 1734, 1154);
 
 			$(window).resize(function () {
 				fitBgToElement('.first-slide', 1732, 1155);
+				moveRightCornerOn($('.first-slide'), $('.first-slide .form-window').offset().left, 1734, 1154);
 				fitBgToElement('.second-registration-slide', 1735, 1155);
 			});
 		});		

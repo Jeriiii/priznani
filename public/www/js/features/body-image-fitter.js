@@ -25,3 +25,21 @@
 			element.css('background-size', '100% auto');
 		}
 	};
+	
+	/**
+	 * Posune pravý okraj obrázku na pozadí na učitou X ovou pozici. Počítá s tím, že se mění velikost obrázku.
+	 * @param Object element element, o který se jedná.
+	 * @param int positionTo na kterou pozici se obrázek posune
+	 * @param int imageResolutionWidth vertikální rozlišení obrázku
+	 * @param int imageResolutionHeight horizontální rozlišení obrázku
+	 */
+	var moveRightCornerOn = function (element, positionTo, imageResolutionWidth, imageResolutionHeight) {
+		if(element.outerWidth() > element.outerHeight()){
+			var realWidth = element.outerWidth();
+		}else{
+			var ratio = imageResolutionWidth / imageResolutionHeight;
+			var realWidth = element.outerHeight() * ratio;
+		}
+		var calculatedValue = positionTo - realWidth;
+		element.css('background-position', calculatedValue + 'px top');
+	};
