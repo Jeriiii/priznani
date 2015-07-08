@@ -2,8 +2,17 @@
  * @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
  */
 ;
+/**
+ * Přesune daný element do footeru okénka
+ * @param {type} element
+ * @returns {undefined}
+ */
+function moveToFooter(element){
+	var window = element.parents('.posPopUp');
+	element.detach().appendTo(window);
+}
 $(document).ready(function () {
-
+	moveToFooter($('.withImage form'));
 	var imageName = $('#addProfilePhotoWindow .cropContainer').attr('data-image-name');
 	$('input[name="imageName"]').val(imageName);
 	var $img = $('#profilePhotoToCrop');
