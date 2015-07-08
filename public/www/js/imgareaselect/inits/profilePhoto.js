@@ -37,12 +37,25 @@ function resizeImage(imageElement) {
 		window.css('top', '+=' + heightDifference / 2);
 	}
 }
+
+/**
+ * Překryje aplikovaný slimScroll pro tento případ.
+ * @returns {undefined}
+ */
+function overrideSlimScroll() {
+	$('.posPopUp.withImage .ajaxBoxData').slimScroll({/* překrytí slimscrollu */
+		height: $('.posPopUp.withImage .ajaxBoxContent').outerHeight() + 'px',
+		railVisible: true,
+		alwaysVisible: true
+	});
+}
 $(document).ready(function () {
 	moveToFooter($('.withImage form'));
 	var trueImg = $('#profilePhotoToCrop');
 	var trueWidth = trueImg.width();
 	var trueHeight = trueImg.height();
 	resizeImage(trueImg);
+	overrideSlimScroll();
 	var imageName = $('#addProfilePhotoWindow .cropContainer').attr('data-image-name');
 	$('input[name="imageName"]').val(imageName);
 	var $img = $('#profilePhotoToCrop');
