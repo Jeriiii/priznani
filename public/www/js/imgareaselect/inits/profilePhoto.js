@@ -11,8 +11,31 @@ function moveToFooter(element){
 	var window = element.parents('.posPopUp');
 	element.detach().appendTo(window);
 }
+
+/**
+ * Změní velikost obrázku podle jeho rodiče
+ * @param {type} imageElement
+ * @returns {undefined}
+ */
+function resizeImage(imageElement) {
+	var scrollContent = imageElement.parent();
+	if(scrollContent.width() < imageElement.width()){
+		imageElement.css('width', '100%');
+	}else{
+		imageElement.css('margin', '20px');
+		var window = imageElement.parents('.posPopUp');
+		var origWidth = window.width();
+		var newWidth = Math.max(imageElement.width() + 40, window.find('form').outerWidth());
+		window.css('width', newWidth);/* zmenšení okna podle obrázku */
+		window.css('left',  '+=' + ((origWidth - newWidth) / 2));
+	}
+}
 $(document).ready(function () {
 	moveToFooter($('.withImage form'));
+	var trueImg = $('#profilePhotoToCrop');
+	var trueWidth = trueImg.width();
+	var trueHeight = trueImg.height();
+	resizeImage(trueImg);
 	var imageName = $('#addProfilePhotoWindow .cropContainer').attr('data-image-name');
 	$('input[name="imageName"]').val(imageName);
 	var $img = $('#profilePhotoToCrop');
@@ -24,20 +47,23 @@ $(document).ready(function () {
 	var img = new Image();
 	img.src = $img.attr('src');
 	img.onload = function () {
-//	alert(this.width + 'x' + this.height);
-		var maxSize = Math.min(this.width, this.height);
+		var imgWidth = $('#profilePhotoToCrop').outerWidth();
+		var imgHeight = $('#profilePhotoToCrop').outerHeight();
+		var trueWidthCoef = trueWidth / imgWidth;
+		var trueHeightCoef = trueHeight / imgHeight;
+		var maxSize = Math.min(imgWidth, imgHeight);
 		$('input[name="imageX1"]').val(0);
-		$('input[name="imageX2"]').val(maxSize);
+		$('input[name="imageX2"]').val(Math.round(maxSize * trueWidthCoef));
 		$('input[name="imageY1"]').val(0);
-		$('input[name="imageY2"]').val(maxSize);
+		$('input[name="imageY2"]').val(Math.round(maxSize * trueWidthCoef));
 
 		$('.img-to-crop').imgAreaSelect({
 			handles: true,
 			onSelectEnd: function (img, selection) {
-				$('input[name="imageX1"]').val(selection.x1);
-				$('input[name="imageY1"]').val(selection.y1);
-				$('input[name="imageX2"]').val(selection.x2);
-				$('input[name="imageY2"]').val(selection.y2);
+				$('input[name="imageX1"]').val(Math.round(selection.x1 * trueWidthCoef));
+				$('input[name="imageY1"]').val(Math.round(selection.y1 * trueHeightCoef));
+				$('input[name="imageX2"]').val(Math.round(selection.x2 * trueWidthCoef));
+				$('input[name="imageY2"]').val(Math.round(selection.y2 * trueHeightCoef));
 			},
 			minHeight: 50,
 			minWidth: 50,

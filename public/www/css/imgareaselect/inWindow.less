@@ -7,6 +7,7 @@
 
 #addProfilePhotoWindow{
 	display: none;
+	text-align: center;
 	
 	.cropContainer{
 		position: relative;
@@ -14,15 +15,17 @@
 		div{
 			position: absolute !important;
 		}
-		
-		img{
-			display: block;
-		}
+	}
+	img{
+		display: inline;
+		cursor: crosshair;
 	}
 	
 }
 
 .posPopUp{
+	
+	
 	
 	p.instructions{
 		padding: 10px 0;
@@ -41,24 +44,29 @@
 		}
 	}
 	
-	.window-info{
-		height: 50px;
-	}
+	
 	
 	&.withImage{
-	
-		width: 80%;
+		width: 90%;
 		height: 1000px;
 		@content-height-correction: 95px;
+		
+		.window-info{
+			height: 50px;
+		}
+		
+		.ajaxBoxContent{
+			padding: 0px;
+		}
 
 		.ajaxBoxContent{
 			height: 1000px - @content-height-correction;
 		}
 		@media screen {
 			@media (max-height: 1100px) {
-				height: 900px;
+				height: 950px;
 				.ajaxBoxContent{
-					height: 900px - @content-height-correction;
+					height: 950px - @content-height-correction;
 				}
 			}
 		}
@@ -104,7 +112,7 @@
 			position: absolute;
 			float: left;
 			bottom: 10px;
-			left: -10px;
+			right: -10px;
 			width: auto;
 			height: 30px;
 			padding: 10px;
