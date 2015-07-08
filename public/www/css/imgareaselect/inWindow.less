@@ -5,20 +5,21 @@
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
 
-#addProfilePhotoWindow .cropContainer{
-	position: relative;
-	
-	div{
-		position: absolute !important;
-	}
-}
-
-#addProfilePhotoWindow .cropContainer img{
-	display: block;
-}
-
 #addProfilePhotoWindow{
 	display: none;
+	
+	.cropContainer{
+		position: relative;
+
+		div{
+			position: absolute !important;
+		}
+		
+		img{
+			display: block;
+		}
+	}
+	
 }
 
 .posPopUp{
@@ -42,15 +43,66 @@
 	
 	&.withImage{
 	
-		width: 1020px;
-		height: 600px;
+		width: 80%;
+		height: 1000px;
+		@content-height-correction: 95px;
 
 		.ajaxBoxContent{
-			height: 535px;
+			height: 1000px - @content-height-correction;
+		}
+		@media screen {
+			@media (max-height: 1100px) {
+				height: 900px;
+				.ajaxBoxContent{
+					height: 900px - @content-height-correction;
+				}
+			}
+		}
+		
+		@media screen {
+			@media (max-height: 1000px) {
+				height: 850px;
+				.ajaxBoxContent{
+					height: 850px - @content-height-correction;
+				}
+			}
+		}
+		@media screen {
+			@media (max-height: 900px) {
+				height: 750px;
+				.ajaxBoxContent{
+					height: 750px - @content-height-correction;
+				}
+			}
+		}
+		
+		@media screen {
+			@media (max-height: 800px) {
+				height: 600px;
+				.ajaxBoxContent{
+					height: 600px - @content-height-correction;
+				}
+			}
+		}
+		@media screen {
+			@media (max-height: 600px) {
+				height: 400px;
+				.ajaxBoxContent{
+					height: 400px - @content-height-correction;
+				}
+			}
 		}
 		
 		.imgCropInput, label{
 			display: none;
+		}
+		form{
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: auto;
+			height: 30px;
+			padding: 10px;
 		}
 	
 	}
