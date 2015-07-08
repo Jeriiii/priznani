@@ -21,11 +21,12 @@ function resizeImage(imageElement) {
 	var window = imageElement.parents('.posPopUp.withImage');
 	var windowContent = imageElement.parents('.ajaxBoxContent');
 	if(scrollContent.width() < imageElement.width()){/* korekce šířky */
-		imageElement.css('width', '100%');
+		imageElement.css('width', '94%');
+		imageElement.css('margin', '30px 3%');
 	}else{
-		imageElement.css('margin', '20px');
+		imageElement.css('margin', '30px');
 		var origWidth = window.width();
-		var newWidth = Math.max(imageElement.width() + 40, window.find('form').outerWidth());
+		var newWidth = Math.max(imageElement.width() + 60, window.find('form').outerWidth());/* těch 40 je za margin*/
 		window.css('width', newWidth);/* zmenšení okna podle obrázku */
 		window.css('left',  '+=' + ((origWidth - newWidth) / 2));
 	}
@@ -59,6 +60,7 @@ function setInitialValues(trueWidthCoef, trueHeightCoef) {
 	$('input[name="imageY1"]').val(0);
 	$('input[name="imageY2"]').val(Math.round(50 * trueHeightCoef));
 }
+
 $(document).ready(function () {
 	if(!($( ".posPopUp.withImage" ).length)){/* pokud nejde o okno s obrázkem, nedělá nic*/
 		return;
