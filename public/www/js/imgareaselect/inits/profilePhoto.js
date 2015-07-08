@@ -13,21 +13,28 @@ function moveToFooter(element){
 }
 
 /**
- * Změní velikost obrázku podle jeho rodiče
+ * Změní velikost obrázku podle jeho rodiče. Pokud je obrázek menší než okno, zmenší okno
  * @param {type} imageElement
  * @returns {undefined}
  */
 function resizeImage(imageElement) {
 	var scrollContent = imageElement.parent();
-	if(scrollContent.width() < imageElement.width()){
+	var window = imageElement.parents('.posPopUp');
+	var windowContent = imageElement.parents('.ajaxBoxContent');
+	if(scrollContent.width() < imageElement.width()){/* korekce šířky */
 		imageElement.css('width', '100%');
 	}else{
 		imageElement.css('margin', '20px');
-		var window = imageElement.parents('.posPopUp');
 		var origWidth = window.width();
 		var newWidth = Math.max(imageElement.width() + 40, window.find('form').outerWidth());
 		window.css('width', newWidth);/* zmenšení okna podle obrázku */
 		window.css('left',  '+=' + ((origWidth - newWidth) / 2));
+	}
+	var heightDifference = windowContent.height() - scrollContent.height();
+	if(heightDifference > 0){/* změna výšky okna */
+		windowContent.css('height', '-=' + heightDifference);
+		window.css('height', '-=' + heightDifference);
+		window.css('top', '+=' + heightDifference / 2);
 	}
 }
 $(document).ready(function () {
