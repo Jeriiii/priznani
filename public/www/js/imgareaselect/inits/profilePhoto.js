@@ -14,12 +14,11 @@ function moveToFooter(element){
 
 /**
  * Změní velikost obrázku podle jeho rodiče. Pokud je obrázek menší než okno, zmenší okno
- * @param {type} imageElement
- * @returns {undefined}
+ * @param {object} imageElement element obrázku
  */
 function resizeImage(imageElement) {
 	var scrollContent = imageElement.parent();
-	var window = imageElement.parents('.posPopUp');
+	var window = imageElement.parents('.posPopUp.withImage');
 	var windowContent = imageElement.parents('.ajaxBoxContent');
 	if(scrollContent.width() < imageElement.width()){/* korekce šířky */
 		imageElement.css('width', '100%');
@@ -40,7 +39,6 @@ function resizeImage(imageElement) {
 
 /**
  * Překryje aplikovaný slimScroll pro tento případ.
- * @returns {undefined}
  */
 function overrideSlimScroll() {
 	$('.posPopUp.withImage .ajaxBoxData').slimScroll({/* překrytí slimscrollu */
@@ -49,7 +47,22 @@ function overrideSlimScroll() {
 		alwaysVisible: true
 	});
 }
+/**
+ * Nastaví formuláři defaultní hodnoty
+ * @param {double} trueWidthCoef koeficient šířky na skutečnou hodnotu
+ * @param {double} trueHeightCoef koeficient výšky na skutečnou hodnotu
+ * @returns {undefined}
+ */
+function setInitialValues(trueWidthCoef, trueHeightCoef) {
+	$('input[name="imageX1"]').val(0);
+	$('input[name="imageX2"]').val(Math.round(50 * trueWidthCoef));
+	$('input[name="imageY1"]').val(0);
+	$('input[name="imageY2"]').val(Math.round(50 * trueHeightCoef));
+}
 $(document).ready(function () {
+	if(!($( ".posPopUp.withImage" ).length)){/* pokud nejde o okno s obrázkem, nedělá nic*/
+		return;
+	}
 	moveToFooter($('.withImage form'));
 	var trueImg = $('#profilePhotoToCrop');
 	var trueWidth = trueImg.width();
@@ -59,11 +72,6 @@ $(document).ready(function () {
 	var imageName = $('#addProfilePhotoWindow .cropContainer').attr('data-image-name');
 	$('input[name="imageName"]').val(imageName);
 	var $img = $('#profilePhotoToCrop');
-	$('input[name="imageX1"]').val(0);
-	$('input[name="imageX2"]').val(50);
-	$('input[name="imageY1"]').val(0);
-	$('input[name="imageY2"]').val(50);
-
 	var img = new Image();
 	img.src = $img.attr('src');
 	img.onload = function () {
@@ -71,11 +79,12 @@ $(document).ready(function () {
 		var imgHeight = $('#profilePhotoToCrop').outerHeight();
 		var trueWidthCoef = trueWidth / imgWidth;
 		var trueHeightCoef = trueHeight / imgHeight;
+		setInitialValues(trueWidthCoef, trueHeightCoef);
 		var maxSize = Math.min(imgWidth, imgHeight);
 		$('input[name="imageX1"]').val(0);
 		$('input[name="imageX2"]').val(Math.round(maxSize * trueWidthCoef));
 		$('input[name="imageY1"]').val(0);
-		$('input[name="imageY2"]').val(Math.round(maxSize * trueWidthCoef));
+		$('input[name="imageY2"]').val(Math.round(maxSize * trueHeightCoef));
 
 		$('.img-to-crop').imgAreaSelect({
 			handles: true,

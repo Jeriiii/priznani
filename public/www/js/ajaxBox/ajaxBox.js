@@ -472,7 +472,7 @@
 	function addSlimScroll(content) {
 		//pridani vlastniho posuvniku
 		content.slimScroll({
-			height: content.outerHeight() + 'px'
+			height: content.height() + 'px'
 		});
 	}
 	/**
