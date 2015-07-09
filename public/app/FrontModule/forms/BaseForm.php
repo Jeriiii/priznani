@@ -141,4 +141,18 @@ class BaseForm extends Form {
 		return $inputContainer;
 	}
 
+	/**
+	 * Všechny errory formuláře vypíše jako flash zprávy. Přesměruje. Volání callbacku onError již nenastane, aby nebyly zobrazeny errory dvakrát.
+	 * @param type $form
+	 */
+	public function errorsToFlashMessages($form) {
+		if ($form->hasErrors()) {
+			$errors = $form->getErrors();
+			foreach ($errors as $message) {
+				$this->getPresenter()->flashMessage($message, 'error');
+			}
+			$this->getPresenter()->redirect('this');
+		}
+	}
+
 }
