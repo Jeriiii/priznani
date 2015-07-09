@@ -39,7 +39,8 @@ class AddItemForm extends BaseForm {
 		}
 
 		$this->addTextarea("note", "Přiznání", 30, 30, 1)
-			->addRule(Form::FILLED, "Vyplňte prosím text zprávy.");
+			->addRule(Form::FILLED, "Vyplňte prosím text přiznání.")
+			->addRule(Form::MAX_LENGTH, "Status je příliš dlouhý.", 65500);
 		/* ochrana proti spamu */
 		$this->addText('nick', 'Toto pole prosím nevyplňujte.');
 		$this->addSubmit("submit", "Odeslat");
