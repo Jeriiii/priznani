@@ -127,7 +127,9 @@
 		/* objekt definující zapnutí a nastavení modulu pro obnovování snippetu a kontroly jeho příchozího obsahu */
 		streamSnippetModule: false,
 		/* čas [ms] po kterém se okénko samo zavře, když je 0, nezavře se */
-		closeAfter: 0
+		closeAfter: 0,
+		/* přidat slimbox (svislý rolovací panel po straně) */
+		addSlimBox: true
 	};
 
 
@@ -230,6 +232,9 @@
 		}
 		if ($box.data("ajaxbox-close-after") !== undefined) {
 			opts.closeAfter = $box.data("ajaxbox-close-after");
+		}
+		if ($box.data("ajaxbox-add-slim-box") !== undefined) {
+			opts.addSlimBox = $box.data("ajaxbox-add-slim-box");
 		}
 		return opts;
 	}
@@ -383,7 +388,7 @@
 		bindOpenCloseListener(opts);//zavření při otevření jiného okénka
 		bindCloseButtons(opts, boxSelector);
 		bindCloseOnClick(opts, boxSelector);
-		addSlimScroll(content);
+		if(opts.addSlimBox) addSlimScroll(content);
 		addResizeBehavior(opts, boxSelector);
 		addReloadTrigger(opts);
 	}

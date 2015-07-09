@@ -1,5 +1,5 @@
 {ifset $uploadedImageName}
-	<div class="ajaxbox-popUp" id="addProfilePhotoWindow" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-additional-classes="withImage" data-ajaxbox-header-html="Nahrát profilovku" data-ajaxbox-open-on-start="true">
+	<div class="ajaxbox-popUp" id="addProfilePhotoWindow" data-ajaxbox-btn=".uploadProfilePhoto" data-ajaxbox-add-slim-box="false"  data-ajaxbox-additional-classes="withImage" data-ajaxbox-header-html="Nahrát profilovku" data-ajaxbox-open-on-start="true">
 		<div class="cropContainer" data-image-name="{$uploadedImageName}"></div>
 		<img src="{$basePath}/images/temp/{$uploadedImageName}" id="profilePhotoToCrop" alt="Prosím nastavte oříznutí obrázku" class="img-to-crop" />
 		{control afterUploadForm}
