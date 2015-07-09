@@ -129,6 +129,17 @@ class InstallPresenter extends BasePresenter {
 		$this->redirect("Install:");
 	}
 
+	public function actionGoToHomepage() {
+		$messages = new Messages;
+
+		$clearCache = new ClearCasch($messages);
+		$clearCache->clearCache();
+
+		$messages->flash($this);
+		$clearCache->clearCache();
+		$this->redirect(":OnePage:");
+	}
+
 	public function actionTestData() {
 		ini_set('max_execution_time', 60);
 		$messages = new Messages;

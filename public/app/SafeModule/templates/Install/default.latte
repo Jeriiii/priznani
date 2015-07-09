@@ -1,8 +1,16 @@
 {block head}
-
+<style>
+	#btn-back {
+		position: fixed;
+		float: right;
+		margin-left: 600px;
+		top: 22px;
+	}
+</style>
 {/block}
 
 {block content}
+	<a n:href="goToHomepage" class="btn btn-danger" id="btn-back">Zpět na hl. stránku</a>
 	<h1>Instalace</h1>
 	<h2>Kompletní instalace</h2>
 	<p>
@@ -17,25 +25,24 @@
 	<h2>Vyčistí cache</h2>
 	<p>Vyčistí cache (temp/cache, css, js)</p>
 	<a n:href="clear-cache" class="btn btn-default btn-lg">Spustit</a>
-	
+
 	<h2>Kategorie uživatelů</h2>
 	<p>Vytvoří kombinace všech kategorií</p>
 	<a n:href="all-categories" class="btn btn-default btn-lg">Spustit</a>
-	
+
 	<h2>Vložení rozsáhlejších dat</h2>
 	<p>Vloží všechny potřebná data. Data budou kompletní, ale bude jich opravdu hodně.</p>
 	<a n:href="more-data" class="btn btn-default btn-lg">Spustit</a>
-	
+
 	<h2>Smazání DB</h2>
 	<p>Smaže celou DB a nechá jen databázovou strukturu.</p>
 	<a n:href="dBStruct" class="btn btn-default btn-lg">Spustit</a>
-	
+
 	<h2>Pokročilé</h2>
 	<p>
 		Jen pro ty co <strong>vědí co dělají!!!</strong>
 	</p>
 	<a n:href="advance" class="btn btn-warning btn-lg">Pokročilé fce</a>
-	
 	
 {/block}
 
