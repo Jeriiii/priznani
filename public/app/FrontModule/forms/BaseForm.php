@@ -118,8 +118,8 @@ class BaseForm extends Form {
 	}
 
 	public function setBFormToHorizontal($lableCCols = "col-sm-2", $inputCCols = "col-sm-5") {
-		$this->lableClass = $this->lableClass . $lableCCols . " " . "control-label";
-		$this->inputClass = $this->inputClass . $inputCCols;
+		$this->lableClass = $this->lableClass . " " . $lableCCols . " " . "control-label";
+		$this->inputClass = $this->inputClass . " " . $inputCCols;
 		$this->formClass = "form-horizontal";
 	}
 
