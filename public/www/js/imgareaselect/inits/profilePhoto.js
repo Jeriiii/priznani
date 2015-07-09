@@ -17,22 +17,40 @@ function moveToFooter(element){
  * @param {object} imageElement element obrázku
  */
 function resizeImage(imageElement) {
-	var scrollContent = imageElement.parent();
-	var window = imageElement.parents('.posPopUp.withImage');
+	var imageContainer = imageElement.parent();
+	var popupWindow = imageElement.parents('.posPopUp.withImage');
 	var windowContent = imageElement.parents('.ajaxBoxContent');
 	imageElement.css('max-width', '100%');
-	imageElement.css('max-height', windowContent.height() - window.find('.window-info').outerHeight() + 'px');
+	imageElement.css('max-height', windowContent.height() - popupWindow.find('.window-info').outerHeight() + 'px');
 	
-	var origWidth = window.width();
-	var newWidth = Math.max(imageElement.width(), window.find('form').outerWidth());
-	window.css('width', newWidth);/* zmenšení okna podle obrázku */
-	window.css('left',  '+=' + ((origWidth - newWidth) / 2));
-	
-	var heightDifference = windowContent.height() - scrollContent.height();
+	resizeWindowWidthByImage(popupWindow, imageElement);
+	resizeWindowHeightByImage(popupWindow, windowContent, imageContainer);
+}
+
+/**
+ * Změní šířku okna podle velikosti obrázku
+ * @param {object} popupWindow jQuery element celého okna
+ * @param {object} imageElement jQuery element obrázku
+ */
+function resizeWindowWidthByImage(popupWindow, imageElement) {
+	var origWidth = popupWindow.width();
+	var newWidth = Math.max(imageElement.width(), popupWindow.find('form').outerWidth());
+	popupWindow.css('width', newWidth);/* zmenšení okna podle obrázku */
+	popupWindow.css('left',  '+=' + ((origWidth - newWidth) / 2));
+}
+
+/**
+ * Změní výšku okna podle velikosti obrázku
+ * @param {object} popupWindow jQuery element celého okna
+ * @param {object} windowContent jQuery element obsahu okna
+ * @param {object} imageContainer jQuery element, ve kterém je obrázek
+ */
+function resizeWindowHeightByImage(popupWindow, windowContent, imageContainer) {
+	var heightDifference = windowContent.height() - imageContainer.height();
 	if(heightDifference > 0){/* změna výšky okna */
 		windowContent.css('height', '-=' + heightDifference);
-		window.css('height', '-=' + heightDifference);
-		window.css('top', '+=' + heightDifference / 2);
+		popupWindow.css('height', '-=' + heightDifference);
+		popupWindow.css('top', '+=' + heightDifference / 2);
 	}
 }
 
@@ -49,6 +67,9 @@ function setInitialValues(trueWidthCoef, trueHeightCoef) {
 	$('input[name="imageY2"]').val(Math.round(50 * trueHeightCoef));
 }
 
+/**
+ * Inicializace crop image
+ */
 $(document).ready(function () {
 	if(!($( ".posPopUp.withImage" ).length)){/* pokud nejde o okno s obrázkem, nedělá nic*/
 		return;
@@ -70,17 +91,16 @@ $(document).ready(function () {
 		var trueHeightCoef = trueHeight / imgHeight;
 		setInitialValues(trueWidthCoef, trueHeightCoef);
 		var maxSize = Math.min(imgWidth, imgHeight);
-		$('input[name="imageX1"]').val(0);
-		$('input[name="imageX2"]').val(Math.round(maxSize * trueWidthCoef));
-		$('input[name="imageY1"]').val(0);
-		$('input[name="imageY2"]').val(Math.round(maxSize * trueHeightCoef));
+		setPostition(0, 0, Math.round(maxSize * trueWidthCoef), Math.round(maxSize * trueHeightCoef));
+		
 		$('.img-to-crop').imgAreaSelect({
 			handles: true,
 			onSelectEnd: function (img, selection) {
-				$('input[name="imageX1"]').val(Math.round(selection.x1 * trueWidthCoef));
-				$('input[name="imageY1"]').val(Math.round(selection.y1 * trueHeightCoef));
-				$('input[name="imageX2"]').val(Math.round(selection.x2 * trueWidthCoef));
-				$('input[name="imageY2"]').val(Math.round(selection.y2 * trueHeightCoef));
+				if(selection.x1 === selection.x2 && selection.y1 === selection.y2){/* korekce při odkliknutí */
+					setPostition(0, 0, Math.round(maxSize * trueWidthCoef), Math.round(maxSize * trueHeightCoef));
+				}else{
+					setPostition(Math.round(selection.x1 * trueWidthCoef), Math.round(selection.y1 * trueHeightCoef), Math.round(selection.x2 * trueWidthCoef), Math.round(selection.y2 * trueHeightCoef));
+				}
 			},
 			minHeight: 50,
 			minWidth: 50,
@@ -93,8 +113,22 @@ $(document).ready(function () {
 			aspectRatio: '1:1',
 			parent: '#addProfilePhotoWindow .cropContainer'
 		});
+		
+		/**
+		 * Nastaví pozici výřezu do skrytého formuláře
+		 * @param {int} x1 xová souřadnice levého horního rohu
+		 * @param {int} y1 yová souřadnice levého horního rohu
+		 * @param {int} x2 xová souřadnice pravého dolního rohu
+		 * @param {int} y2 yová souřadnice pravého dolního rohu
+		 */
+	   function setPostition(x1, y1, x2, y2) {
+		   $('input[name="imageX1"]').val(x1);
+		   $('input[name="imageY1"]').val(y1);
+		   $('input[name="imageX2"]').val(x2);		   
+		   $('input[name="imageY2"]').val(y2);
+	   }
 	};
-
+	
 });
 
 
