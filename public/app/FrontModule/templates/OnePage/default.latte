@@ -28,28 +28,6 @@
 
 {block foot}
 {control js}
-<script>
-	$(document).ready(function () {
-
-		$.convRunAjax = true;
-		$.convOffset = 0;
-		$.convLimit = 5;
-
-		{* záložky u okének na vkládání obsahu/fotek *}
-		$( ".stream-form" ).tabs();
-		{* stream *}
-		$("body").stream({
-			addoffset: 4,
-			snippetName: "snippet-userStream-posts"
-		});
-	});
-	$("#frm-userStream-addConfessionForm-note").click(function() {
-		$("#frm-userStream-addConfessionForm-note").animate({ height: "200px"}, 500);
-	});
-	$("#frm-userStream-statusForm-message").click(function() {
-		$("#frm-userStream-statusForm-message").animate({ height: "200px"}, 500);
-	});
-</script>
 {* je to zvlast schvalne, nejak si to nerozumi s tou minimalizaci*}
 <script type="text/javascript" src="{$basePath}/js/imgareaselect/jquery.imgareaselect.min.js"></script>
 <script type="text/javascript" src="{$basePath}/js/imgareaselect/inits/profilePhoto.js"></script>

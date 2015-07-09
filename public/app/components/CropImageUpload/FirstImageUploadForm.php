@@ -37,6 +37,7 @@ class FirstImageUploadForm extends BaseForm {
 
 		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
+		$this->onValidate[] = callback($this, 'errorsToFlashMessages');
 		return $this;
 	}
 
