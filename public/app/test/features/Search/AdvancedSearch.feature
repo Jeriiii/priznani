@@ -32,8 +32,8 @@ Scenario Outline: Searching for test users
 
 Examples:	
 | age_from	| age_to	| sex	| orientation	| shape			| hair_color	| tall_from	| tall_to	| drink | smoke			| marital	| grad		| found			|
-| 29		| 29		| žena	| hetero		| plnoštíhlá	| blond			| 160		| 170		| ne	| často			| volný		| střední	| TEST ADMIN	|
-| 27		| 27		| muž	| hetero		| plnoštíhlá	| hnědá			| 180		| 190		| často	| příležitostně | volný		| vysoké	| TEST USER		|
+| 28		| 28		| žena	| hetero		| plnoštíhlá	| blond			| 160		| 170		| ne	| často			| volný		| střední	| TEST ADMIN	|
+| 26		| 26		| muž	| hetero		| plnoštíhlá	| hnědá			| 180		| 190		| často	| příležitostně | volný		| vysoké	| TEST USER		|
 
 
 #test, zda se uživatel (ne)vyhledá při drobné změně praktik
