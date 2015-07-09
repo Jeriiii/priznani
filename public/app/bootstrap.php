@@ -3,15 +3,15 @@
 /**
  * My Application bootstrap file.
  */
-use Nette\Application\Routers\RouteList,
-	Nette\Application\Routers\Route,
-	Nette\Forms\Container;
+use POS\Ext\RouteList;
+use Nette\Forms\Container;
+use Kdyby\BootstrapFormRenderer\DI\RendererExtension;
 
 // Load Nette Framework
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/extendeds/bootstrap/Configurator.php';
 
-
-$configurator = new Nette\Configurator;
+$configurator = new POS\Ext\Configurator;
 
 //$configurator->setDebugMode(FALSE);  // zapne produkci
 // Enable Nette Debugger for error visualisation & logging
@@ -27,77 +27,29 @@ $configurator->createRobotLoader()
 	->addDirectory(__DIR__ . '/../vendor/others')
 	->register();
 
-//pokud se automaticky testuje
-$testing = (isset($_SERVER['TESTING']) && $_SERVER['TESTING']) ||
-	(isset($_SERVER['HTTP_X_TESTING']) && $_SERVER['HTTP_X_TESTING']);
+
 
 // Create Dependency Injection container from config.neon file
 $configurator->addConfig(__DIR__ . '/config/config.neon');
-// Load config for automatic testing
-if ($testing) {
-	$configurator->addConfig(__DIR__ . '/config/test.config.neon', FALSE);
-}
 
-if (strpos($_SERVER["REQUEST_URI"], 'install') !== false) {/* zjištění, jestli url obsahuje řetězec install */
-	$installUrl = TRUE;
-} else {
-	$installUrl = FALSE;
-}
 $productionMode = !$configurator->isDebugMode();
-if ($productionMode || !$installUrl) {/* zapnutí eventů v závislosti na prostředí */
-	Kdyby\Events\DI\EventsExtension::register($configurator);
-}
+
+$configurator->addTestConfig($productionMode);
+$configurator->addEvents($productionMode);
+
 $container = $configurator->createContainer();
 
 // Setup router
 $router = new RouteList;
-
 $container->router = $router;
-$router[] = new Route('index.php', 'OnePage:default', Route::ONE_WAY);
-//$router[] = new Route('//[www.]priznanizparty.cz/[/<presenter>/<url>]', array(
-//	'presenter' => 'Page',
-//	'action' => 'default',
-//	'url' => 'priznani-z-party'
-//	));
-//$router[] = new Route('//[www.]priznanizparby.cz/[/<presenter>/<url>]', array(
-//	'presenter' => 'Page',
-//	'action' => 'default',
-//	'url' => 'priznanizparby'
-//	));
-//$router[] = new Route('//priznaniosexu.cz/seznamka[/<presenter>/<url>]', array(
-//	'presenter' => 'Page',
-//	'action' => 'default',
-//	'url' => 'seznamka'
-//	));
-//$router[] = new Route('//priznaniosexu.cz/[/<presenter>/<url>]', array(
-//	'presenter' => 'Page',
-//	'action' => 'default',
-//	'url' => 'priznani-o-sexu'
-//	));
-//$router[] = new Route('//priznaniosexu.cz/poradna/[/<presenter>/<url>]', array(
-//	'presenter' => 'Page',
-//	'action' => 'default',
-//	'url' => 'poradna-o-sexu'
-//	));
-//$router[] = new Route('//priznaniosexu.cz/priznani/<id>', array(
-//	'presenter' => 'Page',
-//	'action' => 'confession',
-//	'id' => '<id>'
-//	));
-//$router[] = new Route('//priznaniosexu.cz/poradna/<id>', array(
-//	'presenter' => 'Page',
-//	'action' => 'advice',
-//	'id' => '<id>'
-//	));
-$router[] = new Route('<presenter>/<action>[/<url>]', 'OnePage:default');
 
 Container::extensionMethod('addDateTimePicker', function (Container $_this, $name, $label, $cols = NULL, $maxLength = NULL) {
 	return $_this[$name] = new Nette\Extras\DateTimePicker($label, $cols, $maxLength);
 });
-Kdyby\BootstrapFormRenderer\DI\RendererExtension::register($configurator);
+RendererExtension::register($configurator);
 
 // Na PRODUKCI se nastaví odchytávání vyjímek
-if (!$configurator->isDebugMode()) {
+if ($productionMode) {
 	$container->application->catchExceptions = TRUE;
 }
 
