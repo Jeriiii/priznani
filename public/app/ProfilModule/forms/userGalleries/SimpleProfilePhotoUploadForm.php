@@ -38,6 +38,7 @@ class SimpleProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 		$this->addSubmit('uploadProfilPhoto', 'Nahrát');
 		$this->setBootstrapRender();
 		$this->onSuccess[] = callback($this, 'submitted');
+		$this->onValidate[] = callback($this, 'errorsToFlashMessages');
 		return $this;
 	}
 
