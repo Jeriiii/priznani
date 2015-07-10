@@ -68,7 +68,6 @@ class SendHeartDialog extends BaseProjectControl {
 		$presenter = $this->getPresenter();
 		if ($this->haveEnaughCoins()) {
 
-
 			$presenter->getSession('loggedUser')->remove(); //odstranění cache uživatelských údajů
 			$presenter->flashMessage('Srdíčko úspěšně odesláno', 'success');
 			$presenter->redirect('this');
