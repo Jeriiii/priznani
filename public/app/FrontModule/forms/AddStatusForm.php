@@ -34,6 +34,10 @@ class AddStatusForm extends BaseForm {
 			->addRule(Form::FILLED, "Vyplňte prosím text zprávy.")
 			->addRule(Form::MAX_LENGTH, "Status je příliš dlouhý.", 600);
 		$this->addSubmit("submit", "Odeslat");
+
+		if ($this->deviceDetector->isMobile()) {
+			$this->onValidate[] = callback($this, 'errorsToFlashMessages');
+		}
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}

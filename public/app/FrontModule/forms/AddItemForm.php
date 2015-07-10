@@ -44,6 +44,10 @@ class AddItemForm extends BaseForm {
 		/* ochrana proti spamu */
 		$this->addText('nick', 'Toto pole prosím nevyplňujte.');
 		$this->addSubmit("submit", "Odeslat");
+
+		if ($this->deviceDetector->isMobile()) {
+			$this->onValidate[] = callback($this, 'errorsToFlashMessages');
+		}
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
