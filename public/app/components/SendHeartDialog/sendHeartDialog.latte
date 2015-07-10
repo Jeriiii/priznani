@@ -1,0 +1,20 @@
+<div id="sendheart-dialog" >
+<!--	class="ajaxbox-popUp" data-ajaxbox-btn="#sendheart-button" data-ajaxbox-header-html="Poslat srdíčko"-->
+{if $canAfford}
+
+	<p>Srdíčko stojí {$heartPrice} zlaťáků.</p>
+	<p>Máte {$loggedUser->property->coins} zlaťáků</p>
+	<p>Opravdu chcete poslat srdíčko tomuto uživateli?</p>
+	<div class="buttons">
+	<a n:href="sendHeart!" class="btn-main" title="Poslat srdíčko!">Ano</a>
+	<a n:href="#" class="close" title="Neposílat srdíčko">Ne</a>
+	</div>
+
+{else}
+
+	<p>Srdíčko stojí {$heartPrice} zlaťáků.</p>
+	<p>Máte {$loggedUser->property->coins} zlaťáků</p>
+	<p>Bohužel nemáte dost zlaťáků na poslání tohoto srdíčka.</p>
+
+{/if}
+</div>

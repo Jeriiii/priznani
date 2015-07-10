@@ -21,7 +21,8 @@ use NetteExt\Helper\ShowUserDataHelper;
 use POS\Ext\LastActive;
 use POSComponent\Confirm;
 use POS\UserPreferences\StreamUserPreferences;
-use POS\UserPreferences\SearchUserPreferences;
+use POSComponent\SendHeartDialog;
+use Nette\DateTime;
 use UserBlock\UserBlocker;
 
 class ShowPresenter extends ProfilBasePresenter {
@@ -314,6 +315,14 @@ class ShowPresenter extends ProfilBasePresenter {
 	}
 
 	/**
+	 * Vrátí id uživatele, jehož profil je zobrazován.
+	 * @return type
+	 */
+	public function getUserID() {
+		return $this->userID;
+	}
+
+	/**
 	 * vykresluje template se vsemi fotky uzivateli
 	 * @param type $id
 	 */
@@ -403,6 +412,10 @@ class ShowPresenter extends ProfilBasePresenter {
 			$blockUser->setBtnClass('ui-btn');
 		}
 		return $blockUser;
+	}
+
+	protected function createComponentSendHeartDialog($name) {
+		return new SendHeartDialog($this->loggedUser, $this->userPropertyDao, $this->activitiesDao, $this, $name);
 	}
 
 	/**
