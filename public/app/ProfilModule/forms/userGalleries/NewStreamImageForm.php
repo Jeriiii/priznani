@@ -56,7 +56,9 @@ class NewStreamImageForm extends UserGalleryImagesBaseForm {
 
 		$this->addSubmit("submit", "Přidat fotky")->setAttribute('class', 'submit-button');
 
-
+		if ($this->deviceDetector->isMobile()) {
+			$this->onValidate[] = callback($this, 'errorsToFlashMessages');
+		}
 		$this->onSuccess[] = callback($this, 'submitted');
 		return $this;
 	}
