@@ -10,5 +10,7 @@
 		var selector = $(this).attr('data-confirm-href');
 		$(selector)[0].click();
 	});
+	
+	$('#popupAddProfilePhoto').css('display', 'block');
 });
 
