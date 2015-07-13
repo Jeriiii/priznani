@@ -22,10 +22,15 @@ use POS\Model\UserCategory;
 class AnonymousSearch extends BaseProjectControl {
 
 	private $users;
+	private $doNotRender = false;
 
 	public function __construct(SessionSection $regSession, UserDao $userDao, UserCategoryDao $userCategoryDao, $parent = NULL, $name = NULL) {
-		$this->users = $this->getUsers($regSession, $userDao, $userCategoryDao);
 		parent::__construct($parent, $name);
+		if (empty($regSession->type)) {
+			$this->doNotRender = true;
+			return;
+		}
+		$this->users = $this->getUsers($regSession, $userDao, $userCategoryDao);
 	}
 
 	private function getUsers($regSession, UserDao $userDao, UserCategoryDao $userCategoryDao) {
@@ -34,6 +39,9 @@ class AnonymousSearch extends BaseProjectControl {
 	}
 
 	public function render() {
+		if ($this->doNotRender) {
+			return;
+		}
 		$this->template->setFile(dirname(__FILE__) . '/anonymousSearch.latte');
 		$this->template->users = $this->users;
 		$this->template->render();
