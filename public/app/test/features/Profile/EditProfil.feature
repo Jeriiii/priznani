@@ -27,7 +27,7 @@ Feature: Edit user profile
 		And I select "leden" from "month"
 		And I select "1990" from "year"
 		And I press "frm-firstEditForm-send" 
-		Then I should see "Informace byla změněny"
+		Then I should see "Informace byly změněny"
 
 	Scenario Outline: User can change Identity info
 		Given I am signed in as "user@test.cz"

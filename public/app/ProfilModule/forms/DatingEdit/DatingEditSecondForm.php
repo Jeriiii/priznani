@@ -8,7 +8,7 @@ use Nette\ComponentModel\IContainer,
 use Nette\Database\Table\ActiveRow;
 use POS\Model\UserCategoryDao;
 
-class DatingEditFirstForm extends DatingRegistrationFirstForm {
+class DatingEditSecondForm extends DatingRegistrationSecondForm {
 
 	/**
 	 * @var \POS\Model\UserDao
@@ -31,17 +31,18 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 	 */
 	public $userCategoryDao;
 
-	public function __construct(UserCategoryDao $userCategoryDao, UserPropertyDao $userPropertyDao, UserDao $userDao, ActiveRow $user, $couple, IContainer $parent = NULL, $name = NULL) {
+	public function __construct(UserCategoryDao $userCategoryDao, UserPropertyDao $userPropertyDao, UserDao $userDao, IContainer $parent = NULL, $name = NULL) {
 		$this->userPropertyDao = $userPropertyDao;
-		$userProperty = $this->userPropertyDao->find($user->propertyID);
-		$this->couple = $couple;
 		$this->userCategoryDao = $userCategoryDao;
+		$this->userDao = $userDao;
 
-		parent::__construct($userDao, $parent, $name, $userProperty, $couple, FALSE);
+		parent::__construct($userDao, $parent, $name);
 
 		if (isset($this["type"])) {
 			unset($this["type"]);
 		}
+		$defaults = $userDao->findProperties($this->getPresenter()->getUser()->getId());
+		$this->setDefaults($defaults);
 
 		$this["send"]->caption = "Uložit";
 		$this["send"]->setAttribute("class", "btn-main medium button");
@@ -55,21 +56,7 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 		$this->id_user = $presenter->getUser()->getId();
 
 		$user = $this->userDao->find($this->id_user);
-
-		$values->age = $this->getAge($values);
-		if (!empty($this->couple)) {
-			$secondAge = $this->getSecondAge($values);
-		}
-		$values->vigor = $this->getVigor($values->age);
-
 		$this->userPropertyDao->update($user->propertyID, $values);
-
-		if (!empty($this->couple)) {
-			$this->couple->update(array(
-				"age" => $secondAge,
-				"vigor" => $this->getVigor($secondAge)
-			));
-		}
 
 		$property = $this->userPropertyDao->find($user->propertyID);
 		$this->userPropertyDao->updatePreferencesID($property, $this->userCategoryDao);
