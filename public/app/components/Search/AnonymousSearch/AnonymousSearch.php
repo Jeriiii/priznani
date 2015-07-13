@@ -14,9 +14,7 @@ namespace POSComponent\Search;
 use POS\Model\UserDao;
 use POSComponent\BaseProjectControl;
 use Nette\Http\SessionSection;
-use POS\Model\UserPropertyDao;
 use POS\Model\UserCategoryDao;
-use Nette\ArrayHash;
 use POS\Model\UserCategory;
 
 class AnonymousSearch extends BaseProjectControl {
