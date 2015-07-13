@@ -1,7 +1,7 @@
 Feature: Confessions form
 
 	Scenario Outline: User can post confession
-		Given I am on "/"
+		Given I am on "/priznaniosexu"
 		And I should see "Přiznání"
 		When I fill in "note" with "<text>"
 		And I press "frm-addConfessionForm-submit"
