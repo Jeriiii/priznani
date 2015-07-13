@@ -50,6 +50,12 @@ class RouteList extends \Nette\Application\Routers\RouteList {
 		//	'action' => 'advice',
 		//	'id' => '<id>'
 		//	));
+		$this[] = new Route('registrace[/<action>]', 'DatingRegistration:default');
+		$this[] = new Route('priznaniosexu', array(
+			'presenter' => 'OnePage',
+			'action' => 'default',
+			'priznani' => '1'
+			), Route::ONE_WAY);
 		$this[] = new Route('<presenter>/<action>[/<url>]', 'OnePage:default');
 	}
 

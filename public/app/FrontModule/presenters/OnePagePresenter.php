@@ -110,7 +110,10 @@ class OnePagePresenter extends BasePresenter {
 	public $rateImageDao;
 	private $userID;
 
-	public function actionDefault() {
+	public function actionDefault($priznani = NULL) {
+		if (!$this->getUser()->isLoggedIn() && empty($priznani)) {
+			$this->redirect(':DatingRegistration:');
+		}
 		$this->userID = $this->getUser()->getId();
 	}
 

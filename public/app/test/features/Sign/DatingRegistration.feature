@@ -1,7 +1,7 @@
 Feature: Dating registration
 
 	Scenario Outline: Registration of a couple 
-		Given I am on "/dating-registration/"
+		Given I am on "/registrace/"
 		When I select "<type>" from "type"
 		And I select "<day>" from "day"
 		And I select "<month>" from "month"
@@ -12,7 +12,7 @@ Feature: Dating registration
 		And I select "Pár" from "type"
 		And I press "send"
 		
-		Then I should be on "/dating-registration/second-reg-form"
+		Then I should be on "/registrace/second-reg-form"
 		When I fill in "<want_to_meet_men>" for "frm-secondRegForm-want_to_meet_men-1"
 		And I press "send"
 
@@ -25,7 +25,7 @@ Feature: Dating registration
 		And I press "send"
 
 		Then I should see "Partnerka"
-		And I should be on "/dating-registration/fourth-reg-form"
+		And I should be on "/registrace/fourth-reg-form"
 		When I select "ženatý / vdaná" from "marital_state"
 		And I select "bi" from "orientation"
 		And I select "160 - 170 cm" from "tallness"
