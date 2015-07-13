@@ -1,11 +1,11 @@
-<ul class="anonymous-search">
+<div class="anonymous-search form-window">
+	<h2 class="window-title">Lidé, které můžete potkat</h2>
+	<ul>
 	{foreach $users as $user}
 		<li>
-			{$user->user_name}
+			{$user|showProfMinDivNoLink}
 		</li>
 	{/foreach}
-	<li class="last">
-	</li>
-	<div class="clear"></div>
-</ul>
+	</ul>
+</div>
 
