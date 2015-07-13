@@ -75,7 +75,7 @@ class DatingEditFirstForm extends DatingRegistrationFirstForm {
 		$this->userPropertyDao->updatePreferencesID($property, $this->userCategoryDao);
 
 		$presenter->calculateLoggedUser();
-		$presenter->flashMessage("Informace byla změněny");
+		$presenter->flashMessage("Informace byly změněny.");
 		$presenter->redirect('this');
 	}
 
