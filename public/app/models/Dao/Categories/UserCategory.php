@@ -11,6 +11,7 @@ use POS\Model\UserCategoryDao;
 use Nette\Http\Session;
 use Nette\Http\SessionSection;
 use NetteExt\Serialize\Serializer;
+use Nette\ArrayHash;
 
 /**
  * Vrátí kategorie uživatelů, který daný uživatel hledá.
@@ -64,6 +65,19 @@ class UserCategory {
 	 */
 	public function calculate() {
 		$this->section->categories = null;
+	}
+
+	/**
+	 * Převede sešnu používanou ve registraci do ArrayHashe obsahujícího preference uživatele
+	 * @param SessionSection $session sešna k převedení
+	 * @return ArrayHash
+	 */
+	public static function sessionToArrayHash($session) {
+		$arrayHash = new ArrayHash();
+		foreach ($session as $key => $value) {
+			$arrayHash->offsetSet($key, $value);
+		}
+		return $arrayHash;
 	}
 
 }
