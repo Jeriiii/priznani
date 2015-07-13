@@ -34,7 +34,7 @@ $configurator->addConfig(__DIR__ . '/config/config.neon');
 
 $productionMode = !$configurator->isDebugMode();
 
-$configurator->addTestConfig($productionMode);
+$configurator->addTestConfig(__DIR__);
 $configurator->addEvents($productionMode);
 
 $container = $configurator->createContainer();
