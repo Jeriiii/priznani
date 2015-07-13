@@ -125,6 +125,10 @@ class EditPresenter extends ProfilBasePresenter {
 		return new Frm\DatingEditFirstForm($this->userCategoryDao, $this->userPropertyDao, $this->userDao, $user, $user->couple, $this, $name);
 	}
 
+	protected function createComponentSecondEditForm($name) {
+		return new Frm\DatingEditSecondForm($this->userCategoryDao, $this->userPropertyDao, $this->userDao, $this, $name);
+	}
+
 	protected function createComponentThirdEditForm($name) {
 		return new Frm\DatingEditThirdForm($this->userCategoryDao, $this->userPropertyDao, $this->userDao, $this, $name);
 	}
