@@ -5,39 +5,38 @@
  */
 
 /**
- * Komponenta pro hledání s nejlepší shodou obou uživatelů podle výsledů
- * z DB.
- *
- * @author Petr Kukrál
+ * Slouží pro vyhledávání pro nepřihlášené uživatele, když vyplňují registraci
+ * @author Jan Kotalík
  */
 
 namespace POSComponent\Search;
 
 use POS\Model\UserDao;
-use Nette\Database\Table\ActiveRow;
-use POS\UserPreferences\SearchUserPreferences;
-use Nette\Http\Session;
+use POSComponent\BaseProjectControl;
+use Nette\Http\SessionSection;
+use POS\Model\UserPropertyDao;
 use POS\Model\UserCategoryDao;
+use Nette\ArrayHash;
+use POS\Model\UserCategory;
 
-class BestMatchSearch extends BaseSearch {
+class AnonymousSearch extends BaseProjectControl {
 
-	public function __construct($loggedInUser, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session, $parent = NULL, $name = NULL) {
-		if (!($loggedInUser instanceof ActiveRow) && !($loggedInUser instanceof \Nette\ArrayHash)) {
-			throw new Exception("variable user must be instance of ActiveRow or ArrayHash");
-		}
+	private $users;
 
-		$users = $this->getBestUsers($loggedInUser, $userDao, $userCategoryDao, $session);
-		parent::__construct($users, $parent, $name);
+	public function __construct(SessionSection $regSession, UserDao $userDao, UserCategoryDao $userCategoryDao, $parent = NULL, $name = NULL) {
+		$this->users = $this->getUsers($regSession, $userDao, $userCategoryDao);
+		parent::__construct($parent, $name);
 	}
 
-	private function getBestUsers($loggedInUser, UserDao $userDao, UserCategoryDao $userCategoryDao, Session $session) {
-		$searchUser = new SearchUserPreferences($loggedInUser, $userDao, $userCategoryDao, $session);
-		$users = $searchUser->getBestUsers();
-		return $users;
+	private function getUsers($regSession, UserDao $userDao, UserCategoryDao $userCategoryDao) {
+		$mine = $userCategoryDao->getMine(UserCategory::sessionToArrayHash($regSession));
+		return $userDao->getByCategories($mine, 0);
 	}
 
-	public function render($mode) {
-		$this->renderBase($mode);
+	public function render() {
+		$this->template->setFile(dirname(__FILE__) . '/anonymousSearch.latte');
+		$this->template->users = $this->users;
+		$this->template->render();
 	}
 
 }
