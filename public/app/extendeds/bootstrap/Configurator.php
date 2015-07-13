@@ -34,19 +34,16 @@ class Configurator extends \Nette\Configurator {
 
 	/**
 	 * Přidá do kontajnetu testovací config, pokud je spuštěný testovací mód.
+	 * @param string $bootstrapPath Cesta k souboru bootstrap.php
 	 * @return TRUE = Je spušťen testovací mód, jinak FALSE.
 	 */
-	public function addTestConfig($productionMode) {
-		if ($productionMode) {
-			return FALSE;
-		}
-
+	public function addTestConfig($bootstrapPath) {
 		//pokud se automaticky testuje
 		$testing = (isset($_SERVER['TESTING']) && $_SERVER['TESTING']) ||
 			(isset($_SERVER['HTTP_X_TESTING']) && $_SERVER['HTTP_X_TESTING']);
 
 		if ($testing) {
-			$this->addConfig(__DIR__ . '/config/test.config.neon', FALSE);
+			$this->addConfig($bootstrapPath . '/config/test.config.neon', FALSE);
 		}
 
 		return $testing;
