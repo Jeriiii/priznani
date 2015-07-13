@@ -5,6 +5,7 @@ use POS\Model\UserDao;
 use Nette\Utils\Strings;
 use Nette\Mail\IMailer;
 use Nette\DateTime;
+use POSComponent\Search\AnonymousSearch;
 
 class DatingRegistrationPresenter extends BasePresenter {
 
@@ -176,6 +177,10 @@ class DatingRegistrationPresenter extends BasePresenter {
 
 	protected function createComponentFourthRegForm($name) {
 		return new Frm\DatingRegistrationFourthForm($this->userDao, $this->getRegSession(), $this->getRegSessionForCouple(), $this, $name);
+	}
+
+	protected function createComponentMatchingUsers($name) {
+		return new AnonymousSearch($this->getRegSession(), $this->userDao, $this->userCategoryDao, $this, $name);
 	}
 
 	/**

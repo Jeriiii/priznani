@@ -1,0 +1,21 @@
+<ul class="best-search">
+	{foreach $items as $item}
+		<li>
+			{if $mode == 'listAll'}
+				{$item|showProfSearch: array(':Profil:Show:default', 'id' => $item->id)}
+			{else}
+				{$item|showProfMinDiv: array(':Profil:Show:default', 'id' => $item->id)}
+			{/if}
+			{if $iterator->isLast() && ($mode == 'listMobile')}
+				<a href="{plink Search:Search:}" title="další..." class="more-btn"></a>
+			{/if}
+		</li>
+	{/foreach}
+	<li class="last">
+	{if ($mode == 'listFew')}
+		<a href="{plink Search:Search:}" title="další..." class="more-btn"></a>
+	{/if}
+	</li>
+	<div class="clear"></div>
+</ul>
+
