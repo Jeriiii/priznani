@@ -33,11 +33,25 @@ var MessagesWindow = React.createClass({
   }
 });
 
+var ProfilePhoto = React.createClass({
+  render: function () {
+    return (
+      <a href={this.props.profileLink} title={this.props.userName}>
+        <img src={this.props.profilePhotoUrl} />
+      </a>
+    );
+  }
+});
+
 var Message = React.createClass({
   render: function() {
     return (
       <div className="message">
-        {this.props.messageText}
+        <ProfilePhoto profileLink="#" userName="Leopold" profilePhotoUrl="http://localhost/priznani/public/www//images/users/man.jpg" />
+        <div className="messageArrow" />
+        <p className="messageText">
+          {this.props.messageText}
+        </p>
       </div>
     );
   }
