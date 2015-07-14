@@ -379,6 +379,13 @@ h2.slideTitle{
 	.scroll-to-btn{
 		margin-top: 20px;
 		width: 280px - @arrow-size;
+		
+		&.imageUnderText{
+			&:before{
+				right: (280px - @arrow-size) - 2 * @arrow-size;
+			}
+		}
+		
 	}
 }
 .title-sentence{
@@ -419,7 +426,17 @@ h2.slideTitle{
 	}
 	
 	&.arrowUp:before{
-		background-position: -71px 0;
+		background-position: -(@arrow-size) 0;
+	}
+	
+	&.imageUnderText{
+		text-align: center;
+		padding-right: 0;
+		&:before{
+			top: auto;
+			bottom: -71px; 
+			right: 250px - @arrow-size / 2;/* šířka okna - půlka šířky tlačítka */
+		}
 	}
 		
 	&.imageOnTheLeft{
