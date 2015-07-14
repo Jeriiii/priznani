@@ -33,10 +33,11 @@ var MessagesWindow = React.createClass({
   }
 });
 
+
 var ProfilePhoto = React.createClass({
   render: function () {
     return (
-      <a href={this.props.profileLink} title={this.props.userName}>
+      <a className="generatedProfile" href={this.props.profileLink} title={this.props.userName}>
         <img src={this.props.profilePhotoUrl} />
       </a>
     );
@@ -47,11 +48,13 @@ var Message = React.createClass({
   render: function() {
     return (
       <div className="message">
-        <ProfilePhoto profileLink="#" userName="Leopold" profilePhotoUrl="http://localhost/priznani/public/www//images/users/man.jpg" />
+        <ProfilePhoto profileLink="#" userName="Leopold" profilePhotoUrl="http://localhost/priznani/public/www/images/users/man.jpg" />
         <div className="messageArrow" />
         <p className="messageText">
           {this.props.messageText}
+          <span className="messageDatetime">14:47 10.07.</span>
         </p>
+        <div className="clear" />
       </div>
     );
   }
@@ -60,7 +63,7 @@ var Message = React.createClass({
 var LoadMoreButton = React.createClass({
   render: function() {
     return (
-      <a className="loadMoreButton">
+      <a className="loadMoreButton btn-main loadingbutton ui-btn">
         Načíst další zprávy
       </a>
     );
@@ -70,10 +73,14 @@ var LoadMoreButton = React.createClass({
 var NewMessageForm = React.createClass({
   render: function() {
     return (
-      <form className="newMessageForm">
-        <input type="text" />
-        <input type="button" value="Odeslat" />
-      </form>
+      <div className="newMessage">
+        <ProfilePhoto profileLink="#" userName="Leopold" profilePhotoUrl="http://localhost/priznani/public/www/images/users/man.jpg" />
+        <div className="messageArrow" />
+        <form>
+          <input type="text" />
+          <input type="button" className="btn-main medium button" value="Odeslat" />
+        </form>
+      </div>
     );
   }
 });

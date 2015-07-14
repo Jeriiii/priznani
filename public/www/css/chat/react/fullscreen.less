@@ -16,6 +16,89 @@
 	margin: 0;
 }
 
+#reactChatWindow{
+	width: 100%;
+	max-width: 500px;
+	
+	.messagesWindow{		
+		height: 500px;
+		padding: 10px 0 25px 0; 
+		overflow: auto;
+	}
+	
+	.message{
+		
+		width: 99%;
+		padding: 0.5% 0;
+		
+		.generatedProfile{
+			width: 8%;
+			float:left;
+		}
+		.messageText{
+			float:left;
+			width: 82%;
+			font-family: Helvetica;
+			min-height: 20px;
+			padding: 5px 15px;
+			.conversation-box();
+		}
+		
+		.messageDatetime{
+			display: block;
+			font-size: 10px;
+			color: #aaa;
+		}
+		
+	}
+	
+	.messageArrow{
+			width: 2%;
+			float:left;
+			width: 0; 
+			height: 0; 
+			position: relative;
+			top: 6px;
+			left: 1px;
+			border-top: 10px solid transparent;
+			border-bottom: 10px solid transparent;
+			border-right:10px solid #fff;
+	}
+	
+	
+	.newMessage{
+		overflow: hidden;
+		padding: 15px 0px 5px 0px;
+		
+		form{
+			float: left;
+			width: 82%;
+			padding: 0;
+			
+		}
+		
+		.generatedProfile{
+			float: left;
+			width: 8%;
+		}
+		
+		input[type='text']{
+			width: 96%;
+			font-size: 14px;
+			font-family: Helvetica;
+			padding: 10px 2%;
+			min-height: 30px; 
+			.conversation-box();
+		}
+		
+		input[type='button']{
+			height: 40px;
+			margin: 15px 0;
+		}
+		
+	}
+}
+
 @media (max-width: 1400px) {
 	.inner{
 		margin: 0 0 0 100px;
@@ -43,15 +126,14 @@
 }
 
 @media (max-width: 750px) {
-	.message-arrow{
+	.messageArrow{
 		display: none;
 	}
-	.message-text, .message-new-snippet{
+	.messageText, .newMessage form{
 		float: right !important;
-		width: 82% !important;
 	}
-	.message-new-snippet{
-		margin-right: 8%;
+	.newMessage form{
+		margin-right: 8% !important;
 	}
 }
 
@@ -60,12 +142,15 @@
 	#pagename span{
 		display: none;
 	}
-	.message-text, .message-new-snippet{
+	.messageText, .newMessage{
 		width: 75% !important;
+	}
+	.newMessage form{
+		margin-right: 4% !important;
 	}
 }
 @media (max-width: 450px) {
-	#snippet-valChatMessages-messageNewForm{
+	.newMessage form{
 			.controls{
 				float:left;
 				max-width: 57%;
@@ -74,11 +159,11 @@
 }
 
 @media (max-width: 320px) {
-	.message-text, .message-new-snippet{
+	.messageText, .newMessage{
 		width: 60% !important;
 	}
-	#snippet-valChatMessages-messageNewForm{
-			.controls{
+	.newMessage form{
+			.input[type="text"]{
 				float:left;
 				max-width: 50%;
 			}
