@@ -53,6 +53,7 @@ class ChatPresenter extends BasePresenter {
 		if ($this->blockedDao->isBlocked($userInChatID, $this->getUser()->getId())) {
 			$this->template->blockedMessage = ChatManager::USER_IS_BLOCKED_MESSAGE;
 		}
+		$this->template->production = $this->productionMode;
 	}
 
 	protected function createComponentConversation($name) {

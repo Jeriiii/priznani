@@ -1,5 +1,5 @@
 {block head}
-	{control css 'chat/chatstream.less'}
+	{control css 'chat/react/fullscreen.less'}
 {/}
 
 {block content}
@@ -11,24 +11,9 @@
 {/block}
 
 {block foot}
-{control js 'stream.js', 'chat/stream-chat-init.js'}
 
-<script>
-	$(document).ready(function () {
-		$("body").stream({
-			addoffset: 30,
-			offsetName: "conversation-offset",
-			msgElement: ".stream-info-message",
-			snippetName: "snippet-conversation-stream-messages",
-			msgText: "Žádné další konverzace nebyly nalezeny.",
-			fnAjaxSuccess: function(data, status) {
-				if (data.snippets['snippet-conversation-stream-messages'] != "") {
-					$("#chat-stream #stream").scrollTop(30 * 50);/* posunutí chat streamu o kus níž, když se načtou data */
-				}
-			},
-			autoLoadData: false
-		});
-	});
-</script>
+<script type="text/javascript" src="{$basePath}/js/react/react-0.13.3{if $production}.min{/if}.js" />
+{control js 'chat/react/build/reactChat.js'}
+
 
 {/block}

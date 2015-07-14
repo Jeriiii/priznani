@@ -36,7 +36,7 @@ abstract class ReactChat extends BaseChatComponent {
 	 * @return \POSComponent\Chat\StandardCommunicator
 	 */
 	protected function createComponentCommunicator() {
-		return new StandardCommunicator($this->chatManager);
+		return new ReactCommunicator($this->chatManager);
 	}
 
 }
