@@ -4,6 +4,7 @@ use POSComponent\Chat\MobileChat;
 use POSComponent\Stream\ChatStream;
 use POSComponent\Chat\MobileContactList;
 use POS\Chat\ChatManager;
+use POSComponent\Chat\React\ReactFullscreenChat;
 
 /**
  * Pro práci se zprávami přes celoou stránku
@@ -55,12 +56,7 @@ class ChatPresenter extends BasePresenter {
 	}
 
 	protected function createComponentConversation($name) {
-		$messages = $this->chatMessagesDao->getLastTextMessagesBetweenUsers($this->loggedUser->id, $this->userInChatID);
-
-		$chatStream = new ChatStream($this->chatManager, $this->chatMessagesDao, $this->loggedUser, $messages, 30, $this, $name);
-		$chatStream->setUserInChatID($this->userInChatID);
-
-		return $chatStream;
+		return new ReactFullscreenChat($this->chatManager, $this->loggedUser, $this, $name);
 	}
 
 	public function renderMobileConversations() {

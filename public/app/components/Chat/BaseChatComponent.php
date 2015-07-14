@@ -14,7 +14,7 @@ use POSComponent\BaseProjectControl;
  *
  * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
  */
-abstract class BaseChatComponent extends BaseProjectControl implements IContactList {
+abstract class BaseChatComponent extends BaseProjectControl {
 
 	/**
 	 * chat manager
@@ -25,8 +25,8 @@ abstract class BaseChatComponent extends BaseProjectControl implements IContactL
 	/**
 	 * Standardni konstruktor, predani sluzby chat manageru
 	 */
-	function __construct(ChatManager $manager) {
-		parent::__construct();
+	function __construct(ChatManager $manager, $parent = NULL, $name = NULL) {
+		parent::__construct($parent, $name);
 		$this->chatManager = $manager;
 	}
 
