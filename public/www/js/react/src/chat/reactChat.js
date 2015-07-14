@@ -8,25 +8,66 @@
 /***********  DEFINICE  ***********/
 var rootElement = document.getElementById('reactChatWindow');
 
-var messagesWindow = React.createClass({
+var ChatWindow = React.createClass({
+  render: function () {
+    return (
+      <div className="chatWindow">
+        <MessagesWindow />
+        <NewMessageForm />
+      </div>
+    )
+  }
+});
+
+var MessagesWindow = React.createClass({
   render: function() {
     return (
-      React.createElement('div', {className: "messagesWindow"})
+      <div className="messagesWindow">
+        <LoadMoreButton />
+        <Message messageText="Lorem ipsum dolor sit amet." />
+        <Message messageText="Lorem ipsum dolor sit amet." />
+        <Message messageText="Lorem ipsum dolor sit amet." />
+        <Message messageText="Lorem ipsum dolor sit amet." />
+      </div>
     );
   }
 });
 
-var message = React.createClass({
+var Message = React.createClass({
   render: function() {
     return (
-      <div className="message"></div>
+      <div className="message">
+        {this.props.messageText}
+      </div>
+    );
+  }
+});
+
+var LoadMoreButton = React.createClass({
+  render: function() {
+    return (
+      <a className="loadMoreButton">
+        Načíst další zprávy
+      </a>
+    );
+  }
+});
+
+var NewMessageForm = React.createClass({
+  render: function() {
+    return (
+      <form className="newMessageForm">
+        <input type="text" />
+        <input type="button" value="Odeslat" />
+      </form>
     );
   }
 });
 
 
 /***********  RENDER  ***********/
+
 React.render(
-  <messagesWindow />,
+  <ChatWindow />,
   rootElement
 );
