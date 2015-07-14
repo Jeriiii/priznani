@@ -40,5 +40,5 @@ app/test/sql/featurestart/*
 app/test/sql/featureend/*
 !app/test/sql/featureend/.gitkeep
 app/test/config/behat.local.yml
-
+.module-cache
 nbproject/licenseheader.txt
