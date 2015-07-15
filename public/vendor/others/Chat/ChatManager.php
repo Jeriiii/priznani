@@ -30,6 +30,9 @@ class ChatManager extends \Nette\Object {
 	const USER_IS_BLOCKING_RETCODE = 6543; /* náhodně zvolené číslo */
 	const USER_IS_BLOCKING_MESSAGE = 'Tohoto uživatele blokujete. Chcete-li mu poslat zprávu, musíte jej odblokovat.';
 
+	/** Počet vrácených zpráv při zjišťování posledních zpráv * */
+	const COUNT_OF_LAST_MESSAGES = 6;
+
 	/**
 	 * DAO pro blokované uživatele
 	 * @var UserBlockedDao
@@ -169,7 +172,7 @@ class ChatManager extends \Nette\Object {
 	 * @return \Nette\Database\Table\Selection zprávy
 	 */
 	public function getLastMessagesBetween($idSender, $idRecipient) {
-		return $this->messagesDao->getLastTextMessagesBetweenUsers($idSender, $idRecipient, 6);
+		return $this->messagesDao->getLastTextMessagesBetweenUsers($idSender, $idRecipient, self::COUNT_OF_LAST_MESSAGES);
 	}
 
 	/**

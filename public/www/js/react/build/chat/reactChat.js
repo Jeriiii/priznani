@@ -5,12 +5,26 @@
 
 /* global React *//* aby Netbeans nevyhazoval chyby kvůli nedeklarované proměnné */
 
-/***********  DEFINICE  ***********/
+/***********  NASTAVENÍ  ***********/
 
-var reactSendMessageLink = document.getElementById('reactChatSendMessageLink').href;
-var reactRefreshMessagesLink = document.getElementById('reactChatRefreshMessagesLink').href;
-var reactLoadMessagesLink = document.getElementById('reactChatLoadMessagesLink').href;
-var parametersPrefix = document.getElementById('reactChatSendMessageLink').dataset.parprefix;
+/** Odkazy ke komunikaci */
+var reactSendMessage = document.getElementById('reactChatSendMessageLink');
+var reactRefreshMessages = document.getElementById('reactChatRefreshMessagesLink');
+var reactLoadMessages = document.getElementById('reactChatLoadMessagesLink');
+/* k poslání zprávy*/
+var reactSendMessageLink = reactSendMessage.href;
+/* k pravidelnému dotazu na zprávy */
+var reactRefreshMessagesLink = reactRefreshMessages.href;
+/* k dotazu na načtení zpráv, když nemám zatím žádné (typicky poslední zprávy mezi uživateli) */
+var reactLoadMessagesLink = reactLoadMessages.href;
+/** prefix před parametry do url */
+var parametersPrefix = reactSendMessage.dataset.parprefix;
+/** obvyklý počet příchozích zpráv v odpovědi u pravidelného a iniciálního požadavku (aneb kolik zpráv mi přijde, když jich je na serveru ještě dost) */
+var usualRefreshMessagesCount = reactRefreshMessages.dataset.maxmessages;
+var usualLoadMessagesCount = reactLoadMessages.dataset.maxmessages;
+
+
+/***********  DEFINICE  ***********/
 
 var ChatWindow = React.createClass({displayName: "ChatWindow",
   render: function () {
@@ -97,7 +111,7 @@ var NewMessageForm = React.createClass({displayName: "NewMessageForm",
 });
 
 
-/***********  COMMUNICATION  ***********/
+/***********  KOMUNIKACE (jQuery) ***********/
 
 /**
  * Získá ze serveru posledních několik proběhlých zpráv s uživatelem s daným id
@@ -112,6 +126,8 @@ var getInitialMessages = function(component, userCodedId, callback){
       callback(component, userCodedId, result);
   });
 };
+
+/***********  CALLBACK FUNKCE  ***********/
 
 /**
  * Nastaví zprávy ze standardního JSONu chatu (viz dokumentace) do state předané komponenty.

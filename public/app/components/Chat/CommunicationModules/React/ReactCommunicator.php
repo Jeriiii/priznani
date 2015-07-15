@@ -7,6 +7,7 @@
 namespace POSComponent\Chat\React;
 
 use POSComponent\Chat\StandardCommunicator;
+use POS\Chat\ChatManager;
 
 /**
  * Slouží přímo ke komunikaci mezi serverem a prohlížečem, zpracovává
@@ -23,6 +24,8 @@ class ReactCommunicator extends StandardCommunicator {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/react.latte');
 		$template->paramsPrefix = $this->uniqueId . "-";
+		$template->maxMessages = ChatManager::COUNT_OF_LAST_MESSAGES;
+		$template->initialMaxMessages = ChatManager::COUNT_OF_LAST_MESSAGES;
 		$template->render();
 	}
 
