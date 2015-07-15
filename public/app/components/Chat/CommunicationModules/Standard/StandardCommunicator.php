@@ -112,6 +112,17 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	}
 
 	/**
+	 * Vrátí zprávy mezi přihlášeným a daným uživatelem, starší než zpráva s předaným id
+	 * @param type $lastId
+	 * @param type $withUserId
+	 */
+	public function handleGetOlderMessages($lastId, $withUserId) {
+		$toId = (int) $this->chatManager->getCoder()->decodeData($withUserId); //dekodovani id
+		$messages = $this->chatManager->getOlderMessagesBetween($lastId, ChatManager::COUNT_OF_LAST_MESSAGES, $this->getPresenter()->getUser()->getId(), $toId);
+		$this->getPresenter()->sendJson($this->prepareResponseArray($messages));
+	}
+
+	/**
 	 * Vezme pole odpovědi a k danému uživateli, se kterým si píšu, zaregistruje žádost
 	 * o potvrzení přijetí poslední zprávy, pokud je tato zpráva odeslána přihlášeným uživatelem
 	 * @param int $userId id uživatele, se kterým si píšu
@@ -171,7 +182,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * @param Selection $messages vyber z tabulky chat_messages
 	 * @return array pole ve formatu pro JSON ve tvaru dokumentace chatu
 	 */
-	private function prepareResponseArray($messages) {
+	protected function prepareResponseArray($messages) {
 		$responseArray = array();
 		foreach ($messages as $message) {
 			$userId = $this->getRelatedUserId($message);

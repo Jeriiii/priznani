@@ -30,8 +30,11 @@ class ChatManager extends \Nette\Object {
 	const USER_IS_BLOCKING_RETCODE = 6543; /* náhodně zvolené číslo */
 	const USER_IS_BLOCKING_MESSAGE = 'Tohoto uživatele blokujete. Chcete-li mu poslat zprávu, musíte jej odblokovat.';
 
-	/** Počet vrácených zpráv při zjišťování posledních zpráv * */
-	const COUNT_OF_LAST_MESSAGES = 6;
+	/** Maximální počet vrácených zpráv při zjišťování posledních zpráv. Pokud je dosažen tento počet, zobrazí se o jednu zprávu méně. * */
+	const COUNT_OF_LAST_MESSAGES = 7;
+
+	/** Maximální počet vrácených zpráv při donačítání starších zpráv. Pokud je dosažen tento počet, zobrazí se o jednu zprávu méně. * */
+	const COUNT_OF_MORE_MESSAGES = 7;
 
 	/**
 	 * DAO pro blokované uživatele
