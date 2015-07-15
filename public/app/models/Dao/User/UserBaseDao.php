@@ -125,7 +125,7 @@ abstract class UserBaseDao extends AbstractDao {
 		return array(
 			'Věk' => self::getAge($user->age),
 			'Výška' => UserBaseDao::getTranslateUserTallness($user->tallness),
-			'Typ těla' => UserBaseDao::getTranslateUserShape($user->shape),
+			'Postava' => UserBaseDao::getTranslateUserShape($user->shape),
 			'Kouřeni cigaret' => UserBaseDao::getTranslateUserHabit($user->smoke),
 			'Pití alkoholu' => UserBaseDao::getTranslateUserHabit($user->drink),
 			'Vzdělání' => UserBaseDao::getTranslateUserGraduation($user->graduation),

@@ -10,7 +10,7 @@ Feature: User's info
 		And I should see "O mně <about>"
 		And I should see "Věk <age>"
 		And I should see "Výška <tallness>"
-		And I should see "Typ těla <bodyType>"
+		And I should see "Postava <bodyType>"
 		And I should see "Kouřeni cigaret <smoking>"
 		And I should see "Pití alkoholu <alcohol>"
 		And I should see "Vzdělání <education>"
