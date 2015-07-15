@@ -7,7 +7,7 @@
 			<a n:href="newReaded! newID => $newInfo->id" class="btn-main btn-small">PŘEČTENO</a>
 		</div>
 	{/if}
-	{if $user->isLoggedIn() && $loggedUser->property->showIntim == null && $loggedUser->property->type == 2} {* žena *}
+	{if $user->isLoggedIn() && $loggedUser->property->showIntim === null && $loggedUser->property->type == 2} {* žena *}
 		<div style="background-color: white;">
 		{control setInitimityForm}
 		</div>
