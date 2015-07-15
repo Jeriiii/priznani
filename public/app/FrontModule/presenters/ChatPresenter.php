@@ -36,10 +36,20 @@ class ChatPresenter extends BasePresenter {
 	}
 
 	public function renderMobileDefault($userInChatID) {
+		if (empty($userInChatID)) {
+			$this->flashMessage('Nejdříve vyberte uživatele, se kterým si chcete povídat');
+			$this->redirect('Chat:conversations');
+		}
+
 		$this->defaultRenderDefault($userInChatID);
 	}
 
 	public function renderDefault($userInChatID) {
+		if (empty($userInChatID)) {
+			$this->flashMessage('Nejdříve vyberte uživatele, se kterým si chcete povídat');
+			$this->redirect(':OnePage:');
+		}
+
 		$this->defaultRenderDefault($userInChatID);
 	}
 
