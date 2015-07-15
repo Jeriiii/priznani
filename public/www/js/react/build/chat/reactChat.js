@@ -20,19 +20,30 @@ var ChatWindow = React.createClass({displayName: "ChatWindow",
 });
 
 var MessagesWindow = React.createClass({displayName: "MessagesWindow",
+  getInitialState: function() {
+    return {messages: [] };
+  },
+  componentDidMount: function() {
+    this.setState(
+      {messages: [
+        { id: 1, text: "Blably blably bla bla bly bla."},
+        { id: 2, text: "Blably blably bla bla bly bla2."}
+      ]
+      });
+  },
   render: function() {
+    var messages = this.state.messages;
     return (
       React.createElement("div", {className: "messagesWindow"}, 
         React.createElement(LoadMoreButton, null), 
-        React.createElement(Message, {messageText: "Lorem ipsum dolor sit amet."}), 
-        React.createElement(Message, {messageText: "Lorem ipsum dolor sit amet."}), 
-        React.createElement(Message, {messageText: "Lorem ipsum dolor sit amet."}), 
-        React.createElement(Message, {messageText: "Lorem ipsum dolor sit amet."})
+        messages.map(function(message){
+            return React.createElement(Message, {key: message.id, messageData: message});
+        })
+        
       )
     );
   }
 });
-
 
 var ProfilePhoto = React.createClass({displayName: "ProfilePhoto",
   render: function () {
@@ -46,12 +57,13 @@ var ProfilePhoto = React.createClass({displayName: "ProfilePhoto",
 
 var Message = React.createClass({displayName: "Message",
   render: function() {
+    var message = this.props.messageData;
     return (
       React.createElement("div", {className: "message"}, 
         React.createElement(ProfilePhoto, {profileLink: "#", userName: "Leopold", profilePhotoUrl: "http://localhost/priznani/public/www/images/users/man.jpg"}), 
         React.createElement("div", {className: "messageArrow"}), 
         React.createElement("p", {className: "messageText"}, 
-          this.props.messageText, 
+          message.text, 
           React.createElement("span", {className: "messageDatetime"}, "14:47 10.07.")
         ), 
         React.createElement("div", {className: "clear"})
@@ -92,3 +104,8 @@ React.render(
   React.createElement(ChatWindow, null),
   rootElement
 );
+
+/***********  COMMUNICATION  ***********/
+;$(function(){
+
+});

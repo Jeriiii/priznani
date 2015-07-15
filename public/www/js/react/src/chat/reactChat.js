@@ -20,19 +20,30 @@ var ChatWindow = React.createClass({
 });
 
 var MessagesWindow = React.createClass({
+  getInitialState: function() {
+    return {messages: [] };
+  },
+  componentDidMount: function() {
+    this.setState(
+      {messages: [
+        { id: 1, text: "Blably blably bla bla bly bla."},
+        { id: 2, text: "Blably blably bla bla bly bla2."}
+      ]
+      });
+  },
   render: function() {
+    var messages = this.state.messages;
     return (
       <div className="messagesWindow">
         <LoadMoreButton />
-        <Message messageText="Lorem ipsum dolor sit amet." />
-        <Message messageText="Lorem ipsum dolor sit amet." />
-        <Message messageText="Lorem ipsum dolor sit amet." />
-        <Message messageText="Lorem ipsum dolor sit amet." />
+        {messages.map(function(message){
+            return <Message key={message.id} messageData={message} />;
+        })
+        }
       </div>
     );
   }
 });
-
 
 var ProfilePhoto = React.createClass({
   render: function () {
@@ -46,12 +57,13 @@ var ProfilePhoto = React.createClass({
 
 var Message = React.createClass({
   render: function() {
+    var message = this.props.messageData;
     return (
       <div className="message">
         <ProfilePhoto profileLink="#" userName="Leopold" profilePhotoUrl="http://localhost/priznani/public/www/images/users/man.jpg" />
         <div className="messageArrow" />
         <p className="messageText">
-          {this.props.messageText}
+          {message.text}
           <span className="messageDatetime">14:47 10.07.</span>
         </p>
         <div className="clear" />
@@ -92,3 +104,8 @@ React.render(
   <ChatWindow />,
   rootElement
 );
+
+/***********  COMMUNICATION  ***********/
+;$(function(){
+
+});
