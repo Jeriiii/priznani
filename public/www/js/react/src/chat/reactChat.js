@@ -7,11 +7,16 @@
 
 /***********  DEFINICE  ***********/
 
+var reactSendMessageLink = document.getElementById('reactChatSendMessageLink').href;
+var reactRefreshMessagesLink = document.getElementById('reactChatRefreshMessagesLink').href;
+var reactLoadMessagesLink = document.getElementById('reactChatLoadMessagesLink').href;
+var parametersPrefix = document.getElementById('reactChatSendMessageLink').dataset.parprefix;
+
 var ChatWindow = React.createClass({
   render: function () {
     return (
       <div className="chatWindow">
-        <MessagesWindow />
+        <MessagesWindow userCodedId={this.props.userCodedId} />
         <NewMessageForm />
       </div>
     )
@@ -23,12 +28,7 @@ var MessagesWindow = React.createClass({
     return {messages: [] };
   },
   componentDidMount: function() {
-    this.setState(
-      {messages: [
-        { id: 1, text: "Blably blably bla bla bly bla."},
-        { id: 2, text: "Blably blably bla bla bly bla2."}
-      ]
-      });
+    getInitialMessages(this, this.props.userCodedId, setDataIntoComponent);
   },
   render: function() {
     var messages = this.state.messages;
@@ -98,6 +98,27 @@ var NewMessageForm = React.createClass({
 
 
 /***********  COMMUNICATION  ***********/
-;$(function(){
 
-});
+/**
+ * Získá ze serveru posledních několik proběhlých zpráv s uživatelem s daným id
+ * @param  {ReactClass} component komponenta, která si vyžádala data
+ * @param  {int}   userCodedId kódované id uživatele
+ * @param  {Function} callback    funkce, která se zavolá při obdržení odpovědi
+ */
+var getInitialMessages = function(component, userCodedId, callback){
+  var data = {};
+	data[parametersPrefix + 'fromId'] = userCodedId;
+  $.getJSON(reactChatLoadMessagesLink, data, function(result){
+      callback(component, userCodedId, result);
+  });
+};
+
+/**
+ * Nastaví zprávy ze standardního JSONu chatu (viz dokumentace) do state předané komponenty.
+ * @param  {ReactClass} component komponenta
+ * @param  {int} userCodedId id uživatele, od kterého chci načíst zprávy
+ * @param  {json} jsonData  data ze serveru
+ */
+var setDataIntoComponent = function(component, userCodedId, jsonData){
+  component.setState(jsonData[userCodedId]);
+};

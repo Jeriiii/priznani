@@ -22,6 +22,7 @@ class ReactCommunicator extends StandardCommunicator {
 	public function render() {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/react.latte');
+		$template->paramsPrefix = $this->uniqueId . "-";
 		$template->render();
 	}
 
