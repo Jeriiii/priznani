@@ -8,8 +8,7 @@ Feature: Homepage testing
 
 	  Examples:
 		 | link				| page					|
-		 | EDITOVAT PROFIL	| /profil.edit/			|
-		 | MŮJ PROFIL		| /profil.show/			|
-		 | MOJE GALERIE		| /profil.galleries/	|
-		 | VYTVOŘIT GALERII	| /profil.galleries/user-gallery-new	|
+		 | Editovat profil	| /profil.edit/			|
+		 | Můj profil		| /profil.show/			|
+		 | Moje galerie		| /profil.galleries/	|
 

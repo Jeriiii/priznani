@@ -27,6 +27,15 @@ $(document).ready(function() {
 				var tab = $(this).parents('.ui-tabs-panel');
 				$('a.ui-tabs-anchor[href="#' + tab.attr('id') + '"]').trigger('click');/* najde příslušné tlačítko a klikne na něj*/
 			});
+			/* script, který přepne kartu na nahrání fotek, když se zmáčkne příslušné tlačítko v pravém menu */
+			$('#show-photo-form').click(function() {
+				$('#ui-id-3').trigger('click');
+				
+				var blackBackground = document.getElementById("activeBackgroundUploadPhoto");
+				
+				blackBackground.style.width = "100px";
+				blackBackground.style.height = "100px";
+			});
 		}
 	});
 	

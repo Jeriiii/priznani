@@ -163,23 +163,22 @@
 		}
 		
 		a.with-counter{
-			display: inline-block;
-			padding: 2px 4px 2px 4px;
+			padding: 0px 4px 0px 4px;
 			
 			span{
 				display: inline-block;
 				width: 28px;
 			}
 		}
-		@icon-size: 30px;
+		@icon-size: 28px;
 		@icon-margin: 12px;
 		a{
 			display: block;
 			color: black;
-			padding: 2px 4px 2px 32px;
+			padding: 0px 4px 0px 32px;
 			font-size: 12px;
-			line-height: @icon-size;
-			background-size: 30px;
+			line-height: @icon-size - 6;
+			background-size: @icon-size;
 			overflow: hidden;
 			background-position: left center;
 			background-color: transparent;
@@ -188,25 +187,39 @@
 			background-position: 200px 200px;
 			
 			&.add-friend{
-				background-position: 0 (-4*@icon-size + @icon-margin - 4);
+				background-position: 0 (-4*@icon-size + @icon-margin - 7);
+				font-weight: bold;
+				color: #cf0707;
 			}
 			&.add-gallery{
-				background-position: 0 (-3*@icon-size + @icon-margin - 4);
+				background-position: 0 (-3*@icon-size + @icon-margin - 7);
 			}
 			&.cross{
-				background-position: 0 (-4*@icon-size + @icon-margin - 4);
+				background-position: 0 (-5*@icon-size + @icon-margin - 7);
 			}
 			&.edit{
-				background-position: 0 (-1*@icon-size + @icon-margin - 4);
+				background-position: 0 (-1*@icon-size + @icon-margin - 7);
 			}
 			&.friends{
-				background-position: 0 (0*@icon-size + @icon-margin - 4);
+				background-position: 0 (0*@icon-size + @icon-margin - 7);
 			}
 			&.profile{
-				background-position: 0 (-5*@icon-size + @icon-margin - 4);
+				background-position: 0 (-5*@icon-size + @icon-margin - 7);
+			}
+			&:hover{
+				background-color: #DFDFDF;
 			}
 			
 		}
-	}
-    
+		h5{
+			color: #9197a3;
+			font-size: 11px;
+			text-transform: uppercase;
+			font-weight: bold;
+			font-family: Helvetica;
+			margin-top: 15px;
+			margin-bottom: 3px;
+		}
+	}    
 }
+
