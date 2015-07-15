@@ -208,6 +208,23 @@ class ChatMessagesDao extends AbstractDao {
 	}
 
 	/**
+	 * Nastaví všechny zprávy starší než dané id (včetně) od daného uživatele jako přečtené
+	 * @param int $idFrom id uživatele, se kterým si píšu
+	 * @param int $idRecipient id přihlášeného uživatele (pro jistotu)
+	 * @param int $lastId id nejnovější přečtené zprávy
+	 * @param int $readed  přečtená/nepřečtená
+	 * @return Nette\Database\Table\Selection upravené zprávy
+	 */
+	public function setOlderMessagesFromUserReaded($idFrom, $idRecipient, $lastId, $readed) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID_SENDER, $idFrom);
+		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
+		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
+		$sel->where(self::COLUMN_ID . " <= ?", $lastId);
+		return $this->setSelectionReaded($sel, $readed);
+	}
+
+	/**
 	 * Vrátí úplně všechny nepřečtené příchozí zprávy daného uživatele
 	 * @param int $idRecipient id uživatele, kterému mají zprávy přijít
 	 * @return Nette\Database\Table\Selection příchozí zprávy
@@ -255,6 +272,27 @@ class ChatMessagesDao extends AbstractDao {
 
 		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
 
+		return $sel;
+	}
+
+	/**
+	 * Vrátí určitý počet zpráv mezi dvěma uživateli starší než daná zpráva.
+	 * @param int $lastMessageId id dané zprávy
+	 * @param int $idUser1 odesílatel/příjemce zpráv
+	 * @param int $idUser2 odesílatel/příjemce zpráv
+	 * @param int $limit kolik maximálně zpráv bude vráceno
+	 * @return Nette\Database\Table\Selection zprávy
+	 */
+	public function getOlderMessagesBetween($lastMessageId, $idUser1, $idUser2, $limit) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID . ' < ?', $lastMessageId);
+		/* vybere zprávy mezi dvěma uživateli */
+		$sel->where(self::COLUMN_ID_SENDER . ' = ? AND ' . self::COLUMN_ID_RECIPIENT . ' = ? OR ' .
+			self::COLUMN_ID_RECIPIENT . ' = ? AND ' . self::COLUMN_ID_SENDER . ' = ? ', $idUser1, $idUser2, $idUser1, $idUser2);
+
+		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
+		$sel->order(self::COLUMN_ID . ' DESC');
+		$sel->limit($limit);
 		return $sel;
 	}
 

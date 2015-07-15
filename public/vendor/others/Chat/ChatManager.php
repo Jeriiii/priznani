@@ -176,6 +176,18 @@ class ChatManager extends \Nette\Object {
 	}
 
 	/**
+	 * Vrátí zprávy starší než ta s daným id
+	 * @param int $lastId id nejstarší známé zprávy
+	 * @param int $limit maximální počet vrácených zpráv
+	 * @param int $idUser1 id prvního uživatele
+	 * @param int idUser2 id druhého uživatele
+	 * @return \Nette\Database\Table\Selection zprávy
+	 */
+	public function getOlderMessagesBetween($lastId, $limit, $idUser1, $idUser2) {
+		return $this->messagesDao->getOlderMessagesBetween($lastId, $idUser1, $idUser2, $limit);
+	}
+
+	/**
 	 * Vrátí instanci Coderu k použití
 	 * @return ChatCoder
 	 */
@@ -226,6 +238,18 @@ class ChatManager extends \Nette\Object {
 			}
 		}
 		return $this->messagesDao->setAllOlderMessagesReaded($maxId, $idUser, $readed);
+	}
+
+	/**
+	 * Nastaví všechny zprávy starší než dané id (včetně) od daného uživatele jako přečtené
+	 * @param int $idFrom id uživatele, se kterým si píšu
+	 * @param int $idRecipient id přihlášeného uživatele (pro jistotu)
+	 * @param int $lastId id nejnovější přečtené zprávy
+	 * @param int $readed  přečtená/nepřečtená
+	 * @return Nette\Database\Table\Selection upravené zprávy
+	 */
+	public function setOlderMessagesFromUserReaded($idFrom, $idRecipient, $lastId, $readed) {
+		return $this->messagesDao->setOlderMessagesFromUserReaded($idFrom, $idRecipient, $lastId, $readed);
 	}
 
 	/**
