@@ -110,11 +110,23 @@ class OnePagePresenter extends BasePresenter {
 	public $rateImageDao;
 	private $userID;
 
+	/*	 * **** počty aktualit v menu ******* */
+	public $countVerificationRequests;
+	public $countFriendRequests;
+	public $countSexy;
+
 	public function actionDefault($priznani = NULL) {
 		if (!$this->getUser()->isLoggedIn() && empty($priznani)) {
 			$this->redirect(':DatingRegistration:');
 		}
 		$this->userID = $this->getUser()->getId();
+
+		/* počty aktualit v menu */
+		//$this->countVerificationRequests = $this->verificationPhotoDao->findByUserID($this->user->id)->count();
+		if (!$this->deviceDetector->isMobile() && $this->getUser()->isLoggedIn()) {/* pokud nejsem na mobilu, údaje se nepředají */
+			$this->countFriendRequests = $this->friendRequestDao->getAllToUser($this->getUser()->id)->count();
+			$this->countSexy = $this->youAreSexyDao->countToUser($this->getUser()->id);
+		}
 	}
 
 	public function renderDefault() {
@@ -124,13 +136,8 @@ class OnePagePresenter extends BasePresenter {
 			$this->template->profilePhoto = $this->loggedUser->profilFotoID;
 			$this->template->loggedUser = $this->loggedUser;
 
-			if (!$this->deviceDetector->isMobile() && $this->getUser()->isLoggedIn()) {/* pokud nejsem na mobilu, údaje se nepředají z presenteru */
-				$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->getUser()->id)->count();
-				$this->template->countSexy = $this->youAreSexyDao->countToUser($this->getUser()->id);
-			}
-
 			$this->template->isUserPaying = $this->paymentDao->isUserPaying($this->userID);
-			$this->template->countVerificationRequests = $this->verificationPhotoDao->findByUserID($this->user->id)->count();
+
 			if ($this->getUser()->isLoggedIn()) {
 				$this->template->sexyLabelToolTip = "Hodnost podle počtu - JE SEXY <br />" . ShowUserDataHelper::getLabelInfoText($this->loggedUser->property->type);
 			}

@@ -124,6 +124,54 @@ class PagePresenter extends BasePresenter {
 		$this->includeThread($this, $order);
 	}
 
+	protected function createComponentOrders($name) {
+		$nav = new Navigation($this, $name);
+		$filters = array(
+			"nejaktivnější" => "active",
+			"nejnovější" => "news",
+			"nejoblíbenější" => "likes",
+			"nejkomentovanější" => "comments"
+		);
+
+		foreach ($filters as $name => $link) {
+			$param = array("order" => $link);
+			$article = $nav->add($name, $this->link("this", $param));
+			if (array_key_exists("order", $_GET)) {
+				if ($_GET["order"] == $link) {
+					$nav->setCurrentNode($article);
+				}
+			} else {
+				if ($link == "active") {
+					$nav->setCurrentNode($article);
+				}
+			}
+		}
+	}
+
+	protected function createComponentTopMenu($name) {
+		$nav = new Navigation($this, $name);
+		$filters = array(
+			"nejaktivnější" => "active",
+			"nejnovější" => "news",
+			"nejoblíbenější" => "likes",
+			"nejkomentovanější" => "comments"
+		);
+
+		foreach ($filters as $name => $link) {
+			$param = array("order" => $link);
+			$article = $nav->add($name, $this->link("this", $param));
+			if (array_key_exists("order", $_GET)) {
+				if ($_GET["order"] == $link) {
+					$nav->setCurrentNode($article);
+				}
+			} else {
+				if ($link == "active") {
+					$nav->setCurrentNode($article);
+				}
+			}
+		}
+	}
+
 	public function actionNaturalScience() {
 		$this->flashMessage("Videa Přírodovědy s Alex již nejsou na Datenode");
 		$this->redirect("Page:metro");

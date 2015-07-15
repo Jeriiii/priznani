@@ -7,23 +7,17 @@
  *
  * @author	Petr Kukrál
  */
-use Nette\Application\UI\Form as Frm,
-	\Navigation\Navigation,
-	\Nette\Utils\Strings,
-	Nette\Http\Url,
-	Nette\Http\Request;
-use Nette\Security\User;
-use POS\Ajax\ExampleHandle,
-	POS\Ajax\AjaxCrate,
-	POS\Ajax\ChatConversationsHandle;
+use Nette\Application\UI\Form as Frm;
+use \Navigation\Navigation;
+use POS\Ajax\AjaxCrate;
+use POS\Ajax\ChatConversationsHandle;
 use POS\Ajax\ActivitesHandle;
 use POSComponent\Payment;
-use NetteExt\Serialize\Serializer;
-use NetteExt\Serialize\Relation;
-use POS\Model\PaymentDao;
-use Nette\Http\SessionSection;
 use NetteExt\Session\SessionManager;
 use NetteExt\Session\UserSession;
+use POS\Ext\Menu\OnePageLeft\Menu;
+use POS\Ext\Menu\OnePageLeft\Item;
+use POS\Ext\Menu\OnePageLeft\Group;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -143,54 +137,6 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$this->template->ajaxObserverLink = $this->link('ajaxRefresh!'); //odkaz pro ajaxObserver na pravidelne pozadavky
 	}
 
-	protected function createComponentOrders($name) {
-		$nav = new Navigation($this, $name);
-		$filters = array(
-			"nejaktivnější" => "active",
-			"nejnovější" => "news",
-			"nejoblíbenější" => "likes",
-			"nejkomentovanější" => "comments"
-		);
-
-		foreach ($filters as $name => $link) {
-			$param = array("order" => $link);
-			$article = $nav->add($name, $this->link("this", $param));
-			if (array_key_exists("order", $_GET)) {
-				if ($_GET["order"] == $link) {
-					$nav->setCurrentNode($article);
-				}
-			} else {
-				if ($link == "active") {
-					$nav->setCurrentNode($article);
-				}
-			}
-		}
-	}
-
-	protected function createComponentTopMenu($name) {
-		$nav = new Navigation($this, $name);
-		$filters = array(
-			"nejaktivnější" => "active",
-			"nejnovější" => "news",
-			"nejoblíbenější" => "likes",
-			"nejkomentovanější" => "comments"
-		);
-
-		foreach ($filters as $name => $link) {
-			$param = array("order" => $link);
-			$article = $nav->add($name, $this->link("this", $param));
-			if (array_key_exists("order", $_GET)) {
-				if ($_GET["order"] == $link) {
-					$nav->setCurrentNode($article);
-				}
-			} else {
-				if ($link == "active") {
-					$nav->setCurrentNode($article);
-				}
-			}
-		}
-	}
-
 	/**
 	 * Vytvoření komponenty pro chat
 	 * @param String $name
@@ -235,6 +181,55 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			if ($backlink == $link) {
 				$nav->setCurrentNode($article);
 			}
+		}
+	}
+
+	protected function createComponentLeftMenu($name) {
+		/* v mobilní verzi se pak zobrazuje v celém layoutu */
+		$menu = new Menu();
+		/* {if $user->isLoggedIn()}
+		  {include #friends}
+		  {* v první verzi se skrývají blokovaní uživatelé *}
+		  {include #blokedUsers}
+		  {include #friendRequest}
+		  {include #markedFromOther}
+		  {* v první verzi se změna statusu skrývá *}
+		  {*<a n:href = ":Profil:Edit:default" title = "Změna statusu">
+		  {if!empty($loggedUser->property->statusID)}
+		  Chci {$loggedUser->property->status->name}
+		  {else}
+		  NASTAVIT STATUS
+		  {/if}
+		  </a>*}
+		  {else}
+		  <a n:href = "DatingRegistration:" class = "btn-main btn-small">Doplnit info o sobě</a>
+		  {/if}
+		  {/if}
+		  <h5>Zábava</h5>
+		  <a n:href = "OnePage: priznani => 1" title = "Přiznání o sexu">Přiznání o sexu</a>
+		  <a n:href = ":Competition:list" title = "Soutěže">Soutěže</a>
+		  <a n:href = ":Eshop:game" title = "Hry">Hry</a>
+		  <a n:href = ":Page:metro" title = "Hry">Bonusy</a> */
+
+		//$countVerReqs = $this->countVerificationRequests;
+
+		$menu->addItem(new Item('Přihlášení', ':Sign:in'), false);
+		$menu->addItem(new Item('Registrace', ':Sign:registration'), false);
+
+		$menu->addItem(new Item('Hledat přátele', ':Search:Search:', 'add-friend'));
+
+		$menu->addGroup(new Group('Profil'));
+		$menu->addItem(new Item('Editovat profil', ':Profil:Edit:default', 'edit'), true);
+		$menu->addItem(new Item('Můj profil', ':Profil:Show:default', 'profile'), true);
+		/* skrytí žádostí o ověření pro první verzi přiznání */
+		//$menu->addItem(new Item('<span>' . $countVerReqs . '</span>Žádostí o ověření', ':Profil:Show:verification', 'with-counter'), true);
+
+		$menu->addGroup(new Group('Obrázky'));
+		$menu->addItem(new Item('Nahrát fotky', null, 'add-gallery', 'show-photo-form'), true);
+		$menu->addItem(new Item('Moje galerie', ':Profil:Galleries:default'), true);
+
+		if ($this->loggedUser->propertyID) { /* ochránit odkazy, které by spadly bez user properties */
+			$menu->addGroup(new Group('Uživatelé'));
 		}
 	}
 
@@ -462,7 +457,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			return $packer->pack();
 		});
 
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
@@ -508,7 +503,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		if ($this->isAjax()) {
 			$handles = new AjaxCrate();
 
-			//$handles->addHandle('chat', new ExampleHandle()); //příklad
+//$handles->addHandle('chat', new ExampleHandle()); //příklad
 			$handles->addHandle('chatConversationWindow', new ChatConversationsHandle($this->chatManager, $this->getUser()->getId()));
 			$handles->addHandle('activities-observer', new ActivitesHandle($this->activitiesDao, $this->getUser()->getId()));
 			$this->ajaxObserver->sendRefreshRequests($this, $handles);
