@@ -12,6 +12,7 @@ use POS\Model\FriendDao;
 use POS\Model\PaymentDao;
 use Nette\Http\Session;
 use POS\Model\UserBlockedDao;
+use NetteExt\Path\ProfilePhotoPathCreator;
 
 /**
  * Správce chatu, používaný pro obecné operace chatu, které se týkají přístupu k modelům
@@ -212,6 +213,25 @@ class ChatManager extends \Nette\Object {
 			$user = $this->userDao->find($id);
 			$session->offsetSet($id, $user[UserDao::COLUMN_USER_NAME]);
 			return $user[UserDao::COLUMN_USER_NAME];
+		}
+	}
+
+	/**
+	 * Vrátí url profilové fotky uživatele
+	 * Šetří databázi.
+	 * @param int $id id uživatele
+	 * @param \Nette\Http\SessionSection $session session k ukladani jmen
+	 * @param \NetteExt\Helper\GetImgPathHelper vyhledávač url
+	 * @return String uzivatelske jmeno
+	 */
+	public function getProfilePhotoUrl($id, $session, $getImagePathHelper) {
+		if ($session->offsetExists($id)) {
+			return $session->offsetGet($id);
+		} else {
+			$user = $this->userDao->find($id);
+			$url = ProfilePhotoPathCreator::createProfilePhotoUrl($user, $getImagePathHelper, true);
+			$session->offsetSet($id, $url);
+			return $url;
 		}
 	}
 

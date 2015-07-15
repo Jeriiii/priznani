@@ -10,6 +10,7 @@ use \Nette\Utils\Json;
 use POS\Model\ChatMessagesDao;
 use Nette\Database\Table\IRow;
 use POS\Chat\ChatManager;
+use NetteExt\Helper\GetImgPathHelper;
 
 /**
  * Slouží přímo ke komunikaci mezi serverem a prohlížečem, zpracovává
@@ -23,6 +24,11 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * Jmeno session, kam se ukladaji jmena uzivatelu
 	 */
 	const USERNAMES_SESSION_NAME = 'chat_usernames';
+
+	/**
+	 * Jmeno session, kam se ukladaji profilova url uzivatelu
+	 */
+	const URL_SESSION_NAME = 'chat_urls';
 
 	/**
 	 * Prefix session, kde se registruji pozadavky na zpravu o doruceni zpravy
@@ -42,6 +48,9 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 
 	/** Zpráva o neúspěchu pro uživatele */
 	private $blockedMessage = '';
+
+	/** @var GetImgPathHelper helper pro generování url */
+	private $getImageUrlHelper = NULL;
 
 	/**
 	 * Vykreslení komponenty
@@ -241,6 +250,10 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		} else {
 			$messageArray['fromMe'] = 0;
 		}
+
+		$messageArray['profilePhotoUrl'] = $this->getProfilePhotoUrl($messageArray[ChatMessagesDao::COLUMN_ID_SENDER]);
+		$messageArray['profileHref'] = $this->getPresenter()->link(':Profil:Show:', array('id' => $messageArray[ChatMessagesDao::COLUMN_ID_SENDER]));
+
 		unset($messageArray[ChatMessagesDao::COLUMN_ID_SENDER]); //id odesilatele je uz v prvnim klici pole
 		unset($messageArray[ChatMessagesDao::COLUMN_ID_RECIPIENT]);  //neposila uzivateli jeho vlastni id
 
@@ -260,6 +273,21 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		$session = $this->getPresenter()->getSession(self::USERNAMES_SESSION_NAME);
 		$session->setExpiration(0);
 		return $this->chatManager->getUsername($id, $session);
+	}
+
+	/**
+	 * Vrátí url profilové fotky uživatele s daným id
+	 * Šetří databázi.
+	 * @param int $id id uživatele
+	 * @return string url fotky
+	 */
+	private function getProfilePhotoUrl($id) {
+		if (empty($this->getImageUrlHelper)) {
+			$this->getImageUrlHelper = new GetImgPathHelper($this->getPresenter()->context->httpRequest->url);
+		}
+		$session = $this->getPresenter()->getSession(self::URL_SESSION_NAME);
+		$session->setExpiration(0);
+		return $this->chatManager->getProfilePhotoUrl($id, $session, $this->getImageUrlHelper);
 	}
 
 	/**
