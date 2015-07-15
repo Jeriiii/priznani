@@ -5,6 +5,7 @@ use POSComponent\Stream\ChatStream;
 use POSComponent\Chat\MobileContactList;
 use POS\Chat\ChatManager;
 use POSComponent\Chat\React\ReactFullscreenChat;
+use POS\Chat\ChatCoder;
 
 /**
  * Pro práci se zprávami přes celoou stránku
@@ -53,6 +54,7 @@ class ChatPresenter extends BasePresenter {
 		if ($this->blockedDao->isBlocked($userInChatID, $this->getUser()->getId())) {
 			$this->template->blockedMessage = ChatManager::USER_IS_BLOCKED_MESSAGE;
 		}
+		$this->template->userInChatCodedId = ChatCoder::encode($userInChatID);
 		$this->template->production = $this->productionMode;
 	}
 
@@ -93,7 +95,7 @@ class ChatPresenter extends BasePresenter {
 	 * @return \POSComponent\Chat\MobileContactList
 	 */
 	protected function createComponentMobileContactList() {
-		return new MobileContactList($this->chatManager);
+		return new MobileContactList($this->chatManager, $this->loggedUser);
 	}
 
 }

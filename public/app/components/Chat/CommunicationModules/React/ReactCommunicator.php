@@ -22,9 +22,6 @@ class ReactCommunicator extends StandardCommunicator {
 	public function render() {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . '/react.latte');
-		$template->sendMessageLink = $this->link("sendMessage!");
-		$template->refreshMessagesLink = $this->link("refreshMessages!");
-		$template->loadMessagesLink = $this->link("loadMessages!");
 		$template->render();
 	}
 

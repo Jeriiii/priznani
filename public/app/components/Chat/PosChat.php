@@ -16,19 +16,15 @@ use POSComponent\BaseProjectControl;
  */
 class PosChat extends BaseChatComponent {
 
-	/** Proměnná s uživatelskými daty (cachovaný řádek z tabulky users). Obsahuje relace na profilFoto, gallery, property @var ArrayHash|ActiveRow řádek z tabulky users */
-	protected $loggedUser;
-
 	/**
 	 * Standardni konstruktor, predani sluzby chat manageru
 	 */
 	function __construct(ChatManager $manager, $loggedUser, $parent = NULL, $name = NULL) {
-		parent::__construct($manager, $parent, $name);
+		parent::__construct($manager, $loggedUser, $parent, $name);
 		$user = $this->getPresenter()->getUser();
 		if (!$user->isLoggedIn()) {
 			$this->getPresenter()->redirect(":Onepage:");
 		}
-		$this->loggedUser = $loggedUser;
 	}
 
 	/**
@@ -48,7 +44,7 @@ class PosChat extends BaseChatComponent {
 	 * @return \POSComponent\Chat\StandardContactList
 	 */
 	protected function createComponentContactList() {
-		return new StandardContactList($this->chatManager);
+		return new StandardContactList($this->chatManager, $this->loggedUser);
 	}
 
 	/**
@@ -56,7 +52,7 @@ class PosChat extends BaseChatComponent {
 	 * @return \POSComponent\Chat\StandardConversationList
 	 */
 	protected function createComponentConversationList() {
-		return new StandardConversationList($this->chatManager);
+		return new StandardConversationList($this->chatManager, $this->loggedUser);
 	}
 
 	/**
@@ -64,7 +60,7 @@ class PosChat extends BaseChatComponent {
 	 * @return \POSComponent\Chat\StandardCommunicator
 	 */
 	protected function createComponentCommunicator() {
-		return new StandardCommunicator($this->chatManager);
+		return new StandardCommunicator($this->chatManager, $this->loggedUser);
 	}
 
 }

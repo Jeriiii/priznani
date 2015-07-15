@@ -16,19 +16,15 @@ use POSComponent\Chat\BaseChatComponent;
  */
 abstract class ReactChat extends BaseChatComponent {
 
-	/** Proměnná s uživatelskými daty (cachovaný řádek z tabulky users). Obsahuje relace na profilFoto, gallery, property @var ArrayHash|ActiveRow řádek z tabulky users */
-	protected $loggedUser;
-
 	/**
 	 * Standardni konstruktor, predani sluzby chat manageru
 	 */
 	function __construct(ChatManager $manager, $loggedUser, $parent = NULL, $name = NULL) {
-		parent::__construct($manager, $parent, $name);
+		parent::__construct($manager, $loggedUser, $parent, $name);
 		$user = $this->getPresenter()->getUser();
 		if (!$user->isLoggedIn()) {
 			$this->getPresenter()->redirect(":Onepage:");
 		}
-		$this->loggedUser = $loggedUser;
 	}
 
 	/**
@@ -36,7 +32,7 @@ abstract class ReactChat extends BaseChatComponent {
 	 * @return \POSComponent\Chat\StandardCommunicator
 	 */
 	protected function createComponentCommunicator() {
-		return new ReactCommunicator($this->chatManager);
+		return new ReactCommunicator($this->chatManager, $this->loggedUser);
 	}
 
 }

@@ -6,7 +6,6 @@
 /* global React *//* aby Netbeans nevyhazoval chyby kvůli nedeklarované proměnné */
 
 /***********  DEFINICE  ***********/
-var rootElement = document.getElementById('reactChatWindow');
 
 var ChatWindow = React.createClass({displayName: "ChatWindow",
   render: function () {
@@ -97,13 +96,6 @@ var NewMessageForm = React.createClass({displayName: "NewMessageForm",
   }
 });
 
-
-/***********  RENDER  ***********/
-
-React.render(
-  React.createElement(ChatWindow, null),
-  rootElement
-);
 
 /***********  COMMUNICATION  ***********/
 ;$(function(){
