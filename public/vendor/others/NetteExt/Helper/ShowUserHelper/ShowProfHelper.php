@@ -146,6 +146,14 @@ class ShowProfHelper {
 		$img->src($src);
 		$img->alt($user->user_name);
 		$elPhoto->add($img);
+
+		/* pokud je uživatel online, dej mu online kroužek */
+		if (LastActive::format($user->last_active) == 'online') {
+			$onlinePoint = Html::el("div");
+			$onlinePoint->addAttributes(array('class' => 'online-point'));
+			$elPhoto->add($onlinePoint);
+		}
+
 		return $elPhoto;
 	}
 

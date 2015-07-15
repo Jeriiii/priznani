@@ -90,7 +90,7 @@ class StreamUserPreferences extends BaseUserPreferences implements IUserPreferen
 	}
 
 	/**
-	 * Načte z databáze nová data z databáze, uloží je do sešny a přidá k aktuálním datům
+	 * Načte z databáze nová data, uloží je do sešny a přidá k aktuálním datům
 	 */
 	public function addNewData() {
 		$newestItems = $this->streamDao->getAllItemsWhatFitsSince($this->getUserCategories(), $this->user, $this->getNewestId());
