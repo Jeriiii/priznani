@@ -132,6 +132,10 @@
 		overflow: auto;
 		width: 210px;
 		border-bottom: 1px solid #aaa;
+		.online-point {
+			display: block;
+		}
+		
 		li{
 				cursor: pointer;
 				position: relative;
@@ -154,7 +158,12 @@
 					}
 					
 					.online-point {
-						display: none;
+							display: inline-block;
+							float: right;
+							position: relative;
+							top: 0;
+							left: 0;
+							margin-top: 13px;
 					}
 				}
 				.chat-username{
