@@ -126,13 +126,6 @@ class ShowPresenter extends ProfilBasePresenter {
 	 * @param type $id
 	 */
 	public function actionDefault($id) {
-		/* Zjistí, zda uživatel nenavštěvuje profil uživatele, který ho zablokoval. */
-		$isBlocked = $this->userBlockedDao->isBlocked($id, $this->loggedUser->id);
-		if ($isBlocked) {
-			$this->flashMessage('Tento uživatel Vás zablokoval.');
-			$this->redirect(':OnePage:');
-		}
-
 		if (empty($id)) {
 			/* kontrola, zda se nesnaží nepřihlášený uživatel zobrazit svůj profil */
 			if (!$this->getUser()->isLoggedIn()) {
@@ -146,8 +139,15 @@ class ShowPresenter extends ProfilBasePresenter {
 			}
 			$this->userData = $this->userDao->find($id);
 		} else {
+			/* Zjistí, zda uživatel nenavštěvuje profil uživatele, který ho zablokoval. */
+			$isBlocked = $this->userBlockedDao->isBlocked($id, $this->loggedUser->id);
+			if ($isBlocked) {
+				$this->flashMessage('Tento uživatel Vás zablokoval.');
+				$this->redirect(':OnePage:');
+			}
+
 			$user = $this->userDao->find($id);
-			if (!$user->property) {
+			if (empty($user) || !$user->property) {
 				$this->flashMessage("Tento profil neexistuje, nebo uživatel nemá dokončený profil.");
 				$this->redirect(":OnePage:");
 			}
