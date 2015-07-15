@@ -30,11 +30,13 @@ $(document).ready(function() {
 			/* script, který přepne kartu na nahrání fotek, když se zmáčkne příslušné tlačítko v pravém menu */
 			$('#show-photo-form').click(function() {
 				$('#ui-id-3').trigger('click');
+				$('#tabs-3').css("z-index","10000");;
 				
 				var blackBackground = document.getElementById("activeBackgroundUploadPhoto");
 				
-				blackBackground.style.width = "100px";
-				blackBackground.style.height = "100px";
+				var $window = $(window);
+				blackBackground.style.width = $window.width() + "px";
+				blackBackground.style.height = $window.height() + "px";
 			});
 		}
 	});
