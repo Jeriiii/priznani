@@ -22,6 +22,8 @@ use UserBlock\UserBlocker;
 use POSComponent\CropImageUpload\CropImageUpload;
 use POS\Webloaders\OnePageWebloader;
 use POSComponent\PhotoRating;
+use NetteExt\Path\GalleryPathCreator;
+use NetteExt\Path\ImagePathCreator;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -158,11 +160,29 @@ class OnePagePresenter extends BasePresenter {
 
 		$dataToSend = array();
 		foreach ($data as $item) {
+			if (!empty($item->userGalleryID)) {
+				$this->addImgUrl($item);
+			}
 			$dataToSend[] = $item;
 		}
 
 		$json = new JsonResponse(array("data" => $dataToSend), "application/json; charset=utf-8");
 		$this->sendResponse($json);
+	}
+
+	/**
+	 * Přidá url k obrázku.
+	 * @param ArrayHash $item Příspěvek ve streamu obsahující obrázek.
+	 */
+	public function addImgUrl($item) {
+		$image = $item->userGallery->lastImage;
+		if (isset($image)) {
+			$userID = $this->loggedUser->id;
+			$galleryFolder = GalleryPathCreator::getUserGalleryFolder($image->galleryID, $userID);
+			$item->imgUrl = ImagePathCreator::getImgScrnPath($image->id, $image->suffix, $galleryFolder, '');
+		} else {
+			$item->imgUrl = null;
+		}
 	}
 
 	/**
