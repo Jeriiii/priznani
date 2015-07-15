@@ -26,6 +26,7 @@ var usualLoadMessagesCount = reactLoadMessages.dataset.maxmessages;
 
 /***********  DEFINICE  ***********/
 
+/** Okno celého chatu s jedním uživatelem */
 var ChatWindow = React.createClass({
   render: function () {
     return (
@@ -37,6 +38,7 @@ var ChatWindow = React.createClass({
   }
 });
 
+/** Část okna, která má svislý posuvník - obsahuje zprávy, tlačítko pro donačítání... */
 var MessagesWindow = React.createClass({
   getInitialState: function() {
     return {messages: [] };
@@ -58,6 +60,7 @@ var MessagesWindow = React.createClass({
   }
 });
 
+/** Komponenta na profilovou fotku */
 var ProfilePhoto = React.createClass({
   render: function () {
     return (
@@ -68,6 +71,7 @@ var ProfilePhoto = React.createClass({
   }
 });
 
+/** Jedna zpráva. */
 var Message = React.createClass({
   render: function() {
     var message = this.props.messageData;
@@ -85,6 +89,7 @@ var Message = React.createClass({
   }
 });
 
+/** Donačítací tlačítko */
 var LoadMoreButton = React.createClass({
   render: function() {
     return (
@@ -95,6 +100,7 @@ var LoadMoreButton = React.createClass({
   }
 });
 
+/** Formulář pro odesílání zpráv */
 var NewMessageForm = React.createClass({
   render: function() {
     return (
