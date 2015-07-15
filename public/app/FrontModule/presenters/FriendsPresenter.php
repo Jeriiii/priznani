@@ -6,6 +6,7 @@
 use POSComponent\UsersList\FriendRequestList;
 use POSComponent\UsersList\FriendsList;
 use POSComponent\UsersList\SexyList\MarkedFromOther;
+use NetteExt\DaoBox;
 
 class FriendsPresenter extends BasePresenter {
 
