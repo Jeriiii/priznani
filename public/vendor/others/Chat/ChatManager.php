@@ -117,6 +117,15 @@ class ChatManager extends \Nette\Object {
 	}
 
 	/**
+	 * Vrátí zprávu s daným ID. Její typ není IRow, ale Selection, aby s ní bylo možno pracovat v univerzálních formátovacích funkcích.
+	 * @param int $messageId id zprávy
+	 * @return Selection zpráva
+	 */
+	public function getSingleMessageSelection($messageId) {
+		return $this->messagesDao->findNoFetch($messageId);
+	}
+
+	/**
 	 * Posle uzivateli zpravu
 	 * @param int $idSender id odesilatele
 	 * @param int $idRecipient id prijemce

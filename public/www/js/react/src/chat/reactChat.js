@@ -35,7 +35,7 @@ var ChatWindow = React.createClass({
     return (
       <div className="chatWindow">
         <MessagesWindow userCodedId={this.props.userCodedId} />
-        <NewMessageForm />
+        <NewMessageForm loggedUser={this.props.loggedUser} userCodedId={this.props.userCodedId} />
       </div>
     )
   }
@@ -116,16 +116,26 @@ var LoadMoreButton = React.createClass({
 /** Formulář pro odesílání zpráv */
 var NewMessageForm = React.createClass({
   render: function() {
+    var loggedUser = this.props.loggedUser;
+    console.log(this.props.relatedWindow);
     return (
       <div className="newMessage">
-        <ProfilePhoto profileLink="#" userName="Leopold" profilePhotoUrl="http://localhost/priznani/public/www/images/users/man.jpg" />
+        <ProfilePhoto profileLink={loggedUser.href} userName={loggedUser.name} profilePhotoUrl={loggedUser.profilePhotoUrl} />
         <div className="messageArrow" />
-        <form>
-          <input type="text" />
-          <input type="button" className="btn-main medium button" value="Odeslat" />
+        <form onSubmit={this.onSubmit}>
+          <input type="text" className="messageInput" />
+          <input type="submit" className="btn-main medium button" value="Odeslat" />
         </form>
       </div>
     );
+  },
+  onSubmit: function(e){/* Vezme zprávu ze submitu a pošle ji. Také smaže zprávu napsanou v inputu. */
+    e.preventDefault();
+    var input = e.target.getElementsByClassName('messageInput')[0];
+    var message = input.value;
+    if(message == undefined || message.trim() == '') return;
+    input.value = '';
+    sendMessage(this, this.props.userCodedId, message, appendDataIntoComponent);
   }
 });
 
@@ -160,6 +170,32 @@ var getOlderMessages = function(component, userCodedId, oldestId, callback){
   $.getJSON(reactGetOlderMessagesLink, data, function(result){
       callback(component, userCodedId, result, usualGetOlderMessagesCount);
   });
+};
+
+/**
+ * Pošle na server zprávu.
+ * @param  {ReactClass} component komponenta, která bude aktualizována daty
+ * @param  {int}   userCodedId kódované id uživatele
+ * @param  {String} message text zprávy
+ * @param  {Function} callback    funkce, která se zavolá při obdržení odpovědi (odeslaná zpráva přijde zpět)
+ */
+var sendMessage = function(component, userCodedId, message, callback){
+  var data = {
+    to: userCodedId,
+    type: 'textMessage',
+    text: message
+  };
+  var json = JSON.stringify(data);
+		$.ajax({
+			dataType: "json",
+			type: 'POST',
+			url: reactSendMessageLink,
+			data: json,
+			contentType: 'application/json; charset=utf-8',
+			success: function(result){
+        callback(component, userCodedId, result);
+      }
+		});
 };
 
 /***********  CALLBACK FUNKCE  ***********/

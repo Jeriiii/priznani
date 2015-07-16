@@ -7,6 +7,8 @@ use POSComponent\Chat\AndroidChat;
 use POS\Chat\ChatManager;
 use POSComponent\Chat\React\ReactFullscreenChat;
 use POS\Chat\ChatCoder;
+use NetteExt\Helper\GetImgPathHelper;
+use POSComponent\Chat\StandardCommunicator;
 
 /**
  * Pro práci se zprávami přes celoou stránku
@@ -56,6 +58,12 @@ class ChatPresenter extends BasePresenter {
 			$this->template->blockedMessage = ChatManager::USER_IS_BLOCKED_MESSAGE;
 		}
 		$this->template->userInChatCodedId = ChatCoder::encode($userInChatID);
+		$this->template->loggedUser = $this->loggedUser;
+
+		$getImagePathHelper = new GetImgPathHelper($this->context->httpRequest->url);
+		$session = $this->getSession(StandardCommunicator::URL_SESSION_NAME);
+		$this->template->loggedUserProfilePhotoUrl = $this->chatManager->getProfilePhotoUrl($this->loggedUser->id, $session, $getImagePathHelper);
+		$this->template->loggedUserHref = $this->link(':Profil:Show:', array('id' => $this->loggedUser->id));
 		$this->template->production = $this->productionMode;
 	}
 

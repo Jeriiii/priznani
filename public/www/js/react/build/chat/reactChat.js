@@ -35,7 +35,7 @@ var ChatWindow = React.createClass({displayName: "ChatWindow",
     return (
       React.createElement("div", {className: "chatWindow"}, 
         React.createElement(MessagesWindow, {userCodedId: this.props.userCodedId}), 
-        React.createElement(NewMessageForm, null)
+        React.createElement(NewMessageForm, {loggedUser: this.props.loggedUser, userCodedId: this.props.userCodedId})
       )
     )
   }
@@ -116,16 +116,26 @@ var LoadMoreButton = React.createClass({displayName: "LoadMoreButton",
 /** Formulář pro odesílání zpráv */
 var NewMessageForm = React.createClass({displayName: "NewMessageForm",
   render: function() {
+    var loggedUser = this.props.loggedUser;
+    console.log(this.props.relatedWindow);
     return (
       React.createElement("div", {className: "newMessage"}, 
-        React.createElement(ProfilePhoto, {profileLink: "#", userName: "Leopold", profilePhotoUrl: "http://localhost/priznani/public/www/images/users/man.jpg"}), 
+        React.createElement(ProfilePhoto, {profileLink: loggedUser.href, userName: loggedUser.name, profilePhotoUrl: loggedUser.profilePhotoUrl}), 
         React.createElement("div", {className: "messageArrow"}), 
-        React.createElement("form", null, 
-          React.createElement("input", {type: "text"}), 
-          React.createElement("input", {type: "button", className: "btn-main medium button", value: "Odeslat"})
+        React.createElement("form", {onSubmit: this.onSubmit}, 
+          React.createElement("input", {type: "text", className: "messageInput"}), 
+          React.createElement("input", {type: "submit", className: "btn-main medium button", value: "Odeslat"})
         )
       )
     );
+  },
+  onSubmit: function(e){/* Vezme zprávu ze submitu a pošle ji. Také smaže zprávu napsanou v inputu. */
+    e.preventDefault();
+    var input = e.target.getElementsByClassName('messageInput')[0];
+    var message = input.value;
+    if(message == undefined || message.trim() == '') return;
+    input.value = '';
+    sendMessage(this, this.props.userCodedId, message, appendDataIntoComponent);
   }
 });
 
@@ -160,6 +170,32 @@ var getOlderMessages = function(component, userCodedId, oldestId, callback){
   $.getJSON(reactGetOlderMessagesLink, data, function(result){
       callback(component, userCodedId, result, usualGetOlderMessagesCount);
   });
+};
+
+/**
+ * Pošle na server zprávu.
+ * @param  {ReactClass} component komponenta, která bude aktualizována daty
+ * @param  {int}   userCodedId kódované id uživatele
+ * @param  {String} message text zprávy
+ * @param  {Function} callback    funkce, která se zavolá při obdržení odpovědi (odeslaná zpráva přijde zpět)
+ */
+var sendMessage = function(component, userCodedId, message, callback){
+  var data = {
+    to: userCodedId,
+    type: 'textMessage',
+    text: message
+  };
+  var json = JSON.stringify(data);
+		$.ajax({
+			dataType: "json",
+			type: 'POST',
+			url: reactSendMessageLink,
+			data: json,
+			contentType: 'application/json; charset=utf-8',
+			success: function(result){
+        callback(component, userCodedId, result);
+      }
+		});
 };
 
 /***********  CALLBACK FUNKCE  ***********/
