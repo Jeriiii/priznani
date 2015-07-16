@@ -5,6 +5,10 @@
 
 /* global React *//* aby Netbeans nevyhazoval chyby kvůli nedeklarované proměnné */
 
+/***********  ZÁVISLOSTI  ***********/
+var ProfilePhoto = require('../components/profile').ProfilePhoto;
+
+
 /***********  NASTAVENÍ  ***********/
 
 /** Odkazy ke komunikaci */
@@ -26,6 +30,7 @@ var parametersPrefix = reactSendMessage.dataset.parprefix;
 var usualGetOlderMessagesCount = reactGetOlderMessages.dataset.maxmessages;
 var usualLoadMessagesCount = reactLoadMessages.dataset.maxmessages;
 
+/***********  INICIALIZACE  ***********/
 
 /***********  DEFINICE  ***********/
 
@@ -66,17 +71,6 @@ var MessagesWindow = React.createClass({
   },
   getOldestId: function(messages){
     return (messages[0]) ? messages[0].id : 9007199254740991; /*nastavení hodnoty nebo maximální hodnoty, když není*/
-  }
-});
-
-/** Komponenta na profilovou fotku */
-var ProfilePhoto = React.createClass({
-  render: function () {
-    return (
-      <a className="generatedProfile" href={this.props.profileLink} title={this.props.userName}>
-        <img src={this.props.profilePhotoUrl} />
-      </a>
-    );
   }
 });
 
