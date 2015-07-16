@@ -13,21 +13,7 @@
 {block foot}
 
 <script type="text/javascript" src="{$basePath}/js/react/react-0.13.3{if $production}.min{/if}.js" />
-{control js 'react/build/chat/reactChat.js'}
-<script>
-	/*inicializace react chatu*/
-	React.render(
-		React.createElement(ChatWindow, { 
-			userCodedId: {$userInChatCodedId},
-			loggedUser: {
-				name: '{$loggedUser->user_name}',
-				href: '{$loggedUserHref}',
-				profilePhotoUrl: '{$loggedUserProfilePhotoUrl}'
-			} 
-			}),
-		document.getElementById('reactChatWindow')
-	  );
-</script>
-
+<script type="text/javascript" src="{$basePath}/js/react/build/chat/reactChat.js" />
+{*control js 'react/build/chat/reactChat.js'*}
 
 {/block}

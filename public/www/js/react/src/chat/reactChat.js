@@ -8,7 +8,6 @@
 /***********  ZÁVISLOSTI  ***********/
 var ProfilePhoto = require('../components/profile').ProfilePhoto;
 
-
 /***********  NASTAVENÍ  ***********/
 
 /** Odkazy ke komunikaci */
@@ -29,8 +28,6 @@ var parametersPrefix = reactSendMessage.dataset.parprefix;
 /** obvyklý počet příchozích zpráv v odpovědi u pravidelného a iniciálního požadavku (aneb kolik zpráv mi přijde, když jich je na serveru ještě dost) */
 var usualGetOlderMessagesCount = reactGetOlderMessages.dataset.maxmessages;
 var usualLoadMessagesCount = reactLoadMessages.dataset.maxmessages;
-
-/***********  INICIALIZACE  ***********/
 
 /***********  DEFINICE  ***********/
 
@@ -111,7 +108,6 @@ var LoadMoreButton = React.createClass({
 var NewMessageForm = React.createClass({
   render: function() {
     var loggedUser = this.props.loggedUser;
-    console.log(this.props.relatedWindow);
     return (
       <div className="newMessage">
         <ProfilePhoto profileLink={loggedUser.href} userName={loggedUser.name} profilePhotoUrl={loggedUser.profilePhotoUrl} />
@@ -227,3 +223,15 @@ var appendDataIntoComponent = function(component, userCodedId, jsonData){
   result.messages = component.state.messages.concat(result.messages);
   component.setState(result);
 };
+
+/***********  INICIALIZACE  ***********/
+var root = document.getElementById('reactChatWindow');
+var loggedUser = {
+  name: root.dataset.username,
+  href: root.dataset.userhref,
+  profilePhotoUrl: root.dataset.profilephotourl
+};
+React.render(
+    <ChatWindow userCodedId={root.dataset.userinchatcodedid} loggedUser={loggedUser} />,
+    root
+);

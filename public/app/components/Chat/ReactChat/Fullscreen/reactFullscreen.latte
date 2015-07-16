@@ -1,4 +1,5 @@
 {if $logged}
 	{control communicator}
-	<div id="reactChatWindow"></div>
+	<div id="reactChatWindow" data-userinchatcodedid="{$userInChatCodedID}" data-username="{$loggedUser->user_name}" data-userhref="{$loggedUserHref}" data-profilephotourl="{$loggedUserProfilePhotoUrl}" ></div>
+	
 {/if}
