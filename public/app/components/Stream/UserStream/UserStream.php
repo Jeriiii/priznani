@@ -78,9 +78,4 @@ class UserStream extends BaseStream {
 		});
 	}
 
-	public function handleNewReaded($newID) {
-		$this->usersNewsDao->deleteByUser($this->loggedUser->id, $newID);
-		$this->redirect("this");
-	}
-
 }

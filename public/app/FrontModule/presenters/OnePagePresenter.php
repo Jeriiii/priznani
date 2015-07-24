@@ -347,4 +347,10 @@ class OnePagePresenter extends BasePresenter {
 		return new Frm \ SetInitimityForm($loggedUser, $sm, $daoBox, $this, $name);
 	}
 
+	/** Přečtení novinek (nad streamem) uživatelem */
+	public function handleNewReaded($newID) {
+		$this->usersNewsDao->deleteByUser($this->loggedUser->id, $newID);
+		$this->redirect("this");
+	}
+
 }
