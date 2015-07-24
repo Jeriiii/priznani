@@ -1,0 +1,1 @@
+Průvodce na datenode po registraci, nebo po stisknutí tlačítka průvodce.

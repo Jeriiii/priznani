@@ -29,7 +29,8 @@ class OnePageWebloader {
 			'lists/initFriends.js',
 			'lists/initBlokedUsers.js', //zakomentováno do první verze přiznání
 			'lists/initMarkedFromOther.js',
-			'onepage/default.js'
+			'onepage/default.js',
+			'plugins/intro/intro.min.js'
 		));
 		$compiler = Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {
