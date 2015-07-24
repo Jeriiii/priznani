@@ -72,7 +72,7 @@ class SignPresenter extends BasePresenter {
 					));
 
 					$this->flashMessage("Potvrzení bylo úspěšné, systém vás automaticky přihlásil.", "info");
-					$this->redirect("OnePage:", array('intro' => TRUE));
+					$this->redirect("OnePage:", array('firstSignIn' => TRUE));
 				} else {
 					$this->flashMessage("Potvrzení bylo úspěšné, můžete se přihlásil.", "info");
 					$this->redirect("Sign:in");
