@@ -3,51 +3,7 @@
 <nav id="stream-menu">
 	{include #profile}
 	<div class="usermenu" data-step="4" data-intro="V levém menu.">
-		{if ! $user->isLoggedIn()}
-		<a n:href=":Sign:in" title="Přihlášení">Přihlášení</a>
-		<a n:href=":Sign:registration" title="Registrace">Registrace</a>
-		{/if}
-
-		<a n:href=":Search:Search:" class="add-friend" title="Hledat přátele" data-step="4" data-position="left" data-intro="Najdi nové přátele. Jednoduše jim pošli žádost o přátelství." data-position="right">Hledat přátele</a>
-		<a title="Průvodce na datenode" id="startIntroBtn" data-auto-start="{$intro}"  onclick="window.scrollTo(0, 0);javascript:introJs().setOption('showProgress', true).start();">Spustit průvodce</a>
-		{if $user->isLoggedIn()}
-
-		<h5>Profil</h5>
-		<a n:href=":Profil:Edit:default" class="edit" title="Editovat profil">Editovat profil</a>
-		<a n:href=":Profil:Show:default" class="profile" title="Muj profil">Můj profil</a>
-		{* skrytí žádostí o ověření pro první verzi přiznání *}
-		{*<a n:href=":Profil:Show:verification" class="with-counter" title="Editovat profil"><span>{$countVerificationRequests}</span> ŽÁDOSTÍ O OVĚŘENÍ</a>*}
-		{/if}
-
-		<h5>Obrázky</h5>
-		<a id="show-photo-form" class="add-gallery" title="Nahrát fotky">Nahrát fotky</a>
-		{if $user->isLoggedIn()}
-		<a n:href=":Profil:Galleries:default" title="Editovat profil">Moje galerie</a>
-			{if $loggedUser->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
-				<h5>Uživatelé</h5>
-				{include #friends}
-				{* v první verzi se skrývají blokovaní uživatelé *}
-				{include #blokedUsers}
-				{include #friendRequest}
-				{include #markedFromOther}
-				{* v první verzi se změna statusu skrývá *}
-				{*<a n:href=":Profil:Edit:default" title="Změna statusu">
-				{if !empty($loggedUser->property->statusID)}
-					Chci {$loggedUser->property->status->name}
-				{else}
-					NASTAVIT STATUS
-				{/if}
-				</a>*}
-			{else}
-				<a n:href="DatingRegistration:" class="btn-main btn-small">Doplnit info o sobě</a>
-			{/if}
-		{/if}
-		<h5>Zábava</h5>
-		<a n:href="OnePage: priznani => 1" title="Přiznání o sexu">Přiznání o sexu</a>
-		<a n:href=":Competition:list" title="Soutěže">Soutěže</a>
-		<a n:href=":Eshop:game" title="Hry">Hry</a>
-		<a n:href=":Page:metro" title="Hry">Bonusy</a>
-		
+		{control leftMenu}		
 	</div>
 	{*<a n:href=":Profil:Galleries:listUserGalleryImages galleryID => $profileGallery->id" class="btn-main btn-small" title="Profilová galerie">Profilová galerie</a>*}
 	<div class="clear"></div>
@@ -67,49 +23,5 @@
 		</span>
 	</div>
 	<div class="delimiter top"></div>
-{/if}
-{/}
-
-{* žádosti o přátelství *}
-
-{define friendRequest}
-
-<div class="usermenu {if $countFriendRequests != 0}red{/if}">
-	<a title="Žádosti o přátelství" class="with-counter" id="friendRequestsBtn"><span>{$countFriendRequests}</span>Žádosti o přátelství</a>
-	<div id="friendRequests">
-	{control friendRequest}
-	</div>
-</div>
-{/}
-
-{* přátelé *}
-{define friends}
-<div class="usermenu">
-	<a title="Seznam přátel" class="friends" id="friendsBtn">Seznam přátel</a>
-	<div id="friends">
-	{control friends}
-	</div>
-</div>
-{/}
-
-{* blokovaní uživatelé *}
-{define blokedUsers}
-<div class="usermenu">
-	<a title="Blokovaní uživatelé" id="blokedUsersBtn">Blokovaní uživatelé</a>
-	<div id="blokedUsers">
-	{control blokedUsers}
-	</div>
-</div>
-{/}
-
-{* označili mě jako sexy *}
-{define markedFromOther}
-{if $countSexy != 0}
-<div class="usermenu red">
-	<a class="with-counter" title="Jsem pro ně sexy" id="markedFromOtherBtn"><span>{$countSexy}</span>Jsem pro ně sexy</a>
-	<div id="markedFromOther">
-	{control markedFromOther}
-	</div>
-</div>
 {/if}
 {/}

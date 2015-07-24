@@ -1,0 +1,80 @@
+{block menu}
+{foreach $menu as $item}
+	{if $item->isItem()}
+		<a 
+			{ifset $item->link}href="{plink $item->link}"{/ifset} 
+			{ifset $item->elClass}class="{$item->elClass}"{/ifset} 
+			title="{$item->tittle}"
+			{foreach $item->attributes as $name => $val}{!$name}="{!$val}"{/foreach}
+			>
+			{$item->name}
+		</a>
+	{/if}
+	{if $item->isGroup()}
+		<h5>{$item->name}</h5>
+		
+		{if $item->name == 'Uživatelé' && $user->isLoggedIn()}
+			{include #friends}
+			{include #blokedUsers}
+			{include #friendRequest}
+			{include #markedFromOther}
+		{/if}
+	{/if}
+{/foreach}
+{/}
+
+{* v první verzi se změna statusu skrývá *}
+{*<a n:href = ":Profil:Edit:default" title = "Změna statusu">
+{if!empty($loggedUser->property->statusID)}
+Chci {$loggedUser->property->status->name}
+{else}
+NASTAVIT STATUS
+{/if}
+</a>*}
+{*else}
+<a n:href = "DatingRegistration:" class = "btn-main btn-small">Doplnit info o sobě</a>
+{/if}
+{/if*}
+
+{* žádosti o přátelství *}
+{define friendRequest}
+<div class="usermenu {if $countFriendRequests != 0}red{/if}">
+	<a title="Žádosti o přátelství" class="with-counter" id="friendRequestsBtn"><span>{$countFriendRequests}</span>Žádosti o přátelství</a>
+	<div id="friendRequests">
+	{control friendRequest}
+	</div>
+</div>
+{/}
+
+{* přátelé *}
+{define friends}
+<div class="usermenu">
+	<a title="Seznam přátel" class="friends" id="friendsBtn">Seznam přátel</a>
+	<div id="friends">
+	{control friends}
+	</div>
+</div>
+{/}
+
+{* blokovaní uživatelé *}
+{define blokedUsers}
+<div class="usermenu">
+	<a title="Blokovaní uživatelé" id="blokedUsersBtn">Blokovaní uživatelé</a>
+	<div id="blokedUsers">
+	{control blokedUsers}
+	</div>
+</div>
+{/}
+
+{* označili mě jako sexy *}
+{define markedFromOther}
+{if $countSexy != 0}
+<div class="usermenu red">
+	<a class="with-counter" title="Jsem pro ně sexy" id="markedFromOtherBtn"><span>{$countSexy}</span>Jsem pro ně sexy</a>
+	<div id="markedFromOther">
+	{control markedFromOther}
+	</div>
+</div>
+{/if}
+{/}
+

@@ -110,11 +110,24 @@ class OnePagePresenter extends BasePresenter {
 	public $rateImageDao;
 	private $userID;
 
+	/*	 * **** počty aktualit v menu ******* */
+	public $countVerificationRequests;
+	public $countFriendRequests;
+	public $countSexy;
+
 	public function actionDefault($priznani = NULL, $firstSignIn = FALSE /* TRUE když se přihlásí poprvé od registrace */) {
 		if (!$this->getUser()->isLoggedIn() && empty($priznani)) {
 			$this->redirect(':DatingRegistration:');
 		}
 		$this->userID = $this->getUser()->getId();
+		$this->intro = $firstSignIn ? 1 : 0;
+
+		/* počty aktualit v menu */
+		//$this->countVerificationRequests = $this->verificationPhotoDao->findByUserID($this->user->id)->count();
+		if (!$this->deviceDetector->isMobile() && $this->getUser()->isLoggedIn()) {/* pokud nejsem na mobilu, údaje se nepředají */
+			$this->countFriendRequests = $this->friendRequestDao->getAllToUser($this->getUser()->id)->count();
+			$this->countSexy = $this->youAreSexyDao->countToUser($this->getUser()->id);
+		}
 	}
 
 	public function renderDefault($priznani = NULL, $firstSignIn = FALSE /* TRUE když se přihlásí poprvé od registrace */) {
@@ -123,15 +136,10 @@ class OnePagePresenter extends BasePresenter {
 			$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
 			$this->template->profilePhoto = $this->loggedUser->profilFotoID;
 			$this->template->loggedUser = $this->loggedUser;
-			$this->template->intro = $firstSignIn ? 1 : 0;
 
-			if (!$this->deviceDetector->isMobile() && $this->getUser()->isLoggedIn()) {/* pokud nejsem na mobilu, údaje se nepředají z presenteru */
-				$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->getUser()->id)->count();
-				$this->template->countSexy = $this->youAreSexyDao->countToUser($this->getUser()->id);
-			}
 
 			$this->template->isUserPaying = $this->paymentDao->isUserPaying($this->userID);
-			$this->template->countVerificationRequests = $this->verificationPhotoDao->findByUserID($this->user->id)->count();
+
 			if ($this->getUser()->isLoggedIn()) {
 				$this->template->sexyLabelToolTip = "Hodnost podle počtu - JE SEXY <br />" . ShowUserDataHelper::getLabelInfoText($this->loggedUser->property->type);
 			}
@@ -246,28 +254,6 @@ class OnePagePresenter extends BasePresenter {
 	protected function createComponentBestMatchSearch($name) {
 		$session = $this->getSession();
 		return new \POSComponent\Search\BestMatchSearch($this->loggedUser, $this->userDao, $this->userCategoryDao, $session, $this, $name);
-	}
-
-	protected function createComponentFriendRequest($name) {
-		$sessionManager = $this->getSessionManager();
-		$smDaoBox = new DaoBox();
-		$smDaoBox->userDao = $this->userDao;
-		$smDaoBox->streamDao = $this->streamDao;
-		$smDaoBox->userCategoryDao = $this->userCategoryDao;
-
-		return new FriendRequestList($this->friendRequestDao, $this->getUser()->id, $sessionManager, $smDaoBox, $this, $name);
-	}
-
-	protected function createComponentFriends($name) {
-		return new FriendsList($this->friendDao, $this->getUser()->id, $this, $name);
-	}
-
-	protected function createComponentBlokedUsers($name) {
-		return new BlokedUsersList($this->userBlockedDao, $this->getUser()->id, $this, $name);
-	}
-
-	protected function createComponentMarkedFromOther($name) {
-		return new MarkedFromOther($this->paymentDao, $this->youAreSexyDao, $this->getUser()->id, $this, $name);
 	}
 
 	/**

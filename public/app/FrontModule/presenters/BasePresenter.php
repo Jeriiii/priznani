@@ -7,23 +7,18 @@
  *
  * @author	Petr Kukrál
  */
-use Nette\Application\UI\Form as Frm,
-	\Navigation\Navigation,
-	\Nette\Utils\Strings,
-	Nette\Http\Url,
-	Nette\Http\Request;
-use Nette\Security\User;
-use POS\Ajax\ExampleHandle,
-	POS\Ajax\AjaxCrate,
-	POS\Ajax\ChatConversationsHandle;
+use Nette\Application\UI\Form as Frm;
+use \Navigation\Navigation;
+use POS\Ajax\AjaxCrate;
+use POS\Ajax\ChatConversationsHandle;
 use POS\Ajax\ActivitesHandle;
 use POSComponent\Payment;
-use NetteExt\Serialize\Serializer;
-use NetteExt\Serialize\Relation;
-use POS\Model\PaymentDao;
-use Nette\Http\SessionSection;
 use NetteExt\Session\SessionManager;
 use NetteExt\Session\UserSession;
+use POS\Ext\Menu\OnePageLeft\Menu;
+use POS\Ext\Menu\OnePageLeft\Item;
+use POS\Ext\Menu\OnePageLeft\Group;
+use POS\Ext\SimpleMenu\LeftMenu;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -70,8 +65,17 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	/** @var \POS\Model\YouAreSexyDao @inject */
 	public $youAreSexyDao;
 
+	/** @var \POS\Model\FriendDao @inject */
+	public $friendDao;
+
 	/** @var \NetteExt\Session\SessionManager Stará se o správu dat v session. */
 	private $sessionManager = null;
+
+	/** @var \POS\Model\UserBlockedDao @inject */
+	public $userBlockedDao;
+
+	/** @var int 1 = má se automaticky spustit průvodce (funguje pouze na onepage), jinak 0 */
+	protected $intro = 0;
 
 	public function startup() {
 		AntispamControl::register();
@@ -128,10 +132,6 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		if ($this->getUser()->isLoggedIn()) {
 			$this->template->identity = $this->getUser()->getIdentity();
 		}
-		if ($this->environment->isMobile() && $this->getUser()->isLoggedIn()) {/* údaje pro pravé menu na mobilu */
-			$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->getUser()->id)->count();
-			$this->template->countSexy = $this->youAreSexyDao->countToUser($this->getUser()->id);
-		}
 
 		$this->template->domain = $this->domain;
 		$this->template->isNotComponentCssEmpty = !empty($this->lessFiles);
@@ -141,54 +141,6 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$this->template->facebook_html = "";
 		$this->template->facebook_script = "";
 		$this->template->ajaxObserverLink = $this->link('ajaxRefresh!'); //odkaz pro ajaxObserver na pravidelne pozadavky
-	}
-
-	protected function createComponentOrders($name) {
-		$nav = new Navigation($this, $name);
-		$filters = array(
-			"nejaktivnější" => "active",
-			"nejnovější" => "news",
-			"nejoblíbenější" => "likes",
-			"nejkomentovanější" => "comments"
-		);
-
-		foreach ($filters as $name => $link) {
-			$param = array("order" => $link);
-			$article = $nav->add($name, $this->link("this", $param));
-			if (array_key_exists("order", $_GET)) {
-				if ($_GET["order"] == $link) {
-					$nav->setCurrentNode($article);
-				}
-			} else {
-				if ($link == "active") {
-					$nav->setCurrentNode($article);
-				}
-			}
-		}
-	}
-
-	protected function createComponentTopMenu($name) {
-		$nav = new Navigation($this, $name);
-		$filters = array(
-			"nejaktivnější" => "active",
-			"nejnovější" => "news",
-			"nejoblíbenější" => "likes",
-			"nejkomentovanější" => "comments"
-		);
-
-		foreach ($filters as $name => $link) {
-			$param = array("order" => $link);
-			$article = $nav->add($name, $this->link("this", $param));
-			if (array_key_exists("order", $_GET)) {
-				if ($_GET["order"] == $link) {
-					$nav->setCurrentNode($article);
-				}
-			} else {
-				if ($link == "active") {
-					$nav->setCurrentNode($article);
-				}
-			}
-		}
 	}
 
 	/**
@@ -423,6 +375,21 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
+	protected function createComponentLeftMenu($name) {
+		$daoBox = new \NetteExt\DaoBox();
+
+		$daoBox->friendRequestDao = $this->friendRequestDao;
+		$daoBox->userDao = $this->userDao;
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->userCategoryDao = $this->userCategoryDao;
+		$daoBox->friendDao = $this->friendDao;
+		$daoBox->userBlockedDao = $this->userBlockedDao;
+		$daoBox->youAreSexyDao = $this->youAreSexyDao;
+		$daoBox->paymentDao = $this->paymentDao;
+
+		return new POS\Ext\SimpleMenu\LeftMenu($this->loggedUser, $daoBox, $this->getSessionManager(), $this, $name, $this->intro);
+	}
+
 	/**
 	 * Vytvoření komponenty k mimifikaci skriptů k mobilní verzi v jQueryMobile, když je uživatel přihlášený
 	 * @return \WebLoader\Nette\CssLoader
@@ -462,7 +429,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			return $packer->pack();
 		});
 
-		// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
+// nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
@@ -508,7 +475,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		if ($this->isAjax()) {
 			$handles = new AjaxCrate();
 
-			//$handles->addHandle('chat', new ExampleHandle()); //příklad
+//$handles->addHandle('chat', new ExampleHandle()); //příklad
 			$handles->addHandle('chatConversationWindow', new ChatConversationsHandle($this->chatManager, $this->getUser()->getId()));
 			$handles->addHandle('activities-observer', new ActivitesHandle($this->activitiesDao, $this->getUser()->getId()));
 			$this->ajaxObserver->sendRefreshRequests($this, $handles);
