@@ -12,10 +12,20 @@ namespace POS\Ext\SimpleMenu;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class Menu {
+class Menu implements \Iterator {
+
+	/** @var int Pozice při procházení iterátorem. */
+	private $position = 0;
 
 	/** @var array Pole položek a nadpisů v menu */
 	private $items = array();
+
+	/** @var boolean TRUE = uživatel je přihlášen, jinak FALSE. */
+	private $loggetIn;
+
+	public function __construct($loggetIn = FALSE) {
+		$this->loggetIn = $loggetIn;
+	}
 
 	/**
 	 * Přidání položky do menu.
@@ -24,9 +34,7 @@ class Menu {
 	 * Null = nereaguje na při. /odhlášení.
 	 */
 	public function addItem(Item $item, $isLoggetIn = null) {
-		if ($isLoggetIn !== null) {
-			$item->setLoggetIn($isLoggetIn);
-		}
+		$item->setLoggetIn($isLoggetIn);
 
 		$this->items[] = $item;
 	}
@@ -38,6 +46,42 @@ class Menu {
 	 */
 	public function addGroup(Group $group) {
 		$this->items[] = $group;
+	}
+
+	/*	 * ************* Metody pro iteraci položek v menu ****************** */
+
+	public function rewind() {
+		/* čištění položek pro přihlášené / nepřihlášené uživatele */
+		foreach ($this->items as $key => $item) {
+			if ($item instanceof Item) {
+				if ($item->showForLoggetIn === null) {
+					continue;
+				}
+				if ($item->showForLoggetIn != $this->loggetIn) {
+					unset($this->items[$key]);
+				}
+			}
+		}
+
+		$this->items = array_values($this->items); //resetuje klíče od 0
+
+		$this->position = 0;
+	}
+
+	public function current() {
+		return $this->items[$this->position];
+	}
+
+	public function key() {
+		return $this->position;
+	}
+
+	public function next() {
+		++$this->position;
+	}
+
+	public function valid() {
+		return isset($this->items[$this->position]);
 	}
 
 }

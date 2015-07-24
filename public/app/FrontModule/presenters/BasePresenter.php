@@ -18,6 +18,7 @@ use NetteExt\Session\UserSession;
 use POS\Ext\Menu\OnePageLeft\Menu;
 use POS\Ext\Menu\OnePageLeft\Item;
 use POS\Ext\Menu\OnePageLeft\Group;
+use POS\Ext\SimpleMenu\LeftMenu;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -64,8 +65,14 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	/** @var \POS\Model\YouAreSexyDao @inject */
 	public $youAreSexyDao;
 
+	/** @var \POS\Model\FriendDao @inject */
+	public $friendDao;
+
 	/** @var \NetteExt\Session\SessionManager Stará se o správu dat v session. */
 	private $sessionManager = null;
+
+	/** @var \POS\Model\UserBlockedDao @inject */
+	public $userBlockedDao;
 
 	public function startup() {
 		AntispamControl::register();
@@ -122,10 +129,6 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		if ($this->getUser()->isLoggedIn()) {
 			$this->template->identity = $this->getUser()->getIdentity();
 		}
-		if ($this->environment->isMobile() && $this->getUser()->isLoggedIn()) {/* údaje pro pravé menu na mobilu */
-			$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->getUser()->id)->count();
-			$this->template->countSexy = $this->youAreSexyDao->countToUser($this->getUser()->id);
-		}
 
 		$this->template->domain = $this->domain;
 		$this->template->isNotComponentCssEmpty = !empty($this->lessFiles);
@@ -181,55 +184,6 @@ abstract class BasePresenter extends BaseProjectPresenter {
 			if ($backlink == $link) {
 				$nav->setCurrentNode($article);
 			}
-		}
-	}
-
-	protected function createComponentLeftMenu($name) {
-		/* v mobilní verzi se pak zobrazuje v celém layoutu */
-		$menu = new Menu();
-		/* {if $user->isLoggedIn()}
-		  {include #friends}
-		  {* v první verzi se skrývají blokovaní uživatelé *}
-		  {include #blokedUsers}
-		  {include #friendRequest}
-		  {include #markedFromOther}
-		  {* v první verzi se změna statusu skrývá *}
-		  {*<a n:href = ":Profil:Edit:default" title = "Změna statusu">
-		  {if!empty($loggedUser->property->statusID)}
-		  Chci {$loggedUser->property->status->name}
-		  {else}
-		  NASTAVIT STATUS
-		  {/if}
-		  </a>*}
-		  {else}
-		  <a n:href = "DatingRegistration:" class = "btn-main btn-small">Doplnit info o sobě</a>
-		  {/if}
-		  {/if}
-		  <h5>Zábava</h5>
-		  <a n:href = "OnePage: priznani => 1" title = "Přiznání o sexu">Přiznání o sexu</a>
-		  <a n:href = ":Competition:list" title = "Soutěže">Soutěže</a>
-		  <a n:href = ":Eshop:game" title = "Hry">Hry</a>
-		  <a n:href = ":Page:metro" title = "Hry">Bonusy</a> */
-
-		//$countVerReqs = $this->countVerificationRequests;
-
-		$menu->addItem(new Item('Přihlášení', ':Sign:in'), false);
-		$menu->addItem(new Item('Registrace', ':Sign:registration'), false);
-
-		$menu->addItem(new Item('Hledat přátele', ':Search:Search:', 'add-friend'));
-
-		$menu->addGroup(new Group('Profil'));
-		$menu->addItem(new Item('Editovat profil', ':Profil:Edit:default', 'edit'), true);
-		$menu->addItem(new Item('Můj profil', ':Profil:Show:default', 'profile'), true);
-		/* skrytí žádostí o ověření pro první verzi přiznání */
-		//$menu->addItem(new Item('<span>' . $countVerReqs . '</span>Žádostí o ověření', ':Profil:Show:verification', 'with-counter'), true);
-
-		$menu->addGroup(new Group('Obrázky'));
-		$menu->addItem(new Item('Nahrát fotky', null, 'add-gallery', 'show-photo-form'), true);
-		$menu->addItem(new Item('Moje galerie', ':Profil:Galleries:default'), true);
-
-		if ($this->loggedUser->propertyID) { /* ochránit odkazy, které by spadly bez user properties */
-			$menu->addGroup(new Group('Uživatelé'));
 		}
 	}
 
@@ -416,6 +370,21 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		});
 
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
+	}
+
+	protected function createComponentLeftMenu($name) {
+		$daoBox = new \NetteExt\DaoBox();
+
+		$daoBox->friendRequestDao = $this->friendRequestDao;
+		$daoBox->userDao = $this->userDao;
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->userCategoryDao = $this->userCategoryDao;
+		$daoBox->friendDao = $this->friendDao;
+		$daoBox->userBlockedDao = $this->userBlockedDao;
+		$daoBox->youAreSexyDao = $this->youAreSexyDao;
+		$daoBox->paymentDao = $this->paymentDao;
+
+		return new POS\Ext\SimpleMenu\LeftMenu($this->loggedUser, $daoBox, $this->getSessionManager(), $this, $name);
 	}
 
 	/**

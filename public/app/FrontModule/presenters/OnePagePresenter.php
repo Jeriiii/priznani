@@ -254,28 +254,6 @@ class OnePagePresenter extends BasePresenter {
 		return new \POSComponent\Search\BestMatchSearch($this->loggedUser, $this->userDao, $this->userCategoryDao, $session, $this, $name);
 	}
 
-	protected function createComponentFriendRequest($name) {
-		$sessionManager = $this->getSessionManager();
-		$smDaoBox = new DaoBox();
-		$smDaoBox->userDao = $this->userDao;
-		$smDaoBox->streamDao = $this->streamDao;
-		$smDaoBox->userCategoryDao = $this->userCategoryDao;
-
-		return new FriendRequestList($this->friendRequestDao, $this->getUser()->id, $sessionManager, $smDaoBox, $this, $name);
-	}
-
-	protected function createComponentFriends($name) {
-		return new FriendsList($this->friendDao, $this->getUser()->id, $this, $name);
-	}
-
-	protected function createComponentBlokedUsers($name) {
-		return new BlokedUsersList($this->userBlockedDao, $this->getUser()->id, $this, $name);
-	}
-
-	protected function createComponentMarkedFromOther($name) {
-		return new MarkedFromOther($this->paymentDao, $this->youAreSexyDao, $this->getUser()->id, $this, $name);
-	}
-
 	/**
 	 * Zobrazit dotaz na oblíbenou polohu nebo pozici.
 	 */

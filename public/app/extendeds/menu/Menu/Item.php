@@ -12,7 +12,7 @@ namespace POS\Ext\SimpleMenu;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class Item {
+class Item implements IItem {
 
 	/** @var string Název položky */
 	public $name;
@@ -23,8 +23,8 @@ class Item {
 	/** @var string Titulek položky v menu */
 	public $tittle;
 
-	/** @var string Id položky */
-	public $elId;
+	/** @var string Další atributy html elementu jako Id a data ... */
+	public $attributes = array();
 
 	/** @var string Třída položky */
 	public $elClass;
@@ -36,16 +36,24 @@ class Item {
 	 */
 	public $showForLoggetIn = null;
 
-	public function __construct($name, $link = null, $elClass = null, $elId = null, $tittle = null) {
+	public function __construct($name, $link = null, $elClass = null, array $attributes = array(), $tittle = null) {
 		$this->name = $name;
 		$this->link = $link;
-		$this->elId = $elId;
+		$this->attributes = $attributes;
 		$this->elClass = $elClass;
 		$this->tittle = $tittle == null ? $name : $tittle;
 	}
 
 	public function setLoggetIn($showForLoggetIn) {
 		$this->showForLoggetIn = $showForLoggetIn;
+	}
+
+	public function isGroup() {
+		return FALSE;
+	}
+
+	public function isItem() {
+		return TRUE;
 	}
 
 }

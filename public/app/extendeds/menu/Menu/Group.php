@@ -12,13 +12,21 @@ namespace POS\Ext\SimpleMenu;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class Group {
+class Group implements IItem {
 
 	/** @var string Název položky */
-	private $name;
+	public $name;
 
 	public function __construct($name) {
 		$this->name = $name;
+	}
+
+	public function isGroup() {
+		return TRUE;
+	}
+
+	public function isItem() {
+		return FALSE;
 	}
 
 }
