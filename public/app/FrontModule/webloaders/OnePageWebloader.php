@@ -30,7 +30,8 @@ class OnePageWebloader {
 			'lists/initBlokedUsers.js', //zakomentováno do první verze přiznání
 			'lists/initMarkedFromOther.js',
 			'onepage/default.js',
-			'plugins/intro/intro.min.js'
+			'plugins/intro/intro.min.js',
+			'plugins/intro/introAutostart.js',
 		));
 		$compiler = Compiler::createJsCompiler($files, WWW_DIR . '/cache/js');
 		$compiler->addFilter(function ($code) {

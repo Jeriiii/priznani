@@ -110,19 +110,20 @@ class OnePagePresenter extends BasePresenter {
 	public $rateImageDao;
 	private $userID;
 
-	public function actionDefault($priznani = NULL) {
+	public function actionDefault($priznani = NULL, $intro = FALSE) {
 		if (!$this->getUser()->isLoggedIn() && empty($priznani)) {
 			$this->redirect(':DatingRegistration:');
 		}
 		$this->userID = $this->getUser()->getId();
 	}
 
-	public function renderDefault() {
+	public function renderDefault($priznani = NULL, $intro = FALSE) {
 		if ($this->user->isLoggedIn()) {
 			$this->template->userID = $this->userID;
 			$this->template->profileGallery = $this->userGalleryDao->findProfileGallery($this->userID);
 			$this->template->profilePhoto = $this->loggedUser->profilFotoID;
 			$this->template->loggedUser = $this->loggedUser;
+			$this->template->intro = $intro ? 1 : 0;
 
 			if (!$this->deviceDetector->isMobile() && $this->getUser()->isLoggedIn()) {/* pokud nejsem na mobilu, údaje se nepředají z presenteru */
 				$this->template->countFriendRequests = $this->friendRequestDao->getAllToUser($this->getUser()->id)->count();

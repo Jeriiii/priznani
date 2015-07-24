@@ -1,5 +1,5 @@
 <a id="contact-toogle-btn">Chat</a>
-<ul id="contacts" data-step="6" data-position="left" data-intro="V chatu najdeš všechny své přátele a po kliknutí na jejich obrázek jim hned píšeš. Kdyby jsi potřeboval poradit a pomoci, najdeš nás ve spodní části chatu.">
+<ul id="contacts">
 	{foreach $contacts as $contact}
 		{var $id = $coder->encodeData($contact->user2->id)}
 		<li id="contact->user2-{$id}" data-id="{$id}" data-title="{$contact->user2->user_name}" class="contact-link">
