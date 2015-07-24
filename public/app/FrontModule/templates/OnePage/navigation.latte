@@ -9,7 +9,7 @@
 		{/if}
 
 		<a n:href=":Search:Search:" class="add-friend" title="Hledat přátele" data-step="4" data-intro="Najdi nové přátele. Jednoduše jim pošli žádost o přátelství." data-position="right">Hledat přátele</a>
-		<a title="Průvodce na datenode" onclick="javascript:introJs().setOption('showProgress', true).start();">Spustit průvodce</a>
+		<a title="Průvodce na datenode" onclick="window.scrollTo(0, 0);javascript:introJs().setOption('showProgress', true).start();">Spustit průvodce</a>
 		{if $user->isLoggedIn()}
 
 		<h5>Profil</h5>
