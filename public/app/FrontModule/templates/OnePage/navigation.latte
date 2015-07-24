@@ -2,13 +2,14 @@
 {block navigation}
 <nav id="stream-menu">
 	{include #profile}
-	<div class="usermenu">
+	<div class="usermenu" data-step="4" data-intro="V levém menu.">
 		{if ! $user->isLoggedIn()}
 		<a n:href=":Sign:in" title="Přihlášení">Přihlášení</a>
 		<a n:href=":Sign:registration" title="Registrace">Registrace</a>
 		{/if}
 
-		<a n:href=":Search:Search:" class="add-friend" title="Hledat přátele">Hledat přátele</a>
+		<a n:href=":Search:Search:" class="add-friend" title="Hledat přátele" data-step="4" data-intro="Najdi nové přátele. Jednoduše jim pošli žádost o přátelství." data-position="right">Hledat přátele</a>
+		<a title="Průvodce na datenode" onclick="javascript:introJs().setOption('showProgress', true).start();">Spustit průvodce</a>
 		{if $user->isLoggedIn()}
 
 		<h5>Profil</h5>
@@ -61,7 +62,9 @@
 	</div>
 	<div class="name-container">
 		<a n:href=":Profil:Show:default" class="user-name">{$loggedUser->user_name|upper}</a>
-		<span class="sexy-label">{$loggedUser|sexyLabel} {$sexyLabelToolTip|toolTip}</span>
+		<span class="sexy-label" data-step="3" data-intro="Buď sexy! Nech se ohodnotit od ostatních uživatelů, jak moc jsi sexi." data-position="right">
+			{$loggedUser|sexyLabel} {$sexyLabelToolTip|toolTip}
+		</span>
 	</div>
 	<div class="delimiter top"></div>
 {/if}

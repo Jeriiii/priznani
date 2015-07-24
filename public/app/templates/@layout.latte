@@ -99,7 +99,11 @@
 			{control activities}
 			<a href="#" title="Poslední zprávy" class="user-btn" id="messages-btn"></a>{*tlačítko pro zobrazení posledních zpráv*}
 			{var msgPanic = "Okamžitě Vás odhlásí a<br/> přesměruje na gmail.com"}
-			<a n:href="panic!" id="panic">{$msgPanic|toolTip: 'Panika!'}</a>
+			<a n:href="panic!" id="panic">
+				<span data-step="5" data-intro="Jde někdo kolem? Po stisknutí tohoto tlačítka tě systém okamžitě odhlásí a přesměruje na neutrální stránku.">
+				{$msgPanic|toolTip: 'Panika!'}
+				</span>
+			</a>
 		{/if}
 			<div class="clear"></div>
 		</div>

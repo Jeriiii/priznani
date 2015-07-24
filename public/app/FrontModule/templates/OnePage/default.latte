@@ -6,7 +6,7 @@
 <div id="activeBackgroundUploadPhoto" style="z-index:10000;position:fixed;top:0;left:0;background: rgba(20, 20, 20, 0.4);"></div>
 <section id="entire-page">
 	{includeblock 'navigation.latte'}
-	<div id="best-match">
+	<div id="best-match" data-step="1" data-intro="Poznávej nové uživatele v liště aktivních uživatelů.">
 		{if $user->isLoggedIn()}
 			{if $loggedUser->propertyID}
 				{control bestMatchSearch 'listFew'}
