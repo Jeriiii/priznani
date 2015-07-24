@@ -5,7 +5,7 @@
  * created on 15.7.2015
  */
 
-namespace POS\Ext\Menu\OnePageLeft;
+namespace POS\Ext\SimpleMenu;
 
 /**
  * Menu v levé části stránky na one page, nebo v mobilní verzi v layoutu

@@ -5,7 +5,7 @@
  * created on 15.7.2015
  */
 
-namespace POS\Ext\Menu\OnePageLeft;
+namespace POS\Ext\SimpleMenu;
 
 /**
  * Jedna položka v menu
