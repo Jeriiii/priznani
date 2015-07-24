@@ -132,6 +132,10 @@
 		overflow: auto;
 		width: 210px;
 		border-bottom: 1px solid #aaa;
+		.online-point {
+			display: block;
+		}
+		
 		li{
 				cursor: pointer;
 				position: relative;
@@ -145,11 +149,21 @@
 				}
 				
 				.generatedProfile{
+					position: relative;
 					
 					img{
 						display: inline-block;
 						height: @contact-item-height;
 						width: @contact-item-height;
+					}
+					
+					.online-point {
+							display: inline-block;
+							float: right;
+							position: relative;
+							top: 0;
+							left: 0;
+							margin-top: 13px;
 					}
 				}
 				.chat-username{

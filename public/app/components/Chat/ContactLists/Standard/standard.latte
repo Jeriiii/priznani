@@ -4,8 +4,13 @@
 		{var $id = $coder->encodeData($contact->user2->id)}
 		<li id="contact->user2-{$id}" data-id="{$id}" data-title="{$contact->user2->user_name}" class="contact-link">
 			{$contact->user2|showProfMin}<span class="chat-username">{$contact->user2->user_name|truncate:15}</span>
-			<span class="online-indicator"></span>
-			<span class="chatLastActivity">{$contactList->getLastActivity($contact->user2)}</span>
+			
+			{var $activity = $contactList->getLastActivity($contact->user2)}
+			{if $activity == 'online'}
+			{* generuje se u fotky automaticky *}
+			{else}
+			<span class="chatLastActivity">{$activity}</span>
+			{/if}
 		</li>
 	{/foreach}
 	<li class="support-contact-spacer"></li>
