@@ -61,7 +61,7 @@ class SignPresenter extends BasePresenter {
 				$this->flashMessage("Potvrzení emailu se nezdařilo, jestli potíže přetrvávají, kontaktujte administrátora stránek.", "error");
 			} else {
 				if (empty($user->last_signed_in)) { //už se někdy přihlásil?
-					$this->userDao->setUserRoleByConfirm($code);
+					$user = $this->userDao->setUserRoleByConfirm($code);
 					$identity = new NS\Identity($user->id, $user->role, $user->toArray());
 					$this->getUser()->login($identity);
 					$this->getUser()->setExpiration('30 minutes', TRUE);
@@ -72,7 +72,7 @@ class SignPresenter extends BasePresenter {
 					));
 
 					$this->flashMessage("Potvrzení bylo úspěšné, systém vás automaticky přihlásil.", "info");
-					$this->redirect("OnePage:");
+					$this->redirect("OnePage:", array('intro' => TRUE));
 				} else {
 					$this->flashMessage("Potvrzení bylo úspěšné, můžete se přihlásil.", "info");
 					$this->redirect("Sign:in");

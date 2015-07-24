@@ -682,6 +682,7 @@ class UserDao extends UserBaseDao {
 		$user->update(array(
 			self::COLUMN_ROLE => \Authorizator::ROLE_USER
 		));
+		return $user;
 	}
 
 	/**
