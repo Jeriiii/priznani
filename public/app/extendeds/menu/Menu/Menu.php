@@ -13,6 +13,10 @@ namespace POS\Ext\SimpleMenu;
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
 class Menu implements \Iterator {
+	/* ukázat položku jen na určitých stránkách */
+
+	const SHOW_ALL_PRES = 0;
+	const SHOW_ONE_PAGE = 1;
 
 	/** @var int Pozice při procházení iterátorem. */
 	private $position = 0;
@@ -23,8 +27,12 @@ class Menu implements \Iterator {
 	/** @var boolean TRUE = uživatel je přihlášen, jinak FALSE. */
 	private $loggetIn;
 
-	public function __construct($loggetIn = FALSE) {
+	/** @var int Na jakém presenteru se dá položka zobrazit. */
+	private $showOn;
+
+	public function __construct($loggetIn = FALSE, $showOn = self::SHOW_ALL_PRES) {
 		$this->loggetIn = $loggetIn;
+		$this->showOn = $showOn;
 	}
 
 	/**
@@ -32,39 +40,51 @@ class Menu implements \Iterator {
 	 * @param \POS\Ext\Menu\OnePageLeft\Item $item
 	 * @param boolean $isLoggetIn Zobrazí se jen pokud je uživatel přihlášen / odhlášen.
 	 * Null = nereaguje na při. /odhlášení.
+	 * @param int $showOn Na jakém presenteru se dá položka zobrazit.
 	 */
-	public function addItem(Item $item, $isLoggetIn = null) {
+	public function addItem(Item $item, $isLoggetIn = null, $showOn = self::SHOW_ALL_PRES) {
 		$item->setLoggetIn($isLoggetIn);
 
-		$this->items[] = $item;
+		$this->add($item, $isLoggetIn, $showOn);
 	}
 
 	/**
 	 * Přidá skupinu k příspěvkům (přidává se nejdříve skupina a teprve
 	 * pak příspěvky v ní).
 	 * @param \POS\Ext\Menu\OnePageLeft\Group $group
+	 * @param boolean $isLoggetIn Zobrazí se jen pokud je uživatel přihlášen / odhlášen.
+	 * @param int $showOn Na jakém presenteru se dá položka zobrazit.
 	 */
-	public function addGroup(Group $group) {
-		$this->items[] = $group;
+	public function addGroup(Group $group, $isLoggetIn = null, $showOn = self::SHOW_ALL_PRES) {
+		$this->add($group, $isLoggetIn, $showOn);
+	}
+
+	/**
+	 * Přidání položky do menu.
+	 * @param \POS\Ext\Menu\OnePageLeft\Item $generalItem Skupina nebo položka
+	 * @param boolean $isLoggetIn Zobrazí se jen pokud je uživatel přihlášen / odhlášen.
+	 * Null = nereaguje na při. /odhlášení.
+	 * @param int $showOn Na jakém presenteru se dá položka zobrazit.
+	 */
+	private function add(IItem $generalItem, $isLoggetIn = null, $showOn = self::SHOW_ALL_PRES) {
+		/* vyřadí položky specifické jen pro určité presentery */
+		if ($showOn != self::SHOW_ALL_PRES && $showOn != $this->showOn) {
+			return;
+		}
+
+		if ($isLoggetIn === null) {
+			$this->items[] = $generalItem;
+			return;
+		}
+
+		if ($isLoggetIn == $this->loggetIn) {
+			$this->items[] = $generalItem;
+		}
 	}
 
 	/*	 * ************* Metody pro iteraci položek v menu ****************** */
 
 	public function rewind() {
-		/* čištění položek pro přihlášené / nepřihlášené uživatele */
-		foreach ($this->items as $key => $item) {
-			if ($item instanceof Item) {
-				if ($item->showForLoggetIn === null) {
-					continue;
-				}
-				if ($item->showForLoggetIn != $this->loggetIn) {
-					unset($this->items[$key]);
-				}
-			}
-		}
-
-		$this->items = array_values($this->items); //resetuje klíče od 0
-
 		$this->position = 0;
 	}
 

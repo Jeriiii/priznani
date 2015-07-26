@@ -1,22 +1,21 @@
 {block menu}
 {foreach $menu as $item}
 	{if $item->isItem()}
-		<a 
+		<li><a 
 			{ifset $item->link}href="{plink $item->link}"{/ifset} 
 			{ifset $item->elClass}class="{$item->elClass}"{/ifset} 
 			title="{$item->tittle}"
 			{foreach $item->attributes as $name => $val}{!$name}="{!$val}"{/foreach}
 			>
 			{$item->name}
-		</a>
+		</a></li>
 	{/if}
 	{if $item->isGroup()}
-		<h5>{$item->name}</h5>
+		{*<h5>{$item->name}</h5>*}
 		
 		{if $item->name == 'Uživatelé' && $user->isLoggedIn()}
-			{include 'blockComponents.latte'}
+			{*include 'blockComponents.latte'*}
 		{/if}
 	{/if}
 {/foreach}
 {/}
-

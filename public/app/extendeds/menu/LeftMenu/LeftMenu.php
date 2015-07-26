@@ -33,20 +33,24 @@ class LeftMenu extends \POSComponent\BaseProjectControl {
 	/** @var int 1 = má se automaticky spustit průvodce, jinak 0 */
 	private $intro;
 
-	public function __construct($loggedUser, DaoBox $daoBox, $sessionManager, $parent, $name, $intro = 0) {
+	/** @var int Na jakém presenteru se dá položka zobrazit. */
+	private $showOn;
+
+	public function __construct($loggedUser, DaoBox $daoBox, $sessionManager, $parent, $name, $intro = 0, $showOn = Menu::SHOW_ALL_PRES) {
 		parent::__construct($parent, $name);
 
 		$this->loggedUser = $loggedUser;
 		$this->daoBox = $daoBox;
 		$this->sessionManager = $sessionManager;
 		$this->intro = $intro;
+		$this->showOn = $showOn;
 	}
 
 	/**
 	 * Vykresli šablonu.
 	 */
-	public function render() {
-		$this->template->setFile(dirname(__FILE__) . '/default.latte');
+	public function render($templateName = 'default.latte') {
+		$this->template->setFile(dirname(__FILE__) . '/' . $templateName);
 		$this->template->menu = $this->createMenu();
 
 		$userId = $this->presenter->getUser()->id;
@@ -55,13 +59,17 @@ class LeftMenu extends \POSComponent\BaseProjectControl {
 		$this->template->render();
 	}
 
+	public function renderMobile() {
+		$this->render('mobile.latte');
+	}
+
 	/**
 	 * Vrátí nové menu.
 	 * @return \POS\Ext\SimpleMenu\Menu
 	 */
 	private function createMenu() {
 		/* v mobilní verzi se pak zobrazuje v celém layoutu */
-		$menu = new Menu($this->presenter->user->isLoggedIn());
+		$menu = new Menu($this->presenter->user->isLoggedIn(), $this->showOn);
 
 		$menu->addItem(new Item('Přihlášení', ':Sign:in'), false);
 		$menu->addItem(new Item('Registrace', ':Sign:registration'), false);
@@ -75,22 +83,22 @@ class LeftMenu extends \POSComponent\BaseProjectControl {
 		$menu->addItem(new Item('Spustit průvodce', null, null, array(
 			'id' => 'startIntroBtn', 'data-auto-start' => $this->intro, 'onclick' =>
 			"window.scrollTo(0, 0);javascript:introJs().setOption('showProgress', true).start();"
-			))
+			)), true, Menu::SHOW_ONE_PAGE
 		);
 
 
 
-		$menu->addGroup(new Group('Profil'));
+		$menu->addGroup(new Group('Profil'), true);
 		$menu->addItem(new Item('Editovat profil', ':Profil:Edit:default', 'edit'), true);
 		$menu->addItem(new Item('Můj profil', ':Profil:Show:default', 'profile'), true);
 		/* skrytí žádostí o ověření pro první verzi přiznání */
 		//$menu->addItem(new Item('<span>' . $countVerReqs . '</span>Žádostí o ověření', ':Profil:Show:verification', 'with-counter'), true);
 
-		$menu->addGroup(new Group('Obrázky'));
-		$menu->addItem(new Item('Nahrát fotky', null, 'add-gallery', array('id' => 'show-photo-form')), true);
+		$menu->addGroup(new Group('Obrázky'), true);
+		$menu->addItem(new Item('Nahrát fotky', null, 'add-gallery', array('id' => 'show-photo-form')), true, Menu::SHOW_ONE_PAGE);
 		$menu->addItem(new Item('Moje galerie', ':Profil:Galleries:default'), true);
 
-		if ($this->loggedUser->propertyID) { /* ochránit odkazy, které by spadly bez user properties */
+		if (isset($this->loggedUser) && $this->loggedUser->propertyID) { /* ochránit odkazy, které by spadly bez user properties */
 			$menu->addGroup(new Group('Uživatelé'));
 		}
 

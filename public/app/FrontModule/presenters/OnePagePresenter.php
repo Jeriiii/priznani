@@ -22,6 +22,7 @@ use UserBlock\UserBlocker;
 use POSComponent\CropImageUpload\CropImageUpload;
 use POS\Webloaders\OnePageWebloader;
 use POSComponent\PhotoRating;
+use POS\Ext\SimpleMenu\Menu;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -332,6 +333,10 @@ class OnePagePresenter extends BasePresenter {
 
 		$sm = $this->getSessionManager();
 		return new Frm \ SetInitimityForm($loggedUser, $sm, $daoBox, $this, $name);
+	}
+
+	protected function createComponentLeftMenu($name, $showOn = Menu::SHOW_ALL_PRES) {
+		parent::createComponentLeftMenu($name, Menu::SHOW_ONE_PAGE);
 	}
 
 	/** Přečtení novinek (nad streamem) uživatelem */
