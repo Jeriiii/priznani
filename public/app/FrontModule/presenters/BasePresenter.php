@@ -15,10 +15,8 @@ use POS\Ajax\ActivitesHandle;
 use POSComponent\Payment;
 use NetteExt\Session\SessionManager;
 use NetteExt\Session\UserSession;
-use POS\Ext\Menu\OnePageLeft\Menu;
-use POS\Ext\Menu\OnePageLeft\Item;
-use POS\Ext\Menu\OnePageLeft\Group;
 use POS\Ext\SimpleMenu\LeftMenu;
+use POS\Ext\SimpleMenu\Menu;
 
 abstract class BasePresenter extends BaseProjectPresenter {
 
@@ -73,6 +71,9 @@ abstract class BasePresenter extends BaseProjectPresenter {
 
 	/** @var \POS\Model\UserBlockedDao @inject */
 	public $userBlockedDao;
+
+	/** @var \POS\Model\userCategoryDao @inject */
+	public $userCategoryDao;
 
 	/** @var int 1 = má se automaticky spustit průvodce (funguje pouze na onepage), jinak 0 */
 	protected $intro = 0;
@@ -375,7 +376,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/cache/js');
 	}
 
-	protected function createComponentLeftMenu($name) {
+	protected function createComponentLeftMenu($name, $showOn = Menu::SHOW_ALL_PRES) {
 		$daoBox = new \NetteExt\DaoBox();
 
 		$daoBox->friendRequestDao = $this->friendRequestDao;
@@ -387,7 +388,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$daoBox->youAreSexyDao = $this->youAreSexyDao;
 		$daoBox->paymentDao = $this->paymentDao;
 
-		return new POS\Ext\SimpleMenu\LeftMenu($this->loggedUser, $daoBox, $this->getSessionManager(), $this, $name, $this->intro);
+		return new LeftMenu($this->loggedUser, $daoBox, $this->getSessionManager(), $this, $name, $this->intro, $showOn);
 	}
 
 	/**

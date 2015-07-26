@@ -62,7 +62,8 @@
 			<div data-role="panel" id="leftmenu" data-position="left" data-display="overlay" >
 				{block leftMenu}
 						<ul data-role="listview">
-							{include #posmenuMobile}
+							<li class="pagename">DATENODE.cz</li>
+							{control leftMenu:mobile}
 							{block inLeftMenu}{/block}
 						</ul>
 				{/block}
@@ -85,17 +86,17 @@
 							<li><a n:href=":Profil:Show:default" class="profile" title="Muj profil">Můj profil</a></li>
 						{/if}
 						<li><a n:href=":Profil:Galleries:userGalleryNew" class="add-gallery" title="Profil">Vytvořit galerii</a></li>
-						{if $user->isLoggedIn()}
+						{*if $user->isLoggedIn()}
 							<li><a n:href=":Profil:Galleries:default" title="Editovat profil">Moje galerie</a></li>
 							{if $loggedUser->propertyID} {* ochránit odkazy, které by spadly bez user properties *}
-								{includeblock 'mobileNavigation.latte'}
+								{*includeblock 'mobileNavigation.latte'}
 								{include #friendRequest}
 								{include #friends}
 								{include #markedFromOther}
 							{else}
 								<li><a n:href="DatingRegistration:" class="btn-main btn-small">Doplnit info o sobě</a></li>
 							{/if}
-						{/if}
+						{/if*}
 					</ul>					
 				{/block}
 				{control userMenu}
