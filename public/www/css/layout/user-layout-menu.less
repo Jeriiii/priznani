@@ -95,11 +95,16 @@
 		}
 		.checkbox{
 			display: none;
+			padding: 0;
+			margin: 0;
+		}
+		.form-group > .checkbox {
+			margin: 0;
 		}
 		
 	}
 	
-	#line-sign-in-form input[type="submit"], .header-btn{
+	#line-sign-in-form input[type="submit"], .header-btn, #sign-in-btn{
 		width: 110px;
 		padding: 0;
 		background: #383436 !important;
@@ -113,9 +118,16 @@
 		color: white;
 		text-align: center;
 	}
-	
-	
-}
+
+	}
+
+	#sign-in-btn{
+		display: none;
+		text-transform: uppercase;
+		float: right;
+		margin-top: 12px !important;
+		margin-right: 12px !important;
+	}
 
 .payment-window{
 	display: none;
@@ -124,6 +136,31 @@
 #dropmenu{
 	display: none;
 	
+}
+
+@media screen and (max-width: 780px){
+	#usermenu{
+		width: 395px;
+	}
+}
+
+@media screen and (max-width: 610px){
+	#usermenu{
+		width: 380px;
+	}
+}
+
+@media screen and (max-width: 590px){
+	#usermenu{
+		width: 110px;
+	}
+	#line-sign-in-form {
+		display: none;
+	}
+
+	#sign-in-btn {
+		display: inline-block;
+	}
 }
 
 @media screen and (max-width: 500px){
@@ -139,4 +176,5 @@
 			border-left: 1px solid #DFBFC2;
 		}
     }
+	
 }
