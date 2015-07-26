@@ -7,8 +7,7 @@ namespace WebLoader;
  *
  * @author Jan Marek
  */
-class Compiler
-{
+class Compiler {
 
 	/** @var string */
 	private $outputDir;
@@ -31,8 +30,10 @@ class Compiler
 	/** @var bool */
 	private $checkLastModified = true;
 
-	public function __construct(IFileCollection $files, IOutputNamingConvention $convention, $outputDir)
-	{
+	/** @var Seznam souborů u kterých se již kontrolovalo, zda nejsou změněné */
+	private $listCheckFiles = array();
+
+	public function __construct(IFileCollection $files, IOutputNamingConvention $convention, $outputDir) {
 		$this->collection = $files;
 		$this->namingConvention = $convention;
 		$this->setOutputDir($outputDir);
@@ -44,8 +45,7 @@ class Compiler
 	 * @param string $outputDir
 	 * @return Compiler
 	 */
-	public static function createCssCompiler(IFileCollection $files, $outputDir)
-	{
+	public static function createCssCompiler(IFileCollection $files, $outputDir) {
 		return new static($files, DefaultOutputNamingConvention::createCssConvention(), $outputDir);
 	}
 
@@ -55,8 +55,7 @@ class Compiler
 	 * @param string $outputDir
 	 * @return Compiler
 	 */
-	public static function createJsCompiler(IFileCollection $files, $outputDir)
-	{
+	public static function createJsCompiler(IFileCollection $files, $outputDir) {
 		return new static($files, DefaultOutputNamingConvention::createJsConvention(), $outputDir);
 	}
 
@@ -64,8 +63,7 @@ class Compiler
 	 * Get temp path
 	 * @return string
 	 */
-	public function getOutputDir()
-	{
+	public function getOutputDir() {
 		return $this->outputDir;
 	}
 
@@ -73,8 +71,7 @@ class Compiler
 	 * Set temp path
 	 * @param string $tempPath
 	 */
-	public function setOutputDir($tempPath)
-	{
+	public function setOutputDir($tempPath) {
 		$tempPath = Path::normalize($tempPath);
 
 		if (!is_dir($tempPath)) {
@@ -92,8 +89,7 @@ class Compiler
 	 * Get join files
 	 * @return bool
 	 */
-	public function getJoinFiles()
-	{
+	public function getJoinFiles() {
 		return $this->joinFiles;
 	}
 
@@ -101,8 +97,7 @@ class Compiler
 	 * Set join files
 	 * @param bool $joinFiles
 	 */
-	public function setJoinFiles($joinFiles)
-	{
+	public function setJoinFiles($joinFiles) {
 		$this->joinFiles = (bool) $joinFiles;
 	}
 
@@ -110,8 +105,7 @@ class Compiler
 	 * Set check last modified
 	 * @param bool $checkLastModified
 	 */
-	public function setCheckLastModified($checkLastModified)
-	{
+	public function setCheckLastModified($checkLastModified) {
 		$this->checkLastModified = (bool) $checkLastModified;
 	}
 
@@ -120,8 +114,7 @@ class Compiler
 	 * @param array $files
 	 * @return int
 	 */
-	public function getLastModified(array $files = null)
-	{
+	public function getLastModified(array $files = null) {
 		if ($files === null) {
 			$files = $this->collection->getFiles();
 		}
@@ -130,6 +123,69 @@ class Compiler
 
 		foreach ($files as $file) {
 			$modified = max($modified, filemtime($file));
+			$modified = max($modified, $this->isImportModified($file));
+		}
+
+		return $modified;
+	}
+
+	/**
+	 * Zkontroluje, zda jsou v souboru importy souborů a zda tyto soubory nebyly změněné.
+	 * @param string $filePath Soubor, u kterého se mají kontrolovat importy.
+	 * @return int Nejvyšší čas modifikace importovaných souborů.
+	 */
+	private function isImportModified($filePath) {
+		/* kontrola, zda jde o less soubor */
+		if (pathinfo($filePath, PATHINFO_EXTENSION) != 'less') {
+			return 0;
+		}
+
+		/* kontrola, zda se tento soubor již nekontroloval */
+		if (in_array($filePath, $this->listCheckFiles)) {
+			return 0;
+		}
+
+		$this->listCheckFiles[] = $filePath;
+
+		return $this->checkImportModified($filePath);
+	}
+
+	/**
+	 * Vypočítá, kdy byl soubor naposledy modifikován.
+	 * @param string $filePath Soubor, u kterého se mají kontrolovat importy.
+	 * @return int Čas poslední modifikace.
+	 */
+	private function checkImportModified($filePath) {
+		$modified = 0;
+		$offset = 0;
+		$fileContent = file_get_contents($filePath);
+		$offset = strpos($fileContent, '@import', $offset);
+
+		while ($offset !== FALSE) {
+			/* nalezení importu */
+			$startOffsetFile = strpos($fileContent, '"', $offset);
+			$endOffsetFile = strpos($fileContent, '"', $startOffsetFile + 1);
+
+			/* nalezení souboru, který se importuje */
+			$fileName = substr($fileContent, $startOffsetFile + 1, $endOffsetFile - $startOffsetFile - 1);
+			$offset = $endOffsetFile + 1;
+
+			$fileImportPath = dirname($filePath) . '/' . $fileName;
+
+			$start = microtime();
+
+			/* kontrola, zda se tento soubor již nekontroloval */
+			if (!in_array($fileImportPath, $this->listCheckFiles)) {
+				$this->listCheckFiles[] = $filePath;
+
+				/* zjištění, kdy se naposledy změnil */
+				$modified = max($modified, filemtime($fileImportPath));
+				$modified = max($modified, $this->isImportModified($fileImportPath));
+			}
+
+			dump((microtime() - $start));
+
+			$offset = strpos($fileContent, '@import', $offset);
 		}
 
 		return $modified;
@@ -140,8 +196,7 @@ class Compiler
 	 * @param array $files
 	 * @return string
 	 */
-	public function getContent(array $files = null)
-	{
+	public function getContent(array $files = null) {
 		if ($files === null) {
 			$files = $this->collection->getFiles();
 		}
@@ -165,8 +220,7 @@ class Compiler
 	 * @param bool $ifModified
 	 * @return array filenames of generated files
 	 */
-	public function generate($ifModified = TRUE)
-	{
+	public function generate($ifModified = TRUE) {
 		if ($this->joinFiles) {
 			return array(
 				$this->generateFiles($this->collection->getFiles(), $ifModified)
@@ -182,8 +236,7 @@ class Compiler
 		}
 	}
 
-	protected function generateFiles(array $files, $ifModified)
-	{
+	protected function generateFiles(array $files, $ifModified) {
 		$name = $this->namingConvention->getFilename($files, $this);
 		$path = $this->outputDir . '/' . $name;
 		$lastModified = $this->checkLastModified ? $this->getLastModified($files) : 0;
@@ -194,9 +247,9 @@ class Compiler
 		}
 
 		return (object) array(
-			'file' => $name,
-			'lastModified' => $lastModified,
-			'sourceFiles' => $files,
+				'file' => $name,
+				'lastModified' => $lastModified,
+				'sourceFiles' => $files,
 		);
 	}
 
@@ -205,8 +258,7 @@ class Compiler
 	 * @param string $file path
 	 * @return string
 	 */
-	protected function loadFile($file)
-	{
+	protected function loadFile($file) {
 		$content = file_get_contents($file);
 
 		foreach ($this->fileFilters as $filter) {
@@ -219,32 +271,28 @@ class Compiler
 	/**
 	 * @return \WebLoader\IFileCollection
 	 */
-	public function getFileCollection()
-	{
+	public function getFileCollection() {
 		return $this->collection;
 	}
 
 	/**
 	 * @return \WebLoader\IOutputNamingConvention
 	 */
-	public function getOutputNamingConvention()
-	{
+	public function getOutputNamingConvention() {
 		return $this->namingConvention;
 	}
 
 	/**
 	 * @param \WebLoader\IFileCollection $collection
 	 */
-	public function setFileCollection(IFileCollection $collection)
-	{
+	public function setFileCollection(IFileCollection $collection) {
 		$this->collection = $collection;
 	}
 
 	/**
 	 * @param \WebLoader\IOutputNamingConvention $namingConvention
 	 */
-	public function setOutputNamingConvention(IOutputNamingConvention $namingConvention)
-	{
+	public function setOutputNamingConvention(IOutputNamingConvention $namingConvention) {
 		$this->namingConvention = $namingConvention;
 	}
 
@@ -252,8 +300,7 @@ class Compiler
 	 * @param callback $filter
 	 * @throws InvalidArgumentException
 	 */
-	public function addFilter($filter)
-	{
+	public function addFilter($filter) {
 		if (!is_callable($filter)) {
 			throw new InvalidArgumentException('Filter is not callable.');
 		}
@@ -264,8 +311,7 @@ class Compiler
 	/**
 	 * @return array
 	 */
-	public function getFilters()
-	{
+	public function getFilters() {
 		return $this->filters;
 	}
 
@@ -273,8 +319,7 @@ class Compiler
 	 * @param callback $filter
 	 * @throws InvalidArgumentException
 	 */
-	public function addFileFilter($filter)
-	{
+	public function addFileFilter($filter) {
 		if (!is_callable($filter)) {
 			throw new InvalidArgumentException('Filter is not callable.');
 		}
@@ -285,8 +330,7 @@ class Compiler
 	/**
 	 * @return array
 	 */
-	public function getFileFilters()
-	{
+	public function getFileFilters() {
 		return $this->fileFilters;
 	}
 
