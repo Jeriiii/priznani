@@ -172,8 +172,6 @@ class Compiler {
 
 			$fileImportPath = dirname($filePath) . '/' . $fileName;
 
-			$start = microtime();
-
 			/* kontrola, zda se tento soubor již nekontroloval */
 			if (!in_array($fileImportPath, $this->listCheckFiles)) {
 				$this->listCheckFiles[] = $filePath;
@@ -182,8 +180,6 @@ class Compiler {
 				$modified = max($modified, filemtime($fileImportPath));
 				$modified = max($modified, $this->isImportModified($fileImportPath));
 			}
-
-			dump((microtime() - $start));
 
 			$offset = strpos($fileContent, '@import', $offset);
 		}
