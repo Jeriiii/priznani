@@ -75,6 +75,9 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	/** @var \POS\Model\userCategoryDao @inject */
 	public $userCategoryDao;
 
+	/** @var \POS\Model\StreamDao @inject */
+	public $streamDao;
+
 	/** @var int 1 = má se automaticky spustit průvodce (funguje pouze na onepage), jinak 0 */
 	protected $intro = 0;
 
