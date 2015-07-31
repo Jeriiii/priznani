@@ -176,6 +176,11 @@ class Compiler {
 			if (!in_array($fileImportPath, $this->listCheckFiles)) {
 				$this->listCheckFiles[] = $filePath;
 
+				/* pokud nemá koncovku, přidá less koncovku */
+				if (pathinfo($fileImportPath, PATHINFO_EXTENSION) == "") {
+					$fileImportPath = $fileImportPath . '.less';
+				}
+
 				/* zjištění, kdy se naposledy změnil */
 				$modified = max($modified, filemtime($fileImportPath));
 				$modified = max($modified, $this->isImportModified($fileImportPath));
