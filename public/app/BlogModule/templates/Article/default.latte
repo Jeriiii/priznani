@@ -1,8 +1,8 @@
-{* This is the welcome page, you can delete it *}
+{* This is the welcome article, you can delete it *}
 
 {block content}
 {if $user->isInRole("admin")}
-	<a class="btn btn-warning" n:href="Documentation:editpage url => $url">Změnit obsah</a>
+	<a class="btn btn-warning" n:href="Article:editArticle url => $url">Změnit obsah</a>
 	{include 'adminPageMenu.latte'}
 {/if}
 
@@ -10,10 +10,10 @@
 
 {if !empty($listPages)}
 	<ul class="list-unstyled">
-		{foreach $listPages as $page}
+		{foreach $listPages as $article}
 			<li>
-				<a class="btn btn-link btn-lg" n:href="Documentation: url => $page->url">
-					{$page->name}
+				<a class="btn btn-link btn-lg" n:href="Article: url => $article->url">
+					{$article->name}
 				</a>
 			</li>
 		{/foreach}
@@ -21,7 +21,7 @@
 {/if}
 {!$text}
 {if !$isHomepage}
-	<a n:href="Documentation:" class="btn btn-link">zpět na hlavní stránku dokumentace</a>
+	<a n:href="Article:" class="btn btn-link">zpět na hlavní stránku dokumentace</a>
 {/if}
 {/block}
 

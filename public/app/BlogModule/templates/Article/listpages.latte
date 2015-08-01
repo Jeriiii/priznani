@@ -1,4 +1,4 @@
-{* This is the welcome page, you can delete it *}
+{* This is the welcome article, you can delete it *}
 
 {block content}
 {if $user->isInRole("admin")}
@@ -21,28 +21,28 @@
 		</th>
 	</thead>
 	<tbody>
-	{foreach $pages as $page}
+	{foreach $articles as $article}
 		<tr>
 			<td>
 				<b>
-					{$page->order}
+					{$article->order}
 				</b>
 			</td>
 			<td>
-				<a class="btn btn-link btn-lg" n:href="Documentation: url => $page->url">
-					{$page->name}
+				<a class="btn btn-link btn-lg" n:href="Article: url => $article->url">
+					{$article->name}
 				</a>
 			</td>
 			<td>
-				{str_replace(array("all", "admin"), array("všichni", "pouze admini"),$page->access_rights)}
+				{str_replace(array("all", "admin"), array("všichni", "pouze admini"),$article->access_rights)}
 			</td>
 			<td>
-				<a class="btn btn-info" n:href="Documentation:editpage url=>$page->url">
+				<a class="btn btn-info" n:href="Article:editArticle url=>$article->url">
 					editovat
 				</a>
 			</td>
 			<td>
-				<a class="btn btn-danger" n:href="deletePage! idPage=>$page->id ">
+				<a class="btn btn-danger" n:href="deleteArticle! idPage=>$article->id ">
 					smazat
 				</a>
 			</td>
