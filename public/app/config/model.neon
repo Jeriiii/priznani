@@ -68,3 +68,4 @@ services:
 	UsersNewsDao: POS\Model\UsersNewsDao
 	ConversationDao: POS\Model\ConversationDao
 	RateImageDao: POS\Model\RateImageDao
+	MagazineDao: POS\Model\MagazineDao

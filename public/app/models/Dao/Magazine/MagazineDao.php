@@ -1,10 +1,9 @@
 <?php
 
-/* 
+/*
  * @copyright Copyright (c) 2013-2015 Kukral COMPANY s.r.o.
  * created on 1.8.2015
  */
-
 
 namespace POS\Model;
 
@@ -16,7 +15,7 @@ namespace POS\Model;
  */
 class MagazinDao extends AbstractDao {
 
-	const TABLE_NAME = "";
+	const TABLE_NAME = "magazine";
 
 	/* Column name */
 	const COLUMN_ID = "id";
