@@ -9,10 +9,10 @@ namespace MagazineModule;
 use Nette\Application\UI\Form as Frm;
 use Michelf\MarkdownToHtml;
 
-class HomePresenter extends \BasePresenter {
+class ArticlePresenter extends \BasePresenter {
 
-	/** @var \POS\Model\MagazineDao @inject */
-	public $magazineDao;
+	/** @var \POS\Model\BlogDao @inject */
+	public $blogDao;
 
 	/** @var \Nette\Database\Table\ActiveRow Aktuální stránka. */
 	public $page;
@@ -53,9 +53,9 @@ class HomePresenter extends \BasePresenter {
 		if (empty($url)) {
 			/* homepage */
 
-			$page = $this->magazineDao->findHomepage();
+			$page = $this->blogDao->findHomepage();
 
-			$this->listPages = $this->magazineDao->getListMages();
+			$this->listPages = $this->blogDao->getListMages();
 
 //			if (!$this->getUser()->isAllowed("adminDocumentation")) {
 //				$this->listPages->where("access_rights", "all");

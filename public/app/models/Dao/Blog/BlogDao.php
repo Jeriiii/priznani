@@ -8,12 +8,11 @@
 namespace POS\Model;
 
 /**
- * NAME DAO NAMEDao
- * slouží k
+ * Dao pro stránky na blogu.
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class MagazineDao extends AbstractDao {
+class BlogDao extends AbstractDao {
 
 	const TABLE_NAME = "magazine";
 
