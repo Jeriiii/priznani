@@ -55,21 +55,20 @@ class ArticlePresenter extends \BasePresenter {
 
 			$page = $this->blogDao->findHomepage();
 
-			$this->listPages = $this->blogDao->getListMages();
-
 //			if (!$this->getUser()->isAllowed("adminDocumentation")) {
 //				$this->listPages->where("access_rights", "all");
 //			}
 		} else {
 			/* normal page */
-			$page = $this->context->createPages()
-				->where("url", $url)
-				->fetch();
+			$page = $this->blogDao->findByUrl();
+
 
 			if (empty($page)) {
 				$this->redirect("Error:404");
 			}
 		}
+
+		$this->listPages = $this->blogDao->getListMages();
 
 		if ($page->access_rights != "all") {
 			$this->isAdmin();

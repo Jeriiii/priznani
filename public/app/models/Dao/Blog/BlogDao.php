@@ -20,6 +20,7 @@ class BlogDao extends AbstractDao {
 	const COLUMN_ID = "id";
 	const COLUMN_HOMEPAGE = 'homepage';
 	const COLUMN_ORDER = 'order';
+	const COLUMN_URL = 'url';
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -46,6 +47,18 @@ class BlogDao extends AbstractDao {
 		$sel->order(self::COLUMN_ORDER . ' ASC');
 
 		return $sel;
+	}
+
+	/**
+	 * Najde stránku podle url.
+	 * @param string $url Url stránky.
+	 * @return \Nette\Database\Table\ActiveRow
+	 */
+	public function findByUrl($url) {
+		$sel = $this->getTable();
+
+		$sel->where(self::COLUMN_URL, $url);
+		return $sel->fetch();
 	}
 
 }
