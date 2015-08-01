@@ -3,11 +3,7 @@
 {block content}
 {if $user->isInRole("admin")}
 	<a class="btn btn-warning" n:href="Documentation:editpage url => $url">Změnit obsah</a>
-	<div class="btn-group">
-		<a class="btn btn-default" n:href="Documentation:listpages">Seznam stránek</a>
-		<a class="btn btn-default" n:href="Documentation:">Domů</a>
-		<a class="btn btn-default" n:href="Documentation:newpage">Nová stránka</a>
-	</div>
+	{include 'adminPageMenu.latte'}
 {/if}
 
 <h1>{$name}</h1>

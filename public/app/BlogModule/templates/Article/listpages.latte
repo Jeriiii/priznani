@@ -2,11 +2,7 @@
 
 {block content}
 {if $user->isInRole("admin")}
-	<div class="btn-group">
-		<a class="btn btn-default" n:href="Documentation:listpages">Seznam stránek</a>
-		<a class="btn btn-default" n:href="Documentation:">Domů</a>
-		<a class="btn btn-default" n:href="Documentation:newpage">Nová stránka</a>
-	</div>
+	{include 'adminPageMenu.latte'}
 {/if}
 <table class="table table-striped">
 	<thead>

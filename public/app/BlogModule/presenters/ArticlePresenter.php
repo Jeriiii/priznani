@@ -1,6 +1,6 @@
 <?php
 
-namespace MagazineModule;
+namespace BlogModule;
 
 /**
  *
@@ -34,16 +34,16 @@ class ArticlePresenter extends \BasePresenter {
 		$this->template->isHomepage = $this->page->homepage == 1 ? TRUE : FALSE;
 	}
 
-	public function renderListPages() {
+	public function renderListArticles() {
 		$this->template->pages = $this->context->createPages()
 			->where("homepage", 0);
 	}
 
-	public function actionEditPage($url = null) {
+	public function actionEditArticle($url = null) {
 		$this->loadPage($url);
 	}
 
-	public function actionNewPage() {
+	public function actionNewArticle() {
 		$this->page = $this->context->createPages()
 			->order("order DESC")
 			->fetch();
