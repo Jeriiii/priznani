@@ -1,13 +1,15 @@
 <?php
 
+namespace MagazineModule;
+
 /**
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
 use Nette\Application\UI\Form as Frm;
-use MarkdownToHtml;
+use Michelf\MarkdownToHtml;
 
-class HomePresenter extends BasePresenter {
+class HomePresenter extends \BasePresenter {
 
 	public $page;
 	private $listPages;
