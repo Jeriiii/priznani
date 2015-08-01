@@ -4,8 +4,8 @@
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-use Nette\Application\UI\Form as Frm,
-	\Michelf\Markdown;
+use Nette\Application\UI\Form as Frm;
+use MarkdownToHtml;
 
 class HomePresenter extends BasePresenter {
 
@@ -83,11 +83,11 @@ class HomePresenter extends BasePresenter {
 	}
 
 	protected function createComponentEditPageForm($name) {
-		return new Frm\editPageForm($this, $name);
+		return new Frm\EditPageForm($this, $name);
 	}
 
 	protected function createComponentNewPageForm($name) {
-		return new Frm\newPageForm($this, $name);
+		return new Frm\NewPageForm($this, $name);
 	}
 
 }
