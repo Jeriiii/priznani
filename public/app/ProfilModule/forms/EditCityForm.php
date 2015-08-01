@@ -108,7 +108,7 @@ class EditCityForm extends BaseForm {
 
 
 		if (sizeof($data) < 3) {
-			$form->addError('Neúplná data o městu(město, okres, kraj)');
+			$form->addError('Neúplná data o městu, zapisujte je ve formátu: město, okres, kraj');
 			return;
 		}
 
