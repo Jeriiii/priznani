@@ -1,0 +1,38 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+{control newPageForm}
+{/block}
+
+{block scripts}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="{$basePath}/js/editor/bootstrap2.3.min.js"></script>
+<script type="text/javascript" src="{$basePath}/js/editor/jquery.pagedown-bootstrap.min.js"></script>
+<script type="text/javascript">
+(function () {
+ 
+	$("textarea.editor").pagedownBootstrap();
+ 
+})();
+</script>
+{/block}
+
+
+{block head}
+<link href="{$basePath}/css/editor/bootstrap2.3.min.css" rel="stylesheet">
+<link href="{$basePath}/css/editor/jquery.pagedown-bootstrap.css" rel="stylesheet">
+<style>
+	input[type="text"] {
+		display:block;width:100%;height:34px;padding:6px 12px;font-size:14px;line-height:1.428571429;color:#555555;vertical-align:middle;background-color:#ffffff;border:1px solid #cccccc;border-radius:4px;-webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.075);box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.075);-webkit-transition:border-color ease-in-out .15s, box-shadow ease-in-out .15s;transition:border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	}
+	input[type="text"]:focus {
+		border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+	}
+	.hide {
+		display: block !important;
+		overflow-y: hidden;
+		bottom: auto;
+	}
+</style>
+{/block}

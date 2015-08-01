@@ -1,0 +1,48 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+{if $user->isInRole("admin")}
+	<a class="btn btn-warning" n:href="Documentation:editpage url => $url">Změnit obsah</a>
+	<div class="btn-group">
+		<a class="btn btn-default" n:href="Documentation:listpages">Seznam stránek</a>
+		<a class="btn btn-default" n:href="Documentation:">Domů</a>
+		<a class="btn btn-default" n:href="Documentation:newpage">Nová stránka</a>
+	</div>
+{/if}
+
+<h1>{$name}</h1>
+
+{if !empty($listPages)}
+	<ul class="list-unstyled">
+		{foreach $listPages as $page}
+			<li>
+				<a class="btn btn-link btn-lg" n:href="Documentation: url => $page->url">
+					{$page->name}
+				</a>
+			</li>
+		{/foreach}
+	</ul>
+{/if}
+{!$text}
+{if !$isHomepage}
+	<a n:href="Documentation:" class="btn btn-link">zpět na hlavní stránku dokumentace</a>
+{/if}
+{/block}
+
+{block scripts}
+{include #parent}
+<script src="http://jush.sourceforge.net/jush.js"></script>
+<script>
+	jush.create_links = false;
+	jush.highlight_tag('code');
+	$('code.jush').each(function(){ $(this).html($(this).html().replace(/\x7B[/$\w].*?\}/g, '<span class="jush-latte">$&</span>')) });
+
+	$('a[href^=#]').click(function(){
+		$('html,body').animate({ scrollTop: $($(this).attr('href')).show().offset().top - 5 }, 'fast');
+		return false;
+	});
+</script>
+{/block}
+
+
+{block head}{/block}
