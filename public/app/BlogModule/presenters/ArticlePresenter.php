@@ -60,7 +60,7 @@ class ArticlePresenter extends \BasePresenter {
 //			}
 		} else {
 			/* normal page */
-			$page = $this->blogDao->findByUrl();
+			$page = $this->blogDao->findByUrl($url);
 
 
 			if (empty($page)) {
@@ -70,19 +70,21 @@ class ArticlePresenter extends \BasePresenter {
 
 		$this->listPages = $this->blogDao->getListMages();
 
-		if ($page->access_rights != "all") {
-			$this->isAdmin();
-		}
+//		if ($page->access_rights != "all") {
+//			$this->isAdmin();
+//		}
 
 		$this->page = $page;
 	}
 
-	public function handleDeletePage($idPage) {
-		$this->context->createPages()
-			->find($idPage)
-			->delete();
+	public function handleDeleteArticle($articleId) {
+		if (!$this->user->isInRole('admin')) {
+			$this->flashMessage('Na tuto akci nemáte dostatečné oprávnění.');
+			$this->redirect('Article');
+		}
 
-		$this->flashMessage('Stránka byla smazána.');
+		$this->blogDao->delete($articleId);
+		$this->flashMessage('Článek byl smazán.');
 	}
 
 	protected function createComponentEditPageForm($name) {
