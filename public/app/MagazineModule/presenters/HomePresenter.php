@@ -11,7 +11,13 @@ use Michelf\MarkdownToHtml;
 
 class HomePresenter extends \BasePresenter {
 
+	/** @var \POS\Model\MagazineDao @inject */
+	public $magazineDao;
+
+	/** @var \Nette\Database\Table\ActiveRow Aktuální stránka. */
 	public $page;
+
+	/** @var \Nette\Database\Table\Selection Seznam stránek.  */
 	private $listPages;
 
 	public function actionDefault($url = null) {
@@ -46,18 +52,14 @@ class HomePresenter extends \BasePresenter {
 	private function loadPage($url) {
 		if (empty($url)) {
 			/* homepage */
-			$page = $this->context->createPages()
-				->where("homepage", 1)
-				->fetch();
 
-			$this->listPages = $this->context->createPages()
-				->where("homepage", 0);
+			$page = $this->magazineDao->findHomepage();
 
-			if (!$this->getUser()->isAllowed("adminDocumentation")) {
-				$this->listPages->where("access_rights", "all");
-			}
+			$this->listPages = $this->magazineDao->getListMages();
 
-			$this->listPages->order("order ASC");
+//			if (!$this->getUser()->isAllowed("adminDocumentation")) {
+//				$this->listPages->where("access_rights", "all");
+//			}
 		} else {
 			/* normal page */
 			$page = $this->context->createPages()
