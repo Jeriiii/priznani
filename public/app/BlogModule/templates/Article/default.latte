@@ -1,9 +1,9 @@
 {* This is the welcome article, you can delete it *}
 
 {block content}
-{if $user->isInRole("admin")}
+{if $user->isAllowed('article', 'adminMenu')}
 	<a class="btn btn-warning" n:href="Article:editArticle url => $url">Změnit obsah</a>
-	{include 'adminPageMenu.latte'}
+	{include 'menu/adminPageMenu.latte'}
 {/if}
 
 <h1>{$name}</h1>

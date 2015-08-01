@@ -35,6 +35,9 @@ class Acl extends Permission {
 		$this->addResource('Search:Search');
 		$this->addResource('Admin:News');
 
+		//blog - funkce
+		$this->addResource('article');
+
 		// privileges
 		$this->allow('baseadmin', 'Admin:Admin');
 		$this->allow('baseadmin', 'Admin:Forms');
@@ -52,6 +55,7 @@ class Acl extends Permission {
 		$this->allow('user', 'Profil:Galleries');
 		$this->allow('user', 'Search:Search');
 		$this->allow('user', 'Chat');
+		$this->allow('admin', 'article', array('adminMenu', 'deleteArticle', 'newArticle', 'editArticle'));
 	}
 
 }
