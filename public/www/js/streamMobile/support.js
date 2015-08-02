@@ -1,4 +1,5 @@
-/* Podpůrné skripty k drobným funkcionalitám streamu na mobulu
+/* 
+ * Podpůrné skripty k drobným funkcionalitám streamu na mobilu
  * @copyright Copyright (c) 2013-2015 Kukral COMPANY s.r.o.
  */
 

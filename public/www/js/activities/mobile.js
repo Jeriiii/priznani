@@ -1,5 +1,5 @@
 /* 
- * 
+ * Skript zajišťující správné chování aktivit na mobilní verzi. Jde o úpravu zajišťující kompatibilitu mezi aktivitami a jQuery mobile.
  * @copyright Copyright (c) 2013-2015 Kukral COMPANY s.r.o.  * 
  */
 
