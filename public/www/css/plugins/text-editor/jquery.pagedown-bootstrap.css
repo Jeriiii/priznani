@@ -29,7 +29,7 @@
 .icon-header,
 .icon-hr-line,
 .icon-undo {
-  background-image: url(../img/Markdown.Editor.Icons.png);
+  background-image: url(../../css/plugins/text-editor/img/Markdown.Editor.Icons.png);
 }
 .icon-link {
   background-position: 0      0;

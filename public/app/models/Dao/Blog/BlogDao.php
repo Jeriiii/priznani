@@ -21,6 +21,10 @@ class BlogDao extends AbstractDao {
 	const COLUMN_HOMEPAGE = 'homepage';
 	const COLUMN_ORDER = 'order';
 	const COLUMN_URL = 'url';
+	const COLUMN_NAME = 'name';
+	const COLUMN_TEXT = 'text';
+	const COLUMN_ACCESS_RIGHTS = 'access_rights';
+	const COLUMN_EXCERPT = 'excerpt'; //úryvek článku
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -52,12 +56,23 @@ class BlogDao extends AbstractDao {
 	/**
 	 * Najde stránku podle url.
 	 * @param string $url Url stránky.
-	 * @return \Nette\Database\Table\ActiveRow
+	 * @return \Nette\Database\Table\ActiveRow Nalezený článek.
 	 */
 	public function findByUrl($url) {
 		$sel = $this->getTable();
 
 		$sel->where(self::COLUMN_URL, $url);
+		return $sel->fetch();
+	}
+
+	/**
+	 * Najde a vrátí poslední článek.
+	 * @return \Nette\Database\Table\ActiveRow Poslední článek.
+	 */
+	public function findLast() {
+		$sel = $this->getTable();
+		$sel->order(self::COLUMN_ORDER . ' DESC');
+
 		return $sel->fetch();
 	}
 

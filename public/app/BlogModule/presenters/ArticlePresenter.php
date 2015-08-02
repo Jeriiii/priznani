@@ -8,14 +8,15 @@ namespace BlogModule;
  */
 use Nette\Application\UI\Form as Frm;
 use Michelf\MarkdownToHtml;
+use Nette\Application\BadRequestException;
 
 class ArticlePresenter extends \BasePresenter {
 
 	/** @var \POS\Model\BlogDao @inject */
 	public $blogDao;
 
-	/** @var \Nette\Database\Table\ActiveRow Aktuální stránka. */
-	public $page;
+	/** @var \Nette\Database\Table\ActiveRow Aktuální článek. */
+	public $article;
 
 	/** @var \Nette\Database\Table\Selection Seznam stránek.  */
 	private $listPages;
@@ -27,11 +28,11 @@ class ArticlePresenter extends \BasePresenter {
 	public function renderDefault($url = null) {
 		$convertor = new MarkdownToHtml();
 
-		$this->template->name = $this->page->name;
-		$this->template->text = $convertor->toHtml($this->page->text);
-		$this->template->url = $this->page->url;
+		$this->template->name = $this->article->name;
+		$this->template->text = $convertor->toHtml($this->article->text);
+		$this->template->url = $this->article->url;
 		$this->template->listPages = !empty($this->listPages) ? $this->listPages : null;
-		$this->template->isHomepage = $this->page->homepage == 1 ? TRUE : FALSE;
+		$this->template->isHomepage = $this->article->homepage == 1 ? TRUE : FALSE;
 	}
 
 	public function renderListArticles() {
@@ -40,31 +41,39 @@ class ArticlePresenter extends \BasePresenter {
 	}
 
 	public function actionEditArticle($url = null) {
+		if (!$this->user->isAllowed('article', 'editArticle')) {
+			$this->flashMessage('Na tuto sekci nemáte dostatečné oprávnění.');
+			$this->redirect('Article:');
+		}
+
 		$this->loadPage($url);
 	}
 
 	public function actionNewArticle() {
-		$this->page = $this->context->createPages()
-			->order("order DESC")
-			->fetch();
+		if (!$this->user->isAllowed('article', 'newArticle')) {
+			$this->flashMessage('Na tuto sekci nemáte dostatečné oprávnění.');
+			$this->redirect('Article:');
+		}
+
+		$this->article = $this->blogDao->findLast();
 	}
 
 	private function loadPage($url) {
 		if (empty($url)) {
 			/* homepage */
 
-			$page = $this->blogDao->findHomepage();
+			$article = $this->blogDao->findHomepage();
 
 //			if (!$this->getUser()->isAllowed("adminDocumentation")) {
 //				$this->listPages->where("access_rights", "all");
 //			}
 		} else {
 			/* normal page */
-			$page = $this->blogDao->findByUrl($url);
+			$article = $this->blogDao->findByUrl($url);
 
 
-			if (empty($page)) {
-				$this->redirect("Error:404");
+			if (empty($article)) {
+				throw new BadRequestException('Stránka nenalezena.');
 			}
 		}
 
@@ -74,7 +83,7 @@ class ArticlePresenter extends \BasePresenter {
 //			$this->isAdmin();
 //		}
 
-		$this->page = $page;
+		$this->article = $article;
 	}
 
 	public function handleDeleteArticle($articleId) {
@@ -88,11 +97,11 @@ class ArticlePresenter extends \BasePresenter {
 	}
 
 	protected function createComponentEditPageForm($name) {
-		return new Frm\EditPageForm($this, $name);
+		return new Frm\EditArticleForm($this->article, $this, $name);
 	}
 
 	protected function createComponentNewPageForm($name) {
-		return new Frm\NewPageForm($this, $name);
+		return new Frm\NewArticleForm($this->article, $this->blogDao, $this, $name);
 	}
 
 }

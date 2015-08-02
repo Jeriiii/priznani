@@ -39,6 +39,10 @@ class ErrorPresenter extends Nette\Application\UI\Presenter {
 		}
 	}
 
+	public function action404() {
+		$this->forward('Error:', array('exception' => 404));
+	}
+
 }
 
 ?>
