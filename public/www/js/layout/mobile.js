@@ -1,4 +1,5 @@
 /* 
+ * Skripty pro obezličky umožňující použít zároveň nette.ajax.js a jquery mobile
  * @copyright Copyright (c) 2013-2015 Kukral COMPANY s.r.o.
  */
 
@@ -10,7 +11,5 @@
 		var selector = $(this).attr('data-confirm-href');
 		$(selector)[0].click();
 	});
-	
-	$('#popupAddProfilePhoto').css('display', 'block');
 });
 

@@ -1,11 +1,11 @@
 /* 
- * 
+ * Inicializace ajax observeru pro mobilní verzi - callbacky jsou totiž jiné než v desktopové verzi
  * @copyright Copyright (c) 2013-2015 Kukral COMPANY s.r.o.  * 
  */
 
 ;$(document).ready(function(){
 	/**
-	 * 
+	 * Změní informační poznámku u daného objektu tak, že mu přidá/odebere příslušnou třídu a html s daty
 	 * @param {type} linkObject
 	 * @param {type} data
 	 * @returns {undefined}
