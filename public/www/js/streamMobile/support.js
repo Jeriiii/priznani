@@ -1,7 +1,6 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Podpůrné skripty k drobným funkcionalitám streamu na mobilu
+ * @copyright Copyright (c) 2013-2015 Kukral COMPANY s.r.o.
  */
 
 $(document).ready(function(){	

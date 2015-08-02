@@ -1,9 +1,9 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Zajišťuje, že se při obnovení snippetu obnoví i jQuery mobile
+ * @copyright Copyright (c) 2013-2015 Kukral COMPANY s.r.o.
  */
 
+/* rekce na událost nette ajax - obnovení snippetu*/
 $.nette.ext('streamAjax', {
 		success: function () {/* úspěch operace z nette.ajax */
 			$('.stream-item').trigger("create");/* znovuaplikování jQueryMobile na stream */

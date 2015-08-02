@@ -1,5 +1,5 @@
 /* 
- * 
+ * Inicializace chatu na mobilu - chová se jinak než na desktopu. Ošetření bugů souvisejících s použitím jquery mobile.
  * @copyright Copyright (c) 2013-2015 Kukral COMPANY s.r.o.  * 
  */
 ;$(function () {
