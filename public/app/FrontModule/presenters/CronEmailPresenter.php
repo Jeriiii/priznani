@@ -70,7 +70,7 @@ class CronEmailPresenter extends BasePresenter {
 		$cronNotifies->sendEmails($this->mailer);
 		$cronNotifies->markEmailsLikeSended();
 
-		echo "Oznámení byly odeslány";
+		echo "Oznámení byla odeslána";
 		die();
 	}
 
