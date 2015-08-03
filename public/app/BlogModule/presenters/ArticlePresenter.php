@@ -9,6 +9,7 @@ namespace BlogModule;
 use Nette\Application\UI\Form as Frm;
 use Michelf\MarkdownToHtml;
 use Nette\Application\BadRequestException;
+use Nette\ArrayHash;
 
 class ArticlePresenter extends \BasePresenter {
 
@@ -28,9 +29,13 @@ class ArticlePresenter extends \BasePresenter {
 	public function renderDefault($url = null) {
 		$convertor = new MarkdownToHtml();
 
-		$this->template->name = $this->article->name;
-		$this->template->text = $convertor->toHtml($this->article->text);
-		$this->template->url = $this->article->url;
+		$article = ArrayHash::from($this->article->toArray());
+
+		$article->excerpt = $convertor->toHtml($article->excerpt);
+		$article->text = $convertor->toHtml($article->text);
+
+		$this->template->article = $article;
+
 		$this->template->listPages = !empty($this->listPages) ? $this->listPages : null;
 		$this->template->isHomepage = $this->article->homepage == 1 ? TRUE : FALSE;
 	}
