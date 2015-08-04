@@ -26,10 +26,11 @@ class StreamInicializator {
 	 * @param \Nette\Security\User $user Přihlášený uživatel
 	 * @param bool $isLoggedIn Je uživatel přihlášen?
 	 * @param \Nette\Database\Table\ActiveRow|\Nette\ArrayHash $loggedUser Přihlášený uživatel.
+	 * @param bool $justConfessions mají se zobrazovat pouze přiznání?
 	 * @return UserStream
 	 */
-	public function createUserStream($presenter, $session, User $user, $loggedUser = null) {
-		$dataForStream = $this->getCorrectDataForStream($presenter, $session, $user, $loggedUser);
+	public function createUserStream($presenter, $session, User $user, $loggedUser = null, $justConfessions = FALSE) {
+		$dataForStream = $this->getCorrectDataForStream($presenter, $session, $user, $loggedUser, $justConfessions);
 		$daoBox = $this->getDaoBoxUserStream($presenter);
 
 		return new UserStream($dataForStream, $daoBox, $session, $loggedUser, $user);
@@ -45,10 +46,11 @@ class StreamInicializator {
 
 	/**
 	 * Vrátí preferované příspěvky uživatele do streamu.
+	 * @param bool $justConfessions mají se zobrazovat pouze přiznání?
 	 * @return StreamUserPreferences
 	 */
-	private function getCorrectDataForStream($presenter, $session, User $user, $loggedUser) {
-		if ($user->isLoggedIn() && isset($loggedUser->property)) {
+	private function getCorrectDataForStream($presenter, $session, User $user, $loggedUser, $justConfessions = FALSE) {
+		if ($user->isLoggedIn() && isset($loggedUser->property) && !$justConfessions) {
 			$streamPreferences = $this->createStreamUserPreferences($presenter, $session, $loggedUser);
 			return $streamPreferences->getBestStreamItems();
 		} else {

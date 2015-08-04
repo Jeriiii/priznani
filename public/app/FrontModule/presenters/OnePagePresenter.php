@@ -115,11 +115,14 @@ class OnePagePresenter extends BasePresenter {
 	public $countVerificationRequests;
 	public $countFriendRequests;
 	public $countSexy;
+	/* mají se zobrazovat pouze přiznání? */
+	public $justConfessions = FALSE;
 
 	public function actionDefault($priznani = NULL, $firstSignIn = FALSE /* TRUE když se přihlásí poprvé od registrace */) {
 		if (!$this->getUser()->isLoggedIn() && empty($priznani)) {
 			$this->redirect(':DatingRegistration:');
 		}
+		$this->justConfessions = !empty($priznani);
 		$this->userID = $this->getUser()->getId();
 		$this->intro = $firstSignIn ? 1 : 0;
 
@@ -183,7 +186,7 @@ class OnePagePresenter extends BasePresenter {
 		$session = $this->getSession();
 		$streamInicializator = new StreamInicializator();
 
-		$userStream = $streamInicializator->createUserStream($this, $session, $this->user, $this->loggedUser);
+		$userStream = $streamInicializator->createUserStream($this, $session, $this->user, $this->loggedUser, $this->justConfessions);
 
 		return $userStream;
 	}
