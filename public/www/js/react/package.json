@@ -1,9 +1,9 @@
 {
-  "name": "reactChat",
+  "name": "reactDatenode",
   "version": "0.0.1",
-  "description": "React chat na Datenode.cz",
+  "description": "React na Datenode.cz",
   "repository": "",
-  "main": "src/chat/reactChat.js",
+  "main": "src/reactDatenode.js",
   "dependencies": {
     "flux": "^2.0.0",
     "keymirror": "~0.1.0",
@@ -19,8 +19,8 @@
     "watchify": "^2.1.1"
   },
   "scripts": {
-    "start": "watchify -o build/chat/reactChat.js -v -d src/chat/reactChat.js",
-    "build": "browserify . -t [envify --NODE_ENV production] | uglifyjs -cm > build/chat/reactChat.min.js",
+    "start": "watchify -o build/reactDatenode.js -v -d src/reactDatenode.js",
+    "build": "browserify . -t [envify --NODE_ENV production] | uglifyjs -cm > build/reactDatenode.min.js",
     "test": "jest"
   },
   "author": "Jan Kotalík",
