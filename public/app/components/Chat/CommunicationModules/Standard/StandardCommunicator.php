@@ -10,6 +10,7 @@ use \Nette\Utils\Json;
 use POS\Model\ChatMessagesDao;
 use Nette\Database\Table\IRow;
 use POS\Chat\ChatManager;
+use NetteExt\Helper\GetImgPathHelper;
 
 /**
  * Slouží přímo ke komunikaci mezi serverem a prohlížečem, zpracovává
@@ -23,6 +24,11 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * Jmeno session, kam se ukladaji jmena uzivatelu
 	 */
 	const USERNAMES_SESSION_NAME = 'chat_usernames';
+
+	/**
+	 * Jmeno session, kam se ukladaji profilova url uzivatelu
+	 */
+	const URL_SESSION_NAME = 'chat_urls';
 
 	/**
 	 * Prefix session, kde se registruji pozadavky na zpravu o doruceni zpravy
@@ -43,6 +49,9 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	/** Zpráva o neúspěchu pro uživatele */
 	private $blockedMessage = '';
 
+	/** @var GetImgPathHelper helper pro generování url */
+	private $getImageUrlHelper = NULL;
+
 	/**
 	 * Vykreslení komponenty
 	 */
@@ -62,18 +71,30 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		$json = file_get_contents("php://input"); //vytánutí všech dat z POST požadavku - data ve formátu JSON
 		$data = Json::decode($json); //prijata zprava dekodovana z JSONu
 		$user = $this->getPresenter()->getUser();
+		if (!empty($this->addMessage($data, $user))) {
+			$this->sendRefreshResponse($data->lastid);
+		}
+	}
+
+	/**
+	 * Přidá zprávu do databáze.
+	 * @param array $data data přijatá z klienta
+	 * @param User $user uživatel
+	 * @return ActiveRow|NULL přidaná zpráva nebo null
+	 */
+	protected function addMessage($data, $user) {
 		if (!empty($data) && $data->type == 'textMessage' && $user->isLoggedIn()) {//ulozeni zpravy do DB
 			$senderId = $user->getId();
 			$data->to = (int) $this->chatManager->getCoder()->decodeData($data->to); //dekodovani id
 			$message = $this->chatManager->sendTextMessage($senderId, $data->to, $data->text); //ulozeni zpravy
-
 			if (!$this->checkBlockingStatement($message)) {/* ověření, že poslání zprávy není blokováno */
 				$this->blockedId = $data->to;
 			} else if ($this->isActualUserPaying()) {//pokud je uzivatel platici
 				$this->registerInfoAboutDelivery($data->to, $message->offsetGet(ChatMessagesDao::COLUMN_ID));
 			}
-			$this->sendRefreshResponse($data->lastid);
+			return $message;
 		}
+		return NULL;
 	}
 
 	/**
@@ -109,6 +130,17 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		}
 
 		$this->getPresenter()->sendJson($response);
+	}
+
+	/**
+	 * Vrátí zprávy mezi přihlášeným a daným uživatelem, starší než zpráva s předaným id
+	 * @param type $lastId
+	 * @param type $withUserId
+	 */
+	public function handleGetOlderMessages($lastId, $withUserId) {
+		$toId = (int) $this->chatManager->getCoder()->decodeData($withUserId); //dekodovani id
+		$messages = $this->chatManager->getOlderMessagesBetween($lastId, ChatManager::COUNT_OF_LAST_MESSAGES, $this->getPresenter()->getUser()->getId(), $toId);
+		$this->getPresenter()->sendJson($this->prepareResponseArray($messages));
 	}
 
 	/**
@@ -171,7 +203,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * @param Selection $messages vyber z tabulky chat_messages
 	 * @return array pole ve formatu pro JSON ve tvaru dokumentace chatu
 	 */
-	private function prepareResponseArray($messages) {
+	protected function prepareResponseArray($messages) {
 		$responseArray = array();
 		foreach ($messages as $message) {
 			$userId = $this->getRelatedUserId($message);
@@ -230,6 +262,10 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		} else {
 			$messageArray['fromMe'] = 0;
 		}
+
+		$messageArray['profilePhotoUrl'] = $this->getProfilePhotoUrl($messageArray[ChatMessagesDao::COLUMN_ID_SENDER]);
+		$messageArray['profileHref'] = $this->getPresenter()->link(':Profil:Show:', array('id' => $messageArray[ChatMessagesDao::COLUMN_ID_SENDER]));
+
 		unset($messageArray[ChatMessagesDao::COLUMN_ID_SENDER]); //id odesilatele je uz v prvnim klici pole
 		unset($messageArray[ChatMessagesDao::COLUMN_ID_RECIPIENT]);  //neposila uzivateli jeho vlastni id
 
@@ -249,6 +285,21 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 		$session = $this->getPresenter()->getSession(self::USERNAMES_SESSION_NAME);
 		$session->setExpiration(0);
 		return $this->chatManager->getUsername($id, $session);
+	}
+
+	/**
+	 * Vrátí url profilové fotky uživatele s daným id
+	 * Šetří databázi.
+	 * @param int $id id uživatele
+	 * @return string url fotky
+	 */
+	private function getProfilePhotoUrl($id) {
+		if (empty($this->getImageUrlHelper)) {
+			$this->getImageUrlHelper = new GetImgPathHelper($this->getPresenter()->context->httpRequest->url);
+		}
+		$session = $this->getPresenter()->getSession(self::URL_SESSION_NAME);
+		$session->setExpiration(0);
+		return $this->chatManager->getProfilePhotoUrl($id, $session, $this->getImageUrlHelper);
 	}
 
 	/**

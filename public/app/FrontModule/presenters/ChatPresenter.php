@@ -3,7 +3,9 @@
 use POSComponent\Chat\MobileChat;
 use POSComponent\Stream\ChatStream;
 use POSComponent\Chat\MobileContactList;
+use POSComponent\Chat\AndroidChat;
 use POS\Chat\ChatManager;
+use POSComponent\Chat\React\ReactFullscreenChat;
 
 /**
  * Pro práci se zprávami přes celoou stránku
@@ -62,15 +64,11 @@ class ChatPresenter extends BasePresenter {
 		if ($this->blockedDao->isBlocked($userInChatID, $this->getUser()->getId())) {
 			$this->template->blockedMessage = ChatManager::USER_IS_BLOCKED_MESSAGE;
 		}
+		$this->template->production = $this->productionMode;
 	}
 
 	protected function createComponentConversation($name) {
-		$messages = $this->chatMessagesDao->getLastTextMessagesBetweenUsers($this->loggedUser->id, $this->userInChatID);
-
-		$chatStream = new ChatStream($this->chatManager, $this->chatMessagesDao, $this->loggedUser, $messages, 30, $this, $name);
-		$chatStream->setUserInChatID($this->userInChatID);
-
-		return $chatStream;
+		return new ReactFullscreenChat($this->chatManager, $this->loggedUser, $this->userInChatID, $this, $name);
 	}
 
 	public function renderMobileConversations() {
@@ -102,11 +100,20 @@ class ChatPresenter extends BasePresenter {
 	}
 
 	/**
+	 * Vytvoření mobilního chatu (http komunikace) pro android
+	 * @param string $name jméno komponenty
+	 * @return AndroidChat komponenta
+	 */
+	public function createComponentAndroidChat($name) {
+		return new AndroidChat($this->chatManager, $this->loggedUser, $this, $name);
+	}
+
+	/**
 	 * Vytvoření komponenty zprostředkovávající seznam kontaktů
 	 * @return \POSComponent\Chat\MobileContactList
 	 */
 	protected function createComponentMobileContactList() {
-		return new MobileContactList($this->chatManager);
+		return new MobileContactList($this->chatManager, $this->loggedUser);
 	}
 
 }

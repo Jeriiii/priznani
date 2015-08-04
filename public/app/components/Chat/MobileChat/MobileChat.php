@@ -30,7 +30,7 @@ class MobileChat extends PosChat {
 	 * @return \POSComponent\Chat\MobileContactList
 	 */
 	protected function createComponentMobileContactList() {
-		return new MobileContactList($this->chatManager);
+		return new MobileContactList($this->chatManager, $this->loggedUser);
 	}
 
 	/**
@@ -38,7 +38,7 @@ class MobileChat extends PosChat {
 	 * @return \POSComponent\Chat\MobileContactList
 	 */
 	protected function createComponentMobileConversationList() {
-		return new MobileConversationList($this->chatManager);
+		return new MobileConversationList($this->chatManager, $this->loggedUser);
 	}
 
 }
