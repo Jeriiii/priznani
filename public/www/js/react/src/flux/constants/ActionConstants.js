@@ -10,7 +10,8 @@ module.exports = {
 
   /* typy akcí, které mohou nastat */
   ActionTypes: keyMirror({
-    TEST : null
+    OLDER_MESSAGES_ARRIVED : null,
+    NEW_MESSAGES_ARRIVED : null
   })
 
 };
