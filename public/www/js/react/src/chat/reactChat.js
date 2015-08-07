@@ -134,8 +134,8 @@ var initializeChatTimer = function(userCodedId){
     var state = MessageStore.getState();
     if(state.dataVersion == 1){/* data se poprvé změnila */
       Timer.maximumInterval = 60000;
-      Timer.initialInterval = 3000;
-      Timer.intervalIncrase = 2000;
+      Timer.initialInterval = 1500;
+      Timer.intervalIncrase = 0;
       Timer.lastId = (state.messages.length > 0) ? Timer.lastId = state.messages[state.messages.length - 1].id : 0;
       Timer.tick = function(){
         MessageActions.createRefreshMessages(reactRefreshMessagesLink, userCodedId, Timer.lastId, parametersPrefix);

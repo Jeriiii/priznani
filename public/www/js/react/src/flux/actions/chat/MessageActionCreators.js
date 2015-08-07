@@ -37,7 +37,8 @@ module.exports = {  /**
             /* tady bych případně přidal další data */
           });
         }
-        exportObject.reloadWindowUnload();
+    }).done(function() {
+      exportObject.reloadWindowUnload();
     });
   },
 
@@ -92,6 +93,8 @@ module.exports = {  /**
             data: result,
             userCodedId : userCodedId
           });
+        },
+        complete: function(){
           exportObject.reloadWindowUnload();
         }
   		});
