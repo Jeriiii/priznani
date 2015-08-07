@@ -21,7 +21,8 @@ module.exports = {  /**
   createGetInitialMessages: function(url, userCodedId, parametersPrefix, usualLoadMessagesCount){
     var data = {};
   	data[parametersPrefix + 'fromId'] = userCodedId;
-
+    this.blockWindowUnload('Ještě se načítají zprávy, opravdu chcete odejít?');
+    var exportObject = this;
     $.getJSON(url, data, function(result){
         if(result.length == 0) {
           dispatcher.dispatch({
@@ -36,6 +37,7 @@ module.exports = {  /**
             /* tady bych případně přidal další data */
           });
         }
+        exportObject.reloadWindowUnload();
     });
   },
 
@@ -75,6 +77,8 @@ module.exports = {  /**
       type: 'textMessage',
       text: message
     };
+    this.blockWindowUnload('Zpráva se stále odesílá, prosíme počkejte několik sekund a pak to zkuste znova.');
+    var exportObject = this;
     var json = JSON.stringify(data);
   		$.ajax({
   			dataType: "json",
@@ -88,6 +92,7 @@ module.exports = {  /**
             data: result,
             userCodedId : userCodedId
           });
+          exportObject.reloadWindowUnload();
         }
   		});
   },
@@ -110,5 +115,35 @@ module.exports = {  /**
           userCodedId : userCodedId
         });
     });
-  }
+  },
+
+  /**
+  	 * Při pokusu zavřít nebo obnovit okno se zeptá uživatele,
+  	 * zda chce okno skutečně zavřít/obnovit. Toto dělá v každém případě, dokud
+  	 * se nezavolá reloadWindowUnload
+  	 * @param {String} reason důvod uvedený v dialogu
+  	 */
+  	blockWindowUnload: function(reason) {
+  		window.onbeforeunload = function () {
+  			return reason;
+  		};
+  	},
+
+  	/**
+  	 * Vypne hlídání zavření/obnovení okna a vrátí jej do počátečního stavu.
+  	 */
+  	reloadWindowUnload: function() {
+  		window.onbeforeunload = function () {
+  			var unsend = false;
+  			$.each($(".messageInput"), function () {//projde vsechny textarea chatu
+  				if ($.trim($(this).val())) {//u kazdeho zkouma hodnotu bez whitespacu
+  					unsend = true;
+  				}
+  			});
+  			if (unsend) {
+  				return 'Máte rozepsaný příspěvek. Chcete tuto stránku přesto opustit?';
+  				/* hláška, co se objeví při pokusu obnovit/zavřít okno, zatímco má uživatel rozepsanou zprávu */
+  			}
+  		};
+  	}
 };
