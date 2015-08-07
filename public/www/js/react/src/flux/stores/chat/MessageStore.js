@@ -17,12 +17,14 @@ var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
+var _dataVersion = 0;/* kolikrát se už změnila data */
 var _messages = [];
 var _thereIsMore = true;
 
 var MessageStore = assign({}, EventEmitter.prototype, {
   /* trigger změny */
   emitChange: function() {
+    _dataVersion++;
     this.emit(CHANGE_EVENT);
   },
   /* touto metodou lze pověsit listener reagující při změně*/
@@ -37,7 +39,8 @@ var MessageStore = assign({}, EventEmitter.prototype, {
   getState: function() {
     return {
       messages: _messages,
-      thereIsMore: _thereIsMore
+      thereIsMore: _thereIsMore,
+      dataVersion: _dataVersion
     };
   }
 
@@ -53,6 +56,9 @@ MessageStore.dispatchToken = Dispatcher.register(function(action) {
     case types.OLDER_MESSAGES_ARRIVED :
       prependDataIntoMessages(action.userCodedId, action.data, action.usualMessagesCount);
       MessageStore.emitChange();
+      break;
+    case types.NO_INITIAL_MESSAGES_ARRIVED:
+      MessageStore.emitChange();/* když nepřijdou žádné zprávy při inicializaci, dá to najevo */
       break;
   }
 });
