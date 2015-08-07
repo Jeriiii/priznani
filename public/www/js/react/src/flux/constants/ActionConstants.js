@@ -10,8 +10,10 @@ module.exports = {
 
   /* typy akcí, které mohou nastat */
   ActionTypes: keyMirror({
-    OLDER_MESSAGES_ARRIVED : null,
-    NEW_MESSAGES_ARRIVED : null
+    /* CHAT */
+    NO_INITIAL_MESSAGES_ARRIVED : null,/* přišla odpověď při prvotním načítání zpráv, ale byla prázdná*/
+    OLDER_MESSAGES_ARRIVED : null,/* přišly starší (donačtené tlačítkem) zprávy */
+    NEW_MESSAGES_ARRIVED : null/* přišly nové zprávy*/
   })
 
 };

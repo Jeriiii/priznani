@@ -9,6 +9,7 @@
 var ProfilePhoto = require('../components/profile').ProfilePhoto;
 var MessageActions = require('../flux/actions/chat/MessageActionCreators');
 var MessageStore = require('../flux/stores/chat/MessageStore');
+var TimerFactory = require('../components/timer');/* je v cachi, nebude se vytvářet vícekrát */
 
 /***********  NASTAVENÍ  ***********/
 
@@ -30,6 +31,8 @@ var parametersPrefix = reactSendMessage.dataset.parprefix;
 /** obvyklý počet příchozích zpráv v odpovědi u pravidelného a iniciálního požadavku (aneb kolik zpráv mi přijde, když jich je na serveru ještě dost) */
 var usualOlderMessagesCount = reactGetOlderMessages.dataset.maxmessages;
 var usualLoadMessagesCount = reactLoadMessages.dataset.maxmessages;
+/* časovač pro pravidelné požadavky na server */
+var Timer = TimerFactory.newInstance();
 
 /***********  DEFINICE  ***********/
 /** Část okna, která má svislý posuvník - obsahuje zprávy, tlačítko pro donačítání... */
@@ -122,9 +125,36 @@ var NewMessageForm = React.createClass({
   }
 });
 
+/**
+ * inicializuje časovač pravidelně se dotazující na nové zprávy v závislosti na tom, jak se mění data v MessageStore
+ * @param {string} userCodedId kódované id uživatele, se kterým si píšu
+ */
+var initializeChatTimer = function(userCodedId){
+  MessageStore.addChangeListener(function(){
+    var state = MessageStore.getState();
+    if(state.dataVersion == 1){/* data se poprvé změnila */
+      Timer.maximumInterval = 60000;
+      Timer.initialInterval = 3000;
+      Timer.intervalIncrase = 2000;
+      Timer.lastId = (state.messages.length > 0) ? Timer.lastId = state.messages[state.messages.length - 1].id : 0;
+      Timer.tick = function(){
+        MessageActions.createRefreshMessages(reactRefreshMessagesLink, userCodedId, Timer.lastId, parametersPrefix);
+      };
+      Timer.start();
+    }else{/* když se data nezměnila poprvé, ale určitě se změnila */
+      Timer.lastId = (state.messages.length > 0) ? Timer.lastId = state.messages[state.messages.length - 1].id : 0;
+      Timer.resetTime();
+    }
+  });
+
+};
+
 module.exports = {
   /** Okno celého chatu s jedním uživatelem */
   ChatWindow: React.createClass({
+    componentDidMount: function() {
+      initializeChatTimer(this.props.userCodedId);
+    },
     render: function () {
       return (
         <div className="chatWindow">

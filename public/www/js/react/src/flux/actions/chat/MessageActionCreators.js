@@ -23,14 +23,19 @@ module.exports = {  /**
   	data[parametersPrefix + 'fromId'] = userCodedId;
 
     $.getJSON(url, data, function(result){
-        if(result.length == 0) return;
-        dispatcher.dispatch({
-          type: ActionTypes.OLDER_MESSAGES_ARRIVED,
-          data: result,
-          userCodedId : userCodedId,
-          usualMessagesCount : usualLoadMessagesCount
-          /* tady bych případně přidal další data */
-        });
+        if(result.length == 0) {
+          dispatcher.dispatch({
+            type: ActionTypes.NO_INITIAL_MESSAGES_ARRIVED
+          });
+        }else{
+          dispatcher.dispatch({
+            type: ActionTypes.OLDER_MESSAGES_ARRIVED,
+            data: result,
+            userCodedId : userCodedId,
+            usualMessagesCount : usualLoadMessagesCount
+            /* tady bych případně přidal další data */
+          });
+        }
     });
   },
 
@@ -85,5 +90,25 @@ module.exports = {  /**
           });
         }
   		});
+  },
+
+  /**
+   * Zeptá se serveru na nové zprávy
+   * @param {string} url url, které se ptám na zprávy
+   * @param  {int}   userCodedId kódované id uživatele
+   * @param  {int} lastId poslední známé id
+   * @param  {string} parametersPrefix prefix před parametry v url
+   */
+  createRefreshMessages: function(url, userCodedId, lastId, parametersPrefix){
+    var data = {};
+  	data[parametersPrefix + 'lastid'] = lastId;
+    $.getJSON(url, data, function(result){
+        if(result.length == 0) return;
+        dispatcher.dispatch({
+          type: ActionTypes.NEW_MESSAGES_ARRIVED,
+          data: result,
+          userCodedId : userCodedId
+        });
+    });
   }
 };
