@@ -26,7 +26,6 @@ var MessageStore = assign({}, EventEmitter.prototype, {
   /* trigger změny */
   emitChange: function() {
     _dataVersion++;
-    filterInfoMessages();
     this.emit(CHANGE_EVENT);
   },
   /* touto metodou lze pověsit listener reagující při změně*/
@@ -73,7 +72,7 @@ MessageStore.dispatchToken = Dispatcher.register(function(action) {
  */
 var appendDataIntoMessages = function(userCodedId, jsonData){
   var result = jsonData[userCodedId];
-  _messages = _messages.concat(result.messages);
+  _messages = _messages.concat(filterInfoMessages(result.messages));
 };
 
 /**
@@ -93,24 +92,23 @@ var prependDataIntoMessages = function(userCodedId, jsonData, usualMessagesCount
   }
   _thereIsMore = thereIsMore;
   _messages = result.messages.concat(_messages);
+  _messages = filterInfoMessages(_messages);
 };
 
 /**
- * Odfiltruje z dat infozprávy a vytřídí je zvlášť
- * @return {[type]} [description]
+ * Odfiltruje z dat infozprávy a vytřídí je zvlášť do globální proměnné
+ * @param {json} messages zprávy přijaté ze serveru
  */
-var filterInfoMessages = function(){
-  var clearMode = false; /* po přepnutí do čištění jen vyhazuje infozprávy*/
-  for(var i = _messages.length - 1 ; i >= Math.max(0, _messages.length - 20); i--){/*projde zprávy shora dolů - jen posledních dvacet kvůli výkonu*/
-    if(_messages[i].type == 1){/* když je to infozpráva */
-      if(!clearMode){/* nečistí se */
-        addToInfoMessages(_messages[i]);
-      }
-      _messages.splice(i,1);/* odstranění zprávy */
-    }else{
-      clearMode = true;/* když najde normální zprávu, vyčistí všechny infozprávy výše */
+var filterInfoMessages = function(messages){
+  _infoMessages = [];
+  console.log(messages);
+  for(var i = 0; i < messages.length; i++){
+    if(messages[i].type == 1){/* když je to infozpráva */
+      addToInfoMessages(messages[i]);
+      messages.splice(i,1);/* odstranění zprávy */
     }
   }
+  return messages;
 };
 
 /**
