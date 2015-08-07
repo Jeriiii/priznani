@@ -38,7 +38,7 @@ var Timer = TimerFactory.newInstance();
 /** Část okna, která má svislý posuvník - obsahuje zprávy, tlačítko pro donačítání... */
 var MessagesWindow = React.createClass({
   getInitialState: function() {
-    return {messages: [], thereIsMore: true, href: '' };
+    return {messages: [], infoMessages: [], thereIsMore: true, href: '' };
   },
   componentDidMount: function() {
     var component = this;
@@ -49,21 +49,33 @@ var MessagesWindow = React.createClass({
   },
   render: function() {
     var messages = this.state.messages;
+    var infoMessages = this.state.infoMessages;
     var oldestId = this.getOldestId(messages);
+    var userCodedId = this.props.userCodedId;
     /* sestavení odkazu pro tlačítko */
     var moreButtonLink = reactGetOlderMessagesLink + '&' + parametersPrefix + 'lastId=' + oldestId + '&' + parametersPrefix + 'withUserId=' + this.props.userCodedId;
     return (
       <div className="messagesWindow">
-        <LoadMoreButton loadHref={moreButtonLink} loadTo={this} oldestId={oldestId} thereIsMore={this.state.thereIsMore} userCodedId={this.props.userCodedId} />
+        <LoadMoreButton loadHref={moreButtonLink} oldestId={oldestId} thereIsMore={this.state.thereIsMore} userCodedId={userCodedId} />
         {messages.map(function(message){
             return <Message key={message.id} messageData={message} userHref={message.profileHref} profilePhotoUrl={message.profilePhotoUrl} />;
         })
+        }
+        {infoMessages.map(function(message, i){
+              return <InfoMessage key={userCodedId + 'info' + i} messageData={message} />;
+          })
         }
       </div>
     );
   },
   getOldestId: function(messages){
     return (messages[0]) ? messages[0].id : 9007199254740991; /*nastavení hodnoty nebo maximální hodnoty, když není*/
+  }
+});
+
+var InfoMessage = React.createClass({
+  render: function(){
+      return(<span className="info-message">{this.props.messageData.text}</span>);
   }
 });
 

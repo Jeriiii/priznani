@@ -37,7 +37,8 @@ module.exports = {  /**
             /* tady bych případně přidal další data */
           });
         }
-        exportObject.reloadWindowUnload();
+    }).done(function() {
+      exportObject.reloadWindowUnload();
     });
   },
 
@@ -92,6 +93,8 @@ module.exports = {  /**
             data: result,
             userCodedId : userCodedId
           });
+        },
+        complete: function(){
           exportObject.reloadWindowUnload();
         }
   		});
@@ -107,6 +110,7 @@ module.exports = {  /**
   createRefreshMessages: function(url, userCodedId, lastId, parametersPrefix){
     var data = {};
   	data[parametersPrefix + 'lastid'] = lastId;
+    data[parametersPrefix + 'readedMessages'] = [lastId];
     $.getJSON(url, data, function(result){
         if(result.length == 0) return;
         dispatcher.dispatch({

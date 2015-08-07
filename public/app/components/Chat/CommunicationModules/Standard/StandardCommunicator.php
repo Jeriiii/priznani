@@ -338,7 +338,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * @param array $responseArray
 	 * @return array response array s případnou přidanou zprávou
 	 */
-	private function addInfoAboutBlocking($responseArray) {
+	protected function addInfoAboutBlocking($responseArray) {
 		if ($this->blocked) {
 			$userIdCoded = $this->chatManager->getCoder()->encodeData($this->blockedId);
 			$responseArray[$userIdCoded]['messages'][] = array(
@@ -416,7 +416,7 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * @param mixed $variable
 	 * @return bool true když je vše ok, false když ne
 	 */
-	private function checkBlockingStatement($variable) {
+	protected function checkBlockingStatement($variable) {
 		if ($variable === ChatManager::USER_IS_BLOCKED_RETCODE) {
 			$this->blockedMessage = ChatManager::USER_IS_BLOCKED_MESSAGE;
 			$this->blocked = true;

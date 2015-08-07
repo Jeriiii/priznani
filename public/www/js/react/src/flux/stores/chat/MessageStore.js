@@ -19,6 +19,7 @@ var CHANGE_EVENT = 'change';
 
 var _dataVersion = 0;/* kolikrát se už změnila data */
 var _messages = [];
+var _infoMessages = [];
 var _thereIsMore = true;
 
 var MessageStore = assign({}, EventEmitter.prototype, {
@@ -39,6 +40,7 @@ var MessageStore = assign({}, EventEmitter.prototype, {
   getState: function() {
     return {
       messages: _messages,
+      infoMessages: _infoMessages,
       thereIsMore: _thereIsMore,
       dataVersion: _dataVersion
     };
@@ -70,7 +72,7 @@ MessageStore.dispatchToken = Dispatcher.register(function(action) {
  */
 var appendDataIntoMessages = function(userCodedId, jsonData){
   var result = jsonData[userCodedId];
-  _messages = _messages.concat(result.messages);
+  _messages = _messages.concat(filterInfoMessages(result.messages));
 };
 
 /**
@@ -89,7 +91,40 @@ var prependDataIntoMessages = function(userCodedId, jsonData, usualMessagesCount
     result.messages.shift();/* odeberu první zprávu */
   }
   _thereIsMore = thereIsMore;
+  result.messages = filterInfoMessages(result.messages);
   _messages = result.messages.concat(_messages);
+};
+
+/**
+ * Odfiltruje z dat infozprávy a vytřídí je zvlášť do globální proměnné
+ * @param {json} messages zprávy přijaté ze serveru
+ */
+var filterInfoMessages = function(messages){
+  _infoMessages = [];
+  for(var i = 0; i < messages.length; i++){
+    if(messages[i].type == 1){/* když je to infozpráva */
+      addToInfoMessages(messages[i]);
+      messages.splice(i,1);/* odstranění zprávy */
+    }
+  }
+  return messages;
+};
+
+/**
+ * Přidá zprávu k infozprávám, pokud mezi nimi ještě není
+ * @param  {json} message zpráva přijatá ze serveru
+ */
+var addToInfoMessages = function(message) {
+  var alreadyExists = false;
+  _infoMessages.forEach(function(infoMessage){
+    if(infoMessage.text == message.text){
+      alreadyExists = true;
+      return;
+    }
+  });
+  if(!alreadyExists){
+    _infoMessages.push(message);
+  }
 };
 
 module.exports = MessageStore;

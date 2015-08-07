@@ -1,6 +1,6 @@
 /*
 * @copyright Copyright (c) 2013-2013 Kukral COMPANY s.r.o.
-*//* 
+*//*
     Created on : 11.2.2015, 14:32:51
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
@@ -16,21 +16,29 @@
 	margin: 0;
 }
 
+.info-message{
+	display: block;
+	text-align: center;
+	font-size: 12px;
+	color: #aaa;
+	padding: 5px 5%;
+}
+
 #reactChatWindow{
 	width: 100%;
 	max-width: 500px;
-	
-	.messagesWindow{		
+
+	.messagesWindow{
 		height: 500px;
-		padding: 10px 0 25px 0; 
+		padding: 10px 0 25px 0;
 		overflow: auto;
 	}
-	
+
 	.message{
-		
+
 		width: 99%;
 		padding: 0.5% 0;
-		
+
 		.generatedProfile{
 			width: 8%;
 			float:left;
@@ -43,20 +51,20 @@
 			padding: 5px 15px;
 			.conversation-box();
 		}
-		
+
 		.messageDatetime{
 			display: block;
 			font-size: 10px;
 			color: #aaa;
 		}
-		
+
 	}
-	
+
 	.messageArrow{
 			width: 2%;
 			float:left;
-			width: 0; 
-			height: 0; 
+			width: 0;
+			height: 0;
 			position: relative;
 			top: 6px;
 			left: 1px;
@@ -64,38 +72,38 @@
 			border-bottom: 10px solid transparent;
 			border-right:10px solid #fff;
 	}
-	
-	
+
+
 	.newMessage{
 		overflow: hidden;
 		padding: 15px 0px 5px 0px;
-		
+
 		form{
 			float: left;
 			width: 82%;
 			padding: 0;
-			
+
 		}
-		
+
 		.generatedProfile{
 			float: left;
 			width: 8%;
 		}
-		
+
 		input[type='text']{
 			width: 96%;
 			font-size: 14px;
 			font-family: Helvetica;
 			padding: 10px 2%;
-			min-height: 30px; 
+			min-height: 30px;
 			.conversation-box();
 		}
-		
+
 		input[type='submit']{
 			height: 40px;
 			margin: 15px 0;
 		}
-		
+
 	}
 }
 
@@ -121,8 +129,8 @@
 	.inner{
 		width: 100% !important;
 	}
-	
-	
+
+
 }
 
 @media (max-width: 750px) {
@@ -138,7 +146,7 @@
 }
 
 @media (max-width: 600px) {
-	
+
 	#pagename span{
 		display: none;
 	}
