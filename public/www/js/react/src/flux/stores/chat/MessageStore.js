@@ -47,7 +47,7 @@ MessageStore.dispatchToken = Dispatcher.register(function(action) {
   var types = constants.ActionTypes;
   switch(action.type){
     case types.NEW_MESSAGES_ARRIVED :
-      prependDataIntoMessages(action.userCodedId, action.data, action.usualMessagesCount);
+      appendDataIntoMessages(action.userCodedId, action.data, action.usualMessagesCount);
       MessageStore.emitChange();
       break;
     case types.OLDER_MESSAGES_ARRIVED :
@@ -64,7 +64,6 @@ MessageStore.dispatchToken = Dispatcher.register(function(action) {
  */
 var appendDataIntoMessages = function(userCodedId, jsonData){
   var result = jsonData[userCodedId];
-  _thereIsMore = thereIsMore;
   _messages = _messages.concat(result.messages);
 };
 

@@ -118,7 +118,7 @@ var NewMessageForm = React.createClass({
     var message = input.value;
     if(message == undefined || message.trim() == '') return;
     input.value = '';
-    sendMessage(this, this.props.userCodedId, message, appendDataIntoComponent);
+    MessageActions.createSendMessage(reactSendMessageLink, this.props.userCodedId, message);
   }
 });
 
@@ -135,33 +135,3 @@ module.exports = {
     }
   })
 };
-
-
-
-  /***********  KOMUNIKACE (jQuery) ***********/
-
-  /**
-   * Pošle na server zprávu.
-   * @param  {ReactClass} component komponenta, která bude aktualizována daty
-   * @param  {int}   userCodedId kódované id uživatele
-   * @param  {String} message text zprávy
-   * @param  {Function} callback    funkce, která se zavolá při obdržení odpovědi (odeslaná zpráva přijde zpět)
-   */
-  var sendMessage = function(component, userCodedId, message, callback){
-    var data = {
-      to: userCodedId,
-      type: 'textMessage',
-      text: message
-    };
-    var json = JSON.stringify(data);
-  		$.ajax({
-  			dataType: "json",
-  			type: 'POST',
-  			url: reactSendMessageLink,
-  			data: json,
-  			contentType: 'application/json; charset=utf-8',
-  			success: function(result){
-          callback(component, userCodedId, result);
-        }
-  		});
-  };
