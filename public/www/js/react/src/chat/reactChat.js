@@ -7,8 +7,8 @@
 
 /***********  ZÁVISLOSTI  ***********/
 var ProfilePhoto = require('../components/profile').ProfilePhoto;
-var actions = require('../flux/actions/chat/ExampleActionCreators');
-var messageStore = require('../flux/stores/chat/MessageStore');
+var MessageActions = require('../flux/actions/chat/MessageActionCreators');
+var MessageStore = require('../flux/stores/chat/MessageStore');
 
 /***********  NASTAVENÍ  ***********/
 
@@ -28,7 +28,7 @@ var reactGetOlderMessagesLink = reactGetOlderMessages.href;
 /** prefix před parametry do url */
 var parametersPrefix = reactSendMessage.dataset.parprefix;
 /** obvyklý počet příchozích zpráv v odpovědi u pravidelného a iniciálního požadavku (aneb kolik zpráv mi přijde, když jich je na serveru ještě dost) */
-var usualGetOlderMessagesCount = reactGetOlderMessages.dataset.maxmessages;
+var usualOlderMessagesCount = reactGetOlderMessages.dataset.maxmessages;
 var usualLoadMessagesCount = reactLoadMessages.dataset.maxmessages;
 
 /***********  DEFINICE  ***********/
@@ -38,8 +38,11 @@ var MessagesWindow = React.createClass({
     return {messages: [], thereIsMore: true, href: '' };
   },
   componentDidMount: function() {
-    getInitialMessages(this, this.props.userCodedId, prependDataIntoComponent);
-    actions.createTest();
+    var component = this;
+    MessageStore.addChangeListener(function(){
+      component.setState(MessageStore.getState());
+    });
+    MessageActions.createGetInitialMessages(reactLoadMessagesLink, this.props.userCodedId, parametersPrefix, usualLoadMessagesCount);
   },
   render: function() {
     var messages = this.state.messages;
@@ -90,7 +93,7 @@ var LoadMoreButton = React.createClass({
     );
   },
   handleClick: function(){
-    getOlderMessages(this.props.loadTo, this.props.userCodedId, this.props.oldestId, prependDataIntoComponent);
+    MessageActions.createGetOlderMessages(reactGetOlderMessagesLink, this.props.userCodedId, this.props.oldestId, parametersPrefix, usualOlderMessagesCount);
   }
 });
 
@@ -138,39 +141,6 @@ module.exports = {
   /***********  KOMUNIKACE (jQuery) ***********/
 
   /**
-   * Získá ze serveru posledních několik proběhlých zpráv s uživatelem s daným id
-   * @param  {ReactClass} component komponenta, která si vyžádala data
-   * @param  {int}   userCodedId kódované id uživatele
-   * @param  {Function} callback    funkce, která se zavolá při obdržení odpovědi
-   */
-  var getInitialMessages = function(component, userCodedId, callback){
-    var data = {};
-  	data[parametersPrefix + 'fromId'] = userCodedId;
-
-    $.getJSON(reactLoadMessagesLink, data, function(result){
-        if(result.length == 0) return;
-        callback(component, userCodedId, result, usualLoadMessagesCount);
-    });
-  };
-
-  /**
-   * Získá ze serveru několik starších zpráv
-   * @param  {ReactClass} component komponenta, která bude aktualizována daty
-   * @param  {int}   userCodedId kódované id uživatele
-   * @param  {int}   oldestId id nejstarší zprávy (nejmenší známé id)
-   * @param  {Function} callback    funkce, která se zavolá při obdržení odpovědi
-   */
-  var getOlderMessages = function(component, userCodedId, oldestId, callback){
-    var data = {};
-  	data[parametersPrefix + 'lastId'] = oldestId;
-    data[parametersPrefix + 'withUserId'] = userCodedId;
-    $.getJSON(reactGetOlderMessagesLink, data, function(result){
-        if(result.length == 0) return;
-        callback(component, userCodedId, result, usualGetOlderMessagesCount);
-    });
-  };
-
-  /**
    * Pošle na server zprávu.
    * @param  {ReactClass} component komponenta, která bude aktualizována daty
    * @param  {int}   userCodedId kódované id uživatele
@@ -194,40 +164,4 @@ module.exports = {
           callback(component, userCodedId, result);
         }
   		});
-  };
-
-  /***********  CALLBACK FUNKCE  ***********/
-
-  /**
-   * Nastaví zprávy ze standardního JSONu chatu (viz dokumentace) do state předané komponenty na začátek před ostatní zprávy.
-   * @param  {ReactClass} component komponenta
-   * @param  {int} userCodedId id uživatele, od kterého chci načíst zprávy
-   * @param  {json} jsonData  data ze serveru
-   * @param  {int} usualMessagesCount obvyklý počet zpráv - pokud je dodržen, zahodí nejstarší zprávu (pokud je zpráv dostatek)
-   * a komponentě podle toho nastaví stav, že na serveru ještě jsou/už nejsou další zprávy
-   */
-  var prependDataIntoComponent = function(component, userCodedId, jsonData, usualMessagesCount){
-    var thereIsMore = true;
-    var result = jsonData[userCodedId];
-    if(result.messages.length < usualMessagesCount){/* pokud mám méně zpráv než je obvyklé*/
-      thereIsMore = false;
-    }else{
-      result.messages.shift();/* odeberu první zprávu */
-    }
-    result.thereIsMore = thereIsMore;
-    result.messages = result.messages.concat(component.state.messages);
-    component.setState(result);
-  };
-
-  /**
-   * Nastaví zprávy ze standardního JSONu chatu (viz dokumentace) do state předané komponenty za ostatní zprávy.
-   * @param  {ReactClass} component komponenta
-   * @param  {int} userCodedId id uživatele, od kterého chci načíst zprávy
-   * @param  {json} jsonData  data ze serveru
-   */
-  var appendDataIntoComponent = function(component, userCodedId, jsonData){
-    var result = jsonData[userCodedId];
-    result.thereIsMore = thereIsMore;
-    result.messages = component.state.messages.concat(result.messages);
-    component.setState(result);
   };
