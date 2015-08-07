@@ -91,8 +91,8 @@ var prependDataIntoMessages = function(userCodedId, jsonData, usualMessagesCount
     result.messages.shift();/* odeberu první zprávu */
   }
   _thereIsMore = thereIsMore;
+  result.messages = filterInfoMessages(result.messages);
   _messages = result.messages.concat(_messages);
-  _messages = filterInfoMessages(_messages);
 };
 
 /**
@@ -101,7 +101,6 @@ var prependDataIntoMessages = function(userCodedId, jsonData, usualMessagesCount
  */
 var filterInfoMessages = function(messages){
   _infoMessages = [];
-  console.log(messages);
   for(var i = 0; i < messages.length; i++){
     if(messages[i].type == 1){/* když je to infozpráva */
       addToInfoMessages(messages[i]);
