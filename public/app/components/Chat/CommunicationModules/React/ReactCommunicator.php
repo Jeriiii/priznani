@@ -38,6 +38,9 @@ class ReactCommunicator extends StandardCommunicator {
 		$data = Json::decode($json); //prijata zprava dekodovana z JSONu
 		$user = $this->getPresenter()->getUser();
 		$message = $this->addMessage($data, $user);
+		if (!$this->checkBlockingStatement($message)) {
+			$this->getPresenter()->sendJson($this->addInfoAboutBlocking(array()));
+		}
 		$messageSelection = $this->chatManager->getSingleMessageSelection($message->id);
 		if (!empty($message)) {
 			$this->getPresenter()->sendJson($this->prepareResponseArray($messageSelection));
