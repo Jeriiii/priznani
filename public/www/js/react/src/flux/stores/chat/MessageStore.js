@@ -50,6 +50,10 @@ MessageStore.dispatchToken = Dispatcher.register(function(action) {
       prependDataIntoMessages(action.userCodedId, action.data, action.usualMessagesCount);
       MessageStore.emitChange();
       break;
+    case types.OLDER_MESSAGES_ARRIVED :
+      prependDataIntoMessages(action.userCodedId, action.data, action.usualMessagesCount);
+      MessageStore.emitChange();
+      break;
   }
 });
 
@@ -60,8 +64,8 @@ MessageStore.dispatchToken = Dispatcher.register(function(action) {
  */
 var appendDataIntoMessages = function(userCodedId, jsonData){
   var result = jsonData[userCodedId];
-  result.thereIsMore = thereIsMore;
-  result.messages = component.state.messages.concat(result.messages);
+  _thereIsMore = thereIsMore;
+  _messages = _messages.concat(result.messages);
 };
 
 /**

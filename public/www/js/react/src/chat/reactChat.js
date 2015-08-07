@@ -28,7 +28,7 @@ var reactGetOlderMessagesLink = reactGetOlderMessages.href;
 /** prefix před parametry do url */
 var parametersPrefix = reactSendMessage.dataset.parprefix;
 /** obvyklý počet příchozích zpráv v odpovědi u pravidelného a iniciálního požadavku (aneb kolik zpráv mi přijde, když jich je na serveru ještě dost) */
-var usualGetOlderMessagesCount = reactGetOlderMessages.dataset.maxmessages;
+var usualOlderMessagesCount = reactGetOlderMessages.dataset.maxmessages;
 var usualLoadMessagesCount = reactLoadMessages.dataset.maxmessages;
 
 /***********  DEFINICE  ***********/
@@ -93,7 +93,7 @@ var LoadMoreButton = React.createClass({
     );
   },
   handleClick: function(){
-    getOlderMessages(this.props.loadTo, this.props.userCodedId, this.props.oldestId, prependDataIntoComponent);
+    MessageActions.createGetOlderMessages(reactGetOlderMessagesLink, this.props.userCodedId, this.props.oldestId, parametersPrefix, usualOlderMessagesCount);
   }
 });
 
@@ -141,23 +141,6 @@ module.exports = {
   /***********  KOMUNIKACE (jQuery) ***********/
 
   /**
-   * Získá ze serveru několik starších zpráv
-   * @param  {ReactClass} component komponenta, která bude aktualizována daty
-   * @param  {int}   userCodedId kódované id uživatele
-   * @param  {int}   oldestId id nejstarší zprávy (nejmenší známé id)
-   * @param  {Function} callback    funkce, která se zavolá při obdržení odpovědi
-   */
-  var getOlderMessages = function(component, userCodedId, oldestId, callback){
-    var data = {};
-  	data[parametersPrefix + 'lastId'] = oldestId;
-    data[parametersPrefix + 'withUserId'] = userCodedId;
-    $.getJSON(reactGetOlderMessagesLink, data, function(result){
-        if(result.length == 0) return;
-        callback(component, userCodedId, result, usualGetOlderMessagesCount);
-    });
-  };
-
-  /**
    * Pošle na server zprávu.
    * @param  {ReactClass} component komponenta, která bude aktualizována daty
    * @param  {int}   userCodedId kódované id uživatele
@@ -182,5 +165,3 @@ module.exports = {
         }
   		});
   };
-
-  /***********  CALLBACK FUNKCE  ***********/
