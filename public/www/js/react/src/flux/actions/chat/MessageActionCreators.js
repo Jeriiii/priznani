@@ -25,7 +25,7 @@ module.exports = {  /**
     $.getJSON(url, data, function(result){
         if(result.length == 0) return;
         dispatcher.dispatch({
-          type: ActionTypes.NEW_MESSAGES_ARRIVED,
+          type: ActionTypes.OLDER_MESSAGES_ARRIVED,
           data: result,
           userCodedId : userCodedId,
           usualMessagesCount : usualLoadMessagesCount
@@ -56,6 +56,34 @@ module.exports = {  /**
           usualMessagesCount : usualOlderMessagesCount
         });
     });
-  }
+  },
 
+  /**
+   * Pošle na server zprávu.
+   * @param {string} url url, které se ptám na zprávy
+   * @param  {int}   userCodedId kódované id uživatele
+   * @param  {String} message text zprávy
+   */
+  createSendMessage: function(url, userCodedId, message){
+    var data = {
+      to: userCodedId,
+      type: 'textMessage',
+      text: message
+    };
+    var json = JSON.stringify(data);
+  		$.ajax({
+  			dataType: "json",
+  			type: 'POST',
+  			url: url,
+  			data: json,
+  			contentType: 'application/json; charset=utf-8',
+  			success: function(result){
+          dispatcher.dispatch({
+            type: ActionTypes.NEW_MESSAGES_ARRIVED,
+            data: result,
+            userCodedId : userCodedId
+          });
+        }
+  		});
+  }
 };
