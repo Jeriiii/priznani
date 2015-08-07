@@ -154,6 +154,7 @@ module.exports = {
   ChatWindow: React.createClass({
     componentDidMount: function() {
       initializeChatTimer(this.props.userCodedId);
+      MessageActions.reloadWindowUnload();
     },
     render: function () {
       return (
