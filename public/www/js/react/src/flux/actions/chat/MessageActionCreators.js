@@ -110,6 +110,7 @@ module.exports = {  /**
   createRefreshMessages: function(url, userCodedId, lastId, parametersPrefix){
     var data = {};
   	data[parametersPrefix + 'lastid'] = lastId;
+    data[parametersPrefix + 'readedMessages'] = [lastId];
     $.getJSON(url, data, function(result){
         if(result.length == 0) return;
         dispatcher.dispatch({
