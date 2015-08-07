@@ -19,12 +19,14 @@ var CHANGE_EVENT = 'change';
 
 var _dataVersion = 0;/* kolikrát se už změnila data */
 var _messages = [];
+var _infoMessages = [];
 var _thereIsMore = true;
 
 var MessageStore = assign({}, EventEmitter.prototype, {
   /* trigger změny */
   emitChange: function() {
     _dataVersion++;
+    filterInfoMessages();
     this.emit(CHANGE_EVENT);
   },
   /* touto metodou lze pověsit listener reagující při změně*/
@@ -39,6 +41,7 @@ var MessageStore = assign({}, EventEmitter.prototype, {
   getState: function() {
     return {
       messages: _messages,
+      infoMessages: _infoMessages,
       thereIsMore: _thereIsMore,
       dataVersion: _dataVersion
     };
@@ -90,6 +93,41 @@ var prependDataIntoMessages = function(userCodedId, jsonData, usualMessagesCount
   }
   _thereIsMore = thereIsMore;
   _messages = result.messages.concat(_messages);
+};
+
+/**
+ * Odfiltruje z dat infozprávy a vytřídí je zvlášť
+ * @return {[type]} [description]
+ */
+var filterInfoMessages = function(){
+  var clearMode = false; /* po přepnutí do čištění jen vyhazuje infozprávy*/
+  for(var i = _messages.length - 1 ; i >= Math.max(0, _messages.length - 20); i--){/*projde zprávy shora dolů - jen posledních dvacet kvůli výkonu*/
+    if(_messages[i].type == 1){/* když je to infozpráva */
+      if(!clearMode){/* nečistí se */
+        addToInfoMessages(_messages[i]);
+      }
+      _messages.splice(i,1);/* odstranění zprávy */
+    }else{
+      clearMode = true;/* když najde normální zprávu, vyčistí všechny infozprávy výše */
+    }
+  }
+};
+
+/**
+ * Přidá zprávu k infozprávám, pokud mezi nimi ještě není
+ * @param  {json} message zpráva přijatá ze serveru
+ */
+var addToInfoMessages = function(message) {
+  var alreadyExists = false;
+  _infoMessages.forEach(function(infoMessage){
+    if(infoMessage.text == message.text){
+      alreadyExists = true;
+      return;
+    }
+  });
+  if(!alreadyExists){
+    _infoMessages.push(message);
+  }
 };
 
 module.exports = MessageStore;
