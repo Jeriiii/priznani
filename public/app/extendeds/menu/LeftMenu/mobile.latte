@@ -2,7 +2,7 @@
 {foreach $menu as $item}
 	{if $item->isItem()}
 		<li><a 
-			{ifset $item->link}href="{plink $item->link}"{/ifset} 
+			{ifset $item->link}href="{$item->link}"{/ifset} 
 			{ifset $item->elClass}class="{$item->elClass}"{/ifset} 
 			title="{$item->tittle}"
 			{foreach $item->attributes as $name => $val}{!$name}="{!$val}"{/foreach}

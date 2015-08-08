@@ -44,6 +44,7 @@ class Menu implements \Iterator {
 	 */
 	public function addItem(Item $item, $isLoggetIn = null, $showOn = self::SHOW_ALL_PRES) {
 		$item->setLoggetIn($isLoggetIn);
+		$item->link = $item->link === null ? '#' : $item->link;
 
 		$this->add($item, $isLoggetIn, $showOn);
 	}
