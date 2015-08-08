@@ -180,13 +180,14 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 	 * Pošle uživateli JSON, obsahující informace o nových zprávách apod.
 	 * Vrací odpověď prohlížeči, vykonání kódu na serveru zde končí.
 	 * @param int $lastId id poslední známé zprávy
+	 * @param array $extraMessages nepovinné pole obsahující id zpráv, které mají být v odpovědi obsaženy tak jako tak
 	 */
-	private function sendRefreshResponse($lastId = 0) {
+	protected function sendRefreshResponse($lastId = 0, $extraMessages = array()) {
 		$userId = $this->getPresenter()->getUser()->getId();
 		if (!$lastId || $lastId == 0) {//pokud jde o prvni pozadavek prohlizece
 			$newMessages = $this->chatManager->getInitialMessages($userId); //vrati nam to nejake zpravy pro zacatek
 		} else {
-			$newMessages = $this->chatManager->getAllNewMessages($lastId, $userId);
+			$newMessages = $this->chatManager->getAllNewMessages($lastId, $userId, $extraMessages);
 		}
 
 		$response = $this->prepareResponseArray($newMessages);

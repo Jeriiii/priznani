@@ -57,8 +57,8 @@ var MessagesWindow = React.createClass({
     return (
       <div className="messagesWindow">
         <LoadMoreButton loadHref={moreButtonLink} oldestId={oldestId} thereIsMore={this.state.thereIsMore} userCodedId={userCodedId} />
-        {messages.map(function(message){
-            return <Message key={message.id} messageData={message} userHref={message.profileHref} profilePhotoUrl={message.profilePhotoUrl} />;
+        {messages.map(function(message, i){
+            return <Message key={userCodedId + 'message' + i} messageData={message} userHref={message.profileHref} profilePhotoUrl={message.profilePhotoUrl} />;
         })
         }
         {infoMessages.map(function(message, i){
@@ -133,7 +133,7 @@ var NewMessageForm = React.createClass({
     var message = input.value;
     if(message == undefined || message.trim() == '') return;
     input.value = '';
-    MessageActions.createSendMessage(reactSendMessageLink, this.props.userCodedId, message);
+    MessageActions.createSendMessage(reactSendMessageLink, this.props.userCodedId, message, getLastId());
   }
 });
 
@@ -148,18 +148,31 @@ var initializeChatTimer = function(userCodedId){
       Timer.maximumInterval = 60000;
       Timer.initialInterval = 3000;
       Timer.intervalIncrase = 2000;
-      Timer.lastId = (state.messages.length > 0) ? Timer.lastId = state.messages[state.messages.length - 1].id : 0;
+      Timer.lastId = getLastId();
       Timer.tick = function(){
         MessageActions.createRefreshMessages(reactRefreshMessagesLink, userCodedId, Timer.lastId, parametersPrefix);
       };
       Timer.start();
     }else{/* když se data nezměnila poprvé, ale určitě se změnila */
-      Timer.lastId = (state.messages.length > 0) ? Timer.lastId = state.messages[state.messages.length - 1].id : 0;
+      Timer.lastId = getLastId();
       Timer.resetTime();
     }
   });
 
 };
+
+/**
+ * Vrátí poslední známé id
+ * @return {int} posledni známé id
+ */
+var getLastId = function() {
+  var state = MessageStore.getState();
+  if(state.messages.length > 0){
+    return state.messages[state.messages.length - 1].id;
+  }else{
+    return 0;
+  }
+}
 
 module.exports = {
   /** Okno celého chatu s jedním uživatelem */

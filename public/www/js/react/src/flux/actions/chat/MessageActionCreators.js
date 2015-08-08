@@ -71,12 +71,14 @@ module.exports = {  /**
    * @param {string} url url, které se ptám na zprávy
    * @param  {int}   userCodedId kódované id uživatele
    * @param  {String} message text zprávy
+   * @param  {int} lastId poslední známé id
    */
-  createSendMessage: function(url, userCodedId, message){
+  createSendMessage: function(url, userCodedId, message, lastId){
     var data = {
       to: userCodedId,
       type: 'textMessage',
-      text: message
+      text: message,
+      lastid: lastId
     };
     this.blockWindowUnload('Zpráva se stále odesílá, prosíme počkejte několik sekund a pak to zkuste znova.');
     var exportObject = this;
