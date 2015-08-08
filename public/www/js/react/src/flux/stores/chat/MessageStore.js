@@ -63,6 +63,9 @@ MessageStore.dispatchToken = Dispatcher.register(function(action) {
     case types.NO_INITIAL_MESSAGES_ARRIVED:
       MessageStore.emitChange();/* když nepřijdou žádné zprávy při inicializaci, dá to najevo */
       break;
+    case types.MESSAGE_ERROR:
+      alert('Chyba sítě: ' + action.errorMessage);
+      break;
   }
 });
 

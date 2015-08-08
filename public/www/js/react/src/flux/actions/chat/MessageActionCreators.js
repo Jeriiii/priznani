@@ -41,6 +41,11 @@ module.exports = {  /**
         }
     }).done(function() {
       exportObject.reloadWindowUnload();
+    }).fail(function(){
+      dispatcher.dispatch({
+        type: ActionTypes.MESSAGE_ERROR,
+        errorMessage: 'Zprávy se bohužel nepodařilo načíst. Zkuste to znovu později.'
+      });
     });
   },
 
@@ -67,6 +72,11 @@ module.exports = {  /**
           oldersId : oldestId,
           usualMessagesCount : usualOlderMessagesCount
         });
+    }).fail(function(){
+      dispatcher.dispatch({
+        type: ActionTypes.MESSAGE_ERROR,
+        errorMessage: 'Zprávy se bohužel nepodařilo načíst. Zkuste to znovu později.'
+      });
     });
   },
 
@@ -107,7 +117,8 @@ module.exports = {  /**
         },
         error: function(){
           dispatcher.dispatch({
-            type: ActionTypes.MESSAGE_ERROR
+            type: ActionTypes.MESSAGE_ERROR,
+            errorMessage: 'Vaši zprávu se bohužel nepodařilo odeslat. Zkuste to znovu později.'
           });
         }
   		});
@@ -132,6 +143,11 @@ module.exports = {  /**
           data: result,
           userCodedId : userCodedId
         });
+    }).fail(function(){
+      dispatcher.dispatch({
+        type: ActionTypes.MESSAGE_ERROR,
+        errorMessage: 'Zprávy se bohužel nepodařilo načíst. Zkuste to znovu později.'
+      });
     });
   },
 
