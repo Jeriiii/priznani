@@ -9,7 +9,9 @@
  var constants = require('../../constants/ActionConstants');
  var EventEmitter = require('events').EventEmitter;
 
-var ActionTypes = constants.ActionTypes;
+var ActionTypes = constants.ActionTypes
+/* zamykání ošetřující souběžné poslání požadavku */
+var ajaxLock = false;
 
 module.exports = {  /**
    * Získá ze serveru posledních několik proběhlých zpráv s uživatelem s daným id
@@ -51,10 +53,12 @@ module.exports = {  /**
    * @param {int} usualOlderMessagesCount  obvyklý počet příchozích zpráv v odpovědi
    */
   createGetOlderMessages: function(url, userCodedId, oldestId, parametersPrefix, usualOlderMessagesCount){
+    ajaxLock = true;
     var data = {};
   	data[parametersPrefix + 'lastId'] = oldestId;
     data[parametersPrefix + 'withUserId'] = userCodedId;
     $.getJSON(url, data, function(result){
+        ajaxLock = false;
         if(result.length == 0) return;
         dispatcher.dispatch({
           type: ActionTypes.OLDER_MESSAGES_ARRIVED,
@@ -74,6 +78,7 @@ module.exports = {  /**
    * @param  {int} lastId poslední známé id
    */
   createSendMessage: function(url, userCodedId, message, lastId){
+    ajaxLock = true;
     var data = {
       to: userCodedId,
       type: 'textMessage',
@@ -97,7 +102,13 @@ module.exports = {  /**
           });
         },
         complete: function(){
+          ajaxLock = false;
           exportObject.reloadWindowUnload();
+        },
+        error: function(){
+          dispatcher.dispatch({
+            type: ActionTypes.MESSAGE_ERROR
+          });
         }
   		});
   },
@@ -110,6 +121,7 @@ module.exports = {  /**
    * @param  {string} parametersPrefix prefix před parametry v url
    */
   createRefreshMessages: function(url, userCodedId, lastId, parametersPrefix){
+    if(ajaxLock) return;
     var data = {};
   	data[parametersPrefix + 'lastid'] = lastId;
     data[parametersPrefix + 'readedMessages'] = [lastId];
