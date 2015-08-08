@@ -26,6 +26,7 @@ var MessageStore = assign({}, EventEmitter.prototype, {
   /* trigger změny */
   emitChange: function() {
     _dataVersion++;
+    if(_messages.length == 0) _thereIsMore = false;
     this.emit(CHANGE_EVENT);
   },
   /* touto metodou lze pověsit listener reagující při změně*/
@@ -61,6 +62,9 @@ MessageStore.dispatchToken = Dispatcher.register(function(action) {
       break;
     case types.NO_INITIAL_MESSAGES_ARRIVED:
       MessageStore.emitChange();/* když nepřijdou žádné zprávy při inicializaci, dá to najevo */
+      break;
+    case types.MESSAGE_ERROR:
+      alert('Chyba sítě: ' + action.errorMessage);
       break;
   }
 });

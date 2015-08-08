@@ -163,10 +163,11 @@ class ChatManager extends \Nette\Object {
 	 * Vrátí všechny zprávy novější než zpráva s daným id
 	 * @param int $fromId dané id zpravy
 	 * @param int $idRecipient id příjemce
+	 * @param array $extraMessages nepovinné pole obsahující id zpráv, které mají být obsaženy tak jako tak
 	 * @return \Nette\Database\Table\Selection zpravy
 	 */
-	public function getAllNewMessages($fromId, $idRecipient) {
-		return $this->messagesDao->getAllNewerMessagesThan($fromId, $idRecipient);
+	public function getAllNewMessages($fromId, $idRecipient, $extraMessages = array()) {
+		return $this->messagesDao->getAllNewerMessagesThan($fromId, $idRecipient, $extraMessages);
 	}
 
 	/**

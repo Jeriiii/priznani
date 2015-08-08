@@ -13,10 +13,4 @@
 		window.location = $(this).find('.conversation-link').attr('href');		
 	});
 	
-	/* přenačtení stylů, když jde nette ajax*/
-	$.nette.ext('chatStreamAjax', {
-		success: function () {/* úspěch operace z nette.ajax */
-			$('#chat-stream form').trigger("create");/* znovuaplikování jQueryMobile na stream */
-		}
-	});
 });

@@ -242,15 +242,24 @@ class ChatMessagesDao extends AbstractDao {
 	 * Vrátí všechny zprávy novější než daná zpráva
 	 * @param int $messageId id dané zprávy
 	 * @param int $idRecipient příjemce zpráv
+	 * @param array $extraMessages nepovinné pole obsahující id zpráv, které mají být obsaženy tak jako tak
 	 * @return Nette\Database\Table\Selection  zprávy
 	 */
-	public function getAllNewerMessagesThan($messageId, $idRecipient) {
+	public function getAllNewerMessagesThan($messageId, $idRecipient, $extraMessages = array()) {
+		if (!empty($extraMessages)) {
+			$extraIds = implode(', ', $extraMessages);
+			$extraSQL = ' OR ' . self::COLUMN_ID . " IN ($extraIds)";
+		} else {
+			$extraSQL = '';
+		}
 		$sel = $this->getTable();
-		$sel->where(self::COLUMN_ID . ' > ?', $messageId);
-		$sel->where(self::COLUMN_ID_RECIPIENT . " IS NOT NULL");
-		$sel->where(self::COLUMN_ID_RECIPIENT, $idRecipient);
-		$sel->where(self::COLUMN_TYPE, self::TYPE_TEXT_MESSAGE);
-
+		$sel->where('('
+			. self::COLUMN_ID . ' > ? AND '
+			. self::COLUMN_ID_RECIPIENT . ' IS NOT NULL AND '
+			. self::COLUMN_ID_RECIPIENT . '= ? AND '
+			. self::COLUMN_TYPE . '= ?) '
+			. $extraSQL
+			, $messageId, $idRecipient, self::TYPE_TEXT_MESSAGE);
 		return $sel;
 	}
 

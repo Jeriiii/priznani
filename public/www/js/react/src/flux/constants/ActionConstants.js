@@ -13,7 +13,8 @@ module.exports = {
     /* CHAT */
     NO_INITIAL_MESSAGES_ARRIVED : null,/* přišla odpověď při prvotním načítání zpráv, ale byla prázdná*/
     OLDER_MESSAGES_ARRIVED : null,/* přišly starší (donačtené tlačítkem) zprávy */
-    NEW_MESSAGES_ARRIVED : null/* přišly nové zprávy*/
+    NEW_MESSAGES_ARRIVED : null,/* přišly nové zprávy*/
+    MESSAGE_ERROR : null /* něco se nepovedlo */
   })
 
 };

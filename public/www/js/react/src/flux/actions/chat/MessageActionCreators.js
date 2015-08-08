@@ -9,7 +9,9 @@
  var constants = require('../../constants/ActionConstants');
  var EventEmitter = require('events').EventEmitter;
 
-var ActionTypes = constants.ActionTypes;
+var ActionTypes = constants.ActionTypes
+/* zamykání ošetřující souběžné poslání požadavku */
+var ajaxLock = false;
 
 module.exports = {  /**
    * Získá ze serveru posledních několik proběhlých zpráv s uživatelem s daným id
@@ -39,6 +41,11 @@ module.exports = {  /**
         }
     }).done(function() {
       exportObject.reloadWindowUnload();
+    }).fail(function(){
+      dispatcher.dispatch({
+        type: ActionTypes.MESSAGE_ERROR,
+        errorMessage: 'Zprávy se bohužel nepodařilo načíst. Zkuste to znovu později.'
+      });
     });
   },
 
@@ -51,10 +58,12 @@ module.exports = {  /**
    * @param {int} usualOlderMessagesCount  obvyklý počet příchozích zpráv v odpovědi
    */
   createGetOlderMessages: function(url, userCodedId, oldestId, parametersPrefix, usualOlderMessagesCount){
+    ajaxLock = true;
     var data = {};
   	data[parametersPrefix + 'lastId'] = oldestId;
     data[parametersPrefix + 'withUserId'] = userCodedId;
     $.getJSON(url, data, function(result){
+        ajaxLock = false;
         if(result.length == 0) return;
         dispatcher.dispatch({
           type: ActionTypes.OLDER_MESSAGES_ARRIVED,
@@ -63,6 +72,11 @@ module.exports = {  /**
           oldersId : oldestId,
           usualMessagesCount : usualOlderMessagesCount
         });
+    }).fail(function(){
+      dispatcher.dispatch({
+        type: ActionTypes.MESSAGE_ERROR,
+        errorMessage: 'Zprávy se bohužel nepodařilo načíst. Zkuste to znovu později.'
+      });
     });
   },
 
@@ -71,12 +85,15 @@ module.exports = {  /**
    * @param {string} url url, které se ptám na zprávy
    * @param  {int}   userCodedId kódované id uživatele
    * @param  {String} message text zprávy
+   * @param  {int} lastId poslední známé id
    */
-  createSendMessage: function(url, userCodedId, message){
+  createSendMessage: function(url, userCodedId, message, lastId){
+    ajaxLock = true;
     var data = {
       to: userCodedId,
       type: 'textMessage',
-      text: message
+      text: message,
+      lastid: lastId
     };
     this.blockWindowUnload('Zpráva se stále odesílá, prosíme počkejte několik sekund a pak to zkuste znova.');
     var exportObject = this;
@@ -95,7 +112,14 @@ module.exports = {  /**
           });
         },
         complete: function(){
+          ajaxLock = false;
           exportObject.reloadWindowUnload();
+        },
+        error: function(){
+          dispatcher.dispatch({
+            type: ActionTypes.MESSAGE_ERROR,
+            errorMessage: 'Vaši zprávu se bohužel nepodařilo odeslat. Zkuste to znovu později.'
+          });
         }
   		});
   },
@@ -108,6 +132,7 @@ module.exports = {  /**
    * @param  {string} parametersPrefix prefix před parametry v url
    */
   createRefreshMessages: function(url, userCodedId, lastId, parametersPrefix){
+    if(ajaxLock) return;
     var data = {};
   	data[parametersPrefix + 'lastid'] = lastId;
     data[parametersPrefix + 'readedMessages'] = [lastId];
@@ -118,6 +143,11 @@ module.exports = {  /**
           data: result,
           userCodedId : userCodedId
         });
+    }).fail(function(){
+      dispatcher.dispatch({
+        type: ActionTypes.MESSAGE_ERROR,
+        errorMessage: 'Zprávy se bohužel nepodařilo načíst. Zkuste to znovu později.'
+      });
     });
   },
 
