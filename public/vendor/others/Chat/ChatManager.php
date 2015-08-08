@@ -12,6 +12,7 @@ use POS\Model\FriendDao;
 use POS\Model\PaymentDao;
 use Nette\Http\Session;
 use POS\Model\UserBlockedDao;
+use NetteExt\Path\ProfilePhotoPathCreator;
 
 /**
  * Správce chatu, používaný pro obecné operace chatu, které se týkají přístupu k modelům
@@ -29,6 +30,12 @@ class ChatManager extends \Nette\Object {
 	/** Vrátí se, když uživatel blokuje toho, komu chce poslat zprávu (tj. nemůže s ním komunikovat, jelikož jej sám blokuje) */
 	const USER_IS_BLOCKING_RETCODE = 6543; /* náhodně zvolené číslo */
 	const USER_IS_BLOCKING_MESSAGE = 'Tohoto uživatele blokujete. Chcete-li mu poslat zprávu, musíte jej odblokovat.';
+
+	/** Maximální počet vrácených zpráv při zjišťování posledních zpráv. Pokud je dosažen tento počet, zobrazí se o jednu zprávu méně. * */
+	const COUNT_OF_LAST_MESSAGES = 7;
+
+	/** Maximální počet vrácených zpráv při donačítání starších zpráv. Pokud je dosažen tento počet, zobrazí se o jednu zprávu méně. * */
+	const COUNT_OF_MORE_MESSAGES = 7;
 
 	/**
 	 * DAO pro blokované uživatele
@@ -110,6 +117,15 @@ class ChatManager extends \Nette\Object {
 	}
 
 	/**
+	 * Vrátí zprávu s daným ID. Její typ není IRow, ale Selection, aby s ní bylo možno pracovat v univerzálních formátovacích funkcích.
+	 * @param int $messageId id zprávy
+	 * @return Selection zpráva
+	 */
+	public function getSingleMessageSelection($messageId) {
+		return $this->messagesDao->findNoFetch($messageId);
+	}
+
+	/**
 	 * Posle uzivateli zpravu
 	 * @param int $idSender id odesilatele
 	 * @param int $idRecipient id prijemce
@@ -147,10 +163,11 @@ class ChatManager extends \Nette\Object {
 	 * Vrátí všechny zprávy novější než zpráva s daným id
 	 * @param int $fromId dané id zpravy
 	 * @param int $idRecipient id příjemce
+	 * @param array $extraMessages nepovinné pole obsahující id zpráv, které mají být obsaženy tak jako tak
 	 * @return \Nette\Database\Table\Selection zpravy
 	 */
-	public function getAllNewMessages($fromId, $idRecipient) {
-		return $this->messagesDao->getAllNewerMessagesThan($fromId, $idRecipient);
+	public function getAllNewMessages($fromId, $idRecipient, $extraMessages = array()) {
+		return $this->messagesDao->getAllNewerMessagesThan($fromId, $idRecipient, $extraMessages);
 	}
 
 	/**
@@ -169,7 +186,19 @@ class ChatManager extends \Nette\Object {
 	 * @return \Nette\Database\Table\Selection zprávy
 	 */
 	public function getLastMessagesBetween($idSender, $idRecipient) {
-		return $this->messagesDao->getLastTextMessagesBetweenUsers($idSender, $idRecipient, 6);
+		return $this->messagesDao->getLastTextMessagesBetweenUsers($idSender, $idRecipient, self::COUNT_OF_LAST_MESSAGES);
+	}
+
+	/**
+	 * Vrátí zprávy starší než ta s daným id
+	 * @param int $lastId id nejstarší známé zprávy
+	 * @param int $limit maximální počet vrácených zpráv
+	 * @param int $idUser1 id prvního uživatele
+	 * @param int idUser2 id druhého uživatele
+	 * @return \Nette\Database\Table\Selection zprávy
+	 */
+	public function getOlderMessagesBetween($lastId, $limit, $idUser1, $idUser2) {
+		return $this->messagesDao->getOlderMessagesBetween($lastId, $idUser1, $idUser2, $limit);
 	}
 
 	/**
@@ -194,6 +223,25 @@ class ChatManager extends \Nette\Object {
 			$user = $this->userDao->find($id);
 			$session->offsetSet($id, $user[UserDao::COLUMN_USER_NAME]);
 			return $user[UserDao::COLUMN_USER_NAME];
+		}
+	}
+
+	/**
+	 * Vrátí url profilové fotky uživatele
+	 * Šetří databázi.
+	 * @param int $id id uživatele
+	 * @param \Nette\Http\SessionSection $session session k ukladani jmen
+	 * @param \NetteExt\Helper\GetImgPathHelper vyhledávač url
+	 * @return String uzivatelske jmeno
+	 */
+	public function getProfilePhotoUrl($id, $session, $getImagePathHelper) {
+		if ($session->offsetExists($id)) {
+			return $session->offsetGet($id);
+		} else {
+			$user = $this->userDao->find($id);
+			$url = ProfilePhotoPathCreator::createProfilePhotoUrl($user, $getImagePathHelper, true);
+			$session->offsetSet($id, $url);
+			return $url;
 		}
 	}
 
@@ -223,6 +271,18 @@ class ChatManager extends \Nette\Object {
 			}
 		}
 		return $this->messagesDao->setAllOlderMessagesReaded($maxId, $idUser, $readed);
+	}
+
+	/**
+	 * Nastaví všechny zprávy starší než dané id (včetně) od daného uživatele jako přečtené
+	 * @param int $idFrom id uživatele, se kterým si píšu
+	 * @param int $idRecipient id přihlášeného uživatele (pro jistotu)
+	 * @param int $lastId id nejnovější přečtené zprávy
+	 * @param int $readed  přečtená/nepřečtená
+	 * @return Nette\Database\Table\Selection upravené zprávy
+	 */
+	public function setOlderMessagesFromUserReaded($idFrom, $idRecipient, $lastId, $readed) {
+		return $this->messagesDao->setOlderMessagesFromUserReaded($idFrom, $idRecipient, $lastId, $readed);
 	}
 
 	/**
