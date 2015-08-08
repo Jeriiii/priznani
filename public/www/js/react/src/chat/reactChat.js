@@ -103,7 +103,7 @@ var LoadMoreButton = React.createClass({
     if(!this.props.thereIsMore){ return null;}
     return (
       <span className="loadMoreButton btn-main loadingbutton ui-btn" onClick={this.handleClick}>
-        Načíst další zprávy
+        Načíst předchozí zprávy
       </span>
     );
   },
