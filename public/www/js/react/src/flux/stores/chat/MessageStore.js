@@ -26,6 +26,7 @@ var MessageStore = assign({}, EventEmitter.prototype, {
   /* trigger změny */
   emitChange: function() {
     _dataVersion++;
+    if(_messages.length == 0) _thereIsMore = false;
     this.emit(CHANGE_EVENT);
   },
   /* touto metodou lze pověsit listener reagující při změně*/
