@@ -68,6 +68,7 @@ class FriendRequestList extends UsersList {
 		if ($this->presenter->isAjax()) {
 			$this->redrawControl();
 		} else {
+			$this->presenter->flashMessage('Nyní jste přátelé.');
 			$this->presenter->redirect("this");
 		}
 	}
