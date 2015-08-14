@@ -37,7 +37,6 @@ class ArticlePresenter extends \BasePresenter {
 		$this->template->article = $article;
 
 		$this->template->listPages = !empty($this->listPages) ? $this->listPages : null;
-		$this->template->isHomepage = $this->article->homepage == 1 ? TRUE : FALSE;
 	}
 
 	public function renderListArticles() {

@@ -7,12 +7,9 @@
 
 <h1>{$article->name}</h1>
 
-<span id="excerpt">{$article->excerpt}</span>
+<span id="excerpt">{!$article->excerpt}</span>
 
 {! $article->text}
-{if !$isHomepage}
-	<a n:href="Article:" class="btn btn-link">zpět na hlavní stránku dokumentace</a>
-{/if}
 
 {if !empty($listPages)}
 	<ul class="articles">
