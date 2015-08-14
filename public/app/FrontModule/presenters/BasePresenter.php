@@ -141,6 +141,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		$this->template->isNotComponentCssEmpty = !empty($this->lessFiles);
 
 		$this->template->loggedUser = $this->loggedUser;
+		$this->template->production = $this->productionMode;
 
 		$this->template->facebook_html = "";
 		$this->template->facebook_script = "";

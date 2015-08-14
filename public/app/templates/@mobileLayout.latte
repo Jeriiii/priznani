@@ -118,9 +118,12 @@
 						});
 					</script>
 					{control jsMobileLayoutLoggedIn}
-				{/if}				
+				{/if}
 				{block scripts}{/block}
 				{block foot}{/block}
+				{*REACT*}
+				<script type="text/javascript" src="{$basePath}/js/react/react-0.13.3{if $production}.min{/if}.js" />
+				<script type="text/javascript" src="{$basePath}/js/react/build/reactDatenode.js" />
 				<div class="clear"></div>
 			</footer>
 		</section>
