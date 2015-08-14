@@ -508,7 +508,7 @@
 		$.fn.ajaxBox.runStates[params.snippetName] = true; //počáteční nastavení
 		$.fn.ajaxBox.currentOffsets[params.snippetName] = params.startOffset;
 		options.dataArrived = function (opts, data) {//zkoumá, jestli snippet poslal nějaká data a pokud ne, schová načítací gif a pomocí globálního přepínače zastaví dotazování
-			if (data.snippets[params.snippetName].trim() == "") {
+			if (data.snippets[params.snippetName] === undefined || data.snippets[params.snippetName].trim() == "") {
 				$.fn.ajaxBox.runStates[params.snippetName] = false;
 				$('div[data-related="' + opts.buttonSelector + '"] .ajaxBoxData').append('<div class="noConvMessages">' + params.endMessage + '</div>');
 				$('div[data-related="' + opts.buttonSelector + '"] .loadingGif').css('display', 'none');
