@@ -1,7 +1,8 @@
 {block menu}
-<div class="btn-group">
-	<a class="btn btn-default" n:href="Article:listArticles">Seznam stránek</a>
-	<a class="btn btn-default" n:href="Article:">Domů</a>
-	<a class="btn btn-default" n:href="Article:newArticle">Nová stránka</a>
+<div class="btn-main-group">
+	<a class="btn-main btn-smaller" n:href="Article:editArticle url => $article->url">Změnit obsah</a>
+	<a class="btn-main btn-smaller" n:href="Article:listArticles">Seznam stránek</a>
+	<a class="btn-main btn-smaller" n:href="Article:">Domů</a>
+	<a class="btn-main btn-smaller" n:href="Article:newArticle">Nová stránka</a>
 </div>
 {/block}

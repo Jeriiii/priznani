@@ -2,7 +2,6 @@
 
 {block content}
 {if $user->isAllowed('article', 'adminMenu')}
-	<a class="btn btn-warning" n:href="Article:editArticle url => $article->url">Změnit obsah</a>
 	{include 'menu/adminPageMenu.latte'}
 {/if}
 
