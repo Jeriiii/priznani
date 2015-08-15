@@ -1,0 +1,24 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+{control editPageForm}
+{/block}
+
+{block foot}
+<script type="text/javascript" src="{$basePath}/js/plugins/text-editor/bootstrap2.3.min.js"></script>
+<script type="text/javascript" src="{$basePath}/js/plugins/text-editor/jquery.pagedown-bootstrap.min.js"></script>
+<script type="text/javascript">
+(function () {
+ 
+	$("textarea.editor").pagedownBootstrap();
+ 
+})();
+</script>
+{/block}
+
+
+{block head}
+<link href="{$basePath}/css/plugins/text-editor/bootstrap.tooltip.min.css" rel="stylesheet">
+<link href="{$basePath}/css/plugins/text-editor/bootstrap2.3.min.css" rel="stylesheet">
+{control css 'bootstrap/forms-full.less', 'plugins/text-editor/jquery.pagedown-bootstrap.css', 'blog/editArticle.less'}
+{/block}

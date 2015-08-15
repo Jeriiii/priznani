@@ -2,6 +2,8 @@
 temp/*
 !temp/reports
 temp/reports/*
+www/images/blog/*
+!www/images/blog/.gitkeep
 !temp/reports/.gitkeep
 !temp/sessions
 temp/sessions/*

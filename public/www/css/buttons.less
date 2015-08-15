@@ -2,9 +2,9 @@
 @import "bootstrap/help/mixins.less";
 @import "variables.less";
 
-
-.btn-main {
-    position: relative;
+/* tlačítko bez barev */
+.btn-prototype {
+	position: relative;
     display: block;
     letter-spacing: 1px;
     color: #fff;
@@ -18,9 +18,13 @@
     height: 30px;
     text-shadow: 0 0 1px white;
     text-align: center;
-    background-color: @main-red !important;
 	border: solid 0 black !important;
-    #gradient > .vertical(@main-red; @main-red-dark);
+}
+
+.btn-main {
+    .btn-prototype;
+	#gradient > .vertical(@main-red; @main-red-dark);
+	background-color: @main-red !important;
 }
 .btn-main:hover {
     background: @main-red-light;
@@ -41,6 +45,12 @@
     line-height: 25px;
     height: 25px;
     font-size: 18px !important;
+}
+
+.btn-main.btn-smaller{
+    line-height: 18px;
+    height: 18px;
+    font-size: 12px !important;
 }
 
 .btn-main-group{

@@ -1,0 +1,64 @@
+{block meta}
+<title>{$article->name} - Datenode.cz</title>
+
+<meta name="keywords" content="{$article->name} - Datenode.cz" />
+<meta name="description" content="{$article->excerpt}" />
+
+<meta property="og:title" content="{$article->name} - Datenode.cz" />
+<meta property="og:type" content="article" />
+{if array_key_exists(0, $article->images)}
+	<meta property="og:image" content="http://datenode.cz{$article->images[0]->path}" />
+{/if}
+<meta property="og:site_name" content="datenode.cz" />
+<meta property="og:description" content="{$article->excerpt}" />
+{/}
+
+{block content}
+{if $user->isAllowed('article', 'adminMenu')}
+	{include 'menu/adminPageMenu.latte'}
+{/if}
+
+<h1>{$article->name}</h1>
+
+<span id="excerpt">{!$article->excerpt}</span>
+
+{ifset $article->images}
+	{foreach $article->images as $image}
+		<img src="{$image->path}" />
+	{/foreach}
+{/ifset}
+
+{! $article->text}
+
+{if !empty($listPages)}
+	<ul class="articles">
+		{foreach $listPages as $art}
+			<li>
+				<a class="btn btn-link btn-lg" n:href="Article: url => $art->url">
+					{$art->name}
+				</a>
+			</li>
+		{/foreach}
+	</ul>
+{/if}
+{/block}
+
+{block scripts}
+{include #parent}
+<script src="http://jush.sourceforge.net/jush.js"></script>
+<script>
+	jush.create_links = false;
+	jush.highlight_tag('code');
+	$('code.jush').each(function(){ $(this).html($(this).html().replace(/\x7B[/$\w].*?\}/g, '<span class="jush-latte">$&</span>')) });
+
+	$('a[href^=#]').click(function(){
+		$('html,body').animate({ scrollTop: $($(this).attr('href')).show().offset().top - 5 }, 'fast');
+		return false;
+	});
+</script>
+{/block}
+
+
+{block head}
+{control css 'blog/article.less'}
+{/block}
