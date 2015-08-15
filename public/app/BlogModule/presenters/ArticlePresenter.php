@@ -10,6 +10,7 @@ use Nette\Application\UI\Form as Frm;
 use Michelf\MarkdownToHtml;
 use Nette\Application\BadRequestException;
 use Nette\ArrayHash;
+use CssMin;
 
 class ArticlePresenter extends \BasePresenter {
 
@@ -40,6 +41,10 @@ class ArticlePresenter extends \BasePresenter {
 		$this->template->article = $article;
 
 		$this->template->listPages = !empty($this->listPages) ? $this->listPages : null;
+	}
+
+	public function actionListArticles() {
+		$this->setLayout('blogAdminLayout');
 	}
 
 	public function renderListArticles() {
@@ -113,6 +118,25 @@ class ArticlePresenter extends \BasePresenter {
 		$daoBox->blogImageDao = $this->blogImageDao;
 
 		return new Frm\NewArticleForm($this->article, $daoBox, $this, $name);
+	}
+
+	public function createComponentCssBlogAdminLayout() {
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/css');
+		$compiler = \WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/cache/css');
+		$compiler->addFileFilter(new \Webloader\Filter\LessFilter());
+		$compiler->addFileFilter(function ($code, $compiler, $path) {
+			return cssmin::minify($code);
+		});
+
+		$files->addFiles(array(
+			'bootstrap-3-2/bootstrap.min.css',
+			'bootstrap-3-2/bootstrap-theme.min.css',
+			'bootstrap-3-2/adminTheme.css',
+			'typeahead.css'
+		));
+
+		/* nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu */
+		return new \WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/cache/css');
 	}
 
 }
