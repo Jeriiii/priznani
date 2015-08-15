@@ -25,37 +25,10 @@ class ArticlePresenter extends \BasePresenter {
 	/** @var \Nette\Database\Table\ActiveRow Aktuální článek. */
 	public $article;
 
-	/** @var \Nette\Database\Table\Selection Seznam stránek.  */
-	private $listPages;
-
-	public function actionDefault($url = null) {
-		$this->loadPage($url);
-	}
-
 	public function renderDefault($url = null) {
-		$convertor = new MarkdownToHtml();
+		$this->template->article = $this->loadArticle($this->loadPage($url));
 
-		$article = ArrayHash::from($this->article->toArray());
-
-		$article->excerpt = $convertor->toHtml($article->excerpt);
-		$article->text = $convertor->toHtml($article->text);
-
-		/* načtení obrázků */
-		$images = $this->article->related(BlogImageDao::TABLE_NAME);
-		$article->images = array();
-
-		foreach ($images as $image) {
-			$path = BlogImagePathCreator::getImgPath($article->id, $image->id, $image->suffix, $this->template->basePath);
-
-			$img = new ArrayHash;
-			$img->path = $path;
-
-			$article->images[] = $img;
-		}
-
-		$this->template->article = $article;
-
-		$this->template->listPages = !empty($this->listPages) ? $this->listPages : null;
+		$this->template->listPages = $this->blogDao->getListMages();
 	}
 
 	public function actionListArticles() {
@@ -74,7 +47,7 @@ class ArticlePresenter extends \BasePresenter {
 			$this->redirect('Article:');
 		}
 
-		$this->loadPage($url);
+		$this->article = $this->loadPage($url);
 	}
 
 	public function actionNewArticle() {
@@ -88,6 +61,11 @@ class ArticlePresenter extends \BasePresenter {
 		$this->article = $this->blogDao->findLast();
 	}
 
+	/**
+	 * Načte článek podle url.
+	 * @param string $url Url článku.
+	 * @throws BadRequestException
+	 */
 	private function loadPage($url) {
 		if (empty($url)) {
 			/* homepage */
@@ -101,19 +79,45 @@ class ArticlePresenter extends \BasePresenter {
 			/* normal page */
 			$article = $this->blogDao->findByUrl($url);
 
-
 			if (empty($article)) {
 				throw new BadRequestException('Stránka nenalezena.');
 			}
 		}
 
-		$this->listPages = $this->blogDao->getListMages();
-
 //		if ($page->access_rights != "all") {
 //			$this->isAdmin();
 //		}
 
-		$this->article = $article;
+		return $article;
+	}
+
+	/**
+	 * Konvertuje MarkDown do html a donačte obrázky.
+	 * @param \Nette\Database\Table\ActiveRow $articleDB Článek z db.
+	 * @return ArrayHash Článek s obrázky.
+	 */
+	private function loadArticle($articleDB) {
+		$convertor = new MarkdownToHtml();
+
+		$article = ArrayHash::from($articleDB->toArray());
+
+		$article->excerpt = $convertor->toHtml($article->excerpt);
+		$article->text = $convertor->toHtml($article->text);
+
+		/* načtení obrázků */
+		$images = $articleDB->related(BlogImageDao::TABLE_NAME);
+		$article->images = array();
+
+		foreach ($images as $image) {
+			$path = BlogImagePathCreator::getImgPath($article->id, $image->id, $image->suffix, $this->template->basePath);
+
+			$img = new ArrayHash;
+			$img->path = $path;
+
+			$article->images[] = $img;
+		}
+
+		return $article;
 	}
 
 	public function handleDeleteArticle($articleId) {
