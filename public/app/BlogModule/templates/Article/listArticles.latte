@@ -26,7 +26,11 @@
 					{str_replace(array('all', 'admin'), array('všichni', 'pouze admini'),$article->access_rights)}
 				</td>
 				<td>
-					
+					{if $article->release == 0}
+					<a class="btn btn-info" n:href="releaseArticle! articleId=>$article->id">
+						vydat
+					</a>
+					{/if}
 				</td>
 				<td>
 					<a class="btn btn-info" n:href="Article:editArticle url=>$article->url">

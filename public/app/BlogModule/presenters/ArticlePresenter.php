@@ -13,6 +13,7 @@ use Nette\ArrayHash;
 use cssMin;
 use POS\Model\BlogImageDao;
 use NetteExt\Path\BlogImagePathCreator;
+use POS\Model\BlogDao;
 
 class ArticlePresenter extends \BasePresenter {
 
@@ -26,9 +27,10 @@ class ArticlePresenter extends \BasePresenter {
 	public $article;
 
 	public function renderDefault($url = null) {
-		$this->template->article = $this->loadArticle($this->loadPage($url));
+		$article = $this->loadArticle($this->loadPage($url));
+		$this->template->article = $article;
 
-		$this->template->listPages = $this->blogDao->getListMages();
+		$this->template->listPages = $this->blogDao->getReleaseArticles($article->id);
 	}
 
 	public function actionListArticles() {
@@ -118,6 +120,16 @@ class ArticlePresenter extends \BasePresenter {
 		}
 
 		return $article;
+	}
+
+	public function handleReleaseArticle($articleId) {
+		$article = $this->blogDao->find($articleId);
+		$article->update(array(
+			BlogDao::COLUMN_RELEASE => 1
+		));
+
+		$this->flashMessage("Článek byl vydán.");
+		$this->redirect("this");
 	}
 
 	public function handleDeleteArticle($articleId) {

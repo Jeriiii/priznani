@@ -35,3 +35,6 @@ ALTER TABLE `magazine_images`
 ALTER TABLE `magazine_images`
 	ADD CONSTRAINT `FK_magazine_images_magazine` FOREIGN KEY (`articleID`) REFERENCES `magazine` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
 
+/* vyšlé články */
+ALTER TABLE `magazine`
+	ADD COLUMN `release` TINYINT(1) UNSIGNED NULL DEFAULT '0' AFTER `access_rights`;

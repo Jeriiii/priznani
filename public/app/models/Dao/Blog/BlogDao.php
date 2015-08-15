@@ -25,6 +25,7 @@ class BlogDao extends AbstractDao {
 	const COLUMN_TEXT = 'text';
 	const COLUMN_ACCESS_RIGHTS = 'access_rights';
 	const COLUMN_EXCERPT = 'excerpt'; //úryvek článku
+	const COLUMN_RELEASE = 'release';
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -42,13 +43,15 @@ class BlogDao extends AbstractDao {
 	}
 
 	/**
-	 * Vrátí seznam stránek
+	 * Vrátí vyšlé články
 	 * @return \Nette\Database\Table\Selection
 	 */
-	public function getListMages() {
+	public function getReleaseArticles($notArticleId = null) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_HOMEPAGE, 0);
-		$sel->order(self::COLUMN_ORDER . ' ASC');
+		$sel->where(self::COLUMN_RELEASE, 1);
+		$sel->where(self::COLUMN_ID . ' != ?', $notArticleId);
+		$sel->order(self::COLUMN_ORDER . ' DESC');
 
 		return $sel;
 	}
