@@ -31,9 +31,13 @@ class NewArticleForm extends BaseForm {
 	public function __construct(ActiveRow $article, DaoBox $daoBox = null, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
-		$this->blogDao = $daoBox->blogDao;
+		if (!empty($daoBox)) {
+			$this->blogDao = $daoBox->blogDao;
+			$this->blogImageDao = $daoBox->blogImageDao;
+		}
+
 		$this->article = $article;
-		$this->blogImageDao = $daoBox->blogImageDao;
+
 
 		$nameField = $this->addText('name', 'Jméno stránky:');
 		$nameField->setRequired('Prosím vložte jméno stránky.');
@@ -49,11 +53,11 @@ class NewArticleForm extends BaseForm {
 
 		$image = $this->addUpload('image', 'Obrázek článku:');
 
-		$accessRights = array(
-			"all" => "všichni",
-			"admin" => "pouze administrátoři"
+		$release = array(
+			0 => "teď nevydávat",
+			1 => "vydat článek okamžitě"
 		);
-		$this->addSelect("access_rights", "Kdo může stránku zobrazit", $accessRights);
+		$this->addSelect("release", "Vydání článku", $release);
 
 		$this->addSubmit('send', 'Odeslat');
 		$this->setDefaults(array(

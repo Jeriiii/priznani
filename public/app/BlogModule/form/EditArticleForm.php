@@ -24,7 +24,8 @@ class EditArticleForm extends NewArticleForm {
 			BlogDao::COLUMN_NAME => $article->name,
 			BlogDao::COLUMN_TEXT => $article->text,
 			BlogDao::COLUMN_ACCESS_RIGHTS => $article->access_rights,
-			BlogDao::COLUMN_ORDER => $article->order
+			BlogDao::COLUMN_ORDER => $article->order,
+			BlogDao::COLUMN_RELEASE => $article->release,
 		));
 
 		unset($this['image']);
