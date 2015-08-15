@@ -16,3 +16,13 @@ ALTER TABLE `magazine`
 
 ALTER TABLE `magazine`
 	CHANGE COLUMN `excerpt` `excerpt` VARCHAR(200) NULL DEFAULT NULL COMMENT 'Výňatek z článku / popis článku' AFTER `name`;
+
+/* obrázky k blogům */
+CREATE TABLE `magazine_images` (
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`suffix` VARCHAR(10) NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;

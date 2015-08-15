@@ -69,3 +69,4 @@ services:
 	ConversationDao: POS\Model\ConversationDao
 	RateImageDao: POS\Model\RateImageDao
 	BlogDao: POS\Model\BlogDao
+	BlogImageDao: POS\Model\BlogImageDao

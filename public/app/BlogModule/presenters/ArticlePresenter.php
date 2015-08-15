@@ -16,6 +16,9 @@ class ArticlePresenter extends \BasePresenter {
 	/** @var \POS\Model\BlogDao @inject */
 	public $blogDao;
 
+	/** @var \POS\Model\BlogImageDao @inject */
+	public $blogImageDao;
+
 	/** @var \Nette\Database\Table\ActiveRow Aktuální článek. */
 	public $article;
 
@@ -105,7 +108,12 @@ class ArticlePresenter extends \BasePresenter {
 	}
 
 	protected function createComponentNewPageForm($name) {
-		return new Frm\NewArticleForm($this->article, $this->blogDao, $this, $name);
+		$daoBox = new \NetteExt\DaoBox;
+
+		$daoBox->blogDao = $this->blogDao;
+		$daoBox->blogImageDao = $this->blogImageDao;
+
+		return new Frm\NewArticleForm($this->article, $daoBox, $this, $name);
 	}
 
 }

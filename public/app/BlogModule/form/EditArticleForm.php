@@ -26,6 +26,8 @@ class EditArticleForm extends NewArticleForm {
 			BlogDao::COLUMN_ACCESS_RIGHTS => $article->access_rights,
 			BlogDao::COLUMN_ORDER => $article->order
 		));
+
+		unset($this['image']);
 	}
 
 	public function submitted($form) {
