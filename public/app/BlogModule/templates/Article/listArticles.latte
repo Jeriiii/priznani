@@ -20,9 +20,7 @@
 					<b>{$article->order}</b>
 				</td>
 				<td>
-					<a class="btn btn-link btn-lg" n:href="Article: url => $article->url">
-						{$article->name}
-					</a>
+					<a class="btn btn-link btn-lg" n:href="Article: url => $article->url">{$article->name}</a>
 				</td>
 				<td>
 					{str_replace(array('all', 'admin'), array('všichni', 'pouze admini'),$article->access_rights)}
@@ -36,7 +34,7 @@
 					</a>
 				</td>
 				<td>
-					<a class="btn btn-danger" n:href="deleteArticle! idPage=>$article->id ">
+					<a class="btn btn-danger" n:href="deleteArticle! articleId=>$article->id ">
 						smazat
 					</a>
 				</td>

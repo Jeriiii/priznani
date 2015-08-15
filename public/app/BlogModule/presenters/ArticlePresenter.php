@@ -52,6 +52,8 @@ class ArticlePresenter extends \BasePresenter {
 	}
 
 	public function actionEditArticle($url = null) {
+		$this->setLayout('blogAdminLayout');
+
 		if (!$this->user->isAllowed('article', 'editArticle')) {
 			$this->flashMessage('Na tuto sekci nemáte dostatečné oprávnění.');
 			$this->redirect('Article:');
@@ -61,6 +63,8 @@ class ArticlePresenter extends \BasePresenter {
 	}
 
 	public function actionNewArticle() {
+		$this->setLayout('blogAdminLayout');
+
 		if (!$this->user->isAllowed('article', 'newArticle')) {
 			$this->flashMessage('Na tuto sekci nemáte dostatečné oprávnění.');
 			$this->redirect('Article:');
@@ -98,13 +102,14 @@ class ArticlePresenter extends \BasePresenter {
 	}
 
 	public function handleDeleteArticle($articleId) {
-		if (!$this->user->isInRole('admin')) {
+		if (!$this->user->isAllowed('article', 'deleteArticle')) {
 			$this->flashMessage('Na tuto akci nemáte dostatečné oprávnění.');
-			$this->redirect('Article');
+			$this->redirect('Article:');
 		}
 
 		$this->blogDao->delete($articleId);
 		$this->flashMessage('Článek byl smazán.');
+		$this->redirect('Article:listArticles');
 	}
 
 	protected function createComponentEditPageForm($name) {
@@ -129,10 +134,8 @@ class ArticlePresenter extends \BasePresenter {
 		});
 
 		$files->addFiles(array(
-			'bootstrap-3-2/bootstrap.min.css',
-			'bootstrap-3-2/bootstrap-theme.min.css',
-			'bootstrap-3-2/adminTheme.css',
-			'typeahead.css'
+			'typeahead.css',
+			'bootstrap-3-3/adminTheme.css',
 		));
 
 		/* nette komponenta pro výpis <link>ů přijímá kompilátor a cestu k adresáři na webu */
