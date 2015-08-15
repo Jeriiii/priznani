@@ -1,4 +1,17 @@
-{* This is the welcome article, you can delete it *}
+{block meta}
+<title>{$article->name} - Datenode.cz</title>
+
+<meta name="keywords" content="{$article->name} - Datenode.cz" />
+<meta name="description" content="{$article->excerpt}" />
+
+<meta property="og:title" content="{$article->name} - Datenode.cz" />
+<meta property="og:type" content="article" />
+{if array_key_exists(0, $article->images)}
+	<meta property="og:image" content="http://datenode.cz{$article->images[0]->path}" />
+{/if}
+<meta property="og:site_name" content="datenode.cz" />
+<meta property="og:description" content="{$article->excerpt}" />
+{/}
 
 {block content}
 {if $user->isAllowed('article', 'adminMenu')}
