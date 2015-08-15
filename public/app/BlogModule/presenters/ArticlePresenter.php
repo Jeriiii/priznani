@@ -43,8 +43,7 @@ class ArticlePresenter extends \BasePresenter {
 	}
 
 	public function renderListArticles() {
-		$this->template->pages = $this->context->createPages()
-			->where("homepage", 0);
+		$this->template->articles = $this->blogDao->getAll();
 	}
 
 	public function actionEditArticle($url = null) {
