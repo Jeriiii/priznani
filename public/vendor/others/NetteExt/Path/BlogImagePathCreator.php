@@ -23,8 +23,8 @@ class BlogImagePathCreator extends PathCreator {
 	 * @param string $imageSuffix Přípona obrázku.
 	 * @return string Cesta k obrázku.
 	 */
-	public static function getImgPath($articleId, $imageId, $imageSuffix) {
-		return self::getArticleFolderPath($articleId) . '/' . $imageId . '.' . $imageSuffix;
+	public static function getImgPath($articleId, $imageId, $imageSuffix, $basePath = null) {
+		return self::getArticleFolderPath($articleId, $basePath) . '/' . $imageId . '.' . $imageSuffix;
 	}
 
 	/**
@@ -32,8 +32,12 @@ class BlogImagePathCreator extends PathCreator {
 	 * @param int $articleId Id článku.
 	 * @return string Cesta ke složce s obrázky článku.
 	 */
-	public static function getArticleFolderPath($articleId) {
-		return self::BASE_PATH . "/images/" . self::BLOG_FOLDER_NAME . '/' . $articleId;
+	public static function getArticleFolderPath($articleId, $basePath = null) {
+		if ($basePath == null) {
+			$basePath = self::BASE_PATH;
+		}
+
+		return $basePath . "/images/" . self::BLOG_FOLDER_NAME . '/' . $articleId;
 	}
 
 }

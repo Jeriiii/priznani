@@ -26,3 +26,12 @@ CREATE TABLE `magazine_images` (
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
+
+/* propojení relace mezi články a obrázky */
+ALTER TABLE `magazine_images`
+	CHANGE COLUMN `id` `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+	ADD COLUMN `articleID` INT UNSIGNED NULL AFTER `suffix`;
+
+ALTER TABLE `magazine_images`
+	ADD CONSTRAINT `FK_magazine_images_magazine` FOREIGN KEY (`articleID`) REFERENCES `magazine` (`id`) ON UPDATE CASCADE ON DELETE CASCADE;
+

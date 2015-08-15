@@ -10,7 +10,9 @@ use Nette\Application\UI\Form as Frm;
 use Michelf\MarkdownToHtml;
 use Nette\Application\BadRequestException;
 use Nette\ArrayHash;
-use CssMin;
+use cssMin;
+use POS\Model\BlogImageDao;
+use NetteExt\Path\BlogImagePathCreator;
 
 class ArticlePresenter extends \BasePresenter {
 
@@ -37,6 +39,19 @@ class ArticlePresenter extends \BasePresenter {
 
 		$article->excerpt = $convertor->toHtml($article->excerpt);
 		$article->text = $convertor->toHtml($article->text);
+
+		/* načtení obrázků */
+		$images = $this->article->related(BlogImageDao::TABLE_NAME);
+		$article->images = array();
+
+		foreach ($images as $image) {
+			$path = BlogImagePathCreator::getImgPath($article->id, $image->id, $image->suffix, $this->template->basePath);
+
+			$img = new ArrayHash;
+			$img->path = $path;
+
+			$article->images[] = $img;
+		}
 
 		$this->template->article = $article;
 

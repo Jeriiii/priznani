@@ -19,6 +19,7 @@ class BlogImageDao extends AbstractDao {
 	/* Column name */
 	const COLUMN_ID = "id";
 	const COLUMN_SUFFIX = 'suffix';
+	const COLUMN_ARTICLE_ID = 'articleID';
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);

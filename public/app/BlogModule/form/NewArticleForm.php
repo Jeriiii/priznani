@@ -94,6 +94,7 @@ class NewArticleForm extends BaseForm {
 		$suffix = pathinfo($image->getName(), PATHINFO_EXTENSION);
 		$imageDB = $this->blogImageDao->insert(array(
 			BlogImageDao::COLUMN_SUFFIX => $suffix,
+			BlogImageDao::COLUMN_ARTICLE_ID => $article->id,
 		));
 
 		$imgUrl = BlogImagePathCreator::getImgPath($article->id, $imageDB->id, $suffix);

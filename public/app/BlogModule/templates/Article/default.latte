@@ -9,6 +9,12 @@
 
 <span id="excerpt">{!$article->excerpt}</span>
 
+{ifset $article->images}
+	{foreach $article->images as $image}
+		<img src="{$image->path}" />
+	{/foreach}
+{/ifset}
+
 {! $article->text}
 
 {if !empty($listPages)}
