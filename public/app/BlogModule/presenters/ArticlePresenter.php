@@ -43,7 +43,7 @@ class ArticlePresenter extends \BasePresenter {
 	}
 
 	public function renderListArticles() {
-		$this->template->articles = $this->blogDao->getAll();
+		$this->template->articles = $this->blogDao->getAll('DESC');
 	}
 
 	public function actionEditArticle($url = null) {

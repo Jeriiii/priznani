@@ -6,48 +6,42 @@
 {/if}
 <table class="table table-striped">
 	<thead>
-		<th>
-			pořadové č.
-		</th>
-		<th>
-			název
-		</th>
-		<th>
-			zobrazí
-		</th>
-		<th>
-		</th>
-		<th>
-		</th>
+		<th>pořadové č.</th>
+		<th>název</th>
+		<th>zobrazí</th>
+		<th></th>
+		<th></th>
+		<th></th>
 	</thead>
 	<tbody>
-	{foreach $articles as $article}
-		<tr>
-			<td>
-				<b>
-					{$article->order}
-				</b>
-			</td>
-			<td>
-				<a class="btn btn-link btn-lg" n:href="Article: url => $article->url">
-					{$article->name}
-				</a>
-			</td>
-			<td>
-				{str_replace(array("all", "admin"), array("všichni", "pouze admini"),$article->access_rights)}
-			</td>
-			<td>
-				<a class="btn btn-info" n:href="Article:editArticle url=>$article->url">
-					editovat
-				</a>
-			</td>
-			<td>
-				<a class="btn btn-danger" n:href="deleteArticle! idPage=>$article->id ">
-					smazat
-				</a>
-			</td>
-		</tr>
-	{/foreach}
+		{foreach $articles as $article}
+			<tr>
+				<td>
+					<b>{$article->order}</b>
+				</td>
+				<td>
+					<a class="btn btn-link btn-lg" n:href="Article: url => $article->url">
+						{$article->name}
+					</a>
+				</td>
+				<td>
+					{str_replace(array('all', 'admin'), array('všichni', 'pouze admini'),$article->access_rights)}
+				</td>
+				<td>
+					
+				</td>
+				<td>
+					<a class="btn btn-info" n:href="Article:editArticle url=>$article->url">
+						editovat
+					</a>
+				</td>
+				<td>
+					<a class="btn btn-danger" n:href="deleteArticle! idPage=>$article->id ">
+						smazat
+					</a>
+				</td>
+			</tr>
+		{/foreach}
 	</tbody>
 </table>
 {/block}
