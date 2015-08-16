@@ -30,6 +30,25 @@
 
 {! $article->text}
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/cs_CZ/sdk.js#xfbml=1&version=v2.4&appId=639745929384551";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-like" 
+	data-href="{link //this}" 
+	data-layout="standard" 
+	data-action="like" 
+	data-show-faces="true"
+	data-share="false">
+</div>
+
+<div class="fb-comments" data-href="{link //this}" data-version="v2.3"></div>
+
 {if !empty($listPages)}
 	<ul class="articles">
 		{foreach $listPages as $art}
@@ -45,17 +64,7 @@
 
 {block scripts}
 {include #parent}
-<script src="http://jush.sourceforge.net/jush.js"></script>
-<script>
-	jush.create_links = false;
-	jush.highlight_tag('code');
-	$('code.jush').each(function(){ $(this).html($(this).html().replace(/\x7B[/$\w].*?\}/g, '<span class="jush-latte">$&</span>')) });
 
-	$('a[href^=#]').click(function(){
-		$('html,body').animate({ scrollTop: $($(this).attr('href')).show().offset().top - 5 }, 'fast');
-		return false;
-	});
-</script>
 {/block}
 
 
