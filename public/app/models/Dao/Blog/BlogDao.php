@@ -79,4 +79,30 @@ class BlogDao extends AbstractDao {
 		return $sel->fetch();
 	}
 
+	/**
+	 * Vrátí článek před tímto článkem.
+	 * @param int $articleId Id článku.
+	 */
+	public function getArticleBefore($articleId) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID . ' < ?', $articleId);
+		$sel->order(self::COLUMN_ID . ' DESC');
+		$sel->limit(1);
+
+		return $sel->fetch();
+	}
+
+	/**
+	 * Vrátí článek před tímto článkem.
+	 * @param int $articleId Id článku.
+	 */
+	public function getArticleAfter($articleId) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_ID . ' > ?', $articleId);
+		$sel->order(self::COLUMN_ID . ' ASC');
+		$sel->limit(1);
+
+		return $sel->fetch();
+	}
+
 }

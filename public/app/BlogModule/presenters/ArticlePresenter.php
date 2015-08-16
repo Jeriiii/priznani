@@ -30,6 +30,9 @@ class ArticlePresenter extends \BasePresenter {
 		$article = $this->loadArticle($this->loadPage($url));
 		$this->template->article = $article;
 
+		$this->template->articleBefore = $this->blogDao->getArticleBefore($article->id);
+		$this->template->articleAfter = $this->blogDao->getArticleAfter($article->id);
+
 		$this->template->listPages = $this->blogDao->getReleaseArticles($article->id);
 	}
 
