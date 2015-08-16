@@ -47,6 +47,14 @@
 	data-share="false">
 </div>
 
+{if !empty($articleBefore)}
+	<a n:href="Article: url => $articleBefore->url"><div class="arrow-left"></div>{$articleBefore->name}</a> 
+{/if}
+-
+{if !empty($articleAfter)}
+	<a n:href="Article: url => $articleAfter->url">{$articleAfter->name}<div class="arrow-right"></div></a> 
+{/if}		
+
 <div class="fb-comments" data-href="{link //this}" data-version="v2.3"></div>
 
 {if !empty($listPages)}
