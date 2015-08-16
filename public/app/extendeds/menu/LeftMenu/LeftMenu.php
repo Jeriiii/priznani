@@ -50,9 +50,15 @@ class LeftMenu extends BaseProjectControl {
 	/**
 	 * Vykresli šablonu.
 	 */
-	public function render($templateName = 'default.latte') {
+	public function render($isMobile = false) {
+		if ($isMobile) {
+			$templateName = 'mobile.latte';
+		} else {
+			$templateName = 'default.latte';
+		}
+
 		$this->template->setFile(dirname(__FILE__) . '/' . $templateName);
-		$this->template->menu = $this->createMenu();
+		$this->template->menu = $this->createMenu($isMobile);
 
 		$userId = $this->presenter->getUser()->id;
 		$this->template->countFriendRequests = $this->daoBox->friendRequestDao->getAllToUser($userId)->count();
@@ -61,14 +67,14 @@ class LeftMenu extends BaseProjectControl {
 	}
 
 	public function renderMobile() {
-		$this->render('mobile.latte');
+		$this->render(true);
 	}
 
 	/**
 	 * Vrátí nové menu.
 	 * @return \POS\Ext\SimpleMenu\Menu
 	 */
-	private function createMenu() {
+	private function createMenu($isMobile = false) {
 		/* v mobilní verzi se pak zobrazuje v celém layoutu */
 		$menu = new Menu($this->presenter->user->isLoggedIn(), $this->showOn);
 		$p = $this->presenter;
@@ -82,12 +88,13 @@ class LeftMenu extends BaseProjectControl {
 			)
 		);
 
-		$menu->addItem(new Item('Spustit průvodce', null, null, array(
-			'id' => 'startIntroBtn', 'data-auto-start' => $this->intro, 'onclick' =>
-			"window.scrollTo(0, 0);javascript:introJs().setOption('showProgress', true).start();"
-			)), true, Menu::SHOW_ONE_PAGE
-		);
-
+		if (!$isMobile) {
+			$menu->addItem(new Item('Spustit průvodce', null, null, array(
+				'id' => 'startIntroBtn', 'data-auto-start' => $this->intro, 'onclick' =>
+				"window.scrollTo(0, 0);javascript:introJs().setOption('showProgress', true).start();"
+				)), true, Menu::SHOW_ONE_PAGE
+			);
+		}
 
 
 		$menu->addGroup(new Group('Profil'), true);
