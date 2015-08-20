@@ -42,6 +42,7 @@ public/app/test/sql/featurestart/*
 public/app/test/sql/featureend/*
 !public/app/test/sql/featureend/.gitkeep
 public/app/test/config/behat.local.yml
+public/www/js/react/node_modules
 
 public/nbproject/licenseheader.txt
 /cron/nbproject/private/
