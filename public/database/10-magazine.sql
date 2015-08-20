@@ -38,3 +38,8 @@ ALTER TABLE `magazine_images`
 /* vyšlé články */
 ALTER TABLE `magazine`
 	ADD COLUMN `release` TINYINT(1) UNSIGNED NULL DEFAULT '0' AFTER `access_rights`;
+
+/* zvětšení popisku článku */
+ALTER TABLE `magazine`
+	CHANGE COLUMN `excerpt` `excerpt` TEXT NULL DEFAULT NULL COMMENT 'Výňatek z článku / popis článku' AFTER `name`;
+
