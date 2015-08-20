@@ -1,3 +1,5 @@
+@import "../variables.less";
+
 /* články v blogu */
 #chat-container{
 	display: none;
@@ -19,4 +21,66 @@
 	border-style: solid;
 	border-width: 10px 0 10px 12px;
 	border-color: transparent transparent transparent #ff0000;
+}
+
+article{
+	font-family: 'Helvetica';
+	font-size: 15px;
+	max-width: 700px;
+	text-align: justify;
+	font: 16px/1.65 Georgia,"New York CE",utopia,serif;
+	color: #474747;
+	
+	h1 {
+		font-size: 300%;
+		margin: .8em 0;
+	}
+	h1, h2, h3 {
+		color: @main-red-light;
+		font-family: lucida,sans-serif;
+	}
+	#excerpt {
+		font-size: 115%;
+		font-style: italic;
+		color: gray;
+		padding-bottom: 1.5em;
+		margin-bottom: 1.5em;
+		border-bottom: 1px solid #DEDEDE;
+	}
+	a {
+		text-decoration: underline;
+		color: @main-red;
+		padding: 3px;
+		margin: 0 -3px;
+	}
+	a:hover {
+		background-color: @main-red-light;
+		color: white;
+		border-radius: 2px;
+	}
+	ol {
+		margin: 0;
+		padding: 15px 0;
+		padding-left: 50px;
+		li{
+			margin: 0;
+		}
+	}
+	ul{
+		margin: 0;
+		padding: 15px 0;
+		padding-left: 50px;
+		li{
+			list-style-type: disc;
+		}
+	}
+	code {
+		max-width: 700px;
+	}
+	hr{
+		max-width: 700px;
+		height: 1px;
+		background-color: #DEDEDE;
+		margin: 25px 5px;
+	}
 }

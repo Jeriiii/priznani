@@ -17,10 +17,10 @@
 {if $user->isAllowed('article', 'adminMenu')}
 	{include 'menu/adminPageMenu.latte'}
 {/if}
-
+<article>
 <h1>{$article->name}</h1>
 
-<span id="excerpt">{!$article->excerpt}</span>
+<div id="excerpt">{!$article->excerpt}</div>
 
 {ifset $article->images}
 	{foreach $article->images as $image}
@@ -29,6 +29,7 @@
 {/ifset}
 
 {! $article->text}
+</article>
 
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
