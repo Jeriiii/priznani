@@ -1,17 +1,18 @@
-/**
- * This file is provided by Facebook for testing and evaluation purposes
- * only. Facebook reserves all rights not expressly granted.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- * FACEBOOK BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
- * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+/*
+ * @author Jan Kotalík <jan.kotalik.pro@gmail.com>
+ * @copyright Copyright (c) 2013-2015 Kukral COMPANY s.r.o.  *
  */
 
 var Dispatcher = require('../../dispatcher/datenodeDispatcher');
-var constants = require('../../constants/ActionConstants');
+if(typeof jest !== 'undefined'){
+   jest.autoMockOff();/* obezlička kvůli testování */
+   var constants = require('../../constants/ActionConstants');
+   jest.autoMockOn();
+}else{
+  var constants = require('../../constants/ActionConstants');
+}
+
+
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
