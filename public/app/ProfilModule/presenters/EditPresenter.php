@@ -170,6 +170,7 @@ class EditPresenter extends ProfilBasePresenter {
 		$daoBox->userDao = $this->userDao;
 		$daoBox->streamDao = $this->streamDao;
 		$daoBox->userCategoryDao = $this->userCategoryDao;
+		$daoBox->paymentDao = $this->paymentDao;
 
 		$sm = $this->getSessionManager();
 		return new Frm \ SetInitimityForm($loggedUser, $sm, $daoBox, $this, $name);

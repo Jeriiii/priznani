@@ -49,6 +49,9 @@
 		{block head}{/block}
 		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		{includeblock 'layoutBloks/googleAnalytics.latte'}
+    {if $user->isLoggedIn() && $loggedUser->blurryImages}
+      {includeblock 'layoutBloks/blurryImagesStyle.latte'}
+    {/if}
 	</head>
 
 	<body>

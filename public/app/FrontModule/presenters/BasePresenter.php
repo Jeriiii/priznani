@@ -87,7 +87,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		if ($this->getUser()->isLoggedIn()) {
 			$this->activityReporter->handleUsersActivity($this->getUser());
 			$section = UserSession::getSectionLoggedUser($this->session);
-			if (empty($section->loggedUser) || empty($this->loggedUser)) {
+			if (empty($section->loggedUser)) {
 				$this->calculateLoggedUser();
 			}
 			$this->loggedUser = $section->loggedUser;
@@ -129,7 +129,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public function calculateLoggedUser() {
 		$sm = $this->getSessionManager();
-		$sm->calculateLoggedUser($this->userDao);
+		$sm->calculateLoggedUser($this->userDao, $this->paymentDao);
 	}
 
 	public function beforeRender() {
