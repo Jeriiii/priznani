@@ -87,7 +87,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 		if ($this->getUser()->isLoggedIn()) {
 			$this->activityReporter->handleUsersActivity($this->getUser());
 			$section = UserSession::getSectionLoggedUser($this->session);
-			if (empty($section->loggedUser) || empty($this->loggedUser)) {
+			if (empty($section->loggedUser)) {
 				$this->calculateLoggedUser();
 			}
 			$this->loggedUser = $section->loggedUser;
