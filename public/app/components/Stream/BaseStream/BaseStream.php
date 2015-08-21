@@ -122,6 +122,7 @@ class BaseStream extends BaseProjectControl {
 		$user = $this->presenter->user;
 		if ($user->isLoggedIn()) {
 			$userData = $this->loggedUser;
+			$this->template->blurryImages = $userData->blurryImages;
 			// Data ohledně profilového fota a jestli zobrazit/nezobrazit formulář
 			$this->template->profilePhoto = $userData->profilFotoID;
 		}

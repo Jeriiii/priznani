@@ -67,6 +67,8 @@ class SessionManager {
 		UserSession::calculateLoggedUser($userDao, $this->loggedUser, $this->session);
 	}
 
+
+
 	/**
 	 * Vrátí přihlášeného uživatele jako active row.
 	 * @param UserDao $userDao

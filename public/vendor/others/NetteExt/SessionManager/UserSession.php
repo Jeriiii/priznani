@@ -45,6 +45,7 @@ class UserSession {
 		$sel = (array) $ser->toArrayHash();
 		/* vytazeni jen jednoho radku */
 		$userRow = array_shift($sel);
+		$userRow->blurryImages = self::shouldImagesBeBlurry($userRow);
 		$section->loggedUser = $userRow;
 	}
 
@@ -55,6 +56,15 @@ class UserSession {
 	public static function getSectionLoggedUser(Session $session) {
 		$sectionLoggedUser = $session->getSection('loggedUser');
 		return $sectionLoggedUser;
+	}
+
+	/**
+	 * Vrátí rozhodnutí, zda se mají rozmazávat fotky ostatních
+	 * @param  ArrayHash $userRow uživatel, kterého se to týká
+	 * @return bool rozmazávat?
+	 */
+	public static function shouldImagesBeBlurry($userRow){
+		return TRUE;
 	}
 
 }
