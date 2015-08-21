@@ -129,7 +129,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public function calculateLoggedUser() {
 		$sm = $this->getSessionManager();
-		$sm->calculateLoggedUser($this->userDao);
+		$sm->calculateLoggedUser($this->userDao, $this->paymentDao);
 	}
 
 	public function beforeRender() {

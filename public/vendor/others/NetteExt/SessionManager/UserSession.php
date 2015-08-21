@@ -12,6 +12,7 @@ use Nette\Http\Session;
 use NetteExt\Serialize\Relation;
 use NetteExt\Serialize\Serializer;
 use POS\Model\UserDao;
+use POS\Model\PaymentDao;
 
 /**
  * Zajišťuje operace nad data v sečně přímo spojovaná s uživatelem (jméno, profilová fotka ...).
@@ -19,13 +20,15 @@ use POS\Model\UserDao;
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
 class UserSession {
+	/* datum určující pomezí - pokud se uživatel registroval před tímto datem, nebudou mu rozmazávány fotky */
+	const DATE_LINE_FOR_BLURRY_IMAGES = '2005-08-21 00:00:00';
 
 	/**
 	 * Přepočítá data o přihlášeném uživateli.
 	 * @param ActiveRow $loggedUser
 	 * @param Session $session
 	 */
-	public static function calculateLoggedUser(UserDao $userDao, $loggedUser, Session $session) {
+	public static function calculateLoggedUser(UserDao $userDao, $loggedUser, Session $session, PaymentDao $paymentDao) {
 		$user = $userDao->getUser($loggedUser->id);
 
 		$section = self::getSectionLoggedUser($session);
@@ -45,6 +48,7 @@ class UserSession {
 		$sel = (array) $ser->toArrayHash();
 		/* vytazeni jen jednoho radku */
 		$userRow = array_shift($sel);
+		$userRow->isPaying = $paymentDao->isUserPaying($loggedUser->id);
 		$userRow->blurryImages = self::shouldImagesBeBlurry($userRow);
 		$section->loggedUser = $userRow;
 	}
@@ -64,7 +68,8 @@ class UserSession {
 	 * @return bool rozmazávat?
 	 */
 	public static function shouldImagesBeBlurry($userRow){
-		return TRUE;
+		$hasApprovedPhoto = FALSE;/* TODO */
+		return !($userRow->created < self::DATE_LINE_FOR_BLURRY_IMAGES || $userRow->isPaying || $hasApprovedPhoto);
 	}
 
 }
