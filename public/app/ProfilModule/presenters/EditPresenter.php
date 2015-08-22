@@ -95,9 +95,12 @@ class EditPresenter extends ProfilBasePresenter {
 
 	}
 
-	public function renderDefault() {
+	public function renderDefault($profilePhoto = FALSE) {
 		$this->template->userData = $this->userData;
 		$this->template->cityData = $this->cityDao->getNamesOfProperties();
+		if ($profilePhoto) {
+			$this->template->showProfilePhotoWindow = TRUE;
+		}
 	}
 
 	public function renderUserImages() {
