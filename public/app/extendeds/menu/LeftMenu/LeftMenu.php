@@ -104,7 +104,7 @@ class LeftMenu extends BaseProjectControl {
 		//$menu->addItem(new Item('<span>' . $countVerReqs . '</span>Žádostí o ověření', ':Profil:Show:verification', 'with-counter'), true);
 
 		$menu->addGroup(new Group('Obrázky'), true);
-		$menu->addItem(new Item('Nahrát fotky', null, 'add-gallery', array('id' => 'show-photo-form')), true, Menu::SHOW_ONE_PAGE);
+		$menu->addItem(new Item('Nahrát fotky', null, 'add-gallery show-photo-form'), true, Menu::SHOW_ONE_PAGE);
 		$menu->addItem(new Item('Moje galerie', $p->link(':Profil:Galleries:default')), true);
 
 		if (isset($this->loggedUser) && $this->loggedUser->propertyID) { /* ochránit odkazy, které by spadly bez user properties */

@@ -28,7 +28,7 @@ $(document).ready(function() {
 				$('a.ui-tabs-anchor[href="#' + tab.attr('id') + '"]').trigger('click');/* najde příslušné tlačítko a klikne na něj*/
 			});
 			/* script, který přepne kartu na nahrání fotek, když se zmáčkne příslušné tlačítko v pravém menu */
-			$('#show-photo-form').click(function() {
+			$('.show-photo-form').click(function() {
 				$('#ui-id-3').trigger('click');
 				$('#tabs-3').css("z-index","10000");;
 				
