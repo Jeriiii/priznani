@@ -30,7 +30,8 @@
 		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		{includeblock 'layoutBloks/googleAnalytics.latte'}
     {if $user->isLoggedIn() && $loggedUser->blurryImages}
-      {includeblock 'layoutBloks/blurryImagesStyle.latte'}
+      {includeblock 'layoutBloks/blurryImages.latte'}
+	  {include #blurryImagesStyle}
     {/if}
 	</head>
 
@@ -114,6 +115,9 @@
 				{control jsMobileLayout}
 
 				{if $user->isLoggedIn()}
+					{if $loggedUser->blurryImages}
+						{include #blurryImagesScripts}
+					{/if}
 					<script>
 						//inicializace ajaxObserveru - nechat před ostatními skripty
 						var observer = $('body').ajaxObserver({
