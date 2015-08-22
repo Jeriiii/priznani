@@ -14,60 +14,74 @@
 {/}
 
 {block content}
-{if $user->isAllowed('article', 'adminMenu')}
-	{include 'menu/adminPageMenu.latte'}
-{/if}
+<div class="page">
+	<div class="left-article">
+		{if $user->isAllowed('article', 'adminMenu')}
+			{include 'menu/adminPageMenu.latte'}
+		{/if}
+		<article>
+			<h1>{$article->name}</h1>
 
-<h1>{$article->name}</h1>
+			<div class="excerpt">{!$article->excerpt}</div>
 
-<span id="excerpt">{!$article->excerpt}</span>
+			{ifset $article->images}
+				{foreach $article->images as $image}
+					<img src="{$image->path}" width="100%" />
+				{/foreach}
+			{/ifset}
 
-{ifset $article->images}
-	{foreach $article->images as $image}
-		<img src="{$image->path}" />
-	{/foreach}
-{/ifset}
+			{! $article->text}
+		</article>
 
-{! $article->text}
+		<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/cs_CZ/sdk.js#xfbml=1&version=v2.4&appId=639745929384551";
+		  fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script>
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/cs_CZ/sdk.js#xfbml=1&version=v2.4&appId=639745929384551";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+		<div class="fb-like" 
+			data-href="{link //this}" 
+			data-layout="standard" 
+			data-action="like" 
+			data-show-faces="true"
+			data-share="false">
+		</div>
 
-<div class="fb-like" 
-	data-href="{link //this}" 
-	data-layout="standard" 
-	data-action="like" 
-	data-show-faces="true"
-	data-share="false">
+		<div class="paginator">
+		{if !empty($articleBefore)}
+			<a n:href="Article: url => $articleBefore->url"><div class="arrow-left"></div>{$articleBefore->name}</a> 
+		{/if}
+		-
+		{if !empty($articleAfter)}
+			<a n:href="Article: url => $articleAfter->url">{$articleAfter->name}<div class="arrow-right"></div></a> 
+		{/if}		
+		</div>
+
+		<div class="fb-comments" data-href="{link //this}" data-version="v2.3" data-width="450"></div>
+	</div>
+
+	<div class="right-menu">
+		<h3>Tipy na články</h3>
+		{if !empty($listPages)}
+			<ul class="articles">
+				{foreach $listPages as $art}
+					<li>
+						<a class="btn btn-link btn-lg" n:href="Article: url => $art->url">
+							{$art->name}
+						</a>
+					</li>
+				{/foreach}
+			</ul>
+		{/if}
+	</div>
+	
+	<div class="clear"></div>
 </div>
 
-{if !empty($articleBefore)}
-	<a n:href="Article: url => $articleBefore->url"><div class="arrow-left"></div>{$articleBefore->name}</a> 
-{/if}
--
-{if !empty($articleAfter)}
-	<a n:href="Article: url => $articleAfter->url">{$articleAfter->name}<div class="arrow-right"></div></a> 
-{/if}		
 
-<div class="fb-comments" data-href="{link //this}" data-version="v2.3"></div>
-
-{if !empty($listPages)}
-	<ul class="articles">
-		{foreach $listPages as $art}
-			<li>
-				<a class="btn btn-link btn-lg" n:href="Article: url => $art->url">
-					{$art->name}
-				</a>
-			</li>
-		{/foreach}
-	</ul>
-{/if}
 {/block}
 
 {block scripts}

@@ -23,7 +23,7 @@ class EditArticleForm extends NewArticleForm {
 		$this->setDefaults(array(
 			BlogDao::COLUMN_NAME => $article->name,
 			BlogDao::COLUMN_TEXT => $article->text,
-			BlogDao::COLUMN_ACCESS_RIGHTS => $article->access_rights,
+			BlogDao::COLUMN_EXCERPT => $article->excerpt,
 			BlogDao::COLUMN_ORDER => $article->order,
 			BlogDao::COLUMN_RELEASE => $article->release,
 		));
@@ -40,7 +40,6 @@ class EditArticleForm extends NewArticleForm {
 		$this->article->update(array(
 			"name" => $values->name,
 			"text" => $values->text,
-			"access_rights" => $values->accessRights,
 			"order" => $values->order,
 			"url" => $values->url,
 			BlogDao::COLUMN_EXCERPT => $values->excerpt
