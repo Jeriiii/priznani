@@ -174,6 +174,8 @@ class EditPresenter extends ProfilBasePresenter {
 		$daoBox->streamDao = $this->streamDao;
 		$daoBox->userCategoryDao = $this->userCategoryDao;
 		$daoBox->paymentDao = $this->paymentDao;
+		$daoBox->userImageDao = $this->userImageDao;
+		$daoBox->userGalleryDao = $this->userGalleryDao;
 
 		$sm = $this->getSessionManager();
 		return new Frm \ SetInitimityForm($loggedUser, $sm, $daoBox, $this, $name);
@@ -205,7 +207,7 @@ class EditPresenter extends ProfilBasePresenter {
 	}
 
 	protected function createComponentCropProfilePhoto($name) {
-		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->imageUploader, $this, $name);
 	}
 
 	protected function createComponentStatusChangeForm($name) {

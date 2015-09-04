@@ -11,6 +11,7 @@ use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
 use NetteExt\File;
 use NetteExt\Path\GalleryPathCreator;
+use NetteExt\Uploader\ImageUploader;
 
 /**
  * Decription
@@ -35,8 +36,8 @@ class VerificationImageNewForm extends UserGalleryImagesBaseForm {
 	 */
 	const NUMBER_OF_IMAGE = 1;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, ImageUploader $imageUploader, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $imageUploader, $parent, $name);
 
 		$this->userID = $this->getPresenter()->getUser()->getId();
 		$gallery = $this->userGalleryDao->findVerificationGalleryByUser($this->userID);

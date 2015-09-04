@@ -37,12 +37,13 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	const IMAGE_FILE = "ImageFile";
 	const IMAGE_DESCRIPTION = "ImageDescription";
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, IContainer $parent = NULL, $name = NULL) {
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, ImageUploader $imageUploader, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
 		$this->streamDao = $streamDao;
+		$this->imageUploader = $imageUploader;
 	}
 
 	public function suffix($filename) {
@@ -116,9 +117,7 @@ class UserGalleryImagesBaseForm extends BaseForm {
 	 * @return boolean TRUE pokud byly fotky automaticky schválené, jinak FALSE
 	 */
 	public function saveImagesFast(ImagesToUpload $imagesToUpload) {
-		$uploader = new ImageUploader($this->userGalleryDao, $this->userImageDao, $this->streamDao);
-		$allow = $uploader->saveImages($imagesToUpload);
-
+		$allow = $this->imageUploader->saveImages($imagesToUpload);
 		return $allow;
 	}
 

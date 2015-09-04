@@ -226,7 +226,7 @@ class OnePagePresenter extends BasePresenter {
 	 * @return \Nette\Application\UI\Form\ProfilePhotoUploadForm
 	 */
 	protected function createComponentCropImageUpload($name) {
-		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->imageUploader, $this, $name);
 	}
 
 	/**
@@ -308,7 +308,7 @@ class OnePagePresenter extends BasePresenter {
 	 * @return \Nette\Application\UI\Form\NewStreamImageForm
 	 */
 	protected function createComponentNewStreamImageForm($name) {
-		return new Frm\NewStreamImageForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+		return new Frm\NewStreamImageForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->imageUploader, $this, $name);
 	}
 
 	/**
@@ -354,6 +354,8 @@ class OnePagePresenter extends BasePresenter {
 		$daoBox->streamDao = $this->streamDao;
 		$daoBox->userCategoryDao = $this->userCategoryDao;
 		$daoBox->paymentDao = $this->paymentDao;
+		$daoBox->userImageDao = $this->userImageDao;
+		$daoBox->userGalleryDao = $this->userGalleryDao;
 
 		$sm = $this->getSessionManager();
 		return new Frm \ SetInitimityForm($loggedUser, $sm, $daoBox, $this, $name);

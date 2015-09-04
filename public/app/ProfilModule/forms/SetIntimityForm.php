@@ -65,7 +65,7 @@ class SetInitimityForm extends BaseForm {
 		$sm = $this->sessionManager;
 		/* přepočítání či smazání nacachovaných dat */
 		$sm->cleanStreamPreferences($daoBox->userDao, $daoBox->streamDao, $daoBox->userCategoryDao);
-		$sm->calculateLoggedUser($daoBox->userDao, $daoBox->paymentDao);
+		$sm->calculateLoggedUser($daoBox->userDao, $daoBox->paymentDao, $daoBox->userImageDao, $daoBox->userGalleryDao);
 
 		$presenter->flashMessage('Nastavení bylo změněno');
 		$presenter->redirect('this');
