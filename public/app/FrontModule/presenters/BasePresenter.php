@@ -78,6 +78,12 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
 
+	/** @var \POS\Model\UserImageDao @inject */
+	public $userImageDao;
+
+	/** @var \POS\Model\UserGalleryDao @inject */
+	public $userGalleryDao;
+
 	/** @var int 1 = má se automaticky spustit průvodce (funguje pouze na onepage), jinak 0 */
 	protected $intro = 0;
 
@@ -129,7 +135,7 @@ abstract class BasePresenter extends BaseProjectPresenter {
 	 */
 	public function calculateLoggedUser() {
 		$sm = $this->getSessionManager();
-		$sm->calculateLoggedUser($this->userDao, $this->paymentDao);
+		$sm->calculateLoggedUser($this->userDao, $this->paymentDao, $this->userImageDao, $this->userGalleryDao);
 	}
 
 	public function beforeRender() {
