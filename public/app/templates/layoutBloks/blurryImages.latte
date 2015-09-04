@@ -17,7 +17,9 @@
 		;$(document).ready(function() {
 			applyBlurryBehavior('.stream-item .imagehref img, #best-match .generatedProfile img, #image_content img, .img-container img, .generatedProfile:not(.generatedProfile.userid{$loggedUser->id}) img', {plink ':Profil:Edit:', 'profilePhoto' => 1});
 			{ifset $showProfilePhotoWindow}
-				$('.uploadProfilePhoto').trigger('click');
+				if(!$('.ajaxBox.posPopUp[data-related=".uploadProfilePhoto"]').is(':visible')){
+					$('.uploadProfilePhoto').trigger('click');
+				}
 			{/ifset}
 		});
 	</script>
