@@ -48,6 +48,8 @@
 					</ul>
 				</nav>
 			</div>
+			{includeblock 'layoutBloks/conditionsAgreement.latte'}
+			{include #cookiePermission}
 			<section id="content" role="main" class="ui-content">
 				{block orders}{/block}
 				{block nextAdmission}{/block}
@@ -126,6 +128,7 @@
 					</script>
 					{control jsMobileLayoutLoggedIn}
 				{/if}
+				{include #cookiePermissionScript}
 				{block scripts}{/block}
 				{block foot}{/block}
 				{*REACT*}
