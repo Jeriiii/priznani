@@ -6,6 +6,9 @@
 
 namespace POS\Listeners;
 
+use NetteExt\Session\UserSession;
+use Nette\Http\Session;
+
 /**
  * Slouží k provedení operací, které se mají uskutečnit pokaždé, když uživatel nahraje nějaký obrázek
  *
@@ -13,8 +16,11 @@ namespace POS\Listeners;
  */
 class UploadImageListener extends \Nette\Object implements \Kdyby\Events\Subscriber {
 
-	public function __construct() {
+	/** @var Nette\Http\Session */
+	private $session;
 
+	public function __construct(Session $session) {
+		$this->session = $session;
 	}
 
 	/**
@@ -28,8 +34,12 @@ class UploadImageListener extends \Nette\Object implements \Kdyby\Events\Subscri
 		);
 	}
 
+	/**
+	 * Nastaví sešně proměnnou loggedUser na NULL a tak donutí aplikaci proměnnou přepočítat
+	 */
 	public function onImageUpload() {
-
+		$section = UserSession::getSectionLoggedUser($this->session);
+		$section->loggedUser = NULL;
 	}
 
 }
