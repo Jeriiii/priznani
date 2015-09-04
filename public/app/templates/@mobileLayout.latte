@@ -29,6 +29,10 @@
 		{block head}{/block}
 		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		{includeblock 'layoutBloks/googleAnalytics.latte'}
+    {if $user->isLoggedIn() && $loggedUser->blurryImages}
+      {includeblock 'layoutBloks/blurryImages.latte'}
+	  {include #blurryImagesStyle}
+    {/if}
 	</head>
 
 	<body>
@@ -55,7 +59,7 @@
 				</ul>
 				{block content}{/block}
 				<div class="clear"></div>
-				
+
 			</section>
 			{* levý a pravý vyjížděcí panel *}
 			{includeblock 'layoutBloks/menu/menu-pos.latte'}
@@ -67,7 +71,7 @@
 							{block inLeftMenu}{/block}
 						</ul>
 				{/block}
-				
+
 			</div><!-- /panel -->
 			<div data-role="panel" id="rightmenu" data-position="right" data-display="overlay" >
 				{block rightMenu}
@@ -97,11 +101,11 @@
 								<li><a n:href="DatingRegistration:" class="btn-main btn-small">Doplnit info o sobě</a></li>
 							{/if}
 						{/if*}
-					</ul>					
+					</ul>
 				{/block}
 				{control userMenu}
 				{block AfterRightMenu}{/block}
-			</div><!-- /panel -->			
+			</div><!-- /panel -->
 			<footer id="foot" class="inner" data-role="footer">
 				Copyright &copy; 2014 priznaniosexu.cz<br /><br />
 				Designed by <a href="http://www.nejlevnejsiwebstranky.cz/">nejlevnejsiwebstranky.cz</a>
@@ -111,6 +115,9 @@
 				{control jsMobileLayout}
 
 				{if $user->isLoggedIn()}
+					{if $loggedUser->blurryImages}
+						{include #blurryImagesScripts}
+					{/if}
 					<script>
 						//inicializace ajaxObserveru - nechat před ostatními skripty
 						var observer = $('body').ajaxObserver({

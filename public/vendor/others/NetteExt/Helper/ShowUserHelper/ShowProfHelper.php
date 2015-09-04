@@ -94,13 +94,13 @@ class ShowProfHelper {
 					$elLink->add($userAge);
 				}
 			}
-			return $this->createContainer($el, $elLink);
+			return $this->createContainer($el, $elLink, 'userid' . $user->id);
 		} else {
 
 			$elPhoto = $this->createPhoto($el, $user, $minSize);
 			$elPhoto->addAttributes(array('class' => 'generatedTitle'));
 
-			return $this->createContainer($el, $elPhoto);
+			return $this->createContainer($el, $elPhoto, 'userid' . $user->id);
 		}
 	}
 
@@ -108,10 +108,11 @@ class ShowProfHelper {
 	 * Obalí element kontejnerem se standardní třídou
 	 * @param string typ elementu (div, span etc...)
 	 * @param Html $element co se má obalit
+	 * @param string $additionalClasses třídy, co se přidají k profilu
 	 * @return obalený element
 	 */
-	private function createContainer($el, $element) {
-		$elContainer = Html::el($el, array('class' => 'generatedProfile'));
+	private function createContainer($el, $element, $additionalClasses = '') {
+		$elContainer = Html::el($el, array('class' => 'generatedProfile ' . $additionalClasses));
 		$elContainer->add($element);
 		return $elContainer;
 	}

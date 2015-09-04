@@ -13,6 +13,7 @@ use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
 use POS\Ext\ImageRules;
+use NetteExt\Uploader\ImageUploader;
 
 /**
  * Zprostředkovává upload obrázku, který posléze umožňuje oříznout
@@ -39,6 +40,9 @@ class CropImageUpload extends BaseProjectControl {
 	 */
 	public $streamDao;
 
+	/** @var ImageUploader	 */
+	public $imageUploader;
+
 	/**
 	 * Cesta k předtím nahranému obrázku
 	 * @var string
@@ -48,11 +52,12 @@ class CropImageUpload extends BaseProjectControl {
 	/**
 	 * Standardní konstruktor
 	 */
-	function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $parent = NULL, $name = NULL) {
+	function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, ImageUploader $imageUploader, $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 		$this->userImageDao = $userImageDao;
 		$this->streamDao = $streamDao;
 		$this->userGalleryDao = $userGalleryDao;
+		$this->imageUploader = $imageUploader;
 	}
 
 	/**
@@ -84,7 +89,7 @@ class CropImageUpload extends BaseProjectControl {
 	 * @return \Nette\Application\UI\Form\BaseForm
 	 */
 	protected function createComponentAfterUploadForm($name) {
-		return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+		return new Frm\ProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->imageUploader, $this, $name);
 	}
 
 	/**
@@ -94,7 +99,7 @@ class CropImageUpload extends BaseProjectControl {
 	 */
 	protected function createComponentFirstImageUploadForm($name) {
 		if ($this->getDeviceDetector()->isMobile()) {
-			return new Frm\SimpleProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+			return new Frm\SimpleProfilePhotoUploadForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->imageUploader, $this, $name);
 		} else {
 			return new \Nette\Application\UI\Form\FirstImageUploadForm(WWW_DIR . '/image-temp/', $this, $name);
 		}

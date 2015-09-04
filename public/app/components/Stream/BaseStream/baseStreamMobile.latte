@@ -11,7 +11,7 @@
 							<h3>{$dataItem->userGallery->name}</h3>
 						</a>
 						<a href="{plink :Profil:Galleries:image imageID => $dataItem->userGallery->lastImage->id, galleryID => $dataItem->userGallery->id}" class="imagehref">
-							<img src="{$dataItem|getStrmImgPath}" alt="{$dataItem->userGallery->name}" width="100%" />
+							<img src="{$dataItem|getStrmImgPath}" alt="{$dataItem->userGallery->name}" width="100%" class="{ifset $blurryImages}{if $blurryImages}blurry {/if}{/ifset}" />
 							<p>{$dataItem->userGallery->lastImage->description}</p>
 						</a>
 						<div class="react-menu">
@@ -24,10 +24,10 @@
 						</div>
 						<div id="comments-{$dataItem->id}" class="comments-container">
 							{control commentImages-$dataItem->id}
-						</div>								
+						</div>
 					{else}
 						{if $dataItem->userGallery->allow_friends}
-							<strong>Tato galerie se zobrazuje pouze přátelům uživatele 
+							<strong>Tato galerie se zobrazuje pouze přátelům uživatele
 								<a href="{plink :Profil:Show: $dataItem->userGallery->userID}">{$dataItem->userGallery->user->user_name}</a>
 							</strong>
 						{/if}
@@ -40,7 +40,7 @@
 				{if $user->isLoggedIn()}
 					<a href="{plink :Competition: imageID => $dataItem->gallery->lastImageID}" title="{$dataItem->gallery->name}"><h3>{$dataItem->gallery->name}</h3></a>
 					<a href="{plink :Competition: imageID => $dataItem->gallery->lastImageID}" class="imagehref">
-						<img src="{$dataItem|getStrmImgPath:'g'}" alt="{$dataItem->gallery->name}" width="100%" />
+						<img src="{$dataItem|getStrmImgPath:'g'}" alt="{$dataItem->gallery->name}" width="100%" class="{ifset $blurryImages}{if $blurryImages}blurry {/if}{/ifset}" />
 						<p>{$dataItem->gallery->lastImage->comment}</p>
 					</a>
 				{else}

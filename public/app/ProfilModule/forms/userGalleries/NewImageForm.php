@@ -9,6 +9,7 @@ use Nette\Application\UI\Form,
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
+use NetteExt\Uploader\ImageUploader;
 
 /**
  * vkládá nové fotky do uživatelské galerie
@@ -37,8 +38,8 @@ class NewImageForm extends UserGalleryImagesBaseForm {
 
 	public $galleryID;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, ImageUploader $imageUploader, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $imageUploader, $parent, $name);
 
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;

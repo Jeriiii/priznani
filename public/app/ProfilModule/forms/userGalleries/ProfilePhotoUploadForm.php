@@ -8,6 +8,7 @@ use POS\Model\UserGalleryDao,
 use POS\Model\UserDao;
 use NetteExt\Form\Upload\UploadImage;
 use Nette\Application\UI\Form;
+use NetteExt\Uploader\ImageUploader;
 
 /**
  * Formulář pro nahrávání profilových fotek.
@@ -25,8 +26,8 @@ class ProfilePhotoUploadForm extends UserGalleryImagesBaseForm {
 	/** @var \POS\Model\StreamDao */
 	public $streamDao;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, ImageUploader $imageUploader, $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $imageUploader, $parent, $name);
 
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;

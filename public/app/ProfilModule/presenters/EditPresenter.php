@@ -95,9 +95,12 @@ class EditPresenter extends ProfilBasePresenter {
 
 	}
 
-	public function renderDefault() {
+	public function renderDefault($profilePhoto = FALSE) {
 		$this->template->userData = $this->userData;
 		$this->template->cityData = $this->cityDao->getNamesOfProperties();
+		if ($profilePhoto) {
+			$this->template->showProfilePhotoWindow = TRUE;
+		}
 	}
 
 	public function renderUserImages() {
@@ -170,6 +173,9 @@ class EditPresenter extends ProfilBasePresenter {
 		$daoBox->userDao = $this->userDao;
 		$daoBox->streamDao = $this->streamDao;
 		$daoBox->userCategoryDao = $this->userCategoryDao;
+		$daoBox->paymentDao = $this->paymentDao;
+		$daoBox->userImageDao = $this->userImageDao;
+		$daoBox->userGalleryDao = $this->userGalleryDao;
 
 		$sm = $this->getSessionManager();
 		return new Frm \ SetInitimityForm($loggedUser, $sm, $daoBox, $this, $name);
@@ -201,7 +207,7 @@ class EditPresenter extends ProfilBasePresenter {
 	}
 
 	protected function createComponentCropProfilePhoto($name) {
-		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->imageUploader, $this, $name);
 	}
 
 	protected function createComponentStatusChangeForm($name) {

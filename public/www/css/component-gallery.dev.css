@@ -39,6 +39,7 @@
 	float:left;
 	width: 700px;
 	height: 500px;
+	overflow: hidden;
 	text-align: center;
 	vertical-align: middle;
 	background-color: #f2f2f2;
@@ -121,7 +122,7 @@
 }
 
 #link{
-	
+
 }
 
 h2{

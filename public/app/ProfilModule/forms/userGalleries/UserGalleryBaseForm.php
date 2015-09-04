@@ -8,6 +8,7 @@ use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
 use Nette\Utils\Html;
+use NetteExt\Uploader\ImageUploader;
 
 /**
  * Základní formulář pro galerii
@@ -16,8 +17,8 @@ class UserGalleryBaseForm extends UserGalleryImagesBaseForm {
 
 	const MIN_APPROVED_IMGS = 1;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $isPaying, $userID, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $isPaying, $userID, ImageUploader $imageUploader, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $imageUploader, $parent, $name);
 
 		$this->addGroup("");
 

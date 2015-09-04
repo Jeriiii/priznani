@@ -11,6 +11,7 @@ use Nette\Image;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
+use NetteExt\Uploader\ImageUploader;
 
 class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm {
 
@@ -26,8 +27,8 @@ class UserGalleryImageChangeForm extends UserGalleryImagesBaseForm {
 	private $imageID;
 	private $galleryID;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $imageID, $galleryID, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $imageID, $galleryID, ImageUploader $imageUploader, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $imageUploader, $parent, $name);
 
 		//form
 
