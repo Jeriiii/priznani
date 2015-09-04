@@ -11,6 +11,7 @@ use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
 use POS\Model\CompetitionsImagesDao;
 use POS\Model\UsersCompetitionsDao;
+use NetteExt\Uploader\ImageUploader;
 
 /**
  * vkládá nové fotky do uživatelské galerie
@@ -45,8 +46,8 @@ class NewCompetitionImageForm extends UserGalleryImagesBaseForm {
 
 	private $galleryID;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, UsersCompetitionsDao $usersCompetitionsDao, CompetitionsImagesDao $competitionsImagesDao, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, UsersCompetitionsDao $usersCompetitionsDao, CompetitionsImagesDao $competitionsImagesDao, ImageUploader $imageUploader, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $imageUploader, $parent, $name);
 
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;

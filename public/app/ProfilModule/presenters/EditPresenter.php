@@ -207,7 +207,7 @@ class EditPresenter extends ProfilBasePresenter {
 	}
 
 	protected function createComponentCropProfilePhoto($name) {
-		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+		return new CropImageUpload($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->imageUploader, $this, $name);
 	}
 
 	protected function createComponentStatusChangeForm($name) {

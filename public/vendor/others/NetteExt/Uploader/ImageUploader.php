@@ -26,7 +26,7 @@ use POS\Model\UserDao;
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class ImageUploader {
+class ImageUploader extends \Nette\Object {
 
 	/** @var \POS\Model\UserGalleryDao */
 	public $userGalleryDao;

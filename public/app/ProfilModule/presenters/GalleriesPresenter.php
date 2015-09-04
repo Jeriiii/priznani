@@ -324,11 +324,11 @@ class GalleriesPresenter extends \BasePresenter {
 	}
 
 	protected function createComponentNewImage($name) {
-		return new Frm\NewImageForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this, $name);
+		return new Frm\NewImageForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this->imageUploader, $this, $name);
 	}
 
 	protected function createComponentUserGalleryImageChange($name) {
-		return new Frm\UserGalleryImageChangeForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->imageID, $this->galleryID, $this, $name);
+		return new Frm\UserGalleryImageChangeForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->imageID, $this->galleryID, $this->imageUploader, $this, $name);
 	}
 
 	public function createComponentUserGalleries() {
@@ -386,7 +386,7 @@ class GalleriesPresenter extends \BasePresenter {
 	 * @return \Nette\Application\UI\Form\VerificationImageNewForm
 	 */
 	public function createComponentVerificationForm($name) {
-		return new Frm\VerificationImageNewForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this, $name);
+		return new Frm\VerificationImageNewForm($this->userGaleryDao, $this->userImageDao, $this->streamDao, $this->imageUploader, $this, $name);
 	}
 
 	protected function createComponentAllowUserForm($name) {

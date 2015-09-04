@@ -28,7 +28,7 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 	const NUMBER_OF_IMAGE = 4;
 
 	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $isPaying, $userID, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $isPaying, $userID, $parent, $name);
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $isPaying, $userID, NULL, $parent, $name);
 
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;

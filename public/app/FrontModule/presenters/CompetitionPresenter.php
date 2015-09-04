@@ -247,7 +247,7 @@ class CompetitionPresenter extends BasePresenter {
 	}
 
 	public function createComponentNewCompImageForm($name) {
-		return new Frm\NewCompetitionImageForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this->usersCompetitionsDao, $this->competitionsImagesDao, $this, $name);
+		return new Frm\NewCompetitionImageForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this->usersCompetitionsDao, $this->competitionsImagesDao, $this->imageUploader, $this, $name);
 	}
 
 	public function createComponentJs() {

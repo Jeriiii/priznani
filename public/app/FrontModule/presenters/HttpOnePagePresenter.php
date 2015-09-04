@@ -167,8 +167,7 @@ class HttpOnePagePresenter extends BasePresenter {
 			$imagesToUpload = new ImagesToUpload($userID, $galleryID);
 			$imagesToUpload->addImage($image);
 
-			$uploader = new ImageUploader($this->userGalleryDao, $this->userImageDao, $this->streamDao);
-			$uploader->saveImages($imagesToUpload);
+			$this->imageUploader->saveImages($imagesToUpload);
 
 			// File successfully uploaded
 			$response['message'] = 'File uploaded successfully!';
