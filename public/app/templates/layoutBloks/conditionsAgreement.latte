@@ -1,0 +1,14 @@
+{define cookiePermission}
+	<div class="fucking-eu-cookies" n:if="empty($_COOKIE[fucking-eu-cookies])">
+		Tento web používá k poskytování služeb, personalizaci reklam a analýze
+		návštěvnosti soubory cookie. Používáním tohoto webu s tím souhlasíte.
+		<a href="https://www.google.com/policies/technologies/cookies/" class="moreinfo">Další informace</a>
+		<a href="#" class="fucking-eu-button btn-main small">V pořádku, zavřít upozornění</a>
+	</div>
+	<noscript><style>.fucking-eu-cookies { display:none }</style></noscript>
+{/define}
+{define cookiePermissionScript}
+	{if empty($_COOKIE[fucking-eu-cookies])}
+		{control js 'layout/euCookies.js'}
+	{/if}
+{/define}
