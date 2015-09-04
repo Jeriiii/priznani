@@ -158,7 +158,6 @@
 				{if $loggedUser->blurryImages}
 					{include #blurryImagesScripts}
 				{/if}
-				{include #cookiePermissionScript}
 				<script>
 					//inicializace ajaxObserveru - nechat před ostatními skripty
 					var observer = $('body').ajaxObserver({
@@ -172,6 +171,7 @@
 				<script type="text/javascript" src="{$basePath}/js/react/react-0.13.3{if $production}.min{/if}.js"></script>
 				<script type="text/javascript" src="{$basePath}/js/react/build/reactDatenode.js"></script>
 			{/if}
+			{include #cookiePermissionScript}
 
 			{block foot}{/block}
 			<div class="clear"></div>
