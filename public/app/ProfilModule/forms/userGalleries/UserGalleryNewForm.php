@@ -6,6 +6,7 @@ use Nette\ComponentModel\IContainer;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
+use NetteExt\Uploader\ImageUploader;
 
 /**
  * Vytvoří novou uživatelskou galerii.
@@ -27,8 +28,8 @@ class UserGalleryNewForm extends UserGalleryBaseForm {
 	 */
 	const NUMBER_OF_IMAGE = 4;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $isPaying, $userID, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $isPaying, $userID, NULL, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $isPaying, $userID, ImageUploader $imageUploader, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $isPaying, $userID, $imageUploader, $parent, $name);
 
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;

@@ -6,6 +6,7 @@ use Nette\ComponentModel\IContainer;
 use POS\Model\UserGalleryDao;
 use POS\Model\UserImageDao;
 use POS\Model\StreamDao;
+use NetteExt\Uploader\ImageUploader;
 
 /**
  * Upraví galerii
@@ -23,8 +24,8 @@ class UserGalleryChangeForm extends UserGalleryBaseForm {
 	public $userImageDao;
 	private $galleryID;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, $isPaying, $userID, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $isPaying, $userID, NULL, $parent, $name);
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, $galleryID, $isPaying, $userID, ImageUploader $imageUploader, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($userGalleryDao, $userImageDao, $streamDao, $isPaying, $userID, $imageUploader, $parent, $name);
 		//form
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
