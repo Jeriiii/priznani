@@ -16,7 +16,7 @@
 	<script type="text/javascript">
 		;$(document).ready(function() {
 			applyBlurryBehavior('.stream-item .imagehref img, #best-match .generatedProfile img, #image_content img, .img-container img, .generatedProfile:not(.generatedProfile.userid{$loggedUser->id}) img', {plink ':Profil:Edit:', 'profilePhoto' => 1});
-			{ifset $showProfilePhotoWindow}
+			{ifset $showProfilePhotoWindow} {* stará se také o zobrazování okna s nahráváním profilovky (viz odkaz) *}
 				if(!$('.ajaxBox.posPopUp[data-related=".uploadProfilePhoto"]').is(':visible')){
 					$('.uploadProfilePhoto').trigger('click');
 				}
