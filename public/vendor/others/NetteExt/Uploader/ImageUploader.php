@@ -20,13 +20,17 @@ use NetteExt\File;
 use Nette\Http\FileUpload;
 use NetteExt\Path\ImagePathCreator;
 use POS\Model\UserDao;
+use Nette\Object;
 
 /**
  * Třída sloužící pro nahrávání obrázků.
  *
  * @author Petr Kukrál <p.kukral@kukral.eu>
  */
-class ImageUploader {
+class ImageUploader extends Object {
+
+	/** Událost nastávající po uploadu fotky uživatelem	 */
+	public $onImageUpload = array();
 
 	/** @var \POS\Model\UserGalleryDao */
 	public $userGalleryDao;
@@ -64,6 +68,7 @@ class ImageUploader {
 			$allow = $this->saveImage($image, $allow, $imagesToUpload->getUserID(), $imagesToUpload->getGalleryID());
 		}
 
+		$this->onImageUpload($allow);
 		return $allow;
 	}
 

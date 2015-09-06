@@ -12,9 +12,12 @@ use POS\UserPreferences\SearchUserPreferences;
 use POS\Model\UserDao;
 use POS\Model\StreamDao;
 use POS\Model\UserCategoryDao;
+use POS\Model\PaymentDao;
 use Nette\Http\Session;
 use Nette\Database\Table\ActiveRow;
 use Nette\ArrayHash;
+use POS\Model\UserImageDao;
+use POS\Model\UserGalleryDao;
 
 /**
  * Obstarává správu hodnot v session
@@ -63,8 +66,8 @@ class SessionManager {
 	 * Přepočítá osobní data přihlášeného uživatele. Osobními daty se myslí
 	 * jméno, profilovka, data z páru a pod.
 	 */
-	public function calculateLoggedUser(UserDao $userDao) {
-		UserSession::calculateLoggedUser($userDao, $this->loggedUser, $this->session);
+	public function calculateLoggedUser(UserDao $userDao, PaymentDao $paymentDao, UserImageDao $userImageDao, UserGalleryDao $userGalleryDao) {
+		UserSession::calculateLoggedUser($userDao, $this->loggedUser, $this->session, $paymentDao, $userImageDao, $userGalleryDao);
 	}
 
 	/**

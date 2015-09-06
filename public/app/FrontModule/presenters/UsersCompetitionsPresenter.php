@@ -150,7 +150,7 @@ class UsersCompetitionsPresenter extends BasePresenter {
 	}
 
 	public function createComponentNewImageForm($name) {
-		return new Frm\NewCompetitionImageForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this->usersCompetitionsDao, $this->competitionsImagesDao, $this, $name);
+		return new Frm\NewCompetitionImageForm($this->userGalleryDao, $this->userImageDao, $this->streamDao, $this->galleryID, $this->usersCompetitionsDao, $this->competitionsImagesDao, $this->imageUploader, $this, $name);
 	}
 
 	/**

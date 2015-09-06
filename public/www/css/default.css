@@ -21,4 +21,5 @@ img{padding:0;border:0;margin:0}
 .notdisplayed{display: none;}
 .hidden{display: hidden;}
 .relative{position: relative;}
+.blurry{filter: blur(10px);-webkit-filter: blur(10px);-moz-filter: blur(10px);-o-filter: blur(10px);-ms-filter: blur(10px);}
 body{padding:0};

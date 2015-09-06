@@ -6,3 +6,6 @@ services:
 	scoreListener:
 		class: POS\Listeners\ScoreListener
 		tags: [kdyby.subscriber]
+	uploadImageListener:
+		class: POS\Listeners\UploadImageListener
+		tags: [kdyby.subscriber]

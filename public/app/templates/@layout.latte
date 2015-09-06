@@ -49,6 +49,10 @@
 		{block head}{/block}
 		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 		{includeblock 'layoutBloks/googleAnalytics.latte'}
+    {if $user->isLoggedIn() && $loggedUser->blurryImages}
+      {includeblock 'layoutBloks/blurryImages.latte'}
+	  {include #blurryImagesStyle}
+    {/if}
 	</head>
 
 	<body>
@@ -115,6 +119,8 @@
 	    </header>
 		</div>
 	    <div class="clear" id="header-placeholder"></div>
+		{includeblock 'layoutBloks/conditionsAgreement.latte'}
+		{include #cookiePermission}
 	    {block beforeContent}{/block}
 	    <section class="inner content-section">
 		<div n:foreach="$flashes as $flash" class='flash {$flash->type}'>
@@ -149,6 +155,9 @@
 			{control jsLayout}
 
 			{if $user->isLoggedIn()}
+				{if $loggedUser->blurryImages}
+					{include #blurryImagesScripts}
+				{/if}
 				<script>
 					//inicializace ajaxObserveru - nechat před ostatními skripty
 					var observer = $('body').ajaxObserver({
@@ -162,6 +171,7 @@
 				<script type="text/javascript" src="{$basePath}/js/react/react-0.13.3{if $production}.min{/if}.js"></script>
 				<script type="text/javascript" src="{$basePath}/js/react/build/reactDatenode.js"></script>
 			{/if}
+			{include #cookiePermissionScript}
 
 			{block foot}{/block}
 			<div class="clear"></div>
