@@ -154,8 +154,6 @@ class ImageUploader {
 			}
 
 			$this->addWatermark($image, $paths);
-		} else {
-			$this->addError('Chyba při nahrávání souboru. Zkuste to prosím znovu.');
 		}
 	}
 
