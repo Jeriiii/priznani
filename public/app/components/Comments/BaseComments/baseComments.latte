@@ -4,7 +4,7 @@
 			{foreach $comments as $comment}
 				<div class="comment">
 					{$comment->user|showProfMin}
-					{if $user->id == $comment->userID}
+					{if $user->id == $comment->userID || $user->isAllowed('delete-any-comment')}
 						{var $link = $_control->link('deleteComment!', $comment->id )}
 						{control deleteComment $comment->id, '', $link}
 					{/if}

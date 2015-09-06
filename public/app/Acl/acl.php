@@ -37,7 +37,7 @@ class Acl extends Permission {
 
 		//blog - funkce
 		$this->addResource('article');
-
+		$this->addResource('delete-any-comment'); //smazat jakýkoliv komentář na streamu, u obrázků ...
 		// privileges
 		$this->allow('baseadmin', 'Admin:Admin');
 		$this->allow('baseadmin', 'Admin:Forms');
@@ -56,6 +56,7 @@ class Acl extends Permission {
 		$this->allow('user', 'Search:Search');
 		$this->allow('user', 'Chat');
 		$this->allow('admin', 'article', array('adminMenu', 'deleteArticle', 'newArticle', 'editArticle'));
+		$this->allow('superadmin', 'delete-any-comment');
 	}
 
 }
