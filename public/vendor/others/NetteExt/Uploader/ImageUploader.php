@@ -76,7 +76,7 @@ class ImageUploader {
 	 * @return boolean Smí se zveřejnit? Ovlivní se pokud jde o profilovou fotku.
 	 */
 	private function saveImage(ImageToUpload $image, $allow, $userID, $galleryID) {
-		if ($image->file instanceof Image || $image->file->isOK()) {
+		if ($image->file instanceof Image || ($image->file->isOK() && $image->file->isImage())) {
 			if ($image->isProfile == TRUE) {
 				$allow = TRUE;
 			}
@@ -88,6 +88,8 @@ class ImageUploader {
 
 			//zaznamenání velikosti screnu do proměných width/heightGalScrn
 			$this->changeSizeGalScrnDB($galleryID, $userID, $imageRow->id, $image->suffix);
+		} else {
+			throw new Exception('Chyba při nahrávání souboru. Zkuste to prosím znovu.');
 		}
 
 		return $allow;
@@ -138,25 +140,21 @@ class ImageUploader {
 	 * @param bool $addWatermark přidání/nepřidání watermarku
 	 */
 	private function upload(ImageToUpload $image, $id, $galleryID, $userID, $max_height, $max_width, $max_minheight, $max_minwidth) {
-		if ($image->file instanceof Image || ($image->file->isOK() && $image->file->isImage())) {
-			$this->checkGallDirs($userID, $galleryID);
+		$this->checkGallDirs($userID, $galleryID);
 
-			/* uložení souboru a renačtení */
-			$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryID, $userID);
+		/* uložení souboru a renačtení */
+		$galleryFolder = GalleryPathCreator::getUserGalleryFolder($galleryID, $userID);
 
-			$paths;
-			if ($image->file instanceof FileUpload) {
-				$paths = UploadImage::upload(
-						$image->file, $id, $image->suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
-			} else if ($image->file instanceof Image) {
-				$paths = UploadImage::moveImage(
-						$image->file, $id, $image->suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
-			}
-
-			$this->addWatermark($image, $paths);
-		} else {
-			$this->addError('Chyba při nahrávání souboru. Zkuste to prosím znovu.');
+		$paths;
+		if ($image->file instanceof FileUpload) {
+			$paths = UploadImage::upload(
+					$image->file, $id, $image->suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
+		} else if ($image->file instanceof Image) {
+			$paths = UploadImage::moveImage(
+					$image->file, $id, $image->suffix, $galleryFolder, $max_height, $max_width, $max_minheight, $max_minwidth);
 		}
+
+		$this->addWatermark($image, $paths);
 	}
 
 	/**
