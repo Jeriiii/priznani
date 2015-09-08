@@ -45,7 +45,7 @@ class CronPresenter extends BasePresenter {
 		foreach ($images as $image) {
 			/* pokud jde o profilovou fotku, upozorní na to uživatele */
 			if ($this->userImageDao->isProfile($image->id)) { //jde o profilovou fotku?
-				$this->activitiesDao->createImageActivity(NULL, $image->gallery->userID, $image->id, 'profilImgOnFront');
+				$this->activitiesDao->createImageActivity(NULL, $image->gallery->userID, $image->id, 'profilImgApproved');
 			}
 		}
 

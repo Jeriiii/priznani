@@ -4,8 +4,8 @@ namespace Nette\Application\UI\Form;
 
 use Nette\Application\UI\Form;
 use Nette\ComponentModel\IContainer;
-use POS\Model\StatusDao;
-use POS\Model\StreamDao;
+use NetteExt\DaoBox;
+use POS\Model\ActivitiesDao;
 
 class AddStatusForm extends BaseForm {
 
@@ -15,13 +15,19 @@ class AddStatusForm extends BaseForm {
 	/** @var \POS\Model\StreamDao */
 	public $streamDao;
 
+	/** @var \POS\Model\ActivitiesDao @inject */
+	public $activitiesDao;
+
 	/** @var ActiveRow|ArrayHash */
 	private $userProperty;
 
-	public function __construct(StreamDao $streamDao, StatusDao $statusDao, $userProperty, IContainer $parent = NULL, $name = NULL) {
+	public function __construct(DaoBox $daoBox, $userProperty, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
-		$this->statusDao = $statusDao;
-		$this->streamDao = $streamDao;
+
+		$this->statusDao = $daoBox->statusDao;
+		$this->streamDao = $daoBox->streamDao;
+		$this->activitiesDao = $daoBox->activitiesDao;
+
 		$this->userProperty = $userProperty;
 
 		$this->addTextarea("message", "")
@@ -45,6 +51,7 @@ class AddStatusForm extends BaseForm {
 		$status = $this->statusDao->insert($values);
 
 		$this->streamDao->addNewStatus($status->id, $userID, $this->userProperty->preferencesID);
+		$this->activitiesDao->createStatusActivity($userID, NULL, $status->id, ActivitiesDao::TYPE_ADD_NEW);
 
 		$presenter->flashMessage('Status byl vložen.');
 		$presenter->redirect('this');

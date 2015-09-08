@@ -336,7 +336,13 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentStatusForm($name) {
-		return new Frm\AddStatusForm($this->streamDao, $this->statusDao, $this->loggedUser->property, $this, $name);
+		$daoBox = new DaoBox();
+
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->statusDao = $this->statusDao;
+		$daoBox->activitiesDao = $this->activitiesDao;
+
+		return new Frm\AddStatusForm($daoBox, $this->loggedUser->property, $this, $name);
 	}
 
 	protected function createComponentPhotoRating($name) {

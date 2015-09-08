@@ -32,6 +32,14 @@ class ActivitiesDao extends AbstractDao {
 	const COLUMN_SEND_NOTIFY = "sendNotify";
 	const REF_EVENT_OWNER = 'event_owner';
 
+	/*	 * *** typy aktualit ***** */
+	const TYPE_ADD_NEW = 'addNew'; //přidání nového příspěvku / obrázku
+	/* obrázkové typy aktualit */
+	const TYPE_VERIF_PHOTO_ACCEPT = 'verificationPhotoAccepted'; //schválení ověřovacího obrázku
+	const TYPE_VERIF_PHOTO_REJECT = 'verificationPhotoReject'; //odmítnutí ověřovacího obrázku
+	const TYPE_PROFIL_IMG_APPROVED = 'profilImgApproved'; //schválení profilové fotky
+	const TYPE_PROFIL_IMG_NO_ON_FRONT = 'profilImgNoOnFront'; //profilová fotka není vhodná na hl. stránku
+
 	private function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
 	}

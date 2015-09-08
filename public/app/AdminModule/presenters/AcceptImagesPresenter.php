@@ -18,6 +18,7 @@ use POS\Model\StreamDao;
 use NetteExt\File;
 use NetteExt\Path\GalleryPathCreator;
 use POS\Ext\ImageRules;
+use POS\Model\ActivitiesDao;
 
 class AcceptImagesPresenter extends AdminSpacePresenter {
 
@@ -130,7 +131,7 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		/* pokud jde o profilovou fotku, upozorní na to uživatele */
 		if (!$isOnFrontPage && $this->userImageDao->isProfile($imageId)) { //jde o profilovou fotku?
 			$image = $this->userImageDao->find($imageId);
-			$this->activitiesDao->createImageActivity(NULL, $image->gallery->userID, $imageId, 'profilImgNoOnFront');
+			$this->activitiesDao->createImageActivity(NULL, $image->gallery->userID, $imageId, ActivitiesDao::TYPE_PROFIL_IMG_NO_ON_FRONT);
 		}
 
 		$this->invalidateMenuData();

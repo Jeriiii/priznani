@@ -30,9 +30,10 @@
 		<strong>{$activity->event_creator->user_name}</strong>
 		{if $activity->type == "comment"}
 			okomentoval status {$activity->status->message|truncate:8}
-
 		{elseif $activity->type == "like"}
 			lajknul status {$activity->status->message|truncate:8}
+		{elseif ($activity->type == "addNew")}
+			přidal status
 		{/if}
 		{include #afterActivity}
 	</a>
@@ -41,7 +42,7 @@
 {define image $activity}
 	{if ($activity->type == "profilImgNoOnFront")} {* není *}
 		{* nevhodná profilovka - nic se neukazuje *}
-	{elseif ($activity->type == "profilImgOnFront")} {* je *}
+	{elseif ($activity->type == "profilImgApproved")} {* je *}
 		{* schválená profilovka - nic se neukazuje *}
 	{else}
 		<a href="{plink :Profil:Galleries:image imageID => $activity->imageID, galleryID => $activity->image->galleryID}"

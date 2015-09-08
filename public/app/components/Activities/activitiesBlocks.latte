@@ -46,7 +46,7 @@
 			<strong>Nevhodná profilovka</strong>
 			pro více informací klikni sem
 		</a>
-	{elseif ($activity->type == "profilImgOnFront")} {* je *}
+	{elseif ($activity->type == "profilImgApproved")} {* je *}
 		<a href="{plink :Profil:Galleries:image imageID => $activity->imageID, galleryID => $activity->image->galleryID}"
 		   data-activity-viewed-id="{$activity->id}">
 			Gratulujeme, vaše profilová fotka byla schválena.
