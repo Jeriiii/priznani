@@ -4,7 +4,7 @@
  */
 
 ;$(document).ready(function(){
-	$("#activity-stream").on('click', '.new-activity', function (e) {
+	$("#activity-stream").on('click', '.new-activity a', function (e) {
 		e.preventDefault();
 		var $target = $(e.target);
 
