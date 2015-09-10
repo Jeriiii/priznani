@@ -24,11 +24,8 @@ class ChangeAutoEmailPresenter extends BasePresenter {
 			));
 		}
 
-		$this->user = $user;
-	}
-
-	public function renderSetWeekly() {
-		$this->template->userData = $this->user;
+		$this->flashMessage('Informační emaily byly změměny na týdenní');
+		$this->redirect('OnePage:');
 	}
 
 }
