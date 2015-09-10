@@ -110,9 +110,15 @@ class DatingRegistrationPresenter extends BasePresenter {
 	 * Pokud jde o pár, přesměruje se na zaregistrování partnera
 	 */
 	public function actionRegister() {
+		$registrationDataUser = $this->getRegSession();
+
+		if ($registrationDataUser->age === NULL) { //pravděpodobně jde o robota který neprošel prvním formulářem
+			$this->flashMessage("Registrace nemohla být dokončena, protože jste nevyplnili svůj věk.");
+			$this->redirect("DatingRegistration:");
+		}
+
 		$this->register();
 
-		$registrationDataUser = $this->getRegSession();
 		$type = $registrationDataUser->type; // typ uživatele
 
 		if ($type == UserDao::PROPERTY_COUPLE || $type == UserDao::PROPERTY_COUPLE_MAN || $type == UserDao::PROPERTY_COUPLE_WOMAN) {
