@@ -42,26 +42,4 @@ class Creator {
 		return $activities;
 	}
 
-	private function createLinkEl($activity) {
-		$linkEl = Html::el('a');
-		$linkEl->addAttributes(array(
-			'data-activity-viewed-id' => $activity->id
-		));
-
-		if ($activity->statusID != NULL) {
-			$link = $this->presenter->link(':Status:', $activity->status->id);
-		} elseif ($activity->imageID != NULL) {
-			$link = $this->presenter->link(':Status:', $activity->status->id);
-		} elseif ($activity->friendRequestID != NULL) {
-			// DO NOTHING
-			return NULL;
-		} else { {
-				include user activity => $activity
-			}
-		}
-
-		$linkEl->href($link);
-		return $linkEl;
-	}
-
 }

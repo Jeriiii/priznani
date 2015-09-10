@@ -57,7 +57,7 @@ class QuickActivities extends \POSComponent\UsersList\AjaxList {
 		$this->template->activities = $this->activities;
 		$this->template->loggedUser = $this->loggedUser;
 		$this->template->userIsPaying = $this->paymentDao->isUserPaying($this->userID);
-		$template->setFile(dirname(__FILE__) . '/activities.latte');
+		$template->setFile(dirname(__FILE__) . '/quickActivities.latte');
 		$template->render();
 	}
 

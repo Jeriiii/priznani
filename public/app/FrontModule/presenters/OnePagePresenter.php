@@ -25,6 +25,7 @@ use POSComponent\PhotoRating;
 use POS\Ext\SimpleMenu\Menu;
 use NetteExt\Path\GalleryPathCreator;
 use NetteExt\Path\ImagePathCreator;
+use Activity\QuickActivities;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -278,6 +279,10 @@ class OnePagePresenter extends BasePresenter {
 	protected function createComponentBestMatchSearch($name) {
 		$session = $this->getSession();
 		return new \POSComponent\Search\BestMatchSearch($this->loggedUser, $this->userDao, $this->userCategoryDao, $session, $this, $name);
+	}
+
+	protected function createComponentQuickActivities($name) {
+		return new QuickActivities($this->activitiesDao, $this->loggedUser, $this->paymentDao, $this, $name);
 	}
 
 	/**
