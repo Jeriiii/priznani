@@ -26,7 +26,9 @@
 
 			{ifset $article->images}
 				{foreach $article->images as $image}
-					<img src="{$image->path}" width="100%" />
+					{if !empty($image)}
+					<img src="{$basePath}{$image->path}" width="100%" />
+					{/if}
 				{/foreach}
 			{/ifset}
 

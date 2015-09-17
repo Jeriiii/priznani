@@ -114,7 +114,7 @@ class ArticlePresenter extends \BasePresenter {
 		$article->images = array();
 
 		foreach ($images as $image) {
-			$path = BlogImagePathCreator::getImgPath($article->id, $image->id, $image->suffix, $this->template->basePath);
+			$path = BlogImagePathCreator::getImgPath($article->id, $image->id, $image->suffix, "");
 
 			$img = new ArrayHash;
 			$img->path = $path;

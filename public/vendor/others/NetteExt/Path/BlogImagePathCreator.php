@@ -33,7 +33,7 @@ class BlogImagePathCreator extends PathCreator {
 	 * @return string Cesta ke složce s obrázky článku.
 	 */
 	public static function getArticleFolderPath($articleId, $basePath = null) {
-		if ($basePath == null) {
+		if ($basePath === null) {
 			$basePath = self::BASE_PATH;
 		}
 

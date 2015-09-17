@@ -93,21 +93,23 @@ class NewArticleForm extends BaseForm {
 	 * @param ActiveRow $article Článek do kterého se mají nahrát obrázky.
 	 */
 	private function uploadImage(FileUpload $image, ActiveRow $article) {
-		File::createDir(BlogImagePathCreator::getArticleFolderPath($article->id)); //vytvoří složku pro obrázky tohoto článku
+		if ($image->isOk() && $image->isImage()) {
+			File::createDir(BlogImagePathCreator::getArticleFolderPath($article->id)); //vytvoří složku pro obrázky tohoto článku
 
-		$suffix = pathinfo($image->getName(), PATHINFO_EXTENSION);
-		$imageDB = $this->blogImageDao->insert(array(
-			BlogImageDao::COLUMN_SUFFIX => $suffix,
-			BlogImageDao::COLUMN_ARTICLE_ID => $article->id,
-		));
+			$suffix = pathinfo($image->getName(), PATHINFO_EXTENSION);
+			$imageDB = $this->blogImageDao->insert(array(
+				BlogImageDao::COLUMN_SUFFIX => $suffix,
+				BlogImageDao::COLUMN_ARTICLE_ID => $article->id,
+			));
 
-		$imgUrl = BlogImagePathCreator::getImgPath($article->id, $imageDB->id, $suffix);
+			$imgUrl = BlogImagePathCreator::getImgPath($article->id, $imageDB->id, $suffix);
 
-		$image->move($imgUrl);
+			$image->move($imgUrl);
 
-		$image = Image::fromFile($imgUrl);
-		$image->resize(1024, NULL); //změna velikosti obrázku
-		$image->save($imgUrl);
+			$image = Image::fromFile($imgUrl);
+			$image->resize(1024, NULL); //změna velikosti obrázku
+			$image->save($imgUrl);
+		}
 	}
 
 }
