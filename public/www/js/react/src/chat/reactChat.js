@@ -121,6 +121,11 @@ var LoadMoreButton = React.createClass({
 var NewMessageForm = React.createClass({
   render: function() {
     var loggedUser = this.props.loggedUser;
+    var slapButton = '';
+    console.log(loggedUser);
+    if (loggedUser.allowedToSlap){
+      slapButton = <button title="Poslat facku" className="sendSlap" onClick={this.sendSlap}></button>
+    }
     return (
       <div className="newMessage">
         <ProfilePhoto profileLink={loggedUser.href} userName={loggedUser.name} profilePhotoUrl={loggedUser.profilePhotoUrl} />
@@ -129,7 +134,7 @@ var NewMessageForm = React.createClass({
           <div className="messageInputContainer">
             <input type="text" className="messageInput" />
             <div className="inputInterface">
-              <button title="Poslat facku" className="sendSlap" onClick={this.sendSlap}></button>
+              {slapButton}
             </div>
             <div className="clear"></div>
           </div>
