@@ -90,3 +90,33 @@
 	}
 	
 }
+
+.messageInputContainer{
+	position: relative;
+
+	input[type='text']{
+		padding-right: 40px;
+	}
+	.inputInterface{
+		width: 8%;
+		float: right;
+
+		.sendSlap{
+			position: absolute;
+			top: -2px;
+			right: 0.1em;
+			display: block;
+			border: none;
+			width: 25px;
+			height: 26px;
+			background: transparent url(../../images/icons/chat/chat-interface-icons.png) 0px 0px no-repeat;
+			opacity: 0.8;
+			cursor: pointer;
+			box-shadow: none;
+
+			&:hover{
+				opacity: 1;
+			}
+		}				
+	}
+}
