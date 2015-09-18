@@ -6,6 +6,7 @@
     Created on : 17.4.2015, 15:03:28
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
+@import "../variables.less";
 
 #stream-loader{
 	display: none;
@@ -75,6 +76,14 @@
 		.messageText{
 			display: block;
 			padding: 0.6em 0.05em 0.6em 42px;
+			font-size: 16px;
+			
+			a{
+				text-decoration: underline;
+				color: @main-red;
+				font-size: 12px;
+				line-height: 16px;
+			}
 		}
 		.messageDatetime{
 			display: block;
@@ -98,18 +107,25 @@
 		padding-right: 40px;
 	}
 	.inputInterface{
-		width: 8%;
+		width: 10%;
 		float: right;
 
 		.sendSlap{
-			position: absolute;
-			top: -2px;
-			right: 0.1em;
 			display: block;
+			width: 35px;
+			height: 30px;
+			text-align: center;
+			font-size: 11px;
+
+			opacity: 0.8;
+			cursor: pointer;
+			text-decoration: none;
+			
+			position: absolute;
+			top: 5px;
+			right: 0.6em;
 			border: none;
-			width: 25px;
-			height: 26px;
-			background: transparent url(../../images/icons/chat/chat-interface-icons.png) 0px 0px no-repeat;
+			/*background: transparent url(../../images/icons/chat/chat-interface-icons.png) center center no-repeat;*/ /* ikonka */
 			opacity: 0.8;
 			cursor: pointer;
 			box-shadow: none;
