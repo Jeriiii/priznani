@@ -43,6 +43,7 @@ class QuickActivities extends \POSComponent\UsersList\AjaxList {
 		if (!($loggedUser instanceof ActiveRow) && !($loggedUser instanceof ArrayHash)) {
 			throw new Exception("variable loggedUser must by instance of ActiveRow or ArrayHash");
 		}
+		$this->limit = 4;
 		$this->userID = $loggedUser->id;
 		$this->activitiesDao = $activitiesDao;
 		$this->loggedUser = $loggedUser;
@@ -53,6 +54,7 @@ class QuickActivities extends \POSComponent\UsersList\AjaxList {
 	 * Vykreslení komponenty
 	 */
 	public function render() {
+		parent::render();
 		$template = $this->template;
 		$this->template->activities = $this->activities;
 		$this->template->loggedUser = $this->loggedUser;

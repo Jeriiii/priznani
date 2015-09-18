@@ -1,7 +1,12 @@
-<a id="activities-btn" class="user-btn"></a>
-<div id="activities" data-ajaxbox-load-url="{link getMoreData!}" 
+<div id="quick-activities" data-ajaxbox-load-url="{link getMoreData!}" 
 	 data-ajaxbox-info-message="<a class='ajax marker read-all-link' href='{link allViewed!}'>Přečíst vše</a>">
 	<ul n:snippet="list" data-ajax-append="true">
 		{includeblock 'activitiesBlocks.latte'}
 	</ul>
+	<div class="loaderbar">
+		<div class="stream-btn-next">
+			<a id="next-data-item-activity-btn" n:href="getMoreData!" class="btn-main loadingbutton">zobrazit více</a>
+		</div>
+		<div id="quick-activity-message" class="loading-message"></div>
+	</div>
 </div>

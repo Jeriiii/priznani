@@ -22,11 +22,11 @@ abstract class AjaxList extends BaseProjectControl implements \IAjaxBox {
 	 */
 	public function render() {
 		$this->setMode($this->getPresenter());
-		if ($this->isTestMode()) {
-			$this->limit = 1000;
-			$offset = 0;
-			$this->setData($offset);
-		}
+		//if ($this->isTestMode()) {
+		$this->limit = 1000;
+		$offset = 0;
+		$this->setData($offset);
+		//}
 	}
 
 	/** @var int Posun příspěvků při rolování */
