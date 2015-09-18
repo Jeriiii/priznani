@@ -27,7 +27,8 @@ $(document).ready(function() {
 		linkElement: "#next-data-item-activity-btn",
 		offsetName: "quickActivities-offset",
 		autoload: false,
-		msgElement: '#quick-activity-message'
+		msgElement: '#quick-activity-message',
+		msgText: "Žádné starší aktivity nebyly nalezeny"
 	});
 	
 	/* záložky u okének na vkládání obsahu/fotek */

@@ -44,10 +44,14 @@ class QuickActivities extends \POSComponent\UsersList\AjaxList {
 			throw new Exception("variable loggedUser must by instance of ActiveRow or ArrayHash");
 		}
 		$this->limit = 4;
+		$this->offset = 0;
+
 		$this->userID = $loggedUser->id;
 		$this->activitiesDao = $activitiesDao;
 		$this->loggedUser = $loggedUser;
 		$this->paymentDao = $paymentDao;
+
+		$this->setData($this->offset);
 	}
 
 	/**
