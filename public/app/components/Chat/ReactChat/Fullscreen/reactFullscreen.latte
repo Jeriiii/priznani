@@ -1,5 +1,4 @@
 {if $logged}
 	{control communicator}
-	<div id="reactChatWindow" data-userinchatcodedid="{$userInChatCodedID}" data-canslap="{if $loggedUser->property->type > 1}true{else}false{/if}" data-username="{$loggedUser->user_name}" data-userhref="{$loggedUserHref}" data-profilephotourl="{$loggedUserProfilePhotoUrl}" ></div>
-	
+	<div id="reactChatWindow" data-userinchatcodedid="{$userInChatCodedID}" data-canslap="{if $loggedUser->property->type == 2}true{else}false{/if}" data-username="{$loggedUser->user_name}" data-userhref="{$loggedUserHref}" data-profilephotourl="{$loggedUserProfilePhotoUrl}" ></div>
 {/if}

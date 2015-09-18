@@ -124,7 +124,7 @@ var NewMessageForm = React.createClass({
     var slapButton = '';
     console.log(loggedUser);
     if (loggedUser.allowedToSlap){
-      slapButton = <button title="Poslat facku" className="sendSlap" onClick={this.sendSlap}></button>
+      slapButton = <a href="#" title="Poslat facku" className="sendSlap" onClick={this.sendSlap}></a>
     }
     return (
       <div className="newMessage">
@@ -143,7 +143,8 @@ var NewMessageForm = React.createClass({
       </div>
     );
   },
-  sendSlap: function(){
+  sendSlap: function(e){
+    e.preventDefault();
     MessageActions.createSendMessage(reactSendMessageLink, this.props.userCodedId, MessageConstants.SEND_SLAP, getLastId());
   },
   onSubmit: function(e){/* Vezme zprávu ze submitu a pošle ji. Také smaže zprávu napsanou v inputu. */
