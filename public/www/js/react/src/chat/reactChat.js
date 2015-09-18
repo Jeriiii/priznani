@@ -91,15 +91,43 @@ var Message = React.createClass({
         <div className="messageArrow" />
         <p className="messageText">
           <AutoLinkText text={message.text} />
-          {message.images.map(function(image, i){
-                return <img src={image.url} width={image.width} key={message.id + 'message' + i} />;
-            })
-          }
+          {message.images.map(this.renderImage)}
           <span className="messageDatetime">{message.sendedDate}</span>
         </p>
         <div className="clear" />
       </div>
     );
+  },
+  renderImage: function(image, i){
+    var message = this.props.messageData;
+    if(image.slap){/* je to facka a dal jsem ji já */
+      return (
+          <span key={message.id + 'messageImageSpan' + i}>
+            <img src={image.url} width={image.width} key={message.id + 'messageImage' + i} />
+            <BlockLink key={message.id + 'messageImageLink' + i}  messageData={message} />
+          </span>
+      );
+    }
+    return <img src={image.url} width={image.width} key={message.id + 'messageImage' + i} />;
+  }
+});
+
+var BlockLink = React.createClass({
+  render: function() {
+    var message = this.props.messageData;
+    var blocklink = document.getElementById('blockCurrentUser');
+    if(blocklink.dataset.alreadyblocked == 'true'){
+      return <span />;
+    }else{
+      return (
+        <a href="#" className="blocklink" onClick={this.handleBlockCurrentUser}>Zablokovat uživatele {blocklink.dataset.username}.</a>
+      );
+    }
+  },
+  handleBlockCurrentUser: function(e){
+    e.preventDefault();
+    document.getElementById('blockCurrentUser').click();
+    $('.blocklink').text('').parent().append('<span class="userBlocked">Uživatel zablokován.</span>');
   }
 });
 

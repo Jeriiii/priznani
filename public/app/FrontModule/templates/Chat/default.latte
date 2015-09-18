@@ -5,8 +5,9 @@
 {block content}
 <h2>Zprávy s {$userInChat->user_name}</h2>
 {ifset $blockedMessage}
-<div class="blockedMessage flash error">{$blockedMessage}</div>
+	<div class="blockedMessage flash error">{$blockedMessage}</div>
 {/ifset}
+<a id="blockCurrentUser" data-alreadyblocked="{ifset $blockedMessage}true{else}false{/ifset}" data-username="{$userInChat->user_name}" n:href="blockUser! blockUserID => $userInChat->id" class="ajax"></a>{* skrytý link pro blokování *}
 {control conversation}
 {/block}
 

@@ -158,7 +158,8 @@ var addToInfoMessages = function(message) {
     if (message.text.indexOf(MessageConstants.SEND_SLAP) >= 0){/* obsahuje symbol facky */
       message.images.push({/* přidání facky do pole obrázků */
         url: (basePath + 'images/chatContent/slap-image.png'),
-        width: '256'
+        width: '256',
+        slap: true
       });
       message.text = message.text.replace(new RegExp(MessageConstants.SEND_SLAP, 'g'), '');/* smazání všech stringů pro facku */
     }
