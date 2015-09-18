@@ -3,23 +3,17 @@
 
 	/* nastavení */
 	var opts;
-	/* odkaz na další data - pro ajax */
-	var ajaxLocation;
+	
 
 	/* main */
 	$.fn.stream = function (options) {
 		var opts = $.extend({}, $.fn.stream.defaults, options);
-		setOpts(opts);
-		this.ajaxLocation = getAjaxLocation(opts);
 		
-		initNextBtn(opts);
-		
-		/* rozhodne, zda se má používat automatické donačítání dat */
-		if(opts.autoLoadData) {
-			timeCheckStream();
-		} else {
-			$(opts.streamLoader).hide();
-		}
+		return this.each(function () {
+			var $this = $(this);
+			setOpts($this, opts);
+			init($this, opts);
+		});
 	};
 
 	$.fn.stream.defaults = {
@@ -31,10 +25,10 @@
 		linkElement: '#next-data-item-btn',
 		/* obaluje celé tlačítko Zobrazit další */
 		btnNext: '.stream-btn-next',
-		/* obrázek (točící), který se zobrazí při načítání dalšího obsahu */
-		streamLoader: '#stream-loader',
+		/* selektor obrázku (točící), který se zobrazí při načítání dalšího obsahu */
+		streamLoader: null, //např. streamLoader: '#stream-loader',
 		/* html element obsahující zprávu pro uživatele viz. msgText */
-		msgElement: '.stream-message',
+		msgElement: '#stream-message',
 		/* text zprávy, který se zobrazí když už nejsou k dispozici další data */
 		msgText: "Žádné starší příspěvky nebyly nalezeny", //Žádné starší příspěvky nebyly nalezeny
 		/* název parametru v URL, který nastavuje vždy aktuální offset hodnotu při každém ajaxovém požadavku */
@@ -42,31 +36,55 @@
 		/* název snippetu, který zastaví dotazování, je-li prázdný */
 		snippetName: '',
 		/* automatické načtení dalších dat při srolování na konec stránky */
-		autoLoadData: true,
+		autoload: true,
 		/* funkce která se zavolá po doběhnutí ajaxového požadavku */
-		fnAjaxSuccess: function(data, status){}
+		fnAjaxSuccess: function(data, status){},
+		/* odkaz na další data - pro ajax */
+		ajaxLocation: null
 	};
 
 	/**
 	 * Signál k zastavení dotazování - false zastaví dotazování
 	 */
 	$.fn.stream.run = true;
+	
+	/**
+	 * Zavede a spustí plugin.
+	 * @param {Object} $this Tato instance pluginu (je při spuštění pluginu vícekrát na jedné stránce)
+	 * @param {Object} opts
+	 */
+	function init($this, opts) {
+		$this.ajaxLocation = getAjaxLocation(opts);
+
+		initNextBtn(opts);
+
+		/* rozhodne, zda se má používat automatické donačítání dat */
+		if(opts.autoload) {
+			timeCheckStream(opts);
+		} else {
+			if(opts.streamLoader !== null) { 
+				$(opts.streamLoader).hide();
+			}
+		}
+	}
 
 	/* prodlouží stream */
-	function changeStream() {
-		var $btnNext = $(this.opts.btnNext);
+	function changeStream(opts) {
+		var $btnNext = $(opts.btnNext);
 		$btnNext.hide();
 
 		/* přidá další příspěvky */
 		if ($.fn.stream.run) {
-			setOffset(this.opts);
-			var ajaxUrl = getAjaxUrl(this.opts, this.ajaxLocation);
-			ajax(ajaxUrl, this.opts);
+			setOffset(opts);
+			var ajaxUrl = getAjaxUrl(opts, opts.ajaxLocation);
+			console.log(opts);
+			console.log(ajaxUrl);
+			ajax(ajaxUrl, opts);
 			
 			$btnNext.show();
 		} else {
 			/* Nejsou-li žádné další příspěvky, vypíše hlášku, že už nejsou */
-			hideBtn(this.opts);
+			hideBtn(opts);
 		}
 	}
 	
@@ -97,32 +115,41 @@
 		};
 	}
 
-	/* naplánuje další kontrolu za daný časový interval(půl vteřinu) */
-	function timeCheckStream() {
-		setTimeout(function () {
-			visibleCheckStream();
-		}, 500);
+	/** 
+	 * Naplánuje další kontrolu za daný časový interval(půl vteřinu)
+	 * @param {Object} opts
+	 */
+	function timeCheckStream(opts) {
+		if(opts.autoload) {
+			setTimeout(function () {
+				visibleCheckStream(opts);
+			}, 500);
+		}
 	}
 
 
-	/* zkontroluje, zda je uživatel na konci seznamu. Když ano, zavolá prodloužení */
-	function visibleCheckStream() {
+	/** 
+	 * Zkontroluje, zda je uživatel na konci seznamu. Když ano, zavolá prodloužení 
+	 * @param {Object} opts
+	 */
+	function visibleCheckStream(opts) {
 		var documentScrollTop = $(document).scrollTop();
 		var viewportHeight = $(window).height();
 
 		var minTop = documentScrollTop;
 		var maxTop = documentScrollTop + viewportHeight;
-		var elementOffset = $(this.opts.streamLoader).offset();
+		var elementOffset = $(opts.streamLoader).offset();
 
 		/* naskroluju-li nakonec stránky if větev projde */
 		if (elementOffset.top >= minTop && elementOffset.top <= maxTop) {
-			changeStream();
+			changeStream(opts);
 		}
-		timeCheckStream();
+		timeCheckStream(opts);
 	}
 
-	function setOpts(opts) {
-		this.opts = opts;
+	function setOpts($this, opts) {
+		$this.opts = opts;
+		opts.this = $this;
 	}
 
 	/**
@@ -131,7 +158,7 @@
 	 * @return {string} Základní odkaz (bez offsetu a limitu) na načtení dalších dat do streamu.
 	 */
 	function getAjaxLocation(opts) {
-		return this.ajaxLocation = $(opts.linkElement).attr('href');
+		return opts.ajaxLocation = $(opts.linkElement).attr('href');
 	}
 	
 	/**
@@ -177,7 +204,7 @@
 	function initNextBtn(opts) {
 		$(opts.linkElement).click(function(e) {
 			e.preventDefault();
-			changeStream();
+			changeStream(opts);
 		});
 	}
 
