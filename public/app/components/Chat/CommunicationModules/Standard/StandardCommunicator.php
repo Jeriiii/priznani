@@ -218,6 +218,9 @@ class StandardCommunicator extends BaseChatComponent implements ICommunicator {
 			$responseArray[$userIdCoded]['messages'][] = $this->modifyResponseRowToArray($message); //do pole pod klicem odesilatele v poli $responseArray vlozi pole se zpravou
 			usort($responseArray[$userIdCoded]['messages'], array($this, 'messageSort')); //seřadí zprávy
 		}
+		if (!empty($responseArray)) {
+			$responseArray['basePath'] = $this->getPresenter()->context->httpRequest->url->basePath;
+		}
 		return $responseArray;
 	}
 

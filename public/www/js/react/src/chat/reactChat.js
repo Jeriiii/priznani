@@ -122,7 +122,6 @@ var NewMessageForm = React.createClass({
   render: function() {
     var loggedUser = this.props.loggedUser;
     var slapButton = '';
-    console.log(loggedUser);
     if (loggedUser.allowedToSlap){
       slapButton = <a href="#" title="Poslat facku" className="sendSlap" onClick={this.sendSlap}></a>
     }

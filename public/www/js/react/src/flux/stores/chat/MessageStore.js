@@ -79,7 +79,7 @@ MessageStore.dispatchToken = Dispatcher.register(function(action) {
 var appendDataIntoMessages = function(userCodedId, jsonData){
   var result = jsonData[userCodedId];
   var resultMessages = filterInfoMessages(result.messages);
-  resultMessages = modifyMessages(resultMessages);
+  resultMessages = modifyMessages(resultMessages, jsonData['basePath']);
   _messages = _messages.concat(resultMessages);
 };
 
@@ -99,8 +99,8 @@ var prependDataIntoMessages = function(userCodedId, jsonData, usualMessagesCount
     result.messages.shift();/* odeberu první zprávu */
   }
   _thereIsMore = thereIsMore;
-  var textMessages = filterInfoMessages(result.messages)
-  result.messages = modifyMessages(textMessages);
+  var textMessages = filterInfoMessages(result.messages);
+  result.messages = modifyMessages(textMessages, jsonData['basePath']);
   _messages = result.messages.concat(_messages);
 };
 
@@ -138,12 +138,13 @@ var addToInfoMessages = function(message) {
   /**
    * Modifikuje text daných zpráv (sem patří zejména nahrazování určitých částí obrázkem - smajlíky, facky, poslané url obrázku...)
    * @param  {Object} messages sada zpráv
+   * @param  {string} basePath kvůli obrázkům
    */
-  var modifyMessages = function(messages) {
+  var modifyMessages = function(messages, basePath) {
     messages.forEach(function(message){
       message.images = [];
       /* nahrazení speciálního symbolu obrázkem */
-      checkSlap(message);
+      checkSlap(message, basePath);
     });
     return messages;
   };
@@ -151,11 +152,12 @@ var addToInfoMessages = function(message) {
   /**
    * Zkontroluje, zda zpráva neobsahuje symbol facky
    * @param  {Object} message objekt jedné zprávy
+   * @param  {string} basePath kvůli obrázkům
    */
-  var checkSlap = function(message){
+  var checkSlap = function(message, basePath){
     if (message.text.indexOf(MessageConstants.SEND_SLAP) >= 0){/* obsahuje symbol facky */
       message.images.push({/* přidání facky do pole obrázků */
-        url: '../images/chatContent/slap-image.png',
+        url: (basePath + 'images/chatContent/slap-image.png'),
         width: '256'
       });
       message.text = message.text.replace(new RegExp(MessageConstants.SEND_SLAP, 'g'), '');/* smazání všech stringů pro facku */
