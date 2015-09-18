@@ -11,6 +11,7 @@ var MessageConstants = require('../flux/constants/ChatConstants').MessageConstan
 var MessageActions = require('../flux/actions/chat/MessageActionCreators');
 var MessageStore = require('../flux/stores/chat/MessageStore');
 var TimerFactory = require('../components/timer');/* je v cachi, nebude se vytvářet vícekrát */
+var AutoLinkText = require('react-autolink-text');
 
 /***********  NASTAVENÍ  ***********/
 
@@ -89,7 +90,7 @@ var Message = React.createClass({
         <ProfilePhoto profileLink={this.props.userHref} userName={message.name} profilePhotoUrl={this.props.profilePhotoUrl} />
         <div className="messageArrow" />
         <p className="messageText">
-          {message.text}
+          <AutoLinkText text={message.text} />
           {message.images.map(function(image, i){
                 return <img src={image.url} width={image.width} key={message.id + 'message' + i} />;
             })
