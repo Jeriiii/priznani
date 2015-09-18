@@ -108,7 +108,7 @@ class QuickActivities extends \POSComponent\UsersList\AjaxList {
 	}
 
 	public function setData($offset) {
-		$activities = $this->activitiesDao->getByUserId($this->userID, $this->limit, $offset);
+		$activities = $this->activitiesDao->getForAllUsers($this->limit, $offset);
 		$this->activities = $activities;
 	}
 

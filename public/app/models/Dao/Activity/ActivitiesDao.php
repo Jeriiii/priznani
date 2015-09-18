@@ -312,7 +312,7 @@ class ActivitiesDao extends AbstractDao {
 	 * rychlém přehledu aktualit.
 	 * @return Nette\Database\Table\Selection
 	 */
-	public function getForAllUsers() {
+	public function getForAllUsers($limit = 0, $offset = 0) {
 		$sel = $this->getTable();
 
 		/* tyto aktuality se nemají načítat a zobrazit */
@@ -325,6 +325,10 @@ class ActivitiesDao extends AbstractDao {
 		$sel->where(self::COLUMN_EVENT_TYPE . ' != ?', self::TYPE_REJECT);
 
 		$sel->where(self::COLUMN_EVENT_TYPE . ' != ?', self::TYPE_NEW_REQUEST);
+
+		if ($limit != 0) {
+			$sel->limit($limit, $offset);
+		}
 
 		return $sel;
 	}
