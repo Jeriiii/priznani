@@ -123,7 +123,7 @@ var NewMessageForm = React.createClass({
     var loggedUser = this.props.loggedUser;
     var slapButton = '';
     if (loggedUser.allowedToSlap){
-      slapButton = <a href="#" title="Poslat facku" className="sendSlap" onClick={this.sendSlap}></a>
+      slapButton = <a href="#" title="Poslat facku" className="sendSlap" onClick={this.sendSlap}>Poslat facku</a>
     }
     return (
       <div className="newMessage">
