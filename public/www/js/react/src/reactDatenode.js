@@ -11,6 +11,7 @@ if(typeof(chatRoot) != 'undefined' && chatRoot != null){/*existuje element pro c
   var Chat = require('./chat/reactChat');
   var loggedUser = {
     name: chatRoot.dataset.username,
+    allowedToSlap: (chatRoot.dataset.canslap == 'true'),
     href: chatRoot.dataset.userhref,
     profilePhotoUrl: chatRoot.dataset.profilephotourl
   };

@@ -5,6 +5,8 @@
     Author     : Jan Kotalík <jan.kotalik.pro@gmail.com>
 */
 
+@import "../../variables.less";
+
 .conversation-box(){
 	border-radius: 6px;
 	box-shadow: 0px 2px 25px 0px rgba(50,50,50,0.8);
@@ -50,6 +52,18 @@
 			min-height: 20px;
 			padding: 5px 15px;
 			.conversation-box();
+			font-size: 16px;
+			
+			a{
+				text-decoration: underline;
+				color: @main-red;
+				font-size: 12px;
+				line-height: 16px;
+			}
+		}
+		.blocklink, .userBlocked{
+			display: block;
+			font-size: 12px !important;
 		}
 
 		.messageDatetime{
@@ -89,14 +103,39 @@
 			float: left;
 			width: 8%;
 		}
-
-		input[type='text']{
+		
+		.messageInputContainer{
 			width: 96%;
-			font-size: 14px;
-			font-family: Helvetica;
 			padding: 10px 2%;
 			min-height: 30px;
 			.conversation-box();
+			
+			input[type='text']{
+				width: 88%;
+				float: left;
+				font-size: 14px;
+				font-family: Helvetica;
+				min-height: 30px;
+			}
+			.inputInterface{
+				width: 12%;
+				float: right;
+				
+				.sendSlap{
+					display: block;
+					width: 35px;
+					height: 30px;
+					text-align: center;
+					font-size: 11px;
+					/*background: transparent url(../../images/icons/chat/chat-interface-icons.png) center center no-repeat;*/ /* ikonka */
+					opacity: 0.8;
+					cursor: pointer;				
+					
+					&:hover{
+						opacity: 1;
+					}
+				}				
+			}
 		}
 
 		input[type='submit']{

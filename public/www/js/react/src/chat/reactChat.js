@@ -7,9 +7,11 @@
 
 /***********  ZÁVISLOSTI  ***********/
 var ProfilePhoto = require('../components/profile').ProfilePhoto;
+var MessageConstants = require('../flux/constants/ChatConstants').MessageConstants;
 var MessageActions = require('../flux/actions/chat/MessageActionCreators');
 var MessageStore = require('../flux/stores/chat/MessageStore');
 var TimerFactory = require('../components/timer');/* je v cachi, nebude se vytvářet vícekrát */
+var AutoLinkText = require('react-autolink-text');
 
 /***********  NASTAVENÍ  ***********/
 
@@ -88,12 +90,44 @@ var Message = React.createClass({
         <ProfilePhoto profileLink={this.props.userHref} userName={message.name} profilePhotoUrl={this.props.profilePhotoUrl} />
         <div className="messageArrow" />
         <p className="messageText">
-          {message.text}
+          <AutoLinkText text={message.text} />
+          {message.images.map(this.renderImage)}
           <span className="messageDatetime">{message.sendedDate}</span>
         </p>
         <div className="clear" />
       </div>
     );
+  },
+  renderImage: function(image, i){
+    var message = this.props.messageData;
+    if(image.slap){/* je to facka a dal jsem ji já */
+      return (
+          <span key={message.id + 'messageImageSpan' + i}>
+            <img src={image.url} width={image.width} key={message.id + 'messageImage' + i} />
+            <BlockLink key={message.id + 'messageImageLink' + i}  messageData={message} />
+          </span>
+      );
+    }
+    return <img src={image.url} width={image.width} key={message.id + 'messageImage' + i} />;
+  }
+});
+
+var BlockLink = React.createClass({
+  render: function() {
+    var message = this.props.messageData;
+    var blocklink = document.getElementById('blockCurrentUser');
+    if(blocklink.dataset.alreadyblocked == 'true'){
+      return <span />;
+    }else{
+      return (
+        <a href="#" className="blocklink" onClick={this.handleBlockCurrentUser}>Zablokovat uživatele {blocklink.dataset.username}.</a>
+      );
+    }
+  },
+  handleBlockCurrentUser: function(e){
+    e.preventDefault();
+    document.getElementById('blockCurrentUser').click();
+    $('.blocklink').text('').parent().append('<span class="userBlocked">Uživatel zablokován.</span>');
   }
 });
 
@@ -116,16 +150,30 @@ var LoadMoreButton = React.createClass({
 var NewMessageForm = React.createClass({
   render: function() {
     var loggedUser = this.props.loggedUser;
+    var slapButton = '';
+    if (loggedUser.allowedToSlap){
+      slapButton = <a href="#" title="Poslat facku" className="sendSlap" onClick={this.sendSlap}>Poslat facku</a>
+    }
     return (
       <div className="newMessage">
         <ProfilePhoto profileLink={loggedUser.href} userName={loggedUser.name} profilePhotoUrl={loggedUser.profilePhotoUrl} />
         <div className="messageArrow" />
         <form onSubmit={this.onSubmit}>
-          <input type="text" className="messageInput" />
+          <div className="messageInputContainer">
+            <input type="text" className="messageInput" />
+            <div className="inputInterface">
+              {slapButton}
+            </div>
+            <div className="clear"></div>
+          </div>
           <input type="submit" className="btn-main medium button" value="Odeslat" />
         </form>
       </div>
     );
+  },
+  sendSlap: function(e){
+    e.preventDefault();
+    MessageActions.createSendMessage(reactSendMessageLink, this.props.userCodedId, MessageConstants.SEND_SLAP, getLastId());
   },
   onSubmit: function(e){/* Vezme zprávu ze submitu a pošle ji. Také smaže zprávu napsanou v inputu. */
     e.preventDefault();
