@@ -126,7 +126,7 @@ class LikeStatusCommentDao extends BaseLikeDao implements ILikeDao {
 	public function addActivity($ownerID, $creatorID, $commentID) {
 		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
 			$sel = $this->getActivityTable();
-			$type = "like";
+			$type = ActivitiesDao::TYPE_LIKE;
 			//? musí se přepsat na přidání aktivity o like komentáře statusu $activity = ActivitiesDao::createImageActivityStatic($creatorID, $ownerID, $commentID, $type, $sel);
 			return $activity;
 		}

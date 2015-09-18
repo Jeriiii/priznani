@@ -34,11 +34,16 @@ class ActivitiesDao extends AbstractDao {
 
 	/*	 * *** typy aktualit ***** */
 	const TYPE_ADD_NEW = 'addNew'; //přidání nového příspěvku / obrázku
-	/* obrázkové typy aktualit */
+	const TYPE_COMMENT = 'comment'; //okomentování příspěvku / obrázku
+	const TYPE_LIKE = 'like'; //likování příspěvku / obrázku
+	/* Obrázkové typy aktualit */
 	const TYPE_VERIF_PHOTO_ACCEPT = 'verificationPhotoAccepted'; //schválení ověřovacího obrázku
 	const TYPE_VERIF_PHOTO_REJECT = 'verificationPhotoReject'; //odmítnutí ověřovacího obrázku
 	const TYPE_PROFIL_IMG_APPROVED = 'profilImgApproved'; //schválení profilové fotky
 	const TYPE_PROFIL_IMG_NO_ON_FRONT = 'profilImgNoOnFront'; //profilová fotka není vhodná na hl. stránku
+	const TYPE_VERIFICATION = 'verification'; //schválení speciální ověřovací fotky
+	const TYPE_APPROVE = 'approve'; //schválení obrázku
+	const TYPE_REJECT = 'reject'; //odmítnutí ověřovací fotky
 
 	private function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -295,6 +300,20 @@ class ActivitiesDao extends AbstractDao {
 			self::COLUMN_EVENT_CREATOR_ID => $creatorID
 		));
 		return $activity->delete();
+	}
+
+	/**
+	 * Vrátí aktivity, které se mohou zobrazit každému uživateli v
+	 * rychlém přehledu aktualit.
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getForAllUsers() {
+		$sel = $this->getTable();
+
+		$sel->where(self::COLUMN_EVENT_TYPE . ' != ?', self::TYPE_PROFIL_IMG_NO_ON_FRONT);
+		$sel->where(self::COLUMN_EVENT_TYPE . ' != ?', self::TYPE_PROFIL_IMG_APPROVED);
+
+		return $sel;
 	}
 
 	/**

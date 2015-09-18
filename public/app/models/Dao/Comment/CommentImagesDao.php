@@ -122,7 +122,7 @@ class CommentImagesDao extends BaseCommentDao {
 	public function addActivity($ownerID, $creatorID, $status) {
 		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
 			$sel = $this->getActivityTable();
-			$type = "comment";
+			$type = ActivitiesDao::TYPE_COMMENT;
 			$activity = ActivitiesDao::createImageActivityStatic($creatorID, $ownerID, $status, $type, $sel);
 			return $activity;
 		}
@@ -138,7 +138,7 @@ class CommentImagesDao extends BaseCommentDao {
 	public function removeActivity($ownerID, $creatorID, $status) {
 		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
 			$sel = $this->getActivityTable();
-			$type = "comment";
+			$type = ActivitiesDao::TYPE_COMMENT;
 			$activity = ActivitiesDao::removeImageActivityStatic($creatorID, $ownerID, $status, $type, $sel);
 		}
 	}

@@ -153,11 +153,11 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		$image = $this->userImageDao->approve($imgId);
 		if ($image->gallery->verification_gallery) {
 			$this->userDao->verify($userID);
-			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "verification");
+			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, ActivitiesDao::TYPE_VERIFICATION);
 		} else {
 			$user = $this->userDao->find($userID);
 			$this->streamDao->aliveGallery($galleryId, $userID, $user->property->preferencesID);
-			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "approve");
+			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, ActivitiesDao::TYPE_APPROVE);
 		}
 
 		$this->invalidateMenuData();
@@ -170,12 +170,12 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 	}
 
 	/**
-	 * Odmítne oběřovací foto
+	 * Odmítne ověřovací foto
 	 * @param type $imgID ID obrázku
 	 */
 	public function handleRejectImage($imgID) {
 		$image = $this->userImageDao->reject($imgID);
-		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $image->gallery->userID, $imgID, "reject");
+		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $image->gallery->userID, $imgID, ActivitiesDao::TYPE_REJECT);
 
 		if ($this->isAjax("imageAcceptance")) {
 			$this->redrawControl('imageAcceptance');
@@ -215,7 +215,9 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		$this->streamDao->aliveGallery($comImage->image->galleryID, $user->id, $user->property->preferencesID);
 		$this->invalidateMenuData();
 
-		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $comImage->image->gallery->userID, $comImage->imageID, "approve");
+		$creatorId = $this->getUser()->getId();
+		$ownerId = $comImage->image->gallery->userID;
+		$this->ActivitiesDao->createImageActivity($creatorId, $ownerId, $comImage->imageID, ActivitiesDao::TYPE_APPROVE);
 
 		if ($this->isAjax()) {
 			$this->redrawControl('imageAcceptance');
@@ -255,11 +257,11 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 
 		$image = $this->userImageDao->approveIntim($imgId);
 		if ($image->gallery->verification_gallery) {
-			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "verification");
+			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, ActivitiesDao::TYPE_VERIFICATION);
 		} else {
 			$user = $this->userDao->find($userID);
 			$this->streamDao->aliveGallery($galleryId, $userID, $user->property->preferencesID);
-			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, "approve");
+			$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $userID, $imgId, ActivitiesDao::TYPE_APPROVE);
 		}
 
 		if ($this->isAjax("imageAcceptance")) {
@@ -280,7 +282,9 @@ class AcceptImagesPresenter extends AdminSpacePresenter {
 		$this->streamDao->aliveGallery($comImage->image->galleryID, $user->id, $user->property->preferencesID);
 		$this->invalidateMenuData();
 
-		$this->ActivitiesDao->createImageActivity($this->getUser()->getId(), $comImage->image->gallery->userID, $comImage->imageID, "approve");
+		$creatorId = $this->getUser()->getId();
+		$ownerId = $comImage->image->gallery->userID;
+		$this->ActivitiesDao->createImageActivity($creatorId, $ownerId, $comImage->imageID, ActivitiesDao::TYPE_APPROVE);
 
 		if ($this->isAjax("imageAcceptance")) {
 			$this->redrawControl('imageAcceptance');

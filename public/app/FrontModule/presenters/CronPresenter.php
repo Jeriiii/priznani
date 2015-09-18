@@ -4,6 +4,7 @@
  * Vydává schválená přiznání.
  */
 use POS\Model\UserPropertyDao;
+use POS\Model\ActivitiesDao;
 
 class CronPresenter extends BasePresenter {
 
@@ -45,7 +46,7 @@ class CronPresenter extends BasePresenter {
 		foreach ($images as $image) {
 			/* pokud jde o profilovou fotku, upozorní na to uživatele */
 			if ($this->userImageDao->isProfile($image->id)) { //jde o profilovou fotku?
-				$this->activitiesDao->createImageActivity(NULL, $image->gallery->userID, $image->id, 'profilImgApproved');
+				$this->activitiesDao->createImageActivity(NULL, $image->gallery->userID, $image->id, ActivitiesDao::TYPE_PROFIL_IMG_APPROVED);
 			}
 		}
 
