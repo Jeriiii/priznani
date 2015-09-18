@@ -11,6 +11,7 @@ if(typeof jest !== 'undefined'){
 }else{
   var constants = require('../../constants/ActionConstants');
 }
+var MessageConstants = require('../../constants/ChatConstants').MessageConstants;
 
 
 var EventEmitter = require('events').EventEmitter;
@@ -77,7 +78,9 @@ MessageStore.dispatchToken = Dispatcher.register(function(action) {
  */
 var appendDataIntoMessages = function(userCodedId, jsonData){
   var result = jsonData[userCodedId];
-  _messages = _messages.concat(filterInfoMessages(result.messages));
+  var resultMessages = filterInfoMessages(result.messages);
+  resultMessages = modifyMessages(resultMessages);
+  _messages = _messages.concat(resultMessages);
 };
 
 /**
@@ -96,7 +99,8 @@ var prependDataIntoMessages = function(userCodedId, jsonData, usualMessagesCount
     result.messages.shift();/* odeberu první zprávu */
   }
   _thereIsMore = thereIsMore;
-  result.messages = filterInfoMessages(result.messages);
+  var textMessages = filterInfoMessages(result.messages)
+  result.messages = modifyMessages(textMessages);
   _messages = result.messages.concat(_messages);
 };
 
@@ -130,6 +134,32 @@ var addToInfoMessages = function(message) {
   if(!alreadyExists){
     _infoMessages.push(message);
   }
-};
+  };
+  /**
+   * Modifikuje text daných zpráv (sem patří zejména nahrazování určitých částí obrázkem - smajlíky, facky, poslané url obrázku...)
+   * @param  {Object} messages sada zpráv
+   */
+  var modifyMessages = function(messages) {
+    messages.forEach(function(message){
+      message.images = [];
+      /* nahrazení speciálního symbolu obrázkem */
+      checkSlap(message);
+    });
+    return messages;
+  };
+
+  /**
+   * Zkontroluje, zda zpráva neobsahuje symbol facky
+   * @param  {Object} message objekt jedné zprávy
+   */
+  var checkSlap = function(message){
+    if (message.text.indexOf(MessageConstants.SEND_SLAP) >= 0){/* obsahuje symbol facky */
+      message.images.push({/* přidání facky do pole obrázků */
+        url: '../images/chatContent/slap-image.png',
+        width: '256'
+      });
+      message.text = message.text.replace(new RegExp(MessageConstants.SEND_SLAP, 'g'), '');/* smazání všech stringů pro facku */
+    }
+  }
 
 module.exports = MessageStore;

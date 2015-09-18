@@ -7,6 +7,7 @@
 
 /***********  ZÁVISLOSTI  ***********/
 var ProfilePhoto = require('../components/profile').ProfilePhoto;
+var MessageConstants = require('../flux/constants/ChatConstants').MessageConstants;
 var MessageActions = require('../flux/actions/chat/MessageActionCreators');
 var MessageStore = require('../flux/stores/chat/MessageStore');
 var TimerFactory = require('../components/timer');/* je v cachi, nebude se vytvářet vícekrát */
@@ -89,6 +90,10 @@ var Message = React.createClass({
         <div className="messageArrow" />
         <p className="messageText">
           {message.text}
+          {message.images.map(function(image, i){
+                return <img src={image.url} width={image.width} key={message.id + 'message' + i} />;
+            })
+          }
           <span className="messageDatetime">{message.sendedDate}</span>
         </p>
         <div className="clear" />
@@ -124,7 +129,7 @@ var NewMessageForm = React.createClass({
           <div className="messageInputContainer">
             <input type="text" className="messageInput" />
             <div className="inputInterface">
-              <button title="Poslat facku" className="sendSlap"></button>
+              <button title="Poslat facku" className="sendSlap" onClick={this.sendSlap}></button>
             </div>
             <div className="clear"></div>
           </div>
@@ -132,6 +137,9 @@ var NewMessageForm = React.createClass({
         </form>
       </div>
     );
+  },
+  sendSlap: function(){
+    MessageActions.createSendMessage(reactSendMessageLink, this.props.userCodedId, MessageConstants.SEND_SLAP, getLastId());
   },
   onSubmit: function(e){/* Vezme zprávu ze submitu a pošle ji. Také smaže zprávu napsanou v inputu. */
     e.preventDefault();
