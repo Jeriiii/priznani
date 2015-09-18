@@ -121,7 +121,13 @@ var NewMessageForm = React.createClass({
         <ProfilePhoto profileLink={loggedUser.href} userName={loggedUser.name} profilePhotoUrl={loggedUser.profilePhotoUrl} />
         <div className="messageArrow" />
         <form onSubmit={this.onSubmit}>
-          <input type="text" className="messageInput" />
+          <div className="messageInputContainer">
+            <input type="text" className="messageInput" />
+            <div className="inputInterface">
+              <button title="Poslat facku" className="sendSlap"></button>
+            </div>
+            <div className="clear"></div>
+          </div>
           <input type="submit" className="btn-main medium button" value="Odeslat" />
         </form>
       </div>

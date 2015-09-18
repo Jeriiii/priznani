@@ -89,14 +89,37 @@
 			float: left;
 			width: 8%;
 		}
-
-		input[type='text']{
+		
+		.messageInputContainer{
 			width: 96%;
-			font-size: 14px;
-			font-family: Helvetica;
 			padding: 10px 2%;
 			min-height: 30px;
 			.conversation-box();
+			
+			input[type='text']{
+				width: 92%;
+				float: left;
+				font-size: 14px;
+				font-family: Helvetica;
+				min-height: 30px;
+			}
+			.inputInterface{
+				width: 8%;
+				float: right;
+				
+				.sendSlap{
+					display: block;
+					width: 26px;
+					height: 26px;
+					background: transparent url(../../images/icons/chat/chat-interface-icons.png) 0px 0px no-repeat;
+					opacity: 0.8;
+					cursor: pointer;				
+					
+					&:hover{
+						opacity: 1;
+					}
+				}				
+			}
 		}
 
 		input[type='submit']{
