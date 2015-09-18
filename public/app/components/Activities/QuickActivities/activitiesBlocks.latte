@@ -67,6 +67,8 @@
 		<strong>{$activity->event_creator->user_name}</strong> 
 		{if ($activity->type == "new-request")}
 			požádal <strong>{$activity->event_owner->user_name}</strong> o přátelství
+		{elseif ($activity->type == "new-friends")}
+			se nyní přátelí s <strong>{$activity->event_owner->user_name}</strong>
 		{/if}
 		{include #afterActivity}
 	</a>

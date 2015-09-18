@@ -116,7 +116,7 @@ class LikeStatusDao extends BaseLikeDao implements ILikeDao {
 	public function addActivity($ownerID, $creatorID, $statusID) {
 		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
 			$sel = $this->getActivityTable();
-			$type = "like";
+			$type = ActivitiesDao::TYPE_LIKE;
 			$activity = ActivitiesDao::createStatusActivityStatic($creatorID, $ownerID, $statusID, $type, $sel);
 			return $activity;
 		}
@@ -133,7 +133,7 @@ class LikeStatusDao extends BaseLikeDao implements ILikeDao {
 	public function removeActivity($ownerID, $creatorID, $statusID) {
 		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
 			$sel = $this->getActivityTable();
-			$type = "like";
+			$type = ActivitiesDao::TYPE_LIKE;
 			$activity = ActivitiesDao::removeCommentActivityStatic($creatorID, $ownerID, $statusID, $type, $sel);
 		}
 	}

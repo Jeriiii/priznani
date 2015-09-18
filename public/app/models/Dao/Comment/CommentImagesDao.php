@@ -114,7 +114,7 @@ class CommentImagesDao extends BaseCommentDao {
 	}
 
 	/**
-	 * Odstraní komentář z aktivit
+	 * Přidá komentář do aktivit
 	 * @param int $ownerID ID uživatele, kterému obrázek patří.
 	 * @param int $creatorID ID uživatele, který obrázek lajknul
 	 * @param int $status ID statusu.

@@ -80,18 +80,30 @@
 	{/if}
 {/}
 {define friendsRequest $activity}
+	{if ($activity->type == "new-request")}
 	<span class="activity-span">
 		{include #beforeActivity}
 		Uživatel <strong>{$activity->event_creator->user_name}</strong> 
-		{if ($activity->type == "new-request")}
+		
 			vás žádá o přátelství
 			<div>
 				<a data-activity-viewed-id="{$activity->id}" href="{$basePath}/?leftMenu-friendRequest-id={$activity->friendRequestID}&do=leftMenu-friendRequest-accept" class="request-button btn-main btn-small">Přijmout</a>
 				<a data-activity-viewed-id="{$activity->id}" href="{$basePath}/?leftMenu-friendRequest-id={$activity->friendRequestID}&do=leftMenu-friendRequest-reject" class="request-button btn-main btn-small">Odmítnout</a>
 			</div>
-		{/if}
+		
 		{include #afterActivity}
 	</span>
+	{else}
+		<a href="{plink :Profil:Show: id => $activity->event_creator->id}"
+		   data-activity-viewed-id="{$activity->id}">
+			{include #beforeActivity}
+			Uživatel <strong>{$activity->event_creator->user_name}</strong>
+				{if ($activity->type == "new-friends")}
+				přijal vaší žádost o přátelství
+				{/if}
+			{include #afterActivity}
+		</a>
+	{/if}
 {/}
 {define user $activity}
 	{* doplnit odkaz! *}

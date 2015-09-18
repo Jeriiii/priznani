@@ -36,6 +36,7 @@ class ActivitiesDao extends AbstractDao {
 	const TYPE_ADD_NEW = 'addNew'; //přidání nového příspěvku / obrázku
 	const TYPE_COMMENT = 'comment'; //okomentování příspěvku / obrázku
 	const TYPE_LIKE = 'like'; //likování příspěvku / obrázku
+
 	/* Obrázkové typy aktualit */
 	const TYPE_VERIF_PHOTO_ACCEPT = 'verificationPhotoAccepted'; //schválení ověřovacího obrázku
 	const TYPE_VERIF_PHOTO_REJECT = 'verificationPhotoReject'; //odmítnutí ověřovacího obrázku
@@ -44,6 +45,10 @@ class ActivitiesDao extends AbstractDao {
 	const TYPE_VERIFICATION = 'verification'; //schválení speciální ověřovací fotky
 	const TYPE_APPROVE = 'approve'; //schválení obrázku
 	const TYPE_REJECT = 'reject'; //odmítnutí ověřovací fotky
+
+	/* Přátelství */
+	const TYPE_NEW_REQUEST = 'new-request'; //žádost o přátelství
+	const TYPE_NEW_FRIENDS = 'new-friends'; // přijmutí žádosti o přátelství
 
 	private function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -134,7 +139,7 @@ class ActivitiesDao extends AbstractDao {
 	 * @param string $type Typ aktivity (like, comment, ...)
 	 * @return Nette\Database\Table\Selection
 	 */
-	public function createFriendRequestActivity($creatorID, $ownerID, $friendRequestID, $type = "new-request") {
+	public function createFriendRequestActivity($creatorID, $ownerID, $friendRequestID, $type = self::TYPE_NEW_REQUEST) {
 		$sel = $this->getTable();
 		$activity = $sel->insert(array(
 			self::COLUMN_EVENT_TYPE => $type,
@@ -310,8 +315,16 @@ class ActivitiesDao extends AbstractDao {
 	public function getForAllUsers() {
 		$sel = $this->getTable();
 
+		/* tyto aktuality se nemají načítat a zobrazit */
+		$sel->where(self::COLUMN_EVENT_TYPE . ' != ?', self::TYPE_VERIF_PHOTO_ACCEPT);
+		$sel->where(self::COLUMN_EVENT_TYPE . ' != ?', self::TYPE_VERIF_PHOTO_REJECT);
 		$sel->where(self::COLUMN_EVENT_TYPE . ' != ?', self::TYPE_PROFIL_IMG_NO_ON_FRONT);
 		$sel->where(self::COLUMN_EVENT_TYPE . ' != ?', self::TYPE_PROFIL_IMG_APPROVED);
+		$sel->where(self::COLUMN_EVENT_TYPE . ' != ?', self::TYPE_VERIFICATION);
+		$sel->where(self::COLUMN_EVENT_TYPE . ' != ?', self::TYPE_APPROVE);
+		$sel->where(self::COLUMN_EVENT_TYPE . ' != ?', self::TYPE_REJECT);
+
+		$sel->where(self::COLUMN_EVENT_TYPE . ' != ?', self::TYPE_NEW_REQUEST);
 
 		return $sel;
 	}
