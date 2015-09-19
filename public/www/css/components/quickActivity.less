@@ -1,5 +1,6 @@
 #quick-activities{
 	font-size: 12px;
+	padding: 2px 0;
 	h3{
 		font-weight: normal;
 		font-family: 'Source Sans Pro', Arial, sans-serif;
@@ -11,17 +12,31 @@
 				display: block;
 			}
 			img{
-				height: 30px;
-				width: 30px;
+				height: 32px;
+				width: 32px;
 			}
-			padding-bottom: 1px;
-/*			border-bottom: 1px solid #DFE0E4;
-			border-color: #E5E6E9 #DFE0E4 #D0D1D5;*/
+			padding: 2px 5px;
+			border-bottom: 1px solid #DFE0E4;
+			border-color: #E5E6E9 #DFE0E4 #D0D1D5;
 			&:hover {
 				background: #fff3f5;
 			}
+			
+			.generatedProfile {
+				float: left;
+			}
+			.message {
+				float: left;
+				width: 128px;
+				padding: 0 5px;
+			}
+			.message:after {
+				clear: both;
+			}
 		}
 	}
+	
+	
 	
 	#next-data-item-activity-btn {
 		font-size: 11px;
