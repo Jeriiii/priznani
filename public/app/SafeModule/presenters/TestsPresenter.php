@@ -4,6 +4,7 @@ namespace SafeModule;
 
 use POSComponent\Stream\StreamInicializator;
 use AntispamControl;
+use Activity\QuickActivities;
 
 /**
  * Slouží pro testování.
@@ -12,6 +13,9 @@ use AntispamControl;
  * @package    jkbusiness
  */
 class TestsPresenter extends BasePresenter {
+
+	/** @var \POS\Model\ActivitiesDao @inject */
+	public $activitiesDao;
 
 	/** @var \POS\Model\StreamDao @inject */
 	public $streamDao;
@@ -88,6 +92,18 @@ class TestsPresenter extends BasePresenter {
 	/** @var \POS\Model\RateImageDao @inject */
 	public $rateImageDao;
 
+	/**
+	 * Proměnná s uživatelskými daty (cachovaný řádek z tabulky users). Obsahuje relace na profilFoto, gallery, property
+	 * @var ArrayHash|ActiveRow řádek z tabulky users
+	 */
+	protected $loggedUser = null;
+
+	public function startup() {
+		parent::startup();
+
+		$this->loggedUser = $this->userDao->find(3); // najde uživatele s ID 3 a uloží ho jako přihlášeného uživatele
+	}
+
 	public function renderDefault() {
 		$this->template->qTestPath = $this->template->basePath . '/tests/qunits';
 	}
@@ -111,6 +127,10 @@ class TestsPresenter extends BasePresenter {
 		AntispamControl::register();
 
 		return $streamInicializator->createUserStream($this, $session, $user, $isLoggedIn);
+	}
+
+	protected function createComponentQuickActivities($name) {
+		return new QuickActivities($this->activitiesDao, $this->loggedUser, $this, $name);
 	}
 
 }

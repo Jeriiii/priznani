@@ -56,7 +56,9 @@
 	function init($this, opts) {
 		$this.ajaxLocation = getAjaxLocation(opts);
 
+		console.log("before init");
 		initNextBtn(opts);
+		console.log("after init");
 
 		/* rozhodne, zda se má používat automatické donačítání dat */
 		if(opts.autoload) {
