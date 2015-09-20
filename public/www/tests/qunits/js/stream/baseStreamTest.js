@@ -12,7 +12,8 @@ QUnit.test("Test donačtení příspěvků na kliknutí", function( assert ) {
 			$("body").stream({
 				addoffset: 4,
 				snippetName: "snippet-userStream-posts",
-				autoLoadData: false
+				streamLoader: '#stream-loader',
+				autoload: false
 			});
 		}
 	});

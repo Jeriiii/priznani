@@ -23,6 +23,7 @@ use POSComponent\Confirm;
 use POS\UserPreferences\StreamUserPreferences;
 use POS\UserPreferences\SearchUserPreferences;
 use UserBlock\UserBlocker;
+use POS\Model\ActivitiesDao;
 
 class ShowPresenter extends ProfilBasePresenter {
 
@@ -361,7 +362,7 @@ class ShowPresenter extends ProfilBasePresenter {
 		$gallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
 		$this->userAllowedDao->insertData($userID, $gallery->id);
 		$this->verificationPhotoRequestDao->acceptRequest($userID);
-		$this->activitiesDao->createImageActivity($this->user->id, $userID, $gallery->lastImage, "verificationPhotoAccepted");
+		$this->activitiesDao->createImageActivity($this->user->id, $userID, $gallery->lastImage, ActivitiesDao::TYPE_VERIF_PHOTO_ACCEPT);
 		if ($this->isAjax()) {
 			$this->redrawControl('requests');
 		} else {
@@ -373,7 +374,7 @@ class ShowPresenter extends ProfilBasePresenter {
 	public function handleRejectUser($userID) {
 		$gallery = $this->userGalleryDao->findVerificationGalleryByUser($this->user->id);
 		$this->verificationPhotoRequestDao->rejectRequest($userID);
-		$this->activitiesDao->createImageActivity($this->user->id, $userID, $gallery->lastImage, "verificationPhotoRejected");
+		$this->activitiesDao->createImageActivity($this->user->id, $userID, $gallery->lastImage, ActivitiesDao::TYPE_VERIF_PHOTO_REJECT);
 		if ($this->isAjax()) {
 			$this->redrawControl('requests');
 		} else {

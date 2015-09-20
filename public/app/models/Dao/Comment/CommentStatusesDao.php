@@ -112,7 +112,7 @@ class CommentStatusesDao extends BaseCommentDao {
 	}
 
 	/**
-	 * Odstraní komentář z aktivit
+	 * Přidá komentář do aktivit
 	 * @param int $ownerID ID uživatele, kterému obrázek patří.
 	 * @param int $creatorID ID uživatele, který obrázek lajknul
 	 * @param int $status ID statusu.
@@ -120,7 +120,7 @@ class CommentStatusesDao extends BaseCommentDao {
 	public function addActivity($ownerID, $creatorID, $status) {
 		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
 			$sel = $this->getActivityTable();
-			$type = "comment";
+			$type = ActivitiesDao::TYPE_COMMENT;
 			$activity = ActivitiesDao::createStatusActivityStatic($creatorID, $ownerID, $status, $type, $sel);
 			return $activity;
 		}
@@ -136,7 +136,7 @@ class CommentStatusesDao extends BaseCommentDao {
 	public function removeActivity($ownerID, $creatorID, $status) {
 		if ($ownerID != 0) { //neexistuje vlastník - např. u soutěží
 			$sel = $this->getActivityTable();
-			$type = "comment";
+			$type = ActivitiesDao::TYPE_COMMENT;
 			ActivitiesDao::removeStatusActivityStatic($creatorID, $ownerID, $status, $type, $sel);
 		}
 	}

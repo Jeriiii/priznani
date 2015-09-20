@@ -3,7 +3,7 @@
  */
 
 var fnPreventNewActivity = function () {
-	$(".new-activity").each(function () {
+	$(".new-activity a").each(function () {
 		$(this).click(function (e) {
 			e.preventDefault();
 			var $target = $(e.target);

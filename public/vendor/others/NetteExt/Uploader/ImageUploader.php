@@ -20,6 +20,7 @@ use NetteExt\File;
 use Nette\Http\FileUpload;
 use NetteExt\Path\ImagePathCreator;
 use POS\Model\UserDao;
+use POS\Model\ActivitiesDao;
 use Nette\Object;
 
 /**
@@ -41,13 +42,17 @@ class ImageUploader extends Object {
 	/** @var \POS\Model\StreamDao */
 	public $streamDao;
 
+	/** @var \POS\Model\ActivitiesDao */
+	public $activitiesDao;
+
 	/** @var int Pokud má uživatel alespoň 1 schválené fotky, schvaluj další automaticky */
 	const AllowLimitForImages = 1;
 
-	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao) {
+	public function __construct(UserGalleryDao $userGalleryDao, UserImageDao $userImageDao, StreamDao $streamDao, ActivitiesDao $activitiesDao) {
 		$this->userGalleryDao = $userGalleryDao;
 		$this->userImageDao = $userImageDao;
 		$this->streamDao = $streamDao;
+		$this->activitiesDao = $activitiesDao;
 	}
 
 	/**
@@ -64,12 +69,20 @@ class ImageUploader extends Object {
 		$allow = $allowedImagesCount >= self::AllowLimitForImages ? TRUE : FALSE;
 
 		$images = $imagesToUpload->getImages();
+		$lastImage = NULL;
+
 		foreach ($images as $image) {
-			$allow = $this->saveImage($image, $allow, $imagesToUpload->getUserID(), $imagesToUpload->getGalleryID());
+			$imageRow = $this->saveImage($image, $allow, $imagesToUpload->getUserID(), $imagesToUpload->getGalleryID());
+			$lastImage = $imageRow !== NULL ? $imageRow : $lastImage;
 		}
 
-		$this->onImageUpload($allow);
-		return $allow;
+		/* vytvoří aktivitu že uživatel nahrál obrázek */
+		if (!empty($lastImage)) {
+			$this->activitiesDao->createImageActivity($imagesToUpload->getUserID(), NULL, $lastImage->id, ActivitiesDao::TYPE_ADD_NEW);
+		}
+
+		$this->onImageUpload($lastImage->approved);
+		return $lastImage->approved;
 	}
 
 	/**
@@ -93,9 +106,11 @@ class ImageUploader extends Object {
 
 			//zaznamenání velikosti screnu do proměných width/heightGalScrn
 			$this->changeSizeGalScrnDB($galleryID, $userID, $imageRow->id, $image->suffix);
+
+			return $imageRow;
 		}
 
-		return $allow;
+		return NULL;
 	}
 
 	/**

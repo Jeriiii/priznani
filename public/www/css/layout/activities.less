@@ -15,8 +15,9 @@
 			border-bottom: 1px solid #ddd;
 			margin: 0;
 			padding: 0;
+			background: #fff3f5;
 			
-			.activity-link, .activity-span{
+			& > a, .activity-span{
 				display: block;
 				padding: 3px 8px;
 				font-size: 12px;
@@ -25,12 +26,8 @@
 				width: auto;
 				min-height: 42px;
 			}
-			.activity-link{
+			& > a{
 				cursor: pointer;
-			}
-			
-			.new-activity{
-				background: #fff3f5;
 			}
 
 			&.viewed{

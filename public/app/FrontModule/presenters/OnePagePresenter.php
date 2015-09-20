@@ -25,6 +25,7 @@ use POSComponent\PhotoRating;
 use POS\Ext\SimpleMenu\Menu;
 use NetteExt\Path\GalleryPathCreator;
 use NetteExt\Path\ImagePathCreator;
+use Activity\QuickActivities;
 
 class OnePagePresenter extends BasePresenter {
 
@@ -280,6 +281,10 @@ class OnePagePresenter extends BasePresenter {
 		return new \POSComponent\Search\BestMatchSearch($this->loggedUser, $this->userDao, $this->userCategoryDao, $session, $this, $name);
 	}
 
+	protected function createComponentQuickActivities($name) {
+		return new QuickActivities($this->activitiesDao, $this->loggedUser, $this, $name);
+	}
+
 	/**
 	 * Zobrazit dotaz na oblíbenou polohu nebo pozici.
 	 */
@@ -336,7 +341,13 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentStatusForm($name) {
-		return new Frm\AddStatusForm($this->streamDao, $this->statusDao, $this->loggedUser->property, $this, $name);
+		$daoBox = new DaoBox();
+
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->statusDao = $this->statusDao;
+		$daoBox->activitiesDao = $this->activitiesDao;
+
+		return new Frm\AddStatusForm($daoBox, $this->loggedUser->property, $this, $name);
 	}
 
 	protected function createComponentPhotoRating($name) {

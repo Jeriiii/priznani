@@ -1,5 +1,5 @@
 {block head}
-    {control css 'onepage/default.less', 'stream/list.less', 'comments/comments.less', 'imgareaselect/default.less', 'imgareaselect/inWindow.less', 'photoRating/default.less', 'plugins/intro/introjs.min.css'}
+    {control css 'onepage/default.less', 'stream/list.less', 'comments/comments.less', 'imgareaselect/default.less', 'imgareaselect/inWindow.less', 'photoRating/default.less', 'plugins/intro/introjs.min.css', 'components/quickActivity.less'}
 {/block}
 
 {block content}
@@ -19,7 +19,10 @@
 		<div id="stream"> 
 			{include 'blocks/addUserInfo.latte'}
 			{include 'blocks/addNewPost.latte'}
-			{control userStream} 
+			{control userStream}
+		</div>
+		<div id="right-dock">
+			{control quickActivities}
 		</div>
 		<div class="clear"></div>
 	</section>

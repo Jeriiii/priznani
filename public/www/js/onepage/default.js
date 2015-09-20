@@ -14,9 +14,21 @@ $(document).ready(function() {
 	$.convLimit = 5;
 
 	/* stream */
-	$("body").stream({
+	$("#stream").stream({
 		addoffset: 4,
-		snippetName: "snippet-userStream-posts"
+		snippetName: "snippet-userStream-posts",
+		streamLoader: '#stream-loader'
+	});
+	
+	/* aktivity */
+	$("#quick-activities").stream({
+		addoffset: 4,
+		snippetName: "snippet-quickActivities-list",
+		linkElement: "#next-data-item-activity-btn",
+		offsetName: "quickActivities-offset",
+		autoload: false,
+		msgElement: '#quick-activity-message',
+		msgText: "Žádné starší aktivity nebyly nalezeny"
 	});
 	
 	/* záložky u okének na vkládání obsahu/fotek */

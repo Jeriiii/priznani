@@ -41,7 +41,9 @@ abstract class AjaxList extends BaseProjectControl implements \IAjaxBox {
 	 */
 	public function handleGetMoreData($offset, $limit) {
 		$this->offset = $offset;
-		$this->limit = $limit;
+		if (is_numeric($limit)) {
+			$this->limit = $limit;
+		}
 		$this->setData($this->offset);
 
 		if ($this->presenter->isAjax()) {

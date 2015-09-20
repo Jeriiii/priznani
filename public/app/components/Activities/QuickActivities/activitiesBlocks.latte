@@ -1,0 +1,91 @@
+{block activities}
+	{ifset $activities}
+		{foreach $activities as $activity}
+			<li class="{if $activity->viewed == 1}viewed{else}new-activity{/if}">
+				{if ($activity->statusID != NULL)}
+					{include status activity => $activity}
+				{elseif ($activity->imageID != NULL)}
+					{include image activity => $activity}
+				{elseif ($activity->friendRequestID != NULL)}
+					{include friendsRequest activity => $activity}
+				{else}
+					{include user activity => $activity}
+				{/if}
+				<div class="clear"></div>
+			</li>
+		{/foreach}
+	{/ifset}
+{/}
+{define beforeActivity}
+	{$activity->event_creator|showProfMinNoLink }<p class="message">
+{/}
+{define afterActivity}
+	</p>
+{/}
+{define status $activity}
+	{* doplnit odkaz! *}
+	<a href="{plink :Status: $activity->status->id}"
+	   data-activity-viewed-id="{$activity->id}">
+		{include #beforeActivity}
+		<strong>{$activity->event_creator->user_name}</strong>
+		{if $activity->type == "comment"}
+			okomentoval status {$activity->status->message|truncate:8}
+		{elseif $activity->type == "like"}
+			lajknul status {$activity->status->message|truncate:8}
+		{elseif ($activity->type == "addNew")}
+			přidal status
+		{/if}
+		{include #afterActivity}
+	</a>
+	
+{/}
+{define image $activity}
+	{if ($activity->type == "profilImgNoOnFront")} {* není *}
+		{* nevhodná profilovka - nic se neukazuje *}
+	{elseif ($activity->type == "profilImgApproved")} {* je *}
+		{* schválená profilovka - nic se neukazuje *}
+	{else}
+		<a href="{plink :Profil:Galleries:image imageID => $activity->imageID, galleryID => $activity->image->galleryID}"
+		   data-activity-viewed-id="{$activity->id}">
+			{include #beforeActivity}
+			<strong>{$activity->event_creator->user_name}</strong>
+			{if ($activity->type == "comment")}
+				okomentoval váš obrázek {$activity->image->name}
+			{elseif ($activity->type == "like")}
+				lajknul váš obrázek {$activity->image->name}
+			{elseif ($activity->type == "addNew")}
+				nahrál nové fotky
+			{/if}
+			{include #afterActivity}
+		</a>
+	{/if}
+{/}
+{define friendsRequest $activity}
+	<a href="{plink :Profil:Show: id => $activity->event_owner->id}"
+		   data-activity-viewed-id="{$activity->id}">
+		{include #beforeActivity}
+		<strong>{$activity->event_creator->user_name}</strong> 
+		{if ($activity->type == "new-request")}
+			požádal <strong>{$activity->event_owner->user_name}</strong> o přátelství
+		{elseif ($activity->type == "new-friends")}
+			se nyní přátelí s <strong>{$activity->event_owner->user_name}</strong>
+		{/if}
+		{include #afterActivity}
+	</a>
+{/}
+{define user $activity}
+	{* doplnit odkaz! *}
+	{if ($activity->type == "sexy")}
+		{if $userIsPaying}
+			<a href="{plink :Profil:Show: id => $activity->event_creator->id}"
+			   data-activity-viewed-id="{$activity->id}">
+				{include #beforeActivity}
+				<strong>{$activity->event_creator->user_name}</strong>
+					označil <strong>{$activity->event_owner->user_name}</strong> jako sexy!
+				{include #afterActivity}
+			</a>
+		{else}
+			{* pro neplacené uživatele se nic nového nezobrazuje *}
+		{/if}
+	{/if}
+{/}
