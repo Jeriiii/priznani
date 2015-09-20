@@ -35,10 +35,7 @@ class QuickActivities extends \POSComponent\UsersList\AjaxList {
 	 */
 	protected $loggedUser;
 
-	/** @var \POS\Model\PaymentDao @inject */
-	public $paymentDao;
-
-	public function __construct(ActivitiesDao $activitiesDao, $loggedUser, PaymentDao $paymentDao) {
+	public function __construct(ActivitiesDao $activitiesDao, $loggedUser) {
 		parent::__construct();
 		if (!($loggedUser instanceof ActiveRow) && !($loggedUser instanceof ArrayHash)) {
 			throw new Exception("variable loggedUser must by instance of ActiveRow or ArrayHash");
@@ -49,7 +46,6 @@ class QuickActivities extends \POSComponent\UsersList\AjaxList {
 		$this->userID = $loggedUser->id;
 		$this->activitiesDao = $activitiesDao;
 		$this->loggedUser = $loggedUser;
-		$this->paymentDao = $paymentDao;
 
 		$this->setData($this->offset);
 	}
@@ -62,7 +58,6 @@ class QuickActivities extends \POSComponent\UsersList\AjaxList {
 		$template = $this->template;
 		$this->template->activities = $this->activities;
 		$this->template->loggedUser = $this->loggedUser;
-		$this->template->userIsPaying = $this->paymentDao->isUserPaying($this->userID);
 		$template->setFile(dirname(__FILE__) . '/quickActivities.latte');
 		$template->render();
 	}

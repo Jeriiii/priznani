@@ -282,7 +282,7 @@ class OnePagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentQuickActivities($name) {
-		return new QuickActivities($this->activitiesDao, $this->loggedUser, $this->paymentDao, $this, $name);
+		return new QuickActivities($this->activitiesDao, $this->loggedUser, $this, $name);
 	}
 
 	/**
