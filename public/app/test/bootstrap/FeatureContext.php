@@ -355,9 +355,11 @@ class FeatureContext extends MinkContext {
 		}
 		$glue = '[';
 		foreach ($responseArray as $usersArray) {//projetí všech zpráv a jejich id
-			foreach ($usersArray->messages as $message) {
-				$readRequestString = $readRequestString . $glue . $message->id;
-				$glue = '%2C';
+			if (!empty($usersArray) && !empty($usersArray->messages)) {
+				foreach ($usersArray->messages as $message) {
+					$readRequestString = $readRequestString . $glue . $message->id;
+					$glue = '%2C';
+				}
 			}
 		}
 		$readRequestString = $readRequestString . ']';

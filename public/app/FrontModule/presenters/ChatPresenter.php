@@ -6,6 +6,8 @@ use POSComponent\Chat\MobileContactList;
 use POSComponent\Chat\AndroidChat;
 use POS\Chat\ChatManager;
 use POSComponent\Chat\React\ReactFullscreenChat;
+use NetteExt\DaoBox;
+use UserBlock\UserBlocker;
 
 /**
  * Pro práci se zprávami přes celoou stránku
@@ -113,6 +115,31 @@ class ChatPresenter extends BasePresenter {
 	 */
 	protected function createComponentMobileContactList() {
 		return new MobileContactList($this->chatManager, $this->loggedUser);
+	}
+
+	/**
+	 * Zablokuje uživatele.
+	 * @param int $blockUserID Id uživatele, který se má blokovat.
+	 */
+	public function handleBlockUser($blockUserID) {
+		$blocker = $this->createUserBlocker(); /* zablokuje uživatele */
+		$blocker->blockUser($blockUserID, $this->loggedUser, $this->session);
+	}
+
+	/**
+	 * Továrnička na třídu pro blokování/odblokování uživatele
+	 */
+	private function createUserBlocker() {
+		$daoBox = new DaoBox();
+
+		$daoBox->userDao = $this->userDao;
+		$daoBox->streamDao = $this->streamDao;
+		$daoBox->userCategoryDao = $this->userCategoryDao;
+		$daoBox->userBlockedDao = $this->userBlockedDao;
+
+		$blocker = new UserBlocker($daoBox);
+
+		return $blocker;
 	}
 
 }

@@ -8,7 +8,7 @@
     "flux": "^2.0.0",
     "keymirror": "~0.1.0",
     "object-assign": "^1.0.0",
-    "react": "^0.12.0",
+    "react": "^0.13.0",
     "react-tools": "*"
   },
   "devDependencies": {
@@ -18,7 +18,8 @@
     "react-tools": "*",
     "reactify": "^0.15.2",
     "uglify-js": "~2.4.15",
-    "watchify": "^2.1.1"
+    "watchify": "^2.1.1",
+    "react-autolink-text": "*"
   },
   "scripts": {
     "start": "watchify -o build/reactDatenode.js -v -d src/reactDatenode.js",
