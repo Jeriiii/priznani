@@ -133,7 +133,7 @@ class CronNotifies extends CronEmails {
 			return;
 		}
 		$imagePathHelper = new GetImgPathHelper($this->urlObject);
-		$users = $this->userDao->getAll(" DESC")->limit(60);
+		$users = $this->userDao->getAll(" DESC")->limit(100);
 		$this->filterUsersToNotifies($emailNotifies, $users, $imagePathHelper);
 	}
 
