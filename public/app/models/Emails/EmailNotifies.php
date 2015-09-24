@@ -23,6 +23,9 @@ class EmailNotifies extends Emails {
 	/** Text přiznání, které se má zobrazovat v emailech */
 	private $confessionText = NULL;
 
+	/** @var array uživatelé, co se mají ukázat v emailu. Pole, jehož hodnoty jsou cesty k profilovým fotkám */
+	private $usersToShow = array();
+
 	public function __construct($setWeeklyLink) {
 		$this->setWeeklyLink = $setWeeklyLink;
 	}
@@ -55,13 +58,21 @@ class EmailNotifies extends Emails {
 	}
 
 	/**
+	 * Přidá fotku uživatele, který se má zobrazit.
+	 * @param string $photoUrl absolutní url fotky uživatele
+	 */
+	public function addUserPhotoToShow($photoUrl) {
+		$this->usersToShow[] = $photoUrl;
+	}
+
+	/**
 	 * existuje již oznámení pro uživatele
 	 * @return EmailNotify Upozornění pro uživatele.
 	 */
 	protected function getUserNotify($user) {
 		if (!array_key_exists($user->id, $this->emailNotifies)) {
 			$setWeeklyLink = $this->setWeeklyLink . '?id=' . DataCoder::encode($user->id);
-			$this->emailNotifies[$user->id] = new EmailNotify($user, $setWeeklyLink, $this->confessionText);
+			$this->emailNotifies[$user->id] = new EmailNotify($user, $setWeeklyLink, $this->confessionText, $this->usersToShow);
 		}
 
 		return $this->emailNotifies[$user->id];

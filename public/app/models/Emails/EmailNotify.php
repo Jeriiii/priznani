@@ -32,10 +32,14 @@ class EmailNotify extends Email {
 	/** @var string Odkaz na týdenní změnu odesílání info emailu */
 	private $setWeeklyLink;
 
-	public function __construct(ActiveRow $user, $setWeeklyLink, $confessionText) {
+	/** @var array uživatelé, co se mají ukázat v emailu. Pole, jehož hodnoty jsou cesty k profilovým fotkám */
+	private $usersToShow;
+
+	public function __construct(ActiveRow $user, $setWeeklyLink, $confessionText, $usersToShow = array()) {
 		parent::__construct($user);
 		$this->confessionText = $confessionText;
 		$this->setWeeklyLink = $setWeeklyLink;
+		$this->usersToShow = $usersToShow;
 	}
 
 	/**
@@ -113,20 +117,16 @@ class EmailNotify extends Email {
 	 * @return string html
 	 */
 	private function renderFriendsList() {
+		if (empty($this->usersToShow)) {
+			return;
+		}
 		$html = "<div style='float: left; width: auto; margin: 15px 0;'>";
 		$itemStyle = 'float: left; margin: 5px; position: relative;';
-		$friends = array(0 => 'http://lorempixel.com/output/people-q-c-100-100-9.jpg',
-			2 => 'http://lorempixel.com/output/people-q-c-100-100-9.jpg',
-			5 => 'http://lorempixel.com/output/people-q-c-100-100-9.jpg',
-			7 => 'http://lorempixel.com/output/people-q-c-100-100-9.jpg'
-		);
-		foreach ($friends as $friendId => $photoUrl) {
+		foreach ($this->usersToShow as $photoUrl) {
 			$html = $html . "<a href ='http://datenode.cz/' style = '$itemStyle'><img src='$photoUrl' width = '60' height = '60' alt = '' /></a>";
 		}
-		$arrowUrl = 'http://datenode.cz/images/userSearch/search-arrow.png';
-		$html = $html . "<a href = '' style = 'background-image: url($arrowUrl); float: left; position: relative; z-index: 5; left: -35px; top: 5px; cursor: pointer;width: 28px;height: 58px;display: block;background-size: 28px 58px;background-position: 0 0;background-color: rgba(0, 0, 0, 0);background-repeat: no-repeat;border: 1px solid #C9C9C9;'></a><div style = 'clear: both'></div>
-</div>
-<div style = 'clear: both'></div>";
+
+		$html = $html . "</div><div style = 'clear: both'></div>";
 		return $html;
 	}
 

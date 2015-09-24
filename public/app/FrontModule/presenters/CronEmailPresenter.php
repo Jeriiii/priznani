@@ -39,6 +39,7 @@ class CronEmailPresenter extends BasePresenter {
 
 		$weeklyLink = $this->getLinkNotifySetWeekly();
 		$this->cronNotifies->setWeeklyLink($weeklyLink);
+		$this->cronNotifies->setUrl($this->context->httpRequest->url);
 
 		$messages = $this->cronNotifies->getEmails();
 
@@ -50,6 +51,7 @@ class CronEmailPresenter extends BasePresenter {
 		$this->checkAccess($userName, $userPassword);
 		$weeklyLink = $this->getLinkNotifySetWeekly();
 		$this->cronNotifies->setWeeklyLink($weeklyLink);
+		$this->cronNotifies->setUrl($this->context->httpRequest->url);
 
 		$this->cronNotifies->markEmailsLikeSended();
 
@@ -63,6 +65,7 @@ class CronEmailPresenter extends BasePresenter {
 	public function actionSendNotifies() {
 		$weeklyLink = $this->getLinkNotifySetWeekly();
 		$this->cronNotifies->setWeeklyLink($weeklyLink);
+		$this->cronNotifies->setUrl($this->context->httpRequest->url);
 
 		$this->cronNotifies->sendEmails($this->mailer);
 		$this->cronNotifies->markEmailsLikeSended();
