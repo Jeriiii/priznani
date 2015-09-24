@@ -82,7 +82,7 @@ class EmailNotify extends Email {
 		$messagesNotice = $this->getMessageTitle();
 		$andNotice = $this->getAndToTitle();
 		$notificationsNotice = $this->getActivityTitle();
-		$adminPhoto = $this->renderProfilePhoto('', 'http://lorempixel.com/output/people-q-c-100-100-9.jpg'); /* TODO změnit na fotku admina + odkaz pokud je třeba */
+		$adminPhoto = $this->renderProfilePhoto('', 'http://datenode.cz/images/userGalleries/221/533/min981.jpg');
 		$messageBody = "$adminPhoto
 			<h2 style='width: auto; float: left; height: 30px; font-size: 30px; padding: 70px 0px 0px 10px; margin: 0; font-weight: 200;'>AHOJ,</h2>
 			<div style='clear: both'></div>
@@ -95,7 +95,7 @@ class EmailNotify extends Email {
 		$body = $this->renderHeader()
 			. "<div style='padding: 20px 10%; font-family: Arial;'>"
 			. "$messageBody"
-			. $this->renderLinkButton('', 'PŘEČÍST NOVÉ ZPRÁVY')/* TODO dopsat tlačítku href odkaz sem do parametru - kam? na zprávy? */
+			. $this->renderLinkButton('http://datenode.cz/', 'PŘEČÍST NOVÉ ZPRÁVY')
 			. $this->renderFriendsList()
 			. "</div>"
 			. $this->renderQuote()
@@ -140,7 +140,6 @@ class EmailNotify extends Email {
 	 */
 	private function renderLinkButton($href, $buttonText) {
 		$linkButtonStyle = 'clear: both; display: block; text-align: center; cursor: pointer; color: white !important; text-decoration: none !important; font-family: Arial; font-size: 24px; margin: 25px 20%; text-decoration: none; padding: 8px 5%; font-weight: 600; background: #90cb00; background: #90cb00;background: -moz-linear-gradient(top,#cf0707 0,#5a8700 100%);background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#90cb00),color-stop(100%,#5a8700));background: -webkit-linear-gradient(top,#90cb00 0,#5a8700 100%);background: -o-linear-gradient(top,#cf0707 0,#5a8700 100%);background: -ms-linear-gradient(top,#cf0707 0,#5a8700 100%);background: linear-gradient(to bottom,#90cb00 0,#5a8700 100%);';
-		/* TODO dopsat tlačítku href odkaz - kam? na zprávy? */
 		return "<a href = '$href' style = '$linkButtonStyle' >$buttonText</a><div style='clear:both;'></div>";
 	}
 
