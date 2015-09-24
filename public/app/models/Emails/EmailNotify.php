@@ -80,7 +80,7 @@ class EmailNotify extends Email {
 		$messagesNotice = $this->getMessageTitle();
 		$andNotice = $this->getAndToTitle();
 		$notificationsNotice = $this->getActivityTitle();
-		$adminPhoto = $this->renderProfilePhoto('', 'http://datenode.cz/images/userGalleries/221/533/min981.jpg');
+		$adminPhoto = $this->renderProfilePhoto('http://datenode.cz/', 'http://datenode.cz/images/email/admin-user.jpg');
 		$messageBody = "$adminPhoto
 			<h2 style='width: auto; float: left; height: 30px; font-size: 30px; padding: 70px 0px 0px 10px; margin: 0; font-weight: 200;'>AHOJ,</h2>
 			<div style='clear: both'></div>
@@ -121,7 +121,7 @@ class EmailNotify extends Email {
 			7 => 'http://lorempixel.com/output/people-q-c-100-100-9.jpg'
 		);
 		foreach ($friends as $friendId => $photoUrl) {
-			$html = $html . "<a href ='#$friendId' style = '$itemStyle'><img src='$photoUrl' width = '60' height = '60' alt = '' /></a>";
+			$html = $html . "<a href ='http://datenode.cz/' style = '$itemStyle'><img src='$photoUrl' width = '60' height = '60' alt = '' /></a>";
 		}
 		$arrowUrl = 'http://datenode.cz/images/userSearch/search-arrow.png';
 		$html = $html . "<a href = '' style = 'background-image: url($arrowUrl); float: left; position: relative; z-index: 5; left: -35px; top: 5px; cursor: pointer;width: 28px;height: 58px;display: block;background-size: 28px 58px;background-position: 0 0;background-color: rgba(0, 0, 0, 0);background-repeat: no-repeat;border: 1px solid #C9C9C9;'></a><div style = 'clear: both'></div>
