@@ -6,6 +6,10 @@
 
 namespace Notify;
 
+use POS\Model\ActivitiesDao;
+use POS\Model\ChatMessagesDao;
+use POS\Model\UserDao;
+
 /**
  * Připravuje emaily oznámení pro určité použití cronem
  *
@@ -23,13 +27,20 @@ class CronNotifies extends CronEmails {
 	public $usersForNewsletters;
 
 	/** @var string Odkaz na týdenní změnu odesílání info emailu */
-	private $setWeeklyLink;
+	private $weeklyLink;
 
-	public function __construct($activitiesDao, $chatMessagesDao, $userDao, $setWeeklyLink) {
+	public function __construct(ActivitiesDao $activitiesDao, ChatMessagesDao $chatMessagesDao, UserDao $userDao) {
 		$this->activitiesDao = $activitiesDao;
 		$this->chatMessagesDao = $chatMessagesDao;
 		$this->usersForNewsletters = $userDao->getForNeswletters();
-		$this->setWeeklyLink = $setWeeklyLink;
+	}
+
+	/**
+	 * Nastaví odkaz pro tlačítko, přepínající na dodávání newsletterů pouze jednou za týden
+	 * @param String $link odkaz
+	 */
+	public function setWeeklyLink($link) {
+		$this->weeklyLink = $link;
 	}
 
 	/**
@@ -40,7 +51,7 @@ class CronNotifies extends CronEmails {
 		$activities = $this->activitiesDao->getNotViewedNotSendNotify($this->usersForNewsletters);
 		$messages = $this->chatMessagesDao->getNotReadedNotSendNotify($this->usersForNewsletters);
 
-		$emailNotifies = new EmailNotifies($this->setWeeklyLink);
+		$emailNotifies = new EmailNotifies($this->weeklyLink);
 		/* upozornění na aktivity */
 		foreach ($activities as $activity) {
 			$emailNotifies->addActivity($activity->event_owner, $activity);

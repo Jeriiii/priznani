@@ -1,6 +1,5 @@
 <?php
 
-use Notify\CronNotifies;
 use Notify\CronForOldUsers;
 use Nette\Application\Responses\JsonResponse;
 
@@ -9,11 +8,8 @@ use Nette\Application\Responses\JsonResponse;
  */
 class CronEmailPresenter extends BasePresenter {
 
-	/** @var \POS\Model\ChatMessagesDao @inject */
-	public $chatMessagesDao;
-
-	/** @var \POS\Model\ActivitiesDao @inject */
-	public $activitiesDao;
+	/** @var Notify\CronNotifies @inject */
+	public $cronNotifies;
 
 	/** @var \Nette\Mail\IMailer @inject */
 	public $mailer;
@@ -40,10 +36,11 @@ class CronEmailPresenter extends BasePresenter {
 	 */
 	public function actionMailToJSON($userName, $userPassword) {
 		$this->checkAccess($userName, $userPassword);
-		$setWeeklyLink = $this->getLinkNotifySetWeekly();
 
-		$cronNotifies = new CronNotifies($this->activitiesDao, $this->chatMessagesDao, $this->userDao, $setWeeklyLink);
-		$messages = $cronNotifies->getEmails();
+		$weeklyLink = $this->getLinkNotifySetWeekly();
+		$this->cronNotifies->setWeeklyLink($weeklyLink);
+
+		$messages = $this->cronNotifies->getEmails();
 
 		$json = new JsonResponse($messages, "application/json; charset=utf-8");
 		$this->sendResponse($json);
@@ -51,10 +48,10 @@ class CronEmailPresenter extends BasePresenter {
 
 	public function actionMailIsSended($userName, $userPassword) {
 		$this->checkAccess($userName, $userPassword);
-		$setWeeklyLink = $this->getLinkNotifySetWeekly();
+		$weeklyLink = $this->getLinkNotifySetWeekly();
+		$this->cronNotifies->setWeeklyLink($weeklyLink);
 
-		$cronNotifies = new CronNotifies($this->activitiesDao, $this->chatMessagesDao, $this->userDao, $setWeeklyLink);
-		$cronNotifies->markEmailsLikeSended();
+		$this->cronNotifies->markEmailsLikeSended();
 
 		echo "Oznámení byly označeny jako odeslané";
 		die();
@@ -64,11 +61,11 @@ class CronEmailPresenter extends BasePresenter {
 	 * Odesílá emaily o nedávné aktivitě uživatelů.
 	 */
 	public function actionSendNotifies() {
-		$setWeeklyLink = $this->getLinkNotifySetWeekly();
-		$cronNotifies = new CronNotifies($this->activitiesDao, $this->chatMessagesDao, $this->userDao, $setWeeklyLink);
+		$weeklyLink = $this->getLinkNotifySetWeekly();
+		$this->cronNotifies->setWeeklyLink($weeklyLink);
 
-		$cronNotifies->sendEmails($this->mailer);
-		$cronNotifies->markEmailsLikeSended();
+		$this->cronNotifies->sendEmails($this->mailer);
+		$this->cronNotifies->markEmailsLikeSended();
 
 		echo "Oznámení byla odeslána";
 		die();
