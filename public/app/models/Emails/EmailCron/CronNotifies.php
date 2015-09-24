@@ -9,6 +9,7 @@ namespace Notify;
 use POS\Model\ActivitiesDao;
 use POS\Model\ChatMessagesDao;
 use POS\Model\UserDao;
+use POS\Model\ConfessionDao;
 
 /**
  * Připravuje emaily oznámení pro určité použití cronem
@@ -23,16 +24,20 @@ class CronNotifies extends CronEmails {
 	/** @var \POS\Model\ChatMessagesDao */
 	public $chatMessagesDao;
 
+	/** @var \POS\Model\ConfessionDao */
+	public $confessionDao;
+
 	/** @var \Nette\Database\Table\Selection Uživatelé, kteří by měli dostat informační email. */
 	public $usersForNewsletters;
 
 	/** @var string Odkaz na týdenní změnu odesílání info emailu */
 	private $weeklyLink;
 
-	public function __construct(ActivitiesDao $activitiesDao, ChatMessagesDao $chatMessagesDao, UserDao $userDao) {
+	public function __construct(ActivitiesDao $activitiesDao, ChatMessagesDao $chatMessagesDao, UserDao $userDao, ConfessionDao $confessionDao) {
 		$this->activitiesDao = $activitiesDao;
 		$this->chatMessagesDao = $chatMessagesDao;
 		$this->usersForNewsletters = $userDao->getForNeswletters();
+		$this->confessionDao = $confessionDao;
 	}
 
 	/**
@@ -52,6 +57,8 @@ class CronNotifies extends CronEmails {
 		$messages = $this->chatMessagesDao->getNotReadedNotSendNotify($this->usersForNewsletters);
 
 		$emailNotifies = new EmailNotifies($this->weeklyLink);
+
+		$emailNotifies->setConfessionText($this->getConfessionText());
 		/* upozornění na aktivity */
 		foreach ($activities as $activity) {
 			$emailNotifies->addActivity($activity->event_owner, $activity);
@@ -73,6 +80,15 @@ class CronNotifies extends CronEmails {
 	public function markEmailsLikeSended() {
 		$this->activitiesDao->updateSendNotify($this->usersForNewsletters);
 		$this->chatMessagesDao->updateSendNotify($this->usersForNewsletters);
+	}
+
+	/**
+	 * Vrátí text (náhodného) přiznání k zobrazení.
+	 * @return string text přiznání
+	 */
+	private function getConfessionText() {
+		$confessions = $this->confessionDao->getBestConfessions(60)->fetchPairs(ConfessionDao::COLUMN_ID, ConfessionDao::COLUMN_NOTE);
+		return $confessions[array_rand($confessions)];
 	}
 
 }

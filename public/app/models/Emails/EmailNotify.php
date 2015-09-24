@@ -26,17 +26,15 @@ class EmailNotify extends Email {
 	/** @var int Další upozornění */
 	private $countOthersActivities;
 
+	/** @var string Text přiznání ke zobrazení */
+	private $confessionText = NULL;
+
 	/** @var string Odkaz na týdenní změnu odesílání info emailu */
 	private $setWeeklyLink;
-	private $quotations = array(
-		array('quote' => 'Tajemství lze udržet mezi třemi osobami. Za předpokladu, že jsou dvě již na pravdě boží.', 'author' => 'Benjamin Franklin'),
-		array('quote' => 'Tajemství lze udržet mezi třemi osobami. Za předpokladu, že jsou dvě již na pravdě boží.2', 'author' => 'Benjamin Franklin2'),
-		array('quote' => 'Tajemství lze udržet mezi třemi osobami. Za předpokladu, že jsou dvě již na pravdě boží.3', 'author' => 'Benjamin Franklin3')
-	);
 
-	public function __construct(ActiveRow $user, $setWeeklyLink) {
+	public function __construct(ActiveRow $user, $setWeeklyLink, $confessionText) {
 		parent::__construct($user);
-
+		$this->confessionText = $confessionText;
 		$this->setWeeklyLink = $setWeeklyLink;
 	}
 
@@ -102,7 +100,7 @@ class EmailNotify extends Email {
 			. $this->renderDivider();
 
 		$userPeriod = $this->user->offsetGet(UserDao::COLUMN_EMAIL_NEWS_PERIOD);
-		if ($userPeriod == UserDao::EMAIL_PERIOD_DAILY) {
+		if ($userPeriod == UserDao::EMAIL_PERIOD_DAILY && !empty($this->setWeeklyLink)) {
 			$body = $body . '<p style="text-align: center; margin: 0 20%; color: #aaa;">Dostáváš od nás příliš mnoho e-mailů? Zde můžeš <a style="color: #cf0707; text-decoration: underline;" href="' . $this->setWeeklyLink . '">přepnout na jeden e-mail týdně</a>. Jenom pozor, abys o něco nepřišel/la.</p>';
 		}
 
@@ -166,21 +164,21 @@ class EmailNotify extends Email {
 	}
 
 	/**
-	 * Vykreslí citát.
+	 * Vykreslí citát (přiznání).
 	 * TODO udělat citáty tak, aby byl ten den stejný, pole quotations je jen příklad
 	 * @return String vygenerované html
 	 */
 	private function renderQuote() {
-		$quote = $this->quotations[array_rand($this->quotations)];
-		$quoteMessage = $quote['quote'];
-		$quoteAuthor = $quote['author'];
-		$quoteHtml = $this->renderLine() . "<div style='clear: both; text-align: center; padding: 20px 10%; color: #888; font-family: 'Times new roman', serif;'>
-			<strong style='font-size: 24px;'>Citát pro dnešní den</strong>
-			<br />
-			<p style='font-style: italic;'>$quoteMessage</p>
-			<strong> - $quoteAuthor - </strong>
-		</div>";
-		return $quoteHtml . $this->renderLine();
+		if (!empty($this->confessionText)) {
+			$quoteHtml = $this->renderLine() . "<div style='clear: both; text-align: center; padding: 20px 10%; color: #888; font-family: 'Times new roman', serif;'>
+				<strong style='font-size: 24px;'>Přiznání pro dnešní den</strong>
+				<br />
+				<p style='font-style: italic;'>$this->confessionText</p>
+			</div>";
+			return $quoteHtml . $this->renderLine();
+		} else {
+			return '';
+		}
 	}
 
 	/**
