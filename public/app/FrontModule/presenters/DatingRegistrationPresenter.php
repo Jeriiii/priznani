@@ -33,7 +33,7 @@ class DatingRegistrationPresenter extends BasePresenter {
 		$this->setLayout("datingLayout");
 	}
 
-	public function renderDefault() {
+	public function renderDefault($justRegistred = false) {
 		$this->template->type = $this->getRegSession()->type;
 		$this->template->features = array(
 			array('image' => 'features1', 'name' => '0 KČ ZA SEZNÁMENÍ', 'text' => 'Unavuje tě všude za vše platit? U nás se seznamujeme <strong>zdarma</strong>.'),
@@ -45,6 +45,7 @@ class DatingRegistrationPresenter extends BasePresenter {
 			array('image' => 'features7', 'name' => 'VĚŘÍŠ NA HOROSKOP?', 'text' => 'Najděte se dle oblíbeného znamení zvěrokruhu, jen na Datenode.cz!'),
 			array('image' => 'features8', 'name' => 'VYSTUPUJTE ZA PÁR', 'text' => 'Jste dva a nechcete mít dva profily? U nás máte možnost PÁR, pro lepší seznamování!'),
 		);
+		$this->template->justRegistred = $justRegistred;
 	}
 
 	public function registred() {
@@ -64,7 +65,7 @@ class DatingRegistrationPresenter extends BasePresenter {
 		$userSession->remove();
 		$this->getRegSessionForCouple()->remove();
 
-		$this->redirect("OnePage:");
+		$this->redirect("DatingRegistration:", array('justRegistred' => TRUE));
 	}
 
 	/**
