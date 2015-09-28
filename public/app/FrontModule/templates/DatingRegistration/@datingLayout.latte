@@ -58,8 +58,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 	{ifset #datingFoot}
 		{include #datingFoot}
 	{/ifset}
-	{control js 'registration/paralax/scrollToAnchor.js', 'features/body-image-fitter.js'}
-	<script src="{$basePath}/js/registration/paralax/parallax.min.js"></script>
+	{control js 'registration/paralax/scrollToAnchor.js', 'features/body-image-fitter.js', 'registration/paralax/parallax.min.js'}
 	<script>
 		$(document).ready(function(){
 			fitBgToElement('.first-slide', 1734, 1154);
