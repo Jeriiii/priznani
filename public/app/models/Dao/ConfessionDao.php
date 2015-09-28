@@ -65,4 +65,15 @@ class ConfessionDao extends BaseConfessionDao {
 		));
 	}
 
+	/**
+	 * Vrátí nejlepší přiznání (podle počtu liků apod.)
+	 * @param type $limit
+	 */
+	public function getBestConfessions($limit = 5) {
+		$sel = $this->getTable();
+		$sel->order(self::COLUMN_LIKES . " DESC");
+		$sel->limit($limit);
+		return $sel;
+	}
+
 }

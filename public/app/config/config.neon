@@ -57,6 +57,8 @@ common:
 		statisticManager: POS\Statistics\StatisticManager
 		ajaxObserver: POS\Ajax\AjaxObserver
 		imageUploader: NetteExt\Uploader\ImageUploader
+		cronNotifies: Notify\CronNotifies
+
 		authorizator:
 			class: Acl
 

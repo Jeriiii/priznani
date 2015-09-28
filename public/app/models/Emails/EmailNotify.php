@@ -26,18 +26,20 @@ class EmailNotify extends Email {
 	/** @var int Další upozornění */
 	private $countOthersActivities;
 
+	/** @var string Text přiznání ke zobrazení */
+	private $confessionText = NULL;
+
 	/** @var string Odkaz na týdenní změnu odesílání info emailu */
 	private $setWeeklyLink;
-	private $quotations = array(
-		array('quote' => 'Tajemství lze udržet mezi třemi osobami. Za předpokladu, že jsou dvě již na pravdě boží.', 'author' => 'Benjamin Franklin'),
-		array('quote' => 'Tajemství lze udržet mezi třemi osobami. Za předpokladu, že jsou dvě již na pravdě boží.2', 'author' => 'Benjamin Franklin2'),
-		array('quote' => 'Tajemství lze udržet mezi třemi osobami. Za předpokladu, že jsou dvě již na pravdě boží.3', 'author' => 'Benjamin Franklin3')
-	);
 
-	public function __construct(ActiveRow $user, $setWeeklyLink) {
+	/** @var array uživatelé, co se mají ukázat v emailu. Pole, jehož hodnoty jsou cesty k profilovým fotkám */
+	private $usersToShow;
+
+	public function __construct(ActiveRow $user, $setWeeklyLink, $confessionText, $usersToShow = array()) {
 		parent::__construct($user);
-
+		$this->confessionText = $confessionText;
 		$this->setWeeklyLink = $setWeeklyLink;
+		$this->usersToShow = $usersToShow;
 	}
 
 	/**
@@ -82,7 +84,7 @@ class EmailNotify extends Email {
 		$messagesNotice = $this->getMessageTitle();
 		$andNotice = $this->getAndToTitle();
 		$notificationsNotice = $this->getActivityTitle();
-		$adminPhoto = $this->renderProfilePhoto('', 'http://lorempixel.com/output/people-q-c-100-100-9.jpg'); /* TODO změnit na fotku admina + odkaz pokud je třeba */
+		$adminPhoto = $this->renderProfilePhoto('http://datenode.cz/', 'http://datenode.cz/images/email/admin-user.jpg');
 		$messageBody = "$adminPhoto
 			<h2 style='width: auto; float: left; height: 30px; font-size: 30px; padding: 70px 0px 0px 10px; margin: 0; font-weight: 200;'>AHOJ,</h2>
 			<div style='clear: both'></div>
@@ -95,14 +97,14 @@ class EmailNotify extends Email {
 		$body = $this->renderHeader()
 			. "<div style='padding: 20px 10%; font-family: Arial;'>"
 			. "$messageBody"
-			. $this->renderLinkButton('', 'PŘEČÍST NOVÉ ZPRÁVY')/* TODO dopsat tlačítku href odkaz sem do parametru - kam? na zprávy? */
+			. $this->renderLinkButton('http://datenode.cz/', 'PŘEČÍST NOVÉ ZPRÁVY')
 			. $this->renderFriendsList()
 			. "</div>"
 			. $this->renderQuote()
 			. $this->renderDivider();
 
 		$userPeriod = $this->user->offsetGet(UserDao::COLUMN_EMAIL_NEWS_PERIOD);
-		if ($userPeriod == UserDao::EMAIL_PERIOD_DAILY) {
+		if ($userPeriod == UserDao::EMAIL_PERIOD_DAILY && !empty($this->setWeeklyLink)) {
 			$body = $body . '<p style="text-align: center; margin: 0 20%; color: #aaa;">Dostáváš od nás příliš mnoho e-mailů? Zde můžeš <a style="color: #cf0707; text-decoration: underline;" href="' . $this->setWeeklyLink . '">přepnout na jeden e-mail týdně</a>. Jenom pozor, abys o něco nepřišel/la.</p>';
 		}
 
@@ -115,20 +117,16 @@ class EmailNotify extends Email {
 	 * @return string html
 	 */
 	private function renderFriendsList() {
+		if (empty($this->usersToShow)) {
+			return;
+		}
 		$html = "<div style='float: left; width: auto; margin: 15px 0;'>";
 		$itemStyle = 'float: left; margin: 5px; position: relative;';
-		$friends = array(0 => 'http://lorempixel.com/output/people-q-c-100-100-9.jpg',
-			2 => 'http://lorempixel.com/output/people-q-c-100-100-9.jpg',
-			5 => 'http://lorempixel.com/output/people-q-c-100-100-9.jpg',
-			7 => 'http://lorempixel.com/output/people-q-c-100-100-9.jpg'
-		);
-		foreach ($friends as $friendId => $photoUrl) {
-			$html = $html . "<a href ='#$friendId' style = '$itemStyle'><img src='$photoUrl' width = '60' height = '60' alt = '' /></a>";
+		foreach ($this->usersToShow as $photoUrl) {
+			$html = $html . "<a href ='http://datenode.cz/' style = '$itemStyle'><img src='$photoUrl' width = '60' height = '60' alt = '' /></a>";
 		}
-		$arrowUrl = 'http://datenode.cz/images/userSearch/search-arrow.png';
-		$html = $html . "<a href = '' style = 'background-image: url($arrowUrl); float: left; position: relative; z-index: 5; left: -35px; top: 5px; cursor: pointer;width: 28px;height: 58px;display: block;background-size: 28px 58px;background-position: 0 0;background-color: rgba(0, 0, 0, 0);background-repeat: no-repeat;border: 1px solid #C9C9C9;'></a><div style = 'clear: both'></div>
-</div>
-<div style = 'clear: both'></div>";
+
+		$html = $html . "</div><div style = 'clear: both'></div>";
 		return $html;
 	}
 
@@ -140,7 +138,6 @@ class EmailNotify extends Email {
 	 */
 	private function renderLinkButton($href, $buttonText) {
 		$linkButtonStyle = 'clear: both; display: block; text-align: center; cursor: pointer; color: white !important; text-decoration: none !important; font-family: Arial; font-size: 24px; margin: 25px 20%; text-decoration: none; padding: 8px 5%; font-weight: 600; background: #90cb00; background: #90cb00;background: -moz-linear-gradient(top,#cf0707 0,#5a8700 100%);background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#90cb00),color-stop(100%,#5a8700));background: -webkit-linear-gradient(top,#90cb00 0,#5a8700 100%);background: -o-linear-gradient(top,#cf0707 0,#5a8700 100%);background: -ms-linear-gradient(top,#cf0707 0,#5a8700 100%);background: linear-gradient(to bottom,#90cb00 0,#5a8700 100%);';
-		/* TODO dopsat tlačítku href odkaz - kam? na zprávy? */
 		return "<a href = '$href' style = '$linkButtonStyle' >$buttonText</a><div style='clear:both;'></div>";
 	}
 
@@ -159,29 +156,28 @@ class EmailNotify extends Email {
 	 * @return String vytvořené html
 	 */
 	private function renderHeader() {
-		$headerStyle = 'height: 47px; background: #CF0707;background: -moz-linear-gradient(top,#cf0707 0,#890302 100%);background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#CF0707),color-stop(100%,#890302));background: -webkit-linear-gradient(top,#CF0707 0,#890302 100%);background: -o-linear-gradient(top,#cf0707 0,#890302 100%);background: -ms-linear-gradient(top,#cf0707 0,#890302 100%);background: linear-gradient(to bottom,#CF0707 0,#890302 100%);text-shadow: 0 0 1px #FFF;color: #FFF;display: block;font-size: 36px;';
+		$headerStyle = 'height: 47px !important; background: #CF0707;background: -moz-linear-gradient(top,#cf0707 0,#890302 100%);background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#CF0707),color-stop(100%,#890302));background: -webkit-linear-gradient(top,#CF0707 0,#890302 100%);background: -o-linear-gradient(top,#cf0707 0,#890302 100%);background: -ms-linear-gradient(top,#cf0707 0,#890302 100%);background: linear-gradient(to bottom,#CF0707 0,#890302 100%);text-shadow: 0 0 1px #FFF;color: #FFF;display: block;font-size: 36px;';
 		return "<div style = '$headerStyle'>
-<h1 style = 'line-height: 47px; padding: 0 10%; font-family: Arial; font-size: 36px; font-weight: 200;'><b style = 'font-weight: 600;'>DATE</b>NODE<span style = 'font-size: 16px;'>.cz</span></h1>
+<h1 style = 'line-height: 47px; height: 47px !important; padding: 0 10% !important; margin: 0 !important; font-family: Arial; font-size: 36px; font-weight: 200;'><b style = 'font-weight: 600;'>DATE</b>NODE<span style = 'font-size: 16px;'>.cz</span></h1>
 <div class = 'clear'></div>
 </div>";
 	}
 
 	/**
-	 * Vykreslí citát.
+	 * Vykreslí citát (přiznání).
 	 * TODO udělat citáty tak, aby byl ten den stejný, pole quotations je jen příklad
 	 * @return String vygenerované html
 	 */
 	private function renderQuote() {
-		$quote = $this->quotations[array_rand($this->quotations)];
-		$quoteMessage = $quote['quote'];
-		$quoteAuthor = $quote['author'];
-		$quoteHtml = $this->renderLine() . "<div style='clear: both; text-align: center; padding: 20px 10%; color: #888; font-family: 'Times new roman', serif;'>
-			<strong style='font-size: 24px;'>Citát pro dnešní den</strong>
-			<br />
-			<p style='font-style: italic;'>$quoteMessage</p>
-			<strong> - $quoteAuthor - </strong>
-		</div>";
-		return $quoteHtml . $this->renderLine();
+		if (!empty($this->confessionText)) {
+			$quoteHtml = $this->renderLine() . "<div style='text-align: center; padding: 20px 10%; color: #888; font-family: Arial;'>
+				<strong style='display: block; text-align: center; font-size: 24px; font-family: Arial;padding: 5px 0; color: #888;font-weight: bold;'>Přiznání pro dnešní den</strong>
+				<p style='display: block; text-align: center; padding: 10px 10%; font-style: italic; color: #888;'>$this->confessionText</p>
+			</div>";
+			return $quoteHtml . $this->renderLine();
+		} else {
+			return '';
+		}
 	}
 
 	/**
