@@ -61,8 +61,8 @@
 							{control likeConfession-$dataItem->id}
 							{if !$user->isLoggedIn()}</a>{/if}
 						</li>
-						<li>{control pollsControl-$dataItem->id}</li>
 					</ul>
+					{control pollsControl-$dataItem->id}
 					</div>
 				</div>
 				<div id="comments-{$dataItem->id}" class="comments-container">
