@@ -1,4 +1,5 @@
 /*
+ * Tento skript se stará o správnou inicializaci komponenty chatu a všeho, co s jeho startem souvisí.
  * @copyright Copyright (c) 2013-2014 Kukral COMPANY s.r.o.
  * @author Jan Kotalík
  */
