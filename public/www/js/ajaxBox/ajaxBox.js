@@ -150,7 +150,7 @@
 		}
 		if(opts.closeAfter !== 0){/* zavření po určitém čase */
 			setTimeout(function(){
-				$('body').trigger('click');/* klikne se na body, aby to fungovalo i s okénky bez zavíracího křížku */
+				$.fn.ajaxBox.closeWindowFn(opts, boxSelector);
 			}, opts.closeAfter);
 		}
 	};
@@ -486,14 +486,20 @@
 	 * @param {String} boxSelector selektor okénka
 	 */
 	function bindCloseButtons(opts, boxSelector) {
-		var closeFn = function () {
-			$(boxSelector).css('display', 'none');
-			$(opts.buttonSelector).removeClass('active');
-			$('.activeBackground[data-related=' + opts.buttonSelector + ']').remove();
-		};
-		$(boxSelector + ' .close-cross').click(closeFn);
-		$(boxSelector + ' .close').click(closeFn);
+		$(boxSelector + ' .close-cross').click($.fn.ajaxBox.closeWindowFn(opts, boxSelector));
+		$(boxSelector + ' .close').click($.fn.ajaxBox.closeWindowFn(opts, boxSelector));
 	}
+	
+	/**
+	 * Zavře okénko s daným selektorem (a nastavením)
+	 * @param {object} opts nastavení
+	 * @param {string} boxSelector selektor okénka k zavření
+	 */
+	$.fn.ajaxBox.closeWindowFn = function (opts, boxSelector) {
+		$(boxSelector).css('display', 'none');
+		$(opts.buttonSelector).removeClass('active');
+		$('.activeBackground[data-related=' + opts.buttonSelector + ']').remove();
+	};
 
 
 
