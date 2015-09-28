@@ -19,6 +19,8 @@ use POS\Model\UserCategory;
 
 class AnonymousSearch extends BaseProjectControl {
 
+	const MAX_USERS_DISPLAYED = 9;
+
 	private $users;
 	private $doNotRender = false;
 
@@ -33,7 +35,7 @@ class AnonymousSearch extends BaseProjectControl {
 
 	private function getUsers($regSession, UserDao $userDao, UserCategoryDao $userCategoryDao) {
 		$mine = $userCategoryDao->getMine(UserCategory::sessionToArrayHash($regSession));
-		return $userDao->getByCategories($mine, 0);
+		return $userDao->getByCategories($mine, 0)->limit(self::MAX_USERS_DISPLAYED);
 	}
 
 	public function render() {
