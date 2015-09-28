@@ -11,23 +11,26 @@ var baseSettings = {//inicializuje se nad daty, která mají být v okénku
 };
 var ajaxSettings = {};
 
-if (typeof isUserPaying !== 'undefined' && isUserPaying) {
-	/* má li uživatel placený účet, zobrazí se mu seznam uživatelů, kteří ho označili že je sexi */
-	/* vyskakovací okénko pro to, kolik lidí mě označilo jako sexi */
-	var ajaxSettings = {
-		loadUrl: loadMarkedFromOtherLink, /* link (url) vygenerovaný komponentou StandardConversationsList */
-		streamSnippetModule: {
-			snippetName: 'snippet-markedFromOther-sexyList',
-			endMessage: 'Žádné další označení.',
-			offsetParameter: 'markedFromOther-offset',
-			limitParameter: 'markedFromOther-limit',
-			addLimit: 5,
-			startOffset: 0
-		}
-	};
+if (typeof loadFriendLink !== 'loadMarkedFromOtherLink') { //zkontroluje, zda je proměnná loadFriendLink definovaná
+	if (typeof isUserPaying !== 'undefined' && isUserPaying) {
+		/* má li uživatel placený účet, zobrazí se mu seznam uživatelů, kteří ho označili že je sexi */
+		/* vyskakovací okénko pro to, kolik lidí mě označilo jako sexi */
+		var ajaxSettings = {
+			loadUrl: loadMarkedFromOtherLink, /* link (url) vygenerovaný komponentou StandardConversationsList */
+			streamSnippetModule: {
+				snippetName: 'snippet-markedFromOther-sexyList',
+				endMessage: 'Žádné další označení.',
+				offsetParameter: 'markedFromOther-offset',
+				limitParameter: 'markedFromOther-limit',
+				addLimit: 5,
+				startOffset: 0
+			}
+		};
+	}
+
+	var settings = $.extend({}, baseSettings, ajaxSettings);
+
+
+	$('#markedFromOther').ajaxBox(settings);
 }
-
-var settings = $.extend({}, baseSettings, ajaxSettings);
-
-$('#markedFromOther').ajaxBox(settings);
 
