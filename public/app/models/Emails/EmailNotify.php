@@ -156,9 +156,9 @@ class EmailNotify extends Email {
 	 * @return String vytvořené html
 	 */
 	private function renderHeader() {
-		$headerStyle = 'height: 47px; background: #CF0707;background: -moz-linear-gradient(top,#cf0707 0,#890302 100%);background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#CF0707),color-stop(100%,#890302));background: -webkit-linear-gradient(top,#CF0707 0,#890302 100%);background: -o-linear-gradient(top,#cf0707 0,#890302 100%);background: -ms-linear-gradient(top,#cf0707 0,#890302 100%);background: linear-gradient(to bottom,#CF0707 0,#890302 100%);text-shadow: 0 0 1px #FFF;color: #FFF;display: block;font-size: 36px;';
+		$headerStyle = 'height: 47px !important; background: #CF0707;background: -moz-linear-gradient(top,#cf0707 0,#890302 100%);background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#CF0707),color-stop(100%,#890302));background: -webkit-linear-gradient(top,#CF0707 0,#890302 100%);background: -o-linear-gradient(top,#cf0707 0,#890302 100%);background: -ms-linear-gradient(top,#cf0707 0,#890302 100%);background: linear-gradient(to bottom,#CF0707 0,#890302 100%);text-shadow: 0 0 1px #FFF;color: #FFF;display: block;font-size: 36px;';
 		return "<div style = '$headerStyle'>
-<h1 style = 'line-height: 47px; padding: 0 10%; font-family: Arial; font-size: 36px; font-weight: 200;'><b style = 'font-weight: 600;'>DATE</b>NODE<span style = 'font-size: 16px;'>.cz</span></h1>
+<h1 style = 'line-height: 47px; height: 47px !important; padding: 0 10% !important; margin: 0 !important; font-family: Arial; font-size: 36px; font-weight: 200;'><b style = 'font-weight: 600;'>DATE</b>NODE<span style = 'font-size: 16px;'>.cz</span></h1>
 <div class = 'clear'></div>
 </div>";
 	}
@@ -170,10 +170,9 @@ class EmailNotify extends Email {
 	 */
 	private function renderQuote() {
 		if (!empty($this->confessionText)) {
-			$quoteHtml = $this->renderLine() . "<div style='clear: both; text-align: center; padding: 20px 10%; color: #888; font-family: 'Times new roman', serif;'>
-				<strong style='font-size: 24px;'>Přiznání pro dnešní den</strong>
-				<br />
-				<p style='font-style: italic;'>$this->confessionText</p>
+			$quoteHtml = $this->renderLine() . "<div style='text-align: center; padding: 20px 10%; color: #888; font-family: Arial;'>
+				<strong style='display: block; text-align: center; font-size: 24px; font-family: Arial;padding: 5px 0; color: #888;font-weight: bold;'>Přiznání pro dnešní den</strong>
+				<p style='display: block; text-align: center; padding: 10px 10%; font-style: italic; color: #888;'>$this->confessionText</p>
 			</div>";
 			return $quoteHtml . $this->renderLine();
 		} else {
