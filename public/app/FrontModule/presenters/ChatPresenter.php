@@ -125,7 +125,12 @@ class ChatPresenter extends BasePresenter {
 	public function handleBlockUser($blockUserID) {
 		$blocker = $this->createUserBlocker(); /* zablokuje uživatele */
 		$blocker->blockUser($blockUserID, $this->loggedUser, $this->session);
-		$this->redirect('Profil:Show:', array('id' => $blockUserID, 'weAreSorry' => 1));
+		if ($this->environment->isMobile()) {
+			$this->flashMessage('Mrzí nás, že máte takovou zkušenost.');
+			$this->redirect('Chat:conversations');
+		} else {
+			$this->redirect('Profil:Show:', array('id' => $blockUserID, 'weAreSorry' => 1));
+		}
 	}
 
 	protected function createComponentBlockUser($name) {
