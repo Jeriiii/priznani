@@ -480,15 +480,6 @@
 			height: content.height() + 'px'
 		});
 	}
-	/**
-	 * Nabinduje danému okénku listener, který ho za určitých podmínek zavře (např při kliknutí na zavírací tlačítko)
-	 * @param {Object} opts nastavení
-	 * @param {String} boxSelector selektor okénka
-	 */
-	function bindCloseButtons(opts, boxSelector) {
-		$(boxSelector + ' .close-cross').click($.fn.ajaxBox.closeWindowFn(opts, boxSelector));
-		$(boxSelector + ' .close').click($.fn.ajaxBox.closeWindowFn(opts, boxSelector));
-	}
 	
 	/**
 	 * Zavře okénko s daným selektorem (a nastavením)
@@ -500,6 +491,20 @@
 		$(opts.buttonSelector).removeClass('active');
 		$('.activeBackground[data-related=' + opts.buttonSelector + ']').remove();
 	};
+	
+	/**
+	 * Nabinduje danému okénku listener, který ho za určitých podmínek zavře (např při kliknutí na zavírací tlačítko)
+	 * @param {Object} opts nastavení
+	 * @param {String} boxSelector selektor okénka
+	 */
+	function bindCloseButtons(opts, boxSelector) {
+		$(boxSelector + ' .close-cross').click(function(){
+			$.fn.ajaxBox.closeWindowFn(opts, boxSelector);
+		});
+		$(boxSelector + ' .close').click(function(){
+			$.fn.ajaxBox.closeWindowFn(opts, boxSelector)
+		});
+	}
 
 
 
