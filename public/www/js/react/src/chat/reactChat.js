@@ -139,8 +139,7 @@ var BlockLink = React.createClass({
   },
   handleBlockCurrentUser: function(e){
     e.preventDefault();
-    document.getElementById('blockCurrentUser').click();
-    $('.blocklink').text('').parent().append('<span class="userBlocked">Uživatel zablokován.</span>');
+    $('#blockCurrentUser .block-user-confirm').trigger('click');
   }
 });
 
