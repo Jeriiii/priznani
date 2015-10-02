@@ -51,7 +51,7 @@ abstract class Email extends Object implements IEmail {
 	 */
 	public function sendEmail(IMailer $mailer) {
 		$mail = new Message;
-		$mail->setFrom(self::EMAIL_ADDRESS_SENDER);
+		$mail->setFrom($this->getEmailSender());
 
 		$email = $this->getEmailAddress();
 		$subject = $this->getEmailSubject();
@@ -76,7 +76,7 @@ abstract class Email extends Object implements IEmail {
 	public function getEmail() {
 		$subject = $this->getEmailSubject();
 		$body = $this->getEmailBody();
-		$from = self::EMAIL_ADDRESS_SENDER;
+		$from = $this->getEmailSender();
 		$to = $this->getEmailAddress();
 		$htmlBody = false;
 
@@ -101,6 +101,14 @@ abstract class Email extends Object implements IEmail {
 	 */
 	public function getEmailAddress() {
 		return $this->user->email;
+	}
+
+	/**
+	 * Vrátí odesílatelův email
+	 * @return string
+	 */
+	protected function getEmailSender() {
+		return self::EMAIL_ADDRESS_SENDER;
 	}
 
 }
