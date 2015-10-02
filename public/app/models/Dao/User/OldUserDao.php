@@ -19,6 +19,7 @@ class OldUserDao extends AbstractDao {
 	/* Column name */
 	const COLUMN_ID = "id";
 	const COLUMN_SEND_NOTIFY = "sendNotify";
+	const COLUMN_NO_EMAILS = "noEmails";
 
 	public function getTable() {
 		return $this->createSelection(self::TABLE_NAME);
@@ -30,6 +31,18 @@ class OldUserDao extends AbstractDao {
 	public function getNoNotify($limit = 100) {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_SEND_NOTIFY, 0);
+		$sel->limit($limit);
+
+		return $sel;
+	}
+
+	/**
+	 * Vrátí všechny uživatele, kterým ještě nebyl odeslán email o neové seznamce
+	 */
+	public function getNoNotifySubscriber($limit = 100) {
+		$sel = $this->getTable();
+		$sel->where(self::COLUMN_SEND_NOTIFY, 0);
+		$sel->where(self::COLUMN_NO_EMAILS, 0);
 		$sel->limit($limit);
 
 		return $sel;
@@ -55,6 +68,17 @@ class OldUserDao extends AbstractDao {
 		$sel->update(array(
 			self::COLUMN_SEND_NOTIFY => 1
 		));
+	}
+
+	/**
+	 * Odhlásí uživatele z odběru
+	 * @param int $oldUserId id uživatele v tabulce
+	 */
+	public function unsubscribe($oldUserId) {
+		$sel = $this->getTable();
+		$sel->wherePrimary($oldUserId);
+		$sel->update(array(self::COLUMN_NO_EMAILS . '' => 1));
+		return $sel;
 	}
 
 }

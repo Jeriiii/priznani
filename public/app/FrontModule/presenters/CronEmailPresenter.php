@@ -122,4 +122,13 @@ class CronEmailPresenter extends BasePresenter {
 		}
 	}
 
+	/**
+	 * Odhlásí uživatele s daným id z odběru emailů
+	 * @param type $oldUserId
+	 */
+	public function actionUnsubscribe($oldUserId) {
+		$this->oldUserDao->unsubscribe($oldUserId);
+		die('Váš email byl úspěšně odhlášen z odběru.');
+	}
+
 }
