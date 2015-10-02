@@ -2,7 +2,7 @@
 <title>{$article->name} - Datenode.cz</title>
 
 <meta name="keywords" content="{$article->name} - Datenode.cz" />
-<meta name="description" content="{$article->excerpt}" />
+<meta name="description" content="{$article->excerpt|striptags|strip}" />
 
 <meta property="og:title" content="{$article->name} - Datenode.cz" />
 <meta property="og:type" content="article" />
@@ -10,7 +10,7 @@
 	<meta property="og:image" content="http://datenode.cz{$article->images[0]->path}" />
 {/if}
 <meta property="og:site_name" content="datenode.cz" />
-<meta property="og:description" content="{$article->excerpt}" />
+<meta property="og:description" content="{$article->excerpt|striptags|strip}" />
 {/}
 
 {block content}
