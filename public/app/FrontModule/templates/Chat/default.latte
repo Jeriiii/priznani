@@ -7,7 +7,12 @@
 {ifset $blockedMessage}
 	<div class="blockedMessage flash error">{$blockedMessage}</div>
 {/ifset}
-<a id="blockCurrentUser" data-alreadyblocked="{ifset $blockedMessage}true{else}false{/ifset}" data-username="{$userInChat->user_name}" n:href="blockUser! blockUserID => $userInChat->id" class="ajax"></a>{* skrytý link pro blokování *}
+<span id="blockCurrentUser" data-alreadyblocked="{ifset $blockedMessage}true{else}false{/ifset}" data-username="{$userInChat->user_name}">{* skryté předání dat pro blokování *}
+	{if empty($blockedMessage)}
+		{var $blocklink = $_presenter->link('blockUser!', array('blockUserID' => $userInChat->id))}
+		{control blockUser $userInChat->id, $userInChat->user_name, $blocklink}
+	{/if}
+</span>
 {control conversation}
 {/block}
 
