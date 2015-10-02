@@ -8,6 +8,7 @@ use POS\Chat\ChatManager;
 use POSComponent\Chat\React\ReactFullscreenChat;
 use NetteExt\DaoBox;
 use UserBlock\UserBlocker;
+use POSComponent\Confirm;
 
 /**
  * Pro práci se zprávami přes celoou stránku
@@ -124,6 +125,21 @@ class ChatPresenter extends BasePresenter {
 	public function handleBlockUser($blockUserID) {
 		$blocker = $this->createUserBlocker(); /* zablokuje uživatele */
 		$blocker->blockUser($blockUserID, $this->loggedUser, $this->session);
+		if ($this->environment->isMobile()) {
+			$this->flashMessage('Mrzí nás, že máte takovou zkušenost.');
+			$this->redirect('Chat:conversations');
+		} else {
+			$this->redirect('Profil:Show:', array('id' => $blockUserID, 'weAreSorry' => 1));
+		}
+	}
+
+	protected function createComponentBlockUser($name) {
+		$blockUser = new Confirm($this, $name, TRUE, FALSE);
+		$blockUser->setTittle("Blokovat uživatele");
+		$blockUser->setMessage("Opravdu chcete blokovat tohoto uživatele?");
+		$blockUser->setBtnText(" ");
+		$blockUser->setBtnClass("block-user-confirm");
+		return $blockUser;
 	}
 
 	/**

@@ -8,7 +8,7 @@ module.exports = {
 
   /* speciální řetězce rozlišované chatem */
   MessageConstants: {
-    SEND_SLAP : '@!slap444',
+    SEND_SLAP : '@!facka!@',
   }
 
 };

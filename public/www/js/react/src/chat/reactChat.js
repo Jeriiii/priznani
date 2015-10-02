@@ -100,15 +100,28 @@ var Message = React.createClass({
   },
   renderImage: function(image, i){
     var message = this.props.messageData;
-    if(image.slap){/* je to facka a dal jsem ji já */
-      return (
-          <span key={message.id + 'messageImageSpan' + i}>
-            <img src={image.url} width={image.width} key={message.id + 'messageImage' + i} />
-            <BlockLink key={message.id + 'messageImageLink' + i}  messageData={message} />
-          </span>
-      );
+    if(image.slap){/* je to facka... */
+      return this.renderSlap(message, image, i);
     }
     return <img src={image.url} width={image.width} key={message.id + 'messageImage' + i} />;
+  },
+  /**
+   * Vykreslí obrázek facky s dodanou zprávou
+   * @param  {Object} message objekt přišlé zprávy
+   * @param  {Object} image   obrázek
+   * @param  {int} i          iterátor
+   */
+  renderSlap: function(message, image, i){
+    var blockMessage = <span className="blockMessage">právě jsi dostal(a) facku</span>;
+    if(message.fromMe == 1){/* a dal jsem ji já */
+      blockMessage = <BlockLink key={message.id + 'messageImageLink' + i}  messageData={message} />;
+    }
+    return (
+        <span key={message.id + 'messageImageSpan' + i}>
+          <img src={image.url} width={image.width} key={message.id + 'messageImage' + i} />
+          {blockMessage}
+        </span>
+    );
   }
 });
 
@@ -126,8 +139,7 @@ var BlockLink = React.createClass({
   },
   handleBlockCurrentUser: function(e){
     e.preventDefault();
-    document.getElementById('blockCurrentUser').click();
-    $('.blocklink').text('').parent().append('<span class="userBlocked">Uživatel zablokován.</span>');
+    $('#blockCurrentUser .block-user-confirm').trigger('click');
   }
 });
 
@@ -152,7 +164,7 @@ var NewMessageForm = React.createClass({
     var loggedUser = this.props.loggedUser;
     var slapButton = '';
     if (loggedUser.allowedToSlap){
-      //slapButton = <a href="#" title="Poslat facku" className="sendSlap" onClick={this.sendSlap}>Poslat facku</a>
+      slapButton = <a href="#" title="Poslat facku" className="sendSlap" onClick={this.sendSlap}>Poslat facku</a>
     }
     return (
       <div className="newMessage">
