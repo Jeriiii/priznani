@@ -29,7 +29,7 @@ class CronForOldUsers extends CronEmails {
 	 * @return EmailNotifies Objekt pro práci s oznámeními uživatelům.
 	 */
 	public function createEmails() {
-		$users = $this->oldUserDao->getNoNotify($this->limit);
+		$users = $this->oldUserDao->getNoNotifySubscriber($this->limit);
 		$emailsForOldUsers = new EmailsForOldUsers($this->mailer);
 
 		/* upozornění na aktivity */

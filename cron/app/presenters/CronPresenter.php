@@ -15,23 +15,22 @@ class CronPresenter extends BasePresenter {
 	public $databaseDao;
 
 	public function actionHourly() {
-		$mailer = new MailReadJSON($this->databaseDao);
 
-		/* emaily pro bývalé uživatele */
-		$mailer->setEmailType(MailReadJSON::TYPE_EMAIL_OLD_USERS);
-		$mailer->sendEmails(self::urlBuilder('mail-to-old-users-json'));
-		$mailer->readUrl(self::urlBuilder('mail-old-users-is-sended')); //označí emaily jako odeslané
-
-		echo 'emaily byly odeslány';
 		die();
 	}
 
 	public function actionDaily() {
 		$mailer = new MailReadJSON($this->databaseDao);
+		$oldMailer = new MailReadJSON($this->databaseDao);
 
 		/* emaily s aktualitami */
 		$mailer->sendEmails(self::urlBuilder('mail-to-json'));
 		$mailer->readUrl(self::urlBuilder('mail-is-sended')); //označí emaily jako odeslané
+
+		/* emaily pro bývalé uživatele */
+		$oldMailer->setEmailType(MailReadJSON::TYPE_EMAIL_OLD_USERS);
+		$oldMailer->sendEmails(self::urlBuilder('mail-to-old-users-json'));
+		$oldMailer->readUrl(self::urlBuilder('mail-old-users-is-sended')); //označí emaily jako odeslané
 
 		echo 'emaily byly odeslány';
 		die();
