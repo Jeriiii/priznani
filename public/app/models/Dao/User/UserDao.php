@@ -515,6 +515,14 @@ class UserDao extends UserBaseDao {
 	}
 
 	/**
+	 * Vrátí všechny uživatele v roli user
+	 * @return Nette\Database\Table\Selection
+	 */
+	public function getInRoleAdvancedUsers() {
+		return $this->getUsersByRole(Authorizator::ROLE_ADVANCED_USER);
+	}
+
+	/**
 	 * Vrátí Selection uživatele podle ID
 	 * @param int $userID ID uživatele
 	 * @return Selection uživatelova data

@@ -101,6 +101,7 @@ class AdminSpacePresenter extends \BaseProjectPresenter {
 			$navigation["DEMOGRAFIE"] = $this->link("Cities:");
 			$navigation["NOVINKY"] = $this->link("News:");
 			$navigation["STATISTIKY"] = $this->link("Statistic:");
+			$navigation["PŘEHLED ZPRÁV"] = $this->link("Admin:userAdvanced");
 		}
 
 		return $navigation;

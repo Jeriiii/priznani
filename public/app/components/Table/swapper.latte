@@ -1,0 +1,29 @@
+{block head}
+
+{/block}
+
+{block content}
+{snippet swapper}
+	<ul class="nav nav-tabs">
+	{foreach $tables as $table}
+		<li role="presentation" class="{if $iterator->counter == $visibleTableNumber}active{/if}" >
+			<a n:href="swapVisibleTable! visibleTableNumber => $iterator->counter" class="ajax">
+				{$table->getHeader()}
+			</a>
+		</li>
+	{/foreach}
+	</ul>
+	
+	{foreach $tables as $table}
+		{if $iterator->counter == $visibleTableNumber}
+			{control table:injectTable $table}
+		{/if}
+	{/foreach}
+{/snippet}
+{/block}
+
+{block scripts}
+
+{/block}
+
+{block foot}

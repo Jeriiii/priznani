@@ -6,6 +6,7 @@ class Authorizator extends Nette\Object implements Nette\Security\IAuthorizator 
 	const ROLE_USER = "user";
 	const ROLE_ADMIN = "admin";
 	const ROLE_SUPERADMIN = "superadmin";
+	const ROLE_ADVANCED_USER = 'advanced_user';
 
 	private $facebook = FALSE;
 	private $galleries = FALSE;
