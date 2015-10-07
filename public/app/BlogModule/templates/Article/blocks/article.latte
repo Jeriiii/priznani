@@ -1,0 +1,15 @@
+<article>
+	<h1>{$article->name}</h1>
+
+	<div class="excerpt">{!$article->excerpt}</div>
+
+	{ifset $article->images}
+		{foreach $article->images as $image}
+			{if !empty($image)}
+			<img src="{$basePath}{$image->path}" width="100%" />
+			{/if}
+		{/foreach}
+	{/ifset}
+
+	{! $article->text}
+</article>

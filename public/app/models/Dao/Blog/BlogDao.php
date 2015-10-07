@@ -50,7 +50,11 @@ class BlogDao extends AbstractDao {
 		$sel = $this->getTable();
 		$sel->where(self::COLUMN_HOMEPAGE, 0);
 		$sel->where(self::COLUMN_RELEASE, 1);
-		$sel->where(self::COLUMN_ID . ' != ?', $notArticleId);
+
+		if ($notArticleId) {
+			$sel->where(self::COLUMN_ID . ' != ?', $notArticleId);
+		}
+
 		$sel->order(self::COLUMN_ORDER . ' DESC');
 
 		return $sel;

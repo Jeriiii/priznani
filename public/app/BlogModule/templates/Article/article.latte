@@ -1,0 +1,72 @@
+{block meta}
+<title>{$article->name} - Datenode.cz</title>
+
+<meta name="keywords" content="{$article->name} - Datenode.cz" />
+<meta name="description" content="{$article->excerpt|striptags|strip}" />
+
+<meta property="og:title" content="{$article->name} - Datenode.cz" />
+<meta property="og:type" content="article" />
+{if array_key_exists(0, $article->images)}
+	<meta property="og:image" content="http://datenode.cz{$article->images[0]->path}" />
+{/if}
+<meta property="og:site_name" content="datenode.cz" />
+<meta property="og:description" content="{$article->excerpt|striptags|strip}" />
+{/}
+
+{block content}
+<div class="page">
+	<div class="left-article">
+		{if $user->isAllowed('article', 'adminMenu')}
+			{include 'menu/adminPageMenu.latte'}
+		{/if}
+		{include 'blocks/article.latte' 'article' => $article}
+
+		<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/cs_CZ/sdk.js#xfbml=1&version=v2.4&appId=639745929384551";
+		  fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script>
+
+		<div class="fb-like" 
+			data-href="{link //this}" 
+			data-layout="standard" 
+			data-action="like" 
+			data-show-faces="true"
+			data-share="false">
+		</div>
+
+		<div class="paginator">
+		{if !empty($articleBefore)}
+			<a n:href="Article:article url => $articleBefore->url"><div class="arrow-left"></div>{$articleBefore->name}</a> 
+		{/if}
+		-
+		{if !empty($articleAfter)}
+			<a n:href="Article:article url => $articleAfter->url">{$articleAfter->name}<div class="arrow-right"></div></a> 
+		{/if}		
+		</div>
+
+		<div class="fb-comments" data-href="{link //this}" data-version="v2.3" data-width="450"></div>
+	</div>
+
+	<div class="right-menu">
+		{include 'blocks/articleTips.latte'}
+	</div>
+	
+	<div class="clear"></div>
+</div>
+
+
+{/block}
+
+{block scripts}
+{include #parent}
+
+{/block}
+
+
+{block head}
+{control css 'blog/article.less'}
+{/block}

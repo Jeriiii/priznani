@@ -26,7 +26,7 @@ class ArticlePresenter extends \BasePresenter {
 	/** @var \Nette\Database\Table\ActiveRow Aktuální článek. */
 	public $article;
 
-	public function renderDefault($url = null) {
+	public function renderArticle($url = null) {
 		$article = $this->loadArticle($this->loadPage($url));
 		$this->template->article = $article;
 
@@ -38,6 +38,13 @@ class ArticlePresenter extends \BasePresenter {
 
 	public function actionListArticles() {
 		$this->setLayout('blogAdminLayout');
+	}
+
+	public function renderDefault() {
+		$articles = $this->blogDao->getReleaseArticles();
+
+		$this->template->articles = $articles;
+		$this->template->listPages = $articles;
 	}
 
 	public function renderListArticles() {

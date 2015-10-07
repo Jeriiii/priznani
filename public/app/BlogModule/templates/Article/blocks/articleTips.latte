@@ -1,0 +1,12 @@
+<h3>Tipy na články</h3>
+{if !empty($listPages)}
+	<ul class="articles">
+		{foreach $listPages as $art}
+			<li>
+				<a class="btn btn-link btn-lg" n:href="Article:article url => $art->url">
+					{$art->name}
+				</a>
+			</li>
+		{/foreach}
+	</ul>
+{/if}
