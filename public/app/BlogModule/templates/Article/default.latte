@@ -17,12 +17,15 @@
 <div class="page">
 	<div class="articles">
 		{foreach $articles as $article}
-		<div class="left-article">
-			{if $user->isAllowed('article', 'adminMenu')}
-				{include 'menu/adminPageMenu.latte' 'article' => $article}
+			{if $iterator->first}
+				<div class="first-article">
+					{include 'blocks/homeArticle.latte' 'article' => $article}
+				</div>
+			{else}
+				<div class="other-article">
+					{include 'blocks/homeArticle.latte' 'article' => $article}
+				</div>
 			{/if}
-			{include 'blocks/article.latte' 'article' => $article}
-		</div>
 		{/foreach}
 	</div>
 	
