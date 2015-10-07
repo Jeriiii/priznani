@@ -1,1 +1,1 @@
-php deployment.cron.php deployment.cron.ini
+php deployment.php deployment.cron.ini
