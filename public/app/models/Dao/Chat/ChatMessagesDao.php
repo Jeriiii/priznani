@@ -514,4 +514,32 @@ class ChatMessagesDao extends AbstractDao {
 		));
 	}
 
+	/**
+	 * Vrátí počet slov, které uživatel napsal (ve svých zprávách) za den.
+	 * @param \DateTime $day Den, za který se mají zprávy počítat.
+	 * @param int $userId Id uživatele, pro kterého se mají zprávy počítat.
+	 * @return int Počet slov ve zprávách za den.
+	 */
+	public function countWordByDay($day, $userId) {
+		$sel = $this->getTable();
+
+		$sel->where(self::COLUMN_SENDED_DATE . " >= ?", $day->format('Y-m-d') . ' ' . "00:00:00");
+		$day->modify('+ 1 days');
+
+		$sel->where(self::COLUMN_SENDED_DATE . " < ?", $day->format('Y-m-d') . ' ' . "00:00:00");
+		$day->modify('- 1 days');
+
+		$sel->where(self::COLUMN_ID_SENDER, $userId);
+
+		$wordInMessages = 0;
+
+		foreach ($sel as $message) {
+			$ansiText = iconv('UTF-8', 'ASCII//TRANSLIT', $message->text);
+			$wordInMsg = str_word_count($ansiText, 0);
+			$wordInMessages = $wordInMessages + $wordInMsg;
+		}
+
+		return $wordInMessages;
+	}
+
 }

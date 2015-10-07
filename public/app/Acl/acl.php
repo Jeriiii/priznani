@@ -11,7 +11,8 @@ class Acl extends Permission {
 		$this->addRole('guest');
 		$this->addRole('unconfirmed_user', 'guest');
 		$this->addRole('user', 'unconfirmed_user');
-		$this->addRole('baseadmin', 'user');
+		$this->addRole('advanced_user', 'user'); //uživatel od nás, u kterého sledujeme statistiky
+		$this->addRole('baseadmin', 'advanced_user');
 		$this->addRole('admin', 'baseadmin');
 		$this->addRole('superadmin', 'admin');
 

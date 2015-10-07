@@ -16,16 +16,19 @@ use Nette\Application\UI\Form as Frm,
 	Nette\DateTime,
 	POS\Model\UserDao,
 	POS\Grids\UsersGrid;
+use JKB\Component\Statistics\Daily\TableUserMessagesStatisics;
+use NetteExt\DaoBox;
+use JKB\Component\Statistics\TableCom;
 
 class AdminPresenter extends AdminSpacePresenter {
 
 	public $id_file;
 
-	/**
-	 * @var \POS\Model\UserDao
-	 * @inject
-	 */
+	/** @var \POS\Model\UserDao @inject */
 	public $userDao;
+
+	/** @var \POS\Model\ChatMessagesDao @inject */
+	public $chatMessagesDao;
 
 	const PAGINATOR_ITEMS_PER_PAGE = 10;
 
@@ -43,6 +46,19 @@ class AdminPresenter extends AdminSpacePresenter {
 		$this->template->users = $this->userDao->getInRoleUsersLimit($userPag->itemsPerPage, $userPag->offset);
 		$this->template->admins = $this->userDao->getInRoleAdminLimit($adminPag->itemsPerPage, $adminPag->offset);
 		$this->template->superadmins = $this->userDao->getInRoleSuperadminLimit($superadminPag->itemsPerPage, $superadminPag->offset);
+	}
+
+	protected function createComponentTableUserMessages($name) {
+		$daoBox = new DaoBox();
+
+		$daoBox->userDao = $this->userDao;
+		$daoBox->chatMessagesDao = $this->chatMessagesDao;
+
+		$user = $this->getUser();
+
+		$table = new TableUserMessagesStatisics($daoBox, $this, $user);
+
+		return new TableCom($table, $this, $name);
 	}
 
 	protected function createComponentPasswordForm($name) {

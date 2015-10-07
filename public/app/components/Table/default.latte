@@ -1,0 +1,31 @@
+{if count($rows) > 0}
+<a name="{$anchor}"></a>
+{*ifset $header}<h3>{$header}</h3>{/ifset*}
+<table class="table table-striped table-bordered table-statistics">
+	<thead>
+		<th>Název</th>
+		{foreach $columnNames as $columnName}
+			<th>{$columnName}</th>
+		{/foreach}
+		<th><strong>Σ</strong></th>
+		{if $visibleInviromentColumn}
+		<th>Zlepšení</th>
+		{/if}
+	</thead>
+	{foreach $rows as $row}
+		<tr>
+			<td>{ifset $row->link}
+					<a href="{$row->link}">
+				{/ifset}
+					{$row->name}
+				{ifset $row->link}
+					</a>
+				{/ifset}
+			</td>
+			{foreach $row->cells as $cell}
+				<td>{$cell->text}</td>
+			{/foreach}
+		</tr>
+	{/foreach}
+</table>
+{/if}
