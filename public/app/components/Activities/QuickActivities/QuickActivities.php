@@ -12,6 +12,7 @@ use Nette\Application\Responses\JsonResponse;
 use Nette\Database\Table\ActiveRow;
 use Nette\ArrayHash;
 use POS\Model\PaymentDao;
+use Exception;
 
 /**
  * Komponenta pro vykreslení rychlého přehledu aktivit všech uživatelů.
