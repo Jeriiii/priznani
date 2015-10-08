@@ -1,3 +1,7 @@
+{block head}
+{control css 'blog/home.less'}
+{/block}
+
 {block meta}
 <title>{*$article->name*} - Datenode.cz</title>
 
@@ -16,21 +20,20 @@
 {block content}
 <div class="page">
 	<div class="articles">
+		{var $showOtherArticle = true}
 		{foreach $articles as $article}
 			{if $iterator->first}
 				<div class="first-article">
+					<h3>Nejnovější články</h3>
 					{include 'blocks/homeArticle.latte' 'article' => $article}
 				</div>
 			{else}
-				<div class="other-article">
+				{if $showOtherArticle}<h3>Další články</h3>{$showOtherArticle = false}{/if}
+				<div class="other-article {if $iterator->isEven()}article-even{/if}">
 					{include 'blocks/homeArticle.latte' 'article' => $article}
 				</div>
 			{/if}
 		{/foreach}
-	</div>
-	
-	<div class="right-menu">
-		{include 'blocks/articleTips.latte'}
 	</div>
 	
 	<div class="clear"></div>
@@ -41,10 +44,4 @@
 
 {block scripts}
 {include #parent}
-
-{/block}
-
-
-{block head}
-{control css 'blog/article.less'}
 {/block}

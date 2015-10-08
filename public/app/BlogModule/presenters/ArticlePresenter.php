@@ -41,7 +41,12 @@ class ArticlePresenter extends \BasePresenter {
 	}
 
 	public function renderDefault() {
-		$articles = $this->blogDao->getReleaseArticles();
+		$articlesDB = $this->blogDao->getReleaseArticles();
+
+		$articles = array();
+		foreach ($articlesDB as $art) {
+			$articles[] = $this->loadArticle($art);
+		}
 
 		$this->template->articles = $articles;
 		$this->template->listPages = $articles;

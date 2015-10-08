@@ -1,13 +1,18 @@
 <article class="home">
-	{ifset $article->images}
-		{foreach $article->images as $image}
-			{if !empty($image)}
-			<img src="{$basePath}{$image->path}" width="100%" />
-			{/if}
-		{/foreach}
-	{/ifset}
-	
-	<h1>{$article->name}</h1>
+	<a class="btn btn-link btn-lg" n:href="Article:article url => $article->url">
+		{ifset $article->images}
+			{foreach $article->images as $image}
+				{if !empty($image)}
+				<img src="{$basePath}{$image->path}" width="100%" />
+				{breakIf true}
+				{/if}
+			{/foreach}
+		{/ifset}
 
-	<div class="excerpt">{!$article->excerpt}</div>
+		<h1>{$article->name}</h1>
+
+		<div class="excerpt">{!$article->excerpt}</div>
+		
+		<div class='read-next'>... číst dále</div>
+	</a>
 </article>
