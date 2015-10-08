@@ -26,7 +26,7 @@ class ArticlePresenter extends \BasePresenter {
 	/** @var \Nette\Database\Table\ActiveRow Aktuální článek. */
 	public $article;
 
-	public function renderDefault($url = null) {
+	public function renderArticle($url = null) {
 		$article = $this->loadArticle($this->loadPage($url));
 		$this->template->article = $article;
 
@@ -38,6 +38,18 @@ class ArticlePresenter extends \BasePresenter {
 
 	public function actionListArticles() {
 		$this->setLayout('blogAdminLayout');
+	}
+
+	public function renderDefault() {
+		$articlesDB = $this->blogDao->getReleaseArticles();
+
+		$articles = array();
+		foreach ($articlesDB as $art) {
+			$articles[] = $this->loadArticle($art);
+		}
+
+		$this->template->articles = $articles;
+		$this->template->listPages = $articles;
 	}
 
 	public function renderListArticles() {
@@ -147,7 +159,12 @@ class ArticlePresenter extends \BasePresenter {
 	}
 
 	protected function createComponentEditPageForm($name) {
-		return new Frm\EditArticleForm($this->article, $this, $name);
+		$daoBox = new \NetteExt\DaoBox;
+
+		$daoBox->blogDao = $this->blogDao;
+		$daoBox->blogImageDao = $this->blogImageDao;
+
+		return new Frm\EditArticleForm($daoBox, $this->article, $this, $name);
 	}
 
 	protected function createComponentNewPageForm($name) {

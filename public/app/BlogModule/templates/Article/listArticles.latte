@@ -1,9 +1,6 @@
 {* This is the welcome article, you can delete it *}
 
 {block content}
-{if $user->isInRole("admin")}
-	{include 'adminPageMenu.latte'}
-{/if}
 <table class="table table-striped">
 	<thead>
 		<th>pořadové č.</th>
@@ -20,7 +17,7 @@
 					<b>{$article->order}</b>
 				</td>
 				<td>
-					<a class="btn btn-link btn-lg" n:href="Article: url => $article->url">{$article->name}</a>
+					<a class="btn btn-link btn-lg" n:href="Article:article url => $article->url">{$article->name}</a>
 				</td>
 				<td>
 					{str_replace(array('all', 'admin'), array('všichni', 'pouze admini'),$article->access_rights)}

@@ -28,13 +28,11 @@ class NewArticleForm extends BaseForm {
 	/** @var int Editovaný článek. */
 	private $article;
 
-	public function __construct(ActiveRow $article, DaoBox $daoBox = null, IContainer $parent = NULL, $name = NULL) {
+	public function __construct(ActiveRow $article, DaoBox $daoBox, IContainer $parent = NULL, $name = NULL) {
 		parent::__construct($parent, $name);
 
-		if (!empty($daoBox)) {
-			$this->blogDao = $daoBox->blogDao;
-			$this->blogImageDao = $daoBox->blogImageDao;
-		}
+		$this->blogDao = $daoBox->blogDao;
+		$this->blogImageDao = $daoBox->blogImageDao;
 
 		$this->article = $article;
 
@@ -84,7 +82,7 @@ class NewArticleForm extends BaseForm {
 
 		$this->uploadImage($image, $article);
 
-		$presenter->redirect("Article:", $values->url);
+		$presenter->redirect("Article:article", $values->url);
 	}
 
 	/**
@@ -92,7 +90,7 @@ class NewArticleForm extends BaseForm {
 	 * @param FileUpload $image Obrázek, co se má nahrát.
 	 * @param ActiveRow $article Článek do kterého se mají nahrát obrázky.
 	 */
-	private function uploadImage(FileUpload $image, ActiveRow $article) {
+	protected function uploadImage(FileUpload $image, ActiveRow $article) {
 		if ($image->isOk() && $image->isImage()) {
 			File::createDir(BlogImagePathCreator::getArticleFolderPath($article->id)); //vytvoří složku pro obrázky tohoto článku
 
