@@ -6,6 +6,7 @@ use Nette\Application\UI\Form;
 use Nette\ComponentModel\IContainer;
 use Nette\Utils\Strings as Strings;
 use POS\Model\BlogDao;
+use NetteExt\DaoBox;
 
 /**
  * Změní článek.
@@ -15,8 +16,8 @@ class EditArticleForm extends NewArticleForm {
 	/** @var int Editovaný článek. */
 	private $article;
 
-	public function __construct($article, IContainer $parent = NULL, $name = NULL) {
-		parent::__construct($article, null, $parent, $name);
+	public function __construct(DaoBox $daoBox, $article, IContainer $parent = NULL, $name = NULL) {
+		parent::__construct($article, $daoBox, $parent, $name);
 
 		$this->article = $article;
 
@@ -27,8 +28,6 @@ class EditArticleForm extends NewArticleForm {
 			BlogDao::COLUMN_ORDER => $article->order,
 			BlogDao::COLUMN_RELEASE => $article->release,
 		));
-
-		unset($this['image']);
 	}
 
 	public function submitted($form) {
@@ -36,6 +35,9 @@ class EditArticleForm extends NewArticleForm {
 		$presenter = $this->getPresenter();
 
 		$values->url = Strings::webalize($values->name);
+
+		$image = $values->image;
+		unset($values['image']);
 
 		$this->article->update(array(
 			"name" => $values->name,
@@ -45,7 +47,9 @@ class EditArticleForm extends NewArticleForm {
 			BlogDao::COLUMN_EXCERPT => $values->excerpt
 		));
 
-		$presenter->redirect("Article:", $values->url);
+		$this->uploadImage($image, $this->article);
+
+		$presenter->redirect("Article:article", $values->url);
 	}
 
 }

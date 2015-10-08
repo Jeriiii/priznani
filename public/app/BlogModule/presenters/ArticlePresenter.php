@@ -154,7 +154,12 @@ class ArticlePresenter extends \BasePresenter {
 	}
 
 	protected function createComponentEditPageForm($name) {
-		return new Frm\EditArticleForm($this->article, $this, $name);
+		$daoBox = new \NetteExt\DaoBox;
+
+		$daoBox->blogDao = $this->blogDao;
+		$daoBox->blogImageDao = $this->blogImageDao;
+
+		return new Frm\EditArticleForm($daoBox, $this->article, $this, $name);
 	}
 
 	protected function createComponentNewPageForm($name) {
