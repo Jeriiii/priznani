@@ -45,3 +45,4 @@ app/test/config/behat.local.yml
 .module-cache
 node-modules/*
 nbproject/licenseheader.txt
+/www/js/react/node_modules/
